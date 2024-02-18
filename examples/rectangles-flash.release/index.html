@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>rectangles-flash</title>
+	</head>
+	<body style="background-color:#ffffff; margin:0; padding:0; font-size:0; overflow:hidden">
+		<canvas id="mainCanvas" width="550" height="400" style="position:relative"></canvas>
+		<script src="http://code.createjs.com/createjs-2014.12.12.combined.js"></script>
+		<script src="http://player.nanofl.com/nanofl-3.1.0.js"></script>
+		<script src="library.js"></script>
+		<script>
+			nanofl.Player.init(document.getElementById("mainCanvas"), nanofl.DataTools.unserialize(serializedLibrary), 24, 'noScale');
+		</script>
+	</body>
+</html>

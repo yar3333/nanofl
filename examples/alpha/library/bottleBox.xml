@@ -1,0 +1,16 @@
+<movieclip version="2.3.0">
+	<layer name="Layer 1">
+		<frame>
+			<shape>
+				<fills>
+					<fill type="solid" color="#00FF00" />
+				</fills>
+				<figure>
+					<polygon fillIndex="0">
+						<contour edges="M0,0L0,65L42,65L42,0L0,0" />
+					</polygon>
+				</figure>
+			</shape>
+		</frame>
+	</layer>
+</movieclip>

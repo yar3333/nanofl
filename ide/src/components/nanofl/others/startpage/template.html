@@ -1,0 +1,94 @@
+<style>
+	.~container
+	{
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		margin-left: -335px;
+		margin-top: -220px;
+		border: 3px solid #D69238;
+	}
+
+	.~container td
+	{
+		vertical-align: top;
+	}
+	
+	.~header
+	{
+		font-size: 32px;
+		line-height: 50px;
+		background-color: #FFAD42;
+		padding-left: 30px;
+		font-weight: bold;
+		color: #333;
+		border-bottom: 3px solid #D69238;
+	}
+	
+	.~container li
+	{
+		font-size: 13px;
+	}
+	
+	.~content
+	{
+		padding: 15px;
+		background-color: #FFF;
+	}
+	
+	.~content .nav > li
+	{
+		padding-right: 14px;
+		white-space: nowrap;
+	}
+	
+	.~content .nav > li > a
+	{
+		width: 190px;
+	}
+	
+	.~recents > li > a
+	{
+		overflow-x: hidden;
+		padding-left: 15px;
+	}
+	.~recents > li > a > i
+	{
+		margin-right: 4px;
+	}
+</style>
+
+<table class="~container">
+	<tr>
+		<td class="~header">
+			NanoFL
+		</td>
+	</tr>
+	<tr>
+		<td class="~content">
+			<table>
+				<tr>
+					<td>
+						<ul id="recents" class="nav ~recents"></ul>
+					</td>
+					<td>
+						<ul id="creates" class="nav">
+							<li class="nav-header"><i class="custom-icon-new"></i> Create New</li>
+							<li><a data-command="document.createNewEmpty" href="javascript:void(0)"><i class="custom-icon-empty"></i> MovieClip</a></li>
+						</ul>
+					</td>
+					<td>
+						<ul id="docs" class="nav">
+							<li class="nav-header"><i class="icon-info-sign"></i> Introduction</li>
+							<li><a target="_blank" href="http://nanofl.com/"><i class="custom-icon-empty"></i> Features</a></li>
+							<li><a target="_blank" href="http://nanofl.com/docs/quick_start/"><i class="custom-icon-empty"></i> Quick start</a></li>
+							<li><a target="_blank" href="http://nanofl.com/docs/api/"><i class="custom-icon-empty"></i> API docs</a></li>
+							<li><a target="_blank" href="http://nanofl.com/docs/examples/"><i class="custom-icon-empty"></i> Examples</a></li>
+						</ul>
+					</td>
+				</tr>
+			</table>
+			
+		</td>
+	</tr>
+</table>

@@ -1,0 +1,104 @@
+[
+	{
+		"name":"File", "items":
+		[
+			{ "name":"New...",				"command":"document.createNewEmpty",	"icon":"custom-icon-new" },
+			{ "name":"Open...",				"command":"document.open",				"icon":"custom-icon-open" },
+			{ "name":"Recents",				"id":"fileRecents", "items":[] },
+			{ "name":"Save",				"command":"openedFile.save",			"icon":"custom-icon-save" },
+			{ "name":"Save As...",			"command":"document.saveAs",			"icon":"custom-icon-empty" },
+			{ "name":"------------------" },
+			{ "name":"Test",				"command":"document.test",				"icon":"custom-icon-run" },
+			{ "name":"------------------" },
+			{ "name":"Import",				"id":"import", "items":
+				[
+					{ "name":"Images into library (png/jpeg/svg)",		"command":"library.importImages",	"icon":"custom-icon-picture" },
+					{ "name":"Sounds into library (wav/mp3/ogg)",		"command":"library.importSounds",	"icon":"custom-icon-sound" },
+					{ "name":"Meshes into library (blend/json)",		"command":"library.importMeshes",	"icon":"custom-icon-cube" }
+				]
+			},
+			{ "name":"Export",				"id":"export", "items":[] },
+			{ "name":"------------------" },
+			{ "name":"Publish Settings...", "command":"document.publishSettings",	"icon":"custom-icon-empty" },
+			{ "name":"Publish",				"command":"document.publish",			"icon":"custom-icon-empty" },
+			{ "name":"------------------" },
+			{ "name":"Properties...",		"command":"document.properties",		"icon":"custom-icon-properties-document" },
+			{ "name":"------------------" },
+			{ "name":"Exit",				"command":"application.quit",			"icon":"custom-icon-exit" }
+		]
+	},
+	{
+		"name":"Edit", "id":"edit", "items":
+		[
+			{ "name":"Undo",				"command":"openedFile.undo",			"icon":"custom-icon-undo" },
+			{ "name":"Redo",				"command":"openedFile.redo",			"icon":"custom-icon-redo" },
+			{ "name":"------------------" },
+			{ "name":"Cut",					"command":"openedFile.cut",				"icon":"custom-icon-cut" },
+			{ "name":"Copy",				"command":"openedFile.copy",			"icon":"custom-icon-copy" },
+			{ "name":"Paste",				"command":"openedFile.paste",			"icon":"custom-icon-paste" },
+			{ "name":"------------------" },
+			{ "name":"Select All",			"command":"openedFile.toggleSelection" },
+			{ "name":"Deselect All",		"command":"openedFile.deselectAll" },
+			{ "name":"------------------" },
+			{ "name":"Preferencies...",		"command":"application.preferences",	"icon":"custom-icon-preferencies" }
+		]
+	},
+	{
+		"name":"Timeline", "id":"timeline", "items":
+		[
+			{ "name":"Create Tween",		"command":"timeline.createTween",		"icon":"icon-forward" },
+			{ "name":"Remove Tween",		"command":"timeline.removeTween",		"icon":"icon-remove" },
+			{ "name":"------------------" },
+			{ "name":"Insert Frame",		"command":"timeline.insertFrame",		"icon":"custom-icon-frame-empty" },
+			{ "name":"Convert to Keyframe",	"command":"timeline.convertToKeyFrame",	"icon":"custom-icon-frame-key" },
+			{ "name":"Remove Frame",		"command":"timeline.removeFrame",		"icon":"custom-icon-frame-remove" }
+		]
+	},
+	{
+		"name":"Editor", "id":"editor", "items":
+		[
+			{ "name":"Convert to Symbol...",	"command":"editor.convertToSymbol",		"icon":"custom-icon-film" },
+			{ "name":"Group",					"command":"editor.group",				"icon":"custom-icon-group" },
+			{ "name":"Duplicate",				"command":"editor.duplicate",			"icon":"custom-icon-duplicate" },
+			{ "name":"Break Apart",				"command":"editor.breakApart",			"icon":"custom-icon-wrench" },
+			{ "name":"Remove",					"command":"editor.remove",				"icon":"custom-icon-remove" },
+			{ "name":"------------------" },
+			{ "name":"Flip Horizontal",			"command":"editor.flipHorizontal",		"icon":"custom-icon-flip-horizontal" },
+			{ "name":"Flip Vertical",			"command":"editor.flipVertical",		"icon":"custom-icon-flip-vertical" },
+			{ "name":"Remove Transform",		"command":"editor.removeTransform",		"icon":"custom-icon-remove-transform" },
+			{ "name":"------------------" },
+			{ "name":"Move to Front",			"command":"editor.moveFront",			"icon":"custom-icon-move-front" },
+			{ "name":"Move Forwards",			"command":"editor.moveForwards",		"icon":"custom-icon-move-forwards" },
+			{ "name":"Move Backwards",			"command":"editor.moveBackwards",		"icon":"custom-icon-move-backwards" },
+			{ "name":"Move to Back",			"command":"editor.moveBack",			"icon":"custom-icon-move-back" }
+		]
+	},
+	{
+		"name":"Library", "id":"library", "items":
+		[
+			{ "name":"New Movie Clip...",					"command":"library.newEmptyMovieClip",		"icon":"custom-icon-film" },
+			{ "name":"New Movie Clip 3D...",				"command":"library.newEmptyMovieClip3D",	"icon":"custom-icon-cube" },
+			{ "name":"New Folder...",						"command":"library.newFolder",				"icon":"custom-icon-folder-close" },
+			{ "name":"------------------" },
+			{ "name":"Add Font Manually...",				"command":"library.addFontManually",		"icon":"custom-icon-font" },
+			{ "name":"Import Font from Google Fonts...",	"command":"library.importFont",				"icon":"custom-icon-google" },
+			{ "name":"------------------" },
+			{ "name":"Remove unused Items",					"command":"library.removeUnused",			"icon":"custom-icon-fire" },
+			{ "name":"Optimize",							"command":"library.optimize",				"icon":"custom-icon-optimize" }
+		]
+	},
+	{
+		"name":"Help", "align":"right", "items":
+		[
+			{ "name":"Application Site...",		"command":"http://nanofl.com/",						"icon":"icon-help" },
+			{ "name":"Command-line options...",	"command":"http://nanofl.com/docs/command_line/",	"icon":"icon-help" },
+			{ "name":"Hotkeys...",				"command":"application.showHotkeys",				"icon":"icon-help" },
+			{ "name":"------------------" },
+			{ "name":"Report a Error...",		"command":"https://bitbucket.org/nanofl/nanofl/issues?status=new&status=open&kind=bug", "icon":"icon-help" },
+			{ "name":"Reload Plugins",			"command":"application.reloadPlugins",				"icon":"icon-help" },
+			{ "name":"------------------" },
+			{ "name":"Register...",				"command":"application.register",					"icon":"custom-icon-star", "version":"trial" },
+			{ "name":"About NanoFL...",			"command":"application.about",						"icon":"icon-help" }
+		]
+	}
+]

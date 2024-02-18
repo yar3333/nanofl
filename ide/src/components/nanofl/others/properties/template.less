@@ -1,0 +1,83 @@
+.nanofl
+{
+	@sizeCount: 60;
+	
+	@base: 5px;
+	
+	.size-loop(@i) when (@i > 0)
+	{
+		.size-@{i} { width:@i * @base; display:inline-block; text-align:left; box-sizing:border-box; }
+		label.size-@{i} { padding:5px 5px 5px 0; margin-bottom:0; text-align:right; vertical-align:top; }
+		input.size-@{i}, select.size-@{i} { margin-bottom:0 !important; height:28px; }
+		select.size-@{i}[multiple=multiple] { height:auto }
+		.size-loop(@i - 1);
+		label.size-@{i}.rightlabel { text-align:left; }
+	}
+	.size-loop(@sizeCount);
+}
+
+.nanofl-pane
+{
+	padding: 10px 0 0 0;
+	background-color: #fafafa;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	
+	.nanofl-group
+	{
+		padding-bottom: 10px;
+		
+		>legend
+		{
+			box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			background-color: #ddd;
+			line-height: 20px;
+			font-size: 10px;
+			font-weight: bold;
+			margin-top: 0;
+			margin-bottom: 10px;
+			padding-left: 10px;
+		}
+		
+		&.collapsed
+		{
+			padding-bottom: 0;
+			overflow: hidden;
+			
+			>legend
+			{
+				margin-bottom: 0;
+			}
+		}
+	}
+
+	.nanofl-row
+	{
+		padding: 2px 0;
+		text-align: center;
+		font-size: 0;
+		white-space: nowrap;
+		
+		&.narrow
+		{
+			padding: 0;
+			margin-top: -6px;
+			margin-bottom: -2px;
+		}
+	}
+	
+	select, .bootstrap-select.btn-group { margin-bottom:0 }
+	
+	.btn-mini.dropdown-toggle [class^="icon-"],
+	.btn-mini.dropdown-toggle [class*=" icon-"]
+	{
+		margin-top: -1px;
+	}
+	
+	span.longlabel
+	{
+		padding-top: 5px;
+		vertical-align: top;
+	}
+}

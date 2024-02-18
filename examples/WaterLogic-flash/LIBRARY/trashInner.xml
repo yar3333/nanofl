@@ -1,0 +1,21 @@
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="trashInner" itemID="54d41552-0000004d" sourceFlashFilepath="\\Asurov\WorkK\Yaroslav\Головоломки с сосудами\сосуд3.fla" sourceLibraryItemHRef="Symbol 5" sourceLastModified="1116492646" lastModified="1423532627" lastUniqueIdentifier="1">
+  <timeline>
+    <DOMTimeline name="trashInner">
+      <layers>
+        <DOMLayer name="Layer 1" color="#9933CC" current="true" isSelected="true" autoNamed="false">
+          <frames>
+            <DOMFrame index="0" keyMode="9728">
+              <elements>
+                <DOMBitmapInstance name="" referenceID="" libraryItemName="_bitmaps/trash">
+                  <matrix>
+                    <Matrix tx="5.4" ty="-9.75"/>
+                  </matrix>
+                </DOMBitmapInstance>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+      </layers>
+    </DOMTimeline>
+  </timeline>
+</DOMSymbolItem>

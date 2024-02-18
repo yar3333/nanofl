@@ -1,0 +1,11 @@
+<movieclip version="2.2.0">
+	<layer name="Layer 1">
+		<frame>
+			<instance libraryItem="letter" name="ins1" x="127" y="79.5" />
+			<instance libraryItem="letter" name="ins2" x="391.95" y="86.55" matrix="0.965927124023438,-0.258804321289063,0.258804321289063,0.965927124023438" />
+			<instance libraryItem="letter" name="ins3" x="105" y="222.55" matrix="0.467147827148438,0,0,0.467147827148438" />
+			<instance libraryItem="letter" name="ins4" x="265.95" y="224.1" matrix="0.45123291015625,-0.120895385742188,0.120895385742188,0.45123291015625" />
+			<instance libraryItem="letter" name="ins4" x="426.85" y="268.65" matrix="0.5777587890625,-0.816177368164063,0.816177368164063,0.5777587890625" regX="68.65" regY="37.2" />
+		</frame>
+	</layer>
+</movieclip>

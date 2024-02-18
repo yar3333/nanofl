@@ -1,0 +1,74 @@
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="_splash/splash" itemID="54d41512-00000049" sourceLibraryItemHRef="Symbol 1" lastModified="1423518895" lastUniqueIdentifier="2">
+  <timeline>
+    <DOMTimeline name="splash">
+      <layers>
+        <DOMLayer name="Barrels" color="#FFFF4F" autoNamed="false">
+          <frames>
+            <DOMFrame index="0" keyMode="9728">
+              <elements>
+                <DOMBitmapInstance name="" referenceID="" libraryItemName="_bitmaps/barrels">
+                  <matrix>
+                    <Matrix a="0.491775512695313" d="0.491775512695313" tx="-283.05" ty="19.9"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point x="152.4" y="137.6"/>
+                  </transformationPoint>
+                </DOMBitmapInstance>
+                <DOMBitmapInstance name="" referenceID="" libraryItemName="_bitmaps/barrels">
+                  <matrix>
+                    <Matrix a="0.608108520507813" d="0.608108520507813" tx="138.7" ty="-15.15"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point x="152.35" y="137.45"/>
+                  </transformationPoint>
+                </DOMBitmapInstance>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+        <DOMLayer name="Barrel3D" color="#FF4FFF" current="true" isSelected="true" autoNamed="false">
+          <frames>
+            <DOMFrame index="0" keyMode="9728">
+              <elements>
+                <DOMBitmapInstance name="" referenceID="" selected="true" libraryItemName="_bitmaps/barrel3D">
+                  <matrix>
+                    <Matrix a="0.608688354492188" d="0.608688354492188" tx="-218.75" ty="-113.9"/>
+                  </matrix>
+                </DOMBitmapInstance>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+        <DOMLayer name="Floor" color="#4FFFFF" autoNamed="false">
+          <frames>
+            <DOMFrame index="0" keyMode="9728">
+              <elements>
+                <DOMBitmapInstance name="" referenceID="" libraryItemName="_bitmaps/floor">
+                  <matrix>
+                    <Matrix d="0.565582275390625" tx="-264" ty="150.05"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point x="260" y="41.55"/>
+                  </transformationPoint>
+                </DOMBitmapInstance>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+        <DOMLayer name="Wall" color="#FF4F4F" autoNamed="false">
+          <frames>
+            <DOMFrame index="0" keyMode="9728">
+              <elements>
+                <DOMBitmapInstance name="" referenceID="" libraryItemName="_bitmaps/wall">
+                  <matrix>
+                    <Matrix tx="-260" ty="-195"/>
+                  </matrix>
+                </DOMBitmapInstance>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+      </layers>
+    </DOMTimeline>
+  </timeline>
+</DOMSymbolItem>

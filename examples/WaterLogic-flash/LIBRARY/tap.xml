@@ -1,0 +1,62 @@
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="tap" itemID="54d3f272-00000072" sourceLibraryItemHRef="Symbol 1" lastModified="1423580362" lastUniqueIdentifier="4">
+  <timeline>
+    <DOMTimeline name="tap" currentFrame="2">
+      <layers>
+        <DOMLayer name="Layer 1" color="#4FFF4F" current="true" isSelected="true">
+          <frames>
+            <DOMFrame index="0" keyMode="9728">
+              <elements>
+                <DOMSymbolInstance libraryItemName="barrel" name="mcKran" centerPoint3DX="-144.2" centerPoint3DY="158.25">
+                  <matrix>
+                    <Matrix a="-0.999969482421875" d="0.949966430664063" tx="275" ty="-134"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point y="0.05"/>
+                  </transformationPoint>
+                </DOMSymbolInstance>
+              </elements>
+            </DOMFrame>
+            <DOMFrame index="1" keyMode="9728">
+              <elements>
+                <DOMSymbolInstance libraryItemName="barrel" name="mcKran" centerPoint3DX="-126.95" centerPoint3DY="146.25">
+                  <matrix>
+                    <Matrix a="-1" d="0.949996948242188" tx="275" ty="-134"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point x="93" y="59.45"/>
+                  </transformationPoint>
+                  <color>
+                    <Color tintMultiplier="0.18" tintColor="#FF0000"/>
+                  </color>
+                </DOMSymbolInstance>
+              </elements>
+            </DOMFrame>
+            <DOMFrame index="2" keyMode="9728">
+              <elements>
+                <DOMSymbolInstance libraryItemName="barrel" name="mcKran" centerPoint3DX="123.05" centerPoint3DY="-43.75">
+                  <matrix>
+                    <Matrix a="-1" d="0.949996948242188" tx="275" ty="-134"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point x="93" y="59.45"/>
+                  </transformationPoint>
+                </DOMSymbolInstance>
+                <DOMSymbolInstance libraryItemName="waterFromTap" name="" centerPoint3DX="-0.05" centerPoint3DY="12.5">
+                  <matrix>
+                    <Matrix tx="179.6" ty="-17.55"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point x="-178.55" y="30.55"/>
+                  </transformationPoint>
+                  <color>
+                    <Color alphaOffset="-113"/>
+                  </color>
+                </DOMSymbolInstance>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+      </layers>
+    </DOMTimeline>
+  </timeline>
+</DOMSymbolItem>

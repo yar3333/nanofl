@@ -1,0 +1,9 @@
+--js ..\..\bin\exporters\SvgExporterPlugin.js
+--class-path ..\..\..\api\gen
+--class-path src
+--library stdlib
+--library datatools
+--main SvgExporterPlugin
+-w -WExternWithExpr
+--cmd IF EXIST support IF NOT EXIST ..\..\bin\exporters\SvgExporterPlugin mkdir  ..\..\bin\exporters\SvgExporterPlugin
+--cmd IF EXIST support xcopy /E /Q /Y support ..\..\bin\exporters\SvgExporterPlugin

@@ -1,0 +1,25 @@
+<movieclip version="2.2.0">
+	<layer name="Layer 1" type="mask" locked="true">
+		<frame>
+			<shape>
+				<fills>
+					<fill type="solid" color="#800000" />
+				</fills>
+				<figure>
+					<polygon fillIndex="0">
+						<contour edges="M-88.09,-53.73L-88.09,22.36L-7.73,22.36L-7.73,-53.73L-88.09,-53.73" />
+					</polygon>
+				</figure>
+			</shape>
+		</frame>
+	</layer>
+	<layer name="Layer 0" locked="true" parentIndex="0">
+		<frame>
+			<instance libraryItem="LibraryItem 1">
+				<filters>
+					<BoxBlurFilter blurX="20" blurY="10" quality="1" />
+				</filters>
+			</instance>
+		</frame>
+	</layer>
+</movieclip>

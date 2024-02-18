@@ -1,0 +1,109 @@
+.frames-content > * > * {
+  border-right: solid 1px #eee;
+  border-bottom: solid 1px #eee;
+  height: 21px;
+}
+.frames-content > * > *:nth-child(5n+1) {
+  background-color: #eee;
+}
+.frames-content > * > *.frame {
+  border-right: none;
+  border-bottom: solid 1px #999;
+  background-color: #fff;
+}
+.frames-content > * > *.frame.frame-notEmpty {
+  background-image: url(~/support/notEmpty.png);
+}
+.frames-content > * > *.frame.tween,
+.frames-content > * > *.frame.tween.frame-notEmpty {
+  background-image: url(~/support/tween.png), url(~/support/tween-middle-good.png);
+}
+.frames-content > * > *.frame.tween-bad,
+.frames-content > * > *.frame.tween-bad.frame-notEmpty {
+  background-image: url(~/support/tween.png), url(~/support/tween-middle-bad.png);
+}
+.frames-content > * > *.frame.frame.startKeyFrame {
+  background-image: url(~/support/start-empty.png);
+}
+.frames-content > * > *.frame.frame.startKeyFrame.frame-label {
+  background-image: url(~/support/label.png), url(~/support/start-empty.png);
+}
+.frames-content > * > *.frame.frame.startKeyFrame.finishKeyFrame {
+  background-image: url(~/support/start-empty.png);
+}
+.frames-content > * > *.frame.frame.startKeyFrame.finishKeyFrame.frame-label {
+  background-image: url(~/support/label.png), url(~/support/start-empty.png);
+}
+.frames-content > * > *.frame.frame.startKeyFrame.tween,
+.frames-content > * > *.frame.frame.startKeyFrame.tween-bad {
+  background-image: url(~/support/start-empty.png), url(~/support/tween.png), url(~/support/tween-start.png);
+}
+.frames-content > * > *.frame.frame.startKeyFrame.tween.frame-label,
+.frames-content > * > *.frame.frame.startKeyFrame.tween-bad.frame-label {
+  background-image: url(~/support/label.png), url(~/support/start-empty.png), url(~/support/tween.png), url(~/support/tween-start.png);
+}
+.frames-content > * > *.frame.frame.startKeyFrame.tween.finishKeyFrame,
+.frames-content > * > *.frame.frame.startKeyFrame.tween-bad.finishKeyFrame {
+  background-image: url(~/support/start-empty.png), url(~/support/tween.png);
+}
+.frames-content > * > *.frame.frame.startKeyFrame.tween.finishKeyFrame.frame-label,
+.frames-content > * > *.frame.frame.startKeyFrame.tween-bad.finishKeyFrame.frame-label {
+  background-image: url(~/support/label.png), url(~/support/start-empty.png), url(~/support/tween.png);
+}
+.frames-content > * > *.frame.frame.startKeyFrame.frame-notEmpty {
+  background-image: url(~/support/start-notEmpty.png), url(~/support/notEmpty.png);
+}
+.frames-content > * > *.frame.frame.startKeyFrame.frame-notEmpty.frame-label {
+  background-image: url(~/support/label.png), url(~/support/start-notEmpty.png), url(~/support/notEmpty.png);
+}
+.frames-content > * > *.frame.frame.startKeyFrame.frame-notEmpty.finishKeyFrame {
+  background-image: url(~/support/start-notEmpty.png), url(~/support/notEmpty.png);
+}
+.frames-content > * > *.frame.frame.startKeyFrame.frame-notEmpty.finishKeyFrame.frame-label {
+  background-image: url(~/support/label.png), url(~/support/start-notEmpty.png), url(~/support/notEmpty.png);
+}
+.frames-content > * > *.frame.frame.startKeyFrame.frame-notEmpty.tween,
+.frames-content > * > *.frame.frame.startKeyFrame.frame-notEmpty.tween-bad {
+  background-image: url(~/support/start-notEmpty.png), url(~/support/tween.png), url(~/support/tween-start.png);
+}
+.frames-content > * > *.frame.frame.startKeyFrame.frame-notEmpty.tween.frame-label,
+.frames-content > * > *.frame.frame.startKeyFrame.frame-notEmpty.tween-bad.frame-label {
+  background-image: url(~/support/label.png), url(~/support/start-notEmpty.png), url(~/support/tween.png), url(~/support/tween-start.png);
+}
+.frames-content > * > *.frame.frame.startKeyFrame.frame-notEmpty.tween.finishKeyFrame,
+.frames-content > * > *.frame.frame.startKeyFrame.frame-notEmpty.tween-bad.finishKeyFrame {
+  background-image: url(~/support/start-notEmpty.png), url(~/support/tween.png);
+}
+.frames-content > * > *.frame.frame.startKeyFrame.frame-notEmpty.tween.finishKeyFrame.frame-label,
+.frames-content > * > *.frame.frame.startKeyFrame.frame-notEmpty.tween-bad.finishKeyFrame.frame-label {
+  background-image: url(~/support/label.png), url(~/support/start-notEmpty.png), url(~/support/tween.png);
+}
+.frames-content > * > *.frame.finishKeyFrame {
+  background-image: url(~/support/finish.png);
+}
+.frames-content > * > *.frame.finishKeyFrame.frame-notEmpty {
+  background-image: url(~/support/finish.png), url(~/support/notEmpty.png);
+}
+.frames-content > * > *.frame.finishKeyFrame.tween,
+.frames-content > * > *.frame.finishKeyFrame.tween.frame-notEmpty,
+.frames-content > * > *.frame.finishKeyFrame.tween-bad,
+.frames-content > * > *.frame.finishKeyFrame.tween-bad.frame-notEmpty {
+  background-image: url(~/support/finish.png), url(~/support/tween.png), url(~/support/tween-finish.png);
+}
+.frames-content > * > *.selected {
+  background-color: #A7D1FC !important;
+}
+.frames-content > * > *.frame.finishKeyFrame {
+  border-right: solid 1px #999;
+}
+.frames-content > * > *.nextLayerFrame {
+  border-bottom: solid 1px #999;
+}
+.layer-type-folder > .frames-content > * > * {
+  background-color: #eee;
+  border-right: none;
+  background-image: none !important;
+}
+.layer-type-folder > .frames-content > * > .frame {
+  border-bottom: 1px solid #999;
+}

@@ -1,0 +1,38 @@
+<style>
+	.~pane
+	{
+		overflow-y: scroll;
+		background-color: #fafafa;
+		border: solid 1px #eee;
+	}
+	
+	.~pane .table
+	{
+		margin-bottom: 0;
+	}
+	
+	.~pane .table tr:first-child td
+	{
+		border-top: none;
+		font-size: 13px;
+	}
+	
+	.~pane td
+	{
+		font-size: 13px;
+	}
+</style>
+
+<wq-content for="title">Hot Keys</wq-content>
+
+<wq-content for="controls">
+	<div id="pane" class="~pane">
+		<table class="table">
+			<tbody id="hotkeys"></tbody>
+		</table>
+	</div>
+</wq-content>
+
+<wq-content for="buttons">
+	<a id="ok" href="javascript:void(0)" class="btn size-23 btn-primary">OK</a>
+</wq-content>

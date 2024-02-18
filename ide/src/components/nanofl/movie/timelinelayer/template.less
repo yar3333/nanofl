@@ -1,0 +1,75 @@
+.frames-content>*>* { border-right: solid 1px #eee; border-bottom: solid 1px #eee; height: 21px; }
+.frames-content>*>*:nth-child(5n+1) { background-color: #eee; }
+.frames-content>*>*.frame { border-right: none; border-bottom: solid 1px #999; background-color: #fff; }
+
+.frames-content>*>*.frame
+{
+	&.frame-notEmpty { background-image: url(~/support/notEmpty.png); }
+	&.tween, &.tween.frame-notEmpty { background-image: url(~/support/tween.png), url(~/support/tween-middle-good.png); }
+	&.tween-bad, &.tween-bad.frame-notEmpty { background-image: url(~/support/tween.png), url(~/support/tween-middle-bad.png); }
+	
+	&.frame.startKeyFrame
+	{
+		.baseBackgrounds(@urls)
+		{
+			background-image:@urls;
+			&.frame-label { background-image:url(~/support/label.png), @urls }
+		}
+		
+		.backgrounds(@urls)
+		{
+			.baseBackgrounds(@urls);
+			&.finishKeyFrame { background-image:@urls }
+			&.finishKeyFrame.frame-label { background-image:url(~/support/label.png), @urls }
+		}
+		
+		.backgrounds(url(~/support/start-empty.png));
+		&.tween, &.tween-bad
+		{
+			.baseBackgrounds(~"url(~/support/start-empty.png), url(~/support/tween.png), url(~/support/tween-start.png)");
+			&.finishKeyFrame { .baseBackgrounds(~"url(~/support/start-empty.png), url(~/support/tween.png)") }
+		}
+		
+		&.frame-notEmpty
+		{
+			.backgrounds(~"url(~/support/start-notEmpty.png), url(~/support/notEmpty.png)");
+			&.tween, &.tween-bad
+			{
+				.baseBackgrounds(~"url(~/support/start-notEmpty.png), url(~/support/tween.png), url(~/support/tween-start.png)");
+				&.finishKeyFrame { .baseBackgrounds(~"url(~/support/start-notEmpty.png), url(~/support/tween.png)") }
+			}
+		}
+	}
+	
+	&.finishKeyFrame
+	{
+		background-image: url(~/support/finish.png);
+		
+		&.frame-notEmpty { background-image: url(~/support/finish.png), url(~/support/notEmpty.png); }
+		
+		&.tween,
+		&.tween.frame-notEmpty,
+		&.tween-bad,
+		&.tween-bad.frame-notEmpty { background-image: url(~/support/finish.png), url(~/support/tween.png), url(~/support/tween-finish.png); }
+	}
+}
+
+.frames-content>*>*.selected { background-color: #A7D1FC !important; }
+
+.frames-content>*>*.frame.finishKeyFrame { border-right: solid 1px #999; }
+
+.frames-content>*>*.nextLayerFrame { border-bottom: solid 1px #999; }
+
+.layer-type-folder>.frames-content>*
+{
+	>*
+	{
+		background-color: #eee;
+		border-right: none;
+		background-image: none !important;
+	}
+	>.frame
+	{
+		border-bottom: 1px solid #999;
+	}
+}

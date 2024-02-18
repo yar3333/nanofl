@@ -1,0 +1,52 @@
+<wq-content for="title">Document Properties</wq-content>
+
+<wq-content for="controls">
+	<table class="tableform">
+		<tbody>
+
+			<tr>
+				<td><label>Size:</label></td>
+				<td>
+					<input type="text" id="width" class="size-10" />
+					<span>x</span>
+					<input type="text" id="height" class="size-10" />
+					<span>px</span>
+				</td>
+			</tr>
+			<tr>
+				<td><label for="backgroundColorText">Background color:</label></td>
+				<td><color-selector id="backgroundColor"></color-selector></td>
+			</tr>
+			<tr>
+				<td><label for="framerate">Framerate:</label></td>
+				<td><input id="framerate" type="text" class="size-10" /> <span>frames per second</span></td>
+			</tr>
+			<tr>
+				<td><label for="scaleMode" title="Stage scale mode.">Scale Mode:</label></td>
+				<td>
+					<select id="scaleMode" class="size-32">
+						<option value="noScale" title="Just center stage.">No Scale</option>
+						<option value="fit" title="Scale with no crop. Keep aspect ratio.">Fit</option>
+						<option value="fill" title="Scale with crop. Keep aspect ratio.">Fill</option>
+						<option value="stretch" title="Scale with no crop. Don't keep aspect ratio.">Stretch</option>
+						<option value="custom" title="Don't do anything automatically.">Custom</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><label class="checkbox"><input id="autoPlay" type="checkbox">Autoplay</label></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><label class="checkbox"><input id="loop" type="checkbox">Loop</label></td>
+			</tr>
+			
+ 			<tr>
+				<td><label for="sceneLinkedClass" title="Scene linked class name.">Scene class:</label></td>
+				<td><input id="sceneLinkedClass" type="text" class="size-32" /></td>
+			</tr>
+            
+		</tbody>
+	</table>
+</wq-content>

@@ -1,0 +1,89 @@
+<DOMDocument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" currentTimeline="1" xflVersion="2.4" creatorInfo="Adobe Flash Professional CC" platform="Windows" versionInfo="Saved by Adobe Flash Windows 13.1 build 226" majorVersion="13" minorVersion="1" buildNumber="226" objectsSnapTo="false" nextSceneIdentifier="2" playOptionsPlayLoop="false" playOptionsPlayPages="false" playOptionsPlayFrameActions="false" filetypeGUID="DD0DDBBF-5BEF-45B2-9F24-A3048D2A676F">
+     <timelines>
+          <DOMTimeline name="Scene 1">
+               <layers>
+                    <DOMLayer name="Layer 1" color="#4F80FF" current="true" isSelected="true">
+                         <frames>
+                              <DOMFrame index="0" keyMode="9728">
+                                   <elements>
+                                        <DOMRectangleObject objectWidth="108" objectHeight="63" x="45" y="31" lockFlag="true" topLeftRadius="10" topRightRadius="10" bottomLeftRadius="10" bottomRightRadius="10">
+                                             <matrix>
+                                                  <Matrix tx="156" ty="-24"/>
+                                             </matrix>
+                                             <stroke>
+                                                  <SolidStroke scaleMode="normal">
+                                                       <fill>
+                                                            <SolidColor color="#0000FF"/>
+                                                       </fill>
+                                                  </SolidStroke>
+                                             </stroke>
+                                        </DOMRectangleObject>
+                                        <DOMRectangleObject objectWidth="141" objectHeight="72" x="220" y="30" lockFlag="true" topLeftRadius="-30.35" topRightRadius="-30.35" bottomLeftRadius="-30.35" bottomRightRadius="-30.35">
+                                             <matrix>
+                                                  <Matrix tx="-35" ty="48"/>
+                                             </matrix>
+                                             <stroke>
+                                                  <SolidStroke scaleMode="normal">
+                                                       <fill>
+                                                            <SolidColor color="#0000FF"/>
+                                                       </fill>
+                                                  </SolidStroke>
+                                             </stroke>
+                                        </DOMRectangleObject>
+                                        <DOMRectangleObject objectWidth="141" objectHeight="72" x="220" y="30" lockFlag="true">
+                                             <matrix>
+                                                  <Matrix tx="-33" ty="128.45"/>
+                                             </matrix>
+                                             <stroke>
+                                                  <SolidStroke scaleMode="normal">
+                                                       <fill>
+                                                            <SolidColor color="#0000FF"/>
+                                                       </fill>
+                                                  </SolidStroke>
+                                             </stroke>
+                                        </DOMRectangleObject>
+                                        <DOMRectangleObject objectWidth="141" objectHeight="72" x="220" y="30" topLeftRadius="10" topRightRadius="20" bottomLeftRadius="30" bottomRightRadius="40">
+                                             <matrix>
+                                                  <Matrix tx="-32" ty="207.4"/>
+                                             </matrix>
+                                             <fill>
+                                                  <RadialGradient focalPointRatio="-0.686274509803922">
+                                                       <matrix>
+                                                            <Matrix a="0.049072265625" b="-0.019622802734375" c="0.0612335205078125" d="0.153121948242188" tx="290.5" ty="66"/>
+                                                       </matrix>
+                                                       <GradientEntry color="#FF0000" ratio="0"/>
+                                                       <GradientEntry ratio="1"/>
+                                                  </RadialGradient>
+                                             </fill>
+                                        </DOMRectangleObject>
+                                        <DOMRectangleObject objectWidth="141" objectHeight="72" x="220" y="30" lockFlag="true">
+                                             <matrix>
+                                                  <Matrix tx="-32" ty="286.4"/>
+                                             </matrix>
+                                             <fill>
+                                                  <LinearGradient>
+                                                       <matrix>
+                                                            <Matrix a="0.0860595703125" d="0.0439453125" tx="290.5" ty="66"/>
+                                                       </matrix>
+                                                       <GradientEntry color="#FFFFFF" ratio="0"/>
+                                                       <GradientEntry ratio="1"/>
+                                                  </LinearGradient>
+                                             </fill>
+                                             <stroke>
+                                                  <SolidStroke scaleMode="normal">
+                                                       <fill>
+                                                            <SolidColor color="#0000FF"/>
+                                                       </fill>
+                                                  </SolidStroke>
+                                             </stroke>
+                                        </DOMRectangleObject>
+                                   </elements>
+                              </DOMFrame>
+                         </frames>
+                    </DOMLayer>
+               </layers>
+          </DOMTimeline>
+     </timelines>
+     <PrinterSettings/>
+     <publishHistory/>
+</DOMDocument>

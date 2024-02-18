@@ -1,0 +1,9 @@
+<movieclip version="2.2.0">
+	<layer name="Layer 1">
+		<frame>
+			<text x="-12.1" y="-8.7" width="24.2" height="17.45">
+				<text-run characters="Abc" fillColor="#000000" align="center" size="12" family="Times New Roman" />
+			</text>
+		</frame>
+	</layer>
+</movieclip>

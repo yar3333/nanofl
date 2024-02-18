@@ -1,0 +1,63 @@
+<DOMDocument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" currentTimeline="1" xflVersion="2.4" creatorInfo="Adobe Flash Professional CC" platform="Windows" versionInfo="Saved by Adobe Flash Windows 13.1 build 226" majorVersion="13" minorVersion="1" buildNumber="226" objectsSnapTo="false" nextSceneIdentifier="2" playOptionsPlayLoop="false" playOptionsPlayPages="false" playOptionsPlayFrameActions="false" filetypeGUID="DD0DDBBF-5BEF-45B2-9F24-A3048D2A676F">
+     <timelines>
+          <DOMTimeline name="Scene 1">
+               <layers>
+                    <DOMLayer name="Layer 1" color="#4F80FF" current="true" isSelected="true">
+                         <frames>
+                              <DOMFrame index="0" keyMode="9728">
+                                   <elements>
+                                        <DOMOvalObject objectWidth="97" objectHeight="87" x="201" y="17" startAngle="157.5" innerRadius="44.1964302062988" endAngle="295.714294433594">
+                                             <fill>
+                                                  <SolidColor color="#FF0000"/>
+                                             </fill>
+                                             <stroke>
+                                                  <SolidStroke scaleMode="normal">
+                                                       <fill>
+                                                            <SolidColor color="#0000FF"/>
+                                                       </fill>
+                                                  </SolidStroke>
+                                             </stroke>
+                                        </DOMOvalObject>
+                                        <DOMOvalObject objectWidth="162" objectHeight="56" x="172" y="130" startAngle="80.3571395874023" endAngle="28.9285717010498">
+                                             <fill>
+                                                  <SolidColor color="#FF0000"/>
+                                             </fill>
+                                             <stroke>
+                                                  <SolidStroke scaleMode="normal">
+                                                       <fill>
+                                                            <SolidColor color="#0000FF"/>
+                                                       </fill>
+                                                  </SolidStroke>
+                                             </stroke>
+                                        </DOMOvalObject>
+                                        <DOMOvalObject objectWidth="38" objectHeight="77.95" x="234" y="209" selected="true" closePath="false" startAngle="138.214279174805" endAngle="73.928581237793">
+                                             <stroke>
+                                                  <SolidStroke scaleMode="normal">
+                                                       <fill>
+                                                            <SolidColor color="#0000FF"/>
+                                                       </fill>
+                                                  </SolidStroke>
+                                             </stroke>
+                                        </DOMOvalObject>
+                                        <DOMOvalObject objectWidth="155" objectHeight="72" x="179" y="309.95" endAngle="0">
+                                             <fill>
+                                                  <SolidColor color="#FF0000"/>
+                                             </fill>
+                                             <stroke>
+                                                  <SolidStroke scaleMode="normal">
+                                                       <fill>
+                                                            <SolidColor color="#0000FF"/>
+                                                       </fill>
+                                                  </SolidStroke>
+                                             </stroke>
+                                        </DOMOvalObject>
+                                   </elements>
+                              </DOMFrame>
+                         </frames>
+                    </DOMLayer>
+               </layers>
+          </DOMTimeline>
+     </timelines>
+     <PrinterSettings/>
+     <publishHistory/>
+</DOMDocument>

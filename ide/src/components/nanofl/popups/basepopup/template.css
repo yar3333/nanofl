@@ -1,0 +1,38 @@
+.L-container .tabs-left > .nav-tabs {
+  border: 0;
+}
+.L-container .tabs-left > .nav-tabs > li {
+  border-right: 1px solid #ddd;
+  margin-bottom: 0;
+}
+.L-container .tabs-left > .nav-tabs > li > a {
+  margin-bottom: 0;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+.L-container .tabs-left > .nav-tabs > li > a.grey {
+  color: #bbbbbb;
+}
+.L-container .tabs-left > .nav-tabs > li.active {
+  border-right: 1px solid transparent;
+}
+.L-container .tabs-left > .nav-tabs > li.active > a,
+.L-container .tabs-left > .nav-tabs > li.active > a:hover,
+.L-container .tabs-left > .nav-tabs > li.active > a:focus {
+  background-color: transparent;
+  color: #000;
+}
+.L-container .tabs-left > .nav-tabs > li.active > a.grey,
+.L-container .tabs-left > .nav-tabs > li.active > a:hover.grey,
+.L-container .tabs-left > .nav-tabs > li.active > a:focus.grey {
+  color: #bbbbbb;
+}
+.L-container .tabs-left > .nav-tabs > li.nav-header {
+  color: #666;
+  font-size: 13px;
+  box-sizing: padding-box;
+}
+.L-container .tabs-left > .nav-tabs > li + .nav-header {
+  margin-top: 0;
+  padding-top: 9px;
+}

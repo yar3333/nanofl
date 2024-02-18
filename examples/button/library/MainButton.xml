@@ -1,0 +1,50 @@
+<movieclip version="2.3.0" linkedClass="MyButton" likeButton="true">
+	<layer name="Layer 1">
+		<frame>
+			<text x="-11.715000000000032" y="-43.75999999999999" width="30" height="29">
+				<new-text-format characters="" fillColor="#000000" size="35" />
+				<text-run characters="0" fillColor="#FF0000" align="center" size="20" style="bold" family="Courier New" />
+			</text>
+		</frame>
+		<frame>
+			<text x="-11.715000000000032" y="-43.75999999999999" width="30" height="29">
+				<new-text-format characters="" fillColor="#000000" size="35" />
+				<text-run characters="1" fillColor="#FF0000" align="center" size="20" style="bold" family="Courier New" />
+			</text>
+		</frame>
+		<frame>
+			<text x="-11.715000000000032" y="-43.75999999999999" width="30" height="29">
+				<new-text-format characters="" fillColor="#000000" size="35" />
+				<text-run characters="2" fillColor="#FF0000" align="center" size="20" style="bold" family="Courier New" />
+			</text>
+		</frame>
+		<frame>
+			<text x="-11.715000000000032" y="-43.75999999999999" width="30" height="29">
+				<new-text-format characters="" fillColor="#000000" size="35" />
+				<text-run characters="3" fillColor="#FF0000" align="center" size="20" style="bold" family="Courier New" />
+			</text>
+		</frame>
+	</layer>
+	<layer name="Layer 0">
+		<frame duration="4">
+			<shape>
+				<fills>
+					<fill type="radial" colors="rgb(255, 255, 255),rgb(0, 197, 205)" ratios="0,1" cx="0.0013187855787464287" cy="0.0013187855787464287" r="151.33333333333331" />
+				</fills>
+				<strokes>
+					<stroke type="solid" color="#004A88" thickness="2" />
+				</strokes>
+				<figure>
+					<polygon fillIndex="0">
+						<contour edges="M139.81,19.13C162.68,0,139.81,-19.14C115.03,-38.01,57.91,-46.19C0,-53.75,-57.92,-46.19C-115.04,-38.01,-139.82,-19.14C-162.69,0,-139.82,19.13C-115.04,38.01,-57.92,46.19C0,53.75,57.91,46.19C115.03,38.01,139.81,19.13" />
+					</polygon>
+					<edge strokeIndex="0" edges="M139.81,19.13C115.03,38.01,57.91,46.19C0,53.75,-57.92,46.19C-115.04,38.01,-139.82,19.13C-162.69,0,-139.82,-19.14C-115.04,-38.01,-57.92,-46.19C0,-53.75,57.91,-46.19C115.03,-38.01,139.81,-19.14C162.68,0,139.81,19.13" />
+				</figure>
+			</shape>
+			<text x="-67.33201454775457" y="-21.997507906388392" width="148.03125" height="42">
+				<new-text-format characters="" fillColor="#000000" size="12" />
+				<text-run characters="Press me!" fillColor="#000000" size="32" family="Arial" />
+			</text>
+		</frame>
+	</layer>
+</movieclip>

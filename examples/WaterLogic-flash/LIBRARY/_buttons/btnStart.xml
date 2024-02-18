@@ -1,0 +1,41 @@
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="_buttons/btnStart" itemID="40799c4f-0000003b" sourceFlashFilepath="..\..\Template.old\game-old.fla" sourceLibraryItemHRef="Standard/btnStart" sourceLastModified="1081711695" symbolType="button" lastModified="1423172626">
+  <timeline>
+    <DOMTimeline name="btnStart">
+      <layers>
+        <DOMLayer name="Layer 1" color="#4F80FF" current="true" isSelected="true">
+          <frames>
+            <DOMFrame index="0" duration="3" keyMode="9728">
+              <elements>
+                <DOMSymbolInstance libraryItemName="_buttons/Start" name="" centerPoint3DX="2.35" centerPoint3DY="1">
+                  <matrix>
+                    <Matrix tx="1" ty="1.45"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point x="0.5" y="0.25"/>
+                  </transformationPoint>
+                  <filters>
+                    <GlowFilter blurX="2" blurY="2" color="#000000" quality="2" strength="2"/>
+                  </filters>
+                </DOMSymbolInstance>
+              </elements>
+            </DOMFrame>
+            <DOMFrame index="3" keyMode="9728">
+              <elements>
+                <DOMShape>
+                  <fills>
+                    <FillStyle index="1">
+                      <SolidColor/>
+                    </FillStyle>
+                  </fills>
+                  <edges>
+                    <Edge fillStyle1="1" edges="!637 -281|637 243!637 243|-603 243!-603 243|-603 -281!-603 -281|637 -281"/>
+                  </edges>
+                </DOMShape>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+      </layers>
+    </DOMTimeline>
+  </timeline>
+</DOMSymbolItem>

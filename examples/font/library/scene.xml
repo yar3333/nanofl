@@ -1,0 +1,41 @@
+<movieclip version="2.2.0">
+	<layer name="Layer 1">
+		<frame>
+			<text x="450" y="0" width="27.55" height="20" selectable="true">
+				<text-run characters="a123" fillColor="#FFFFFF" size="12" family="Times New Roman" />
+			</text>
+			<text x="450" y="50" width="28.2" height="36" selectable="true">
+				<text-run characters="b123&#xA;c345" fillColor="#FFFFFF" size="12" family="Times New Roman" />
+			</text>
+			<text x="450" y="150" width="22.2" height="20" selectable="true">
+				<text-run characters="Def" fillColor="#000000" align="center" size="12" family="Times New Roman" />
+			</text>
+			<text x="450" y="200" width="22.2" height="20" selectable="true">
+				<text-run characters="Ghi" fillColor="#000000" align="center" size="12" family="Times New Roman" />
+			</text>
+			<text x="450" y="250" width="76.4" height="26">
+				<text-run characters="Klmn" fillColor="#000000" align="center" size="12" family="Times New Roman" />
+				<text-run characters="Oprst" fillColor="#000000" align="center" size="18" style="bold" family="Times New Roman" />
+			</text>
+			<instance libraryItem="Symbol 1" x="450" y="100" />
+			<text x="233" y="0" width="30.2" height="404">
+				<text-run characters="aasa&#xA;asdas&#xA;dasd&#xA;a&#xA;sds&#xA;das&#xA;dsa&#xA;da&#xA;das&#xA;da&#xA;da&#xA;sda&#xA;sd&#xA;asd&#xA;asd&#xA;sa&#xA;da&#xA;d&#xA;as&#xA;dsa&#xA;d&#xA;d&#xA;ad&#xA;sadd&#xA;asd" fillColor="#000000" size="12" family="Times New Roman" />
+			</text>
+			<text x="333" y="0" width="35" height="388.1">
+				<text-run characters="aasa&#xA;asdas&#xA;dasd&#xA;a&#xA;sds&#xA;das&#xA;dsa&#xA;da&#xA;das&#xA;da&#xA;da&#xA;sda&#xA;sd&#xA;asd&#xA;asd&#xA;sa&#xA;da&#xA;d&#xA;as&#xA;dsa&#xA;d" fillColor="#000000" size="14" family="Times New Roman" />
+			</text>
+			<text x="283" y="0" width="35" height="395.6">
+				<text-run characters="aasa&#xA;asdas&#xA;dasd&#xA;a&#xA;sds&#xA;das&#xA;dsa&#xA;da&#xA;das&#xA;da&#xA;da&#xA;sda&#xA;sd&#xA;asd&#xA;asd&#xA;sa&#xA;da&#xA;d&#xA;as&#xA;dsa&#xA;d&#xA;d&#xA;ad" fillColor="#000000" size="13" family="Times New Roman" />
+			</text>
+			<text x="383" y="0" width="45" height="383">
+				<text-run characters="aasa&#xA;asdas&#xA;dasd&#xA;a&#xA;sds&#xA;das&#xA;dsa&#xA;da&#xA;das&#xA;da&#xA;da&#xA;sda&#xA;sd&#xA;asd&#xA;asd&#xA;sa&#xA;da&#xA;d&#xA;as&#xA;dsa" fillColor="#000000" size="14" family="Verdana" />
+			</text>
+			<text width="106.5" height="52">
+				<text-run characters="Arialp" fillColor="#000000" size="40" family="Arial" />
+			</text>
+			<text x="0" y="100" width="120" height="54">
+				<text-run characters="Impact" fillColor="#000000" size="40" family="Impact" />
+			</text>
+		</frame>
+	</layer>
+</movieclip>

@@ -1,0 +1,45 @@
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="background" itemID="54d43208-000000ac" sourceLibraryItemHRef="Symbol 1" lastModified="1423532599" lastUniqueIdentifier="1">
+  <timeline>
+    <DOMTimeline name="background">
+      <layers>
+        <DOMLayer name="Layer 1" color="#4FFF4F" current="true" isSelected="true">
+          <frames>
+            <DOMFrame index="0" keyMode="9728">
+              <elements>
+                <DOMSymbolInstance libraryItemName="wall" name="" centerPoint3DX="260.7" centerPoint3DY="195">
+                  <transformationPoint>
+                    <Point x="260" y="195"/>
+                  </transformationPoint>
+                </DOMSymbolInstance>
+                <DOMBitmapInstance name="" referenceID="" libraryItemName="_bitmaps/barrels">
+                  <matrix>
+                    <Matrix a="0.368423461914063" d="0.368423461914063" tx="351.7" ty="241.2"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point x="152.55" y="137.6"/>
+                  </transformationPoint>
+                </DOMBitmapInstance>
+                <DOMBitmapInstance name="" referenceID="" libraryItemName="_bitmaps/floor">
+                  <matrix>
+                    <Matrix d="0.565582275390625" tx="1.45" ty="343"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point x="260" y="41.55"/>
+                  </transformationPoint>
+                </DOMBitmapInstance>
+                <DOMBitmapInstance name="" referenceID="" libraryItemName="_bitmaps/barrels">
+                  <matrix>
+                    <Matrix a="0.368423461914063" d="0.368423461914063" tx="185.2" ty="240.35"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point x="152.5" y="137.65"/>
+                  </transformationPoint>
+                </DOMBitmapInstance>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+      </layers>
+    </DOMTimeline>
+  </timeline>
+</DOMSymbolItem>

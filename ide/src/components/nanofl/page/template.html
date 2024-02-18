@@ -1,0 +1,44 @@
+<div id="container">
+	
+	<div id="mainMenuContainer" class="pane ui-layout-north no-user-select"></div>
+	
+	<div class="pane ui-layout-east">
+		<ul id="rightNav" class="nav nav-tabs nav-tabs-narrow no-user-select">
+			<li id="libraryTab" class="active"><a href="javascript:void(0)">Library</a></li>
+			<li id="propertiesTab"><a href="javascript:void(0)">Properties</a></li>
+			<li id="outputTab"><a href="javascript:void(0)">Output</a></li>
+		</ul>
+		<library id="library"></library>
+		<properties id="properties"></properties>
+		<output-pane id="output"></output-pane>
+	</div>
+	
+	<div class="pane ui-layout-center no-user-select">
+		
+		<opened-files id="openedFiles"></opened-files>
+		
+		<div id="content">
+			<div id="startPage" class="startPage">
+				<start-page id="startPageComponent"></start-page>
+			</div>
+			<div id="moviePage" style="display:none">
+				<movie id="movie"></movie>
+			</div>
+		</div>
+		
+	</div>
+	
+</div>
+
+<popups id="popupsContainer"></popups>
+
+<waiter id="waiter"></waiter>
+<shadow id="shadow"></shadow>
+
+<main-menu id="mainMenu"></main-menu>
+<alerter id="alerter"></alerter>
+
+<fps-meter id="fpsMeter"></fps-meter>
+<drag-and-drop id="dragAndDrop"></drag-and-drop>
+<preference-storage id="preferenceStorage"></preference-storage>
+<context-menu id="inputContextMenu"></context-menu>

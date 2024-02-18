@@ -1,0 +1,44 @@
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="_buttons/btnNext" itemID="40799ccf-00000040" sourceFlashFilepath="..\..\Template.old\game-old.fla" sourceLibraryItemHRef="Standard/btnNext" sourceLastModified="1081711823" symbolType="button" lastModified="1423173956">
+  <timeline>
+    <DOMTimeline name="btnNext">
+      <layers>
+        <DOMLayer name="Layer 1" color="#4F80FF" current="true" isSelected="true">
+          <frames>
+            <DOMFrame index="0" duration="3" keyMode="9728">
+              <elements>
+                <DOMSymbolInstance libraryItemName="_buttons/Next" name="" centerPoint3DX="41.25" centerPoint3DY="12.65">
+                  <matrix>
+                    <Matrix a="1.15655517578125" d="1.15655517578125" tx="-0.05" ty="1.05"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point x="35.75" y="9.9"/>
+                  </transformationPoint>
+                  <filters>
+                    <GlowFilter blurX="2" blurY="2" color="#000000" quality="2" strength="2"/>
+                  </filters>
+                </DOMSymbolInstance>
+              </elements>
+            </DOMFrame>
+            <DOMFrame index="3" keyMode="9728">
+              <elements>
+                <DOMShape isFloating="true">
+                  <matrix>
+                    <Matrix a="0.640380859375" tx="-0.65"/>
+                  </matrix>
+                  <fills>
+                    <FillStyle index="1">
+                      <SolidColor/>
+                    </FillStyle>
+                  </fills>
+                  <edges>
+                    <Edge fillStyle1="1" edges="!-1538 -273S2|1525.5 -273!1525.5 -273|1525.5 280!1525.5 280|-1538 280!-1538 280|-1538 -273"/>
+                  </edges>
+                </DOMShape>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+      </layers>
+    </DOMTimeline>
+  </timeline>
+</DOMSymbolItem>

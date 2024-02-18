@@ -1,0 +1,7 @@
+--js ..\..\bin\filters\StdFiltersPlugin.js
+--class-path ..\..\..\api\gen
+--class-path src
+--main StdFiltersPlugin
+--cmd sed -i "s/var createjs = {};/createjs = createjs || {};/" ../../bin/filters/StdFiltersPlugin.js
+--cmd IF EXIST support IF NOT EXIST ..\..\bin\filters\StdFiltersPlugin mkdir  ..\..\bin\filters\StdFiltersPlugin
+--cmd IF EXIST support xcopy /E /Q /Y support ..\..\bin\filters\StdFiltersPlugin

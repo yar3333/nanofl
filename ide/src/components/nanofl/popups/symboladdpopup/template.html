@@ -1,0 +1,62 @@
+<style>
+	.registration
+	{
+		position: relative;
+		width: 24px;
+		height: 24px;
+		border: solid 1px black;
+		line-height: 0;
+		margin-top: 10px;
+		margin-left: 5px;
+	}
+	
+	.registration>span
+	{
+		display: inline-block;
+		position: absolute;
+		width: 6px;
+		height: 6px;
+		border: solid 1px black;
+		background-color: white;
+		cursor: default;
+	}
+	
+	.registration>span.active
+	{
+		background-color: black;
+	}
+	
+	.registration>span:nth-child(3n+1)   { left: -5px; }
+	.registration>span:nth-child(3n+2)   { left: 8px; }
+	.registration>span:nth-child(3n)     { left: 21px; }
+	.registration>span:nth-child(1),
+	.registration>span:nth-child(2),
+	.registration>span:nth-child(3)      { top: -5px; }
+	.registration>span:nth-child(4),
+	.registration>span:nth-child(5),
+	.registration>span:nth-child(6)      { top: 8px; }
+	.registration>span:nth-child(7),
+	.registration>span:nth-child(8),
+	.registration>span:nth-child(9)      { top: 21px; }
+</style>
+
+<wq-content for="title">Add Symbol</wq-content>
+
+<wq-content for="controls">
+	<form class="form-horizontal">
+		<div class="control-group">
+			<label class="control-label" for="name">Name:</label>
+			<div class="controls">
+				<input type="text" id="name" />
+			</div>
+			<label class="control-label" for="registration">Registration:</label>
+			<div class="controls">
+				<div id="registration" class="registration">
+					<span>&nbsp;</span><span>&nbsp;</span><span>&nbsp;</span>
+					<span>&nbsp;</span><span class="active">&nbsp;</span><span>&nbsp;</span>
+					<span>&nbsp;</span><span>&nbsp;</span><span>&nbsp;</span>
+				</div>
+			</div>
+		</div>
+	</form>
+</wq-content>

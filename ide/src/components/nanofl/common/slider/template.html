@@ -1,0 +1,32 @@
+<style>
+	.nanofl .slider.slider-horizontal
+	{
+		margin-top: 8px;
+	}
+
+	.nanofl .slider.slider-horizontal .slider-handle.triangle
+	{
+		border-bottom-color: #BBBBBB;
+		border-width: 0 6px 15px;
+		top: -6px;
+		margin-left: -6px;
+	}
+
+	.nanofl .slider-track
+	{
+	  background-image: linear-gradient(to bottom, #666 0%, #bbb 100%);
+	}
+
+	.nanofl .slider.slider-horizontal .slider-track
+	{
+		height: 6px;
+	}
+</style>
+
+<div id="container" class="nanofl-row">
+	<span class="size-10 longlabel"><label id="label">Label:</label>&nbsp;</span>
+	<span id="slider" class="size-23" data-slider-selection="none" data-slider-handle="triangle" data-slider-tooltip="hide" />
+	<span class="size-2">&nbsp;</span>
+	<input type="text" id="value" class="size-8" value="50" />
+	<label id="units" class="size-2">%</label>
+</div>

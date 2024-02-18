@@ -1,0 +1,12 @@
+[
+	{ "name":"Create Tween",			"command":"timeline.createTween",			"icon":"icon-forward" },
+	{ "name":"Remove Tween",			"command":"timeline.removeTween",			"icon":"icon-remove" },
+	{ "name":"------------------" },
+	{ "name":"Insert Frame",			"command":"timeline.insertFrame",			"icon":"custom-icon-frame-empty" },
+	{ "name":"Convert to Keyframe",		"command":"timeline.convertToKeyFrame",		"icon":"custom-icon-frame-key" },
+	{ "name":"Remove Frame",			"command":"timeline.removeFrame",			"icon":"custom-icon-frame-remove" },
+	{ "name":"------------------" },
+	{ "name":"Cut",						"command":"timeline.cut",					"icon":"custom-icon-cut" },
+	{ "name":"Copy",					"command":"timeline.copy",					"icon":"custom-icon-copy" },
+	{ "name":"Paste",					"command":"timeline.paste",					"icon":"custom-icon-paste" }
+]

@@ -1,0 +1,26 @@
+<style>
+	.~vbtn { margin-top:4px }
+	.~rmenu.dropdown-menu { left:auto; right:0 }
+</style>
+
+<wq-content for="content">
+	<fieldset class="nanofl-group">
+		<legend>FILTERS</legend>
+		
+		<div style="margin: 0 auto">
+			<div class="nanofl-row" style="margin-bottom:5px">
+				<span class="size-4">&nbsp;</span>
+				<select id="usedFilters" multiple="multiple" class="size-28"></select>
+				<span class="size-2">&nbsp;</span>
+				<span class="size-11" style="white-space:normal; vertical-align:top">
+					<div class="btn-group">
+						<button data-toggle="dropdown" class="btn btn-mini size-7 dropdown-toggle"><i class="custom-icon-plus"></i><span class="caret"></span></button>
+						<ul id="allFilters" class="dropdown-menu ~rmenu"></ul>
+					</div>
+					<button id="removeFilter" class="btn btn-mini ~vbtn size-7" title="Remove Filter"><i class="custom-icon-trash"></i></button>
+				</span>
+			</div>
+			<custom-properties-pane id="customProperties"></custom-properties-pane>
+		</div>
+	</fieldset>
+</wq-content>

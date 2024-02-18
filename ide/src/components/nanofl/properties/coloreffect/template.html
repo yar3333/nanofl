@@ -1,0 +1,56 @@
+<wq-content for="content">
+	<fieldset class="nanofl-group">
+		<legend>COLOR EFFECT</legend>
+		
+		<div style="margin: 0 auto">
+			<div class="nanofl-row">
+				<label class="size-10">Style:</label>
+				<select id="type" class="size-22">
+					<option value="0">None</option>
+					<option value="1">Brightness</option>
+					<option value="2">Tint</option>
+					<option value="3">Advanced</option>
+					<option value="4">Alpha</option>
+				</select>
+				<span class="size-2">&nbsp;</span>
+				<color-selector id="color" cssClass="size-11" visibility="false"></color-selector>
+			</div>
+			
+			<div id="colorEffects">
+				<slider id="brightness" text="Bright:" min="-100" max="100" step="1"></slider>
+				<slider id="tint" text="Tint:" min="0" max="100" step="1"></slider>
+				<div>
+					<div class="nanofl-row">
+						<label class="size-10">Alpha:</label>
+						<input type="text" id="colorMulA" class="size-8" />
+						<label class="size-11">% * A + </label>
+						<input type="text" id="colorAddA" class="size-8" />
+						<span class="size-8"></span>
+					</div>
+					<div class="nanofl-row">
+						<label class="size-10">Red:</label>
+						<input type="text" id="colorMulR" class="size-8" />
+						<label class="size-11">% * R + </label>
+						<input type="text" id="colorAddR" class="size-8" />
+						<span class="size-8"></span>
+					</div>
+					<div class="nanofl-row">
+						<label class="size-10">Green:</label>
+						<input type="text" id="colorMulG" class="size-8" />
+						<label class="size-11">% * G + </label>
+						<input type="text" id="colorAddG" class="size-8" />
+						<span class="size-8"></span>
+					</div>
+					<div class="nanofl-row">
+						<label class="size-10">Blue:</label>
+						<input type="text" id="colorMulB" class="size-8" />
+						<label class="size-11">% * B + </label>
+						<input type="text" id="colorAddB" class="size-8" />
+						<span class="size-8"></span>
+					</div>
+				</div>
+				<slider id="alpha" text="Alpha:" min="0" max="100" step="1"></slider>
+			</div>
+		</div>
+	</fieldset>
+</wq-content>

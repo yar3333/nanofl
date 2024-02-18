@@ -1,0 +1,18 @@
+<movieclip version="2.2.0">
+	<layer name="Label">
+		<frame>
+			<group x="-100" y="0">
+				<group x="-81.25" y="-40.8" matrix="0.996261596679688,0.0863800048828125,-0.0863800048828125,0.996261596679688">
+					<shape>
+						<strokes>
+							<stroke type="solid" color="#FF0023" thickness="6.75" />
+						</strokes>
+						<figure>
+							<edge strokeIndex="0" edges="M581,30L581,362.95" />
+						</figure>
+					</shape>
+				</group>
+			</group>
+		</frame>
+	</layer>
+</movieclip>

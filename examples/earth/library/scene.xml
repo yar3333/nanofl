@@ -1,0 +1,25 @@
+<movieclip version="2.3.0" linkedClass="MySceneClass">
+	<layer name="2D">
+		<frame>
+			<text x="2" y="2" matrix="1.00352300629871,0,0,1" width="97.54296875" height="18">
+				<new-text-format characters="" fillColor="#000000" size="12" />
+				<text-run characters="ThreeJS Renderer:" fillColor="#000000" size="11" family="Arial" />
+			</text>
+			<text name="txtRenderer" x="98" y="2" matrix="1.12302728755,0,0,1" width="121.1" height="18">
+				<new-text-format characters="" fillColor="#000000" size="11" family="Arial" />
+			</text>
+			<text x="450" y="2" matrix="1.02439022007476,0,0,1" width="28.44921875" height="18">
+				<new-text-format characters="" fillColor="#000000" size="12" />
+				<text-run characters="FPS:" fillColor="#000000" size="11" family="Arial" />
+			</text>
+			<text name="txtFPS" x="477" y="2" matrix="0.99503219806479,0,0,1" width="36.1797337513453" height="18">
+				<new-text-format characters="" fillColor="#000000" size="11" family="Arial" />
+			</text>
+		</frame>
+	</layer>
+	<layer name="3D">
+		<frame>
+			<instance libraryItem="earth" name="myEarth" rotationX="-22.422680412371136" rotationY="-27.061855670103096" ambientLightColor="#FFFFFF" x="260" y="190" />
+		</frame>
+	</layer>
+</movieclip>

@@ -1,0 +1,80 @@
+[	
+	{ "shortcut":"Ctrl+U"				, "command":"application.preferences" },
+	{ "shortcut":"Ctrl+Shift+P"			, "command":"application.reloadPlugins" },
+	{ "shortcut":"Ctrl+Q"				, "command":"application.quit" },
+	{ "shortcut":"Alt+F4"				, "command":"application.quit" },
+	
+	{ "shortcut":"V"					, "command":"editor.switchToSelectTool" },
+	{ "shortcut":"Q"					, "command":"editor.switchToTransformTool" },
+	{ "shortcut":"T"					, "command":"editor.switchToTextTool" },
+	{ "shortcut":"Y"					, "command":"editor.switchToPencilTool" },
+	{ "shortcut":"E"					, "command":"editor.switchToEraserTool" },
+	{ "shortcut":"N"					, "command":"editor.switchToLineTool" },
+	{ "shortcut":"R"					, "command":"editor.switchToRectangleTool" },
+	{ "shortcut":"O"					, "command":"editor.switchToOvalTool" },
+	{ "shortcut":"K"					, "command":"editor.switchToFillTool" },
+	{ "shortcut":"F"					, "command":"editor.switchToGradientTool" },
+	{ "shortcut":"I"					, "command":"editor.switchToDropperTool" },
+	
+	{ "shortcut":"F8"					, "command":"editor.convertToSymbol" },
+	
+	{ "shortcut":"Ctrl+A"				, "command":"editor.toggleSelection" },
+	{ "shortcut":"Ctrl+Shift+A"			, "command":"editor.deselectAll" },
+	
+	{ "shortcut":"Ctrl+B"				, "command":"editor.breakApart" },
+	{ "shortcut":"Ctrl+G"				, "command":"editor.group" },
+	{ "shortcut":"Ctrl+D"				, "command":"editor.duplicate" },
+	{ "shortcut":"Ctrl+Shift+Z"			, "command":"editor.removeTransform" },
+	
+	{ "shortcut":"Ctrl+Shift+D"			, "command":"editor.dump" },
+	
+	{ "shortcut":"Delete"				, "command":"editor.remove" },
+	
+	{ "shortcut":"Left"					, "command":"editor.translateLeft" },
+	{ "shortcut":"Right"				, "command":"editor.translateRight" },
+	{ "shortcut":"Up"					, "command":"editor.translateUp" },
+	{ "shortcut":"Down"					, "command":"editor.translateDown" },
+	
+	{ "shortcut":"Shift+Left"			, "command":"editor.jumpLeft" },
+	{ "shortcut":"Shift+Right"			, "command":"editor.jumpRight" },
+	{ "shortcut":"Shift+Up"				, "command":"editor.jumpUp" },
+	{ "shortcut":"Shift+Down"			, "command":"editor.jumpDown" },
+	
+	{ "shortcut":"Ctrl+Up"				, "command":"editor.moveForwards" },
+	{ "shortcut":"Ctrl+Down"			, "command":"editor.moveBackwards" },
+	{ "shortcut":"Ctrl+Shift+Up"		, "command":"editor.moveFront" },
+	{ "shortcut":"Ctrl+Shift+Down"		, "command":"editor.moveBack" },
+	
+	{ "shortcut":"Ctrl+Z"				, "command":"document.undo" },
+	{ "shortcut":"Ctrl+Y"				, "command":"document.redo" },
+	
+	{ "shortcut":"Ctrl+N"				, "command":"document.createNewEmpty" },
+	{ "shortcut":"Ctrl+O"				, "command":"document.open" },
+	{ "shortcut":"Ctrl+S"				, "command":"document.save" },
+	{ "shortcut":"Ctrl+Shift+S"			, "command":"document.saveAs" },
+	{ "shortcut":"Ctrl+J"				, "command":"document.properties" },
+	{ "shortcut":"Ctrl+Enter"			, "command":"document.test" },
+	{ "shortcut":"Ctrl+Shift+F12"		, "command":"document.publishSettings" },
+	{ "shortcut":"Shift+Alt+F12"		, "command":"document.publish" },
+	
+	{ "shortcut":"Delete"				, "command":"library.remove" },
+	{ "shortcut":"F2"					, "command":"library.rename" },
+	{ "shortcut":"Up"					, "command":"library.gotoPrev" },
+	{ "shortcut":"Down"					, "command":"library.gotoNext" },
+	{ "shortcut":"Shift+Up"				, "command":"library.gotoPrevExtSelect" },
+	{ "shortcut":"Shift+Down"			, "command":"library.gotoNextExtSelect" },
+	{ "shortcut":"Ctrl+F8"				, "command":"library.newEmptyMovieClip" },
+	{ "shortcut":"Ctrl+R"				, "command":"library.importFiles" },
+	
+	{ "shortcut":"F2"					, "command":"timeline.renameLayer" },
+	{ "shortcut":"F5"					, "command":"timeline.insertFrame" },
+	{ "shortcut":"F6"					, "command":"timeline.convertToKeyFrame" },
+	{ "shortcut":"F7"					, "command":"timeline.addBlankKeyFrame" },
+	{ "shortcut":"Shift+F5"				, "command":"timeline.removeFrame" },
+	{ "shortcut":"Ctrl+,"				, "command":"timeline.gotoPrevFrame" },
+	{ "shortcut":"Ctrl+."				, "command":"timeline.gotoNextFrame" },
+	{ "shortcut":"Enter"				, "command":"timeline.play" },
+	
+	{ "shortcut":"F8"					, "command":"code.compile" },
+	{ "shortcut":"F5"					, "command":"code.run" }
+]

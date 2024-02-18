@@ -1,0 +1,47 @@
+<style>
+	.~customPropertiesPaneNoProperties
+	{
+		font-size: 13px;
+		margin-top: 14px;
+	}
+	
+	.~scrollable
+	{
+		overflow: auto;
+		position: relative;
+	}
+</style>
+
+<wq-content for="title">Preferences</wq-content>
+
+<wq-content for="panes">
+	
+	<div id="generalPropertiesPane" class="tab-pane">
+		<h4 style="margin-top:0">General settings</h4>
+		<table class="tableform">
+			<tbody>
+				<tr>
+					<td><label for="checkNewVersionPeriod">Check new version every:</label></td>
+					<td>
+						<select id="checkNewVersionPeriod" class="size-32">
+							<option value="no">-</option>
+							<option value="start">application start</option>
+							<option value="day">day</option>
+							<option value="week">week</option>
+							<option value="month">month</option>
+						</select>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div id="customPropertiesPane" class="tab-pane">
+		<h4 id="customPropertiesPaneTitle" style="margin-top:0"></h4>
+		<div id="scrollable" class="~scrollable">
+			<p id="customPropertiesPaneNoProperties" class="~customPropertiesPaneNoProperties">There are no properties for this plugin.</p>
+            <custom-properties-table-form id="customProperties"></custom-properties-table-form>
+		</div>
+	</div>
+	
+</wq-content>

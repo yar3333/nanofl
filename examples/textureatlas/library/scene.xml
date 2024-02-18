@@ -1,0 +1,8 @@
+<movieclip version="2.3.0">
+	<layer name="Label">
+		<frame>
+			<instance libraryItem="tweenBottle" x="194.5" y="66" matrix="0.544444444444392,0,0,0.544444444444447" />
+			<instance libraryItem="tweenLetter" x="334" y="149.5" />
+		</frame>
+	</layer>
+</movieclip>

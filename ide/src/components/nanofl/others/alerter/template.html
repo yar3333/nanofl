@@ -1,0 +1,45 @@
+<style>
+	.~container
+	{
+		position: absolute;
+		width: 100%;
+		top: 0;
+		text-align: center;
+		font-size: 0;
+		pointer-events: none;
+		z-index: 4;
+	}
+	
+	.~container>span
+	{
+		display: inline-block;
+		line-height: 28px;
+		font-size: 14px;
+		padding: 0 10px;
+		border-radius: 0 0 9px 9px;
+		pointer-events: auto;
+	}
+	
+	.~container>span.alerter-info
+	{
+		background-color: #C3E3B3;
+		border: solid 1px #346B19;
+		color: #346B19;
+	}
+	
+	.~container>span.alerter-warning
+	{
+		background-color: #FAE60A;
+		border: solid 1px #968E30;
+		color: #777700;
+	}
+	
+	.~container>span.alerter-error
+	{
+		background-color: #FFC1BF;
+		border: solid 1px #7F0000;
+		color: #7F0000;
+	}
+</style>
+
+<div id="container" class="~container" style="display:none"><span></span></div>

@@ -1,0 +1,4 @@
+[
+	{ "name":"Clear",		"command":"output.clear",		"icon":"custom-icon-remove" },
+	{ "name":"Copy",		"command":"output.copy",		"icon":"custom-icon-copy" }
+]

@@ -1,0 +1,29 @@
+<style>
+	.~noScroll
+	{
+		overflow: hidden;
+	}
+</style>
+
+<div id="container">
+	<div class="pane ui-layout-north" style="font-size:0">
+		<timeline id="timeline"></timeline>
+	</div>
+	<div id="frameContainer" class="pane ui-layout-center">
+		
+		<div class="pane ui-layout-west pane-back-color" style="overflow:hidden"><toolbar id="toolbar"></toolbar></div>
+		<div class="pane ui-layout-center ~noScroll">
+			<table id="navigatorLine" class="navigatorline">
+				<tbody>
+					<tr>
+						<td><navigator id="navigator"></navigator></td>
+						<td align="right"><zoomer id="zoomer"></zoomer></td>
+					</tr>
+				</tbody>
+			</table>
+			<editor id="editor"></editor>
+			<status-bar id="statusBar"></status-bar>
+		</div>
+		
+	</div>
+</div>

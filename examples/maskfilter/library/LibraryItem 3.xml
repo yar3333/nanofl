@@ -1,0 +1,11 @@
+<movieclip version="2.2.0">
+	<layer name="Layer 0">
+		<frame>
+			<instance libraryItem="LibraryItem 1" x="0" y="14">
+				<filters>
+					<BoxBlurFilter blurX="20" blurY="10" quality="1" />
+				</filters>
+			</instance>
+		</frame>
+	</layer>
+</movieclip>

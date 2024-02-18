@@ -1,0 +1,61 @@
+build: bin/templates/scripts/three-r161.js \
+       engine \
+       bin/examples \
+       bin/plugins \
+       bin/scripts/api \
+       bin/resources/app/static
+	
+	make -C ../modules
+
+	haxe build.hxml --main Main -D no-trial -D long-asserts
+	
+	npx webpack
+	rm bin/resources/app/haxe.js
+	
+	npx cpx -u "src/components/**/support/**" bin/resources/app/components
+
+rebuild: clean build
+
+clean:
+	if [ -d bin/resources/app ]; then \
+		/bin/find bin/resources/app -mindepth 1 \
+			-not -path "bin/resources/app/package.json" \
+			-not -path "bin/resources/app/main.js" \
+			-not -path "bin/resources/app/preload.js" \
+			-not -path "bin/resources/app/static*" \
+			-not -path "bin/resources/app/tools*" \
+			-not -path "bin/resources/app/preferences*" \
+			-not -path "bin/resources/app/templates*" \
+			-not -path "bin/resources/app/node_modules*" \
+			-delete ;\
+	fi
+	make -C ../modules clean
+
+run:
+	cd bin && NanoFL.exe
+	
+bin/templates/scripts/three-r161.js:
+	cmd //c npm i
+	mkdir -p $(@D)
+	cp node_modules/three/build/three.module.js $@
+
+engine:
+	npx symlink-dir ../engine $@
+
+bin/examples:
+	npx symlink-dir ../examples $@
+
+bin/plugins:
+	npx symlink-dir ../plugins/bin $@
+
+bin/scripts/api:
+	npx symlink-dir ../api/gen $@
+
+bin/resources/app/static:
+	npx symlink-dir static $@
+
+##############################################################################################
+
+PHONY: rebuild build clean run
+
+.SUFFIXES:

@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project version="2">
+  <!-- Output SWF options -->
+  <output>
+    <movie outputType="Application" />
+    <movie input="" />
+    <movie path="bin\index.js" />
+    <movie fps="0" />
+    <movie width="0" />
+    <movie height="0" />
+    <movie version="0" />
+    <movie minorVersion="0" />
+    <movie platform="JavaScript" />
+    <movie background="#FFFFFF" />
+  </output>
+  <!-- Other classes to be compiled into your SWF -->
+  <classpaths>
+    <class path="..\..\engine" />
+    <class path="..\..\player\src" />
+    <class path="..\..\ide\src" />
+    <class path="src" />
+  </classpaths>
+  <!-- Build options -->
+  <build>
+    <option directives="test&#xA;debug&#xA;ide&#xA;long_asserts&#xA;client&#xA;threejs-noEmbed" />
+    <option flashStrict="False" />
+    <option noInlineOnDebug="False" />
+    <option mainClass="Main" />
+    <option enabledebug="False" />
+    <option additional="" />
+  </build>
+  <!-- haxelib libraries -->
+  <haxelib>
+    <library name="easeljs" />
+    <library name="stdlib" />
+    <library name="HtmlParser" />
+    <library name="tweenjs" />
+    <library name="jquery" />
+    <library name="easeljs" />
+    <library name="soundjs" />
+    <library name="threejs" />
+    <library name="jsonmod" />
+    <library name="jslibs" />
+  </haxelib>
+  <!-- Class files to compile (other referenced classes will automatically be included) -->
+  <compileTargets>
+    <compile path="Main.hx" />
+  </compileTargets>
+  <!-- Paths to exclude from the Project Explorer tree -->
+  <hiddenPaths>
+    <hidden path="GeomTestNeko.hxproj" />
+    <hidden path="obj" />
+  </hiddenPaths>
+  <!-- Executed before build -->
+  <preBuildCommand />
+  <!-- Executed after build -->
+  <postBuildCommand alwaysRun="False">haxelib run refactor -v replaceInFile bin/index.js "!^var __map_reserved = {}$!var __map_reserved = {};!m"</postBuildCommand>
+  <!-- Other project options -->
+  <options>
+    <option showHiddenPaths="True" />
+    <option testMovie="OpenDocument" />
+    <option testMovieCommand="index.html" />
+  </options>
+  <!-- Plugin storage -->
+  <storage />
+</project>

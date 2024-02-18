@@ -1,0 +1,15 @@
+{
+    "name": "nanofl-ts",
+    "version": "0.0.4",
+    "description": "Typescript definitions for writing NanoFL applications",
+    "homepage": "https://github.com/yar3333/nanofl/tree/main/nanofl-ts",
+    "license": "MIT",
+    "author": "yar3333",
+    "main": "",
+    "types": "index.d.ts",
+    "scripts": {},
+    "dependencies": {
+        "@types/createjs": "*",
+        "@types/three": "*"
+    }
+}

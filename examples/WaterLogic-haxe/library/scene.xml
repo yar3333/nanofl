@@ -1,0 +1,108 @@
+<movieclip version="2.2.0" autoPlay="false" loop="false" linkedClass="Scene">
+	<layer name="Label">
+		<frame label="Origin" />
+		<frame label="Rules" />
+		<frame label="Game" />
+		<frame label="Win" />
+		<frame />
+	</layer>
+	<layer name="Code">
+		<frame />
+		<frame />
+		<frame />
+		<frame />
+		<frame />
+	</layer>
+	<layer name="Hud">
+		<frame>
+			<instance libraryItem="_buttons/btnStart" name="btGotoGame" x="357.499999999992" y="181.549999999999" matrix="0.854268770962739,-0.107794152331484,0.107794152331499,0.854268770962861" />
+			<instance libraryItem="_buttons/btnRules" name="btRules" x="366.25" y="234.4" matrix="0.993637084960938,0.112625122070313,-0.112625122070313,0.993637084960938" />
+		</frame>
+		<frame>
+			<instance libraryItem="_buttons/btnBack" name="btGotoOrigin" x="120.65" y="345.65" />
+			<text x="47.8" y="57.65" width="426.8333435058594" height="268">
+				<text-run characters="You have to get specified&#xA;water volume in each bucket.&#xA;" fillColor="#00FFFF" align="center" size="17" style="bold" family="Comic Sans MS" />
+				<text-run characters="&#xA;" fillColor="#FFFF00" align="center" size="17" style="bold" family="Comic Sans MS" />
+				<text-run characters="You may do next:&#xA;   1) fill whole bucket from the tap;&#xA;   2) fallout all water from the bucket;&#xA;   3) transfuse water from one bucket to another." fillColor="#FFFF00" size="17" style="bold" family="Comic Sans MS" />
+				<text-run characters="&#xA;" fillColor="#6699FF" size="17" style="bold" family="Comic Sans MS" />
+				<text-run characters="&#xA;" fillColor="#6699FF" align="center" size="17" style="bold" family="Comic Sans MS" />
+				<text-run characters="Click on the bucket to get it.&#xA;Move mouse with bucket and&#xA;click again to do something else." fillColor="#00FFFF" align="center" size="17" style="bold" family="Comic Sans MS" />
+			</text>
+			<instance libraryItem="_buttons/btnStart" name="btGotoGame" x="385.5" y="340.747959183677" matrix="0.735443971701841,0,0,0.750000000000001" />
+			<text x="213.341204630291" y="7.85" matrix="2.01708984375,0,0,2.01708984375" regX="72" regY="8.4" width="47.18333435058594" height="27">
+				<text-run characters="RULES" fillColor="#FF9900" align="center" size="18" family="Impact" />
+			</text>
+		</frame>
+		<frame>
+			<instance libraryItem="musicButton" x="481" y="11" regX="15" regY="16" />
+			<text x="26" y="14.65" width="63" height="31">
+				<text-run characters="Level" fillColor="#FFFFFF" align="center" size="23" style="bold" family="Arial" />
+			</text>
+			<text name="tfLevel" x="93" y="14.65" width="42.6" height="31" selectable="true">
+				<text-run characters="000" fillColor="#FFFFFF" size="23" style="bold" family="Arial" />
+			</text>
+		</frame>
+		<frame>
+			<instance libraryItem="_buttons/btnNext" x="260.1" y="298.25" matrix="1.0517578125,0,0,1.0517578125" />
+			<text x="135.95" y="74.5" matrix="1,0,0,1.11320495605469" width="248.1" height="152">
+				<text-run characters="Success!&#xA;&#xA;" fillColor="#FFFF00" align="center" size="29" family="Impact" />
+				<text-run characters="Task was not simple,&#xA;but you was smart!" fillColor="#00FFFF" align="center" size="29" family="Impact" />
+			</text>
+		</frame>
+		<frame>
+			<instance libraryItem="_buttons/btnNext" x="260.1" y="302.3" />
+			<text x="130.05" y="72.85" width="259.9" height="176">
+				<text-run characters="All tasks are done!" fillColor="#00FF00" align="center" size="34" family="Impact" />
+				<text-run characters="&#xA;" fillColor="#FFCC00" align="center" size="34" family="Impact" />
+				<text-run characters="&#xA;You are smart&#xA;and clever!" fillColor="#FFFF00" align="center" size="34" family="Impact" />
+			</text>
+		</frame>
+	</layer>
+	<layer name="Movie">
+		<frame>
+			<instance libraryItem="_splash/title" x="148.283540372671" y="-10.2478260869565" />
+		</frame>
+		<frame />
+		<frame>
+			<instance libraryItem="trash" name="mcTrash" x="97" y="228.4" regX="75" regY="15" />
+			<instance libraryItem="game" name="game" />
+			<text name="tfTask" x="26" y="65.3" width="473.8" height="128.65">
+				<text-run characters="Task" fillColor="#FFFF00" size="18" family="Arial" />
+			</text>
+		</frame>
+		<frame />
+		<frame />
+	</layer>
+	<layer name="Fon">
+		<frame>
+			<instance libraryItem="_splash/splash" x="260" y="195.2" regX="16.2" regY="15.1" />
+		</frame>
+		<frame>
+			<instance libraryItem="_splash/splash" x="260" y="195" regX="16.2" regY="15.1">
+				<color type="brightness" value="-0.31" />
+			</instance>
+		</frame>
+		<frame>
+			<instance libraryItem="background" regX="217.75" regY="193.95">
+				<color type="brightness" value="-0.1" />
+			</instance>
+			<instance libraryItem="tap" name="mcTap" x="451.4" y="214.35" regX="-1.05" regY="-0.5" />
+		</frame>
+		<frame>
+			<instance libraryItem="wall" regX="260" regY="195">
+				<color type="tint" color="#333333" multiplier="0.2" />
+				<filters>
+					<BoxBlurFilter blurX="10" blurY="10" quality="3" />
+				</filters>
+			</instance>
+		</frame>
+		<frame>
+			<instance libraryItem="wall" regX="260" regY="195">
+				<color type="tint" color="#333333" multiplier="0.2" />
+				<filters>
+					<BoxBlurFilter blurX="10" blurY="10" quality="3" />
+				</filters>
+			</instance>
+		</frame>
+	</layer>
+</movieclip>

@@ -1,0 +1,26 @@
+<movieclip version="2.3.0">
+	<layer name="auto">
+		<frame>
+			<instance libraryItem="mc" x="32" y="25.97402597402595">
+				<filters>
+					<GaussianBlurFilterPlugin radius="20" />
+				</filters>
+			</instance>
+			<instance libraryItem="mc" x="32" y="220" />
+		</frame>
+	</layer>
+	<layer name="Layer 1">
+		<frame>
+			<shape>
+				<fills>
+					<fill type="solid" color="#77FF77" />
+				</fills>
+				<figure>
+					<polygon fillIndex="0">
+						<contour edges="M0,0L0,400L350,400L350,0L0,0" />
+					</polygon>
+				</figure>
+			</shape>
+		</frame>
+	</layer>
+</movieclip>

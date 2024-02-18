@@ -1,0 +1,21 @@
+<movieclip version="2.2.0">
+	<layer name="Label">
+		<frame>
+			<shape>
+				<strokes>
+					<stroke type="solid" color="#000000" thickness="2" />
+					<stroke type="solid" color="#FFFFFF" thickness="2" />
+				</strokes>
+				<figure>
+					<edge strokeIndex="0" edges="M259.95,52.55L271.95,53.4L384.95,35M405.95,63L271.95,53.4L259.95,55.35" />
+					<edge strokeIndex="1" edges="M483.95,353.95L281.7,329.18L281,329.33M395.95,304.95L281.7,329.18" />
+				</figure>
+			</shape>
+			<instance libraryItem="Symbol 1" x="239.95" y="192.35" matrix="0.533340454101563,0,0,0.533340454101563" />
+			<instance libraryItem="Symbol 1" x="90.95" y="198.45" matrix="0.533340454101563,0,0,0.533340454101563" />
+			<instance libraryItem="Symbol 1" x="424.95" y="195.45" matrix="0.533340454101563,0,0,0.533340454101563" />
+			<instance libraryItem="Symbol 2" x="172.45" y="60" />
+			<instance libraryItem="Symbol 3" x="158.45" y="336.2" />
+		</frame>
+	</layer>
+</movieclip>

@@ -1,0 +1,48 @@
+<movieclip version="2.2.0" autoPlay="false" loop="false" linkedClass="McBucket">
+	<layer name="neck" locked="true">
+		<frame duration="101">
+			<instance libraryItem="neck" name="mcNeck" x="0" y="-65" />
+		</frame>
+	</layer>
+	<layer name="text" locked="true">
+		<frame duration="101">
+			<text name="tfLabel" x="-21.6" y="-29.1" width="44.2" height="26.35">
+				<text-run characters="00/00" fillColor="#FFFFFF" align="center" size="16" family="Arial" />
+			</text>
+		</frame>
+	</layer>
+	<layer name="waterMask" type="mask" locked="true">
+		<frame duration="100" tweenType="motion">
+			<instance libraryItem="bucketWaterMask" x="-18" y="-1.35" regX="18.5" regY="15.9" />
+		</frame>
+		<frame tweenType="motion">
+			<instance libraryItem="bucketWaterMask" x="-18" y="-57.3" regX="18.5" regY="15.9" />
+		</frame>
+	</layer>
+	<layer name="water" locked="true" parentIndex="2">
+		<frame duration="101">
+			<instance libraryItem="bucketInner" name="mcForeColor" x="1.25" y="-36.75" regX="18" regY="15">
+				<color type="advanced" alphaMultiplier="0.859375" redMultiplier="0.8203125" greenMultiplier="0.8203125" blueMultiplier="0.8203125" alphaOffset="0" redOffset="0" greenOffset="46" blueOffset="46" />
+			</instance>
+		</frame>
+	</layer>
+	<layer name="bounding box" locked="true">
+		<frame duration="101">
+			<instance libraryItem="bucketBox" name="mcBox" x="-25" y="-65" regX="21" regY="32.5">
+				<color type="alpha" value="0" />
+			</instance>
+		</frame>
+	</layer>
+	<layer name="highlighting" locked="true">
+		<frame duration="101">
+			<instance libraryItem="bucketInner" name="mcForeColor" x="1.25" y="-36.75" regX="18" regY="15">
+				<color type="tint" color="#FF0000" multiplier="0.18" />
+			</instance>
+		</frame>
+	</layer>
+	<layer name="bucket" locked="true">
+		<frame duration="101">
+			<instance libraryItem="bucketInner" x="1.3" y="-36.65" />
+		</frame>
+	</layer>
+</movieclip>

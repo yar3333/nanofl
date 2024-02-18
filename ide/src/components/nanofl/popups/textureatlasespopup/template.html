@@ -1,0 +1,70 @@
+<style>
+	.~libraryContainer,
+	.~atlasContainer
+	{
+		border: solid 2px #ddd;
+		margin-top: 5px;
+	}
+	
+	.~label
+	{
+		font-size: 14px;
+		line-height: 30px;
+	}
+	
+	.~label a
+	{
+		text-decoration: underline;
+	}
+	
+	.~middleButtons
+	{
+		padding: 0 10px;
+	}
+	
+	.nanofl .~middleButtons .btn
+	{
+		display: block;
+		margin-bottom: 20px;
+		padding-top: 20px;
+		padding-bottom: 20px;
+	}
+	.nanofl .~middleButtons .btn:last-child { margin-bottom:0; } 
+</style>
+
+<wq-content for="title">Texture Atlases</wq-content>
+
+<wq-content for="controls">
+	<table>
+		<tbody>
+			<tr>
+				<td valign="top">
+					<div class="~label">Library items</div>
+					<div id="libraryContainer" class="~libraryContainer">
+						<library-view id="library"></library-view>
+					</div>
+				</td>
+				<td class="~middleButtons">
+					<div style="height:30px">&nbsp;</div>
+					<button id="toAtlas" class="btn"><i class="icon-arrow-right"></i></button>
+					<button id="fromAtlas" class="btn"><i class="icon-arrow-left"></i></button>
+				</td>
+				<td valign="top">
+					<select id="atlases" style="margin-bottom:0"></select>
+					<div style="float:right">
+						<button id="newAtlas" class="btn" title="New Atlas..."><i class="custom-icon-page-blank"></i></button>
+						<button id="atlasProperties" class="btn" title="Atlas Properties..."><i class="custom-icon-properties"></i></button>
+						<button id="deleteAtlas" class="btn" title="Delete Atlas"><i class="custom-icon-trash"></i></button>
+					</div>
+					<div id="atlasContainer" class="~atlasContainer">
+						<library-view id="atlas"></library-view>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</wq-content>
+
+<wq-content for="buttons">
+	<a id="ok" href="javascript:void(0)" class="btn size-23 btn-primary">OK</a>
+</wq-content>

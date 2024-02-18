@@ -1,0 +1,5 @@
+[
+	{ "name":"Cut",				"command":"document.cut",			"icon":"custom-icon-cut" },
+	{ "name":"Copy",			"command":"document.copy",			"icon":"custom-icon-copy" },
+	{ "name":"Paste",			"command":"document.paste",			"icon":"custom-icon-paste" }
+]

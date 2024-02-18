@@ -1,0 +1,11 @@
+--js ..\..\bin\importers\ZippedNanoFLImporterPlugin.js
+--class-path ..\..\..\api\gen
+--class-path src
+--library stdlib
+--library datatools
+--library HtmlParser
+--library jquery
+--main ZippedNanoFLImporterPlugin
+-w -WExternWithExpr
+--cmd IF EXIST support IF NOT EXIST ..\..\bin\importers\ZippedNanoFLImporterPlugin mkdir  ..\..\bin\importers\ZippedNanoFLImporterPlugin
+--cmd IF EXIST support xcopy /E /Q /Y support ..\..\bin\importers\ZippedNanoFLImporterPlugin

@@ -1,0 +1,7 @@
+<movieclip version="2.2.0">
+	<layer name="Layer 1">
+		<frame>
+			<instance libraryItem="Bitmap 10" x="-135" y="-141.5" />
+		</frame>
+	</layer>
+</movieclip>

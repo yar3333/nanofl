@@ -1,0 +1,54 @@
+<style>
+	.~tabs.nav-tabs>li>a
+	{
+		padding: 2px 8px;
+	}
+	
+	.~tabs button
+	{
+		line-height: 14px;
+		height: 14px;
+		padding: 0;
+		border: 0;
+		background-color: transparent;
+		float: right;
+		margin-top: 1px;
+	}
+	
+	.~tabs li button:hover
+	{
+		background-color: #DCD7D1;
+	}
+	
+	.~tabs li.active button:hover
+	{
+		background-color: #ECE7E1;
+	}
+	
+	.~tabs button i
+	{
+		margin-top: 0;
+	}
+	
+	.~toggleMenu
+	{
+		line-height: 14px;
+		height: 14px;
+		padding: 5px 4px 0;
+		border: 0;
+		background-color: transparent;
+		margin-top: 5px;
+		margin-right: 3px;
+	}
+	
+	.~toggleMenu:hover
+	{
+		background-color: #EEE9E5;
+	}
+</style>
+
+<div id="container">
+	<button id="toggleMenu" class="~toggleMenu" style="position:absolute; right:0"><span class="caret" /></button>
+	<dropdown-menu id="menu"></dropdown-menu>
+	<ul id="tabs" class="~tabs nav nav-tabs nav-tabs-narrow"></ul>
+</div>

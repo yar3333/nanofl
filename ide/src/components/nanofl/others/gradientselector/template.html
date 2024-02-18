@@ -1,0 +1,50 @@
+<style>
+	.~content
+	{
+		width: 90%;
+		display: inline-block;
+		text-align: left;
+		box-sizing: border-box;
+	}
+	
+	.~inner
+	{
+		padding: 0 5px;
+	}
+	
+	.~gradient
+	{
+		height: 50px;
+	}
+	
+	.~controls
+	{
+		margin-top: 8px;
+		height: 12px;
+		background: lightgray;
+		position: relative;
+	}
+	
+	.~controls>*
+	{
+		position: absolute;
+	}
+	
+	.~controls>*>*
+	{
+		width: 10px;
+		height: 10px;
+		background: red;
+		border: solid 1px black;
+	}
+</style>
+
+<div id="container" class="nanofl-row">
+	<span id="content" class="~content">
+		<div class="~inner">
+			<div class="chess-back"><div id="gradient" class="~gradient"></div></div>
+		</div>
+		<div id="controls" class="~controls"></div>
+		<color-selector id="color" display="false"></color-selector>
+	</span>
+</div>

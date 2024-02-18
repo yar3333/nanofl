@@ -1,0 +1,20 @@
+<movieclip version="2.2.0">
+	<layer name="Layer 1">
+		<frame>
+			<shape>
+				<fills>
+					<fill type="linear" colors="#00FF00,#FF0000" ratios="0,1" x0="215.0125" y0="243.1125" x1="263.9875" y1="214.9875" />
+				</fills>
+				<strokes>
+					<stroke type="solid" color="#006600" />
+				</strokes>
+				<figure>
+					<polygon fillIndex="0">
+						<contour edges="M96,71L75,331.95L502,318.95L233,71L96,71" />
+					</polygon>
+					<edge strokeIndex="0" edges="M96,71L233,71L502,318.95L75,331.95L96,71" />
+				</figure>
+			</shape>
+		</frame>
+	</layer>
+</movieclip>

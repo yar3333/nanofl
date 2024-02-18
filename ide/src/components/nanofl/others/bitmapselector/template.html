@@ -1,0 +1,27 @@
+<style>
+	.~inner { height: 70px; width:100% }
+	
+	.~content { text-align: center; padding:0; }
+	.~content>* { border: dashed 1px black; display: inline-block; line-height: 0; vertical-align: top; }
+	
+	.~prev, .~next { width: 33px; vertical-align: middle; padding: 0; }
+	.~prev>div, .~next>div { width: 33px; height: 33px; background-image: url(~/support/arrows.png); cursor:pointer; }
+	.~next>div { background-position: -33px 0; }
+	.~prev { padding-right: 0; }
+	.~next { padding-left: 0; }	
+	
+	.~prev.~disabled>div { background-position:   0   -33px; cursor:default; }
+	.~next.~disabled>div { background-position: -33px -33px; cursor:default; }
+</style>
+
+<div id="container" class="nanofl-row">
+	<table class="~inner">
+		<tbody>
+			<tr>
+				<td id="prev" class="~prev"><div>&nbsp;</div></td>
+				<td id="content" class="~content"><div><img id="image" style="display:none" /></div></td>
+				<td id="next" class="~next"><div>&nbsp;</div></td>
+			</tr>
+		</tbody>
+	</table>
+</div>

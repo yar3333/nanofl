@@ -1,0 +1,23 @@
+<movieclip version="2.2.0">
+	<layer name="Barrels">
+		<frame>
+			<instance libraryItem="_bitmaps/barrels" x="-283.05" y="19.9" matrix="0.491775512695313,0,0,0.491775512695313" regX="152.4" regY="137.6" />
+			<instance libraryItem="_bitmaps/barrels" x="138.7" y="-15.15" matrix="0.608108520507813,0,0,0.608108520507813" regX="152.35" regY="137.45" />
+		</frame>
+	</layer>
+	<layer name="Barrel3D">
+		<frame>
+			<instance libraryItem="_bitmaps/barrel3D" x="-218.75" y="-113.9" matrix="0.608688354492188,0,0,0.608688354492188" />
+		</frame>
+	</layer>
+	<layer name="Floor">
+		<frame>
+			<instance libraryItem="_bitmaps/floor" x="-264" y="150.05" matrix="1,0,0,0.565582275390625" regX="260" regY="41.55" />
+		</frame>
+	</layer>
+	<layer name="Wall">
+		<frame>
+			<instance libraryItem="_bitmaps/wall" x="-260" y="-195" />
+		</frame>
+	</layer>
+</movieclip>

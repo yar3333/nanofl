@@ -1,0 +1,7 @@
+[
+	{ "name":"Normal",		"command":"timeline.switchLayerTypeToNormal",		"icon":"custom-icon-page-blank" },
+	{ "name":"Mask",		"command":"timeline.switchLayerTypeToMask",			"icon":"custom-icon-mask" },
+	{ "name":"Masked",		"command":"timeline.switchLayerTypeToMasked",		"icon":"custom-icon-page-blank" },
+	{ "name":"Guide",		"command":"timeline.switchLayerTypeToGuide",		"icon":"custom-icon-layer-guide" },
+	{ "name":"Guided",		"command":"timeline.switchLayerTypeToGuided",		"icon":"custom-icon-page-blank" }
+]

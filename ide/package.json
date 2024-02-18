@@ -1,0 +1,21 @@
+{
+  "name": "nanofl-ide",
+  "version": "1.0.0",
+  "main": "none.js",
+  "author": "",
+  "scripts": {},
+  "dependencies": {
+    "@nanofl/ide-globals": "file:../modules/nanofl-ide-globals/node_module",
+    "@nanofl/ide-keyboard": "file:../modules/nanofl-ide-keyboard/node_module",
+    "@nanofl/ide-sys": "file:../modules/nanofl-ide-sys/node_module",
+    "hxnodejs-wquery": "^1.1.1",
+    "re-htmlparser": "^3.4.0",
+    "three": "^0.161.0"
+  },
+  "devDependencies": {
+    "cpx": "^1.5.0",
+    "symlink-dir": "^5.2.1",
+    "webpack": "^5.90.1",
+    "webpack-cli": "^5.1.4"
+  }
+}

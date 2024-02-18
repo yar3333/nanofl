@@ -1,0 +1,23 @@
+<movieclip version="2.2.0">
+	<layer name="Layer 1" type="mask">
+		<frame>
+			<text x="-35" y="-18.8" width="96.93333435058594" height="52">
+				<text-run characters="START" fillColor="#000000" size="38" family="Impact" />
+			</text>
+		</frame>
+	</layer>
+	<layer name="Layer 2" parentIndex="0">
+		<frame>
+			<shape>
+				<fills>
+					<fill type="linear" colors="#FF0000,#FFEC69" ratios="0,1" x0="13.0160226552894" y0="21.1436493918649" x1="13.0160226552894" y1="-4.83440313594741" />
+				</fills>
+				<figure>
+					<polygon fillIndex="0">
+						<contour edges="M64.57,26.62L64.57,-14.41L-38.5,-14.41L-38.5,26.62L64.57,26.62" />
+					</polygon>
+				</figure>
+			</shape>
+		</frame>
+	</layer>
+</movieclip>

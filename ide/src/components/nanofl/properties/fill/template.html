@@ -1,0 +1,26 @@
+<wq-content for="content">
+	<fieldset class="nanofl-group">
+		<legend>FILL</legend>
+		
+		<div class="nanofl-row">
+			<label class="size-10">Style:</label>
+			<select id="type" class="size-23">
+				<option value="none">None</option>
+				<option value="solid">Solid</option>
+				<option value="linear">Linear</option>
+				<option value="radial">Radial</option>
+				<option value="bitmap">Bitmap</option>
+			</select>
+			<span class="size-2">&nbsp;</span>
+			<color-selector id="color" cssClass="size-10"></color-selector>
+		</div>
+		
+		<gradient-selector id="gradient"></gradient-selector>
+		<bitmap-selector id="bitmap"></bitmap-selector>
+		
+		<div id="repeatContainer" class="nanofl-row">
+			<span class="size-10">&nbsp;</span>
+			<label class="size-35 checkboxlabel"><input type="checkbox" id="repeat" /> Repeat</label>
+		</div>
+	</fieldset>
+</wq-content>

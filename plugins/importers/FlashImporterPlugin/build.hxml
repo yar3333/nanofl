@@ -1,0 +1,10 @@
+--js ..\..\bin\importers\FlashImporterPlugin.js
+--class-path ..\..\..\api\gen
+--class-path src
+--library stdlib
+--library datatools
+--library HtmlParser
+--main FlashImporterPlugin
+-w -WExternWithExpr -WDeprecated
+--cmd IF EXIST support IF NOT EXIST ..\..\bin\importers\FlashImporterPlugin mkdir  ..\..\bin\importers\FlashImporterPlugin
+--cmd IF EXIST support xcopy /E /Q /Y support ..\..\bin\importers\FlashImporterPlugin

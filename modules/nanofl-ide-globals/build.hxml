@@ -1,0 +1,9 @@
+--js node_module/index.js
+--class-path src
+--library injector
+--library codegen
+--dce full
+--macro include('nanofl.ide')
+--macro CodeGen.includePrivateMembers()
+--macro CodeGen.exposeToRoot('nanofl.ide')
+--macro CodeGen.haxeExtern('library', '@nanofl/ide-globals')

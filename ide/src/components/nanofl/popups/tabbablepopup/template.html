@@ -1,0 +1,45 @@
+<style>
+	.~panes > div > table.tableform
+	{
+		margin-left: 0;
+	}
+	
+	.~parts.nav-tabs > li
+	{
+		width: 175px;
+		box-sizing: border-box;
+	}
+	
+	.~parts.nav-tabs > li > a
+	{
+		width: 150px;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow-x: hidden;
+	}
+	
+	.~parts.nav-tabs > li > a > i
+	{
+		margin-top: 0;
+	}
+	
+	.~parts.nav-tabs > li > button
+	{
+		display: none;
+		position: absolute;
+		margin-left: 145px;
+		overflow-x: hidden;
+	}
+	
+	.~parts.nav-tabs > li:hover > button
+	{
+		display: block;
+	}
+</style>
+
+<wq-content for="controls">
+    <div id="tabbable" class="tabbable tabs-left" style="width:700px">
+		<ul id="parts" class="nav nav-tabs ~parts"></ul>
+		<div id="panes" class="tab-content ~panes"><wq-placeholder id="panes"></wq-placeholder></div>
+    </div>	
+</wq-content>

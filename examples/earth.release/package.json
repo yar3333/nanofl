@@ -1,0 +1,19 @@
+{
+  "name": "button",
+  "version": "1.0.0",
+  "description": "",
+  "main": "application.js",
+  "scripts": {
+    "build": "webpack"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/createjs": "^0.0.32",
+    "nanofl-ts": "file:../../nanofl-ts",
+    "ts-loader": "^8.4.0",
+    "typescript": "^5.3.3",
+    "webpack": "^5.90.1",
+    "webpack-cli": "^5.1.4"
+  }
+}

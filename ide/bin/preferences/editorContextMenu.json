@@ -1,0 +1,22 @@
+[
+	{ "name":"Convert to Symbol...",	"command":"editor.convertToSymbol",		"icon":"custom-icon-film" },
+	{ "name":"Group",					"command":"editor.group",				"icon":"custom-icon-group" },
+	{ "name":"Break Apart",				"command":"editor.breakApart",			"icon":"custom-icon-wrench" },
+	{ "name":"Delete",					"command":"editor.remove",				"icon":"custom-icon-remove" },
+	{ "name":"------------------" },
+	{ "name":"Remove Transform",		"command":"editor.removeTransform",		"icon":"custom-icon-remove-transform" },
+	{ "name":"------------------" },
+	{ "name":"Move to Front",			"command":"editor.moveFront",			"icon":"custom-icon-move-front" },
+	{ "name":"Move Forwards",			"command":"editor.moveForwards",		"icon":"custom-icon-move-forwards" },
+	{ "name":"Move Backwards",			"command":"editor.moveBackwards",		"icon":"custom-icon-move-backwards" },
+	{ "name":"Move to Back",			"command":"editor.moveBack",			"icon":"custom-icon-move-back" },
+	{ "name":"------------------" },
+	{ "name":"Cut",						"command":"editor.cut",					"icon":"custom-icon-cut" },
+	{ "name":"Copy",					"command":"editor.copy",				"icon":"custom-icon-copy" },
+	{ "name":"Paste",					"command":"editor.paste",				"icon":"custom-icon-paste" },
+	{ "name":"------------------" },
+	{ "name":"Symbol Code",				"command":"editor.editCode",			"icon":"custom-icon-page" },
+	{ "name":"------------------" },
+	{ "name":"Document Properties",		"command":"document.properties",		"icon":"custom-icon-properties-document" },
+	{ "name":"Symbol Properties",		"command":"editor.properties",			"icon":"custom-icon-properties" }
+]

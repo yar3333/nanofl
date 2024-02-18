@@ -1,0 +1,31 @@
+<style>
+	.~container
+	{
+		border: 0;
+		margin: 0;
+		border-radius: 0;
+		font-size: 12px;
+		line-height: 14px;
+		white-space: pre;
+		box-sizing: border-box;
+		overflow-x: scroll;
+		overflow-y: scroll;
+		cursor: text;
+		padding: 5px 0 0 0;
+	}
+	
+	.~container>*
+	{
+		padding: 0 5px;
+		display: block;
+	}
+	
+	.~container>.output-error  { color:#9F0000 }
+	.~container>.output-warn   { color:#A89F00 }
+	.~container>.error-in-file { color:#330000; cursor:default; line-height:24px }
+	.~container>.active { background-color:#eee }
+</style>
+
+<pre id="container" class="~container" style="display:none"></pre>
+
+<context-menu id="contextMenu"></context-menu>

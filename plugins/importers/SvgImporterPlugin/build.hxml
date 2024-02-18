@@ -1,0 +1,9 @@
+--js ..\..\bin\importers\SvgImporterPlugin.js
+--class-path ..\..\..\api\gen
+--class-path src
+--library stdlib
+--library datatools
+--main SvgImporterPlugin
+-w -WExternWithExpr
+--cmd IF EXIST support IF NOT EXIST ..\..\bin\importers\SvgImporterPlugin mkdir  ..\..\bin\importers\SvgImporterPlugin
+--cmd IF EXIST support xcopy /E /Q /Y support ..\..\bin\importers\SvgImporterPlugin

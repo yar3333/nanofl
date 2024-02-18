@@ -1,0 +1,8 @@
+--js node_module/index.js
+--class-path src
+--library stdlib
+--library jquery
+--library codegen
+--dce std
+--macro CodeGen.exposeToRoot('nanofl.ide.keyboard')
+--macro CodeGen.haxeExtern('library', '@nanofl/ide-keyboard')

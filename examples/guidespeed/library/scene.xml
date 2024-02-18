@@ -1,0 +1,34 @@
+<movieclip version="2.2.0">
+	<layer name="Layer 1" type="guide">
+		<frame duration="158">
+			<shape>
+				<strokes>
+					<stroke type="solid" color="#FF0000" />
+				</strokes>
+				<figure>
+					<edge strokeIndex="0" edges="M185.5,384C257.57,-312.57,307.5,381" />
+				</figure>
+			</shape>
+		</frame>
+	</layer>
+	<layer name="Layer 2" parentIndex="0">
+		<frame duration="155" tweenType="motion">
+			<instance libraryItem="Symbol 1" x="174.455219562404" y="364.112047377167" regX="11.5" regY="15.5" />
+		</frame>
+		<frame tweenType="motion">
+			<instance libraryItem="Symbol 1" x="277.69420747874" y="334.6057159216" matrix="2.54838562011719,0,0,2.54838562011719" regX="11.5" regY="15.5" />
+		</frame>
+	</layer>
+	<layer name="Layer 3">
+		<frame duration="158">
+			<shape>
+				<strokes>
+					<stroke type="solid" color="#FF0000" />
+				</strokes>
+				<figure>
+					<edge strokeIndex="0" edges="M185.5,384C257.57,-312.57,307.5,381" />
+				</figure>
+			</shape>
+		</frame>
+	</layer>
+</movieclip>

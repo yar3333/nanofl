@@ -1,0 +1,147 @@
+<style>
+	.~panes > div > table.tableform
+	{
+		margin-left: 40px;
+	}
+	
+	.~parts.nav-tabs > li
+	{
+		width: 175px;
+	}
+	
+	.~parts.nav-tabs > li > a
+	{
+		width: 150px;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow-x: hidden;
+	}
+	
+	.~parts.nav-tabs > li > a > i
+	{
+		margin-top: 0;
+	}
+	
+	.~parts.nav-tabs > li > button
+	{
+		display: none;
+		position: absolute;
+		margin-left: 145px;
+		overflow-x: hidden;
+	}
+	
+	.~parts.nav-tabs > li:hover > button
+	{
+		display: block;
+	}
+	
+	.~customPropertiesPaneNoProperties
+	{
+		font-size: 13px;
+		margin-top: 14px;
+	}
+	
+	.~scrollable
+	{
+		overflow: auto;
+		position: relative;
+	}
+</style>
+
+<wq-content for="title">Publish Settings</wq-content>
+
+<wq-content for="controls">
+	<table class="tableform" style="margin-left:0">
+		<tbody>
+			<tr>
+				<td></td>
+				<td>
+					<table>
+						<tr>
+							<td>
+								<label class="checkbox" title="Using texture atlases to speed up your application. Depend on generator.">
+									<input id="useTextureAtlases" type="checkbox">Use Texture Atlases
+								</label>
+							</td>
+							<td>
+								&nbsp;<button class="btn" id="manageTextureAtlases">manage...</button>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><label class="checkbox"><input id="isConvertImagesIntoJpeg" type="checkbox">Convert images into JPEG</label></td>
+			</tr>
+			<tr>
+				<td><label for="int">JPEG quality</label></td>
+				<td>
+					<input type="number" id="jpegQuality" min="1" max="100" value="80" class="size-10" />
+					<span>%</span>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><label class="checkbox"><input id="isGenerateMp3Sounds" type="checkbox">Generate MP3 sounds</label></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><label class="checkbox"><input id="isGenerateOggSounds" type="checkbox">Generate OGG sounds</label></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><label class="checkbox"><input id="isGenerateWavSounds" type="checkbox">Generate WAV sounds</label></td>
+			</tr>
+			<tr>
+				<td><label for="list">Audio quality</label></td>
+				<td>
+					<select id="audioQuality" class="size-12">
+						<option>32</option>
+						<option>40</option>
+						<option>48</option>
+						<option>64</option>
+						<option>80</option>
+						<option>96</option>
+						<option>112</option>
+						<option>128</option>
+						<option>160</option>
+						<option>192</option>
+					</select>
+					<span>Kbps</span>
+				</td>
+			</tr>
+			<tr>
+				<td><label for="urlOnClick" title="Link to go on click.">URL on click:</label></td>
+				<td><input id="urlOnClick" type="text" class="size-32" /></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><label class="checkbox"><input id="useLocalScripts" type="checkbox" title="Copy createjs.js and three.js into release directory on publish. Otherwise, links to CDN will be used.">Use local scripts</label></td>
+			</tr>
+			<!-- <tr>
+				<td></td>
+				<td>
+					<table>
+						<tr>
+							<td>
+								<label class="checkbox">
+									<input id="shareForDevices" type="checkbox">Share for Devices
+								</label>
+							</td>
+							<td>
+								&nbsp;<button class="btn" id="showShareForDevicesPopup">more...</button>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr> -->
+		</tbody>
+	</table>
+</wq-content>
+
+<wq-content for="buttons">
+	<a id="publish" href="javascript:void(0)" class="btn size-23">Publish</a>
+	<a id="ok" href="javascript:void(0)" class="btn size-23 btn-primary">OK</a>
+	<a id="cancel" href="javascript:void(0)" class="btn size-23">Cancel</a>
+</wq-content>

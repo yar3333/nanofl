@@ -1,0 +1,10 @@
+--js node_module/index.js
+--class-path src
+--library stdlib
+--library injector
+--library hxelectron
+--library codegen
+-w -WDeprecatedEnumAbstract
+--dce full
+--macro CodeGen.exposeToRoot('nanofl.ide.sys', false)
+--macro CodeGen.haxeExtern('library', '@nanofl/ide-sys')

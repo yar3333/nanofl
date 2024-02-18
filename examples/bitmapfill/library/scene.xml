@@ -1,0 +1,19 @@
+<movieclip version="2.3.0">
+	<layer name="Label">
+		<frame>
+			<group x="61.95" y="6">
+				<shape>
+					<fills>
+						<fill type="bitmap" bitmapPath="Bitmap 10" repeat="no-repeat" x="125" y="52.45" />
+					</fills>
+					<figure>
+						<polygon fillIndex="0">
+							<contour edges="M396,336.45L396,53.45L125,53.45L125,336.45L396,336.45" />
+						</polygon>
+					</figure>
+				</shape>
+			</group>
+			<instance libraryItem="Symbol 1" x="74.5" y="197.5" />
+		</frame>
+	</layer>
+</movieclip>

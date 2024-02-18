@@ -1,0 +1,38 @@
+<div id="container" class="timeline-container">
+	<div id="headers">
+		<div class="timeline-row timeline-row-headers">
+			<span class="timeline-icon" id="headerIcon">&nbsp;</span>
+			<span class="timeline-title" id="headerTitle">&nbsp;</span>
+			<span class="timeline-edited" id="headerEdited">&nbsp;</span>
+			<span class="timeline-visible" id="visibleAll" title="Show/hide all layers"><i class="icon-eye-open"></i></span>
+			<span class="timeline-locked" id="lockedAll" title="Lock/unlock all layers"><i class="icon-lock"></i></span>
+			<span class="timeline-frames frames-headers"><span id="framesHeader"></span></span>
+		</div>
+	</div>
+	<div id="borders">
+		<div class="timeline-row timeline-row-borders">
+			<span class="timeline-icon">&nbsp;</span>
+			<span class="timeline-title">&nbsp;</span>
+			<span class="timeline-edited">&nbsp;</span>
+			<span class="timeline-visible">&nbsp;</span>
+			<span class="timeline-locked">&nbsp;</span>
+			<span class="timeline-frames frames-borders"><span id="framesBorder"></span></span>
+		</div>
+	</div>
+	<div id="content" class="timeline-content"></div>
+	<div id="controls">
+		<div class="timeline-row timeline-row-controls">
+			<span id="buttons" class="timeline-controls-buttons">
+				<button id="addLayer" class="btn btn-micro" title="Add Layer"><i class="custom-icon-page-blank"></i></button>
+				<button id="addFolder" class="btn btn-micro" title="Add Folder"><i class="custom-icon-folder-close"></i></button>
+				<button id="removeLayer" class="btn btn-micro" title="Remove Layer"><i class="custom-icon-trash"></i></button>
+			</span>
+			<span id="hscrollContainer" class="timeline-controls-hscroll">
+				<horizontal-scrollbar id="hScrollbar"></horizontal-scrollbar>
+			</span>
+		</div>
+	</div>
+</div>
+
+<context-menu id="frameContextMenu"></context-menu>
+<context-menu id="layerContextMenu"></context-menu>

@@ -1,0 +1,6 @@
+{
+  "name": "nanofl-ide-globals",
+  "dependencies": {
+    "injector": ""
+  }
+}

@@ -1,0 +1,89 @@
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="musicButton" itemID="54d952a5-00000050" linkageExportForAS="true" linkageIdentifier="MusicButton" sourceFlashFilepath="..\..\AirAce\game.fla" sourceLibraryItemHRef="mcPause" sourceLastModified="1097589053" lastModified="1423580347" lastUniqueIdentifier="5">
+  <timeline>
+    <DOMTimeline name="musicButton">
+      <layers>
+        <DOMLayer name="Layer 4" color="#FF4FFF">
+          <frames>
+            <DOMFrame index="0" keyMode="9728">
+              <elements/>
+            </DOMFrame>
+            <DOMFrame index="1" keyMode="9728">
+              <elements>
+                <DOMShape>
+                  <strokes>
+                    <StrokeStyle index="1">
+                      <SolidStroke scaleMode="normal" weight="2">
+                        <fill>
+                          <SolidColor/>
+                        </fill>
+                      </SolidStroke>
+                    </StrokeStyle>
+                  </strokes>
+                  <edges>
+                    <Edge strokeStyle="1" edges="!518 87|110 533"/>
+                  </edges>
+                </DOMShape>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+        <DOMLayer name="Layer 3" color="#FF800A">
+          <frames>
+            <DOMFrame index="0" duration="2" keyMode="9728">
+              <elements>
+                <DOMShape>
+                  <fills>
+                    <FillStyle index="1">
+                      <SolidColor/>
+                    </FillStyle>
+                  </fills>
+                  <edges>
+                    <Edge fillStyle1="1" edges="!512 190[512 211 498 226!498 226[483 240 462 240!462 240|380 240!380 240|380 438!380 438|378 438!378 438[381 #1BE.22 381 455!381 455[381 486 347 508!347 508[315 530 267 530!267 530[219 530 185 508!185 508[152 486 152 455!152 455[152 424
+ 185 402!185 402[219 380 267 380!267 380[#111.A8 380 280 380.5!280 380.5|280 200!280 200[280 197 280 195!280 195[280 193 280 190!280 190[280 169 295 155!295 155[309 140 330 140!330 140|462 140!462 140[483 140 498 155!498 155[512 169 512
+ 190"/>
+                  </edges>
+                </DOMShape>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+        <DOMLayer name="Layer 1" color="#4FFF4F" current="true" isSelected="true">
+          <frames>
+            <DOMFrame index="0" duration="2" keyMode="9728">
+              <elements>
+                <DOMShape>
+                  <fills>
+                    <FillStyle index="1">
+                      <SolidColor color="#FFFFFF" alpha="0.298039215686275"/>
+                    </FillStyle>
+                    <FillStyle index="2">
+                      <SolidColor color="#FFFFFF" alpha="0.4"/>
+                    </FillStyle>
+                  </fills>
+                  <strokes>
+                    <StrokeStyle index="1">
+                      <SolidStroke scaleMode="normal">
+                        <fill>
+                          <SolidColor/>
+                        </fill>
+                      </SolidStroke>
+                    </StrokeStyle>
+                  </strokes>
+                  <edges>
+                    <Edge fillStyle1="1" strokeStyle="1" edges="
+!617.5 440[#259.81 #1DF.E2 574 515!574 515[#231.6E #212.FF 546.5 546!546.5 546[#1C4.9E #27F.A1 320 639.5!320 639.5[#BB.E2 #27F.A1 94.5 546!94.5 546[#4F.5A 531 66.5 515!66.5 515[#1B.62 #1D1.BC 11 407!11 407[-0.1171875 #16D.97 0 319.5!0
+ 319.5[-0.1171875 #111.E8 11 233!11 233[#20.B4 #9A.F2 94.5 93.5!94.5 93.5[#BB.E2 #FFFFFF.9F 320 -0.5!320 -0.5[#1C4.9E #FFFFFF.9F 546.5 93.5!546.5 93.5[#252.39 #8D.36 617.5 199!617.5 199[#27F.FA #FE.9F 640 319.5!640 319.5[#27F.FA #180.5F
+ 617.5 440"/>
+                    <Edge fillStyle0="1" fillStyle1="2" edges="
+!240 200[#C2.A5 #E1.9D 160 263.5!160 263.5[#93.7 #114.9 136 293!136 293[117 #140.8F 98 347!98 347[#60.89 #15B.CF 94.5 347.5!94.5 347.5[82.5 #15B.CF 70.5 347!70.5 347[#42.B #158.0F 64 340!64 340[#3A.EF #14F.0F 55 329!55 329[#35.F5 #98.26
+ 204.5 68.5!204.5 68.5[#100.01 #28.56 312 42.5!312 42.5[#1A9.2B #24.F9 393.5 137!393.5 137[#182.94 #A1.82 364.5 163!364.5 163[#12B.6A #A7.ED 245 197!245 197[#F2.7C #C6.78 240 200"/>
+                  </edges>
+                </DOMShape>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+      </layers>
+    </DOMTimeline>
+  </timeline>
+</DOMSymbolItem>

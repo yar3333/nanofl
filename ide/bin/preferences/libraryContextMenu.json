@@ -1,0 +1,4 @@
+[
+	{ "name":"Create Folder",			"command":"library.createFolder",		"icon":"" },
+	{ "name":"Select unused Items",		"command":"library.selectUnused",		"icon":"" }
+]

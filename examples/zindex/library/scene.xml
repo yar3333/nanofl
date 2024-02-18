@@ -1,0 +1,10 @@
+<movieclip version="2.2.0">
+	<layer name="Layer 1">
+		<frame>
+			<instance libraryItem="Symbol 1" x="69.45" y="54.05" matrix="2.10240173339844,0,0,2.10240173339844" regX="36.5" regY="28.5" />
+			<instance libraryItem="Symbol 2" x="157.25" y="113.45" matrix="2.10240173339844,0,0,2.10240173339844" regX="36.5" regY="28.55" />
+			<instance libraryItem="Symbol 3" x="246.6" y="163.9" matrix="2.10240173339844,0,0,2.10240173339844" regX="36.5" regY="28.5" />
+			<instance libraryItem="Symbol 4" x="329.65" y="219.6" matrix="2.10240173339844,0,0,2.10240173339844" regX="36.5" regY="28.5" />
+		</frame>
+	</layer>
+</movieclip>

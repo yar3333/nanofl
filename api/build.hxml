@@ -1,0 +1,34 @@
+--cwd ../ide
+build.hxml
+--no-output
+--define noprofile
+--library codegen
+
+--macro CodeGen.include("createjs")
+--macro CodeGen.include("easeljs")
+--macro CodeGen.include("tweenjs")
+--macro CodeGen.include("soundjs")
+--macro CodeGen.include("preloadjs")
+
+--macro CodeGen.include("js.three")
+--macro CodeGen.exclude("js.three.addons")
+--macro CodeGen.include("js.html.webgl")
+--macro CodeGen.include("js.html.OffscreenCanvas")
+--macro CodeGen.include("js.html.TexImageSource")
+--macro CodeGen.include("js.html.VideoFrame")
+--macro CodeGen.include("js.html.CanvasImageSource")
+--macro CodeGen.include("js.html.ImageEncodeOptions")
+--macro CodeGen.include("js.html.EventListenerOrEventListenerObject")
+--macro CodeGen.include("js.html.EventListenerObject")
+
+--macro CodeGen.include("nanofl")
+--macro CodeGen.include("components")
+--macro CodeGen.include("js.injecting")
+--macro CodeGen.include("wquery")
+--macro CodeGen.include("undoqueue")
+--macro CodeGen.include("htmlparser")
+
+--macro CodeGen.removeTypeMeta(":jsRequire :allow :rtti :autoBuild :build")
+--macro CodeGen.removeFieldMeta(":profile :allow :noprofile")
+
+--macro CodeGen.haxeExtern("../api/gen")

@@ -1,0 +1,40 @@
+<wq-content for="content">
+	<fieldset class="nanofl-group">
+		<legend>CHARACTER</legend>
+		
+		<div class="nanofl-row">
+			<label class="size-10">Family:</label>
+			<select id="family" class="size-35"></select>
+		</div>
+		<div class="nanofl-row">
+			<label class="size-10">Style:</label>
+			<select id="style" class="size-23">
+				<option value="">&nbsp;</option>
+				<option value="light">Light</option>
+				<option value="normal">Normal</option>
+				<option value="italic">Italic</option>
+				<option value="bold">Bold</option>
+				<option value="bold italic">Bold Italic</option>
+			</select>
+			<span class="size-2">&nbsp;</span>
+			<color-selector id="fillColor" cssClass="size-10"></color-selector>
+		</div>
+		<div class="nanofl-row">
+			<slider id="size" text="Size:" min="1" max="200" step="1" exponentially="true" units="pt"></slider>
+		</div>
+		<div class="nanofl-row">
+			<label class="size-10">Stroke:</label>
+			<input type="text" id="strokeSize" class="size-8" />
+			<label class="size-17 rightlabel">px</label>
+			<color-selector id="strokeColor" cssClass="size-10"></color-selector>
+		</div>
+		<div class="nanofl-row">
+			<label class="size-10">&nbsp;</label>
+			<label class="size-13 checkboxlabel"><input type="checkbox" id="kerning" /> Kerning</label>
+			<label class="size-12">/ Spacing:</label>
+			<input type="text" id="letterSpacing" class="size-8" title="Letter spacing" />
+			<label class="size-2 rightlabel">px</label>
+		</div>
+		
+	</fieldset>
+</wq-content>

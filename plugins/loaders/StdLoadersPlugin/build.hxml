@@ -1,0 +1,9 @@
+--js ..\..\bin\loaders\StdLoadersPlugin.js
+--class-path ..\..\..\api\gen
+--class-path src
+--library datatools
+--library threejs
+--main StdLoadersPlugin
+--cmd sed -i "s/var createjs = {};/createjs = createjs || {};/" ../../bin/loaders/StdLoadersPlugin.js
+--cmd IF EXIST support IF NOT EXIST ..\..\bin\loaders\StdLoadersPlugin mkdir  ..\..\bin\loaders\StdLoadersPlugin
+--cmd IF EXIST support xcopy /E /Q /Y support ..\..\bin\loaders\StdLoadersPlugin

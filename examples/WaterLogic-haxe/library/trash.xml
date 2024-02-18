@@ -1,0 +1,12 @@
+<movieclip version="2.2.0" autoPlay="false" loop="false">
+	<layer name="Layer 1">
+		<frame>
+			<instance libraryItem="trashInner" x="-80" y="78" regX="89" regY="36.45" />
+		</frame>
+		<frame>
+			<instance libraryItem="trashInner" x="-80" y="78" regX="89" regY="36.45">
+				<color type="tint" color="#FF0000" multiplier="0.18" />
+			</instance>
+		</frame>
+	</layer>
+</movieclip>

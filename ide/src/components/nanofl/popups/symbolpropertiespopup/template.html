@@ -1,0 +1,44 @@
+<wq-content for="title">Symbol Properties</wq-content>
+
+<wq-content for="controls">
+	<table class="tableform">
+		<tbody id="movieClipItem">
+			<tr>
+				<td></td>
+				<td><label class="checkbox" title="This movie clip will extends nanofl.Button class."><input id="likeButton" type="checkbox" title="This movie clip will extends nanofl.Button class.">Treat as Button</label></td>
+			</tr>
+		</tbody>
+		<tbody id="framedItem">
+			<tr>
+				<td></td>
+				<td><label class="checkbox"><input id="autoPlay" type="checkbox">Autoplay</label></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><label class="checkbox"><input id="loop" type="checkbox">Loop</label></td>
+			</tr>
+		</tbody>
+		<tbody id="spriteSheetableItem">
+			<tr>
+				<td></td>
+				<td><label class="checkbox" title="This movie clip will extends nanofl.SpriteSheet class."><input id="exportAsSpriteSheet" type="checkbox" title="This movie clip will extends createjs.Sprite class.">Export as SpriteSheet</label></td>
+			</tr>
+		</tbody>
+		<tbody id="meshItem">
+			<tr>
+				<td><label for="renderAreaSize" title="Increase value to improve quality.">Render area size:</label></td>
+				<td><input id="renderAreaSize" type="number" min="10" max="4096" class="size-12" title="Increase value to improve quality." /> <span>px</span></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><label class="checkbox"><input id="loadLights" type="checkbox">Load Lights</label></td>
+			</tr>
+		</tbody>
+		<tbody id="instancableItem">
+			<tr>
+				<td><label for="linkedClass">Linked class:</label></td>
+				<td><input id="linkedClass" type="text"></td>
+			</tr>
+		</tbody>
+	</table>
+</wq-content>

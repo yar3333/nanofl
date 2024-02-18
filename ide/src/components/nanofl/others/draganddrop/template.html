@@ -1,0 +1,35 @@
+<style>
+	.dragHelper
+	{
+		position: absolute;
+		z-index: 3; /* because layout splitters has z-index = 2 */
+		pointer-events: none;
+	}
+	
+	.dragHelper > div
+	{
+		display: none;
+	}
+	
+	.dragHelper-text
+	{
+		border: solid 1px grey;
+		background-color: white;
+		font-size: 12px;
+		white-space: nowrap;
+		padding: 0 10px;
+		opacity: 0.5;
+	}
+	.dragHelper-text > i { margin-top:-1px; }
+	
+	.dragHelper-rectangle
+	{
+		position: absolute;
+		border: solid 1px grey;
+	}
+</style>
+	
+<div id="container" class="dragHelper">
+	<div id="iconText" class="dragHelper-text"><i id="icon"></i> <span id="text"></span></div>
+	<div id="rectangle" class="dragHelper-rectangle"></div>
+</div>

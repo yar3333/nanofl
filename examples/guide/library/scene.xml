@@ -1,0 +1,38 @@
+<movieclip version="2.2.0">
+	<layer name="Layer 1" type="guide">
+		<frame duration="158">
+			<shape>
+				<strokes>
+					<stroke type="solid" color="#FF0000" />
+					<stroke type="solid" color="#00CC00" />
+				</strokes>
+				<figure>
+					<edge strokeIndex="0" edges="M23.05,265.95C582.82,-221.92,171,261.95" />
+					<edge strokeIndex="1" edges="M171,261.95L539,372.95" />
+				</figure>
+			</shape>
+		</frame>
+	</layer>
+	<layer name="Layer 2" parentIndex="0">
+		<frame duration="155" tweenType="motion" motionTweenEasing="-60" motionTweenRotateCount="-1" motionTweenOrientToPath="true">
+			<instance libraryItem="Symbol 1" x="27.4" y="236.65" regX="11.5" regY="15.5" />
+		</frame>
+		<frame tweenType="motion">
+			<instance libraryItem="Symbol 1" x="487.75" y="326.8" matrix="2.54838562011719,0,0,2.54838562011719" regX="11.5" regY="15.5" />
+		</frame>
+	</layer>
+	<layer name="Layer 3">
+		<frame duration="158">
+			<shape>
+				<strokes>
+					<stroke type="solid" color="#FF0000" />
+					<stroke type="solid" color="#00CC00" />
+				</strokes>
+				<figure>
+					<edge strokeIndex="0" edges="M23.05,265.95C582.82,-221.92,171,261.95" />
+					<edge strokeIndex="1" edges="M171,261.95L539,372.95" />
+				</figure>
+			</shape>
+		</frame>
+	</layer>
+</movieclip>

@@ -1,0 +1,24 @@
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="_splash/title" itemID="54d41516-0000004a" sourceFlashFilepath="\\Asurov\WorkK\Yaroslav\Головоломки с сосудами\заставка.fla" sourceLibraryItemHRef="Symbol 13" sourceLastModified="1116495899" lastModified="1423185174" lastUniqueIdentifier="3">
+  <timeline>
+    <DOMTimeline name="title">
+      <layers>
+        <DOMLayer name="Layer 5" color="#4FFFFF" current="true" isSelected="true">
+          <frames>
+            <DOMFrame index="0" keyMode="9728">
+              <elements>
+                <DOMSymbolInstance libraryItemName="_splash/titleInner" name="" selected="true" centerPoint3DX="128.3" centerPoint3DY="-105.5">
+                  <transformationPoint>
+                    <Point x="78.25" y="19.45"/>
+                  </transformationPoint>
+                  <filters>
+                    <GlowFilter blurX="3" blurY="3" color="#000000" quality="2" strength="3"/>
+                  </filters>
+                </DOMSymbolInstance>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+      </layers>
+    </DOMTimeline>
+  </timeline>
+</DOMSymbolItem>

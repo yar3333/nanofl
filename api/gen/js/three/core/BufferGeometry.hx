@@ -1,0 +1,509 @@
+package js.three.core;
+
+typedef NormalBufferAttributes = Dynamic<String>;
+
+typedef NormalOrGLBufferAttributes = Dynamic<String>;
+
+/**
+ * A representation of mesh, line, or point geometry
+ * Includes vertex positions, face indices, normals, colors, UVs, and custom attributes within buffers, reducing the cost of passing all this data to the GPU.
+ * @remarks
+ * To read and edit data in BufferGeometry attributes, see {@link THREE.BufferAttribute | BufferAttribute} documentation.
+ * @example
+ * ```typescript
+ * const geometry = new THREE.BufferGeometry();
+ *
+ * // create a simple square shape. We duplicate the top left and bottom right
+ * // vertices because each vertex needs to appear once per triangle.
+ * const vertices = new Float32Array( [
+ *   -1.0, -1.0,  1.0, // v0
+ *    1.0, -1.0,  1.0, // v1
+ *    1.0,  1.0,  1.0, // v2
+ *
+ *    1.0,  1.0,  1.0, // v3
+ *   -1.0,  1.0,  1.0, // v4
+ *   -1.0, -1.0,  1.0  // v5
+ * ] );
+ *
+ * // itemSize = 3 because there are 3 values (components) per vertex
+ * geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+ * const material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+ * const mesh = new THREE.Mesh( geometry, material );
+ * ```
+ * @example
+ * ```typescript
+ * const geometry = new THREE.BufferGeometry();
+ *
+ * const vertices = new Float32Array( [
+ *   -1.0, -1.0,  1.0, // v0
+ *    1.0, -1.0,  1.0, // v1
+ *    1.0,  1.0,  1.0, // v2
+ *   -1.0,  1.0,  1.0, // v3
+ * ] );
+ * geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+ *
+ * const indices = [
+ *   0, 1, 2,
+ *   2, 3, 0,
+ * ];
+ *
+ * geometry.setIndex( indices );
+ * geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+ *
+ * const material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+ * const mesh = new THREE.Mesh( geometry, material );
+ * ```
+ * @see Example: {@link https://threejs.org/examples/#webgl_buffergeometry | Mesh with non-indexed faces}
+ * @see Example: {@link https://threejs.org/examples/#webgl_buffergeometry_indexed | Mesh with indexed faces}
+ * @see Example: {@link https://threejs.org/examples/#webgl_buffergeometry_lines | Lines}
+ * @see Example: {@link https://threejs.org/examples/#webgl_buffergeometry_lines_indexed | Indexed Lines}
+ * @see Example: {@link https://threejs.org/examples/#webgl_buffergeometry_custom_attributes_particles | Particles}
+ * @see Example: {@link https://threejs.org/examples/#webgl_buffergeometry_rawshader | Raw Shaders}
+ * @see {@link https://threejs.org/docs/index.html#api/en/core/BufferGeometry | Official Documentation}
+ * @see {@link https://github.com/mrdoob/three.js/blob/master/src/core/BufferGeometry.js | Source}
+ */
+/**
+	
+	 * A representation of mesh, line, or point geometry
+	 * Includes vertex positions, face indices, normals, colors, UVs, and custom attributes within buffers, reducing the cost of passing all this data to the GPU.
+	 * @remarks
+	 * To read and edit data in BufferGeometry attributes, see {@link THREE.BufferAttribute | BufferAttribute} documentation.
+	 * @example
+	 * ```typescript
+	 * const geometry = new THREE.BufferGeometry();
+	 * 
+	 * // create a simple square shape. We duplicate the top left and bottom right
+	 * // vertices because each vertex needs to appear once per triangle.
+	 * const vertices = new Float32Array( [
+	 *   -1.0, -1.0,  1.0, // v0
+	 *    1.0, -1.0,  1.0, // v1
+	 *    1.0,  1.0,  1.0, // v2
+	 * 
+	 *    1.0,  1.0,  1.0, // v3
+	 *   -1.0,  1.0,  1.0, // v4
+	 *   -1.0, -1.0,  1.0  // v5
+	 * ] );
+	 * 
+	 * // itemSize = 3 because there are 3 values (components) per vertex
+	 * geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+	 * const material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+	 * const mesh = new THREE.Mesh( geometry, material );
+	 * ```
+	 * @example
+	 * ```typescript
+	 * const geometry = new THREE.BufferGeometry();
+	 * 
+	 * const vertices = new Float32Array( [
+	 *   -1.0, -1.0,  1.0, // v0
+	 *    1.0, -1.0,  1.0, // v1
+	 *    1.0,  1.0,  1.0, // v2
+	 *   -1.0,  1.0,  1.0, // v3
+	 * ] );
+	 * geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+	 * 
+	 * const indices = [
+	 *   0, 1, 2,
+	 *   2, 3, 0,
+	 * ];
+	 * 
+	 * geometry.setIndex( indices );
+	 * geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+	 * 
+	 * const material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+	 * const mesh = new THREE.Mesh( geometry, material );
+	 * ```
+	 * @see Example: {@link https://threejs.org/examples/#webgl_buffergeometry | Mesh with non-indexed faces}
+	 * @see Example: {@link https://threejs.org/examples/#webgl_buffergeometry_indexed | Mesh with indexed faces}
+	 * @see Example: {@link https://threejs.org/examples/#webgl_buffergeometry_lines | Lines}
+	 * @see Example: {@link https://threejs.org/examples/#webgl_buffergeometry_lines_indexed | Indexed Lines}
+	 * @see Example: {@link https://threejs.org/examples/#webgl_buffergeometry_custom_attributes_particles | Particles}
+	 * @see Example: {@link https://threejs.org/examples/#webgl_buffergeometry_rawshader | Raw Shaders}
+	 * @see {@link https://threejs.org/docs/index.html#api/en/core/BufferGeometry | Official Documentation}
+	 * @see {@link https://github.com/mrdoob/three.js/blob/master/src/core/BufferGeometry.js | Source}
+	 
+**/
+@:native("THREE.BufferGeometry") extern class BufferGeometry<Attributes:(js.three.core.BufferGeometry.NormalOrGLBufferAttributes)> extends js.three.core.EventDispatcher<{ var dispose : { }; }> {
+	/**
+		
+			 * A representation of mesh, line, or point geometry
+			 * Includes vertex positions, face indices, normals, colors, UVs, and custom attributes within buffers, reducing the cost of passing all this data to the GPU.
+			 * @remarks
+			 * To read and edit data in BufferGeometry attributes, see {@link THREE.BufferAttribute | BufferAttribute} documentation.
+			 * @example
+			 * ```typescript
+			 * const geometry = new THREE.BufferGeometry();
+			 * 
+			 * // create a simple square shape. We duplicate the top left and bottom right
+			 * // vertices because each vertex needs to appear once per triangle.
+			 * const vertices = new Float32Array( [
+			 *   -1.0, -1.0,  1.0, // v0
+			 *    1.0, -1.0,  1.0, // v1
+			 *    1.0,  1.0,  1.0, // v2
+			 * 
+			 *    1.0,  1.0,  1.0, // v3
+			 *   -1.0,  1.0,  1.0, // v4
+			 *   -1.0, -1.0,  1.0  // v5
+			 * ] );
+			 * 
+			 * // itemSize = 3 because there are 3 values (components) per vertex
+			 * geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+			 * const material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+			 * const mesh = new THREE.Mesh( geometry, material );
+			 * ```
+			 * @example
+			 * ```typescript
+			 * const geometry = new THREE.BufferGeometry();
+			 * 
+			 * const vertices = new Float32Array( [
+			 *   -1.0, -1.0,  1.0, // v0
+			 *    1.0, -1.0,  1.0, // v1
+			 *    1.0,  1.0,  1.0, // v2
+			 *   -1.0,  1.0,  1.0, // v3
+			 * ] );
+			 * geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+			 * 
+			 * const indices = [
+			 *   0, 1, 2,
+			 *   2, 3, 0,
+			 * ];
+			 * 
+			 * geometry.setIndex( indices );
+			 * geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+			 * 
+			 * const material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+			 * const mesh = new THREE.Mesh( geometry, material );
+			 * ```
+			 * @see Example: {@link https://threejs.org/examples/#webgl_buffergeometry | Mesh with non-indexed faces}
+			 * @see Example: {@link https://threejs.org/examples/#webgl_buffergeometry_indexed | Mesh with indexed faces}
+			 * @see Example: {@link https://threejs.org/examples/#webgl_buffergeometry_lines | Lines}
+			 * @see Example: {@link https://threejs.org/examples/#webgl_buffergeometry_lines_indexed | Indexed Lines}
+			 * @see Example: {@link https://threejs.org/examples/#webgl_buffergeometry_custom_attributes_particles | Particles}
+			 * @see Example: {@link https://threejs.org/examples/#webgl_buffergeometry_rawshader | Raw Shaders}
+			 * @see {@link https://threejs.org/docs/index.html#api/en/core/BufferGeometry | Official Documentation}
+			 * @see {@link https://github.com/mrdoob/three.js/blob/master/src/core/BufferGeometry.js | Source}
+			 
+	**/
+	function new():Void;
+	/**
+		
+			 * Unique number for this {@link THREE.BufferGeometry | BufferGeometry} instance.
+			 * @remarks Expects a `Integer`
+			 
+	**/
+	var id : Int;
+	/**
+		
+			 * {@link http://en.wikipedia.org/wiki/Universally_unique_identifier | UUID} of this object instance.
+			 * @remarks This gets automatically assigned and shouldn't be edited.
+			 
+	**/
+	var uuid : String;
+	/**
+		
+			 * Optional name for this {@link THREE.BufferGeometry | BufferGeometry} instance.
+			 * @defaultValue `''`
+			 
+	**/
+	var name : String;
+	/**
+		
+			 * A Read-only _string_ to check if `this` object type.
+			 * @remarks Sub-classes will update this value.
+			 * @defaultValue `BufferGeometry`
+			 
+	**/
+	var type(default, null) : js.three.geometries.GeometryType;
+	/**
+		
+			 * Allows for vertices to be re-used across multiple triangles; this is called using "indexed triangles".
+			 * Each triangle is associated with the indices of three vertices. This attribute therefore stores the index of each vertex for each triangular face.
+			 * If this attribute is not set, the {@link THREE.WebGLRenderer | renderer}  assumes that each three contiguous positions represent a single triangle.
+			 * @defaultValue `null`
+			 
+	**/
+	var index : js.three.core.BufferAttribute;
+	/**
+		
+			 * This hashmap has as id the name of the attribute to be set and as value the {@link THREE.BufferAttribute | buffer} to set it to. Rather than accessing this property directly,
+			 * use {@link setAttribute | .setAttribute} and {@link getAttribute | .getAttribute} to access attributes of this geometry.
+			 * @defaultValue `{}`
+			 
+	**/
+	var attributes : Attributes;
+	/**
+		
+			 * Hashmap of {@link THREE.BufferAttribute | BufferAttributes} holding details of the geometry's morph targets.
+			 * @remarks
+			 * Once the geometry has been rendered, the morph attribute data cannot be changed.
+			 * You will have to call {@link dispose | .dispose}(), and create a new instance of {@link THREE.BufferGeometry | BufferGeometry}.
+			 * @defaultValue `{}`
+			 
+	**/
+	var morphAttributes : Dynamic<Array<haxe.extern.EitherType<js.three.core.BufferAttribute, js.three.core.InterleavedBufferAttribute>>>;
+	/**
+		
+			 * Used to control the morph target behavior; when set to true, the morph target data is treated as relative offsets, rather than as absolute positions/normals.
+			 * @defaultValue `false`
+			 
+	**/
+	var morphTargetsRelative : Bool;
+	/**
+		
+			 * Split the geometry into groups, each of which will be rendered in a separate WebGL draw call. This allows an array of materials to be used with the geometry.
+			 * @remarks Every vertex and index must belong to exactly one group — groups must not share vertices or indices, and must not leave vertices or indices unused.
+			 * @remarks Use {@link addGroup | .addGroup} to add groups, rather than modifying this array directly.
+			 * @defaultValue `[]`
+			 
+	**/
+	var groups : Array<{ /**
+		 * Specifies the first element in this draw call – the first vertex for non-indexed geometry, otherwise the first triangle index. * @remarks Expects a `Integer` 
+	**/
+	public var start(default, default) : Float; /**
+		 * Specifies the material array index to use. * @remarks Expects a `Integer` 
+	**/
+	@:optional
+	public var materialIndex(default, default) : haxe.extern.EitherType<Float, { }>; /**
+		 * Specifies how many vertices (or indices) are included. * @remarks Expects a `Integer` 
+	**/
+	public var count(default, default) : Float; }>;
+	/**
+		
+			 * Bounding box for the {@link THREE.BufferGeometry | BufferGeometry}, which can be calculated with {@link computeBoundingBox | .computeBoundingBox()}.
+			 * @remarks Bounding boxes aren't computed by default. They need to be explicitly computed, otherwise they are `null`.
+			 * @defaultValue `null`
+			 
+	**/
+	var boundingBox : js.three.math.Box3;
+	/**
+		
+			 * Bounding sphere for the {@link THREE.BufferGeometry | BufferGeometry}, which can be calculated with {@link computeBoundingSphere | .computeBoundingSphere()}.
+			 * @remarks bounding spheres aren't computed by default. They need to be explicitly computed, otherwise they are `null`.
+			 * @defaultValue `null`
+			 
+	**/
+	var boundingSphere : js.three.math.Sphere;
+	/**
+		
+			 * Determines the part of the geometry to render. This should not be set directly, instead use {@link setDrawRange | .setDrawRange(...)}.
+			 * @remarks For non-indexed {@link THREE.BufferGeometry | BufferGeometry}, count is the number of vertices to render.
+			 * @remarks For indexed {@link THREE.BufferGeometry | BufferGeometry}, count is the number of indices to render.
+			 * @defaultValue `{ start: 0, count: Infinity }`
+			 
+	**/
+	var drawRange : { var count : Float; var start : Float; };
+	/**
+		
+			 * An object that can be used to store custom data about the BufferGeometry. It should not hold references to functions as these will not be cloned.
+			 * @defaultValue `{}`
+			 
+	**/
+	var userData : Dynamic<Dynamic>;
+	/**
+		
+			 * Read-only flag to check if a given object is of type {@link BufferGeometry}.
+			 * @remarks This is a _constant_ value
+			 * @defaultValue `true`
+			 
+	**/
+	var isBufferGeometry(default, null) : Bool;
+	/**
+		
+			 * Return the {@link index | .index} buffer.
+			 
+	**/
+	function getIndex():js.three.core.BufferAttribute;
+	/**
+		
+			 * Set the {@link THREE.BufferGeometry.index | .index} buffer.
+			 
+	**/
+	function setIndex(index:haxe.extern.EitherType<js.three.core.BufferAttribute, Array<Float>>):js.three.core.BufferGeometry<js.three.core.BufferGeometry.NormalBufferAttributes>;
+	/**
+		
+			 * Sets an {@link attributes | attribute} to this geometry with the specified name.
+			 * @remarks
+			 * Use this rather than the attributes property, because an internal hashmap of {@link attributes | .attributes} is maintained to speed up iterating over attributes.
+			 
+	**/
+	function setAttribute(name:String, attribute:Dynamic):Dynamic;
+	/**
+		
+			 * Returns the {@link attributes | attribute} with the specified name.
+			 
+	**/
+	function getAttribute(name:String):Array<Attributes>;
+	/**
+		
+			 * Deletes the  {@link attributes | attribute} with the specified name.
+			 
+	**/
+	function deleteAttribute(name:String):js.three.core.BufferGeometry<js.three.core.BufferGeometry.NormalBufferAttributes>;
+	/**
+		
+			 * Returns true if the {@link attributes | attribute} with the specified name exists.
+			 
+	**/
+	function hasAttribute(name:String):Bool;
+	/**
+		
+			 * Adds a group to this geometry
+			 * @see the {@link BufferGeometry.groups | groups} property for details.
+			 
+	**/
+	function addGroup(start:Float, count:Int, ?materialIndex:Float):Void;
+	/**
+		
+			 * Clears all groups.
+			 
+	**/
+	function clearGroups():Void;
+	/**
+		
+			 * Set the {@link drawRange | .drawRange} property
+			 * @remarks For non-indexed BufferGeometry, count is the number of vertices to render
+			 * @remarks For indexed BufferGeometry, count is the number of indices to render.
+			 
+	**/
+	function setDrawRange(start:Float, count:Int):Void;
+	/**
+		
+			 * Applies the matrix transform to the geometry.
+			 
+	**/
+	function applyMatrix4(matrix:js.three.math.Matrix4):js.three.core.BufferGeometry<js.three.core.BufferGeometry.NormalBufferAttributes>;
+	/**
+		
+			 * Applies the rotation represented by the quaternion to the geometry.
+			 
+	**/
+	function applyQuaternion(quaternion:js.three.math.Quaternion):js.three.core.BufferGeometry<js.three.core.BufferGeometry.NormalBufferAttributes>;
+	/**
+		
+			 * Rotate the geometry about the X axis. This is typically done as a one time operation, and not during a loop.
+			 * @remarks Use {@link THREE.Object3D.rotation | Object3D.rotation} for typical real-time mesh rotation.
+			 
+	**/
+	function rotateX(angle:Float):js.three.core.BufferGeometry<js.three.core.BufferGeometry.NormalBufferAttributes>;
+	/**
+		
+			 * Rotate the geometry about the Y axis.
+			 * @remarks This is typically done as a one time operation, and not during a loop.
+			 * @remarks Use {@link THREE.Object3D.rotation | Object3D.rotation} for typical real-time mesh rotation.
+			 
+	**/
+	function rotateY(angle:Float):js.three.core.BufferGeometry<js.three.core.BufferGeometry.NormalBufferAttributes>;
+	/**
+		
+			 * Rotate the geometry about the Z axis.
+			 * @remarks This is typically done as a one time operation, and not during a loop.
+			 * @remarks Use {@link THREE.Object3D.rotation | Object3D.rotation} for typical real-time mesh rotation.
+			 
+	**/
+	function rotateZ(angle:Float):js.three.core.BufferGeometry<js.three.core.BufferGeometry.NormalBufferAttributes>;
+	/**
+		
+			 * Translate the geometry.
+			 * @remarks This is typically done as a one time operation, and not during a loop.
+			 * @remarks Use {@link THREE.Object3D.position | Object3D.position} for typical real-time mesh rotation.
+			 
+	**/
+	function translate(x:Float, y:Float, z:Float):js.three.core.BufferGeometry<js.three.core.BufferGeometry.NormalBufferAttributes>;
+	/**
+		
+			 * Scale the geometry data.
+			 * @remarks This is typically done as a one time operation, and not during a loop.
+			 * @remarks Use {@link THREE.Object3D.scale | Object3D.scale} for typical real-time mesh scaling.
+			 
+	**/
+	function scale(x:Float, y:Float, z:Float):js.three.core.BufferGeometry<js.three.core.BufferGeometry.NormalBufferAttributes>;
+	/**
+		
+			 * Rotates the geometry to face a point in space.
+			 * @remarks This is typically done as a one time operation, and not during a loop.
+			 * @remarks Use {@link THREE.Object3D.lookAt | Object3D.lookAt} for typical real-time mesh usage.
+			 
+	**/
+	function lookAt(vector:js.three.math.Vector3):js.three.core.BufferGeometry<js.three.core.BufferGeometry.NormalBufferAttributes>;
+	/**
+		
+			 * Center the geometry based on the bounding box.
+			 
+	**/
+	function center():js.three.core.BufferGeometry<js.three.core.BufferGeometry.NormalBufferAttributes>;
+	/**
+		
+			 * Sets the attributes for this BufferGeometry from an array of points.
+			 
+	**/
+	function setFromPoints(points:haxe.extern.EitherType<Array<js.three.math.Vector3>, Array<js.three.math.Vector2>>):js.three.core.BufferGeometry<js.three.core.BufferGeometry.NormalBufferAttributes>;
+	/**
+		
+			 * Computes bounding box of the geometry, updating {@link boundingBox | .boundingBox} attribute.
+			 * @remarks Bounding boxes aren't computed by default. They need to be explicitly computed, otherwise they are `null`.
+			 
+	**/
+	function computeBoundingBox():Void;
+	/**
+		
+			 * Computes bounding sphere of the geometry, updating {@link boundingSphere | .boundingSphere} attribute.
+			 * @remarks bounding spheres aren't computed by default. They need to be explicitly computed, otherwise they are `null`.
+			 
+	**/
+	function computeBoundingSphere():Void;
+	/**
+		
+			 * Calculates and adds a tangent attribute to this geometry.
+			 * The computation is only supported for indexed geometries and if position, normal, and uv attributes are defined
+			 * @remarks
+			 * When using a tangent space normal map, prefer the MikkTSpace algorithm provided by
+			 * {@link BufferGeometryUtils.computeMikkTSpaceTangents} instead.
+			 
+	**/
+	function computeTangents():Void;
+	/**
+		
+			 * Computes vertex normals for the given vertex data. For indexed geometries, the method sets each vertex normal to
+			 * be the average of the face normals of the faces that share that vertex. For non-indexed geometries, vertices are
+			 * not shared, and the method sets each vertex normal to be the same as the face normal.
+			 
+	**/
+	function computeVertexNormals():Void;
+	/**
+		
+			 * Every normal vector in a geometry will have a magnitude of 1
+			 * @remarks This will correct lighting on the geometry surfaces.
+			 
+	**/
+	function normalizeNormals():Void;
+	/**
+		
+			 * Return a non-index version of an indexed BufferGeometry.
+			 
+	**/
+	function toNonIndexed():js.three.core.BufferGeometry<js.three.core.BufferGeometry.NormalBufferAttributes>;
+	/**
+		
+			 * Convert the buffer geometry to three.js {@link https://github.com/mrdoob/three.js/wiki/JSON-Object-Scene-format-4 | JSON Object/Scene format}.
+			 
+	**/
+	function toJSON():{ };
+	/**
+		
+			 * Creates a clone of this BufferGeometry
+			 
+	**/
+	function clone():js.three.core.BufferGeometry<js.three.core.BufferGeometry.NormalBufferAttributes>;
+	/**
+		
+			 * Copies another BufferGeometry to this BufferGeometry.
+			 
+	**/
+	function copy(source:js.three.core.BufferGeometry<js.three.core.BufferGeometry.NormalBufferAttributes>):js.three.core.BufferGeometry<js.three.core.BufferGeometry.NormalBufferAttributes>;
+	/**
+		
+			 * Frees the GPU-related resources allocated by this instance.
+			 * @remarks Call this method whenever this instance is no longer used in your app.
+			 
+	**/
+	function dispose():Void;
+}

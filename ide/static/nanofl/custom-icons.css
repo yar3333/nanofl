@@ -1,0 +1,73 @@
+[class^="custom-icon-"], [class*=" custom-icon-"]
+{
+	background: transparent url(custom-icons.png) no-repeat 0 0;
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	line-height: 14px;
+	margin-top: 1px;
+	vertical-align: text-top;
+}
+.custom-icon-button { background-position: -0px 0 }
+.custom-icon-cap-butt { background-position: -14px 0 }
+.custom-icon-cap-round { background-position: -28px 0 }
+.custom-icon-cap-square { background-position: -42px 0 }
+.custom-icon-comment { background-position: -56px 0 }
+.custom-icon-copy-white { background-position: -70px 0 }
+.custom-icon-copy { background-position: -84px 0 }
+.custom-icon-cube { background-position: -98px 0 }
+.custom-icon-cut { background-position: -112px 0 }
+.custom-icon-document-close { background-position: -126px 0 }
+.custom-icon-download { background-position: -140px 0 }
+.custom-icon-duplicate { background-position: -154px 0 }
+.custom-icon-empty { background-position: -168px 0 }
+.custom-icon-exit { background-position: -182px 0 }
+.custom-icon-film { background-position: -196px 0 }
+.custom-icon-fire { background-position: -210px 0 }
+.custom-icon-flip-horizontal { background-position: -224px 0 }
+.custom-icon-flip-vertical { background-position: -238px 0 }
+.custom-icon-folder-close { background-position: -252px 0 }
+.custom-icon-folder-open { background-position: -266px 0 }
+.custom-icon-font { background-position: -280px 0 }
+.custom-icon-frame-empty { background-position: -294px 0 }
+.custom-icon-frame-key { background-position: -308px 0 }
+.custom-icon-frame-remove { background-position: -322px 0 }
+.custom-icon-google { background-position: -336px 0 }
+.custom-icon-group { background-position: -350px 0 }
+.custom-icon-haxe { background-position: -364px 0 }
+.custom-icon-join-bevel { background-position: -378px 0 }
+.custom-icon-join-miter { background-position: -392px 0 }
+.custom-icon-join-round { background-position: -406px 0 }
+.custom-icon-layer-guide { background-position: -420px 0 }
+.custom-icon-mask { background-position: -434px 0 }
+.custom-icon-move-back { background-position: -448px 0 }
+.custom-icon-move-backwards { background-position: -462px 0 }
+.custom-icon-move-forwards { background-position: -476px 0 }
+.custom-icon-move-front { background-position: -490px 0 }
+.custom-icon-native-document { background-position: -504px 0 }
+.custom-icon-new { background-position: -518px 0 }
+.custom-icon-open { background-position: -532px 0 }
+.custom-icon-optimize { background-position: -546px 0 }
+.custom-icon-page-blank { background-position: -560px 0 }
+.custom-icon-page-document { background-position: -574px 0 }
+.custom-icon-paste-white { background-position: -588px 0 }
+.custom-icon-paste { background-position: -602px 0 }
+.custom-icon-picture { background-position: -616px 0 }
+.custom-icon-plus { background-position: -630px 0 }
+.custom-icon-point { background-position: -644px 0 }
+.custom-icon-preferencies { background-position: -658px 0 }
+.custom-icon-properties-document { background-position: -672px 0 }
+.custom-icon-properties { background-position: -686px 0 }
+.custom-icon-redo { background-position: -700px 0 }
+.custom-icon-remove-transform { background-position: -714px 0 }
+.custom-icon-remove { background-position: -728px 0 }
+.custom-icon-rename { background-position: -742px 0 }
+.custom-icon-run { background-position: -756px 0 }
+.custom-icon-save { background-position: -770px 0 }
+.custom-icon-scene { background-position: -784px 0 }
+.custom-icon-sound { background-position: -798px 0 }
+.custom-icon-star { background-position: -812px 0 }
+.custom-icon-trash { background-position: -826px 0 }
+.custom-icon-undo { background-position: -840px 0 }
+.custom-icon-upload { background-position: -854px 0 }
+.custom-icon-wrench { background-position: -868px 0 }

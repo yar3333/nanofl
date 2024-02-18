@@ -1,0 +1,22 @@
+<wq-content for="content">
+	<fieldset class="nanofl-group">
+		<legend>MESH</legend>
+		
+		<slider id="rotationX" text="Rotation X:" min="-180" max="180" step="15" units="°"></slider>
+		<slider id="rotationY" text="Rotation Y:" min="-180" max="180" step="15" units="°"></slider>
+		
+		<slider id="cameraFov" text="Camera FOV:" min="1" max="140" step="5" correction="-1" units="°"></slider>
+		
+		<div class="nanofl-row">
+			<span class="size-10 longlabel"><label>Ambient Light:</label>&nbsp;</span>
+			<color-selector id="ambientLightColor" cssClass="size-35" showAlpha="false"></color-selector>
+		</div>
+		
+		<div class="nanofl-row">
+			<span class="size-10 longlabel"><label>Directional Light:</label>&nbsp;</span>
+			<color-selector id="directionalLightColor" cssClass="size-35" showAlpha="false"></color-selector>
+		</div>
+		<slider id="directionalLightRotationX" text="Light X:" min="-180" max="180" step="15" units="°"></slider>
+		<slider id="directionalLightRotationY" text="Light Y:" min="-180" max="180" step="15" units="°"></slider>
+	</fieldset>
+</wq-content>

@@ -1,0 +1,230 @@
+body { overflow:hidden }
+
+.no-user-select
+{
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;	
+}
+
+.ui-layout-pane
+{
+	padding: 0;
+	border: 0;
+}
+
+.modal-backdrop, 
+.modal-backdrop.fade.in
+{
+	opacity: 0.1 !important;
+}
+
+.colorpicker.dropdown-menu
+{
+	z-index:2000;
+}
+
+.colorpicker-component .input-group-addon
+{
+	display: inline-block;
+}
+
+.colorpicker-component .input-group-addon i
+{
+	display: inline-block;
+	border-radius: 4px;
+	border: 1px solid rgb(204, 204, 204);
+	padding: 4px 6px;
+	width: 28px;
+	height: 20px;
+}
+
+.nav { margin-bottom: 0; }
+
+a:focus { outline: none; }
+
+.nav.nav-tabs > .active > a, 
+.nav.nav-tabs > .active > a:hover, 
+.nav.nav-tabs > .active > a:focus
+{
+	background-color: #fafafa;
+}
+
+.nanofl .sp-replacer
+{
+	padding: 2px;
+}
+
+.nanofl .btn
+{
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.chess-back
+{
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==");
+}
+
+.nanofl .modal-header h4 { text-align:center; }
+.nanofl .modal-body, .nanofl .modal-footer { padding-left:40px; padding-right:40px; }
+.nanofl .modal-body { margin-top:10px; margin-bottom:10px; max-height:none; }
+.nanofl .modal-body p:last-child { margin-bottom:0; }
+.nanofl .modal-footer { text-align:center; }
+.nanofl .modal-footer .btn + .btn { margin-left:10px; }
+.nanofl .modal { width:auto; }
+.nanofl .modal form { margin-bottom:0; }
+.nanofl .modal .form-horizontal .control-group:last-child { margin-bottom:0; }
+.nanofl .modal form input.size-max
+{
+    box-sizing: border-box;
+    height: 28px;
+    width: 100%;
+}
+
+.nav.nav-tabs > li > a
+{
+	padding-top: 2px;
+	padding-bottom: 2px;
+	font-size: 13px;
+	color: #444;
+}
+
+.pane-back-color { background-color:#fafafa }
+
+
+.nanofl label, .nanofl input, .nanofl button, .nanofl select, .nanofl textarea, .uneditable-input { font-size:13px; }
+
+.nanofl .btn { text-align:center !important }
+.nanofl .btn:hover, .nanofl .btn:focus { border-color:#aaa; }
+
+.nanofl .controls { font-size:13px }
+
+.nanofl select { width:auto }
+
+.nanofl .table th { font-size:13px }
+
+.navigatorline
+{
+	width: 100%;
+	background-color: #fafafa;
+	border-bottom: 1px solid #ddd;
+}
+
+.btn-mini [class^="icon-"],
+.btn-mini [class*=" icon-"],
+.btn-mini [class^="custom-icon-"],
+.btn-mini [class*=" custom-icon-"]
+{
+	margin-top: 1px;
+}
+
+.nanofl .btn.btn-micro { padding:0 3px; line-height:18px; }
+.nanofl .btn.btn-micro i { margin-top:0; }
+
+.nanofl input[type=number]
+{
+	padding-right: 0;
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+span.longlabel { position:relative }
+span.longlabel>label { position:absolute; right:5px }
+
+.nanofl label.rightlabel
+{
+	text-align: left;
+	padding-left: 5px;
+	padding-right: 0;
+}
+
+.nanofl label.checkboxlabel { text-align:left; padding-right:0; }
+.nanofl label.checkboxlabel input[type=checkbox] { margin-top:-3px; }
+
+.nanofl input[disabled], select[disabled], textarea[disabled], input[readonly], select[readonly], textarea[readonly]
+{
+    cursor: default;
+}
+
+.nanofl .dropdown-menu>li.checked:before
+{
+	content: "•";
+	position: absolute;
+	font-size: 20px;
+	margin-left: 6px;
+	margin-top: 3px;
+}
+
+.nanofl .dropdown-submenu>.dropdown-menu
+{
+	margin-top: -6px !important;
+}
+
+.nanofl .dropdown-menu.inner.selectpicker>li>a { line-height:14px }
+.nanofl .dropdown-menu.inner.selectpicker>li>a>span { line-height:20px }
+
+.nanofl button.close { font-size:20px; }
+
+
+.nanofl input.inPlaceEdit
+{
+	border: none;
+	height: 21px;
+	line-height: 21px;
+	padding: 0;
+	margin: 0 0 1px 0;
+	border-radius: 0;
+	text-align: left;
+}
+
+.nanofl .dropdown-menu > li.disabled > a
+{
+	pointer-events: none;
+}
+.nanofl .dropdown-menu > li.disabled > a > i
+{
+	filter: url(filters.svg#grayscale); /* Firefox 3.5+ */
+	filter: gray; /* IE6-9 */
+	-webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
+}
+
+.nanofl .nav .dropdown-toggle .caret
+{
+    border-bottom-color: #777;
+    border-top-color: #777;
+}
+
+.nav.nav-tabs.nav-tabs-narrow
+{
+	height: 25px;
+}
+
+.nav.nav-tabs.nav-tabs-narrow > li > a
+{
+	line-height: 16px;
+	margin-top: 4px;
+}
+
+.nav > li > a:focus
+{
+	border-color: transparent;
+	background-color: transparent;
+}
+
+.startPage
+{
+	position: relative;
+	background-color: #fafafa;
+}
+
+body.nanofl>.ui-layout-container>.ui-layout-pane.ui-layout-pane-center
+{
+	overflow: hidden;
+}
+
+.list > li { margin-top:6px }
+.list > li:first { margin-top:0 }

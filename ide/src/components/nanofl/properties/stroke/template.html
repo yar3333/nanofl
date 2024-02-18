@@ -1,0 +1,48 @@
+<wq-content for="content">
+	<fieldset class="nanofl-group">
+		<legend>STROKE</legend>
+		
+		<div class="nanofl-row">
+			<label class="size-10">Style:</label>
+			<select id="type" class="size-23">
+				<option value="none">None</option>
+				<option value="solid">Solid</option>
+				<option value="linear">Linear</option>
+				<option value="radial">Radial</option>
+				<option value="bitmap">Bitmap</option>
+			</select>
+			<span class="size-2">&nbsp;</span>
+			<color-selector id="color" cssClass="size-10"></color-selector>
+		</div>
+		
+		<gradient-selector id="gradient"></gradient-selector>
+		<bitmap-selector id="bitmap"></bitmap-selector>
+		
+		<slider id="thickness" text="Size:" min="1" max="50" step="1" units="px"></slider>
+		
+		<div class="nanofl-row" style="margin-top:-10px">
+			<span class="size-10">&nbsp;</span>
+			<label class="size-35 checkboxlabel"><input type="checkbox" id="ignoreScale" /> Ignore scale</label>
+		</div>
+		
+		<div class="nanofl-row">
+			<label class="size-10">Caps:</label>
+			<div id="caps" class="btn-group size-35" data-toggle="buttons-radio">
+				<button data-value="round" class="btn" title="round"><i class="custom-icon-cap-round"></i></button>
+				<button data-value="square" class="btn" title="square"><i class="custom-icon-cap-square"></i></button>
+				<button data-value="butt" class="btn" title="butt"><i class="custom-icon-cap-butt"></i></button>
+			</div>
+		</div>
+		
+		<div class="nanofl-row">
+			<label class="size-10">Joints:</label>
+			<div id="joints" class="btn-group size-35" data-toggle="buttons-radio">
+				<button data-value="round" class="btn" title="round"><i class="custom-icon-join-round"></i></button>
+				<button data-value="miter" class="btn" title="miter"><i class="custom-icon-join-miter"></i></button>
+				<button data-value="bevel" class="btn" title="bevel"><i class="custom-icon-join-bevel"></i></button>
+			</div>
+		</div>
+		
+		<slider id="miterLimit" text="Miter limit:" min="1" max="50" step="1" units="px"></slider>
+	</fieldset>
+</wq-content>

@@ -1,0 +1,7 @@
+<movieclip version="2.3.0" loop="false">
+	<layer name="Layer 0">
+		<frame>
+			<instance libraryItem="MainButton" x="324.71500000000003" y="226.76" />
+		</frame>
+	</layer>
+</movieclip>
