@@ -252,7 +252,7 @@ class Code extends wquery.Component
 		var revItems = items.copy();
 		revItems.reverse();
 		
-		while (width < maxWidth && items.exists(function(x) return !tabs.exists((y) -> x.id == y.data("id"))))
+		while (width < maxWidth && items.exists(x -> !tabs.exists(y -> x.id == y.data("id"))))
 		{
 			for (item in revItems)
 			{

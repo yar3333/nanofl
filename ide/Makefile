@@ -1,4 +1,5 @@
-build: bin/templates/scripts/three-r161.js \
+build: node_modules \
+	   bin/templates/scripts/three-r161.js \
        engine \
        bin/examples \
        bin/plugins \
@@ -34,8 +35,10 @@ clean:
 run:
 	cd bin && NanoFL.exe
 	
+node_modules:
+	npm install
+	
 bin/templates/scripts/three-r161.js:
-	cmd //c npm i
 	mkdir -p $(@D)
 	cp node_modules/three/build/three.module.js $@
 
