@@ -1,4 +1,4 @@
-import { base } from './nanofl-code';
+import { base } from './autogen';
 
 export class MyButton extends base.MyButton
 {

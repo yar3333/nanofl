@@ -12,6 +12,7 @@
     "@types/createjs": "^0.0.32",
     "@types/three": "^0.161.2",
     "nanofl-ts": "file:../../nanofl-ts",
+    "three": "^0.161.0",
     "ts-loader": "^8.4.0",
     "typescript": "^5.3.3",
     "webpack": "^5.90.1",

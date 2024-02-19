@@ -1,5 +1,5 @@
 window.THREE = window.THREE || {};
-window.THREE_addons_loaders_GLTFLoader = window.THREE_addons_loaders_GLTFLoader || {};
+window.THREE_addons_GLTFLoader = window.THREE_addons_GLTFLoader || {};
 
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
@@ -1555,7 +1555,7 @@ class js_Boot {
 	}
 }
 js_Boot.__name__ = "js.Boot";
-var GLTFLoader = (__webpack_require__(664).GLTFLoader);
+var GLTFLoader = (__webpack_require__(676).GLTFLoader);
 var THREE_Color = (__webpack_require__(800).Color);
 var THREE_PerspectiveCamera = (__webpack_require__(800).PerspectiveCamera);
 var THREE_AmbientLight = (__webpack_require__(800).AmbientLight);
@@ -8992,11 +8992,11 @@ module.exports = THREE;
 
 /***/ }),
 
-/***/ 664:
+/***/ 676:
 /***/ ((module) => {
 
 "use strict";
-module.exports = THREE_addons_loaders_GLTFLoader;
+module.exports = THREE_addons_GLTFLoader;
 
 /***/ })
 
