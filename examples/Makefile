@@ -31,14 +31,21 @@ PROJECTS =	alpha \
 			WaterLogic-haxe \
 			zindex
 
-DST = $(addsuffix .release,$(PROJECTS))
+DST_LIST = $(addsuffix .release,$(PROJECTS))
 
-build: $(DST)
+build: $(DST_LIST)
 
 rebuild: clean build
 
 clean:
-	rm -rf $(DST)
+	@for DST in $(DST_LIST) ;\
+	do \
+		rm -rf $$DST/library ;\
+		rm -rf $$DST/scripts ;\
+		rm -f $$DST/src/nanofl-code.ts ;\
+		rm -f $$DST/library.js ;\
+		rm -f $$DST/index.html ;\
+	done
 
 %.release:
 	if [ -f $(basename $@)/$(basename $@).nfl ]; then \
