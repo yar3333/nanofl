@@ -3,6 +3,5 @@
         "target": "ES6",
         "moduleResolution": "Bundler",
         "strict": true
-    },
-    "include": ["./src/**/*.ts"]
+    }
 }
