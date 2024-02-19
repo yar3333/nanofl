@@ -1,5 +1,6 @@
 --js bin\nanofl-haxe.js
 --define js-es=6
+--dce full
 --class-path engine
 --class-path src
 --macro include('nanofl', false)

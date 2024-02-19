@@ -1,7 +1,9 @@
 /** @type {import('webpack').Configuration} */
 module.exports = {
-    mode: 'development',
-    devtool: false,
+    mode: 'production',
+    optimization: {
+        minimize: false,
+    },
 
 	target: "web",
 	
@@ -25,6 +27,6 @@ module.exports = {
 
 	externals: {
 		"three": "THREE",
-        "three/addons/loaders/GLTFLoader.js" : "THREE_addons_loades_GLTFLoader",
+        "three/addons/loaders/GLTFLoader.js" : "THREE_addons_loaders_GLTFLoader",
 	}
 }    
