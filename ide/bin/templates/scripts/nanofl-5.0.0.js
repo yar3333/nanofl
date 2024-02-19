@@ -1,4 +1,4 @@
-window.THREE = window.three || {};
+window.THREE = window.THREE || {};
 window.THREE_addons_loaders_GLTFLoader = window.THREE_addons_loaders_GLTFLoader || {};
 
 /******/ (() => { // webpackBootstrap
@@ -1555,7 +1555,7 @@ class js_Boot {
 	}
 }
 js_Boot.__name__ = "js.Boot";
-var GLTFLoader = (__webpack_require__(664).GLTFLoader);
+var GLTFLoader = __webpack_require__(664);
 var THREE_Color = (__webpack_require__(800).Color);
 var THREE_PerspectiveCamera = (__webpack_require__(800).PerspectiveCamera);
 var THREE_AmbientLight = (__webpack_require__(800).AmbientLight);

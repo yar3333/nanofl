@@ -7,7 +7,6 @@
   "author": "yar3333",
   "license": "ISC",
   "dependencies": {
-    "three": "^0.161.0"
   },
   "devDependencies": {
     "symlink-dir": "^5.2.1",

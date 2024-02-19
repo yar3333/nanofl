@@ -2705,7 +2705,7 @@ nanofl_ide_sys_node_core_NodeWindowsRegistry.prototype = {
 		var n = fullKey.lastIndexOf("\\");
 		var keyPath = StringTools.replace(HxOverrides.substr(fullKey,0,n),"\\","\\\\");
 		var keyName = HxOverrides.substr(fullKey,n + 1,null);
-		var r = this.runPowerShell("\n            $ErrorActionPreference = 'Stop'\n            $keyPath = \"" + keyPath + "\"\n            $key = \"" + keyName + "\"\n    \n            try {\n                $value = Get-ItemProperty -Path $keyPath -Name $key\n                if ($value -ne $null) {\n                    Write-Output $value.$key\n                } else {\n                    Write-Output \"---NOT_FOUND\"\n                }\n            } catch {\n                Write-Output \"---ERROR: $_\"\n            }\n        ").toString();
+		var r = this.runPowerShell("\r\n            $ErrorActionPreference = 'Stop'\r\n            $keyPath = \"" + keyPath + "\"\r\n            $key = \"" + keyName + "\"\r\n    \r\n            try {\r\n                $value = Get-ItemProperty -Path $keyPath -Name $key\r\n                if ($value -ne $null) {\r\n                    Write-Output $value.$key\r\n                } else {\r\n                    Write-Output \"---NOT_FOUND\"\r\n                }\r\n            } catch {\r\n                Write-Output \"---ERROR: $_\"\r\n            }\r\n        ").toString();
 		return r;
 	}
 	,runPowerShell: function(script) {
