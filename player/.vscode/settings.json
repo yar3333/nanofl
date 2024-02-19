@@ -2,5 +2,6 @@
     "files.exclude": {
         "bin": true,
         "package-lock.json": true
-    }
+    },
+    "search.useIgnoreFiles": false
 }

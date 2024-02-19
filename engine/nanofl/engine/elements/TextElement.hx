@@ -1,13 +1,16 @@
 package nanofl.engine.elements;
 
 import datatools.ArrayTools;
-import htmlparser.HtmlNodeElement;
-import htmlparser.XmlBuilder;
 import nanofl.TextRun;
 import nanofl.engine.geom.Point;
-using htmlparser.HtmlParserTools;
 using nanofl.engine.geom.BoundsTools;
 using stdlib.StringTools;
+
+#if ide
+import htmlparser.HtmlNodeElement;
+import htmlparser.XmlBuilder;
+using htmlparser.HtmlParserTools;
+#end
 
 class TextElement extends Element
 {
@@ -153,9 +156,7 @@ class TextElement extends Element
             lineSpacing: textRun.lineSpacing ?? 2.0,
         };
 	}
-    #end
-	
-	#if ide
+    
     function loadTextRun(node:HtmlNodeElement) : TextRun
 	{
 		return TextRun.create

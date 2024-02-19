@@ -1,12 +1,15 @@
 package nanofl.engine.elements;
 
-import htmlparser.HtmlNodeElement;
-import htmlparser.XmlBuilder;
 import nanofl.engine.elements.Element;
 import nanofl.engine.geom.Point;
 import nanofl.engine.IPathElement;
 import nanofl.engine.libraryitems.SpriteItem;
 import stdlib.Debug;
+
+#if ide
+import htmlparser.HtmlNodeElement;
+import htmlparser.XmlBuilder;
+#end
 
 class SpriteFrameElement extends Element
 {

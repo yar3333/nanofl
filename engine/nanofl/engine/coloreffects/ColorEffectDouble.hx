@@ -1,7 +1,11 @@
 package nanofl.engine.coloreffects;
 
+#if ide
 import htmlparser.HtmlNodeElement;
 import htmlparser.XmlBuilder;
+using htmlparser.HtmlParserTools;
+#end
+
 
 /**
     Special effect, used internally for MotionTween.

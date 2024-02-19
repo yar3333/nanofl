@@ -2,17 +2,20 @@ package nanofl.engine.movieclip;
 
 import nanofl.engine.IMotionTween;
 import datatools.ArrayRO;
-import htmlparser.XmlBuilder;
 import nanofl.engine.IElementsContainer;
 import nanofl.engine.Library;
 import datatools.ArrayTools;
-import htmlparser.HtmlNodeElement;
 import nanofl.engine.elements.Element;
 import nanofl.engine.elements.Elements;
 import nanofl.engine.elements.ShapeElement;
 import stdlib.Debug;
 using stdlib.Lambda;
+
+#if ide
+import htmlparser.HtmlNodeElement;
+import htmlparser.XmlBuilder;
 using htmlparser.HtmlParserTools;
+#end
 
 class KeyFrame
     implements IElementsContainer

@@ -1,12 +1,15 @@
 package nanofl.engine.fills;
 
-import htmlparser.HtmlNodeElement;
-import htmlparser.XmlBuilder;
 import nanofl.engine.geom.Matrix;
 import nanofl.engine.Library;
 import nanofl.engine.libraryitems.BitmapItem;
-using htmlparser.HtmlParserTools;
 using Lambda;
+
+#if ide
+import htmlparser.HtmlNodeElement;
+import htmlparser.XmlBuilder;
+using htmlparser.HtmlParserTools;
+#end
 
 class BitmapFill extends BaseFill implements IFill
 {
@@ -23,7 +26,8 @@ class BitmapFill extends BaseFill implements IFill
 		this.matrix = matrix;
 	}
 	
-	public static function load(node:HtmlNodeElement, version:String)
+	#if ide
+    public static function load(node:HtmlNodeElement, version:String)
 	{
 		return new BitmapFill
 		(
@@ -32,6 +36,7 @@ class BitmapFill extends BaseFill implements IFill
 			Matrix.load(node)
 		);
 	}
+    #end
 	
 	public static function loadJson(obj:Dynamic, version:String) : BitmapFill
 	{
@@ -43,6 +48,7 @@ class BitmapFill extends BaseFill implements IFill
 		);
 	}
 	
+    #if ide
 	public function save(out:XmlBuilder)
 	{
 		out.begin("fill").attr("type", "bitmap");
@@ -63,6 +69,7 @@ class BitmapFill extends BaseFill implements IFill
         matrix.saveJson(r);
         return r;
 	}
+    #end
 	
 	public function clone() : BitmapFill
 	{

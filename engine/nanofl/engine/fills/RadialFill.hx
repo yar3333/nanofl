@@ -1,10 +1,13 @@
 package nanofl.engine.fills;
 
+import nanofl.engine.geom.Matrix;
+using nanofl.engine.geom.PointTools;
+
+#if ide
 import htmlparser.HtmlNodeElement;
 import htmlparser.XmlBuilder;
-import nanofl.engine.geom.Matrix;
 using htmlparser.HtmlParserTools;
-using nanofl.engine.geom.PointTools;
+#end
 
 class RadialFill extends BaseFill implements IFill
 {
@@ -27,7 +30,8 @@ class RadialFill extends BaseFill implements IFill
 		this.fy = fy;
 	}
 	
-	public static function load(node:HtmlNodeElement, version:String) : RadialFill
+	#if ide
+    public static function load(node:HtmlNodeElement, version:String) : RadialFill
 	{
 		return Version.handle(version,
 		[
@@ -65,7 +69,8 @@ class RadialFill extends BaseFill implements IFill
 				);
 			}
 		]);
-	}	
+	}
+    #end
     
     public static function loadJson(obj:Dynamic, version:String) : RadialFill
 	{
@@ -84,6 +89,7 @@ class RadialFill extends BaseFill implements IFill
         );
 	}
 	
+    #if ide
 	public function save(out:XmlBuilder)
 	{
 		out.begin("fill").attr("type", "radial");
@@ -111,6 +117,7 @@ class RadialFill extends BaseFill implements IFill
 		    fy: fy ?? cy,
         };
 	}
+    #end
 	
 	public function clone() : RadialFill
 	{

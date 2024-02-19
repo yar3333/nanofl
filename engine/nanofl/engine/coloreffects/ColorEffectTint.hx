@@ -1,9 +1,10 @@
 package nanofl.engine.coloreffects;
 
+#if ide
 import htmlparser.HtmlNodeElement;
 import htmlparser.XmlBuilder;
 using htmlparser.HtmlParserTools;
-using Lambda;
+#end
 
 class ColorEffectTint extends ColorEffect
 {

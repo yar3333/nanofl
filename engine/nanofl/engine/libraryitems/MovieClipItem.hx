@@ -20,10 +20,12 @@ import nanofl.engine.movieclip.KeyFrame;
 import nanofl.engine.movieclip.Layer;
 import stdlib.Debug;
 import stdlib.Std;
+
+#if ide
 import htmlparser.HtmlNodeElement;
 import htmlparser.XmlBuilder;
 using htmlparser.HtmlParserTools;
-using stdlib.Lambda;
+#end
 
 class MovieClipItem	extends InstancableItem
 	implements ILayersContainer

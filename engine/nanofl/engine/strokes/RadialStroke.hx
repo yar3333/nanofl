@@ -1,9 +1,12 @@
 package nanofl.engine.strokes;
 
+import nanofl.engine.geom.Matrix;
+
+#if ide
 import htmlparser.HtmlNodeElement;
 import htmlparser.XmlBuilder;
-import nanofl.engine.geom.Matrix;
 using htmlparser.HtmlParserTools;
+#end
 
 class RadialStroke extends BaseStroke implements IStroke
 {
@@ -28,6 +31,7 @@ class RadialStroke extends BaseStroke implements IStroke
 		this.fy = fy;
 	}
 	
+    #if ide
 	function loadProperties(node:HtmlNodeElement) : Void
 	{
 		loadBaseProperties(node);
@@ -39,6 +43,7 @@ class RadialStroke extends BaseStroke implements IStroke
 		fx = node.getAttr("fx", cx);
 		fy = node.getAttr("fy", cy);
 	}
+    #end
 	
 	function loadPropertiesJson(obj:Dynamic) : Void
 	{
@@ -52,6 +57,7 @@ class RadialStroke extends BaseStroke implements IStroke
 		fy = obj.fy ?? cy;
 	}
 	
+    #if ide
 	function saveProperties(out:XmlBuilder) : Void
 	{
 		out.attr("colors", colors);
@@ -77,6 +83,7 @@ class RadialStroke extends BaseStroke implements IStroke
 
 		saveBasePropertiesJson(obj);
 	}
+    #end
 	
 	public function begin(g:ShapeRender) : Void
 	{

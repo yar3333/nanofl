@@ -4,8 +4,6 @@ import js.lib.Error;
 import datatools.ArrayRO;
 import datatools.ArrayTools;
 import datatools.NullTools;
-import htmlparser.HtmlNodeElement;
-import htmlparser.XmlBuilder;
 import nanofl.engine.IPathElement;
 import nanofl.engine.Library;
 import nanofl.engine.IInstance;
@@ -16,7 +14,12 @@ import nanofl.engine.libraryitems.InstancableItem;
 import nanofl.engine.movieclip.Layer;
 import stdlib.Debug;
 using stdlib.Lambda;
+
+#if ide
+import htmlparser.HtmlNodeElement;
+import htmlparser.XmlBuilder;
 using htmlparser.HtmlParserTools;
+#end
 
 class Instance extends Element
 	implements IInstance

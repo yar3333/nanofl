@@ -1,8 +1,10 @@
 package nanofl.engine.geom;
 
+#if ide
 import htmlparser.HtmlNodeElement;
 import htmlparser.XmlBuilder;
 using htmlparser.HtmlParserTools;
+#end
 
 class Matrix
 {
@@ -25,6 +27,7 @@ class Matrix
 		this.ty = ty;
 	}
 	
+    #if ide
 	public static function load(node:HtmlNodeElement) : Matrix
 	{
 		var coefs = node.getAttr("matrix", [0.0]);
@@ -32,6 +35,7 @@ class Matrix
 			? new Matrix(coefs[0], coefs[1], coefs[2], coefs[3], node.getAttr("x", 0.0), node.getAttr("y", 0.0))
 			: new Matrix(1.0, 0.0, 0.0, 1.0, node.getAttr("x", 0.0), node.getAttr("y", 0.0));
 	}
+    #end
 
 	public static function loadJson(obj:Dynamic) : Matrix
 	{
@@ -40,6 +44,7 @@ class Matrix
 			: new Matrix(1.0, 0.0, 0.0, 1.0, obj.x ?? 0.0, obj.y ?? 0.0);
 	}
 	
+    #if ide
 	public function save(out:XmlBuilder)
 	{
 		if (tx != 0.0 || ty != 0.0)
@@ -67,6 +72,7 @@ class Matrix
 			obj.matrix = [a, b, c, d];
 		}
 	}
+    #end
 	
 	public function decompose() : { x:Float, y:Float, scaleX:Float, scaleY:Float, rotation:Float, skewX:Float, skewY:Float }
 	{

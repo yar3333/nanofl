@@ -13,9 +13,5 @@ module.exports = {
         },
         path: __dirname + '/bin/resources/app',
         filename: 'index.js',
-    },
-
-	externals: {
-		jquery: 'jQuery',
-	}
+    }
 }    

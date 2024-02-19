@@ -4,8 +4,11 @@ import js.lib.Error;
 import js.Browser;
 import js.Syntax;
 import js.lib.Promise;
+
+#if ide
 import htmlparser.HtmlNodeElement;
 import htmlparser.XmlBuilder;
+#end
 
 abstract class LibraryItem
 	implements ILibraryItem

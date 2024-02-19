@@ -1,7 +1,5 @@
 package nanofl.engine.elements;
 
-import htmlparser.HtmlNodeElement;
-import htmlparser.XmlBuilder;
 import nanofl.engine.Debug.console;
 import nanofl.engine.fills.*;
 import datatools.ArrayTools;
@@ -22,9 +20,14 @@ import stdlib.Debug;
 import stdlib.ExceptionTools;
 using nanofl.engine.geom.PointTools;
 using nanofl.engine.geom.BoundsTools;
-using htmlparser.HtmlParserTools;
 using stdlib.Lambda;
 using StringTools;
+
+#if ide
+import htmlparser.HtmlNodeElement;
+import htmlparser.XmlBuilder;
+using htmlparser.HtmlParserTools;
+#end
 
 #if profiler @:build(Profiler.buildMarked()) #end
 class ShapeElement extends Element

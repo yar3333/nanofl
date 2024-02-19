@@ -1,14 +1,17 @@
 package nanofl.engine.coloreffects;
 
-import htmlparser.HtmlNodeElement;
 import nanofl.engine.coloreffects.ColorEffectAdvanced;
 import nanofl.engine.coloreffects.ColorEffectAlpha;
 import nanofl.engine.coloreffects.ColorEffectBrightness;
 import nanofl.engine.coloreffects.ColorEffectTint;
-import htmlparser.XmlBuilder;
 import stdlib.Debug;
-using htmlparser.HtmlParserTools;
 using Lambda;
+
+#if ide
+import htmlparser.HtmlNodeElement;
+import htmlparser.XmlBuilder;
+using htmlparser.HtmlParserTools;
+#end
 
 abstract class ColorEffect
 {

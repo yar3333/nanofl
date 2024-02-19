@@ -1,7 +1,6 @@
 package nanofl.engine.geom;
 
 import datatools.ArrayTools;
-import nanofl.engine.fills.EraseFill;
 import nanofl.engine.fills.IFill;
 import stdlib.Debug;
 using stdlib.Lambda;
@@ -390,11 +389,12 @@ class Polygons
 		#end
 	}
 	
+    #if ide
 	public static function removeErased(polygons:Array<Polygon>)
 	{
 		var i = 0; while (i < polygons.length)  
 		{
-			if (Std.isOfType(polygons[i].fill, EraseFill))
+			if (Std.isOfType(polygons[i].fill, nanofl.engine.fills.EraseFill))
 			{
 				polygons.splice(i, 1);
 			}
@@ -404,6 +404,7 @@ class Polygons
 			}
 		}
 	}
+    #end
 	
 	/**
 	 * Compare with fill testing.

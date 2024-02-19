@@ -2,14 +2,17 @@ package nanofl.engine.elements;
 
 import nanofl.engine.IElementsContainer;
 import nanofl.engine.Library;
-import htmlparser.HtmlNodeElement;
-import htmlparser.XmlBuilder;
 import nanofl.engine.geom.Matrix;
 import nanofl.engine.geom.Point;
 import nanofl.engine.geom.PointTools;
 import stdlib.Debug;
-using htmlparser.HtmlParserTools;
 using StringTools;
+
+#if ide
+import htmlparser.HtmlNodeElement;
+import htmlparser.XmlBuilder;
+using htmlparser.HtmlParserTools;
+#end
 
 abstract class Element
 {

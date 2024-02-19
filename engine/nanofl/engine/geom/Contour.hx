@@ -1,6 +1,5 @@
 package nanofl.engine.geom;
 
-import htmlparser.XmlBuilder;
 import datatools.ArrayTools;
 import stdlib.Debug;
 using Lambda;
@@ -27,7 +26,8 @@ class Contour
 		]);
 	}
 	
-	public function save(out:XmlBuilder)
+    #if ide
+	public function save(out:htmlparser.XmlBuilder)
 	{
 		out.begin("contour");
 		out.attr("edges", Edges.save(edges));
@@ -41,6 +41,7 @@ class Contour
             edges: Edges.save(edges)
         };
 	}
+    #end
 	
 	public function draw(g:ShapeRender)
 	{

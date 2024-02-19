@@ -5,8 +5,6 @@ import nanofl.engine.movieclip.TweenedElement;
 import nanofl.engine.movieclip.KeyFrame;
 import datatools.ArrayRO;
 import stdlib.Debug;
-import htmlparser.HtmlNodeElement;
-import htmlparser.XmlBuilder;
 import nanofl.engine.IMotionTween;
 import nanofl.engine.coloreffects.ColorEffectDouble;
 import nanofl.engine.elements.Element;
@@ -14,8 +12,13 @@ import nanofl.engine.elements.Instance;
 import nanofl.engine.geom.Matrix;
 import nanofl.engine.plugins.FilterPlugins;
 import stdlib.Std;
-using htmlparser.HtmlParserTools;
 using stdlib.Lambda;
+
+#if ide
+import htmlparser.HtmlNodeElement;
+import htmlparser.XmlBuilder;
+using htmlparser.HtmlParserTools;
+#end
 
 class MotionTween
 	implements IMotionTween

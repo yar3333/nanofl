@@ -1,11 +1,14 @@
 package nanofl.engine;
 
-import htmlparser.HtmlNodeElement;
-import htmlparser.XmlBuilder;
 import nanofl.engine.plugins.FilterPlugins;
 import stdlib.Debug;
-using htmlparser.HtmlParserTools;
 using Lambda;
+
+#if ide
+import htmlparser.HtmlNodeElement;
+import htmlparser.XmlBuilder;
+using htmlparser.HtmlParserTools;
+#end
 
 class FilterDef
 {
@@ -30,6 +33,7 @@ class FilterDef
 		this._params = params;
 	}
 	
+    #if ide
 	public static function load(node:HtmlNodeElement, version:String) : FilterDef
 	{
 		if (node == null) return null;
@@ -59,12 +63,14 @@ class FilterDef
 		
 		return new FilterDef(name, params);
 	}
+    #end
 	
 	public static function loadJson(obj:Dynamic, version:String) : FilterDef
 	{
 		return new FilterDef(obj.name, obj.params);
 	}
 	
+    #if ide
 	public function save(out:XmlBuilder) : Void
     {
         out.begin(name);
@@ -87,6 +93,7 @@ class FilterDef
             params : _params,
         };
     }
+    #end
 
 	public function equ(filter:FilterDef) : Bool
 	{

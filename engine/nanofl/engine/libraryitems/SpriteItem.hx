@@ -11,11 +11,14 @@ import nanofl.engine.geom.Point;
 import nanofl.engine.movieclip.KeyFrame;
 import nanofl.engine.movieclip.Layer;
 import stdlib.Debug;
+using nanofl.engine.geom.BoundsTools;
+using Lambda;
+
+#if ide
 import htmlparser.HtmlNodeElement;
 import htmlparser.XmlBuilder;
 using htmlparser.HtmlParserTools;
-using nanofl.engine.geom.BoundsTools;
-using Lambda;
+#end
 
 class SpriteItem extends InstancableItem
 	implements ILayersContainer

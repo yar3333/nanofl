@@ -1,16 +1,19 @@
 package nanofl.engine.geom;
 
-import htmlparser.HtmlNodeElement;
-import htmlparser.XmlBuilder;
 import datatools.ArrayTools;
 import nanofl.engine.strokes.IStroke;
-import nanofl.engine.strokes.SelectionStroke;
 import stdlib.Debug;
-using htmlparser.HtmlParserTools;
 using stdlib.Lambda;
+
+#if ide
+import htmlparser.HtmlNodeElement;
+import htmlparser.XmlBuilder;
+using htmlparser.HtmlParserTools;
+#end
 
 class StrokeEdges
 {
+    #if ide
 	public static function load(nodes:Array<HtmlNodeElement>, strokes:Array<IStroke>, version:String) : Array<StrokeEdge>
 	{
         var r = new Array<StrokeEdge>();
@@ -28,6 +31,7 @@ class StrokeEdges
 
         return r;
 	}
+    #end
 
 	public static function loadJson(objs:Array<Dynamic>, strokes:Array<IStroke>, version:String) : Array<StrokeEdge>
 	{
@@ -47,7 +51,8 @@ class StrokeEdges
         return r;
 	}
 	
-	public static function save(edges:Array<StrokeEdge>, strokes:Array<IStroke>, out:XmlBuilder)
+	#if ide
+    public static function save(edges:Array<StrokeEdge>, strokes:Array<IStroke>, out:XmlBuilder)
 	{
 		var groups = getStrokeGroups(edges, strokes);
 		for (i in 0...groups.length)
@@ -74,6 +79,7 @@ class StrokeEdges
         
         return arr;
 	}
+    #end
 	
 	static function getStrokeGroups(edges:Array<StrokeEdge>, strokes:Array<IStroke>) : Array<Array<Edge>>
 	{
@@ -134,21 +140,23 @@ class StrokeEdges
 			i = j;
 		}
 		
+        #if ide
 		if (Edges.showSelection)
 		{
-			edges = edges.filter(function(e) return e.selected);
+			edges = edges.filter(e -> e.selected);
 			if (edges.length > 0)
 			{
 				var i = 0; while (i < edges.length)
 				{
 					var j = i + 1; while (j < edges.length && edges[i].stroke.equ(edges[j].stroke)) j++;
-					new SelectionStroke(edges[i].stroke, scaleSelection).begin(g);
+					new nanofl.engine.strokes.SelectionStroke(edges[i].stroke, scaleSelection).begin(g);
 					Edges.draw(edges.slice(i, j), g, true);
 					g.endStroke();
 					i = j;
 				}
 			}
 		}
+        #end
 	}
 	
 	static function sort(edges:Array<StrokeEdge>) : Void

@@ -1,9 +1,12 @@
 package nanofl.engine.fills;
 
+import nanofl.engine.geom.Matrix;
+
+#if ide
 import htmlparser.HtmlNodeElement;
 import htmlparser.XmlBuilder;
-import nanofl.engine.geom.Matrix;
 using htmlparser.HtmlParserTools;
+#end
 
 class LinearFill extends BaseFill implements IFill
 {
@@ -24,6 +27,7 @@ class LinearFill extends BaseFill implements IFill
 		this.y1 = y1;
     }
 	
+    #if ide
 	public static function load(node:HtmlNodeElement, version:String)
 	{
 		return Version.handle(version,
@@ -59,6 +63,7 @@ class LinearFill extends BaseFill implements IFill
 			}
 		]);
 	}
+    #end
 
 	public static function loadJson(obj:Dynamic, version:String)
     {
@@ -73,6 +78,7 @@ class LinearFill extends BaseFill implements IFill
         );
     }    
 	
+    #if ide
 	public function save(out:XmlBuilder)
 	{
 		out.begin("fill").attr("type", "linear");
@@ -98,6 +104,7 @@ class LinearFill extends BaseFill implements IFill
             y1: y1,
         };
     }
+    #end
 	
 	public function clone() : LinearFill
 	{

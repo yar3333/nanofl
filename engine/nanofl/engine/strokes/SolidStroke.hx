@@ -1,9 +1,12 @@
 package nanofl.engine.strokes;
 
 import js.lib.Error;
+
+#if ide
 import htmlparser.HtmlNodeElement;
 import htmlparser.XmlBuilder;
 using htmlparser.HtmlParserTools;
+#end
 
 class SolidStroke extends BaseStroke implements IStroke
 {
@@ -15,18 +18,21 @@ class SolidStroke extends BaseStroke implements IStroke
 		this.color = color;
 	}
 	
+    #if ide
 	function loadProperties(node:HtmlNodeElement) : Void
 	{
 		loadBaseProperties(node);
 		color = node.getAttr("color", "#000000");
 	}
+    #end
 
 	function loadPropertiesJson(obj:Dynamic) : Void
 	{
 		loadBasePropertiesJson(obj);
 		color = obj.color ?? "#000000";
 	}
-        
+    
+    #if ide
 	function saveProperties(out:XmlBuilder) 
 	{
 		out.attr("color", color);
@@ -38,6 +44,7 @@ class SolidStroke extends BaseStroke implements IStroke
 		obj.color = color;
 		saveBasePropertiesJson(obj);
 	}
+    #end
 	
 	public function begin(g:ShapeRender) : Void
 	{

@@ -2,14 +2,17 @@ package nanofl.engine.movieclip;
 
 import datatools.ArrayRO;
 import datatools.ArrayTools;
-import htmlparser.XmlBuilder;
 import nanofl.engine.ILayersContainer;
 import nanofl.engine.Library;
 import nanofl.engine.movieclip.KeyFrame;
-import htmlparser.HtmlNodeElement;
 import nanofl.engine.LayerType;
-using htmlparser.HtmlParserTools;
 using stdlib.Lambda;
+
+#if ide
+import htmlparser.HtmlNodeElement;
+import htmlparser.XmlBuilder;
+using htmlparser.HtmlParserTools;
+#end
 
 class Layer
 {

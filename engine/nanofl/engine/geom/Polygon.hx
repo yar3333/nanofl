@@ -1,22 +1,26 @@
 package nanofl.engine.geom;
 
-import htmlparser.HtmlNodeElement;
-import htmlparser.XmlBuilder;
+import stdlib.Debug;
 import datatools.ArrayTools;
 import nanofl.engine.fills.IFill;
 import nanofl.engine.fills.LinearFill;
 import nanofl.engine.fills.RadialFill;
-import nanofl.engine.fills.SelectionFill;
 import nanofl.engine.fills.TypedFill;
-import stdlib.Debug;
 using stdlib.Lambda;
 using nanofl.engine.geom.PointTools;
+
+#if ide
+import htmlparser.HtmlNodeElement;
+import htmlparser.XmlBuilder;
 using htmlparser.HtmlParserTools;
+#end
 
 @:allow(nanofl.engine.geom.Polygons)
 class Polygon implements nanofl.engine.ISelectable
 {
+    #if ide
 	public static var showSelection = true;
+    #end
 	
 	public var contours(default, null) : Array<Contour>;
 	public var fill : IFill;
@@ -32,6 +36,7 @@ class Polygon implements nanofl.engine.ISelectable
 		this.selected = selected;
 	}
 	
+    #if ide
 	public static function load(node:HtmlNodeElement, fills:Array<IFill>, version:String) : Polygon
 	{
 		Debug.assert(node.name == "polygon");
@@ -52,6 +57,7 @@ class Polygon implements nanofl.engine.ISelectable
 		
 		return new Polygon(fills[fillIndex], contours);
 	}
+    #end
 
 	public static function loadJson(obj:Dynamic, fills:Array<IFill>, version:String) : Polygon
 	{
@@ -69,6 +75,7 @@ class Polygon implements nanofl.engine.ISelectable
 		return new Polygon(fills[fillIndex], contours);
 	}
 	
+    #if ide
 	public function save(fills:Array<IFill>, out:XmlBuilder)
 	{
 		out.begin("polygon").attr("fillIndex", getFillIndex(fills));
@@ -84,6 +91,7 @@ class Polygon implements nanofl.engine.ISelectable
             contours: contours.map(c -> c.saveJson()),
         };
 	}
+    #end
 	
 	public function draw(g:ShapeRender, scaleSelection:Float)
 	{
@@ -91,12 +99,14 @@ class Polygon implements nanofl.engine.ISelectable
 		for (contour in contours) contour.draw(g);
 		g.endFill();
 		
+        #if ide
 		if (showSelection && selected)
 		{
-			new SelectionFill(scaleSelection).begin(g);
+			new nanofl.engine.fills.SelectionFill(scaleSelection).begin(g);
 			for (contour in contours) contour.draw(g);
 			g.endFill();
 		}
+        #end
 	}
 	
 	public function translate(dx:Float, dy:Float) : Void
@@ -385,21 +395,6 @@ class Polygon implements nanofl.engine.ISelectable
 		{
 			Edges.replaceAll(contour.edges, search, replacement);
 		}
-	}
-	
-	public function export(out:XmlBuilder, fills:Array<IFill>)
-	{
-		var fillIndex = -1; for (i in 0...fills.length) if (fills[i].equ(fill)) { fillIndex = i; break; }
-		if (fillIndex == -1) { fillIndex = fills.length; fills.push(fill); }
-		
-		out.begin("polygon").attr("fillIndex", fillIndex);
-		for (c in contours)
-		{
-			out.begin("contour");
-			Edges.export(c.edges, out);
-			out.end();
-		}
-		out.end();
 	}
 	
 	public function split() : Array<Polygon>

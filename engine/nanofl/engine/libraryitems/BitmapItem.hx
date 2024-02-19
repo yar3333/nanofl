@@ -6,11 +6,14 @@ import js.lib.Promise;
 import nanofl.engine.ITextureItem;
 import nanofl.engine.ILibraryItem;
 import nanofl.engine.geom.Point;
-import htmlparser.HtmlNodeElement;
-import htmlparser.XmlBuilder;
 import stdlib.Debug;
 using nanofl.engine.geom.BoundsTools;
+
+#if ide
+import htmlparser.HtmlNodeElement;
+import htmlparser.XmlBuilder;
 using htmlparser.HtmlParserTools;
+#end
 
 class BitmapItem extends InstancableItem implements ITextureItem
 {

@@ -19,24 +19,34 @@ class Mesh extends SolidContainer #if !ide implements IInstance #end
 	
 	public var symbol(default, null) : MeshItem;
 	
-	public var rotationX : Float = 0.0;
-	public var rotationY : Float = 0.0;
-	public var rotationZ : Float = 0.0;
+	public var rotationX : Float;
+	public var rotationY : Float;
+	public var rotationZ : Float;
 	
 	public var scene : Scene;
 	public var group : Group;
 	
-	public var camera(default, null) = new PerspectiveCamera(70, 1, 0, 1e7);
-	public var autoCamera = true;
+	public var camera(default, null) : PerspectiveCamera;
+	public var autoCamera : Bool;
 	
-	public var ambientLight(default, null) = new AmbientLight(0xE0E0E0);
-	public var directionalLight(default, null) = new DirectionalLight(0x808080, 1);
+	public var ambientLight(default, null) : AmbientLight;
+	public var directionalLight(default, null) : DirectionalLight;
 	
 	public function new(symbol:MeshItem)
 	{
 		super();
-		
-		#if profiler Profiler.measure("Mesh.new", function() { #end
+        
+        rotationX = 0.0;
+        rotationY = 0.0;
+        rotationZ = 0.0;
+        
+        camera = new PerspectiveCamera(70, 1, 0, 1e7);
+        autoCamera = true;
+                
+        ambientLight = new AmbientLight(0xE0E0E0);
+        directionalLight = new DirectionalLight(0x808080, 1);
+        
+        #if profiler Profiler.measure("Mesh.new", function() { #end
 		
 		this.symbol = symbol;
 		

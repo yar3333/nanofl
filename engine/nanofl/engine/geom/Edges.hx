@@ -1,11 +1,9 @@
 package nanofl.engine.geom;
 
-import htmlparser.XmlBuilder;
-import nanofl.engine.strokes.IStroke;
 import stdlib.Debug;
+import nanofl.engine.strokes.IStroke;
 using nanofl.engine.geom.PointTools;
 using stdlib.Lambda;
-using htmlparser.HtmlParserTools;
 
 #if profiler @:build(Profiler.buildMarked()) #end
 class Edges
@@ -117,7 +115,8 @@ class Edges
 		return bounds;
 	}
 	
-	public static function export<T:Edge>(edges:Array<T>, out:XmlBuilder) : Void
+    #if ide
+	public static function export<T:Edge>(edges:Array<T>, out:htmlparser.XmlBuilder) : Void
 	{
 		if (edges.length == 0) return;
 		
@@ -141,7 +140,7 @@ class Edges
 		}
 	}
 	
-	public static function exportStroked(edges:Array<StrokeEdge>, out:XmlBuilder) : Void
+	public static function exportStroked(edges:Array<StrokeEdge>, out:htmlparser.XmlBuilder) : Void
 	{
 		if (edges.length == 0) return;
 		
@@ -161,6 +160,7 @@ class Edges
 			out.end();
 		}
 	}
+    #end
 	
 	public static function load(s:String) : Array<Edge>
 	{

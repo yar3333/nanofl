@@ -2,8 +2,6 @@ package nanofl.engine.elements;
 
 import datatools.ArrayRO;
 import datatools.ArrayTools;
-import htmlparser.HtmlNodeElement;
-import htmlparser.XmlBuilder;
 import nanofl.engine.ITimeline;
 import nanofl.engine.Library;
 import nanofl.engine.elements.Element;
@@ -12,7 +10,12 @@ import nanofl.engine.geom.Matrix;
 import nanofl.engine.geom.Point;
 import nanofl.engine.movieclip.Layer;
 import stdlib.Debug;
+
+#if ide
+import htmlparser.HtmlNodeElement;
+import htmlparser.XmlBuilder;
 using htmlparser.HtmlParserTools;
+#end
 
 class GroupElement extends Element
 	implements IPathElement

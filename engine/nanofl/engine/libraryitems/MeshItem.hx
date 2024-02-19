@@ -16,9 +16,14 @@ import nanofl.engine.ITextureItem;
 import stdlib.Debug;
 using stdlib.Lambda;
 using stdlib.StringTools;
-using htmlparser.HtmlParserTools;
 import js.Browser.console;
 using nanofl.engine.geom.BoundsTools;
+
+#if ide
+import htmlparser.HtmlNodeElement;
+import htmlparser.XmlBuilder;
+using htmlparser.HtmlParserTools;
+#end
 
 class MeshItem extends InstancableItem implements ITextureItem
 {
@@ -256,7 +261,7 @@ class MeshItem extends InstancableItem implements ITextureItem
             || textureAtlas != null && textureAtlas != "";
     }
 
-    override function saveProperties(xml:htmlparser.XmlBuilder) : Void
+    override function saveProperties(xml:XmlBuilder) : Void
     {
         super.saveProperties(xml);
 
@@ -278,7 +283,7 @@ class MeshItem extends InstancableItem implements ITextureItem
 		obj.loadLights = loadLights ?? false;
     }
     
-    override function loadProperties(xml:htmlparser.HtmlNodeElement) : Void
+    override function loadProperties(xml:HtmlNodeElement) : Void
     {
         super.loadProperties(xml);
 

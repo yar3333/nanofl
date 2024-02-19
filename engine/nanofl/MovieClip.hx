@@ -13,22 +13,24 @@ using stdlib.StringTools;
 @:expose
 class MovieClip extends Container implements IInstance
 {
-	var layerOfChild = new Map<DisplayObject, Int>();
+	var layerOfChild : Map<DisplayObject, Int>;
 	
 	public var symbol(default, null) : MovieClipItem;
 	
-	public var currentFrame(default, null) = 0;
+	public var currentFrame(default, null) : Int;
 	
 	public var paused : Bool;
 	public var loop : Bool;
 	
 	public function new(symbol:MovieClipItem, initFrameIndex:Int, childFrameIndexes:Array<{ element:IPathElement, frameIndex:Int }>)
 	{
-		Debug.assert(Std.isOfType(symbol, MovieClipItem));
-		
 		super();
+		
+        Debug.assert(Std.isOfType(symbol, MovieClipItem));
+		
+        layerOfChild = new Map<DisplayObject, Int>();
 		this.symbol = symbol;
-		if (initFrameIndex != null) currentFrame = initFrameIndex;
+		currentFrame = initFrameIndex ?? 0;
 		symbol.updateDisplayObject(this, childFrameIndexes);
 		
 		paused = !symbol.autoPlay;

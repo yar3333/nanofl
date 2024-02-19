@@ -1,6 +1,5 @@
 package nanofl.engine.strokes;
 
-import htmlparser.XmlBuilder;
 import nanofl.engine.geom.Matrix;
 import nanofl.engine.Library;
 
@@ -18,8 +17,10 @@ interface IStroke
 	function applyAlpha(alpha:Float) : Void;
 	function getTransformed(m:Matrix, applyToThickness:Bool) : IStroke;
 	@:noapi function getTyped() : TypedStroke;
-	function save(out:XmlBuilder) : Void;
+    #if ide
+    function save(out:htmlparser.XmlBuilder) : Void;
 	function saveJson() : Dynamic;
+    #end
 	function swapInstance(oldNamePath:String, newNamePath:String) : Void;
 	function setLibrary(library:Library) : Void;
 	function toString() : String;

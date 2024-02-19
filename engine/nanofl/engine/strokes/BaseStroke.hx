@@ -1,9 +1,12 @@
 package nanofl.engine.strokes;
 
+import nanofl.engine.geom.Matrix;
+
+#if ide
 import htmlparser.HtmlNodeElement;
 import htmlparser.XmlBuilder;
-import nanofl.engine.geom.Matrix;
 using htmlparser.HtmlParserTools;
+#end
 
 abstract class BaseStroke
 {
@@ -35,6 +38,7 @@ abstract class BaseStroke
 		this.ignoreScale = ignoreScale;
 	}
 	
+    #if ide
 	public static function load(node:HtmlNodeElement, version:String) : IStroke
 	{
 		var r : BaseStroke;
@@ -49,6 +53,7 @@ abstract class BaseStroke
 		r.loadProperties(node);
 		return cast r;
 	}
+    #end
 	
 	public static function loadJson(obj:{ type:String }, version:String) : IStroke
 	{
@@ -67,13 +72,13 @@ abstract class BaseStroke
 
     @:noapi abstract function getTyped() : TypedStroke;
 
+    #if ide
     public final function save(out:XmlBuilder)
     {
         out.begin("stroke").attr("type", getTyped().getName());
         saveProperties(out);
         out.end();
     }
-    
 
     public final function saveJson() : { type:String }
     {
@@ -91,6 +96,7 @@ abstract class BaseStroke
 		miterLimit = node.getAttr("miterLimit", 3.0);
 		ignoreScale = node.getAttr("ignoreScale", false);
 	}
+    #end
 	
 	abstract function loadPropertiesJson(obj:Dynamic) : Void;
 	function loadBasePropertiesJson(obj:Dynamic) : Void
@@ -102,6 +108,7 @@ abstract class BaseStroke
 		ignoreScale = obj.ignoreScale ?? false;
 	}
 	
+    #if ide
 	abstract function saveProperties(out:XmlBuilder) : Void;
 	function saveBaseProperties(out:XmlBuilder) : Void
 	{
@@ -121,6 +128,7 @@ abstract class BaseStroke
 		obj.miterLimit = miterLimit ?? 3.0;
 		obj.ignoreScale = ignoreScale ?? false;
 	}
+    #end
 	
 	function setStrokeStyle(g:ShapeRender) : Void
 	{

@@ -1,10 +1,13 @@
 package nanofl.engine.strokes;
 
 import js.lib.Error;
+import nanofl.engine.geom.Matrix;
+
+#if ide
 import htmlparser.HtmlNodeElement;
 import htmlparser.XmlBuilder;
-import nanofl.engine.geom.Matrix;
 using htmlparser.HtmlParserTools;
+#end
 
 class LinearStroke extends BaseStroke implements IStroke
 {
@@ -27,6 +30,7 @@ class LinearStroke extends BaseStroke implements IStroke
 		this.y1 = y1;
 	}
 	
+    #if ide
 	function loadProperties(node:HtmlNodeElement) : Void
     {
         loadBaseProperties(node);
@@ -37,6 +41,7 @@ class LinearStroke extends BaseStroke implements IStroke
         x1 = node.getAttr("x1", 0.0);
         y1 = node.getAttr("y1", 0.0);
     }
+    #end
 
     function loadPropertiesJson(obj:Dynamic) : Void
     {
@@ -49,6 +54,7 @@ class LinearStroke extends BaseStroke implements IStroke
         y1 = obj.y1 ?? 0.0;
     }
         
+    #if ide
 	function saveProperties(out:XmlBuilder) : Void
 	{
 		out.attr("colors", colors);
@@ -72,6 +78,7 @@ class LinearStroke extends BaseStroke implements IStroke
 
 		saveBasePropertiesJson(obj);
 	}
+    #end
 	
 	public function begin(g:ShapeRender) : Void
 	{

@@ -1,13 +1,17 @@
 package nanofl.engine.fills;
 
 import js.lib.Error;
+
+#if ide
 import htmlparser.HtmlNodeElement;
 using htmlparser.HtmlParserTools;
+#end
 
 abstract class BaseFill
 {
 	public abstract function setLibrary(library:Library) : Void;
 
+    #if ide
     public static function load(node:HtmlNodeElement, version:String) : IFill
     {
         return switch (node.getAttr("type", "solid"))
@@ -19,4 +23,5 @@ abstract class BaseFill
             case _: throw new Error("Unknow fill type '" + node.getAttr("type") + "'.");
         }
     }
+    #end
 }

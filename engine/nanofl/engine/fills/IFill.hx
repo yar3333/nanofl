@@ -1,6 +1,5 @@
 package nanofl.engine.fills;
 
-import htmlparser.XmlBuilder;
 import nanofl.engine.geom.Matrix;
 
 interface IFill
@@ -11,8 +10,10 @@ interface IFill
 	function applyAlpha(alpha:Float) : Void;
 	function getTransformed(m:Matrix) : IFill;
 	@:noapi function getTyped() : TypedFill;
-	function save(out:XmlBuilder) : Void;
+	#if ide
+    function save(out:htmlparser.XmlBuilder) : Void;
 	function saveJson() : { type:String };
+    #end
 	function swapInstance(oldNamePath:String, newNamePath:String) : Void;
 	function setLibrary(library:Library) : Void;
 	function toString() : String;

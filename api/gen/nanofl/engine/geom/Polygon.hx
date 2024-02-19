@@ -26,7 +26,6 @@ extern class Polygon implements nanofl.engine.ISelectable {
 	function getPointInside():nanofl.engine.geom.Point;
 	function clone():nanofl.engine.geom.Polygon;
 	function replaceEdge(search:nanofl.engine.geom.Edge, replacement:Array<nanofl.engine.geom.Edge>):Void;
-	function export(out:htmlparser.XmlBuilder, fills:Array<nanofl.engine.fills.IFill>):Void;
 	function split():Array<nanofl.engine.geom.Polygon>;
 	function equ(p:nanofl.engine.geom.Polygon):Bool;
 	function normalize():Void;

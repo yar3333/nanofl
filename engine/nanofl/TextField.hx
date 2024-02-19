@@ -1,19 +1,18 @@
 package nanofl;
 
+import haxe.Timer;
+import haxe.Utf8;
+import js.Browser;
+import js.html.CanvasRenderingContext2D;
+import stdlib.Event;
+import stdlib.Std;
 import easeljs.display.Container;
 import easeljs.events.MouseEvent;
 import easeljs.geom.Point;
 import easeljs.display.Shape;
 import easeljs.display.Text;
-import haxe.Timer;
-import haxe.Utf8;
-import js.Browser;
-import js.JQuery;
-import js.html.CanvasRenderingContext2D;
 import nanofl.engine.TextChunk;
 import nanofl.engine.TextLine;
-import stdlib.Event;
-import stdlib.Std;
 using nanofl.engine.DrawTools;
 using StringTools;
 
@@ -50,13 +49,13 @@ class TextField extends SolidContainer
 	
 	public var selectable : Bool;
 	
-	var _border = false;
+	var _border : Bool;
     @:property
 	public var border(get, set) : Bool;
 	function get_border() return _border;
 	function set_border(v) { if (_border != v) { _border = v; optionsChanged(); } return v; }
 	
-	var _dashedBorder = false;
+	var _dashedBorder : Bool;
     @:property
 	public var dashedBorder(get, set) : Bool;
 	function get_dashedBorder() return _dashedBorder;
@@ -76,19 +75,19 @@ class TextField extends SolidContainer
 	var caretTimer : Timer;
 	var caretStartPos : Point;
 	var caretEndPos : Point;
-	var textarea : JQuery;
-	var _editing = false;
+	var textarea : js.JQuery;
 	
+    var _editing : Bool;
 	public var editing(get, set) : Bool;
 	function get_editing() return _editing;
 	function set_editing(v) { if (_editing != v) { _editing = v; optionsChanged(); } return v; }
 	
-	var _selectionStart = 0;
+	var _selectionStart : Int;
 	public var selectionStart(get, set) : Int;
 	function get_selectionStart() : Int return _selectionStart;
 	function set_selectionStart(v:Int) : Int { if (_selectionStart != v) { needUpdate = true; _selectionStart = v; } return v; }
 	
-	var _selectionEnd = 0;
+	var _selectionEnd : Int;
 	public var selectionEnd(get, set) : Int;
 	function get_selectionEnd() : Int return _selectionEnd;
 	function set_selectionEnd(v:Int) : Int { if (_selectionEnd != v) { needUpdate = true; _selectionEnd = v; } return v; }
@@ -124,7 +123,7 @@ class TextField extends SolidContainer
 	
     @:property
 	public var text(get, set) : String;
-	function get_text() return textRuns.map(function(run) return run.characters).join("");
+	function get_text() return textRuns.map(run -> run.characters).join("");
 	function set_text(v:String) : String
 	{
 		var format = textRuns.length > 0 ? textRuns[textRuns.length - 1] : newTextFormat;
@@ -136,6 +135,15 @@ class TextField extends SolidContainer
 	public function new(width=0.0, height=0.0, selectable=false, border=false, dashedBorder=false, ?textRuns:Array<TextRun>, ?newTextFormat:TextRun)
 	{
 		super();
+
+        #if ide
+        _editing = false;
+        _selectionStart = 0;
+        _selectionEnd = 0;
+        #end
+
+        _border = false;
+        _dashedBorder = false;
 		
 		this.width = width;
 		this.height = height;
@@ -699,7 +707,7 @@ class TextField extends SolidContainer
 			
 			if (textarea == null)
 			{
-				textarea = new JQuery
+				textarea = new js.JQuery
 				(
 					'<textarea autocorrect="off" autocapitalize="off" spellcheck="false" style="' +
 						'position:absolute;' +
@@ -715,7 +723,7 @@ class TextField extends SolidContainer
 						'height:0;' +
 					'"></textarea>'
 				);
-				new JQuery(stage.canvas).after(textarea);
+				new js.JQuery(stage.canvas).after(textarea);
 				textarea.html(text);
 				setTextareaSelection();
 				textarea.keydown(keydown);
@@ -934,7 +942,7 @@ class TextField extends SolidContainer
 		}
 	}
 	
-	function keydown(e:JqEvent)
+	function keydown(e:js.JQuery.JqEvent)
 	{
 		var length = Utf8.length(text);
 		
@@ -976,7 +984,7 @@ class TextField extends SolidContainer
 		updateStage();
 	}
 	
-	function keypress(e:JqEvent)
+	function keypress(e:js.JQuery.JqEvent)
 	{
 		if (!e.ctrlKey && !e.altKey  && e.charCode != 0)
 		{
@@ -988,7 +996,7 @@ class TextField extends SolidContainer
 		}
 	}
 	
-	function keyup(e:JqEvent)
+	function keyup(e:js.JQuery.JqEvent)
 	{
 		restoreSelectionFromTextarea();
 		log("keyup / restoreSelectionFromTextarea " + selectionStart + ".." + selectionEnd);
@@ -997,7 +1005,7 @@ class TextField extends SolidContainer
 		updateStage();
 	}
 	
-	function paste(e:JqEvent)
+	function paste(e:js.JQuery.JqEvent)
 	{
 		insertToTextRuns((cast e.originalEvent:js.html.ClipboardEvent).clipboardData.getData("text/plain"));
 	}

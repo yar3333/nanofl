@@ -3,9 +3,12 @@ package nanofl.engine.libraryitems;
 import nanofl.engine.libraryitems.LibraryItem;
 import nanofl.engine.elements.Instance;
 import nanofl.engine.geom.Point;
+
+#if ide
 import htmlparser.HtmlNodeElement;
 import htmlparser.XmlBuilder;
 using htmlparser.HtmlParserTools;
+#end
 
 abstract class InstancableItem extends LibraryItem
 {

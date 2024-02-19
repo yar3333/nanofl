@@ -1,10 +1,13 @@
 package nanofl.engine.coloreffects;
 
+import nanofl.engine.coloreffects.ColorEffect;
+using Lambda;
+
+#if ide
 import htmlparser.HtmlNodeElement;
 import htmlparser.XmlBuilder;
-import nanofl.engine.coloreffects.ColorEffect;
 using htmlparser.HtmlParserTools;
-using Lambda;
+#end
 
 class ColorEffectAdvanced extends ColorEffect
 {

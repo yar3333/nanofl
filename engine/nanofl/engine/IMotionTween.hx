@@ -1,14 +1,13 @@
 package nanofl.engine;
 
 import nanofl.engine.movieclip.TweenedElement;
-import htmlparser.XmlBuilder;
 
 interface IMotionTween
 {
 	function isGood() : Bool;
 	
     #if ide
-    function save(out:XmlBuilder) : Void;
+    function save(out:htmlparser.XmlBuilder) : Void;
     function saveJson() : Dynamic;
 	#end
 	

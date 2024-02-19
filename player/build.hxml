@@ -1,16 +1,14 @@
 --js bin\nanofl-haxe.js
+--define js-es=6
 --class-path engine
 --class-path src
 --macro include('nanofl', false)
---library jquery
 --library stdlib
 --library datatools
---library HtmlParser
 --library jsprop
 --library easeljs
 --library tweenjs
 --library soundjs
 --library threejs
 --library threejs-addons
-#--macro removeMetadata('js.three', ':jsRequire')
 nanofl.Player

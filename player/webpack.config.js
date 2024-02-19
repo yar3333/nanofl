@@ -1,3 +1,4 @@
+/** @type {import('webpack').Configuration} */
 module.exports = {
     mode: 'development',
     devtool: false,
@@ -23,8 +24,7 @@ module.exports = {
     },
 
 	externals: {
-		"jquery": "jQuery",
-		"three": "three",
-        "three/addons/loaders/GLTFLoader.js" : "three_GLTFLoader",
+		"three": "THREE",
+        "three/addons/loaders/GLTFLoader.js" : "THREE.addons.loaders.GLTFLoader",
 	}
 }    

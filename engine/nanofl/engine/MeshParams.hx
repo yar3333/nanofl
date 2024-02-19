@@ -2,10 +2,13 @@ package nanofl.engine;
 
 import js.three.math.Euler;
 import js.three.math.Color;
+using stdlib.Lambda;
+
+#if ide
 import htmlparser.HtmlNodeElement;
 import htmlparser.XmlBuilder;
-using stdlib.Lambda;
 using htmlparser.HtmlParserTools;
+#end
 
 class MeshParams
 {
@@ -19,7 +22,8 @@ class MeshParams
 	
 	public function new() {}
 	
-	public static function load(node:HtmlNodeElement) : MeshParams
+	#if ide
+    public static function load(node:HtmlNodeElement) : MeshParams
 	{
 		var r = new MeshParams();
 		
@@ -33,6 +37,7 @@ class MeshParams
 		
 		return r;
 	}
+    #end
 
 	public static function loadJson(obj:Dynamic) : MeshParams
     {
@@ -48,7 +53,8 @@ class MeshParams
 		
 		return r;
     }
-        
+    
+    #if ide
 	public function save(out:XmlBuilder)
 	{
 		var def = new MeshParams();
@@ -77,6 +83,7 @@ class MeshParams
             directionalLightRotationY = directionalLightRotationY ?? def.directionalLightRotationY;
         };
     }
+    #end
 	
 	public function equ(obj:MeshParams) : Bool
 	{

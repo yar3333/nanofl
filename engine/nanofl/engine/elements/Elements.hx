@@ -1,13 +1,12 @@
 package nanofl.engine.elements;
 
-import htmlparser.HtmlNodeElement;
 import datatools.ArrayRO;
 import datatools.ArrayTools;
 
 class Elements
 {
     #if ide
-	public static function parse(base:HtmlNodeElement, version:String) : Array<Element>
+	public static function parse(base:htmlparser.HtmlNodeElement, version:String) : Array<Element>
 	{
 		var elements = new Array<Element>();
 		

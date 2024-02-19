@@ -1,9 +1,12 @@
 package nanofl.engine.fills;
 
+import nanofl.engine.geom.Matrix;
+
+#if ide
 import htmlparser.HtmlNodeElement;
 import htmlparser.XmlBuilder;
-import nanofl.engine.geom.Matrix;
 using htmlparser.HtmlParserTools;
+#end
 
 class SolidFill extends BaseFill implements IFill
 {
@@ -14,16 +17,19 @@ class SolidFill extends BaseFill implements IFill
 		this.color = color;
 	}
 	
-	public static function load(node:HtmlNodeElement, version:String)
+	#if ide
+    public static function load(node:HtmlNodeElement, version:String)
 	{
 		return new SolidFill(node.getAttr("color", "#000000"));
 	}
+    #end
 	
 	public static function loadJson(obj:Dynamic, version:String) : Dynamic
 	{
 		return new SolidFill(obj.color ?? "#000000");
 	}
 	
+    #if ide
 	public function save(out:XmlBuilder)
 	{
 		out.begin("fill").attr("type", "solid");
@@ -39,6 +45,7 @@ class SolidFill extends BaseFill implements IFill
             color: color,
         };
 	}
+    #end
 	
 	public function clone() : SolidFill
 	{

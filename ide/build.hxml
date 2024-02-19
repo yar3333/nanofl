@@ -1,4 +1,5 @@
 --js bin\resources\app\haxe.js
+--define js-es=6
 --class-path engine
 --class-path src
 --class-path ..\modules\nanofl-ide-sys\library
@@ -11,7 +12,7 @@
 --library soundjs
 --library tweenjs
 --library preloadjs
---library hxnodejs-wquery
+--library wquery
 --library hxnodejs-re-htmlparser
 --library threejs
 --library threejs-addons

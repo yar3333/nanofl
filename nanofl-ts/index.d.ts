@@ -1,3 +1,6 @@
+/// <reference types="@types/createjs" />
+/// <reference types="@types/three" />
+
 declare namespace nanofl
 {
     class Library

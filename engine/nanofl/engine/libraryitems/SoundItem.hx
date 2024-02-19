@@ -2,9 +2,12 @@ package nanofl.engine.libraryitems;
 
 import js.lib.Promise;
 import nanofl.engine.ILibraryItem;
+
+#if ide
 import htmlparser.HtmlNodeElement;
 import htmlparser.XmlBuilder;
 using htmlparser.HtmlParserTools;
+#end
 
 class SoundItem extends LibraryItem
 {

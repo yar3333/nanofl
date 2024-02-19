@@ -9,18 +9,26 @@ import nanofl.engine.geom.Matrix;
 
 class BaseTransformationShape extends Container
 {
-	@:isVar var BOX_SIZE(default, never) = 4;
-	@:isVar var RHOMBUS_T(default, never) = 0.7;
-	@:isVar var RHOMBUS_K(default, never) = 0.7;
+	final BOX_SIZE : Float;
+	final RHOMBUS_T : Float;
+	final RHOMBUS_K : Float;
 	
 	var lines : Shape;
-	var needUpdate = true;
+	var needUpdate : Bool;
 	
-	public var magnet = false;
+	public var magnet : Bool;
 	
 	public function new()
 	{
 		super();
+
+        BOX_SIZE = 4;
+        RHOMBUS_T = 0.7;
+        RHOMBUS_K = 0.7;
+
+        needUpdate = true;
+        magnet = false;
+
 		addChild(lines = new Shape());
 	}
 	

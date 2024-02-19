@@ -56,11 +56,11 @@ class TransformationBox extends BaseTransformationShape
 	var tpBarB : Shape;
 	var tpBarL : Shape;
 	
-	public var minWidth = null;
-	public var minHeight = null;
+	public var minWidth : Float;
+	public var minHeight : Float;
 	
-	public var width = 0.0;
-	public var height = 0.0;
+	public var width : Float;
+	public var height : Float;
 	
 	public var regPointX(get, set) : Float;
 	function get_regPointX() return tpReg.x;
@@ -70,7 +70,7 @@ class TransformationBox extends BaseTransformationShape
 	function get_regPointY() return tpReg.y;
 	function set_regPointY(v:Float) return tpReg.y = v;
 	
-	public var rotateCursorUrl = "rotate.cur";
+	public var rotateCursorUrl : String;
 	
 	public var resize(default, null) : Event<ResizeEventArgs>;
 	public var rotate(default, null) : Event<RotateEventArgs>;
@@ -81,22 +81,43 @@ class TransformationBox extends BaseTransformationShape
 	public var defaultRegPointX : Float;
 	public var defaultRegPointY : Float;
 	
-	public var enableRegPoint = true;
-	public var enableRotatePoint = true;
-	public var enableTranslatePoint = false;
-	public var enableBars = false;
+	public var enableRegPoint : Bool;
+	public var enableRotatePoint : Bool;
+	public var enableTranslatePoint : Bool;
+	public var enableBars : Bool;
 	
-	public var translatePointPositionX = "50%";
-	public var translatePointPositionY = "50%";
+	public var translatePointPositionX : String;
+	public var translatePointPositionY : String;
 	
-	public var topBarPosition = 0.5;
-	public var rightBarPosition = 0.5;
-	public var bottomBarPosition = 0.5;
-	public var leftBarPosition = 0.5;
+	public var topBarPosition : Float;
+	public var rightBarPosition : Float;
+	public var bottomBarPosition : Float;
+	public var leftBarPosition : Float;
 	
 	public function new()
 	{
 		super();
+
+        minWidth = null;
+        minHeight = null;
+        
+        width = 0.0;
+        height = 0.0;
+
+        rotateCursorUrl = "rotate.cur";
+
+        enableRegPoint = true;
+        enableRotatePoint = true;
+        enableTranslatePoint = false;
+        enableBars = false;
+        
+        translatePointPositionX = "50%";
+        translatePointPositionY = "50%";
+        
+        topBarPosition = 0.5;
+        rightBarPosition = 0.5;
+        bottomBarPosition = 0.5;
+        leftBarPosition = 0.5;
 		
 		addChild(tpLT_r=createRotateDot());
 		addChild(tpLT_t=createResizeDot("lt"));

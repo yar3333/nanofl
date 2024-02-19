@@ -1,11 +1,14 @@
 package nanofl.engine.strokes;
 
-import htmlparser.HtmlNodeElement;
-import htmlparser.XmlBuilder;
 import nanofl.engine.Library;
 import nanofl.engine.libraryitems.BitmapItem;
-using htmlparser.HtmlParserTools;
 using Lambda;
+
+#if ide
+import htmlparser.HtmlNodeElement;
+import htmlparser.XmlBuilder;
+using htmlparser.HtmlParserTools;
+#end
 
 class BitmapStroke extends BaseStroke implements IStroke
 {
@@ -21,12 +24,14 @@ class BitmapStroke extends BaseStroke implements IStroke
 		this.repeat = repeat;
 	}
 	
+    #if ide
 	function loadProperties(node:HtmlNodeElement) : Void
 	{
 		loadBaseProperties(node);
 		bitmapPath = node.getAttr("bitmapPath");
 		repeat = node.getAttr("repeat");
 	}
+    #end
 
 	function loadPropertiesJson(obj:Dynamic) : Void
 	{
@@ -35,6 +40,7 @@ class BitmapStroke extends BaseStroke implements IStroke
 		repeat = obj.repeat;
 	}
 	
+    #if ide
 	function saveProperties(out:XmlBuilder) 
 	{
 		out.attr("bitmapPath", bitmapPath);
@@ -48,6 +54,7 @@ class BitmapStroke extends BaseStroke implements IStroke
 		obj.repeat = repeat ?? "repeat";
 		saveBasePropertiesJson(obj);
 	}
+    #end
 	
 	public function begin(g:ShapeRender) : Void
 	{

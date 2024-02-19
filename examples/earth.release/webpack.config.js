@@ -20,5 +20,11 @@ module.exports = {
         },
         filename: 'application.js',
         path: __dirname,
-    }
+    },
+
+	externals: {
+		"three": "three",
+        "three/addons/loaders/GLTFLoader.js" : "three_GLTFLoader",
+	}
+
 };

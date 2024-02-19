@@ -9,11 +9,14 @@ import nanofl.engine.FontVariant;
 import nanofl.engine.ILibraryItem;
 import stdlib.Debug;
 import stdlib.Std;
+using stdlib.StringTools;
+using stdlib.Lambda;
+
+#if ide
 import htmlparser.HtmlNodeElement;
 import htmlparser.XmlBuilder;
 using htmlparser.HtmlParserTools;
-using stdlib.StringTools;
-using stdlib.Lambda;
+#end
 
 class FontItem extends LibraryItem
 {

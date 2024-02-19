@@ -2,8 +2,11 @@ package nanofl.engine.libraryitems;
 
 import js.lib.Promise;
 import nanofl.engine.ILibraryItem;
+
+#if ide
 import htmlparser.HtmlNodeElement;
 import htmlparser.XmlBuilder;
+#end
 
 class FolderItem extends LibraryItem
 {

@@ -22,10 +22,12 @@
 		<script src="texture-atlases.js"></script>
 		
 		<script type="module">
-			import * as three from 'three';
-			import * as three_GLTFLoader from 'three/addons/loaders/GLTFLoader.js';
-			window.three = three;
-			window.three_GLTFLoader = three_GLTFLoader;
+			import * as THREE from 'three';
+			import * as GLTFLoader from 'three/addons/loaders/GLTFLoader.js';
+			window.THREE = THREE;
+			window.THREE.addons = window.THREE.addons || {};
+			window.THREE.addons.loaders = window.THREE.addons.loaders || {};
+			window.THREE.addons.loaders.GLTFLoader = GLTFLoader;
 			
 			var scriptPlayer = document.createElement("script");
 			scriptPlayer.src = "http://player.nanofl.com/nanofl-{playerVersion}.js";
