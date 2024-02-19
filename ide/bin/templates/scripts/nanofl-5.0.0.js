@@ -1555,7 +1555,7 @@ class js_Boot {
 	}
 }
 js_Boot.__name__ = "js.Boot";
-var GLTFLoader = __webpack_require__(664);
+var GLTFLoader = (__webpack_require__(664).GLTFLoader);
 var THREE_Color = (__webpack_require__(800).Color);
 var THREE_PerspectiveCamera = (__webpack_require__(800).PerspectiveCamera);
 var THREE_AmbientLight = (__webpack_require__(800).AmbientLight);
