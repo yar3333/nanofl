@@ -1,6 +1,8 @@
 module.exports = {
 	mode: 'development',
+    
     entry: './src/application.ts',
+    
     module: {
         rules: [
             {
@@ -10,21 +12,22 @@ module.exports = {
             },
         ],
     },
+    
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
     },
+    
     output: {
         library: {
             type: 'assign-properties',
             name: 'window',
         },
         filename: 'application.js',
-        path: __dirname,
+        path: __dirname + "/scripts",
     },
 
 	externals: {
-		"three": "three",
-        "three/addons/loaders/GLTFLoader.js" : "three_GLTFLoader",
+		"three": "THREE",
+        "three/addons/loaders/GLTFLoader.js" : "THREE_addons_loaders_GLTFLoader",
 	}
-
 };

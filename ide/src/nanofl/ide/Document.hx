@@ -615,8 +615,12 @@ class Document extends OpenedFile
                 hasCodeToPublish // add link to application.js ?
             );
 
-            if (hasCodeToPublish) CodeGenerator.generate(publishedLibrary, destDir + "/nanofl-code.ts");
-            else                  fileSystem.deleteFile(destDir + "/nanofl-code.ts");
+            if (hasCodeToPublish) CodeGenerator.generate(publishedLibrary, destDir + "/src/nanofl-code.ts");
+            else
+            {
+                fileSystem.deleteFile(destDir + "/src/nanofl-code.ts");
+                try { fileSystem.deleteEmptyDirectory(destDir + "/src"); } catch (_) {}
+            }
 			
 			view.alerter.info("Published successfully.");
 

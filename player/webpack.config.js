@@ -25,6 +25,6 @@ module.exports = {
 
 	externals: {
 		"three": "THREE",
-        "three/addons/loaders/GLTFLoader.js" : "THREE.addons.loaders.GLTFLoader",
+        "three/addons/loaders/GLTFLoader.js" : "THREE_addons_loades_GLTFLoader",
 	}
 }    

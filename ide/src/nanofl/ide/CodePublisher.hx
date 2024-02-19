@@ -36,7 +36,7 @@ class CodePublisher extends InjectContainer
 
 	function publishHtmlAndJsFilesInner(addLinkToThreeJs:Bool, addLinkToApplicationJs:Bool)
 	{
-		var template = fileSystem.getContent(supportDir + "/project" + (addLinkToThreeJs ? "-threejs":"") + ".html");
+		var template = fileSystem.getContent(supportDir + "/project.html");
 
         final hasTextureAtlases = properties.publishSettings.useTextureAtlases && properties.publishSettings.textureAtlases.iterator().hasNext();
 		
@@ -51,23 +51,24 @@ class CodePublisher extends InjectContainer
 		template = template.replace("{postContainer}", properties.publishSettings.urlOnClick != "" ? "\n\t\t</a>" : "");
 		template = template.replace("{playerVersion}", Version.player);
 
-        if (!hasTextureAtlases)
+        if (!addLinkToThreeJs)
         {
-            template = template.replace('\t\t<script src="texture-atlases.js"></script>\r\n', '');
-        }
-        
-        if (addLinkToApplicationJs)
-        {
-            template = ~/[ \t]*[<][!]-- BEGIN NOT APP --[>].*?[<][!]-- END --[>]\r\n/s.replace(template, "");
-            template = ~/[ \t]*[<][!]-- BEGIN APP --[>]\r\n/s.replace(template, "");
-            template = ~/[ \t]*[<][!]-- END --[>]\r\n/s.replace(template, "");
+            template = ~/[ \t]*[<][!]-- NANOFL_BEGIN_THREE --[>].*?[<][!]-- NANOFL_END_THREE --[>]\r\n/s.replace(template, "");
         }
         else
         {
-            template = template.replace('\t\t<script src="application.js"></script>\r\n', '');
-            template = ~/[ \t]*[<][!]-- BEGIN APP --[>].*?[<][!]-- END --[>]\r\n/s.replace(template, "");
-            template = ~/[ \t]*[<][!]-- BEGIN NOT APP --[>]\r\n/s.replace(template, "");
-            template = ~/[ \t]*[<][!]-- END --[>]\r\n/s.replace(template, "");
+            template = ~/[ \t]*[<][!]-- NANOFL_BEGIN_THREE --[>]\r\n/s.replace(template, "");
+            template = ~/[ \t]*[<][!]-- NANOFL_END_THREE --[>]\r\n/s.replace(template, "");
+        }
+
+        if (!hasTextureAtlases)
+        {
+            template = template.replace('\t\t<script defer src="texture-atlases.js"></script>\r\n', '');
+        }
+            
+        if (!addLinkToApplicationJs)
+        {
+            template = template.replace('\t\t<script defer src="scripts/application.js"></script>\r\n', '');
         }
 
         if (properties.publishSettings.useLocalScripts)
@@ -98,7 +99,11 @@ class CodePublisher extends InjectContainer
         }
         else
         {
-            fileSystem.deleteDirectoryRecursively(destDir + "/scripts");
+            fileSystem.deleteFile(destDir + "/scripts/createjs-1.0.0.js");
+            fileSystem.deleteFile(destDir + "/scripts/three-r161.js");
+            fileSystem.deleteDirectoryRecursively(destDir + "/scripts/three-addons");
+            fileSystem.deleteFile(destDir + "/scripts/nanofl-" + Version.player + ".js");
+            try { fileSystem.deleteEmptyDirectory(destDir + "/scripts"); } catch (_) {}
         }
 	}
 

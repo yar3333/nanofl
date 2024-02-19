@@ -15172,13 +15172,13 @@ module.exports = THREE;
 /***/ }),
 
 /***/ "three/addons/loaders/GLTFLoader.js":
-/*!**************************************************!*\
-  !*** external "THREE.addons.loaders.GLTFLoader" ***!
-  \**************************************************/
+/*!*************************************************!*\
+  !*** external "THREE_addons_loades_GLTFLoader" ***!
+  \*************************************************/
 /***/ ((module) => {
 
 "use strict";
-module.exports = THREE.addons.loaders.GLTFLoader;
+module.exports = THREE_addons_loades_GLTFLoader;
 
 /***/ })
 

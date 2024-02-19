@@ -3,17 +3,34 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>{title}</title>
+		<!-- NANOFL_BEGIN_THREE -->
+		<script type="importmap">
+			{
+				"imports": {
+					"three": "https://unpkg.com/three@0.161.0/build/three.module.js",
+					"three/addons/": "https://unpkg.com/three@0.161.0/examples/jsm/"
+				}
+			}
+		</script>
+		<script type="module">
+			import * as THREE from 'three';
+			import * as GLTFLoader from 'three/addons/loaders/GLTFLoader.js';
+			window.THREE = THREE;
+			window.THREE_addons_loades_GLTFLoader = GLTFLoader;
+        </script>
+		<!-- NANOFL_END_THREE -->
+		<script defer src="https://code.createjs.com/1.0.0/createjs.js"></script>
+        <script defer src="http://player.nanofl.com/nanofl-5.0.0.js"></script>
+		<script defer src="library.js"></script>
+		<script defer src="texture-atlases.js"></script>
+        <script defer src="scripts/application.js"></script>
+        <script>
+            window.addEventListener("load", () => {
+                nanofl.Player.init(document.getElementById("container"), libraryData, {framerate}, '{scaleMode}', {textureAtlasesData});
+            });
+        </script>
 	</head>
 	<body style="background-color:{backgroundColor}; margin:0; padding:0; font-size:0; overflow:hidden">
-		{preContainer}<div id="container" style="position:relative; display:inline-block; width:{width}; height:{height}"></div>{postContainer}
-		
-		<script src="https://code.createjs.com/1.0.0/createjs.js"></script>
-		<script src="http://player.nanofl.com/nanofl-{playerVersion}.js"></script>
-		<script src="library.js"></script>
-		<script src="texture-atlases.js"></script>
-		<script src="application.js"></script>
-		<script>
-			nanofl.Player.init(document.getElementById("container"), libraryData, {framerate}, '{scaleMode}', {textureAtlasesData});
-		</script>
+		{preContainer}<div id="container" style="position:relative; display:inline-block; width:{width}; {height}"></div>{postContainer}
 	</body>
 </html>

@@ -1,4 +1,4 @@
-import { base } from '../nanofl-code';
+import { base } from './nanofl-code';
 
 export class MySceneClass extends base.MySceneClass
 {
