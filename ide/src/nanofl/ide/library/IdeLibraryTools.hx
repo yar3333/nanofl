@@ -104,13 +104,19 @@ class IdeLibraryTools
 	
 	public static function getUsedItems(library:IdeLibrary, useTextureAtlases:Bool) : Array<IIdeLibraryItem>
 	{
-		var usedNamePaths = [ Library.SCENE_NAME_PATH ]
-            .concat(MovieClipItemTools.getUsedNamePaths(library.getSceneItem(), true, useTextureAtlases))
-            .concat(library.getInstancableItemsAsIde().filter(x -> x.linkedClass != "").map(x -> x.namePath))
-            .concat(library.getFontItemsAsIde().map(x -> x.namePath))
-            .concat(library.getSoundsAsIde().filter(x -> x.linkage != "").map(x -> x.namePath));
+        final symbolsWithLinkedClass = library.getInstancableItemsAsIde().filter(x -> x.linkedClass != "");
+        final forcedUsedSymbols = [ stdlib.Std.downcast(library.getSceneItem(), IIdeInstancableItem) ].concat(symbolsWithLinkedClass);
 
-        var folderNamePaths = library.getItemsAsIde().filterByType(FolderItem).map(x -> x.namePath);
+		var usedNamePaths = forcedUsedSymbols.map(x -> x.namePath);
+        for (mc in forcedUsedSymbols.filterByType(MovieClipItem))
+        {
+            MovieClipItemTools.getUsedNamePaths(mc, true, useTextureAtlases, usedNamePaths);
+        }
+
+        usedNamePaths = usedNamePaths.concat(library.getFontItemsAsIde().map(x -> x.namePath));
+        usedNamePaths = usedNamePaths.concat(library.getSoundsAsIde().filter(x -> x.linkage != "").map(x -> x.namePath));
+
+        final folderNamePaths = library.getItemsAsIde().filterByType(FolderItem).map(x -> x.namePath);
         while (true)
         {
             var folderAdded = false;
@@ -136,10 +142,10 @@ class IdeLibraryTools
 	
 	public static function getItemsContainInstances(library:IdeLibrary, namePaths:Array<String>) : Array<IIdeLibraryItem>
 	{
-		var r = [];
+		final r = [];
 		for (item in library.getItemsAsIde(true))
 		{
-			var hasInstance = namePaths.exists(namePath ->
+			final hasInstance = namePaths.exists(namePath ->
 			{
 				if (item.namePath == namePath) return true;
 				if (Std.isOfType(item, MovieClipItem) && MovieClipItemTools.getUsedNamePaths((cast item:MovieClipItem), false, false).contains(namePath)) return true;
@@ -157,7 +163,7 @@ class IdeLibraryTools
 	
 	static function getSymbolUseCount(library:IdeLibrary, roots:Array<MovieClipItem>) : Map<String, Int>
 	{
-		var r = new Map<String, Int>();
+		final r = new Map<String, Int>();
 		
 		for (root in roots)
 		{
@@ -184,11 +190,11 @@ class IdeLibraryTools
 	{
 		if (!Std.isOfType(item, MovieClipItem)) return null;
 		
-        var item = (cast item : MovieClipItem);
+        final item = (cast item : MovieClipItem);
         if (item.layers.length == 1 && item.layers[0].keyFrames.length == 1 && item.layers[0].type == LayerType.normal)
         {
-            var elements = item.layers[0].keyFrames[0].elements;
-            var shape = item.layers[0].keyFrames[0].getShape(false);
+            final elements = item.layers[0].keyFrames[0].elements;
+            final shape = item.layers[0].keyFrames[0].getShape(false);
             if (shape == null)
             {
                 if (elements.length == 1) return elements[0];

@@ -1,5 +1,6 @@
 package nanofl.engine;
 
+import js.Browser;
 import datatools.MapTools;
 import js.lib.Promise;
 import datatools.ArrayRO;
@@ -73,7 +74,7 @@ class Library
         Debug.assert(namePath != "");
         var r = items.get(namePath);
         if (r != null) return r;
-        trace("Symbol '" + namePath + "' is not found.");
+        Browser.console.warn("Symbol '" + namePath + "' is not found.");
         return createItemOnItemNotFound(namePath);
     }
 
