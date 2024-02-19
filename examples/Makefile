@@ -33,7 +33,7 @@ PROJECTS =	alpha \
 
 DST_LIST = $(addsuffix .release,$(PROJECTS))
 
-build: $(DST_LIST)
+build: $(addsuffix /library.js,$(DST_LIST))
 
 rebuild: clean build
 
@@ -47,9 +47,12 @@ clean:
 		rm -f $$DST/index.html ;\
 	done
 
-%.release:
-	if [ -f $(basename $@)/$(basename $@).nfl ]; then \
-		../ide/bin/nanofl.exe $(basename $@)/$(basename $@).nfl -publish -quit ;\
+%.release/library.js:
+	if [ -f $*/$(*F).nfl ]; then \
+		../ide/bin/nanofl.exe $*/$(*F).nfl -publish -quit ;\
+	fi
+	if [ -f $(@D)/package.json ]; then \
+		cd $(@D) && npm i && npm run build ;\
 	fi
 	
 	#if [ -f $(basename $@)/$(basename $@).xfl ]; then \
