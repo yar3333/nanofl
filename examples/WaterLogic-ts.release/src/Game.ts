@@ -1,5 +1,5 @@
 import { base, Sounds } from './autogen';
-import { BaseBucket } from './BaseBucket';
+import { WaterContainer } from './WaterContainer';
 import { Bucket } from './Bucket';
 import { Scene } from './Scene';
 
@@ -15,17 +15,17 @@ export class Game extends base.Game
 	carryDX : number;
 	carryDY : number;
 
-	action = 0;				    // what to do with "carry" if user release it
-								// 0 - nothing
-								// 1-4 - see gameMode
+	action = 0;		// what to do with "carry" if user release it
+					// 0 - nothing
+					// 1-4 - see gameMode
 	
 	fallTo : Bucket = null;
 	
-	gameMode = 0;			    // 0 - waiting to user
-								// 1 - tansfuse water from "carry" into "fallTo"
-								// 2 - filling "carry" from tap
-								// 3 - falling out from carry to trash
-								// 4 - moving bucket to floor
+	gameMode = 0;	// 0 - waiting to user
+					// 1 - tansfuse water from "carry" into "fallTo"
+					// 2 - filling "carry" from tap
+					// 3 - falling out from carry to trash
+					// 4 - moving bucket to floor
 	
 	tapWaiting = 0;	// tick counter
 	
@@ -222,20 +222,21 @@ export class Game extends base.Game
 		else	// user have bucket
 		{
 			this.gameMode = this.action;
-			if (this.gameMode == 1) this.carry.startFallToBucketProcess(this.fallTo);
-			else
-			if (this.gameMode == 2)
+            
+			if (this.gameMode == 1)
+            {
+                this.carry.startFallToBucketProcess(this.fallTo);
+            }
+			else if (this.gameMode == 2)
 			{
 				this.tapWaiting = 0;
 				this.carry.mc.x = this.parent.mcTap.x;
 			}
-			else
-			if (this.gameMode == 3)
+			else if (this.gameMode == 3)
 			{
 				this.fillBeforeTrash = this.carry.fill;
-				
-				var sliv = new BaseBucket(1000, this.parent.mcTrash);
-				this.carry.startFallToBucketProcess(sliv);
+				const trash = new WaterContainer(1000, this.parent.mcTrash);
+				this.carry.startFallToBucketProcess(trash);
 			}
 		}
 	}

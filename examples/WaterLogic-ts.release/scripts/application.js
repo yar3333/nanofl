@@ -2,30 +2,6 @@
 /******/ 	// runtime can't be in strict mode because a global variable is assign and maybe created.
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/BaseBucket.ts":
-/*!***************************!*\
-  !*** ./src/BaseBucket.ts ***!
-  \***************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   BaseBucket: () => (/* binding */ BaseBucket)
-/* harmony export */ });
-class BaseBucket {
-    constructor(total, mc) {
-        this.fill = 0;
-        this.total = total;
-        this.mc = mc;
-    }
-    setFill(v) { }
-    getNeckPos() { return new createjs.Point(this.mc.x, this.mc.y); }
-}
-
-
-/***/ }),
-
 /***/ "./src/Bucket.ts":
 /*!***********************!*\
   !*** ./src/Bucket.ts ***!
@@ -37,14 +13,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   Bucket: () => (/* binding */ Bucket)
 /* harmony export */ });
-/* harmony import */ var _BaseBucket__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BaseBucket */ "./src/BaseBucket.ts");
+/* harmony import */ var _WaterContainer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./WaterContainer */ "./src/WaterContainer.ts");
 /* harmony import */ var _McBucket__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./McBucket */ "./src/McBucket.ts");
 /* harmony import */ var _autogen__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./autogen */ "./src/autogen.ts");
 
 
 
-class Bucket extends _BaseBucket__WEBPACK_IMPORTED_MODULE_0__.BaseBucket {
-    constructor(baseMovie, total, x) {
+class Bucket extends _WaterContainer__WEBPACK_IMPORTED_MODULE_0__.WaterContainer {
+    constructor(parent, total, x) {
         super(total, new _McBucket__WEBPACK_IMPORTED_MODULE_1__.McBucket());
         this.fallProcessPhase = 0; // 0 - nothing to do
         // 1 - moving to preffered position
@@ -54,8 +30,7 @@ class Bucket extends _BaseBucket__WEBPACK_IMPORTED_MODULE_0__.BaseBucket {
         // 5 - moving to mouse position
         this.fillProcessDest = null;
         this.fillProcessFallFrame = 0;
-        this.baseMovie = baseMovie;
-        baseMovie.addChild(this.mc);
+        parent.addChild(this.mc);
         this.mc.x = x;
         this.mc.y = 345;
         this.mc.scaleX = this.mc.scaleY = Math.sqrt(total) * 40 / 100;
@@ -181,7 +156,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   Game: () => (/* binding */ Game)
 /* harmony export */ });
 /* harmony import */ var _autogen__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./autogen */ "./src/autogen.ts");
-/* harmony import */ var _BaseBucket__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./BaseBucket */ "./src/BaseBucket.ts");
+/* harmony import */ var _WaterContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./WaterContainer */ "./src/WaterContainer.ts");
 /* harmony import */ var _Bucket__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Bucket */ "./src/Bucket.ts");
 
 
@@ -356,16 +331,17 @@ class Game extends _autogen__WEBPACK_IMPORTED_MODULE_0__.base.Game {
         else // user have bucket
          {
             this.gameMode = this.action;
-            if (this.gameMode == 1)
+            if (this.gameMode == 1) {
                 this.carry.startFallToBucketProcess(this.fallTo);
+            }
             else if (this.gameMode == 2) {
                 this.tapWaiting = 0;
                 this.carry.mc.x = this.parent.mcTap.x;
             }
             else if (this.gameMode == 3) {
                 this.fillBeforeTrash = this.carry.fill;
-                var sliv = new _BaseBucket__WEBPACK_IMPORTED_MODULE_1__.BaseBucket(1000, this.parent.mcTrash);
-                this.carry.startFallToBucketProcess(sliv);
+                const trash = new _WaterContainer__WEBPACK_IMPORTED_MODULE_1__.WaterContainer(1000, this.parent.mcTrash);
+                this.carry.startFallToBucketProcess(trash);
             }
         }
     }
@@ -545,6 +521,30 @@ class Scene extends _autogen__WEBPACK_IMPORTED_MODULE_0__.base.Scene {
             (_c = this.btGotoOrigin) === null || _c === void 0 ? void 0 : _c.addEventListener("click", () => this.gotoAndStop("Origin"));
         }
     }
+}
+
+
+/***/ }),
+
+/***/ "./src/WaterContainer.ts":
+/*!*******************************!*\
+  !*** ./src/WaterContainer.ts ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   WaterContainer: () => (/* binding */ WaterContainer)
+/* harmony export */ });
+class WaterContainer {
+    constructor(total, mc) {
+        this.fill = 0;
+        this.total = total;
+        this.mc = mc;
+    }
+    setFill(v) { }
+    getNeckPos() { return new createjs.Point(this.mc.x, this.mc.y); }
 }
 
 

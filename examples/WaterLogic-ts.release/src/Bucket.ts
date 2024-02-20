@@ -1,27 +1,27 @@
-import { BaseBucket } from './BaseBucket';
+import { WaterContainer } from './WaterContainer';
 import { McBucket } from './McBucket';
 import { Sounds } from './autogen';
 
-export class Bucket extends BaseBucket
+export class Bucket extends WaterContainer
 {
-	baseMovie : nanofl.MovieClip;
-	
+    readonly mc : McBucket; // for type cast only
+
 	fallProcessPhase = 0;	// 0 - nothing to do
-								// 1 - moving to preffered position
-								// 2 - rotation forward
-								// 3 - waiting water to fall out
-								// 4 - rotation backward
-								// 5 - moving to mouse position
+							// 1 - moving to preffered position
+							// 2 - rotation forward
+							// 3 - waiting water to fall out
+							// 4 - rotation backward
+							// 5 - moving to mouse position
 	
-	fillProcessDest : BaseBucket = null;
-	fillProcessFallFrame = 0;
+	fillProcessDest : WaterContainer = null;
 	
-	public constructor(baseMovie:nanofl.MovieClip, total:number, x:number)
+    fillProcessFallFrame = 0;
+	
+	public constructor(parent:nanofl.MovieClip, total:number, x:number)
 	{
 		super(total, new McBucket());
 		
-		this.baseMovie = baseMovie;
-		baseMovie.addChild(this.mc);
+		parent.addChild(this.mc);
 		
 		this.mc.x = x;
 		this.mc.y = 345;
@@ -35,20 +35,20 @@ export class Bucket extends BaseBucket
 	
 	public activate(act:boolean)
 	{
-		var mcForeColor = this.mc.getChildByName("mcForeColor");
+		var mcForeColor = this.mc.mcForeColor;
 		mcForeColor.visible = act;
 	}
 	
 	public getNeckPos() : createjs.Point
 	{
-		var mcNeck = this.mc.getChildByName("mcNeck");
+		var mcNeck = this.mc.mcNeck;
 		return new createjs.Point(this.mc.x + mcNeck.x * this.mc.scaleX, this.mc.y + mcNeck.y * this.mc.scaleY);
 	}
 	
 	public setFill(v:number)
 	{
 		this.fill = v;
-		(this.mc.getChildByName("tfLabel") as nanofl.TextField).text = this.fill + "/" + this.total;
+		this.mc.tfLabel.text = this.fill + "/" + this.total;
 		this.mc.gotoAndStop(Math.round(this.fill / this.total * 100));
 	}
 	
@@ -68,7 +68,7 @@ export class Bucket extends BaseBucket
 	}
 	
 	// начинает анимированный процесс переливание из текущей бутыли в заданную
-	public startFallToBucketProcess(dest:BaseBucket)
+	public startFallToBucketProcess(dest:WaterContainer)
 	{
 		if (this.fallProcessPhase != 0) { console.log("StartFallProcess error 1"); return; }
 
@@ -86,9 +86,8 @@ export class Bucket extends BaseBucket
 		if (this.fallProcessPhase == 0) return true;
 		if (this.fallProcessPhase == 1)
 		{
-			var thisNeck = this.getNeckPos();
 			var destNeck = this.fillProcessDest.getNeckPos();
-			var b = this.mc.getChildByName("mcBox").getBounds();
+			var b = this.mc.mcBox.getBounds();
 			var mustPos = new createjs.Point(destNeck.x + b.height * this.mc.scaleY, destNeck.y);
 			if (this.moveStepTo(mustPos, 6)) this.fallProcessPhase++;
 		}
