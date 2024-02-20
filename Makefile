@@ -29,16 +29,4 @@ WaterLogic: FORCE
 installer: FORCE
 	make -C installer
 
-site: FORCE
-	make -C site
-
-site-upload: FORCE
-	make -C site upload
-
-player-upload: FORCE
-	make -C player upload
-
-installer-upload: FORCE
-	make -C installer upload
-
 FORCE:
