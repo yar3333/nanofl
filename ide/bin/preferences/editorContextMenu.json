@@ -15,8 +15,6 @@
 	{ "name":"Copy",					"command":"editor.copy",				"icon":"custom-icon-copy" },
 	{ "name":"Paste",					"command":"editor.paste",				"icon":"custom-icon-paste" },
 	{ "name":"------------------" },
-	{ "name":"Symbol Code",				"command":"editor.editCode",			"icon":"custom-icon-page" },
-	{ "name":"------------------" },
 	{ "name":"Document Properties",		"command":"document.properties",		"icon":"custom-icon-properties-document" },
 	{ "name":"Symbol Properties",		"command":"editor.properties",			"icon":"custom-icon-properties" }
 ]

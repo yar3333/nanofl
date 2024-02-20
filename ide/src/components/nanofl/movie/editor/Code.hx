@@ -170,7 +170,6 @@ class Code extends wquery.Component
 			menu.toggleItem("editor.cut", isForSelected);
 			menu.toggleItem("editor.copy", isForSelected);
 			//menu.toggleItem("editor.paste", true);
-			menu.toggleItem("editor.editCode", app.getAciveSymbol() != null);
 			
 			menu.toggleItem("document.properties", !isForSelected && isPathItemIsMovieClip() && pathItem.element.isScene());
 			menu.toggleItem("editor.properties", !isForSelected && isPathItemIsMovieClip() && !pathItem.element.isScene());
