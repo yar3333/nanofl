@@ -1,4 +1,4 @@
-PLUGINS = $(subst ./,,$(shell /bin/find . -maxdepth 2 -mindepth 2 -type d -not -path "./bin/*" -not -path "./api/*" -printf '%p\n'))
+PLUGINS = $(wildcard filters/*) $(wildcard loaders/*) $(wildcard importers/*) $(wildcard exporters/*)
 JS_RESULTS = $(addprefix bin/,$(addsuffix .js,$(PLUGINS)))
 
 rebuild: clean build
