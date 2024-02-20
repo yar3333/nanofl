@@ -82,7 +82,7 @@ class CodeGenerator extends InjectContainer
 	
 	function getInstanceChildByNameClassDeclaration(item:IIdeInstancableItem) : String
 	{
-        var r = "";
+        var r = [];
 
 		if (Std.isOfType(item, MovieClipItem))
 		{
@@ -91,12 +91,13 @@ class CodeGenerator extends InjectContainer
                 var k = getNamedElementClass(element);
                 if (k != null)
                 {
-                    r += "\t\tget " + k.name + "() { return this.getChildByName(\"" + k.name + "\") as " + k.klass + " }\n";
+                    var str = "\t\tget " + k.name + "() { return this.getChildByName(\"" + k.name + "\") as " + k.klass + " }\n";
+                    if (!r.contains(str)) r.push(str);
                 }
             }
 		}
 		
-		return r;
+		return r.join("");
 	}
 	
 	function getNamedElementClass(element:Element) : { name:String, klass:String }
@@ -137,7 +138,7 @@ class CodeGenerator extends InjectContainer
 		
 		for (sound in sounds)
 		{
-			text += "\tstatic " + sound.linkage + "(?options:createjs.SoundOptions) : createjs.AbstractSoundInstance { return createjs.Sound.play(\"" + sound.linkage + "\", options) }\n";
+			text += "\tstatic " + sound.linkage + "(interrupt?:any, delay?:number, offset?:number, loop?:number, volume?:number, pan?:number) : createjs.AbstractSoundInstance { return createjs.Sound.play(\"" + sound.linkage + "\", interrupt, delay, offset, loop, volume, pan) }\n";
 		}
 		
 		text += "}\n";

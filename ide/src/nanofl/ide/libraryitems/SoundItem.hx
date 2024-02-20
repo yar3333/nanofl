@@ -1,5 +1,6 @@
 package nanofl.ide.libraryitems;
 
+import js.Browser;
 import htmlparser.HtmlNodeElement;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
 
@@ -18,10 +19,16 @@ class SoundItem extends nanofl.engine.libraryitems.SoundItem
 	{
 		if (itemNode.name != "sound") return null;
 		
-		//var version = itemNode.getAttribute("version");
-		//if (version == null || version == "") version = "1.0.0";
-		
-		return new SoundItem(namePath, itemNode.getAttribute("ext")); 
+		var r = new SoundItem(namePath, itemNode.getAttribute("ext"));
+        r.loadProperties(itemNode);
+
+        if (r.ext == null || r.ext == "")
+        {
+            Browser.console.warn("SoundItem.parse: ext is empty | " + namePath);
+            r.ext = "wav";
+        }
+
+        return r;
 	}
 	
 	public function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String) : IIdeLibraryItem
