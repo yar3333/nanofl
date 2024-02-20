@@ -38,6 +38,7 @@ export namespace base
 		get btRules() { return this.getChildByName("btRules") as nanofl.Button }
 		get btGotoOrigin() { return this.getChildByName("btGotoOrigin") as nanofl.Button }
 		get tfLevel() { return this.getChildByName("tfLevel") as nanofl.TextField }
+		get btNextLevel() { return this.getChildByName("btNextLevel") as nanofl.Button }
 		get mcTrash() { return this.getChildByName("mcTrash") as nanofl.MovieClip }
 		get game() { return this.getChildByName("game") as Game }
 		get tfTask() { return this.getChildByName("tfTask") as nanofl.TextField }

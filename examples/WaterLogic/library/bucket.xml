@@ -1,4 +1,4 @@
-<movieclip version="2.2.0" autoPlay="false" loop="false" linkedClass="McBucket">
+<movieclip version="2.3.0" linkedClass="McBucket" autoPlay="false" loop="false">
 	<layer name="neck" locked="true">
 		<frame duration="101">
 			<instance libraryItem="neck" name="mcNeck" x="0" y="-65" />
@@ -7,6 +7,7 @@
 	<layer name="text" locked="true">
 		<frame duration="101">
 			<text name="tfLabel" x="-21.6" y="-29.1" width="44.2" height="26.35">
+				<new-text-format characters="" fillColor="#000000" size="12" />
 				<text-run characters="00/00" fillColor="#FFFFFF" align="center" size="16" family="Arial" />
 			</text>
 		</frame>

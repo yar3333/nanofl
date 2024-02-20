@@ -1,4 +1,4 @@
-<movieclip version="2.2.0" autoPlay="false" loop="false" linkedClass="Scene">
+<movieclip version="2.3.0" linkedClass="Scene" autoPlay="false" loop="false">
 	<layer name="Label">
 		<frame label="Origin" />
 		<frame label="Rules" />
@@ -20,7 +20,8 @@
 		</frame>
 		<frame>
 			<instance libraryItem="_buttons/btnBack" name="btGotoOrigin" x="120.65" y="345.65" />
-			<text x="47.8" y="57.65" width="426.8333435058594" height="268">
+			<text x="47.8" y="57.65" width="426.8916015625" height="268">
+				<new-text-format characters="" fillColor="#000000" size="12" />
 				<text-run characters="You have to get specified&#xA;water volume in each bucket.&#xA;" fillColor="#00FFFF" align="center" size="17" style="bold" family="Comic Sans MS" />
 				<text-run characters="&#xA;" fillColor="#FFFF00" align="center" size="17" style="bold" family="Comic Sans MS" />
 				<text-run characters="You may do next:&#xA;   1) fill whole bucket from the tap;&#xA;   2) fallout all water from the bucket;&#xA;   3) transfuse water from one bucket to another." fillColor="#FFFF00" size="17" style="bold" family="Comic Sans MS" />
@@ -30,21 +31,25 @@
 			</text>
 			<instance libraryItem="_buttons/btnStart" name="btGotoGame" x="385.5" y="340.747959183677" matrix="0.735443971701841,0,0,0.750000000000001" />
 			<text x="213.341204630291" y="7.85" matrix="2.01708984375,0,0,2.01708984375" regX="72" regY="8.4" width="47.18333435058594" height="27">
+				<new-text-format characters="" fillColor="#000000" size="12" />
 				<text-run characters="RULES" fillColor="#FF9900" align="center" size="18" family="Impact" />
 			</text>
 		</frame>
 		<frame>
 			<instance libraryItem="musicButton" x="481" y="11" regX="15" regY="16" />
 			<text x="26" y="14.65" width="63" height="31">
+				<new-text-format characters="" fillColor="#000000" size="12" />
 				<text-run characters="Level" fillColor="#FFFFFF" align="center" size="23" style="bold" family="Arial" />
 			</text>
 			<text name="tfLevel" x="93" y="14.65" width="42.6" height="31" selectable="true">
+				<new-text-format characters="" fillColor="#000000" size="12" />
 				<text-run characters="000" fillColor="#FFFFFF" size="23" style="bold" family="Arial" />
 			</text>
 		</frame>
 		<frame>
-			<instance libraryItem="_buttons/btnNext" x="260.1" y="298.25" matrix="1.0517578125,0,0,1.0517578125" />
+			<instance libraryItem="_buttons/btnNext" name="btNextLevel" x="260.1" y="298.25" matrix="1.0517578125,0,0,1.0517578125" />
 			<text x="135.95" y="74.5" matrix="1,0,0,1.11320495605469" width="248.1" height="152">
+				<new-text-format characters="" fillColor="#000000" size="12" />
 				<text-run characters="Success!&#xA;&#xA;" fillColor="#FFFF00" align="center" size="29" family="Impact" />
 				<text-run characters="Task was not simple,&#xA;but you was smart!" fillColor="#00FFFF" align="center" size="29" family="Impact" />
 			</text>
@@ -52,6 +57,7 @@
 		<frame>
 			<instance libraryItem="_buttons/btnNext" x="260.1" y="302.3" />
 			<text x="130.05" y="72.85" width="259.9" height="176">
+				<new-text-format characters="" fillColor="#000000" size="12" />
 				<text-run characters="All tasks are done!" fillColor="#00FF00" align="center" size="34" family="Impact" />
 				<text-run characters="&#xA;" fillColor="#FFCC00" align="center" size="34" family="Impact" />
 				<text-run characters="&#xA;You are smart&#xA;and clever!" fillColor="#FFFF00" align="center" size="34" family="Impact" />
@@ -67,7 +73,8 @@
 			<instance libraryItem="trash" name="mcTrash" x="97" y="228.4" regX="75" regY="15" />
 			<instance libraryItem="game" name="game" />
 			<text name="tfTask" x="26" y="65.3" width="473.8" height="128.65">
-				<text-run characters="Task" fillColor="#FFFF00" size="18" family="Arial" />
+				<new-text-format characters="" fillColor="#000000" size="12" />
+				<text-run characters="Task" fillColor="#FFFF00" size="18" style="bold" family="Arial Black" strokeSize="1" />
 			</text>
 		</frame>
 		<frame />

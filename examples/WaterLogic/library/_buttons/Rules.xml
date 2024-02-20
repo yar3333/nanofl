@@ -1,7 +1,8 @@
-<movieclip version="2.2.0">
+<movieclip version="2.3.0">
 	<layer name="Layer 1" type="mask" locked="true">
 		<frame>
 			<text x="-36.25" y="-18.8" width="71.4" height="39">
+				<new-text-format characters="" fillColor="#000000" size="12" />
 				<text-run characters="RULES" fillColor="#000000" size="28" family="Impact" />
 			</text>
 		</frame>

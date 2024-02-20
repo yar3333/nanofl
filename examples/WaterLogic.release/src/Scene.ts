@@ -14,6 +14,7 @@ export class Scene extends base.Scene
             this.btGotoGame?.addEventListener("click", () => this.gotoAndStop("Game"));
             this.btRules?.addEventListener("click", () => this.gotoAndStop("Rules"));
             this.btGotoOrigin?.addEventListener("click", () => this.gotoAndStop("Origin"));
+            this.btNextLevel?.addEventListener("click", () => this.gotoAndStop("Game"));
 		}
 	}
 }

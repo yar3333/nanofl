@@ -1,4 +1,4 @@
-<movieclip version="2.2.0" autoPlay="false" loop="false" linkedClass="MusicButton">
+<movieclip version="2.3.0" linkedClass="MusicButton" autoPlay="false" loop="false">
 	<layer name="Layer 2">
 		<frame />
 		<frame>

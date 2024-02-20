@@ -1,4 +1,4 @@
-<movieclip version="2.2.0">
+<movieclip version="2.3.0">
 	<layer name="Layer 1">
 		<frame duration="2">
 			<instance libraryItem="_bitmaps/barrel" x="1.95" y="-5" />
