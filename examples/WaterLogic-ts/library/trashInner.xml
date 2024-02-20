@@ -1,7 +1,0 @@
-<movieclip version="2.2.0">
-	<layer name="Layer 1">
-		<frame>
-			<instance libraryItem="_bitmaps/trash" x="5.4" y="-9.75" />
-		</frame>
-	</layer>
-</movieclip>
