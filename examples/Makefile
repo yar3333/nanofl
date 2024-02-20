@@ -28,7 +28,7 @@ PROJECTS =	alpha \
 			textureatlas \
 			transform \
 			tween \
-			WaterLogic-haxe \
+			WaterLogic \
 			zindex
 
 DST_LIST = $(addsuffix .release,$(PROJECTS))
