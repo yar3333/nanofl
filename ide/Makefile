@@ -1,9 +1,7 @@
 build: node_modules \
 	   bin/templates/scripts/three-r161.js \
        engine \
-       bin/examples \
        bin/plugins \
-       bin/scripts/api \
        bin/resources/app/static
 	
 	make -C ../modules
