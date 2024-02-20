@@ -60,23 +60,27 @@ export class Game extends base.Game
 				tfTask.text = "You need to measure 4 litres of water,\nusing two buckets of 5 and 7 litres.\nUse barrel (at the right) for filling buckets.\nTo make buckets empty, use trash (at the left).";
 				this.buckets.push(new Bucket(this, 5, 220));
 				this.buckets.push(new Bucket(this, 7, 320));
+                break;
 			
 			case 2:
 				tfTask.text = "You need to measure 1 liter of water.";
 				this.buckets.push(new Bucket(this, 3, 180));
 				this.buckets.push(new Bucket(this, 6, 280));
 				this.buckets.push(new Bucket(this, 8, 380));
+                break;
 			
 			case 3:
 				tfTask.text = "You need to measure 1 liter of water.";
 				this.buckets.push(new Bucket(this, 3, 220));
 				this.buckets.push(new Bucket(this, 5, 320));
+                break;
 			
 			case 4:
 				tfTask.text = "You need to got 1 liter of water in any two buckets.";
 				this.buckets.push(new Bucket(this, 3, 180));
 				this.buckets.push(new Bucket(this, 4, 280));
 				this.buckets.push(new Bucket(this, 6, 380));
+                break;
 			
 			case 5:
 				tfTask.text = "You need to got 6 litres of water in bigger bucket,\n4 liters in 5-bucket and 4 litres in 8-bucket.";
@@ -84,6 +88,7 @@ export class Game extends base.Game
 				this.buckets.push(new Bucket(this, 5, 250));
 				this.buckets.push(new Bucket(this, 8, 320));
 				this.buckets.push(new Bucket(this, 12, 400));
+                break;
 			
 			case 6:
 				tfTask.text = "You need to got 2 liter of water in any three buckets.";
@@ -91,12 +96,14 @@ export class Game extends base.Game
 				this.buckets.push(new Bucket(this, 3, 250));
 				this.buckets.push(new Bucket(this, 8, 320));
 				this.buckets.push(new Bucket(this, 11, 400));
+                break;
 			
 			case 7:
 				tfTask.text = "You need to got 1 liter of water in any two buckets..";
 				this.buckets.push(new Bucket(this, 2, 180));
 				this.buckets.push(new Bucket(this, 3, 280));
 				this.buckets.push(new Bucket(this, 9, 380));
+                break;
 			
 			case 8:
 				tfTask.text = "You need to got 1 liter of water in small three buckets.";
@@ -104,6 +111,7 @@ export class Game extends base.Game
 				this.buckets.push(new Bucket(this,  7, 250));
 				this.buckets.push(new Bucket(this,  9, 320));
 				this.buckets.push(new Bucket(this, 11, 400));
+                break;
 			
 			case 9:
 				tfTask.text = "You need to fill buckets on increase:\nsmallest bust be empty, next must contain 1 liter,\nnext - 2 litres and bigger - 3 litres.";
@@ -111,12 +119,14 @@ export class Game extends base.Game
 				this.buckets.push(new Bucket(this, 11, 250));
 				this.buckets.push(new Bucket(this, 13, 320));
 				this.buckets.push(new Bucket(this, 17, 400));
+                break;
 			
 			case 10:
 				tfTask.text = "You must to got 18 litres in 19-bucket and 5 litres in 6-bucket.";
 				this.buckets.push(new Bucket(this,  2, 180));
 				this.buckets.push(new Bucket(this,  6, 280));
 				this.buckets.push(new Bucket(this, 19, 380));
+                break;
 		}
 	}
 	
@@ -126,6 +136,7 @@ export class Game extends base.Game
 		{
 			case 0:
 				if (this.checkWin()) (this.parent as nanofl.MovieClip).gotoAndStop("Win");
+                break;
 				
 			case 1: // transfuse water from current bucket to another
                 this.fallTo.activate(false);
@@ -134,6 +145,7 @@ export class Game extends base.Game
 					this.gameMode = 0;
 					this.selectAction();
 				}
+                break;
 				
 			case 2: // filling bucket from tap
 				if (this.carry.fill < this.carry.total)
@@ -158,6 +170,7 @@ export class Game extends base.Game
 						this.selectAction();
 					}
 				}
+                break;
 				
 			case 3: // fall out to trash
 				if (this.carry.fallProcessStep(this.carryDX, this.carryDY))
@@ -173,6 +186,7 @@ export class Game extends base.Game
 						Sounds.trash();
 					}
 				}
+                break;
 				
 			case 4: // moving bucket to the ground
 				if (this.carry.moveStepTo(new createjs.Point(this.carry.mc.x, 345), 6))
@@ -181,6 +195,7 @@ export class Game extends base.Game
 					this.gameMode = 0;
 					this.selectAction();
 				}
+                break;
 		}
 	}
 	

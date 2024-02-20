@@ -1,5 +1,6 @@
 module.exports = {
 	mode: 'development',
+    devtool: false,
 
     entry: './src/application.ts',
     
