@@ -1,32 +1,24 @@
-build: ide api plugins player
+build: ide plugins player
 
-ide: FORCE
+ide:
 	@echo ide =================================================================
 	make -C ide rebuild
 	@echo
 
-api: FORCE
-	@echo api =================================================================
-	make -C api build
-	@echo
-
-plugins: FORCE
+plugins:
 	@echo plugins =============================================================
 	make -C plugins
 	@echo
 
-player: FORCE
+player:
 	@echo player ==============================================================
 	make -C player build
 	@echo
 
-examples: FORCE
+examples:
 	make -C examples
-
-WaterLogic: FORCE
-	make -C examples WaterLogic
 	
-installer: FORCE
+installer:
 	make -C installer
 
-FORCE:
+.PHONY: build ide plugins player examples installer

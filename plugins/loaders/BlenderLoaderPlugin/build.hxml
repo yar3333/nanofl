@@ -1,5 +1,5 @@
 --js ..\..\bin\loaders\BlenderLoaderPlugin.js
---class-path ..\..\..\api\gen
+--class-path ..\..\api\gen
 --class-path src
 --library datatools
 --main BlenderLoaderPlugin

@@ -1,5 +1,5 @@
 --js ..\..\bin\importers\SvgImporterPlugin.js
---class-path ..\..\..\api\gen
+--class-path ..\..\api\gen
 --class-path src
 --library stdlib
 --library datatools

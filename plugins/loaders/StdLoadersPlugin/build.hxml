@@ -1,5 +1,5 @@
 --js ..\..\bin\loaders\StdLoadersPlugin.js
---class-path ..\..\..\api\gen
+--class-path ..\..\api\gen
 --class-path src
 --library datatools
 --library threejs

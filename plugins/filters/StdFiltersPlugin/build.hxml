@@ -1,5 +1,5 @@
 --js ..\..\bin\filters\StdFiltersPlugin.js
---class-path ..\..\..\api\gen
+--class-path ..\..\api\gen
 --class-path src
 --main StdFiltersPlugin
 --cmd sed -i "s/var createjs = {};/createjs = createjs || {};/" ../../bin/filters/StdFiltersPlugin.js

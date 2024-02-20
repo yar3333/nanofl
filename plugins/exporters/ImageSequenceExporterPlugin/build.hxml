@@ -1,5 +1,5 @@
 --js ..\..\bin\exporters\ImageSequenceExporterPlugin.js
---class-path ..\..\..\api\gen
+--class-path ..\..\api\gen
 --class-path src
 --library datatools
 --main Main

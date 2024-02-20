@@ -1,4 +1,4 @@
---cwd ../ide
+--cwd ../../ide
 build.hxml
 --no-output
 --define noprofile
@@ -31,4 +31,4 @@ build.hxml
 --macro CodeGen.removeTypeMeta(":jsRequire :allow :rtti :autoBuild :build")
 --macro CodeGen.removeFieldMeta(":profile :allow :noprofile")
 
---macro CodeGen.haxeExtern("../api/gen")
+--macro CodeGen.haxeExtern("../plugins/api/gen")
