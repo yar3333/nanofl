@@ -1,9 +1,0 @@
---js ..\..\bin\exporters\ZippedNanoFLExporterPlugin.js
---class-path ..\..\..\api\gen
---class-path src
---library stdlib
---library datatools
---main ZippedNanoFLExporterPlugin
--w -WExternWithExpr
---cmd IF EXIST support IF NOT EXIST ..\..\bin\exporters\ZippedNanoFLExporterPlugin mkdir  ..\..\bin\exporters\ZippedNanoFLExporterPlugin
---cmd IF EXIST support xcopy /E /Q /Y support ..\..\bin\exporters\ZippedNanoFLExporterPlugin
