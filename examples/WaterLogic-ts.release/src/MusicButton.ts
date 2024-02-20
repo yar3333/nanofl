@@ -3,13 +3,12 @@ import { base, Sounds } from './autogen';
 export class MusicButton extends base.MusicButton
 {
 	soundLoop : nanofl.SeamlessSoundLoop;
-	
-	constructor()
-	{
-		super();
+
+    init()
+    {
 		this.cursor = "pointer";
 		this.musicOn();
-	}
+    }
 	
 	onMouseUp(e:createjs.MouseEvent)
 	{

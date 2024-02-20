@@ -183,8 +183,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _autogen__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./autogen */ "./src/autogen.ts");
 /* harmony import */ var _BaseBucket__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./BaseBucket */ "./src/BaseBucket.ts");
 /* harmony import */ var _Bucket__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Bucket */ "./src/Bucket.ts");
-/* harmony import */ var _Globals__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Globals */ "./src/Globals.ts");
-
 
 
 
@@ -192,9 +190,6 @@ class Game extends _autogen__WEBPACK_IMPORTED_MODULE_0__.base.Game {
     constructor() {
         super(...arguments);
         this.level = 0;
-        this.g = 1; // physic constant
-        this.midX = 520 / 2;
-        this.midY = 390 / 2;
         this.buckets = new Array();
         this.carry = null;
         this.action = 0; // what to do with "carry" if user release it
@@ -206,77 +201,72 @@ class Game extends _autogen__WEBPACK_IMPORTED_MODULE_0__.base.Game {
         // 2 - filling "carry" from tap
         // 3 - falling out from carry to trash
         // 4 - moving bucket to floor
-        this.fallIntoBucketPhase = 0; // 0 - rotation for falling
-        // 1 - going to original position
         this.tapWaiting = 0; // tick counter
         this.fillBeforeTrash = 0;
     }
     init() {
         this.parent.stop();
-        this.mcTap = this.parent.getChildByName("mcTap");
-        this.mcTrash = this.parent.getChildByName("mcTrash");
-        this.level = _Globals__WEBPACK_IMPORTED_MODULE_3__.Globals.level;
-        this.parent.getChildByName("tfLevel").text = this.level + "";
-        var tfTask = this.parent.getChildByName("tfTask");
+        this.level = this.parent.level;
+        this.parent.tfLevel.text = this.level + "";
         switch (this.level) {
             case 1:
-                tfTask.text = "You need to measure 4 litres of water,\nusing two buckets of 5 and 7 litres.\nUse barrel (at the right) for filling buckets.\nTo make buckets empty, use trash (at the left).";
+                this.parent.tfTask.text = "You need to measure 4 litres of water,\nusing two buckets of 5 and 7 litres.\nUse barrel (at the right) for filling buckets.\nTo make buckets empty, use trash (at the left).";
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 5, 220));
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 7, 320));
                 break;
             case 2:
-                tfTask.text = "You need to measure 1 liter of water.";
+                this.parent.tfTask.text = "You need to measure 1 liter of water.";
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 3, 180));
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 6, 280));
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 8, 380));
                 break;
             case 3:
-                tfTask.text = "You need to measure 1 liter of water.";
+                this.parent.tfTask.text = "You need to measure 1 liter of water.";
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 3, 220));
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 5, 320));
                 break;
             case 4:
-                tfTask.text = "You need to got 1 liter of water in any two buckets.";
+                this.parent.tfTask.text = "You need to got 1 liter of water in any two buckets.";
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 3, 180));
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 4, 280));
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 6, 380));
                 break;
             case 5:
-                tfTask.text = "You need to got 6 litres of water in bigger bucket,\n4 liters in 5-bucket and 4 litres in 8-bucket.";
+                this.parent.tfTask.text = "You need to got 6 litres of water in bigger bucket,\n4 liters in 5-bucket and 4 litres in 8-bucket.";
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 3, 180));
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 5, 250));
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 8, 320));
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 12, 400));
                 break;
             case 6:
-                tfTask.text = "You need to got 2 liter of water in any three buckets.";
+                this.parent.tfTask.text = "You need to got 2 liter of water in any three buckets.";
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 3, 180));
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 3, 250));
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 8, 320));
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 11, 400));
                 break;
             case 7:
-                tfTask.text = "You need to got 1 liter of water in any two buckets..";
+                this.parent.tfTask.text = "You need to got 1 liter of water in any two buckets..";
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 2, 180));
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 3, 280));
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 9, 380));
                 break;
             case 8:
-                tfTask.text = "You need to got 1 liter of water in small three buckets.";
+                this.parent.tfTask.text = "You need to got 1 liter of water in small three buckets.";
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 5, 180));
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 7, 250));
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 9, 320));
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 11, 400));
                 break;
             case 9:
-                tfTask.text = "You need to fill buckets on increase:\nsmallest bust be empty, next must contain 1 liter,\nnext - 2 litres and bigger - 3 litres.";
+                this.parent.tfTask.text = "You need to fill buckets on increase:\nsmallest bust be empty, next must contain 1 liter,\nnext - 2 litres and bigger - 3 litres.";
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 7, 180));
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 11, 250));
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 13, 320));
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 17, 400));
                 break;
             case 10:
-                tfTask.text = "You must to got 18 litres in 19-bucket and 5 litres in 6-bucket.";
+                this.parent.tfTask.text = "You must to got 18 litres in 19-bucket and 5 litres in 6-bucket.";
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 2, 180));
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 6, 280));
                 this.buckets.push(new _Bucket__WEBPACK_IMPORTED_MODULE_2__.Bucket(this, 19, 380));
@@ -286,8 +276,10 @@ class Game extends _autogen__WEBPACK_IMPORTED_MODULE_0__.base.Game {
     onEnterFrame() {
         switch (this.gameMode) {
             case 0:
-                if (this.checkWin())
+                if (this.checkWin()) {
+                    this.parent.level++;
                     this.parent.gotoAndStop("Win");
+                }
                 break;
             case 1: // transfuse water from current bucket to another
                 this.fallTo.activate(false);
@@ -298,8 +290,8 @@ class Game extends _autogen__WEBPACK_IMPORTED_MODULE_0__.base.Game {
                 break;
             case 2: // filling bucket from tap
                 if (this.carry.fill < this.carry.total) {
-                    if (this.mcTap.currentFrame != 2)
-                        this.mcTap.gotoAndStop(2);
+                    if (this.parent.mcTap.currentFrame != 2)
+                        this.parent.mcTap.gotoAndStop(2);
                     this.tapWaiting++;
                     if (this.tapWaiting % 10 == 9) {
                         this.carry.setFill(this.carry.fill + 1);
@@ -309,7 +301,7 @@ class Game extends _autogen__WEBPACK_IMPORTED_MODULE_0__.base.Game {
                 }
                 else // bucket is full
                  {
-                    this.mcTap.gotoAndStop(0);
+                    this.parent.mcTap.gotoAndStop(0);
                     if (this.carry.moveStepTo(new createjs.Point(this.stage.mouseX + this.carryDX, this.stage.mouseY + this.carryDY), 10)) {
                         this.tapWaiting = 0;
                         this.gameMode = 0;
@@ -368,11 +360,11 @@ class Game extends _autogen__WEBPACK_IMPORTED_MODULE_0__.base.Game {
                 this.carry.startFallToBucketProcess(this.fallTo);
             else if (this.gameMode == 2) {
                 this.tapWaiting = 0;
-                this.carry.mc.x = this.mcTap.x;
+                this.carry.mc.x = this.parent.mcTap.x;
             }
             else if (this.gameMode == 3) {
                 this.fillBeforeTrash = this.carry.fill;
-                var sliv = new _BaseBucket__WEBPACK_IMPORTED_MODULE_1__.BaseBucket(1000, this.mcTrash);
+                var sliv = new _BaseBucket__WEBPACK_IMPORTED_MODULE_1__.BaseBucket(1000, this.parent.mcTrash);
                 this.carry.startFallToBucketProcess(sliv);
             }
         }
@@ -396,19 +388,21 @@ class Game extends _autogen__WEBPACK_IMPORTED_MODULE_0__.base.Game {
             return;
         var carryNeckPos = this.carry.getNeckPos();
         // want to fill from tap?
-        if (Math.abs(carryNeckPos.x - this.mcTap.x) < this.carry.mc.scaleX * 8 && carryNeckPos.y - this.mcTap.y > -5 && carryNeckPos.y - this.mcTap.y < 40) {
+        if (Math.abs(carryNeckPos.x - this.parent.mcTap.x) < this.carry.mc.scaleX * 8
+            && carryNeckPos.y - this.parent.mcTap.y > -5
+            && carryNeckPos.y - this.parent.mcTap.y < 40) {
             this.action = 2;
-            this.mcTap.gotoAndStop(1);
+            this.parent.mcTap.gotoAndStop(1);
             return;
         }
-        this.mcTap.gotoAndStop(0);
+        this.parent.mcTap.gotoAndStop(0);
         // want to fall out to trash?
         if (this.carry.mc.x < 165 && this.carry.mc.y <= 350) {
             this.action = 3;
-            this.mcTrash.gotoAndStop(1);
+            this.parent.mcTrash.gotoAndStop(1);
             return;
         }
-        this.mcTrash.gotoAndStop(0);
+        this.parent.mcTrash.gotoAndStop(0);
         // want to transfuse to another bucket?
         var bucket = this.findNearestBucket();
         if (this.carry.mc.getTransformedBounds().intersects(bucket.mc.getTransformedBounds())) {
@@ -464,24 +458,6 @@ class Game extends _autogen__WEBPACK_IMPORTED_MODULE_0__.base.Game {
 
 /***/ }),
 
-/***/ "./src/Globals.ts":
-/*!************************!*\
-  !*** ./src/Globals.ts ***!
-  \************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Globals: () => (/* binding */ Globals)
-/* harmony export */ });
-class Globals {
-}
-Globals.level = 1;
-
-
-/***/ }),
-
 /***/ "./src/McBucket.ts":
 /*!*************************!*\
   !*** ./src/McBucket.ts ***!
@@ -515,8 +491,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _autogen__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./autogen */ "./src/autogen.ts");
 
 class MusicButton extends _autogen__WEBPACK_IMPORTED_MODULE_0__.base.MusicButton {
-    constructor() {
-        super();
+    init() {
         this.cursor = "pointer";
         this.musicOn();
     }
@@ -558,21 +533,17 @@ __webpack_require__.r(__webpack_exports__);
 class Scene extends _autogen__WEBPACK_IMPORTED_MODULE_0__.base.Scene {
     constructor() {
         super(...arguments);
-        this.lastInitFrame = null;
+        this.initFrame = null;
+        this.level = 1;
     }
     onEnterFrame() {
-        if (this.currentFrame != this.lastInitFrame) {
-            this.lastInitFrame = this.currentFrame;
-            this.addButtonHandler("btGotoGame", () => this.gotoAndStop("Game"));
-            this.addButtonHandler("btRules", () => this.gotoAndStop("Rules"));
-            this.addButtonHandler("btScores", () => this.gotoAndStop("Scores"));
-            this.addButtonHandler("btGotoOrigin", () => this.gotoAndStop("Origin"));
+        var _a, _b, _c;
+        if (this.currentFrame != this.initFrame) {
+            this.initFrame = this.currentFrame;
+            (_a = this.btGotoGame) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => this.gotoAndStop("Game"));
+            (_b = this.btRules) === null || _b === void 0 ? void 0 : _b.addEventListener("click", () => this.gotoAndStop("Rules"));
+            (_c = this.btGotoOrigin) === null || _c === void 0 ? void 0 : _c.addEventListener("click", () => this.gotoAndStop("Origin"));
         }
-    }
-    addButtonHandler(name, f) {
-        var bt = this.getChildByName(name);
-        if (bt != null)
-            bt.addEventListener("click", () => f());
     }
 }
 

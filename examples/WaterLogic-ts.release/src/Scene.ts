@@ -2,23 +2,18 @@ import { base } from './autogen';
 
 export class Scene extends base.Scene
 {
-	lastInitFrame : number = null;
+	initFrame : number = null;
+
+    level = 1;
 	
 	onEnterFrame()
 	{
-		if (this.currentFrame != this.lastInitFrame)
+		if (this.currentFrame != this.initFrame)
 		{
-			this.lastInitFrame = this.currentFrame;
-			this.addButtonHandler("btGotoGame", () => this.gotoAndStop("Game"));
-			this.addButtonHandler("btRules", () => this.gotoAndStop("Rules"));
-			this.addButtonHandler("btScores", () => this.gotoAndStop("Scores"));
-			this.addButtonHandler("btGotoOrigin", () => this.gotoAndStop("Origin"));
+			this.initFrame = this.currentFrame;
+            this.btGotoGame?.addEventListener("click", () => this.gotoAndStop("Game"));
+            this.btRules?.addEventListener("click", () => this.gotoAndStop("Rules"));
+            this.btGotoOrigin?.addEventListener("click", () => this.gotoAndStop("Origin"));
 		}
-	}
-	
-	addButtonHandler(name:string, f:(p:void)=>void)
-	{
-		var bt = this.getChildByName(name);
-		if (bt != null) bt.addEventListener("click", () => f());
 	}
 }
