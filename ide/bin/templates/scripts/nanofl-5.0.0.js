@@ -4027,13 +4027,13 @@ class nanofl_engine_Library {
 		}
 	}
 	getItem(namePath) {
-		stdlib_Debug.assert(namePath != null,null,{ fileName : "engine/nanofl/engine/Library.hx", lineNumber : 72, className : "nanofl.engine.Library", methodName : "getItem"});
-		stdlib_Debug.assert(namePath != "",null,{ fileName : "engine/nanofl/engine/Library.hx", lineNumber : 73, className : "nanofl.engine.Library", methodName : "getItem"});
+		stdlib_Debug.assert(namePath != null,null,{ fileName : "engine/nanofl/engine/Library.hx", lineNumber : 73, className : "nanofl.engine.Library", methodName : "getItem"});
+		stdlib_Debug.assert(namePath != "",null,{ fileName : "engine/nanofl/engine/Library.hx", lineNumber : 74, className : "nanofl.engine.Library", methodName : "getItem"});
 		let r = this.items.h[namePath];
 		if(r != null) {
 			return r;
 		}
-		console.log("engine/nanofl/engine/Library.hx:76:","Symbol '" + namePath + "' is not found.");
+		$global.console.warn("Symbol '" + namePath + "' is not found.");
 		return this.createItemOnItemNotFound(namePath);
 	}
 	getItems(includeScene) {
