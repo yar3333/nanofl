@@ -12,7 +12,4 @@ $(DEST_WINDOWS): license_*.rtf nanofl.iss $(DEPS)
 	@echo installer ===========================================================
 	"c:\Program Files (x86)\Inno Setup 5\iscc" -qp -dVERSION=$(VERSION) nanofl.iss
 
-upload: build
-	lftp -e "mirror --reverse --only-newer --no-perms bin downloads; bye" -u "nanofl_ftp,sdfsdfaJHha" nanofl.com
-
-.PHONY: build upload
+.PHONY: build

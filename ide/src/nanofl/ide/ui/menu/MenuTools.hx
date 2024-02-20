@@ -157,10 +157,6 @@ class MenuTools
 		enableItemLazy(container, "timeline.paste",			function() return tempActiveView(app, ActiveView.TIMELINE,	function() return app.document != null && clipboard.canPaste()));
 		
 		enableItemLazy(container, "output.copy",			function() return tempActiveView(app, ActiveView.OUTPUT, function() return clipboard.canCopy()));
-		
-		#if !no_trial
-		toggleItem(container, "application.register", !preferences.application.registered);
-		#end
 	}
 
 	public static function enableItem(container:JQuery, command:String, enable=true)
@@ -197,15 +193,8 @@ class MenuTools
 		if (mustNotBeDefined == null)
 		{
 			mustNotBeDefined = [];
-			
-			mustNotBeDefined.push
-			(
-				#if no_trial
-				"trial"
-				#else
-				"no-trial"
-				#end
-			);
+
+            // ADD CODE HERE
 		}
 		
 		return mustNotBeDefined;

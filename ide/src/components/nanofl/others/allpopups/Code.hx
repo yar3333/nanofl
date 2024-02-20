@@ -20,8 +20,6 @@ class Code extends wquery.Component
 		"preferences-popup": components.nanofl.popups.preferencespopup.Code,
 		"hotkeys-help-popup": components.nanofl.popups.hotkeyshelppopup.Code,
 		"publish-settings-popup": components.nanofl.popups.publishsettingspopup.Code,
-		"share-for-devices-popup": components.nanofl.popups.sharefordevicespopup.Code,
-		"register-popup": components.nanofl.popups.registerpopup.Code,
 	};
 	
 	public function getPopups() return template();

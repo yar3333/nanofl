@@ -113,11 +113,7 @@ class Application extends js.injecting.InjectContainer
 		
 		preferences.storage.applyToIDE(true);
 		
-		#if !no_trial
-		new Trial().onStart(finishInitialization);
-		#else
 		finishInitialization();
-		#end
 	}
 	
 	function finishInitialization()

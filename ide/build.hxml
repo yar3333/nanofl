@@ -4,7 +4,6 @@
 --class-path src
 --class-path ..\modules\nanofl-ide-sys\library
 --define ide
---define no_trial
 --library datatools
 --library jsprop
 --library bootstrap

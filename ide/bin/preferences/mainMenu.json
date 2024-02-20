@@ -97,7 +97,6 @@
 			{ "name":"Report a Error...",		"command":"https://bitbucket.org/nanofl/nanofl/issues?status=new&status=open&kind=bug", "icon":"icon-help" },
 			{ "name":"Reload Plugins",			"command":"application.reloadPlugins",				"icon":"icon-help" },
 			{ "name":"------------------" },
-			{ "name":"Register...",				"command":"application.register",					"icon":"custom-icon-star", "version":"trial" },
 			{ "name":"About NanoFL...",			"command":"application.about",						"icon":"icon-help" }
 		]
 	}

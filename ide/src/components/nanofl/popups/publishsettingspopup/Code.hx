@@ -98,16 +98,6 @@ class Code extends components.nanofl.popups.basepopup.Code
 		settings.useLocalScripts = template().useLocalScripts.prop("checked");
 	}
 	
-	function shareForDevices_change(_)
-	{
-		//settings.shareForDevices = template().shareForDevices.prop("checked");
-	}
-	
-	function showShareForDevicesPopup_click(_)
-	{
-		popups.shareForDevices.show();
-	}
-	
 	function publish_click(_)
 	{
 		ok_click(null);

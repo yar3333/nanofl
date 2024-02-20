@@ -25,8 +25,4 @@ class ApplicationGroup extends BaseGroup
 		if (doc != null) doc.activate();
 		else app.openDocument(path);
 	}
-	
-	#if !no_trial
-	@:noapi public function register() 	popups.register.show();
-	#end
 }

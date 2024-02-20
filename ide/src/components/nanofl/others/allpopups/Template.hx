@@ -46,12 +46,6 @@ class Template
 	
 	public var publishSettings(get, never) : components.nanofl.popups.publishsettingspopup.Code;
 	inline function get_publishSettings() return cast component.children.publishSettings;
-	
-	public var shareForDevices(get, never) : components.nanofl.popups.sharefordevicespopup.Code;
-	inline function get_shareForDevices() return cast component.children.shareForDevices;
-	
-	public var register(get, never) : components.nanofl.popups.registerpopup.Code;
-	inline function get_register() return cast component.children.register;
 
 	public function new(component:wquery.Component) this.component = component;
 }

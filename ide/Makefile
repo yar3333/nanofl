@@ -6,7 +6,7 @@ build: node_modules \
 	
 	make -C ../modules
 
-	haxe build.hxml --main Main -D no-trial -D long-asserts
+	haxe build.hxml --main Main -D long-asserts
 	
 	npx webpack
 	rm bin/resources/app/haxe.js
