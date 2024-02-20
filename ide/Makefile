@@ -45,14 +45,8 @@ bin/templates/scripts/three-r161.js:
 engine:
 	npx symlink-dir ../engine $@
 
-bin/examples:
-	npx symlink-dir ../examples $@
-
 bin/plugins:
 	npx symlink-dir ../plugins/bin $@
-
-bin/scripts/api:
-	npx symlink-dir ../api/gen $@
 
 bin/resources/app/static:
 	npx symlink-dir static $@
