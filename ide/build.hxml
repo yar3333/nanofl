@@ -1,9 +1,9 @@
 --js bin\resources\app\haxe.js
 --define js-es=6
+--define ide
 --class-path engine
 --class-path src
---class-path ..\modules\nanofl-ide-sys\library
---define ide
+--library stdlib
 --library datatools
 --library jsprop
 --library bootstrap
@@ -17,6 +17,7 @@
 --library threejs-addons
 --library jquery
 --library undoqueue
+--library nanofl-ide-sys
 --library nanofl-ide-globals
 --library nanofl-ide-keyboard
 --macro stdlib.Macro.expose('nanofl')

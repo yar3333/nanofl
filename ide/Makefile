@@ -16,18 +16,8 @@ build: node_modules \
 rebuild: clean build
 
 clean:
-	if [ -d bin/resources/app ]; then \
-		/bin/find bin/resources/app -mindepth 1 \
-			-not -path "bin/resources/app/package.json" \
-			-not -path "bin/resources/app/main.js" \
-			-not -path "bin/resources/app/preload.js" \
-			-not -path "bin/resources/app/static*" \
-			-not -path "bin/resources/app/tools*" \
-			-not -path "bin/resources/app/preferences*" \
-			-not -path "bin/resources/app/templates*" \
-			-not -path "bin/resources/app/node_modules*" \
-			-delete ;\
-	fi
+	rm -f  bin/resources/app/index.js
+	rm -rf bin/resources/app/components
 	make -C ../modules clean
 
 run:

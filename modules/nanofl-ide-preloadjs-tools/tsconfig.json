@@ -3,6 +3,5 @@
         "target": "ES6",
         "moduleResolution": "node",
         "strict": true
-    },
-    "include": ["./src/**/*.ts"]
+    }
 }
