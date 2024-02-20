@@ -1,0 +1,10 @@
+<movieclip version="2.2.0">
+	<layer name="Layer 2">
+		<frame>
+			<instance libraryItem="_bitmaps/wall" />
+		</frame>
+	</layer>
+	<layer name="Layer 1">
+		<frame />
+	</layer>
+</movieclip>

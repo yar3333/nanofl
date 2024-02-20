@@ -1,0 +1,10 @@
+<movieclip version="2.2.0">
+	<layer name="Layer 1">
+		<frame>
+			<instance libraryItem="wall" regX="260" regY="195" />
+			<instance libraryItem="_bitmaps/barrels" x="351.7" y="241.2" matrix="0.368423461914063,0,0,0.368423461914063" regX="152.55" regY="137.6" />
+			<instance libraryItem="_bitmaps/floor" x="1.45" y="343" matrix="1,0,0,0.565582275390625" regX="260" regY="41.55" />
+			<instance libraryItem="_bitmaps/barrels" x="185.2" y="240.35" matrix="0.368423461914063,0,0,0.368423461914063" regX="152.5" regY="137.65" />
+		</frame>
+	</layer>
+</movieclip>

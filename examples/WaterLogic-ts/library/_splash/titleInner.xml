@@ -1,0 +1,23 @@
+<movieclip version="2.2.0">
+	<layer name="Layer 3" type="mask">
+		<frame>
+			<text x="12.65" y="0" width="285.1333312988281" height="76">
+				<text-run characters="Water Logic" fillColor="#626262" size="58" family="Impact" />
+			</text>
+		</frame>
+	</layer>
+	<layer name="Layer 4" parentIndex="0">
+		<frame>
+			<shape>
+				<fills>
+					<fill type="linear" colors="#FF0000,#FFEC69" ratios="0,1" x0="153.992537313433" y0="64.4333333333333" x1="153.992537313433" y1="23.2666666666667" />
+				</fills>
+				<figure>
+					<polygon fillIndex="0">
+						<contour edges="M296.49,73.1L296.49,8.1L11.49,8.1L11.49,73.1L296.49,73.1" />
+					</polygon>
+				</figure>
+			</shape>
+		</frame>
+	</layer>
+</movieclip>
