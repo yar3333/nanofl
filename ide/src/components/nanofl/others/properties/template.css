@@ -1201,182 +1201,422 @@
 .nanofl label.size-1.rightlabel {
   text-align: left;
 }
+.nanofl label.size-1.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-2.rightlabel {
   text-align: left;
+}
+.nanofl label.size-2.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl label.size-3.rightlabel {
   text-align: left;
 }
+.nanofl label.size-3.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-4.rightlabel {
   text-align: left;
+}
+.nanofl label.size-4.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl label.size-5.rightlabel {
   text-align: left;
 }
+.nanofl label.size-5.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-6.rightlabel {
   text-align: left;
+}
+.nanofl label.size-6.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl label.size-7.rightlabel {
   text-align: left;
 }
+.nanofl label.size-7.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-8.rightlabel {
   text-align: left;
+}
+.nanofl label.size-8.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl label.size-9.rightlabel {
   text-align: left;
 }
+.nanofl label.size-9.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-10.rightlabel {
   text-align: left;
+}
+.nanofl label.size-10.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl label.size-11.rightlabel {
   text-align: left;
 }
+.nanofl label.size-11.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-12.rightlabel {
   text-align: left;
+}
+.nanofl label.size-12.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl label.size-13.rightlabel {
   text-align: left;
 }
+.nanofl label.size-13.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-14.rightlabel {
   text-align: left;
+}
+.nanofl label.size-14.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl label.size-15.rightlabel {
   text-align: left;
 }
+.nanofl label.size-15.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-16.rightlabel {
   text-align: left;
+}
+.nanofl label.size-16.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl label.size-17.rightlabel {
   text-align: left;
 }
+.nanofl label.size-17.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-18.rightlabel {
   text-align: left;
+}
+.nanofl label.size-18.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl label.size-19.rightlabel {
   text-align: left;
 }
+.nanofl label.size-19.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-20.rightlabel {
   text-align: left;
+}
+.nanofl label.size-20.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl label.size-21.rightlabel {
   text-align: left;
 }
+.nanofl label.size-21.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-22.rightlabel {
   text-align: left;
+}
+.nanofl label.size-22.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl label.size-23.rightlabel {
   text-align: left;
 }
+.nanofl label.size-23.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-24.rightlabel {
   text-align: left;
+}
+.nanofl label.size-24.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl label.size-25.rightlabel {
   text-align: left;
 }
+.nanofl label.size-25.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-26.rightlabel {
   text-align: left;
+}
+.nanofl label.size-26.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl label.size-27.rightlabel {
   text-align: left;
 }
+.nanofl label.size-27.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-28.rightlabel {
   text-align: left;
+}
+.nanofl label.size-28.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl label.size-29.rightlabel {
   text-align: left;
 }
+.nanofl label.size-29.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-30.rightlabel {
   text-align: left;
+}
+.nanofl label.size-30.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl label.size-31.rightlabel {
   text-align: left;
 }
+.nanofl label.size-31.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-32.rightlabel {
   text-align: left;
+}
+.nanofl label.size-32.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl label.size-33.rightlabel {
   text-align: left;
 }
+.nanofl label.size-33.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-34.rightlabel {
   text-align: left;
+}
+.nanofl label.size-34.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl label.size-35.rightlabel {
   text-align: left;
 }
+.nanofl label.size-35.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-36.rightlabel {
   text-align: left;
+}
+.nanofl label.size-36.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl label.size-37.rightlabel {
   text-align: left;
 }
+.nanofl label.size-37.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-38.rightlabel {
   text-align: left;
+}
+.nanofl label.size-38.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl label.size-39.rightlabel {
   text-align: left;
 }
+.nanofl label.size-39.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-40.rightlabel {
   text-align: left;
+}
+.nanofl label.size-40.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl label.size-41.rightlabel {
   text-align: left;
 }
+.nanofl label.size-41.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-42.rightlabel {
   text-align: left;
+}
+.nanofl label.size-42.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl label.size-43.rightlabel {
   text-align: left;
 }
+.nanofl label.size-43.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-44.rightlabel {
   text-align: left;
+}
+.nanofl label.size-44.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl label.size-45.rightlabel {
   text-align: left;
 }
+.nanofl label.size-45.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-46.rightlabel {
   text-align: left;
+}
+.nanofl label.size-46.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl label.size-47.rightlabel {
   text-align: left;
 }
+.nanofl label.size-47.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-48.rightlabel {
   text-align: left;
+}
+.nanofl label.size-48.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl label.size-49.rightlabel {
   text-align: left;
 }
+.nanofl label.size-49.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-50.rightlabel {
   text-align: left;
+}
+.nanofl label.size-50.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl label.size-51.rightlabel {
   text-align: left;
 }
+.nanofl label.size-51.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-52.rightlabel {
   text-align: left;
+}
+.nanofl label.size-52.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl label.size-53.rightlabel {
   text-align: left;
 }
+.nanofl label.size-53.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-54.rightlabel {
   text-align: left;
+}
+.nanofl label.size-54.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl label.size-55.rightlabel {
   text-align: left;
 }
+.nanofl label.size-55.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-56.rightlabel {
   text-align: left;
+}
+.nanofl label.size-56.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl label.size-57.rightlabel {
   text-align: left;
 }
+.nanofl label.size-57.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-58.rightlabel {
   text-align: left;
+}
+.nanofl label.size-58.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl label.size-59.rightlabel {
   text-align: left;
 }
+.nanofl label.size-59.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
+}
 .nanofl label.size-60.rightlabel {
   text-align: left;
+}
+.nanofl label.size-60.checkboxlabel {
+  text-align: left;
+  padding-right: 0;
 }
 .nanofl-pane {
   padding: 10px 0 0 0;
