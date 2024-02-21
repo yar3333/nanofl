@@ -75,8 +75,8 @@ class CodePublisher extends InjectContainer
         {
             template = template.replace("https://code.createjs.com/createjs-2014.12.12.combined.js",  "scripts/createjs-1.0.0.js");
             template = template.replace("http://player.nanofl.com/nanofl-" + Version.player + ".js", "scripts/nanofl-" + Version.player + ".js");
-            template = template.replace("https://unpkg.com/three@0.161.0/build/three.module.js", "scripts/three-r161.js");
-            template = template.replace("https://unpkg.com/three@0.161.0/examples/jsm/", "scripts/three-addons/");
+            template = template.replace("https://unpkg.com/three@0.161.0/build/three.module.js", "./scripts/three-r161.js");
+            template = template.replace("https://unpkg.com/three@0.161.0/examples/jsm/", "./scripts/three-addons/");
         }
 		
 		fileSystem.saveContent(destDir + "/index.html", template);
