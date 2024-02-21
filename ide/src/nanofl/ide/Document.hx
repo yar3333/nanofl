@@ -51,8 +51,8 @@ class Document extends OpenedFile
 	function get_type() return OpenedFileType.DOCUMENT;
 	
 	var savedLibrary : IdeLibrary;
-	
-	var fileOperationsQueue = new AsyncQueue();
+
+    public var allowAutoReloading(default, null) = true;
 	
 	/**
 	 * Used when document was opened directly from none-NanoFL format. In other cases is null.
@@ -81,10 +81,6 @@ class Document extends OpenedFile
 	public var navigator(default, null) : Navigator;
 	public var editor(default, null) : Editor;
 	public var undoQueue(default, null) : UndoQueue;
-	
-	@:isVar public var busy(get, set) : Bool;
-	function get_busy() return fileOperationsQueue.running || busy;
-	function set_busy(v:Bool) return busy = v;
 	
 	public var isTemporary(get, never) : Bool;
 	function get_isTemporary() return path.startsWith(getBaseTemporaryDir(folders) + "/");
@@ -236,15 +232,12 @@ class Document extends OpenedFile
 			{
 				var properties = DocumentProperties.load(path, fileSystem);
 				var library = new IdeLibrary(Path.join([ Path.directory(path), "library" ]));
-				return library.loadItems().then(function(_)
-				{
-					return
-					{
-						properties: properties,
-						library: library,
-						lastModified: realLastModified
-					};
-				});
+				return library.loadItems().then(_ ->
+                ({
+                    properties: properties,
+                    library: library,
+                    lastModified: realLastModified
+                }));
 			}
 		}
 		return Promise.resolve(null);
@@ -310,27 +303,22 @@ class Document extends OpenedFile
 			
 			if (Path.extension(newPath) == "nfl")
 			{
-				return new Promise<Bool>((resolve, reject) ->
-				{
-					fileOperationsQueue.add("doc.saveAs->saveNativeAs", (next:Void->Void) ->
-					{
-						var success = saveNativeAs(newPath);
-						if (success)
-						{
-							originalPath = null;
-							originalLastModified = null;
-							openedFiles.titleChanged(this);
-							view.alerter.info("Document \"" + newPath + "\" saved.");
-						}
-						else
-						{
-							view.alerter.error("Could't save document \"" + newPath + "\".");
-						}
-						
-						resolve(success);
-						next();
-					});
-				});
+                if (!saveNative()) return Promise.resolve(false);
+
+                var success = saveNativeAs(newPath);
+                if (success)
+                {
+                    originalPath = null;
+                    originalLastModified = null;
+                    openedFiles.titleChanged(this);
+                    view.alerter.info("Document \"" + newPath + "\" saved.");
+                }
+                else
+                {
+                    view.alerter.error("Could't save document \"" + newPath + "\".");
+                }
+
+                return Promise.resolve(success);
 			}
 			else
 			{
@@ -455,17 +443,8 @@ class Document extends OpenedFile
 			
 			if (exporter != null)
 			{
-				return new Promise<Bool>((resolve, reject) ->
-				{
-					processLibraryFiles("doc.export", (next:Void->Void) ->
-					{
-						DocumentExporterHelper.run(this, destPath, exporter, (success:Bool) ->
-						{
-							resolve(success);
-							next();
-						});
-					});
-				});
+				if (!saveNative()) return Promise.resolve(false);
+                return Promise.resolve(DocumentExporterHelper.run(this, destPath, exporter));
 			}
 			else
 			if (Path.extension(destPath) == "nfl")
@@ -478,7 +457,7 @@ class Document extends OpenedFile
 			}
 		}
 	}
-	
+
 	public function reload() : Promise<{ added:Array<IIdeLibraryItem>, removed:Array<IIdeLibraryItem> }>
 	{
 		return reloadInner(true, false);
@@ -491,42 +470,29 @@ class Document extends OpenedFile
 	
 	function reloadInner(addUndoTransaction:Bool, force:Bool) : Promise<{ added:Array<IIdeLibraryItem>, removed:Array<IIdeLibraryItem> }>
 	{
-		return new Promise<{ added:Array<IIdeLibraryItem>, removed:Array<IIdeLibraryItem> }>(function(resolve, reject)
-		{
-			fileOperationsQueue.add("doc.reload->serverUtils.reloadDocument", function(next:Void->Void)
-			{
-				loadRaw(fileSystem, path, !force ? lastModified : null).then((e:{ library:IdeLibrary, properties:DocumentProperties, lastModified:Date }) ->
-				{
-					if (e != null)
-					{
-						var itemsToRemove = library.getItems().filter(x -> !e.library.hasItem(x.namePath));
-						var itemsToAdd = e.library.getItemsAsIde().filter(x -> !library.hasItem(x.namePath));
-						
-						if (addUndoTransaction) undoQueue.beginTransaction({ libraryRemoveItems:itemsToRemove.map(x -> x.namePath), libraryAddItems:true });
-						library.removeItems(itemsToRemove.map(x -> x.namePath));
-						library.addItems(itemsToAdd, false);
-						if (addUndoTransaction) undoQueue.commitTransaction();
-						
-						library.preload().then(function(_)
-						{
-							editor.rebind();
-							library.update();
-							
-							lastModified = e.lastModified;
-							savedLibrary = library.getRawLibrary().clone();
-							
-							resolve({ added:itemsToAdd, removed:itemsToRemove });
-							next();
-						});
-					}
-					else
-					{
-						resolve({ added:[], removed:[] });
-						next();
-					}
-				});
-			});
-		});
+        return loadRaw(fileSystem, path, !force ? lastModified : null).then((e:{ library:IdeLibrary, properties:DocumentProperties, lastModified:Date }) ->
+        {
+            if (e == null) return Promise.resolve({ added:[], removed:[] });
+            
+            var itemsToRemove = library.getItems().filter(x -> !e.library.hasItem(x.namePath));
+            var itemsToAdd = e.library.getItemsAsIde().filter(x -> !library.hasItem(x.namePath));
+            
+            if (addUndoTransaction) undoQueue.beginTransaction({ libraryRemoveItems:itemsToRemove.map(x -> x.namePath), libraryAddItems:true });
+            library.removeItems(itemsToRemove.map(x -> x.namePath));
+            library.addItems(itemsToAdd, false);
+            if (addUndoTransaction) undoQueue.commitTransaction();
+            
+            return library.preload().then(_ ->
+            {
+                editor.rebind();
+                library.update();
+                
+                lastModified = e.lastModified;
+                savedLibrary = library.getRawLibrary().clone();
+                
+                return { added:itemsToAdd, removed:itemsToRemove };
+            });
+        });
 	}
 	
 	public function test() : Promise<Bool>
@@ -668,13 +634,6 @@ class Document extends OpenedFile
 			: (!isTemporary && lastModified != null && app.document.undoQueue.isDocumentModified());
 	}
 	
-	@:allow(nanofl.ide.editor.EditorLibrary)
-	function processLibraryFiles(label:String, callb:(Void->Void)->Void)
-	{
-		fileOperationsQueue.add("doc.processLibraryFiles->saveNative", function(next:Void->Void) { saveNative(); next(); });
-		fileOperationsQueue.add("doc.processLibraryFiles->" + label, callb);
-	}
-	
 	public function dispose()
 	{
 		if (isTemporary)
@@ -725,6 +684,29 @@ class Document extends OpenedFile
 		
 		return { lastModified:Date.now(), errorMessage:null };
 	}
+
+    public function runPreventingAutoReload<T>(f:Void->Promise<T>) : Promise<T>
+    {
+        allowAutoReloading = false;
+        
+        try
+        {
+            return f()  .catchError(e ->
+                        {
+                            allowAutoReloading = true;
+                            throw e;
+                        })
+                        .then(r -> {
+                            allowAutoReloading = true;
+                            return r;
+                        });
+        }
+        catch (e)
+        {
+            allowAutoReloading = true;
+            throw e;
+        }
+    }
 	
 	public function getShortTitle() : String
 	{

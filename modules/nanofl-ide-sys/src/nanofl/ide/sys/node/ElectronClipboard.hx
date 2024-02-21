@@ -1,19 +1,23 @@
 package nanofl.ide.sys.node;
 
 import nanofl.ide.sys.node.core.ElectronApi;
+using StringTools;
+using Lambda;
 
 class ElectronClipboard implements nanofl.ide.sys.Clipboard
 {
 	public function new() {}
-    
-    public function writeText(data:String) : Void
+
+    public function hasText() : Bool
     {
-        ElectronApi.callMethod("clipboard", "writeText", data);
+        final formats : Array<String> = ElectronApi.callMethod("clipboard", "availableFormats");
+        return formats.exists(x -> x.startsWith("text/"));
     }
 
-    public function has(format:String) : Bool
+    public function hasImage() : Bool
     {
-        return ElectronApi.callMethod("clipboard", "has", format);
+        final formats : Array<String> = ElectronApi.callMethod("clipboard", "availableFormats");
+        return formats.exists(x -> x.startsWith("image/"));
     }
     
     public function readText() : String
@@ -25,5 +29,10 @@ class ElectronClipboard implements nanofl.ide.sys.Clipboard
     {
         var r : electron.NativeImage = ElectronApi.callMethod("clipboard", "readImage");
         return r != null ? r.toPNG().hxToBytes() : null;
+    }
+        
+    public function writeText(data:String) : Void
+    {
+        ElectronApi.callMethod("clipboard", "writeText", data);
     }
 }

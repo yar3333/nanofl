@@ -324,52 +324,40 @@ class EditorLibrary extends InjectContainer
 	
 	public function addFiles(files:Array<File>, folderPath="") : Promise<Array<IIdeLibraryItem>>
 	{
-		return new Promise<Array<IIdeLibraryItem>>(function(resolve, reject)
-		{
-			document.processLibraryFiles("EditorLibrary.uploadFiles->serverUtils.uploadFiles", function(next)
-			{
-				uploader.saveUploadedFiles(files, Path.join([ library.libraryDir, folderPath ])).then(function(_) next());
-			});
+        return document.runPreventingAutoReload(() ->
+        {
+            document.saveNative();
 			
-			document.reload().then(function(e:{ added:Array<IIdeLibraryItem> })
+			return uploader.saveUploadedFiles(files, Path.join([ library.libraryDir, folderPath ])).then(_ ->
 			{
-				if (folderPath != "")
-				{
-					var folder : FolderItem = cast getItem(folderPath);
-					folder.opened = true;
-					view.library.update();
-					view.library.select(e.added.map(x -> x.namePath));
-				}
-				resolve(e.added);
-			});
+                return document.reload().then((e:{ added:Array<IIdeLibraryItem> }) ->
+                {
+                    if (folderPath != "")
+                    {
+                        var folder : FolderItem = cast getItem(folderPath);
+                        folder.opened = true;
+                        view.library.update();
+                        view.library.select(e.added.map(x -> x.namePath));
+                    }
+                    return e.added;
+                });
+            });
 		});
 	}
 	
-	public function loadFilesFromClipboard() : Promise<Bool>
+	public function loadFilesFromClipboard() : Bool
 	{
-		return new Promise<Bool>(function(resolve, reject)
-		{
-			document.processLibraryFiles("EditorLibrary.loadFilesFromClipboard->serverUtils.loadFilesFromClipboard", function(next:Void->Void)
-			{
-				clipboard.loadFilesFromClipboard(libraryDir);
-				resolve(true);
-				next();
-				return null;
-			});
-		});
+        log("EditorLibrary.loadFilesFromClipboard");
+        if (!document.saveNative()) return false;
+        clipboard.loadFilesFromClipboard(libraryDir);
+        return true;
 	}
 	
-	public function copyFilesIntoLibrary(srcDir:String, relativePaths:Array<String>) : Promise<{}>
+	public function copyFilesIntoLibrary(srcDir:String, relativePaths:Array<String>) : Void
 	{
-		return new Promise<{}>(function(resolve, reject)
-		{
-			document.processLibraryFiles("EditorLibrary.copyFilesIntoLibrary->serverUtils.copyLibraryFiles", function(next:Void->Void)
-			{
-				fileSystem.copyLibraryFiles(srcDir, relativePaths, libraryDir);
-				resolve(null);
-				next();
-			});
-		});
+        log("EditorLibrary.copyFilesIntoLibrary");
+        document.saveNative();
+        fileSystem.copyLibraryFiles(srcDir, relativePaths, libraryDir);
 	}
 	
 	public function selectUnusedItems()

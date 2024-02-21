@@ -19,14 +19,6 @@ import nanofl.ide.ui.View;
 using StringTools;
 using stdlib.Lambda;
 
-private enum abstract Format(String) to String
-{
-	var text = "text";
-	var html = "html";
-	var image = "image";
-	var rtf = "rtf";
-}
-
 @:rtti
 class Clipboard extends InjectContainer
 {
@@ -103,7 +95,7 @@ class Clipboard extends InjectContainer
 	
 	public function canPaste() : Bool
 	{
-		return isClipboardContains(Format.text) || isClipboardContains(Format.image);
+		return hasText() || hasImage();
 	}
 	
 	public function cut() : Bool
@@ -120,15 +112,15 @@ class Clipboard extends InjectContainer
 	
 	public function paste() : Bool
 	{
-		if (!canPaste()) return false;
+        log("paste");
 		
-		if (isClipboardContains(Format.text))
+		if (hasText())
 		{
 			log("paste text");
 			return pasteString(getStringFromClipboard());
 		}
 		else
-		if (isClipboardContains(Format.image))
+		if (hasImage())
 		{
             var namePath = app.document.library.getNextItemName();
             var destFile = app.document.library.libraryDir + "/" + namePath + ".png";
@@ -195,21 +187,19 @@ class Clipboard extends InjectContainer
 						libraryAddItems: true
 					});
 					
-					app.document.library.loadFilesFromClipboard().then(function(success:Bool)
-					{
-						log("loadFilesFromClipboard " + success);
-						if (success)
-						{
-							app.document.reloadWoTransactionForced().then(function(_)
-							{
-								pasteStringInner(xml);
-							});
-						}
-						else
-						{
-							pasteStringInner(xml);
-						}
-					});
+					final success = app.document.library.loadFilesFromClipboard();
+                    log("loadFilesFromClipboard " + success);
+                    if (success)
+                    {
+                        app.document.reloadWoTransactionForced().then(_ ->
+                        {
+                            pasteStringInner(xml);
+                        });
+                    }
+                    else
+                    {
+                        pasteStringInner(xml);
+                    }
 			}
 			
 			return true;
@@ -335,10 +325,8 @@ class Clipboard extends InjectContainer
 		return activeElement != null && ["textarea", "input", "select"].indexOf(activeElement.nodeName.toLowerCase()) >= 0;
 	}
 	
-	function isClipboardContains(format:Format) : Bool
-	{
-		return clipboard.has(format);
-	}
+	function hasText() return clipboard.hasText();
+	function hasImage() return clipboard.hasImage();
 	
 	function getStringFromClipboard() : String
 	{
@@ -355,14 +343,17 @@ class Clipboard extends InjectContainer
 	public function loadFilesFromClipboard(destDir:String) : Void
 	{
 		var clipboardDir = folders.temp + "/clipboard";
-		fileSystem.copyAny(clipboardDir, destDir);
+        if (fileSystem.exists(clipboardDir))
+        {
+            fileSystem.copyAny(clipboardDir, destDir);
+        }
 	}
 	
 	public function saveFilesIntoClipboard(baseDir:String, relativePaths:Array<String>) : Void
 	{
 		var clipboardDir = folders.temp + "/clipboard";
 		
-		fileSystem.deleteAny(clipboardDir);
+		fileSystem.deleteAny(clipboardDir + "/*");
 		
 		for (relativePath in relativePaths)
 		{

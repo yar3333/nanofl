@@ -246,17 +246,15 @@ class LibraryItems
 			{
 				var libraryDir = libraryFilesNodes[0].getAttribute("libraryDir");
 				var files = libraryFilesNodes[0].find(">file").map(x -> x.getAttribute("path"));
-				return document.library.copyFilesIntoLibrary(libraryDir, files).then(function(_)
-				{
-					log("\tfiles copied into library");
-					
-					return document.reloadWoTransactionForced().then(function(e:{ added:Array<IIdeLibraryItem>, removed:Array<IIdeLibraryItem> })
-					{
-						log("\tdocument reloaded\n\t" + e.added.map(x -> x.namePath).join("\n\t"));
-						document.undoQueue.commitTransaction();
-						return items.concat(e.added);
-					});
-				});
+				document.library.copyFilesIntoLibrary(libraryDir, files);
+                log("\tfiles copied into library");
+                
+                return document.reloadWoTransactionForced().then((e:{ added:Array<IIdeLibraryItem>, removed:Array<IIdeLibraryItem> }) ->
+                {
+                    log("\tdocument reloaded\n\t" + e.added.map(x -> x.namePath).join("\n\t"));
+                    document.undoQueue.commitTransaction();
+                    return items.concat(e.added);
+                });
 			}
 			else
 			{

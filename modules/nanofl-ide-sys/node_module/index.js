@@ -113,6 +113,18 @@ HxOverrides.remove = function(a,obj) {
 HxOverrides.now = function() {
 	return Date.now();
 };
+var Lambda = function() { };
+Lambda.__name__ = "Lambda";
+Lambda.exists = function(it,f) {
+	var x = $getIterator(it);
+	while(x.hasNext()) {
+		var x1 = x.next();
+		if(f(x1)) {
+			return true;
+		}
+	}
+	return false;
+};
 Math.__name__ = "Math";
 var Reflect = function() { };
 Reflect.__name__ = "Reflect";
@@ -2246,11 +2258,17 @@ var nanofl_ide_sys_node_ElectronClipboard = function() {
 };
 nanofl_ide_sys_node_ElectronClipboard.__name__ = "nanofl.ide.sys.node.ElectronClipboard";
 nanofl_ide_sys_node_ElectronClipboard.prototype = {
-	writeText: function(data) {
-		nanofl_ide_sys_node_core_ElectronApi.callMethod("clipboard","writeText",data);
+	hasText: function() {
+		var formats = nanofl_ide_sys_node_core_ElectronApi.callMethod("clipboard","availableFormats");
+		return Lambda.exists(formats,function(x) {
+			return StringTools.startsWith(x,"text/");
+		});
 	}
-	,has: function(format) {
-		return nanofl_ide_sys_node_core_ElectronApi.callMethod("clipboard","has",format);
+	,hasImage: function() {
+		var formats = nanofl_ide_sys_node_core_ElectronApi.callMethod("clipboard","availableFormats");
+		return Lambda.exists(formats,function(x) {
+			return StringTools.startsWith(x,"image/");
+		});
 	}
 	,readText: function() {
 		return nanofl_ide_sys_node_core_ElectronApi.callMethod("clipboard","readText");
@@ -2262,6 +2280,9 @@ nanofl_ide_sys_node_ElectronClipboard.prototype = {
 		} else {
 			return null;
 		}
+	}
+	,writeText: function(data) {
+		nanofl_ide_sys_node_core_ElectronApi.callMethod("clipboard","writeText",data);
 	}
 	,__class__: nanofl_ide_sys_node_ElectronClipboard
 };
@@ -2949,6 +2970,7 @@ stdlib_Uuid.newUuid = function() {
 	var uuid = StringTools.hex(stdlib_Uuid.counter++,8) + "-" + StringTools.hex(timeF / 65536 | 0,8) + "-" + StringTools.hex(time % 65536,8) + "-" + StringTools.hex(Std.random(65536),4) + "-" + StringTools.hex(Std.random(65536),4);
 	return uuid;
 };
+function $getIterator(o) { if( o instanceof Array ) return new haxe_iterators_ArrayIterator(o); else return o.iterator(); }
 function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $global.$haxeUID++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = m.bind(o); o.hx__closures__[m.__id__] = f; } return f; }
 $global.$haxeUID |= 0;
 if(typeof(performance) != "undefined" ? typeof(performance.now) == "function" : false) {
@@ -2979,7 +3001,7 @@ haxe_xml_Parser.escapes = (function($this) {
 	$r = h;
 	return $r;
 }(this));
-nanofl_ide_sys_Clipboard.__rtti = "<class path=\"nanofl.ide.sys.Clipboard\" params=\"\" interface=\"1\">\n\t<writeText public=\"1\" set=\"method\"><f a=\"data\">\n\t<c path=\"String\"/>\n\t<x path=\"Void\"/>\n</f></writeText>\n\t<has public=\"1\" set=\"method\"><f a=\"format\">\n\t<c path=\"String\"/>\n\t<x path=\"Bool\"/>\n</f></has>\n\t<readText public=\"1\" set=\"method\"><f a=\"\"><c path=\"String\"/></f></readText>\n\t<readImageAsPngBytes public=\"1\" set=\"method\"><f a=\"\"><c path=\"haxe.io.Bytes\"/></f></readImageAsPngBytes>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":expose\"><e>\"Clipboard\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
+nanofl_ide_sys_Clipboard.__rtti = "<class path=\"nanofl.ide.sys.Clipboard\" params=\"\" interface=\"1\">\n\t<hasText public=\"1\" set=\"method\"><f a=\"\"><x path=\"Bool\"/></f></hasText>\n\t<hasImage public=\"1\" set=\"method\"><f a=\"\"><x path=\"Bool\"/></f></hasImage>\n\t<readText public=\"1\" set=\"method\"><f a=\"\"><c path=\"String\"/></f></readText>\n\t<readImageAsPngBytes public=\"1\" set=\"method\"><f a=\"\"><c path=\"haxe.io.Bytes\"/></f></readImageAsPngBytes>\n\t<writeText public=\"1\" set=\"method\"><f a=\"data\">\n\t<c path=\"String\"/>\n\t<x path=\"Void\"/>\n</f></writeText>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":expose\"><e>\"Clipboard\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
 nanofl_ide_sys_Dialogs.__rtti = "<class path=\"nanofl.ide.sys.Dialogs\" params=\"\" interface=\"1\">\n\t<showOpenDialog public=\"1\" set=\"method\"><f a=\"options\">\n\t<t path=\"nanofl.ide.sys.ShowOpenDialogOptions\"/>\n\t<c path=\"js.lib.Promise\"><t path=\"nanofl.ide.sys.ShowOpenDialogResult\"/></c>\n</f></showOpenDialog>\n\t<showSaveDialog public=\"1\" set=\"method\"><f a=\"options\">\n\t<t path=\"nanofl.ide.sys.ShowSaveDialogOptions\"/>\n\t<c path=\"js.lib.Promise\"><t path=\"nanofl.ide.sys.ShowSaveDialogResult\"/></c>\n</f></showSaveDialog>\n\t<showMessageBox public=\"1\" set=\"method\"><f a=\"options\">\n\t<t path=\"nanofl.ide.sys.ShowMessageBoxOptions\"/>\n\t<c path=\"js.lib.Promise\"><t path=\"nanofl.ide.sys.ShowMessageBoxResult\"/></c>\n</f></showMessageBox>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":expose\"><e>\"Dialogs\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
 nanofl_ide_sys_Environment.__rtti = "<class path=\"nanofl.ide.sys.Environment\" params=\"\" interface=\"1\">\n\t<get public=\"1\" set=\"method\"><f a=\"name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></get>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":expose\"><e>\"Environment\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
 nanofl_ide_sys_FileSystem.__rtti = "<class path=\"nanofl.ide.sys.FileSystem\" params=\"\" interface=\"1\">\n\t<getCwd public=\"1\" set=\"method\"><f a=\"\"><c path=\"String\"/></f></getCwd>\n\t<exists public=\"1\" set=\"method\"><f a=\"path\">\n\t<c path=\"String\"/>\n\t<x path=\"Bool\"/>\n</f></exists>\n\t<rename public=\"1\" set=\"method\"><f a=\"oldPath:newPath\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n\t<x path=\"Void\"/>\n</f></rename>\n\t<isDirectory public=\"1\" set=\"method\"><f a=\"path\">\n\t<c path=\"String\"/>\n\t<x path=\"Bool\"/>\n</f></isDirectory>\n\t<createDirectory public=\"1\" set=\"method\"><f a=\"dirPath\">\n\t<c path=\"String\"/>\n\t<x path=\"Void\"/>\n</f></createDirectory>\n\t<deleteFile public=\"1\" set=\"method\"><f a=\"path\">\n\t<c path=\"String\"/>\n\t<x path=\"Void\"/>\n</f></deleteFile>\n\t<deleteEmptyDirectory public=\"1\" set=\"method\"><f a=\"dirPath\">\n\t<c path=\"String\"/>\n\t<x path=\"Void\"/>\n</f></deleteEmptyDirectory>\n\t<deleteDirectoryRecursively public=\"1\" set=\"method\"><f a=\"dirPath\">\n\t<c path=\"String\"/>\n\t<x path=\"Void\"/>\n</f></deleteDirectoryRecursively>\n\t<readDirectory public=\"1\" set=\"method\"><f a=\"dirPath\">\n\t<c path=\"String\"/>\n\t<c path=\"Array\"><c path=\"String\"/></c>\n</f></readDirectory>\n\t<getContent public=\"1\" set=\"method\"><f a=\"filePath\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></getContent>\n\t<saveContent public=\"1\" set=\"method\"><f a=\"filePath:text:?append\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n\t<x path=\"Bool\"/>\n\t<x path=\"Void\"/>\n</f></saveContent>\n\t<getBinary public=\"1\" set=\"method\"><f a=\"filePath\">\n\t<c path=\"String\"/>\n\t<c path=\"haxe.io.Bytes\"/>\n</f></getBinary>\n\t<saveBinary public=\"1\" set=\"method\"><f a=\"filePath:data\">\n\t<c path=\"String\"/>\n\t<c path=\"haxe.io.Bytes\"/>\n\t<x path=\"Void\"/>\n</f></saveBinary>\n\t<getLastModified public=\"1\" set=\"method\"><f a=\"path\">\n\t<c path=\"String\"/>\n\t<c path=\"Date\"/>\n</f></getLastModified>\n\t<getSize public=\"1\" set=\"method\"><f a=\"path\">\n\t<c path=\"String\"/>\n\t<x path=\"Int\"/>\n</f></getSize>\n\t<copyFile public=\"1\" set=\"method\"><f a=\"srcPath:destPath\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n\t<x path=\"Void\"/>\n</f></copyFile>\n\t<getTempFilePath public=\"1\" set=\"method\"><f a=\"?extensionPrefixedWithDot\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></getTempFilePath>\n\t<findFiles public=\"1\" set=\"method\"><f a=\"dirPath:?onFile:?onDir\">\n\t<c path=\"String\"/>\n\t<f a=\"\">\n\t\t<c path=\"String\"/>\n\t\t<x path=\"Void\"/>\n\t</f>\n\t<f a=\"\">\n\t\t<c path=\"String\"/>\n\t\t<x path=\"Bool\"/>\n\t</f>\n\t<x path=\"Void\"/>\n</f></findFiles>\n\t<findFilesInDirectoriesFilteredByRegex public=\"1\" set=\"method\"><f a=\"dirs:reFilter\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n\t<c path=\"Array\"><c path=\"String\"/></c>\n</f></findFilesInDirectoriesFilteredByRegex>\n\t<processFilePatternPair public=\"1\" set=\"method\">\n\t\t<f a=\"oldName:newName:callb\">\n\t\t\t<c path=\"String\"/>\n\t\t\t<c path=\"String\"/>\n\t\t\t<f a=\":\">\n\t\t\t\t<c path=\"String\"/>\n\t\t\t\t<c path=\"String\"/>\n\t\t\t\t<x path=\"Void\"/>\n\t\t\t</f>\n\t\t\t<x path=\"Void\"/>\n\t\t</f>\n\t\t<haxe_doc>* Process each file, matched by oldName pattern (args example: oldName=\"folderA/myFileNameA.*\", newName=\"folderB/myFileNameB.*\").</haxe_doc>\n\t</processFilePatternPair>\n\t<processFilePattern public=\"1\" set=\"method\">\n\t\t<f a=\"path:callb\">\n\t\t\t<c path=\"String\"/>\n\t\t\t<f a=\"\">\n\t\t\t\t<c path=\"String\"/>\n\t\t\t\t<x path=\"Void\"/>\n\t\t\t</f>\n\t\t\t<x path=\"Void\"/>\n\t\t</f>\n\t\t<haxe_doc>* Process each file, matched by path pattern (path example: \"folder/myFileName.*\").</haxe_doc>\n\t</processFilePattern>\n\t<absolutePath public=\"1\" set=\"method\"><f a=\"relPath\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></absolutePath>\n\t<deleteAny public=\"1\" set=\"method\"><f a=\"path\">\n\t<c path=\"String\"/>\n\t<x path=\"Void\"/>\n</f></deleteAny>\n\t<deleteAnyByPattern public=\"1\" set=\"method\"><f a=\"path\">\n\t<c path=\"String\"/>\n\t<x path=\"Void\"/>\n</f></deleteAnyByPattern>\n\t<renameByPattern public=\"1\" set=\"method\"><f a=\"srcPath:destPath\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n\t<x path=\"Void\"/>\n</f></renameByPattern>\n\t<copyAny public=\"1\" set=\"method\"><f a=\"srcPath:destPath\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n\t<x path=\"Void\"/>\n</f></copyAny>\n\t<copyByPattern public=\"1\" set=\"method\"><f a=\"srcPath:destPath\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n\t<x path=\"Void\"/>\n</f></copyByPattern>\n\t<syncDirectory public=\"1\" set=\"method\"><f a=\"src:dest\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n\t<x path=\"Void\"/>\n</f></syncDirectory>\n\t<copyLibraryFiles public=\"1\" set=\"method\"><f a=\"srcLibraryDir:relativePaths:destLibraryDir\">\n\t<c path=\"String\"/>\n\t<c path=\"Array\"><c path=\"String\"/></c>\n\t<c path=\"String\"/>\n\t<x path=\"Void\"/>\n</f></copyLibraryFiles>\n\t<getDocumentLastModified public=\"1\" set=\"method\"><f a=\"path\">\n\t<c path=\"String\"/>\n\t<c path=\"Date\"/>\n</f></getDocumentLastModified>\n\t<nativePath public=\"1\" set=\"method\"><f a=\"path\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></nativePath>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":expose\"><e>\"FileSystem\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";

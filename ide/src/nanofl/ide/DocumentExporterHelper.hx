@@ -10,14 +10,14 @@ using stdlib.Lambda;
 
 class DocumentExporterHelper
 {
-	public static function run(document:Document, path:String, exporter:Exporter, ?callb:Bool->Void)
+	public static function run(document:Document, path:String, exporter:Exporter) : Bool
 	{
 		Edges.showSelection = false;
 		Polygon.showSelection = false;
 		
 		var r = false;
 		
-		var success = SafeCode.run("Error during exporting", function()
+		var success = SafeCode.run("Error during exporting", () ->
 		{
 			r = exporter.run
 			(
@@ -28,13 +28,9 @@ class DocumentExporterHelper
 			);
 		});
 		
-		postExport(success && r, callb);
-	}
-	
-	static function postExport(success:Bool, callb:Bool->Void)
-	{
-		Edges.showSelection = true;
+        Edges.showSelection = true;
 		Polygon.showSelection = true;
-		if (callb != null) callb(success);
+		
+		return success && r;
 	}
 }

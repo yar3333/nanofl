@@ -24,7 +24,7 @@ class ExternalChangesDetector extends InjectContainer
 	
 	function detectChanges()
 	{
-		if (app.document == null || app.document.busy) return;
+		if (app.document == null || !app.document.allowAutoReloading) return;
 		
 		app.document.reload().then((e:{ added:Array<IIdeLibraryItem>, removed:Array<IIdeLibraryItem> }) ->
 		{
