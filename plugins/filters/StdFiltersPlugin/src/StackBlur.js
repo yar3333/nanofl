@@ -115,7 +115,7 @@ function stackBlurCanvasRGBA( canvas, top_x, top_y, width, height, radius )
 	if ( isNaN(radius) || radius < 1 ) return;
 	radius |= 0;
 	
-	var context = canvas.getContext("2d");
+	var context = canvas.getContext("2d", { willReadFrequently:true });
 	var imageData;
 	
 	try

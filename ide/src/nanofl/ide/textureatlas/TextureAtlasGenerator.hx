@@ -247,7 +247,7 @@ class TextureAtlasGenerator
 	
 	function isCacheRectEmpty(obj:DisplayObject, x:Int, y:Int, w:Int, h:Int) : Bool
 	{
-		var imageData = obj.cacheCanvas.getContext2d().getImageData(x, y, w, h);
+		var imageData = obj.cacheCanvas.getContext2d({ willReadFrequently:true }).getImageData(x, y, w, h);
 		var size = imageData.width * imageData.height * 4;
 		var i = 0; while (i < size)
 		{

@@ -14815,7 +14815,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 			surface.width = this._drawWidth;
 			surface.height = this._drawHeight;
 		} else {
-			var ctx = surface.getContext("2d");
+			var ctx = surface.getContext("2d", { willReadFrequently:true });
 
 			if (!compositeOperation) {
 				ctx.clearRect(0, 0, this._drawWidth+1, this._drawHeight+1);
