@@ -13,5 +13,10 @@ module.exports = {
         },
         path: __dirname + '/bin/resources/app',
         filename: 'index.js',
-    }
+    },
+
+	externals: {
+		"three": "THREE",
+        "three/addons/loaders/GLTFLoader.js" : "THREE_addons_GLTFLoader",
+	}
 }    

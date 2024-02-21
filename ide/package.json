@@ -8,8 +8,7 @@
     "@nanofl/ide-globals": "file:../modules/nanofl-ide-globals/node_module",
     "@nanofl/ide-keyboard": "file:../modules/nanofl-ide-keyboard/node_module",
     "@nanofl/ide-sys": "file:../modules/nanofl-ide-sys/node_module",
-    "re-htmlparser": "^3.4.0",
-    "three": "^0.161.0"
+    "re-htmlparser": "^3.4.0"
   },
   "devDependencies": {
     "cpx": "^1.5.0",

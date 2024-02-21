@@ -28,6 +28,6 @@ module.exports = {
 
 	externals: {
 		"three": "THREE",
-        "three/addons/loaders/GLTFLoader.js" : "THREE_addons_loaders_GLTFLoader",
+        "three/addons/loaders/GLTFLoader.js" : "THREE_addons_GLTFLoader",
 	}
 };
