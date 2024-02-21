@@ -6312,7 +6312,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	var canvas = createjs.createCanvas?createjs.createCanvas():document.createElement("canvas"); // prevent errors on load in browsers without canvas.
 	if (canvas.getContext) {
 		DisplayObject._hitTestCanvas = canvas;
-		DisplayObject._hitTestContext = canvas.getContext("2d");
+		DisplayObject._hitTestContext = canvas.getContext("2d", { willReadFrequently:true });
 		canvas.width = canvas.height = 1;
 	}
 
