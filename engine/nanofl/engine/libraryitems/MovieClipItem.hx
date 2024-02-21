@@ -224,7 +224,7 @@ class MovieClipItem	extends InstancableItem
 				}
 			}
 		}
-		points.sort(function(a, b)
+		points.sort((a, b) ->
 		{
 			return Reflect.compare(PointTools.getDistP(pos, a), PointTools.getDistP(pos, b));
 		});

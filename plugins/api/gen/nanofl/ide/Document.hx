@@ -2,6 +2,7 @@ package nanofl.ide;
 
 extern class Document extends nanofl.ide.OpenedFile {
 	function new(path:String, properties:nanofl.ide.DocumentProperties, library:nanofl.ide.library.IdeLibrary, ?lastModified:Date):Void;
+	var allowAutoReloading(default, null) : Bool;
 	/**
 		
 			 * Used when document was opened directly from none-NanoFL format. In other cases is null.
@@ -26,10 +27,6 @@ extern class Document extends nanofl.ide.OpenedFile {
 	var navigator(default, null) : nanofl.ide.navigator.Navigator;
 	var editor(default, null) : nanofl.ide.editor.Editor;
 	var undoQueue(default, null) : nanofl.ide.undo.document.UndoQueue;
-	@:isVar
-	var busy(get, set) : Bool;
-	private function get_busy():Bool;
-	private function set_busy(v:Bool):Bool;
 	var isTemporary(get, never) : Bool;
 	private function get_isTemporary():Bool;
 	override function getTabTextColor():String;
@@ -48,6 +45,7 @@ extern class Document extends nanofl.ide.OpenedFile {
 	override function canBeSaved():Bool;
 	override function dispose():Void;
 	function saveNative():Bool;
+	function runPreventingAutoReload<T>(f:() -> js.lib.Promise<T>):js.lib.Promise<T>;
 	override function getShortTitle():String;
 	override function getPath():String;
 	override function getLongTitle():String;

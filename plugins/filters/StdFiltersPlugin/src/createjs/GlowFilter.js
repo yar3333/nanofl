@@ -204,7 +204,7 @@ _stage.addChild(_shape);</code></pre>
 		var dCvs = document.createElement("canvas");
 		dCvs.width = width;
 		dCvs.height = height;
-		var dCtx = dCvs.getContext("2d");
+		var dCtx = dCvs.getContext("2d", { willReadFrequently:true });
 		var dImgData = dCtx.getImageData(0, 0, width, height);
 		var dData = dImgData.data;
 		var inner = this.inner;
