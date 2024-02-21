@@ -77,7 +77,6 @@
 		"name":"Library", "id":"library", "items":
 		[
 			{ "name":"New Movie Clip...",					"command":"library.newEmptyMovieClip",		"icon":"custom-icon-film" },
-			{ "name":"New Movie Clip 3D...",				"command":"library.newEmptyMovieClip3D",	"icon":"custom-icon-cube" },
 			{ "name":"New Folder...",						"command":"library.newFolder",				"icon":"custom-icon-folder-close" },
 			{ "name":"------------------" },
 			{ "name":"Add Font Manually...",				"command":"library.addFontManually",		"icon":"custom-icon-font" },
