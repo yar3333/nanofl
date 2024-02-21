@@ -7031,7 +7031,7 @@ class nanofl_engine_libraryitems_BitmapItem extends nanofl_engine_libraryitems_I
 		return r;
 	}
 	updateDisplayObject(dispObj,childFrameIndexes) {
-		stdlib_Debug.assert(((dispObj) instanceof createjs.Bitmap),null,{ fileName : "engine/nanofl/engine/libraryitems/BitmapItem.hx", lineNumber : 102, className : "nanofl.engine.libraryitems.BitmapItem", methodName : "updateDisplayObject"});
+		stdlib_Debug.assert(((dispObj) instanceof createjs.Bitmap),null,{ fileName : "engine/nanofl/engine/libraryitems/BitmapItem.hx", lineNumber : 101, className : "nanofl.engine.libraryitems.BitmapItem", methodName : "updateDisplayObject"});
 		dispObj.image = this.image;
 		dispObj.setBounds(0,0,this.image.width,this.image.height);
 	}

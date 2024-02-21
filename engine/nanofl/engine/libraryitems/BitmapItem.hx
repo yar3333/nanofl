@@ -76,7 +76,6 @@ class BitmapItem extends InstancableItem implements ITextureItem
             image.onload = () -> resolve(null);
             image.onerror = e -> reject(e);
             image.src = 'data:image/png;base64,' + imageDataBase64;
-            //document.body.appendChild(image);
         });
     }
 	
