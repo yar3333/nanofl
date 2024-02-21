@@ -1,11 +1,9 @@
 package wquery;
 
 extern class ComponentTools {
-	static function processSubstitutions(doc:js.html.DocumentFragment, object:Dynamic):js.html.DocumentFragment;
-	static function expandDocElemIDs(prefixID:String, baseNode:wquery.GenericHtmlElement):Void;
-	static function htmlStringToDocumentFragment(html:String):js.html.DocumentFragment;
-	static function documentFragmentToHtmlStringTo(doc:js.html.DocumentFragment):String;
-	static function createChildren(parent:wquery.Component, node:wquery.GenericHtmlElement, imports:Dynamic<wquery.Component>):Array<wquery.Component>;
+	static function processSubstitutions(doc:js.html.TemplateElement, object:Dynamic):Void;
+	static function expandDocElemIDs(prefixID:String, baseNode:js.html.Element):Void;
+	static function createChildren(parent:wquery.Component, node:js.html.DocumentFragment, imports:Dynamic<wquery.Component>):Array<wquery.Component>;
 	static function loadFieldValues(component:wquery.Component, params:Dynamic):Void;
 	static function callMethodIfExists(obj:Dynamic, methodName:String, ?args:Array<Dynamic>):Void;
 	static function ensureStylesActive(klassName:String, css:String):Void;

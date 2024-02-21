@@ -11,7 +11,7 @@
     "re-htmlparser": "^3.4.0"
   },
   "devDependencies": {
-    "cpx": "^1.5.0",
+    "cpx2": "^7.0.1",
     "symlink-dir": "^5.2.1",
     "webpack": "^5.90.1",
     "webpack-cli": "^5.1.4"
