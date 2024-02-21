@@ -208,8 +208,8 @@ class TextureAtlasGenerator
 		{
 			namePath: item.namePath,
 			frameIndex: frameIndex,
-			regX: cast -(cast dispObj)._cacheOffsetX,
-			regY: cast -(cast dispObj)._cacheOffsetY
+			regX: -dispObj.bitmapCache.offX,
+			regY: -dispObj.bitmapCache.offY,
 		};
 	}
 	

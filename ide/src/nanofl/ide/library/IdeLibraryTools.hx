@@ -105,7 +105,7 @@ class IdeLibraryTools
 	public static function getUsedItems(library:IdeLibrary, useTextureAtlases:Bool) : Array<IIdeLibraryItem>
 	{
         final symbolsWithLinkedClass = library.getInstancableItemsAsIde().filter(x -> x.linkedClass != "");
-        final forcedUsedSymbols = [ stdlib.Std.downcast(library.getSceneItem(), IIdeInstancableItem) ].concat(symbolsWithLinkedClass);
+        final forcedUsedSymbols = [ (library.getSceneItem() : IIdeInstancableItem) ].concat(symbolsWithLinkedClass);
 
 		var usedNamePaths = forcedUsedSymbols.map(x -> x.namePath);
         for (mc in forcedUsedSymbols.filterByType(MovieClipItem))

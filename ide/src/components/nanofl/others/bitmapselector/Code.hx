@@ -15,7 +15,7 @@ class Code extends wquery.Component
 	
 	function init()
 	{
-		template().image.load(function(e) resizeImage());
+		template().image.load(_ -> resizeImage());
 	}
 	
 	function resizeImage()

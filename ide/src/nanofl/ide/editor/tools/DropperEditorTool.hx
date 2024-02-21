@@ -62,7 +62,7 @@ class DropperEditorTool extends EditorTool
 		if (stroke || fill)
 		{
 			pos = editor.container.localToGlobal(pos.x, pos.y);
-			var imageData = cast(editor.container.stage.canvas, js.html.CanvasElement).getContext2d().getImageData(pos.x, pos.y, 1, 1);
+			var imageData = editor.container.stage.canvas.getContext2d().getImageData(pos.x, pos.y, 1, 1);
 			var data = imageData.data;
 			var color = ColorTools.rgbaToString({ r:data[0], g:data[1], b:data[2], a:data[3]/255 });
 			if (stroke) newObjectParams.setStrokeParams({ color:color });

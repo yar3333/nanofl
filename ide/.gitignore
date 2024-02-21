@@ -1,8 +1,6 @@
 bin/plugins
 bin/resources/app/components
-bin/resources/app/haxe.js
-bin/resources/app/iframes
-bin/resources/app/index.js
 bin/resources/app/static
+bin/resources/app/index.js
 node_modules
 engine
