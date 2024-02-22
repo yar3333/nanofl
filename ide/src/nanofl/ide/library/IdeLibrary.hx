@@ -272,5 +272,10 @@ class IdeLibrary extends nanofl.engine.Library
             var folder = parts.slice(0, i).join("/");
             if (!hasItem(folder)) addItem(new FolderItem(folder));
         }
-    }    
+    }
+
+    public function getSceneFramesIterator(documentProperties:DocumentProperties, applyBackgroundColor:Bool) : SceneFramesIterator
+    {
+        return new SceneFramesIterator(documentProperties, this, applyBackgroundColor);
+    }
 }

@@ -7,27 +7,6 @@ function $extend(from, fields) {
 	if( fields.toString !== Object.prototype.toString ) proto.toString = fields.toString;
 	return proto;
 }
-var EReg = function(r,opt) {
-	this.r = new RegExp(r,opt.split("u").join(""));
-};
-EReg.__name__ = true;
-EReg.prototype = {
-	match: function(s) {
-		if(this.r.global) {
-			this.r.lastIndex = 0;
-		}
-		this.r.m = this.r.exec(s);
-		this.r.s = s;
-		return this.r.m != null;
-	}
-	,matched: function(n) {
-		if(this.r.m != null && n >= 0 && n < this.r.m.length) {
-			return this.r.m[n];
-		} else {
-			throw haxe_Exception.thrown("EReg::matched");
-		}
-	}
-};
 var Main = function() { };
 Main.__name__ = true;
 Main.main = function() {
@@ -41,47 +20,31 @@ VideoExporter.run = function(fileSystem,processManager,folders,destFilePath,docu
 		fileSystem.deleteFile(destFilePath);
 	}
 	var args = ["-f","rawvideo","-pixel_format","rgb24","-video_size",documentProperties.width + "x" + documentProperties.height,"-framerate",documentProperties.framerate + "","-i","pipe:0",destFilePath];
-	var canvas = window.document.createElement("canvas");
-	canvas.width = documentProperties.width;
-	canvas.height = documentProperties.height;
-	var totalFrames = library.getSceneItem().getTotalFrames();
-	var frameNum = 0;
-	var dataOut = new Uint8Array(canvas.width * canvas.height * 3);
-	var stage = new nanofl.Stage(canvas);
-	var scene = library.getSceneInstance().createDisplayObject(null);
-	stage.addChild(scene);
-	var backColor = VideoExporter.hexToRgb(documentProperties.backgroundColor);
-	var ctx = canvas.getContext("2d",{ willReadFrequently : true});
+	var dataOut = new Uint8Array(documentProperties.width * documentProperties.height * 3);
+	var sceneFramesIterator = library.getSceneFramesIterator(documentProperties,true);
 	try {
 		return processManager.runPipedStdIn(folders.get_tools() + "/ffmpeg.exe",args,null,null,function() {
-			if(frameNum >= totalFrames) {
+			if(!sceneFramesIterator.hasNext()) {
 				return null;
 			}
-			stage.update();
-			var dataIn = ctx.getImageData(0,0,canvas.width,canvas.height).data;
+			var ctx = sceneFramesIterator.next();
+			var dataIn = ctx.getImageData(0,0,documentProperties.width,documentProperties.height).data;
 			var pIn = 0;
 			var pOut = 0;
 			var i = 0;
-			while(i < canvas.height) {
+			while(i < documentProperties.height) {
 				var j = 0;
-				while(j < canvas.width) {
+				while(j < documentProperties.width) {
 					var r = dataIn[pIn++];
 					var g = dataIn[pIn++];
 					var b = dataIn[pIn++];
 					var a = dataIn[pIn++];
-					var fa = a / 255.0;
-					dataOut[pOut++] = Math.round((1 - fa) * backColor.r + fa * r);
-					var fa1 = a / 255.0;
-					dataOut[pOut++] = Math.round((1 - fa1) * backColor.g + fa1 * g);
-					var fa2 = a / 255.0;
-					dataOut[pOut++] = Math.round((1 - fa2) * backColor.b + fa2 * b);
+					dataOut[pOut++] = r;
+					dataOut[pOut++] = g;
+					dataOut[pOut++] = b;
 					++j;
 				}
 				++i;
-			}
-			frameNum += 1;
-			if(frameNum < totalFrames) {
-				scene.advance();
 			}
 			return dataOut.buffer;
 		}).then(function(r) {
@@ -91,19 +54,6 @@ VideoExporter.run = function(fileSystem,processManager,folders,destFilePath,docu
 		var e = haxe_Exception.caught(_g);
 		$global.console.error(e);
 		return Promise.resolve(false);
-	}
-};
-VideoExporter.applyAlpha = function(fore,a,back) {
-	var fa = a / 255.0;
-	return Math.round((1 - fa) * back + fa * fore);
-};
-VideoExporter.hexToRgb = function(hex) {
-	var re = new EReg("^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$","i");
-	var result = re.match(hex);
-	if(result) {
-		return { r : parseInt(re.matched(1),16), g : parseInt(re.matched(2),16), b : parseInt(re.matched(3),16)};
-	} else {
-		return null;
 	}
 };
 var WebmVideoExporterPlugin = function() {
@@ -138,21 +88,8 @@ haxe_Exception.caught = function(value) {
 		return new haxe_ValueException(value,null,value);
 	}
 };
-haxe_Exception.thrown = function(value) {
-	if(((value) instanceof haxe_Exception)) {
-		return value.get_native();
-	} else if(((value) instanceof Error)) {
-		return value;
-	} else {
-		var e = new haxe_ValueException(value);
-		return e;
-	}
-};
 haxe_Exception.__super__ = Error;
 haxe_Exception.prototype = $extend(Error.prototype,{
-	get_native: function() {
-		return this.__nativeException;
-	}
 });
 var haxe_ValueException = function(value,previous,native) {
 	haxe_Exception.call(this,String(value),previous,native);
