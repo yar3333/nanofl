@@ -1,5 +1,7 @@
 package nanofl.ide.sys.node;
 
+import js.lib.ArrayBuffer;
+import js.lib.Promise;
 import js.node.ChildProcess;
 import nanofl.ide.sys.node.core.NodeBuffer;
 import nanofl.ide.sys.node.core.ElectronApi;
@@ -38,7 +40,7 @@ class NodeProcessManager implements nanofl.ide.sys.ProcessManager
 		if (env != null) options.env = env;
 		if (input != null) options.input = input;
 		
-		log("ChildProcess.spawnSync " + filePath + (directory != null ? " in dir '" + directory + "'" : "")  + args.map(function(s) return "\n\t" + s).join(""));
+		log("ChildProcess.spawnSync " + filePath + (directory != null ? " in dir '" + directory + "'" : "")  + args.map(s -> "\n\t" + s).join(""));
 		var result = ElectronApi.child_process.spawnSync(filePath, args, options);
 		
 		log(result);
@@ -50,6 +52,61 @@ class NodeProcessManager implements nanofl.ide.sys.ProcessManager
 			error: (cast result.stderr : NodeBuffer).toString()
 		};
 	}
+
+    public function runPipedStdIn(filePath:String, args:Array<String>, directory:String, env:Dynamic<String>, getDataForStdIn:()->ArrayBuffer) : Promise<ProcessResult>
+    {
+        var options : ChildProcessSpawnOptions = { stdio: ChildProcessSpawnOptionsStdioSimple.Pipe };
+        if (directory != null) options.cwd = directory;
+        if (env != null) options.env = env;
+        
+        var process = ElectronApi.child_process.spawn(filePath, args, options);
+
+        return new Promise<ProcessResult>((resolve, reject) ->
+        {
+            var outStr = "";
+            var errStr = "";
+    
+            process.stdout.on('data', data ->
+            {
+                outStr += Std.string(data);
+            });
+                
+            process.stderr.on('data', data ->
+            {
+                errStr += Std.string(data);
+            });
+                
+            process.on('close', code ->
+            {
+                resolve({ code:code, out:outStr, err:errStr });
+            });         
+            
+            process.on('error', code ->
+            {
+                reject({ code:code, out:outStr, err:errStr });
+            });
+
+            function sendNextChunk()
+            {
+                while (true)
+                {
+                    final data = getDataForStdIn();
+                    if (data == null)
+                    {
+                        process.stdin.end();
+                        break;
+                    }
+                    if (!process.stdin.write(ElectronApi.createBuffer(data, null, null)))
+                    {
+                        process.stdin.once("drain", () -> sendNextChunk());
+                        break;
+                    }
+                }
+            }
+
+            sendNextChunk();
+        });
+    }
 	
 	static function log(v:Dynamic, ?infos:haxe.PosInfos)
 	{
