@@ -15,7 +15,7 @@ class MediaConvertor extends InjectContainer
 	
 	public function convertImage(srcFile:String, destFile:String, quality:Int) : Bool
 	{
-		var convertToolPath = folders.tools + "/image_converter/convert.exe";
+		var convertToolPath = folders.tools + "/magic.exe";
 		
 		var destDir = Path.directory(destFile);
 		if (destDir != null && destDir != "") fileSystem.createDirectory(destDir);
@@ -34,7 +34,7 @@ class MediaConvertor extends InjectContainer
 	
 	public function convertAudio(srcFile:String, destFile:String, quality:Int) : Bool
 	{
-		var ffmpegToolPath = folders.tools + "/audio_converter/ffmpeg.exe";
+		var ffmpegToolPath = folders.tools + "/ffmpeg.exe";
 		
 		var destDir = Path.directory(destFile);
 		if (destDir != null && destDir != "") fileSystem.createDirectory(destDir);
