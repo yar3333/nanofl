@@ -27,7 +27,6 @@ class Instance extends Element
 {
 	function get_type() return ElementType.instance;
 	
-    @jsonIgnore
 	var library : Library;
 	
 	public var namePath : String;

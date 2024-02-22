@@ -13,7 +13,6 @@ using stdlib.Lambda;
 @:rtti
 class DocumentProperties extends InjectContainer
 {
-    @jsonIgnore
 	@inject var fileSystem : FileSystem;
 
     var version : String = Version.document;

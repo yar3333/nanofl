@@ -23,7 +23,6 @@ using htmlparser.HtmlParserTools;
 class MotionTween
 	implements IMotionTween
 {
-	@jsonIgnore
 	public var keyFrame : KeyFrame;
 	
 	public var easing : Int;

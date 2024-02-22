@@ -15,6 +15,9 @@ class ElectronApi
     public static var http_utils(get, never) : HttpUtils;
     static inline function get_http_utils() return (cast Browser.window).electronApi.http_utils;
     
+    public static var process_utils(get, never) : ProcessUtils;
+    static inline function get_process_utils() return (cast Browser.window).electronApi.process_utils;
+    
     public static function callMethodAsync<T>(objName:String, methodName:String, ...args:Dynamic) : js.lib.Promise<T>
     {
         var argsArray = (cast [ objName, methodName ] : Array<Dynamic>).concat(args.toArray());

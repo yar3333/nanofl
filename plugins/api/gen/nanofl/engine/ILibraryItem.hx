@@ -1,7 +1,6 @@
 package nanofl.engine;
 
 interface ILibraryItem {
-	@jsonIgnore
 	var library(default, null) : nanofl.engine.Library;
 	var namePath : String;
 	var type(get, never) : nanofl.engine.LibraryItemType;

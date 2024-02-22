@@ -9,7 +9,6 @@ extern class SpriteItem extends nanofl.engine.libraryitems.InstancableItem imple
 	var autoPlay : Bool;
 	var loop : Bool;
 	var textureAtlas : String;
-	@jsonIgnore
 	var spriteSheet(default, null) : easeljs.display.SpriteSheet;
 	override function clone():nanofl.engine.libraryitems.SpriteItem;
 	override function getIcon():String;

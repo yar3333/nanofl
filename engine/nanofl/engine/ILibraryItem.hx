@@ -5,7 +5,6 @@ import nanofl.engine.Library;
 
 interface ILibraryItem
 {
-	@jsonIgnore
 	var library(default, null) : Library;
 	
 	//@:allow(nanofl.engine.Library.renameItemInner)

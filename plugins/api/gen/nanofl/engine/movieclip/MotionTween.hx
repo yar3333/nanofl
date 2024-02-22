@@ -2,7 +2,6 @@ package nanofl.engine.movieclip;
 
 extern class MotionTween implements nanofl.engine.IMotionTween {
 	function new(easing:Int, orientToPath:Bool, rotateCount:Int, rotateCountX:Int, rotateCountY:Int, directionalLightRotateCountX:Int, directionalLightRotateCountY:Int):Void;
-	@jsonIgnore
 	var keyFrame : nanofl.engine.movieclip.KeyFrame;
 	var easing : Int;
 	var orientToPath : Bool;

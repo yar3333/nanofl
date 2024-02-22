@@ -16,7 +16,6 @@ using htmlparser.HtmlParserTools;
 
 abstract class Element
 {
-	@jsonIgnore
 	public var parent : IElementsContainer;
 
     public var type(get, never) : ElementType;

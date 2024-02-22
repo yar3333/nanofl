@@ -14,7 +14,7 @@ class WebmVideoExporterPlugin implements IExporterPlugin
 	
 	public var menuItemName = "MP4 Video (*.mp4)";
 	public var menuItemIcon = "custom-icon-film";
-	public var fileFilterDescription = "WEBM Video (*.mp4)";
+	public var fileFilterDescription = "MP4 Video (*.mp4)";
 	public var fileFilterExtensions = [ "mp4" ];
 	public var fileDefaultExtension = "mp4";
 	public var properties : Array<CustomProperty> = null;
@@ -23,7 +23,7 @@ class WebmVideoExporterPlugin implements IExporterPlugin
 	
 	public function exportDocument(api:PluginApi, params:Dynamic, srcFilePath:String, destFilePath:String, documentProperties:DocumentProperties, library:IdeLibrary) : Bool
 	{
-		VideoExporter.run(api.processManager, api.folders, destFilePath, documentProperties, library);
+		VideoExporter.run(api.fileSystem, api.processManager, api.folders, destFilePath, documentProperties, library);
 		return true;
 	}
 }

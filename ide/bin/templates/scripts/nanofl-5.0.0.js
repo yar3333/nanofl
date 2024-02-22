@@ -4636,7 +4636,7 @@ class nanofl_engine_elements_Element {
 			if(!element.loadPropertiesJson(obj,version)) {
 				return null;
 			}
-			stdlib_Debug.assert(element.matrix != null,null,{ fileName : "engine/nanofl/engine/elements/Element.hx", lineNumber : 98, className : "nanofl.engine.elements.Element", methodName : "parseJson"});
+			stdlib_Debug.assert(element.matrix != null,null,{ fileName : "engine/nanofl/engine/elements/Element.hx", lineNumber : 97, className : "nanofl.engine.elements.Element", methodName : "parseJson"});
 		}
 		return element;
 	}
@@ -4814,8 +4814,8 @@ class nanofl_engine_elements_Instance extends nanofl_engine_elements_Element {
 			return false;
 		}
 		this.namePath = obj.libraryItem;
-		stdlib_Debug.assert(this.namePath != null,null,{ fileName : "engine/nanofl/engine/elements/Instance.hx", lineNumber : 78, className : "nanofl.engine.elements.Instance", methodName : "loadPropertiesJson"});
-		stdlib_Debug.assert(this.namePath != "",null,{ fileName : "engine/nanofl/engine/elements/Instance.hx", lineNumber : 79, className : "nanofl.engine.elements.Instance", methodName : "loadPropertiesJson"});
+		stdlib_Debug.assert(this.namePath != null,null,{ fileName : "engine/nanofl/engine/elements/Instance.hx", lineNumber : 77, className : "nanofl.engine.elements.Instance", methodName : "loadPropertiesJson"});
+		stdlib_Debug.assert(this.namePath != "",null,{ fileName : "engine/nanofl/engine/elements/Instance.hx", lineNumber : 78, className : "nanofl.engine.elements.Instance", methodName : "loadPropertiesJson"});
 		let tmp = obj.name;
 		this.name = tmp != null ? tmp : "";
 		this.colorEffect = nanofl_engine_coloreffects_ColorEffect.loadJson(obj.colorEffect);
@@ -7457,37 +7457,11 @@ class nanofl_engine_libraryitems_MovieClipItem extends nanofl_engine_libraryitem
 	}
 	updateDisplayObject(dispObj,childFrameIndexes) {
 		if(!this.exportAsSpriteSheet) {
-			stdlib_Debug.assert(((dispObj) instanceof nanofl_MovieClip),null,{ fileName : "engine/nanofl/engine/libraryitems/MovieClipItem.hx", lineNumber : 126, className : "nanofl.engine.libraryitems.MovieClipItem", methodName : "updateDisplayObject"});
-			let movieClip = dispObj;
-			movieClip.removeAllChildren();
-			movieClip.alpha = 1.0;
-			let topElement = null;
-			let topElementLayer = null;
-			let i = this.get_layers().length - 1;
-			while(i >= 0) {
-				let _g = 0;
-				let _g1 = this.get_layers()[i].getTweenedElements(movieClip.currentFrame);
-				while(_g < _g1.length) {
-					let tweenedElement = _g1[_g];
-					++_g;
-					if(childFrameIndexes == null || childFrameIndexes.length == 0 || childFrameIndexes[0].element != tweenedElement.original) {
-						let obj = tweenedElement.current.createDisplayObject(childFrameIndexes);
-						obj.visible = this.get_layers()[i].type == nanofl_engine_LayerType.normal;
-						movieClip.addChildToLayer(obj,i);
-					} else if(childFrameIndexes != null && childFrameIndexes.length != 0 && childFrameIndexes[0].element == tweenedElement.original) {
-						topElement = tweenedElement.current;
-						topElementLayer = i;
-					}
-				}
-				--i;
-			}
-			if(topElement != null) {
-				movieClip.addChildToLayer(topElement.createDisplayObject(childFrameIndexes),topElementLayer);
-			}
+			nanofl_engine_libraryitems_MovieClipItem.updateDisplayObjectInner(this.get_layers(),dispObj,childFrameIndexes);
 		}
 	}
 	asSpriteSheet() {
-		if(this.spriteSheet == null) {
+		if(nanofl_engine_libraryitems_MovieClipItem.asSpriteSheet_spriteSheet == null) {
 			let builder = new createjs.SpriteSheetBuilder();
 			let t = this.exportAsSpriteSheet;
 			this.exportAsSpriteSheet = false;
@@ -7499,9 +7473,9 @@ class nanofl_engine_libraryitems_MovieClipItem extends nanofl_engine_libraryitem
 				builder.addFrame(mc);
 			}
 			this.exportAsSpriteSheet = t;
-			this.spriteSheet = builder.build();
+			nanofl_engine_libraryitems_MovieClipItem.asSpriteSheet_spriteSheet = builder.build();
 		}
-		return this.spriteSheet;
+		return nanofl_engine_libraryitems_MovieClipItem.asSpriteSheet_spriteSheet;
 	}
 	preload() {
 		return nanofl_engine_TextureItemTools.preload(this);
@@ -7584,6 +7558,35 @@ class nanofl_engine_libraryitems_MovieClipItem extends nanofl_engine_libraryitem
 		item.addLayer(layer);
 		layer.addKeyFrame(new nanofl_engine_movieclip_KeyFrame(null,null,null,elements));
 		return item;
+	}
+	static updateDisplayObjectInner(layers,dispObj,childFrameIndexes) {
+		stdlib_Debug.assert(((dispObj) instanceof nanofl_MovieClip),null,{ fileName : "engine/nanofl/engine/libraryitems/MovieClipItem.hx", lineNumber : 132, className : "nanofl.engine.libraryitems.MovieClipItem", methodName : "updateDisplayObjectInner"});
+		let movieClip = dispObj;
+		movieClip.removeAllChildren();
+		movieClip.alpha = 1.0;
+		let topElement = null;
+		let topElementLayer = null;
+		let i = layers.length - 1;
+		while(i >= 0) {
+			let _g = 0;
+			let _g1 = layers[i].getTweenedElements(movieClip.currentFrame);
+			while(_g < _g1.length) {
+				let tweenedElement = _g1[_g];
+				++_g;
+				if(childFrameIndexes == null || childFrameIndexes.length == 0 || childFrameIndexes[0].element != tweenedElement.original) {
+					let obj = tweenedElement.current.createDisplayObject(childFrameIndexes);
+					obj.visible = layers[i].type == nanofl_engine_LayerType.normal;
+					movieClip.addChildToLayer(obj,i);
+				} else if(childFrameIndexes != null && childFrameIndexes.length != 0 && childFrameIndexes[0].element == tweenedElement.original) {
+					topElement = tweenedElement.current;
+					topElementLayer = i;
+				}
+			}
+			--i;
+		}
+		if(topElement != null) {
+			movieClip.addChildToLayer(topElement.createDisplayObject(childFrameIndexes),topElementLayer);
+		}
 	}
 	static loadFromJson(namePath,baseLibraryUrl) {
 		return nanofl_engine_Loader.file(baseLibraryUrl + "/" + namePath + ".json").then(function(itemJsonStr) {
@@ -7692,7 +7695,7 @@ class nanofl_engine_libraryitems_SpriteItem extends nanofl_engine_libraryitems_I
 		return obj;
 	}
 	preload() {
-		stdlib_Debug.assert(this.library != null,"You need to add item '" + this.namePath + "' to the library before preload call.",{ fileName : "engine/nanofl/engine/libraryitems/SpriteItem.hx", lineNumber : 88, className : "nanofl.engine.libraryitems.SpriteItem", methodName : "preload"});
+		stdlib_Debug.assert(this.library != null,"You need to add item '" + this.namePath + "' to the library before preload call.",{ fileName : "engine/nanofl/engine/libraryitems/SpriteItem.hx", lineNumber : 87, className : "nanofl.engine.libraryitems.SpriteItem", methodName : "preload"});
 		if(nanofl_engine_TextureItemTools.getSpriteSheet(this) == null) {
 			return this.ensureSpriteSheet();
 		} else {
@@ -7708,8 +7711,8 @@ class nanofl_engine_libraryitems_SpriteItem extends nanofl_engine_libraryitems_I
 		if(spriteSheet == null) {
 			spriteSheet = this.spriteSheet;
 		}
-		stdlib_Debug.assert(spriteSheet != null,null,{ fileName : "engine/nanofl/engine/libraryitems/SpriteItem.hx", lineNumber : 102, className : "nanofl.engine.libraryitems.SpriteItem", methodName : "createDisplayObject"});
-		stdlib_Debug.assert(spriteSheet.complete,null,{ fileName : "engine/nanofl/engine/libraryitems/SpriteItem.hx", lineNumber : 103, className : "nanofl.engine.libraryitems.SpriteItem", methodName : "createDisplayObject"});
+		stdlib_Debug.assert(spriteSheet != null,null,{ fileName : "engine/nanofl/engine/libraryitems/SpriteItem.hx", lineNumber : 101, className : "nanofl.engine.libraryitems.SpriteItem", methodName : "createDisplayObject"});
+		stdlib_Debug.assert(spriteSheet.complete,null,{ fileName : "engine/nanofl/engine/libraryitems/SpriteItem.hx", lineNumber : 102, className : "nanofl.engine.libraryitems.SpriteItem", methodName : "createDisplayObject"});
 		let sprite = new createjs.Sprite(spriteSheet);
 		sprite.gotoAndStop(initFrameIndex);
 		return sprite;
@@ -8190,7 +8193,7 @@ class nanofl_engine_movieclip_MotionTween {
 					let finishFilters = _g3;
 					this.fixFilterSequence(startFilters,finishFilters);
 					this.fixFilterSequence(finishFilters,startFilters);
-					stdlib_Debug.assert(startFilters.length == finishFilters.length,"startFilters.length = " + startFilters.length + " != finishFilters.length = " + finishFilters.length,{ fileName : "engine/nanofl/engine/movieclip/MotionTween.hx", lineNumber : 93, className : "nanofl.engine.movieclip.MotionTween", methodName : "apply"});
+					stdlib_Debug.assert(startFilters.length == finishFilters.length,"startFilters.length = " + startFilters.length + " != finishFilters.length = " + finishFilters.length,{ fileName : "engine/nanofl/engine/movieclip/MotionTween.hx", lineNumber : 92, className : "nanofl.engine.movieclip.MotionTween", methodName : "apply"});
 					let i = 0;
 					let _g6 = [];
 					let _g_current = 0;
@@ -8290,7 +8293,7 @@ class nanofl_engine_movieclip_MotionTween {
 		return new nanofl_engine_movieclip_MotionTween(this.easing,this.orientToPath,this.rotateCount,this.rotateCountX,this.rotateCountY,this.directionalLightRotateCountX,this.directionalLightRotateCountY);
 	}
 	equ(_motionTween) {
-		stdlib_Debug.assert(((_motionTween) instanceof nanofl_engine_movieclip_MotionTween),null,{ fileName : "engine/nanofl/engine/movieclip/MotionTween.hx", lineNumber : 304, className : "nanofl.engine.movieclip.MotionTween", methodName : "equ"});
+		stdlib_Debug.assert(((_motionTween) instanceof nanofl_engine_movieclip_MotionTween),null,{ fileName : "engine/nanofl/engine/movieclip/MotionTween.hx", lineNumber : 303, className : "nanofl.engine.movieclip.MotionTween", methodName : "equ"});
 		let motionTween = _motionTween;
 		if(motionTween.easing != this.easing) {
 			return false;
@@ -8960,24 +8963,17 @@ nanofl_TextField.selectionStart = 0;
 nanofl_TextField.selectionEnd = 0;
 nanofl_engine_ColorTools.colors = { "aliceblue" : "#f0f8ff", "antiquewhite" : "#faebd7", "aqua" : "#00ffff", "aquamarine" : "#7fffd4", "azure" : "#f0ffff", "beige" : "#f5f5dc", "bisque" : "#ffe4c4", "black" : "#000000", "blanchedalmond" : "#ffebcd", "blue" : "#0000ff", "blueviolet" : "#8a2be2", "brown" : "#a52a2a", "burlywood" : "#deb887", "cadetblue" : "#5f9ea0", "chartreuse" : "#7fff00", "chocolate" : "#d2691e", "coral" : "#ff7f50", "cornflowerblue" : "#6495ed", "cornsilk" : "#fff8dc", "crimson" : "#dc143c", "cyan" : "#00ffff", "darkblue" : "#00008b", "darkcyan" : "#008b8b", "darkgoldenrod" : "#b8860b", "darkgray" : "#a9a9a9", "darkgreen" : "#006400", "darkkhaki" : "#bdb76b", "darkmagenta" : "#8b008b", "darkolivegreen" : "#556b2f", "darkorange" : "#ff8c00", "darkorchid" : "#9932cc", "darkred" : "#8b0000", "darksalmon" : "#e9967a", "darkseagreen" : "#8fbc8f", "darkslateblue" : "#483d8b", "darkslategray" : "#2f4f4f", "darkturquoise" : "#00ced1", "darkviolet" : "#9400d3", "deeppink" : "#ff1493", "deepskyblue" : "#00bfff", "dimgray" : "#696969", "dodgerblue" : "#1e90ff", "firebrick" : "#b22222", "floralwhite" : "#fffaf0", "forestgreen" : "#228b22", "fuchsia" : "#ff00ff", "gainsboro" : "#dcdcdc", "ghostwhite" : "#f8f8ff", "gold" : "#ffd700", "goldenrod" : "#daa520", "gray" : "#808080", "grey" : "#808080", "green" : "#008000", "greenyellow" : "#adff2f", "honeydew" : "#f0fff0", "hotpink" : "#ff69b4", "indianred " : "#cd5c5c", "indigo" : "#4b0082", "ivory" : "#fffff0", "khaki" : "#f0e68c", "lavender" : "#e6e6fa", "lavenderblush" : "#fff0f5", "lawngreen" : "#7cfc00", "lemonchiffon" : "#fffacd", "lightblue" : "#add8e6", "lightcoral" : "#f08080", "lightcyan" : "#e0ffff", "lightgoldenrodyellow" : "#fafad2", "lightgrey" : "#d3d3d3", "lightgreen" : "#90ee90", "lightpink" : "#ffb6c1", "lightsalmon" : "#ffa07a", "lightseagreen" : "#20b2aa", "lightskyblue" : "#87cefa", "lightslategray" : "#778899", "lightsteelblue" : "#b0c4de", "lightyellow" : "#ffffe0", "lime" : "#00ff00", "limegreen" : "#32cd32", "linen" : "#faf0e6", "magenta" : "#ff00ff", "maroon" : "#800000", "mediumaquamarine" : "#66cdaa", "mediumblue" : "#0000cd", "mediumorchid" : "#ba55d3", "mediumpurple" : "#9370d8", "mediumseagreen" : "#3cb371", "mediumslateblue" : "#7b68ee", "mediumspringgreen" : "#00fa9a", "mediumturquoise" : "#48d1cc", "mediumvioletred" : "#c71585", "midnightblue" : "#191970", "mintcream" : "#f5fffa", "mistyrose" : "#ffe4e1", "moccasin" : "#ffe4b5", "navajowhite" : "#ffdead", "navy" : "#000080", "oldlace" : "#fdf5e6", "olive" : "#808000", "olivedrab" : "#6b8e23", "orange" : "#ffa500", "orangered" : "#ff4500", "orchid" : "#da70d6", "palegoldenrod" : "#eee8aa", "palegreen" : "#98fb98", "paleturquoise" : "#afeeee", "palevioletred" : "#d87093", "papayawhip" : "#ffefd5", "peachpuff" : "#ffdab9", "peru" : "#cd853f", "pink" : "#ffc0cb", "plum" : "#dda0dd", "powderblue" : "#b0e0e6", "purple" : "#800080", "red" : "#ff0000", "rosybrown" : "#bc8f8f", "royalblue" : "#4169e1", "saddlebrown" : "#8b4513", "salmon" : "#fa8072", "sandybrown" : "#f4a460", "seagreen" : "#2e8b57", "seashell" : "#fff5ee", "sienna" : "#a0522d", "silver" : "#c0c0c0", "skyblue" : "#87ceeb", "slateblue" : "#6a5acd", "slategray" : "#708090", "snow" : "#fffafa", "springgreen" : "#00ff7f", "steelblue" : "#4682b4", "tan" : "#d2b48c", "teal" : "#008080", "thistle" : "#d8bfd8", "tomato" : "#ff6347", "turquoise" : "#40e0d0", "violet" : "#ee82ee", "wheat" : "#f5deb3", "white" : "#ffffff", "whitesmoke" : "#f5f5f5", "yellow" : "#ffff00", "yellowgreen" : "#9acd32", "transparent" : "rgba(0,0,0,0)"};
 nanofl_engine_Debug.console = new nanofl_engine_Console();
-nanofl_engine_movieclip_KeyFrame.__meta__ = { fields : { layer : { jsonIgnore : null}}};
 nanofl_engine_Library.SCENE_NAME_PATH = "scene";
 nanofl_engine_ScaleMode.fit = "fit";
 nanofl_engine_ScaleMode.fill = "fill";
 nanofl_engine_ScaleMode.stretch = "stretch";
 nanofl_engine_ScaleMode.custom = "custom";
 nanofl_engine_elements_Element._hx_skip_constructor = false;
-nanofl_engine_elements_Element.__meta__ = { fields : { parent : { jsonIgnore : null}}};
-nanofl_engine_elements_Instance.__meta__ = { fields : { library : { jsonIgnore : null}}};
 nanofl_engine_geom_Edge.GAP = 0.01;
 nanofl_engine_geom_Edges.reFloat2 = new EReg("([-+0-9.]+),([-+0-9.]+)","");
 nanofl_engine_geom_Edges.reFloat4 = new EReg("([-+0-9.]+),([-+0-9.]+),([-+0-9.]+),([-+0-9.]+)","");
 nanofl_engine_geom_Matrix.DEG_TO_RAD = Math.PI / 180;
 nanofl_engine_libraryitems_LibraryItem._hx_skip_constructor = false;
-nanofl_engine_libraryitems_LibraryItem.__meta__ = { fields : { library : { jsonIgnore : null}}};
-nanofl_engine_libraryitems_SpriteItem.__meta__ = { fields : { _layers : { jsonIgnore : null}, spriteSheet : { jsonIgnore : null}}};
-nanofl_engine_movieclip_Layer.__meta__ = { fields : { layersContainer : { jsonIgnore : null}, parentLayer : { jsonIgnore : null}}};
-nanofl_engine_movieclip_MotionTween.__meta__ = { fields : { keyFrame : { jsonIgnore : null}}};
 nanofl_engine_plugins_FilterPlugins.plugins = new haxe_ds_StringMap();
 })( true ? exports : 0, typeof window != "undefined" ? window : typeof __webpack_require__.g != "undefined" ? __webpack_require__.g : typeof self != "undefined" ? self : this);
 

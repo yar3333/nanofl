@@ -7,6 +7,27 @@ function $extend(from, fields) {
 	if( fields.toString !== Object.prototype.toString ) proto.toString = fields.toString;
 	return proto;
 }
+var EReg = function(r,opt) {
+	this.r = new RegExp(r,opt.split("u").join(""));
+};
+EReg.__name__ = true;
+EReg.prototype = {
+	match: function(s) {
+		if(this.r.global) {
+			this.r.lastIndex = 0;
+		}
+		this.r.m = this.r.exec(s);
+		this.r.s = s;
+		return this.r.m != null;
+	}
+	,matched: function(n) {
+		if(this.r.m != null && n >= 0 && n < this.r.m.length) {
+			return this.r.m[n];
+		} else {
+			throw haxe_Exception.thrown("EReg::matched");
+		}
+	}
+};
 var Main = function() { };
 Main.__name__ = true;
 Main.main = function() {
@@ -15,21 +36,54 @@ Main.main = function() {
 Math.__name__ = true;
 var VideoExporter = function() { };
 VideoExporter.__name__ = true;
-VideoExporter.run = function(processManager,folders,destFilePath,documentProperties,library) {
+VideoExporter.run = function(fileSystem,processManager,folders,destFilePath,documentProperties,library) {
+	if(fileSystem.exists(destFilePath)) {
+		fileSystem.deleteFile(destFilePath);
+	}
 	var args = ["-f","rawvideo","-pixel_format","rgb24","-video_size",documentProperties.width + "x" + documentProperties.height,"-framerate",documentProperties.framerate + "","-i","pipe:0",destFilePath];
 	var canvas = window.document.createElement("canvas");
 	canvas.width = documentProperties.width;
 	canvas.height = documentProperties.height;
-	var ctx = canvas.getContext("2d",{ willReadFrequently : true});
 	var totalFrames = library.getSceneItem().getTotalFrames();
 	var frameNum = 0;
+	var dataOut = new Uint8Array(canvas.width * canvas.height * 3);
+	var stage = new nanofl.Stage(canvas);
+	var scene = library.getSceneInstance().createDisplayObject(null);
+	stage.addChild(scene);
+	var backColor = VideoExporter.hexToRgb(documentProperties.backgroundColor);
+	var ctx = canvas.getContext("2d",{ willReadFrequently : true});
 	try {
 		return processManager.runPipedStdIn(folders.get_tools() + "/ffmpeg.exe",args,null,null,function() {
-			var scene = new nanofl.MovieClip(library.getSceneItem(),frameNum,null);
-			ctx.fillStyle = documentProperties.backgroundColor;
-			ctx.fillRect(0,0,documentProperties.width,documentProperties.height);
-			scene.draw(ctx);
-			return ctx.getImageData(0,0,canvas.width,canvas.height).data.buffer;
+			if(frameNum >= totalFrames) {
+				return null;
+			}
+			stage.update();
+			var dataIn = ctx.getImageData(0,0,canvas.width,canvas.height).data;
+			var pIn = 0;
+			var pOut = 0;
+			var i = 0;
+			while(i < canvas.height) {
+				var j = 0;
+				while(j < canvas.width) {
+					var r = dataIn[pIn++];
+					var g = dataIn[pIn++];
+					var b = dataIn[pIn++];
+					var a = dataIn[pIn++];
+					var fa = a / 255.0;
+					dataOut[pOut++] = Math.round((1 - fa) * backColor.r + fa * r);
+					var fa1 = a / 255.0;
+					dataOut[pOut++] = Math.round((1 - fa1) * backColor.g + fa1 * g);
+					var fa2 = a / 255.0;
+					dataOut[pOut++] = Math.round((1 - fa2) * backColor.b + fa2 * b);
+					++j;
+				}
+				++i;
+			}
+			frameNum += 1;
+			if(frameNum < totalFrames) {
+				scene.advance();
+			}
+			return dataOut.buffer;
 		}).then(function(r) {
 			return r.code == 0;
 		});
@@ -39,11 +93,24 @@ VideoExporter.run = function(processManager,folders,destFilePath,documentPropert
 		return Promise.resolve(false);
 	}
 };
+VideoExporter.applyAlpha = function(fore,a,back) {
+	var fa = a / 255.0;
+	return Math.round((1 - fa) * back + fa * fore);
+};
+VideoExporter.hexToRgb = function(hex) {
+	var re = new EReg("^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$","i");
+	var result = re.match(hex);
+	if(result) {
+		return { r : parseInt(re.matched(1),16), g : parseInt(re.matched(2),16), b : parseInt(re.matched(3),16)};
+	} else {
+		return null;
+	}
+};
 var WebmVideoExporterPlugin = function() {
 	this.properties = null;
 	this.fileDefaultExtension = "mp4";
 	this.fileFilterExtensions = ["mp4"];
-	this.fileFilterDescription = "WEBM Video (*.mp4)";
+	this.fileFilterDescription = "MP4 Video (*.mp4)";
 	this.menuItemIcon = "custom-icon-film";
 	this.menuItemName = "MP4 Video (*.mp4)";
 	this.name = "Mp4VideoExporter";
@@ -51,7 +118,7 @@ var WebmVideoExporterPlugin = function() {
 WebmVideoExporterPlugin.__name__ = true;
 WebmVideoExporterPlugin.prototype = {
 	exportDocument: function(api,params,srcFilePath,destFilePath,documentProperties,library) {
-		VideoExporter.run(api.processManager,api.folders,destFilePath,documentProperties,library);
+		VideoExporter.run(api.fileSystem,api.processManager,api.folders,destFilePath,documentProperties,library);
 		return true;
 	}
 };
@@ -71,8 +138,21 @@ haxe_Exception.caught = function(value) {
 		return new haxe_ValueException(value,null,value);
 	}
 };
+haxe_Exception.thrown = function(value) {
+	if(((value) instanceof haxe_Exception)) {
+		return value.get_native();
+	} else if(((value) instanceof Error)) {
+		return value;
+	} else {
+		var e = new haxe_ValueException(value);
+		return e;
+	}
+};
 haxe_Exception.__super__ = Error;
 haxe_Exception.prototype = $extend(Error.prototype,{
+	get_native: function() {
+		return this.__nativeException;
+	}
 });
 var haxe_ValueException = function(value,previous,native) {
 	haxe_Exception.call(this,String(value),previous,native);

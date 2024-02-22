@@ -3,7 +3,6 @@ package nanofl.engine.libraryitems;
 extern class LibraryItem implements nanofl.engine.ILibraryItem {
 	var type(get, never) : nanofl.engine.LibraryItemType;
 	private function get_type():nanofl.engine.LibraryItemType;
-	@jsonIgnore
 	var library(default, null) : nanofl.engine.Library;
 	var namePath : String;
 	function getIcon():String;

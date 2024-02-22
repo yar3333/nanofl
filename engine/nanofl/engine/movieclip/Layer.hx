@@ -16,7 +16,6 @@ using htmlparser.HtmlParserTools;
 
 class Layer
 {
-	@jsonIgnore
 	public var layersContainer : ILayersContainer;
 	
 	public var name : String;
@@ -25,7 +24,6 @@ class Layer
 	public var locked : Bool;
 	public var parentIndex : Int;
 	
-	@jsonIgnore
 	public var parentLayer(get, never) : Layer;
 	@:noCompletion function get_parentLayer() return parentIndex != null ? layersContainer.layers[parentIndex] : null;
 	

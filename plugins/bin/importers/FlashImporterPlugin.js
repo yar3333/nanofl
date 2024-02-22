@@ -4901,7 +4901,6 @@ htmlparser_HtmlParser.reElementClose = "<\\s*/\\s*(" + htmlparser_HtmlParser.reN
 htmlparser_HtmlParser.reComment = "<!--[\\s\\S]*?-->";
 htmlparser_HtmlParser.reMain = new EReg("(" + htmlparser_HtmlParser.reCDATA + ")|(" + htmlparser_HtmlParser.reScript + ")|(" + htmlparser_HtmlParser.reStyle + ")|(" + htmlparser_HtmlParser.reElementOpen + "((?:\\s+" + htmlparser_HtmlParser.reAttr + ")*)\\s*" + htmlparser_HtmlParser.reElementEnd + ")|(" + htmlparser_HtmlParser.reElementClose + ")|(" + htmlparser_HtmlParser.reComment + ")","ig");
 htmlparser_HtmlParser.reParseAttrs = new EReg("(" + htmlparser_HtmlParser.reNamespacedID + ")(?:\\s*=\\s*('[^']*'|\"[^\"]*\"|[-_a-z0-9]+))?","ig");
-nanofl_engine_ILibraryItem.__meta__ = { fields : { library : { jsonIgnore : null}}};
 stdlib_Uuid.counter = 0;
 FlashImporterPlugin.main();
 })(typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);

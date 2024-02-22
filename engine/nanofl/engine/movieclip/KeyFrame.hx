@@ -20,7 +20,6 @@ using htmlparser.HtmlParserTools;
 class KeyFrame
     implements IElementsContainer
 {
-	@jsonIgnore
 	public var layer : Layer;
 	
 	public var label : String;

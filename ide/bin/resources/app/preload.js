@@ -2,7 +2,7 @@ const { contextBridge, ipcRenderer } = require('electron/renderer');
 const fs = require('fs');
 const { Buffer } = require('node:buffer');
 const child_process = require('child_process');
-const { http_utils } = require('./preloadjs-tools.js');
+const { http_utils, process_utils } = require('./preloadjs-tools.js');
 
 contextBridge.exposeInMainWorld('electronApi',
 {
@@ -40,4 +40,5 @@ contextBridge.exposeInMainWorld('electronApi',
     createBuffer: Buffer.from,
     child_process: child_process,
     http_utils: http_utils,
+    process_utils: process_utils,
 });

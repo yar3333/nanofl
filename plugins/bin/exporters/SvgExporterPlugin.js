@@ -1503,6 +1503,5 @@ var Bool = Boolean;
 var Class = { };
 var Enum = { };
 js_Boot.__toStr = ({ }).toString;
-nanofl_engine_ILibraryItem.__meta__ = { fields : { library : { jsonIgnore : null}}};
 SvgExporterPlugin.main();
 })(typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);

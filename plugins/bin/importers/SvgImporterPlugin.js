@@ -3941,7 +3941,6 @@ var Class = { };
 var Enum = { };
 js_Boot.__toStr = ({ }).toString;
 haxe_SysTools.winMetaCharacters = [32,40,41,37,33,94,34,60,62,38,124,10,13,44,59];
-nanofl_engine_ILibraryItem.__meta__ = { fields : { library : { jsonIgnore : null}}};
 svgimport_SegmentsParser.MOVE = 77;
 svgimport_SegmentsParser.MOVER = 109;
 svgimport_SegmentsParser.LINE = 76;

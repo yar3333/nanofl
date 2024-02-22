@@ -2,14 +2,12 @@ package nanofl.engine.movieclip;
 
 extern class Layer {
 	function new(name:String, ?type:nanofl.engine.LayerType, ?visible:Bool, ?locked:Bool, ?parentIndex:Int):Void;
-	@jsonIgnore
 	var layersContainer : nanofl.engine.ILayersContainer;
 	var name : String;
 	var type : nanofl.engine.LayerType;
 	var visible : Bool;
 	var locked : Bool;
 	var parentIndex : Int;
-	@jsonIgnore
 	var parentLayer(get, never) : nanofl.engine.movieclip.Layer;
 	@:noCompletion
 	private function get_parentLayer():nanofl.engine.movieclip.Layer;

@@ -1,7 +1,6 @@
 package nanofl.engine.elements;
 
 extern class Element {
-	@jsonIgnore
 	var parent : nanofl.engine.IElementsContainer;
 	var type(get, never) : nanofl.engine.ElementType;
 	private function get_type():nanofl.engine.ElementType;

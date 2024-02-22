@@ -117,52 +117,58 @@ class MovieClipItem	extends InstancableItem
 	
 	public function updateDisplayObject(dispObj:easeljs.display.DisplayObject, childFrameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : Void
 	{
-		if (exportAsSpriteSheet)
+		if (!exportAsSpriteSheet)
 		{
-			//Debug.assert(Std.isOfType(dispObj, easeljs.display.Sprite));
+			updateDisplayObjectInner(layers, dispObj, childFrameIndexes);
 		}
 		else
 		{
-			Debug.assert(Std.isOfType(dispObj, nanofl.MovieClip));
-			
-			var movieClip : nanofl.MovieClip = cast dispObj;
-			
-			movieClip.removeAllChildren();
-			movieClip.alpha = 1.0;
-			
-			var topElement : Element = null;
-			var topElementLayer : Int = null;
-			
-			var i = layers.length - 1; while (i >= 0)
-			{
-				for (tweenedElement in layers[i].getTweenedElements(movieClip.currentFrame))
-				{
-					if (childFrameIndexes == null || childFrameIndexes.length == 0 || childFrameIndexes[0].element != cast tweenedElement.original)
-					{
-						var obj = tweenedElement.current.createDisplayObject(childFrameIndexes);
-						obj.visible = layers[i].type == LayerType.normal;
-						movieClip.addChildToLayer(obj, i);
-					}
-					else
-					if (childFrameIndexes != null && childFrameIndexes.length != 0 && childFrameIndexes[0].element == cast tweenedElement.original)
-					{
-						topElement = tweenedElement.current;
-						topElementLayer = i;
-					}
-				}
-				i--;
-			}
-			
-			if (topElement != null)
-			{
-				movieClip.addChildToLayer(topElement.createDisplayObject(childFrameIndexes), topElementLayer);
-			}
-		}
+            //Debug.assert(Std.isOfType(dispObj, easeljs.display.Sprite));
+        }
+    }
+
+    public static function updateDisplayObjectInner(layers:ArrayRO<Layer>, dispObj:easeljs.display.DisplayObject, childFrameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : Void
+    {
+        Debug.assert(Std.isOfType(dispObj, nanofl.MovieClip));
+        
+        var movieClip : nanofl.MovieClip = cast dispObj;
+        
+        movieClip.removeAllChildren();
+        movieClip.alpha = 1.0;
+        
+        var topElement : Element = null;
+        var topElementLayer : Int = null;
+        
+        var i = layers.length - 1; while (i >= 0)
+        {
+            for (tweenedElement in layers[i].getTweenedElements(movieClip.currentFrame))
+            {
+                if (childFrameIndexes == null || childFrameIndexes.length == 0 || childFrameIndexes[0].element != cast tweenedElement.original)
+                {
+                    var obj = tweenedElement.current.createDisplayObject(childFrameIndexes);
+                    obj.visible = layers[i].type == LayerType.normal;
+                    movieClip.addChildToLayer(obj, i);
+                }
+                else
+                if (childFrameIndexes != null && childFrameIndexes.length != 0 && childFrameIndexes[0].element == cast tweenedElement.original)
+                {
+                    topElement = tweenedElement.current;
+                    topElementLayer = i;
+                }
+            }
+            i--;
+        }
+        
+        if (topElement != null)
+        {
+            movieClip.addChildToLayer(topElement.createDisplayObject(childFrameIndexes), topElementLayer);
+        }
 	}
 	
-	var spriteSheet : easeljs.display.SpriteSheet;
 	function asSpriteSheet() : easeljs.display.SpriteSheet
 	{
+        static var spriteSheet : easeljs.display.SpriteSheet = null;
+
 		if (spriteSheet == null)
 		{
 			var builder = new easeljs.utils.SpriteSheetBuilder();

@@ -29,7 +29,7 @@ class SpriteItem extends InstancableItem
 	var frames : Array<SpriteItemFrame>;
 	
 	// ILayersContainer
-	@jsonIgnore var _layers : Array<Layer>;
+	var _layers : Array<Layer>;
 	public var layers(get, never) : ArrayRO<Layer>;
 	@:noCompletion public function get_layers()
 	{
@@ -54,7 +54,6 @@ class SpriteItem extends InstancableItem
 	// ITextureItem
 	public var textureAtlas : String;
 	
-	@jsonIgnore
 	public var spriteSheet(default, null) : easeljs.display.SpriteSheet;
 	
 	public function new(namePath:String, frames:Array<SpriteItemFrame>)

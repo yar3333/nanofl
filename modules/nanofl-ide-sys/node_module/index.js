@@ -2570,49 +2570,7 @@ nanofl_ide_sys_node_NodeProcessManager.prototype = {
 		return { exitCode : result.status, output : result.stdout.toString(), error : result.stderr.toString()};
 	}
 	,runPipedStdIn: function(filePath,args,directory,env,getDataForStdIn) {
-		var options = { stdio : "pipe"};
-		if(directory != null) {
-			options.cwd = directory;
-		}
-		if(env != null) {
-			options.env = env;
-		}
-		var $process = window.electronApi.child_process.spawn(filePath,args,options);
-		return new Promise(function(resolve,reject) {
-			var outStr = "";
-			var errStr = "";
-			$process.stdout.on("data",function(data) {
-				outStr += Std.string(data);
-				return outStr;
-			});
-			$process.stderr.on("data",function(data) {
-				errStr += Std.string(data);
-				return errStr;
-			});
-			$process.on("close",function(code) {
-				resolve({ code : code, out : outStr, err : errStr});
-			});
-			$process.on("error",function(code) {
-				reject({ code : code, out : outStr, err : errStr});
-			});
-			var sendNextChunk = null;
-			sendNextChunk = function() {
-				while(true) {
-					var data = getDataForStdIn();
-					if(data == null) {
-						$process.stdin.end();
-						break;
-					}
-					if(!$process.stdin.write(nanofl_ide_sys_node_core_ElectronApi.createBuffer(data,null,null))) {
-						$process.stdin.once("drain",function() {
-							sendNextChunk();
-						});
-						break;
-					}
-				}
-			};
-			sendNextChunk();
-		});
+		return window.electronApi.process_utils.runPipedStdIn(filePath,args,directory,env,getDataForStdIn);
 	}
 	,__class__: nanofl_ide_sys_node_NodeProcessManager
 };

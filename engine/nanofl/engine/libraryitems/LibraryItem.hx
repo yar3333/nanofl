@@ -16,7 +16,6 @@ abstract class LibraryItem
     public var type(get, never) : LibraryItemType;
 	abstract function get_type() : LibraryItemType;
 	
-    @jsonIgnore
 	public var library(default, null) : Library;
 	
 	//@:allow(nanofl.engine.Library.renameItemInner)
