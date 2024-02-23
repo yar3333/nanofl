@@ -2,11 +2,7 @@
 
 /// <reference types='nanofl-ts' />
 
-import { McBucket as _McBucket } from '../McBucket';
-import { Game as _Game } from '../Game';
-import { MusicButton as _MusicButton } from '../MusicButton';
-import { Scene as _Scene } from '../Scene';
-import { McTrash as _McTrash } from '../McTrash';
+import * as linked from './linked-classes';
 
 export namespace base
 {
@@ -45,8 +41,8 @@ export namespace base
 		get btGotoOrigin() { return this.getChildByName("btGotoOrigin") as nanofl.Button }
 		get tfLevel() { return this.getChildByName("tfLevel") as nanofl.TextField }
 		get btNextLevel() { return this.getChildByName("btNextLevel") as nanofl.Button }
-		get mcTrash() { return this.getChildByName("mcTrash") as _McTrash }
-		get game() { return this.getChildByName("game") as _Game }
+		get mcTrash() { return this.getChildByName("mcTrash") as linked.McTrash }
+		get game() { return this.getChildByName("game") as linked.Game }
 		get tfTask() { return this.getChildByName("tfTask") as nanofl.TextField }
 		get mcTap() { return this.getChildByName("mcTap") as nanofl.MovieClip }
 	}

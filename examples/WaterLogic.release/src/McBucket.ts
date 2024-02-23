@@ -71,8 +71,7 @@ export class McBucket extends base.McBucket
 		}
 	}
 	
-	// начинает анимированный процесс переливание из текущей бутыли в заданную
-	public startFallToBucketProcess(dest:IWaterContainer)
+	public startFallToProcess(dest:IWaterContainer)
 	{
 		if (this.fallProcessPhase != 0) { console.log("StartFallProcess error 1"); return; }
 
@@ -81,11 +80,13 @@ export class McBucket extends base.McBucket
 		this.fillProcessFallFrame = 0;
 	}
 	
-	// должна вызываться на каждом кадре, пока процесс переливания идёт
-	// (если будет вызвана когда процесс уже закончен - ничего страшного)
-	// возвращает - закончен ли процесс переливания
-	// mouseDX, mouseDY - смещение для последней фазы
-	public fallProcessStep(mouseDX:number, mouseDY:number) : boolean
+    /**
+     * Must be called on every frame while water falling.
+     * @param mouseDX X offset for last step
+     * @param mouseDY Y offset for last step
+     * @returns Falling finished?
+     */
+    public fallProcessStep(mouseDX:number, mouseDY:number) : boolean
 	{
 		if (this.fallProcessPhase == 0) return true;
 		if (this.fallProcessPhase == 1)

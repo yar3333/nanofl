@@ -222,7 +222,7 @@ export class Game extends base.Game
             
 			if (this.gameMode == 1)
             {
-                this.carry.startFallToBucketProcess(this.fallTo);
+                this.carry.startFallToProcess(this.fallTo);
             }
 			else if (this.gameMode == 2)
 			{
@@ -232,7 +232,7 @@ export class Game extends base.Game
 			else if (this.gameMode == 3)
 			{
 				this.fillBeforeTrash = this.carry.getFill();
-				this.carry.startFallToBucketProcess(this.scene.mcTrash);
+				this.carry.startFallToProcess(this.scene.mcTrash);
 			}
 		}
 	}
