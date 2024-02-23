@@ -19,7 +19,7 @@ VideoExporter.run = function(fileSystem,processManager,folders,destFilePath,docu
 	if(fileSystem.exists(destFilePath)) {
 		fileSystem.deleteFile(destFilePath);
 	}
-	var args = ["-f","rawvideo","-pixel_format","rgb24","-video_size",documentProperties.width + "x" + documentProperties.height,"-framerate",documentProperties.framerate + "","-i","pipe:0",destFilePath];
+	var args = ["-f","rawvideo","-pixel_format","rgb24","-video_size",documentProperties.width + "x" + documentProperties.height,"-framerate",documentProperties.framerate + "","-i","pipe:0","-c:v","libx264",destFilePath];
 	var dataOut = new Uint8Array(documentProperties.width * documentProperties.height * 3);
 	var sceneFramesIterator = library.getSceneFramesIterator(documentProperties,true);
 	try {

@@ -25,6 +25,7 @@ class VideoExporter
             "-video_size", documentProperties.width + "x" + documentProperties.height,
             "-framerate", documentProperties.framerate + "",
             "-i", "pipe:0",
+            "-c:v", "libx264", //"-crf", "0",
             destFilePath
         ];
             
