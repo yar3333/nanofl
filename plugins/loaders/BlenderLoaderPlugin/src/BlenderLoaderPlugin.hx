@@ -27,7 +27,7 @@ class BlenderLoaderPlugin implements ILoaderPlugin
 	
 	public var properties : Array<CustomProperty> =
 	[
-		{ type:"info", label:"This plugin automatically convert *.blend in your library into *.json (supported by NanoFL)."
+		{ type:"info", label:"This plugin automatically run Blender to convert *.blend in your library into *.gltf."
 						   + " Ensure you have <a href='http://blender.org/'>Blender</a> installed." },
 		{ type:"file", name:"blenderPath", label:"Path to the blender.exe", description:"Select path to the blender.exe", defaultValue:"", fileFilters:[ { description:"Executable files (*.exe)", extensions:[ "exe" ] } ] }
 	];
