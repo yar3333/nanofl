@@ -2021,13 +2021,21 @@ libraryData =
             "label": "Rules",
             "duration": 1,
             "motionTween": null,
-            "elements": []
+            "elements": [
+              {
+                "type": "shape"
+              }
+            ]
           },
           {
             "label": "Game",
             "duration": 1,
             "motionTween": null,
-            "elements": []
+            "elements": [
+              {
+                "type": "shape"
+              }
+            ]
           },
           {
             "label": "Win",
@@ -2063,13 +2071,21 @@ libraryData =
             "label": "",
             "duration": 1,
             "motionTween": null,
-            "elements": []
+            "elements": [
+              {
+                "type": "shape"
+              }
+            ]
           },
           {
             "label": "",
             "duration": 1,
             "motionTween": null,
-            "elements": []
+            "elements": [
+              {
+                "type": "shape"
+              }
+            ]
           },
           {
             "label": "",
@@ -2140,6 +2156,9 @@ libraryData =
             "duration": 1,
             "motionTween": null,
             "elements": [
+              {
+                "type": "shape"
+              },
               {
                 "type": "instance",
                 "libraryItem": "_buttons/btnBack",
@@ -2326,6 +2345,9 @@ libraryData =
             "duration": 1,
             "motionTween": null,
             "elements": [
+              {
+                "type": "shape"
+              },
               {
                 "type": "instance",
                 "libraryItem": "musicButton",
@@ -2619,13 +2641,20 @@ libraryData =
             "label": "",
             "duration": 1,
             "motionTween": null,
-            "elements": []
+            "elements": [
+              {
+                "type": "shape"
+              }
+            ]
           },
           {
             "label": "",
             "duration": 1,
             "motionTween": null,
             "elements": [
+              {
+                "type": "shape"
+              },
               {
                 "type": "instance",
                 "libraryItem": "trash",
@@ -2735,6 +2764,9 @@ libraryData =
             "motionTween": null,
             "elements": [
               {
+                "type": "shape"
+              },
+              {
                 "type": "instance",
                 "libraryItem": "_splash/splash",
                 "name": "",
@@ -2756,6 +2788,9 @@ libraryData =
             "duration": 1,
             "motionTween": null,
             "elements": [
+              {
+                "type": "shape"
+              },
               {
                 "type": "instance",
                 "libraryItem": "background",
@@ -2970,7 +3005,7 @@ libraryData =
   "trash": {
     "type": "movieclip",
     "version": "2.3.0",
-    "linkedClass": "",
+    "linkedClass": "McTrash",
     "autoPlay": false,
     "loop": false,
     "likeButton": false,

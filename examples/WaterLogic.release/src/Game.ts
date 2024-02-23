@@ -1,6 +1,7 @@
 import { base, Sounds } from './autogen';
-import { WaterContainer } from './WaterContainer';
-import { Bucket } from './Bucket';
+//import { WaterContainer } from './IWaterContainer';
+import { McBucket } from './McBucket';
+import { McTrash } from './McTrash';
 import { Scene } from './Scene';
 
 export class Game extends base.Game
@@ -9,9 +10,9 @@ export class Game extends base.Game
 
 	level = 0;
 
-	buckets = new Array<Bucket>();
+	buckets = new Array<McBucket>();
 
-	carry : Bucket = null;
+	carry : McBucket = null;
 	carryDX : number;
 	carryDY : number;
 
@@ -19,7 +20,7 @@ export class Game extends base.Game
 					// 0 - nothing
 					// 1-4 - see gameMode
 	
-	fallTo : Bucket = null;
+	fallTo : McBucket = null;
 	
 	gameMode = 0;	// 0 - waiting to user
 					// 1 - tansfuse water from "carry" into "fallTo"
@@ -43,74 +44,74 @@ export class Game extends base.Game
 		{
 			case 1:
 				this.parent.tfTask.text = "You need to measure 4 litres of water,\nusing two buckets of 5 and 7 litres.\nUse barrel (at the right) for filling buckets.\nTo make buckets empty, use trash (at the left).";
-				this.buckets.push(new Bucket(this, 5, 220));
-				this.buckets.push(new Bucket(this, 7, 320));
+				this.buckets.push(this.addChild(new McBucket(5, 220)));
+				this.buckets.push(this.addChild(new McBucket(7, 320)));
                 break;
 			
 			case 2:
 				this.parent.tfTask.text = "You need to measure 1 liter of water.";
-				this.buckets.push(new Bucket(this, 3, 180));
-				this.buckets.push(new Bucket(this, 6, 280));
-				this.buckets.push(new Bucket(this, 8, 380));
+				this.buckets.push(this.addChild(new McBucket(3, 180)));
+				this.buckets.push(this.addChild(new McBucket(6, 280)));
+				this.buckets.push(this.addChild(new McBucket(8, 380)));
                 break;
 			
 			case 3:
 				this.parent.tfTask.text = "You need to measure 1 liter of water.";
-				this.buckets.push(new Bucket(this, 3, 220));
-				this.buckets.push(new Bucket(this, 5, 320));
+				this.buckets.push(this.addChild(new McBucket(3, 220)));
+				this.buckets.push(this.addChild(new McBucket(5, 320)));
                 break;
 			
 			case 4:
 				this.parent.tfTask.text = "You need to got 1 liter of water in any two buckets.";
-				this.buckets.push(new Bucket(this, 3, 180));
-				this.buckets.push(new Bucket(this, 4, 280));
-				this.buckets.push(new Bucket(this, 6, 380));
+				this.buckets.push(this.addChild(new McBucket(3, 180)));
+				this.buckets.push(this.addChild(new McBucket(4, 280)));
+				this.buckets.push(this.addChild(new McBucket(6, 380)));
                 break;
 			
 			case 5:
 				this.parent.tfTask.text = "You need to got 6 litres of water in bigger bucket,\n4 liters in 5-bucket and 4 litres in 8-bucket.";
-				this.buckets.push(new Bucket(this, 3, 180));
-				this.buckets.push(new Bucket(this, 5, 250));
-				this.buckets.push(new Bucket(this, 8, 320));
-				this.buckets.push(new Bucket(this, 12, 400));
+				this.buckets.push(this.addChild(new McBucket(3, 180)));
+				this.buckets.push(this.addChild(new McBucket(5, 250)));
+				this.buckets.push(this.addChild(new McBucket(8, 320)));
+				this.buckets.push(this.addChild(new McBucket(12, 400)));
                 break;
 			
 			case 6:
 				this.parent.tfTask.text = "You need to got 2 liter of water in any three buckets.";
-				this.buckets.push(new Bucket(this, 3, 180));
-				this.buckets.push(new Bucket(this, 3, 250));
-				this.buckets.push(new Bucket(this, 8, 320));
-				this.buckets.push(new Bucket(this, 11, 400));
+				this.buckets.push(this.addChild(new McBucket(3, 180)));
+				this.buckets.push(this.addChild(new McBucket(3, 250)));
+				this.buckets.push(this.addChild(new McBucket(8, 320)));
+				this.buckets.push(this.addChild(new McBucket(11, 400)));
                 break;
 			
 			case 7:
 				this.parent.tfTask.text = "You need to got 1 liter of water in any two buckets..";
-				this.buckets.push(new Bucket(this, 2, 180));
-				this.buckets.push(new Bucket(this, 3, 280));
-				this.buckets.push(new Bucket(this, 9, 380));
+				this.buckets.push(this.addChild(new McBucket(2, 180)));
+				this.buckets.push(this.addChild(new McBucket(3, 280)));
+				this.buckets.push(this.addChild(new McBucket(9, 380)));
                 break;
 			
 			case 8:
 				this.parent.tfTask.text = "You need to got 1 liter of water in small three buckets.";
-				this.buckets.push(new Bucket(this,  5, 180));
-				this.buckets.push(new Bucket(this,  7, 250));
-				this.buckets.push(new Bucket(this,  9, 320));
-				this.buckets.push(new Bucket(this, 11, 400));
+				this.buckets.push(this.addChild(new McBucket( 5, 180)));
+				this.buckets.push(this.addChild(new McBucket( 7, 250)));
+				this.buckets.push(this.addChild(new McBucket( 9, 320)));
+				this.buckets.push(this.addChild(new McBucket(11, 400)));
                 break;
 			
 			case 9:
 				this.parent.tfTask.text = "You need to fill buckets on increase:\nsmallest bust be empty, next must contain 1 liter,\nnext - 2 litres and bigger - 3 litres.";
-				this.buckets.push(new Bucket(this,  7, 180));
-				this.buckets.push(new Bucket(this, 11, 250));
-				this.buckets.push(new Bucket(this, 13, 320));
-				this.buckets.push(new Bucket(this, 17, 400));
+				this.buckets.push(this.addChild(new McBucket( 7, 180)));
+				this.buckets.push(this.addChild(new McBucket(11, 250)));
+				this.buckets.push(this.addChild(new McBucket(13, 320)));
+				this.buckets.push(this.addChild(new McBucket(17, 400)));
                 break;
 			
 			case 10:
 				this.parent.tfTask.text = "You must to got 18 litres in 19-bucket and 5 litres in 6-bucket.";
-				this.buckets.push(new Bucket(this,  2, 180));
-				this.buckets.push(new Bucket(this,  6, 280));
-				this.buckets.push(new Bucket(this, 19, 380));
+				this.buckets.push(this.addChild(new McBucket( 2, 180)));
+				this.buckets.push(this.addChild(new McBucket( 6, 280)));
+				this.buckets.push(this.addChild(new McBucket(19, 380)));
                 break;
 		}
 	}
@@ -137,13 +138,13 @@ export class Game extends base.Game
                 break;
 				
 			case 2: // filling bucket from tap
-				if (this.carry.fill < this.carry.total)
+				if (this.carry.getFill() < this.carry.total)
 				{
 					if (this.parent.mcTap.currentFrame != 2) this.parent.mcTap.gotoAndStop(2);
 					this.tapWaiting++;
 					if (this.tapWaiting % 10 == 9)
 					{
-						this.carry.setFill(this.carry.fill + 1);
+						this.carry.setFill(this.carry.getFill() + 1);
 						Sounds.tap();
 						Sounds.water();
 					}
@@ -169,16 +170,16 @@ export class Game extends base.Game
 				}
 				else
 				{
-					if (this.fillBeforeTrash > 0 && this.carry.fill < this.fillBeforeTrash)
+					if (this.fillBeforeTrash > 0 && this.carry.getFill() < this.fillBeforeTrash)
 					{
-						this.fillBeforeTrash = this.carry.fill;
+						this.fillBeforeTrash = this.carry.getFill();
 						Sounds.trash();
 					}
 				}
                 break;
 				
 			case 4: // moving bucket to the ground
-				if (this.carry.moveStepTo(new createjs.Point(this.carry.mc.x, 345), 6))
+				if (this.carry.moveStepTo(new createjs.Point(this.carry.x, 345), 6))
 				{
 					this.carry = null;
 					this.gameMode = 0;
@@ -196,23 +197,23 @@ export class Game extends base.Game
 		{
 			for (let i = 0; i < this.buckets.length; i++)
 			{
-				var pos = this.buckets[i].mc.globalToLocal(e.stageX, e.stageY);
-				if (this.buckets[i].mc.hitTest(pos.x, pos.y))
+				var pos = this.buckets[i].globalToLocal(e.stageX, e.stageY);
+				if (this.buckets[i].hitTest(pos.x, pos.y))
 				{
 					this.carry = this.buckets[i];
-					this.carryDX = this.buckets[i].mc.x - e.stageX;
-					this.carryDY = this.buckets[i].mc.y - e.stageY;
+					this.carryDX = this.buckets[i].x - e.stageX;
+					this.carryDY = this.buckets[i].y - e.stageY;
 					
 					// move bucket to the front
 					for (let j = 0; j < this.buckets.length; j++)
 					{
-						if (this.getChildIndex(this.buckets[j].mc) > this.getChildIndex(this.carry.mc))
+						if (this.getChildIndex(this.buckets[j]) > this.getChildIndex(this.carry))
 						{
-							this.swapChildren(this.buckets[j].mc, this.carry.mc);
+							this.swapChildren(this.buckets[j], this.carry);
 						}
 					}
 					
-					console.log("carry " + new createjs.Point(this.carry.mc.x, this.carry.mc.y));
+					console.log("carry " + new createjs.Point(this.carry.x, this.carry.y));
 					console.log("neck " + this.carry.getNeckPos());
 					
 					break;
@@ -230,13 +231,12 @@ export class Game extends base.Game
 			else if (this.gameMode == 2)
 			{
 				this.tapWaiting = 0;
-				this.carry.mc.x = this.parent.mcTap.x;
+				this.carry.x = this.parent.mcTap.x;
 			}
 			else if (this.gameMode == 3)
 			{
-				this.fillBeforeTrash = this.carry.fill;
-				const trash = new WaterContainer(1000, this.parent.mcTrash);
-				this.carry.startFallToBucketProcess(trash);
+				this.fillBeforeTrash = this.carry.getFill();
+				this.carry.startFallToBucketProcess(this.parent.mcTrash);
 			}
 		}
 	}
@@ -254,8 +254,8 @@ export class Game extends base.Game
 
 		if (this.carry != null)
 		{
-			this.carry.mc.x = e.stageX + this.carryDX;
-			this.carry.mc.y = e.stageY + this.carryDY;
+			this.carry.x = e.stageX + this.carryDX;
+			this.carry.y = e.stageY + this.carryDY;
 		}
 	}
 	
@@ -268,7 +268,7 @@ export class Game extends base.Game
 		var carryNeckPos = this.carry.getNeckPos();
 		
 		// want to fill from tap?
-		if (Math.abs(carryNeckPos.x - this.parent.mcTap.x) < this.carry.mc.scaleX * 8 
+		if (Math.abs(carryNeckPos.x - this.parent.mcTap.x) < this.carry.scaleX * 8 
             && carryNeckPos.y - this.parent.mcTap.y > -5 
             && carryNeckPos.y - this.parent.mcTap.y < 40)
 		{
@@ -279,7 +279,7 @@ export class Game extends base.Game
 		this.parent.mcTap.gotoAndStop(0);
 		
 		// want to fall out to trash?
-		if (this.carry.mc.x < 165 && this.carry.mc.y <= 350)
+		if (this.carry.x < 165 && this.carry.y <= 350)
 		{
 			this.action = 3;
 			this.parent.mcTrash.gotoAndStop(1);
@@ -289,7 +289,7 @@ export class Game extends base.Game
 		
 		// want to transfuse to another bucket?
 		var bucket = this.findNearestBucket();
-		if (this.carry.mc.getTransformedBounds().intersects(bucket.mc.getTransformedBounds()))
+		if (this.carry.getTransformedBounds().intersects(bucket.getTransformedBounds()))
 		{
 			this.action = 1;
 			this.fallTo = bucket;
@@ -308,15 +308,15 @@ export class Game extends base.Game
 		}
 	}
 	
-	findNearestBucket() : Bucket
+	findNearestBucket() : McBucket
 	{
-		var bestBot : Bucket = null;
+		var bestBot : McBucket = null;
 		var bestDist : number = 1e10;
 		for (const b of this.buckets)
 		{
 			if (b == this.carry) continue;
-			var dx = this.carry.mc.x - b.mc.x;
-			var dy = this.carry.mc.y - b.mc.y;
+			var dx = this.carry.x - b.x;
+			var dy = this.carry.y - b.y;
 			var dist = Math.sqrt(dx * dx + dy * dy);
 			if (dist < bestDist) { bestBot = b; bestDist = dist; }
 		}
@@ -327,16 +327,16 @@ export class Game extends base.Game
 	{
 		switch (this.level)
 		{
-			case  1: return this.buckets[0].fill == 4 || this.buckets[1].fill == 4;
-			case  2: return this.buckets[0].fill == 1 || this.buckets[1].fill == 1 || this.buckets[2].fill == 1;
-			case  3: return this.buckets[0].fill == 1 || this.buckets[1].fill == 1;
-			case  4: return this.buckets.filter(bucket => bucket.fill == 1).length  >= 2;
-			case  5: return this.buckets[1].fill == 4 && this.buckets[2].fill == 4 && this.buckets[3].fill == 6;
-			case  6: return this.buckets.filter(bucket => bucket.fill == 2).length  >= 3;
-			case  7: return this.buckets.filter(bucket => bucket.fill == 1).length  >= 2;
-			case  8: return this.buckets[0].fill == 1 && this.buckets[1].fill == 1 && this.buckets[2].fill == 1;
-			case  9: return this.buckets[0].fill == 0 && this.buckets[1].fill == 1 && this.buckets[2].fill == 2 && this.buckets[3].fill == 3;
-			case 10: return this.buckets[1].fill == 5 && this.buckets[2].fill == 18;
+			case  1: return this.buckets[0].getFill() == 4 || this.buckets[1].getFill() == 4;
+			case  2: return this.buckets[0].getFill() == 1 || this.buckets[1].getFill() == 1 || this.buckets[2].getFill() == 1;
+			case  3: return this.buckets[0].getFill() == 1 || this.buckets[1].getFill() == 1;
+			case  4: return this.buckets.filter(bucket => bucket.getFill() == 1).length  >= 2;
+			case  5: return this.buckets[1].getFill() == 4 && this.buckets[2].getFill() == 4 && this.buckets[3].getFill() == 6;
+			case  6: return this.buckets.filter(bucket => bucket.getFill() == 2).length  >= 3;
+			case  7: return this.buckets.filter(bucket => bucket.getFill() == 1).length  >= 2;
+			case  8: return this.buckets[0].getFill() == 1 && this.buckets[1].getFill() == 1 && this.buckets[2].getFill() == 1;
+			case  9: return this.buckets[0].getFill() == 0 && this.buckets[1].getFill() == 1 && this.buckets[2].getFill() == 2 && this.buckets[3].getFill() == 3;
+			case 10: return this.buckets[1].getFill() == 5 && this.buckets[2].getFill() == 18;
 		}
 		return false;
 	}
