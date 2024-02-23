@@ -2,4 +2,4 @@
 --no-output
 --class-path gen
 --class-path test
---main ApiTest
+--main Main
