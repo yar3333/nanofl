@@ -32,7 +32,7 @@ class SvgExporter
 	public function export(xml:XmlBuilder)
 	{
 		var scene = library.getSceneItem();
-		var items : Array<MovieClipItem> = cast library.getItems().filter((x) -> Std.is(x, MovieClipItem));
+		var items : Array<MovieClipItem> = cast library.getItems().filter(x -> Std.is(x, MovieClipItem));
 		var sceneWithItems = [scene].concat(items);
 		
 		xml.begin("defs");
@@ -55,7 +55,7 @@ class SvgExporter
 				(
 					item,
 					false,
-					function(shape:ShapeElement, e)
+					(shape:ShapeElement, e) ->
 					{
 						if (e.insideMask && !shapePaths.exists(shape))
 						{

@@ -1,3 +1,4 @@
+import haxe.crypto.Base64;
 import nanofl.ide.plugins.PluginApi;
 import nanofl.engine.CustomProperty;
 import nanofl.ide.library.IdeLibrary;
@@ -19,7 +20,14 @@ class PngImageExporterPlugin implements IExporterPlugin
 	
 	public function exportDocument(api:PluginApi, params:Dynamic, srcFilePath:String, destFilePath:String, documentProperties:DocumentProperties, library:IdeLibrary) : Bool
 	{
-		ImageExporter.run("image/png", api.fileSystem, destFilePath, documentProperties, library);
+        var sceneFramesIterator = library.getSceneFramesIterator(documentProperties, false);
+        if (!sceneFramesIterator.hasNext()) return false;
+        
+        var ctx = sceneFramesIterator.next();
+        
+		var data = ctx.canvas.toDataURL("image/png").split(",")[1];
+		api.fileSystem.saveBinary(destFilePath, Base64.decode(data));
+        
 		return true;
 	}
 }

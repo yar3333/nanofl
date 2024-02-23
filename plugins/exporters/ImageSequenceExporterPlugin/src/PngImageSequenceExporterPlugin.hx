@@ -19,7 +19,7 @@ class PngImageSequenceExporterPlugin implements IExporterPlugin
 	
 	public function exportDocument(api:PluginApi, params:Dynamic, srcFilePath:String, destFilePath:String, documentProperties:DocumentProperties, library:IdeLibrary) : Bool
 	{
-		ImageSequenceExporter.run("image/png", api.fileSystem, destFilePath, documentProperties, library);
+		ImageSequenceExporter.run("image/png", false, api.fileSystem, destFilePath, documentProperties, library);
 		return true;
 	}
 }

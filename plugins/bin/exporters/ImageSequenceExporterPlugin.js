@@ -33,25 +33,17 @@ HxOverrides.now = function() {
 };
 var ImageSequenceExporter = function() { };
 ImageSequenceExporter.__name__ = true;
-ImageSequenceExporter.run = function(type,fileSystem,destFilePath,documentProperties,library) {
+ImageSequenceExporter.run = function(type,applyBackgroundColor,fileSystem,destFilePath,documentProperties,library) {
 	var totalFrames = library.getSceneItem().getTotalFrames();
 	var digits = Std.string(totalFrames - 1).length;
-	var canvas = window.document.createElement("canvas");
-	canvas.width = documentProperties.width;
-	canvas.height = documentProperties.height;
-	var ctx = canvas.getContext("2d",null);
 	var baseDestFilePath = haxe_io_Path.withoutExtension(destFilePath) + "_";
 	var ext = "." + haxe_io_Path.extension(destFilePath);
-	var _g = 0;
-	var _g1 = totalFrames;
-	while(_g < _g1) {
-		var i = _g++;
-		var scene = new nanofl.MovieClip(library.getSceneItem(),i,null);
-		ctx.fillStyle = documentProperties.backgroundColor;
-		ctx.fillRect(0,0,documentProperties.width,documentProperties.height);
-		scene.draw(ctx);
-		var data = canvas.toDataURL(type).split(",")[1];
-		fileSystem.saveBinary(baseDestFilePath + StringTools.lpad(i == null ? "null" : "" + i,"0",digits) + ext,haxe_crypto_Base64.decode(data));
+	var sceneFramesIterator = library.getSceneFramesIterator(documentProperties,applyBackgroundColor);
+	var i = 0;
+	while(sceneFramesIterator.hasNext()) {
+		var ctx = sceneFramesIterator.next();
+		var data = ctx.canvas.toDataURL(type).split(",")[1];
+		fileSystem.saveBinary(baseDestFilePath + StringTools.lpad(Std.string(i++),"0",digits) + ext,haxe_crypto_Base64.decode(data));
 	}
 	return true;
 };
@@ -67,7 +59,7 @@ var JpegImageSequenceExporterPlugin = function() {
 JpegImageSequenceExporterPlugin.__name__ = true;
 JpegImageSequenceExporterPlugin.prototype = {
 	exportDocument: function(api,params,srcFilePath,destFilePath,documentProperties,library) {
-		ImageSequenceExporter.run("image/jpeg",api.fileSystem,destFilePath,documentProperties,library);
+		ImageSequenceExporter.run("image/jpeg",true,api.fileSystem,destFilePath,documentProperties,library);
 		return true;
 	}
 };
@@ -90,7 +82,7 @@ var PngImageSequenceExporterPlugin = function() {
 PngImageSequenceExporterPlugin.__name__ = true;
 PngImageSequenceExporterPlugin.prototype = {
 	exportDocument: function(api,params,srcFilePath,destFilePath,documentProperties,library) {
-		ImageSequenceExporter.run("image/png",api.fileSystem,destFilePath,documentProperties,library);
+		ImageSequenceExporter.run("image/png",false,api.fileSystem,destFilePath,documentProperties,library);
 		return true;
 	}
 };

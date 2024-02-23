@@ -19,7 +19,7 @@ class JpegImageSequenceExporterPlugin implements IExporterPlugin
 	
 	public function exportDocument(api:PluginApi, params:Dynamic, srcFilePath:String, destFilePath:String, documentProperties:DocumentProperties, library:IdeLibrary) : Bool
 	{
-		ImageSequenceExporter.run("image/jpeg", api.fileSystem, destFilePath, documentProperties, library);
+		ImageSequenceExporter.run("image/jpeg", true, api.fileSystem, destFilePath, documentProperties, library);
 		return true;
 	}
 }

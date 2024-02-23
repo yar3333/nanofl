@@ -31,23 +31,6 @@ HxOverrides.substr = function(s,pos,len) {
 HxOverrides.now = function() {
 	return Date.now();
 };
-var ImageExporter = function() { };
-ImageExporter.__name__ = true;
-ImageExporter.run = function(type,fileSystem,destFilePath,documentProperties,library) {
-	var instance = library.getSceneInstance();
-	var scene = instance.createDisplayObject(null);
-	nanofl.DisplayObjectTools.smartCache(scene);
-	var canvas = window.document.createElement("canvas");
-	canvas.width = documentProperties.width;
-	canvas.height = documentProperties.height;
-	var ctx = canvas.getContext("2d",null);
-	ctx.fillStyle = documentProperties.backgroundColor;
-	ctx.fillRect(0,0,documentProperties.width,documentProperties.height);
-	scene.draw(ctx);
-	var data = canvas.toDataURL(type).split(",")[1];
-	fileSystem.saveBinary(destFilePath,haxe_crypto_Base64.decode(data));
-	return true;
-};
 var JpegImageExporterPlugin = function() {
 	this.properties = null;
 	this.fileDefaultExtension = "jpg";
@@ -60,7 +43,13 @@ var JpegImageExporterPlugin = function() {
 JpegImageExporterPlugin.__name__ = true;
 JpegImageExporterPlugin.prototype = {
 	exportDocument: function(api,params,srcFilePath,destFilePath,documentProperties,library) {
-		ImageExporter.run("image/jpeg",api.fileSystem,destFilePath,documentProperties,library);
+		var sceneFramesIterator = library.getSceneFramesIterator(documentProperties,true);
+		if(!sceneFramesIterator.hasNext()) {
+			return false;
+		}
+		var ctx = sceneFramesIterator.next();
+		var data = ctx.canvas.toDataURL("image/jpeg").split(",")[1];
+		api.fileSystem.saveBinary(destFilePath,haxe_crypto_Base64.decode(data));
 		return true;
 	}
 };
@@ -83,7 +72,13 @@ var PngImageExporterPlugin = function() {
 PngImageExporterPlugin.__name__ = true;
 PngImageExporterPlugin.prototype = {
 	exportDocument: function(api,params,srcFilePath,destFilePath,documentProperties,library) {
-		ImageExporter.run("image/png",api.fileSystem,destFilePath,documentProperties,library);
+		var sceneFramesIterator = library.getSceneFramesIterator(documentProperties,false);
+		if(!sceneFramesIterator.hasNext()) {
+			return false;
+		}
+		var ctx = sceneFramesIterator.next();
+		var data = ctx.canvas.toDataURL("image/png").split(",")[1];
+		api.fileSystem.saveBinary(destFilePath,haxe_crypto_Base64.decode(data));
 		return true;
 	}
 };
