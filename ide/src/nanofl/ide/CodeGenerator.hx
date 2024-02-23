@@ -40,7 +40,7 @@ class CodeGenerator extends InjectContainer
         var instancableItems = library.getInstancableItemsAsIde().filter(x -> !StringTools.isNullOrEmpty(x.linkedClass));
         for (item in instancableItems)
         {
-            generateUserTsFile(item, destDir + "/" + item.linkedClass);
+            generateUserTsFile(item, destDir + "/" + item.linkedClass + ".ts");
         }
     }
 
@@ -94,7 +94,7 @@ class CodeGenerator extends InjectContainer
     function getImportsUserClasses(items:Array<IIdeInstancableItem>) : String
     {
         if (items.length == 0) return "";
-        return items.map(x -> "import { " + x.linkedClass + " as _" + x.linkedClass + " }\n").join("") + "\n";
+        return items.map(x -> "import { " + x.linkedClass + " as _" + x.linkedClass + " } from '../" + x.linkedClass + "';\n").join("") + "\n";
     }
 	
 	function getInstanceBaseClassDefinition(item:IIdeInstancableItem) : String

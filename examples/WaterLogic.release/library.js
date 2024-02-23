@@ -2021,21 +2021,13 @@ libraryData =
             "label": "Rules",
             "duration": 1,
             "motionTween": null,
-            "elements": [
-              {
-                "type": "shape"
-              }
-            ]
+            "elements": []
           },
           {
             "label": "Game",
             "duration": 1,
             "motionTween": null,
-            "elements": [
-              {
-                "type": "shape"
-              }
-            ]
+            "elements": []
           },
           {
             "label": "Win",
@@ -2071,21 +2063,13 @@ libraryData =
             "label": "",
             "duration": 1,
             "motionTween": null,
-            "elements": [
-              {
-                "type": "shape"
-              }
-            ]
+            "elements": []
           },
           {
             "label": "",
             "duration": 1,
             "motionTween": null,
-            "elements": [
-              {
-                "type": "shape"
-              }
-            ]
+            "elements": []
           },
           {
             "label": "",
@@ -2156,9 +2140,6 @@ libraryData =
             "duration": 1,
             "motionTween": null,
             "elements": [
-              {
-                "type": "shape"
-              },
               {
                 "type": "instance",
                 "libraryItem": "_buttons/btnBack",
@@ -2345,9 +2326,6 @@ libraryData =
             "duration": 1,
             "motionTween": null,
             "elements": [
-              {
-                "type": "shape"
-              },
               {
                 "type": "instance",
                 "libraryItem": "musicButton",
@@ -2641,20 +2619,13 @@ libraryData =
             "label": "",
             "duration": 1,
             "motionTween": null,
-            "elements": [
-              {
-                "type": "shape"
-              }
-            ]
+            "elements": []
           },
           {
             "label": "",
             "duration": 1,
             "motionTween": null,
             "elements": [
-              {
-                "type": "shape"
-              },
               {
                 "type": "instance",
                 "libraryItem": "trash",
@@ -2764,9 +2735,6 @@ libraryData =
             "motionTween": null,
             "elements": [
               {
-                "type": "shape"
-              },
-              {
                 "type": "instance",
                 "libraryItem": "_splash/splash",
                 "name": "",
@@ -2788,9 +2756,6 @@ libraryData =
             "duration": 1,
             "motionTween": null,
             "elements": [
-              {
-                "type": "shape"
-              },
               {
                 "type": "instance",
                 "libraryItem": "background",

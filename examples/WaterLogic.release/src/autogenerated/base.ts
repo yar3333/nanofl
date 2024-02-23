@@ -2,7 +2,11 @@
 
 /// <reference types='nanofl-ts' />
 
-import { McTrash as _McTrash } from "./McTrash";
+import { McBucket as _McBucket } from '../McBucket';
+import { Game as _Game } from '../Game';
+import { MusicButton as _MusicButton } from '../MusicButton';
+import { Scene as _Scene } from '../Scene';
+import { McTrash as _McTrash } from '../McTrash';
 
 export namespace base
 {
@@ -42,7 +46,7 @@ export namespace base
 		get tfLevel() { return this.getChildByName("tfLevel") as nanofl.TextField }
 		get btNextLevel() { return this.getChildByName("btNextLevel") as nanofl.Button }
 		get mcTrash() { return this.getChildByName("mcTrash") as _McTrash }
-		get game() { return this.getChildByName("game") as Game }
+		get game() { return this.getChildByName("game") as _Game }
 		get tfTask() { return this.getChildByName("tfTask") as nanofl.TextField }
 		get mcTap() { return this.getChildByName("mcTap") as nanofl.MovieClip }
 	}
@@ -53,13 +57,4 @@ export namespace base
 			super(nanofl.Player.library.getItem("trash"));
 		}
 	}
-}
-
-export class Sounds
-{
-	static bucket(interrupt?:any, delay?:number, offset?:number, loop?:number, volume?:number, pan?:number) : createjs.AbstractSoundInstance { return createjs.Sound.play("bucket", interrupt, delay, offset, loop, volume, pan) }
-	static music(interrupt?:any, delay?:number, offset?:number, loop?:number, volume?:number, pan?:number) : createjs.AbstractSoundInstance { return createjs.Sound.play("music", interrupt, delay, offset, loop, volume, pan) }
-	static tap(interrupt?:any, delay?:number, offset?:number, loop?:number, volume?:number, pan?:number) : createjs.AbstractSoundInstance { return createjs.Sound.play("tap", interrupt, delay, offset, loop, volume, pan) }
-	static trash(interrupt?:any, delay?:number, offset?:number, loop?:number, volume?:number, pan?:number) : createjs.AbstractSoundInstance { return createjs.Sound.play("trash", interrupt, delay, offset, loop, volume, pan) }
-	static water(interrupt?:any, delay?:number, offset?:number, loop?:number, volume?:number, pan?:number) : createjs.AbstractSoundInstance { return createjs.Sound.play("water", interrupt, delay, offset, loop, volume, pan) }
 }
