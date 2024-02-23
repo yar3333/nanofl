@@ -122,11 +122,8 @@ class Application extends js.injecting.InjectContainer
 		
         plugins.reload(false)
             .then(_ -> CommandLine.process())
-            .then(success ->
-            {
-                //checkForUpdates();
-                ExternalChangesDetector.start();
-            });
+            //.then(_ -> checkForUpdates())
+            .then(_ -> ExternalChangesDetector.start());
 	}
 	
 	public function createNewEmptyDocument(?callb:Document->Void) : Void
@@ -262,44 +259,48 @@ class Application extends js.injecting.InjectContainer
 		Browser.window.close();
 	}
 	
-	function checkForUpdates()
+	function checkForUpdates() : Promise<{}>
 	{
 		var period = preferences.application.checkNewVersionPeriod;
-		if (period == "no") return;
+		if (period == "no") return null;
 		
 		var lastDate = preferences.application.checkNewVersionLastDate != null ? preferences.application.checkNewVersionLastDate : 0.0;
 		var dt = Date.now().getTime() - lastDate;
 		
 		switch (period)
 		{
-			case "day":		if (dt < DateTools.days(1)) return;
-			case "week":	if (dt < DateTools.days(7)) return;
-			case "month":	if (dt < DateTools.days(30)) return;
+			case "day":		if (dt < DateTools.days(1)) return null;
+			case "week":	if (dt < DateTools.days(7)) return null;
+			case "month":	if (dt < DateTools.days(30)) return null;
 		}
-		
-		JQuery.getJSON("http://nanofl.com/last_version_info.json?" + Uuid.newUuid(), function(remoteVersionInfo, status, _)
-		{
-			if (status == "success")
-			{
-				preferences.application.checkNewVersionLastDate = Date.now().getTime();
-				
-				//log("checkForUpdates remote version = " + remoteVersionInfo.version);
-				if (Version.compare(remoteVersionInfo.version, Version.ide) > 0)
-				{
-					view.alerter.warning
-					(
-						"New version " + remoteVersionInfo.version + " is available."
-					  + " Your version is " + Version.ide + "."
-					  + " Visit <a href=\"http://nanofl.com/\">nanofl.com</a> for updates.",
-					  10000
-					);
-				}
-			}
-			else
-			{
-				Browser.window.console.log("checkForUpdates status = " + status);
-			}
-		});
+
+        return new Promise<{}>((resolve, reject) ->
+        {
+            JQuery.getJSON("http://nanofl.com/last_version_info.json?" + Uuid.newUuid(), (remoteVersionInfo, status, _) ->
+            {
+                if (status == "success")
+                {
+                    preferences.application.checkNewVersionLastDate = Date.now().getTime();
+                    
+                    //log("checkForUpdates remote version = " + remoteVersionInfo.version);
+                    if (Version.compare(remoteVersionInfo.version, Version.ide) > 0)
+                    {
+                        view.alerter.warning
+                        (
+                            "New version " + remoteVersionInfo.version + " is available."
+                          + " Your version is " + Version.ide + "."
+                          + " Visit <a href=\"http://nanofl.com/\">nanofl.com</a> for updates.",
+                          10000
+                        );
+                    }
+                }
+                else
+                {
+                    Browser.window.console.log("checkForUpdates status = " + status);
+                }
+                resolve(null);
+            });
+        });
 	}
 	
 	function createKeyboard() : Keyboard
