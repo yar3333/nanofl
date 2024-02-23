@@ -38,16 +38,16 @@ class Bucket extends _WaterContainer__WEBPACK_IMPORTED_MODULE_0__.WaterContainer
         this.activate(false);
     }
     activate(act) {
-        var mcForeColor = this.mc.getChildByName("mcForeColor");
+        var mcForeColor = this.mc.mcForeColor;
         mcForeColor.visible = act;
     }
     getNeckPos() {
-        var mcNeck = this.mc.getChildByName("mcNeck");
+        var mcNeck = this.mc.mcNeck;
         return new createjs.Point(this.mc.x + mcNeck.x * this.mc.scaleX, this.mc.y + mcNeck.y * this.mc.scaleY);
     }
     setFill(v) {
-        this.fill = v;
-        this.mc.getChildByName("tfLabel").text = this.fill + "/" + this.total;
+        this._fill = v;
+        this.mc.tfLabel.text = this.fill + "/" + this.total;
         this.mc.gotoAndStop(Math.round(this.fill / this.total * 100));
     }
     fallToBucket(dest) {
@@ -79,9 +79,8 @@ class Bucket extends _WaterContainer__WEBPACK_IMPORTED_MODULE_0__.WaterContainer
         if (this.fallProcessPhase == 0)
             return true;
         if (this.fallProcessPhase == 1) {
-            var thisNeck = this.getNeckPos();
             var destNeck = this.fillProcessDest.getNeckPos();
-            var b = this.mc.getChildByName("mcBox").getBounds();
+            var b = this.mc.mcBox.getBounds();
             var mustPos = new createjs.Point(destNeck.x + b.height * this.mc.scaleY, destNeck.y);
             if (this.moveStepTo(mustPos, 6))
                 this.fallProcessPhase++;
@@ -513,12 +512,13 @@ class Scene extends _autogen__WEBPACK_IMPORTED_MODULE_0__.base.Scene {
         this.level = 1;
     }
     onEnterFrame() {
-        var _a, _b, _c;
+        var _a, _b, _c, _d;
         if (this.currentFrame != this.initFrame) {
             this.initFrame = this.currentFrame;
             (_a = this.btGotoGame) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => this.gotoAndStop("Game"));
             (_b = this.btRules) === null || _b === void 0 ? void 0 : _b.addEventListener("click", () => this.gotoAndStop("Rules"));
             (_c = this.btGotoOrigin) === null || _c === void 0 ? void 0 : _c.addEventListener("click", () => this.gotoAndStop("Origin"));
+            (_d = this.btNextLevel) === null || _d === void 0 ? void 0 : _d.addEventListener("click", () => this.gotoAndStop("Game"));
         }
     }
 }
@@ -538,8 +538,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   WaterContainer: () => (/* binding */ WaterContainer)
 /* harmony export */ });
 class WaterContainer {
+    get fill() { return this._fill; }
     constructor(total, mc) {
-        this.fill = 0;
+        this._fill = 0;
         this.total = total;
         this.mc = mc;
     }
@@ -596,6 +597,7 @@ var base;
         get btRules() { return this.getChildByName("btRules"); }
         get btGotoOrigin() { return this.getChildByName("btGotoOrigin"); }
         get tfLevel() { return this.getChildByName("tfLevel"); }
+        get btNextLevel() { return this.getChildByName("btNextLevel"); }
         get mcTrash() { return this.getChildByName("mcTrash"); }
         get game() { return this.getChildByName("game"); }
         get tfTask() { return this.getChildByName("tfTask"); }

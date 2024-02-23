@@ -1,17 +1,20 @@
-<movieclip version="2.2.0" likeButton="true" linkedClass="myButton">
+<movieclip version="2.3.0" likeButton="true">
 	<layer name="Layer 1">
 		<frame>
-			<text x="-23.5" y="-20.8" width="47" height="41.65">
+			<text x="-23.5" y="-20.8" width="47" height="42">
+				<new-text-format characters="" fillColor="#000000" size="12" />
 				<text-run characters="up" fillColor="#000099" size="34" style="bold" family="Times New Roman" />
 			</text>
 		</frame>
 		<frame>
-			<text x="-36.5" y="-20.8" width="75.5" height="41.65">
+			<text x="-36.5" y="-20.8" width="75.5" height="42">
+				<new-text-format characters="" fillColor="#000000" size="12" />
 				<text-run characters="over" fillColor="#000099" size="34" style="bold" family="Times New Roman" />
 			</text>
 		</frame>
 		<frame>
-			<text x="-45.5" y="-20.8" width="86.5" height="41.65">
+			<text x="-45.5" y="-20.8" width="86.5" height="42">
+				<new-text-format characters="" fillColor="#000000" size="12" />
 				<text-run characters="down" fillColor="#000099" align="center" size="34" style="bold" family="Times New Roman" />
 			</text>
 		</frame>

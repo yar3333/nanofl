@@ -3,7 +3,7 @@ export class WaterContainer
 	readonly total : number;
 	readonly mc : nanofl.MovieClip;
 
-    private _fill = 0;
+    protected _fill = 0;
     get fill() { return this._fill; }
 	
 	constructor(total:number, mc:nanofl.MovieClip) 

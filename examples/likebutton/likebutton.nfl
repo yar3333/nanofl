@@ -1,4 +1,4 @@
-<nanofl version="2.2.0">
+<nanofl version="2.3.0">
 	<general>
 		<param name="title" value="" />
 		<param name="width" value="550" />
@@ -6,7 +6,6 @@
 		<param name="backgroundColor" value="#FFFFFF" />
 		<param name="framerate" value="24" />
 		<param name="scaleMode" value="noScale" />
-		<param name="generateFlashDevelopProject" value="false" />
 	</general>
 	<publishSettings>
 		<param name="useTextureAtlases" value="false" />
@@ -18,6 +17,5 @@
 		<param name="audioQuality" value="128" />
 		<param name="urlOnClick" value="" />
 		<param name="useLocalScripts" value="false" />
-		<param name="forceSoftwareRenderer" value="false" />
 	</publishSettings>
 </nanofl>

@@ -202,14 +202,14 @@ libraryData =
                   {
                     "name": "GlowFilter",
                     "params": {
-                      "alpha": "100",
-                      "blurX": "2",
-                      "blurY": "2",
+                      "alpha": 100,
+                      "blurX": 2,
+                      "blurY": 2,
                       "color": "#000000",
-                      "inner": "false",
-                      "knockout": "false",
-                      "quality": "2",
-                      "strength": "200"
+                      "inner": false,
+                      "knockout": false,
+                      "quality": 2,
+                      "strength": 200
                     }
                   }
                 ]
@@ -2027,21 +2027,13 @@ libraryData =
             "label": "Game",
             "duration": 1,
             "motionTween": null,
-            "elements": [
-              {
-                "type": "shape"
-              }
-            ]
+            "elements": []
           },
           {
             "label": "Win",
             "duration": 1,
             "motionTween": null,
-            "elements": [
-              {
-                "type": "shape"
-              }
-            ]
+            "elements": []
           },
           {
             "label": "",
@@ -2077,21 +2069,13 @@ libraryData =
             "label": "",
             "duration": 1,
             "motionTween": null,
-            "elements": [
-              {
-                "type": "shape"
-              }
-            ]
+            "elements": []
           },
           {
             "label": "",
             "duration": 1,
             "motionTween": null,
-            "elements": [
-              {
-                "type": "shape"
-              }
-            ]
+            "elements": []
           },
           {
             "label": "",
@@ -2343,9 +2327,6 @@ libraryData =
             "motionTween": null,
             "elements": [
               {
-                "type": "shape"
-              },
-              {
                 "type": "instance",
                 "libraryItem": "musicButton",
                 "name": "",
@@ -2443,9 +2424,6 @@ libraryData =
             "duration": 1,
             "motionTween": null,
             "elements": [
-              {
-                "type": "shape"
-              },
               {
                 "type": "instance",
                 "libraryItem": "_buttons/btnNext",
@@ -2649,9 +2627,6 @@ libraryData =
             "motionTween": null,
             "elements": [
               {
-                "type": "shape"
-              },
-              {
                 "type": "instance",
                 "libraryItem": "trash",
                 "name": "mcTrash",
@@ -2701,9 +2676,9 @@ libraryData =
                     "fillColor": "#FFFF00",
                     "align": "left",
                     "size": 18,
-                    "style": "",
+                    "style": "bold",
                     "family": "Arial Black",
-                    "strokeSize": 0,
+                    "strokeSize": 1,
                     "strokeColor": "#000000",
                     "kerning": true,
                     "letterSpacing": 0,
@@ -2717,11 +2692,7 @@ libraryData =
             "label": "",
             "duration": 1,
             "motionTween": null,
-            "elements": [
-              {
-                "type": "shape"
-              }
-            ]
+            "elements": []
           },
           {
             "label": "",
@@ -2786,9 +2757,6 @@ libraryData =
             "motionTween": null,
             "elements": [
               {
-                "type": "shape"
-              },
-              {
                 "type": "instance",
                 "libraryItem": "background",
                 "name": "",
@@ -2819,9 +2787,6 @@ libraryData =
             "duration": 1,
             "motionTween": null,
             "elements": [
-              {
-                "type": "shape"
-              },
               {
                 "type": "instance",
                 "libraryItem": "wall",
@@ -2870,9 +2835,9 @@ libraryData =
                   {
                     "name": "BoxBlurFilter",
                     "params": {
-                      "blurX": "10",
-                      "blurY": "10",
-                      "quality": "3"
+                      "blurX": 10,
+                      "blurY": 10,
+                      "quality": 3
                     }
                   }
                 ]

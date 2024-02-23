@@ -3,7 +3,7 @@ libraryData =
   "myButton": {
     "type": "movieclip",
     "version": "2.3.0",
-    "linkedClass": "myButton",
+    "linkedClass": "",
     "autoPlay": true,
     "loop": true,
     "likeButton": true,

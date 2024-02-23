@@ -47,7 +47,7 @@ export class Bucket extends WaterContainer
 	
 	public setFill(v:number)
 	{
-		this.fill = v;
+		this._fill = v;
 		this.mc.tfLabel.text = this.fill + "/" + this.total;
 		this.mc.gotoAndStop(Math.round(this.fill / this.total * 100));
 	}

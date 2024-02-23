@@ -90,7 +90,7 @@ class FilterDef
         return
         { 
             name : name,
-            params : _params,
+            params : params,
         };
     }
     #end

@@ -49,7 +49,7 @@ clean:
 
 %.release/library.js:
 	if [ -f $*/$(*F).nfl ]; then \
-		../ide/bin/nanofl.exe $*/$(*F).nfl -publish -quit ;\
+		../ide/bin/nanofl.exe $*/$(*F).nfl -save -publish -quit ;\
 	fi
 	if [ -f $(@D)/package.json ]; then \
 		cd $(@D) && npm i && npm run build ;\

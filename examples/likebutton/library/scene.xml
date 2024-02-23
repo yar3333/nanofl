@@ -1,4 +1,4 @@
-<movieclip version="2.2.0">
+<movieclip version="2.3.0">
 	<layer name="Layer 1">
 		<frame>
 			<instance libraryItem="myButton" x="273.45" y="187.3" />
