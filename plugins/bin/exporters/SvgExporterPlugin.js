@@ -126,14 +126,14 @@ SvgExporterPlugin.main = function() {
 	nanofl.ide.plugins.ExporterPlugins.register(new SvgExporterPlugin());
 };
 SvgExporterPlugin.prototype = {
-	exportDocument: function(api,params,srcFilePath,destFilePath,documentProperties,library) {
-		nanofl.engine.Debug.console.log("Plugin.exportDocument " + srcFilePath + " => " + destFilePath);
+	exportDocument: function(api,args) {
+		nanofl.engine.Debug.console.log("Plugin.exportDocument " + args.srcFilePath + " => " + args.destFilePath);
 		var xml = new htmlparser.XmlBuilder();
-		xml.begin("svg").attr("xmlns","http://www.w3.org/2000/svg").attr("width",documentProperties.width).attr("height",documentProperties.height).attr("xmlns:xlink","http://www.w3.org/1999/xlink");
-		new svgexporter_SvgExporter(library).export(xml);
+		xml.begin("svg").attr("xmlns","http://www.w3.org/2000/svg").attr("width",args.documentProperties.width).attr("height",args.documentProperties.height).attr("xmlns:xlink","http://www.w3.org/1999/xlink");
+		new svgexporter_SvgExporter(args.library).export(xml);
 		xml.end();
-		api.fileSystem.saveContent(destFilePath,xml.toString());
-		return true;
+		api.fileSystem.saveContent(args.destFilePath,xml.toString());
+		return Promise.resolve(true);
 	}
 	,__class__: SvgExporterPlugin
 };

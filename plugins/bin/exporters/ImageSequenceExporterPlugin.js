@@ -45,7 +45,7 @@ ImageSequenceExporter.run = function(type,applyBackgroundColor,fileSystem,destFi
 		var data = ctx.canvas.toDataURL(type).split(",")[1];
 		fileSystem.saveBinary(baseDestFilePath + StringTools.lpad(Std.string(i++),"0",digits) + ext,haxe_crypto_Base64.decode(data));
 	}
-	return true;
+	return Promise.resolve(true);
 };
 var JpegImageSequenceExporterPlugin = function() {
 	this.properties = null;
@@ -58,9 +58,8 @@ var JpegImageSequenceExporterPlugin = function() {
 };
 JpegImageSequenceExporterPlugin.__name__ = true;
 JpegImageSequenceExporterPlugin.prototype = {
-	exportDocument: function(api,params,srcFilePath,destFilePath,documentProperties,library) {
-		ImageSequenceExporter.run("image/jpeg",true,api.fileSystem,destFilePath,documentProperties,library);
-		return true;
+	exportDocument: function(api,args) {
+		return ImageSequenceExporter.run("image/jpeg",true,api.fileSystem,args.destFilePath,args.documentProperties,args.library);
 	}
 };
 var Main = function() { };
@@ -81,9 +80,8 @@ var PngImageSequenceExporterPlugin = function() {
 };
 PngImageSequenceExporterPlugin.__name__ = true;
 PngImageSequenceExporterPlugin.prototype = {
-	exportDocument: function(api,params,srcFilePath,destFilePath,documentProperties,library) {
-		ImageSequenceExporter.run("image/png",false,api.fileSystem,destFilePath,documentProperties,library);
-		return true;
+	exportDocument: function(api,args) {
+		return ImageSequenceExporter.run("image/png",false,api.fileSystem,args.destFilePath,args.documentProperties,args.library);
 	}
 };
 var Std = function() { };

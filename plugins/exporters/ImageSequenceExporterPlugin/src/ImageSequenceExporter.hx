@@ -1,3 +1,4 @@
+import js.lib.Promise;
 import haxe.crypto.Base64;
 import haxe.io.Path;
 import nanofl.ide.library.IdeLibrary;
@@ -7,7 +8,7 @@ using StringTools;
 
 class ImageSequenceExporter
 {
-	public static function run(type:String, applyBackgroundColor:Bool, fileSystem:FileSystem, destFilePath:String, documentProperties:DocumentProperties, library:IdeLibrary) : Bool
+	public static function run(type:String, applyBackgroundColor:Bool, fileSystem:FileSystem, destFilePath:String, documentProperties:DocumentProperties, library:IdeLibrary) : Promise<Bool>
 	{
 		var totalFrames = library.getSceneItem().getTotalFrames();
 		var digits = Std.string(totalFrames - 1).length;
@@ -25,6 +26,6 @@ class ImageSequenceExporter
 			fileSystem.saveBinary(baseDestFilePath + Std.string(i++).lpad("0", digits) + ext, Base64.decode(data));
         }
 		
-		return true;
+		return Promise.resolve(true);
 	}
 }

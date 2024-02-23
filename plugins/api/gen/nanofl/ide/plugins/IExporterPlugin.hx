@@ -40,13 +40,7 @@ interface IExporterPlugin {
 	/**
 		
 			 * This method must export document.
-			 * @param	params				Custom parameters specified by user (produced from `properties`).
-			 * @param	srcFilePath			Path to `*.nfl` file.
-			 * @param	destFilePath		Path to supported file (one of the `fileFilterExtensions`).
-			 * @param	documentProperties	Properties of the document.
-			 * @param	library				Document's library.
-			 * @return	Success flag.
 			 
 	**/
-	function exportDocument(api:nanofl.ide.plugins.PluginApi, params:Dynamic, srcFilePath:String, destFilePath:String, documentProperties:nanofl.ide.DocumentProperties, library:nanofl.ide.library.IdeLibrary):Bool;
+	function exportDocument(api:nanofl.ide.plugins.PluginApi, args:nanofl.ide.plugins.ExporterArgs):js.lib.Promise<Bool>;
 }

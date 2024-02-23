@@ -1,8 +1,8 @@
+import js.lib.Promise;
 import haxe.crypto.Base64;
-import nanofl.ide.plugins.PluginApi;
 import nanofl.engine.CustomProperty;
-import nanofl.ide.library.IdeLibrary;
-import nanofl.ide.DocumentProperties;
+import nanofl.ide.plugins.ExporterArgs;
+import nanofl.ide.plugins.PluginApi;
 import nanofl.ide.plugins.IExporterPlugin;
 
 class JpegImageExporterPlugin implements IExporterPlugin
@@ -18,16 +18,16 @@ class JpegImageExporterPlugin implements IExporterPlugin
 	
 	public function new() {}
 	
-	public function exportDocument(api:PluginApi, params:Dynamic, srcFilePath:String, destFilePath:String, documentProperties:DocumentProperties, library:IdeLibrary) : Bool
+	public function exportDocument(api:PluginApi, args:ExporterArgs) : Promise<Bool>
 	{
-        var sceneFramesIterator = library.getSceneFramesIterator(documentProperties, true);
-        if (!sceneFramesIterator.hasNext()) return false;
+        var sceneFramesIterator = args.library.getSceneFramesIterator(args.documentProperties, true);
+        if (!sceneFramesIterator.hasNext()) return Promise.resolve(false);
         
         var ctx = sceneFramesIterator.next();
         
 		var data = ctx.canvas.toDataURL("image/jpeg").split(",")[1];
-		api.fileSystem.saveBinary(destFilePath, Base64.decode(data));
+		api.fileSystem.saveBinary(args.destFilePath, Base64.decode(data));
         
-		return true;
+		return Promise.resolve(true);
 	}
 }

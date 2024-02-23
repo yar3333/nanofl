@@ -1,7 +1,7 @@
+import nanofl.ide.plugins.ExporterArgs;
+import js.lib.Promise;
 import nanofl.ide.plugins.PluginApi;
 import nanofl.engine.CustomProperty;
-import nanofl.ide.library.IdeLibrary;
-import nanofl.ide.DocumentProperties;
 import nanofl.ide.plugins.IExporterPlugin;
 
 class JpegImageSequenceExporterPlugin implements IExporterPlugin
@@ -17,9 +17,8 @@ class JpegImageSequenceExporterPlugin implements IExporterPlugin
 	
 	public function new() {}
 	
-	public function exportDocument(api:PluginApi, params:Dynamic, srcFilePath:String, destFilePath:String, documentProperties:DocumentProperties, library:IdeLibrary) : Bool
+	public function exportDocument(api:PluginApi, args:ExporterArgs) : Promise<Bool>
 	{
-		ImageSequenceExporter.run("image/jpeg", true, api.fileSystem, destFilePath, documentProperties, library);
-		return true;
+		return ImageSequenceExporter.run("image/jpeg", true, api.fileSystem, args.destFilePath, args.documentProperties, args.library);
 	}
 }

@@ -42,15 +42,15 @@ var JpegImageExporterPlugin = function() {
 };
 JpegImageExporterPlugin.__name__ = true;
 JpegImageExporterPlugin.prototype = {
-	exportDocument: function(api,params,srcFilePath,destFilePath,documentProperties,library) {
-		var sceneFramesIterator = library.getSceneFramesIterator(documentProperties,true);
+	exportDocument: function(api,args) {
+		var sceneFramesIterator = args.library.getSceneFramesIterator(args.documentProperties,true);
 		if(!sceneFramesIterator.hasNext()) {
-			return false;
+			return Promise.resolve(false);
 		}
 		var ctx = sceneFramesIterator.next();
 		var data = ctx.canvas.toDataURL("image/jpeg").split(",")[1];
-		api.fileSystem.saveBinary(destFilePath,haxe_crypto_Base64.decode(data));
-		return true;
+		api.fileSystem.saveBinary(args.destFilePath,haxe_crypto_Base64.decode(data));
+		return Promise.resolve(true);
 	}
 };
 var Main = function() { };
@@ -71,15 +71,15 @@ var PngImageExporterPlugin = function() {
 };
 PngImageExporterPlugin.__name__ = true;
 PngImageExporterPlugin.prototype = {
-	exportDocument: function(api,params,srcFilePath,destFilePath,documentProperties,library) {
-		var sceneFramesIterator = library.getSceneFramesIterator(documentProperties,false);
+	exportDocument: function(api,args) {
+		var sceneFramesIterator = args.library.getSceneFramesIterator(args.documentProperties,false);
 		if(!sceneFramesIterator.hasNext()) {
-			return false;
+			return Promise.resolve(false);
 		}
 		var ctx = sceneFramesIterator.next();
 		var data = ctx.canvas.toDataURL("image/png").split(",")[1];
-		api.fileSystem.saveBinary(destFilePath,haxe_crypto_Base64.decode(data));
-		return true;
+		api.fileSystem.saveBinary(args.destFilePath,haxe_crypto_Base64.decode(data));
+		return Promise.resolve(true);
 	}
 };
 var haxe_Exception = function(message,previous,native) {

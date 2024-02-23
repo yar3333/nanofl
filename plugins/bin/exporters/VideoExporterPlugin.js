@@ -67,9 +67,8 @@ var WebmVideoExporterPlugin = function() {
 };
 WebmVideoExporterPlugin.__name__ = true;
 WebmVideoExporterPlugin.prototype = {
-	exportDocument: function(api,params,srcFilePath,destFilePath,documentProperties,library) {
-		VideoExporter.run(api.fileSystem,api.processManager,api.folders,destFilePath,documentProperties,library);
-		return true;
+	exportDocument: function(api,args) {
+		return VideoExporter.run(api.fileSystem,api.processManager,api.folders,args.destFilePath,args.documentProperties,args.library);
 	}
 };
 var haxe_Exception = function(message,previous,native) {

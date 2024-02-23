@@ -1,5 +1,6 @@
 package nanofl.ide.plugins;
 
+import js.lib.Promise;
 import nanofl.engine.CustomPropertiesTools;
 import nanofl.ide.library.IdeLibrary;
 import nanofl.ide.plugins.ExporterPlugins;
@@ -15,18 +16,25 @@ class Exporter
 		this.params = params;
 	}
 	
-	public function run(srcFilePath:String, destFilePath:String, documentProperties:DocumentProperties, library:IdeLibrary) : Bool
+	public function run(srcFilePath:String, destFilePath:String, documentProperties:DocumentProperties, library:IdeLibrary) : Promise<Bool>
 	{
 		var plugin = ExporterPlugins.plugins.get(pluginName);
 		if (plugin != null)
 		{
             var pluginApi = new PluginApi();
-			return plugin.exportDocument(pluginApi, CustomPropertiesTools.fix(params, plugin.properties), srcFilePath, destFilePath, documentProperties, library);
+			return plugin.exportDocument(pluginApi,
+            {
+                params: CustomPropertiesTools.fix(params, plugin.properties),
+                srcFilePath: srcFilePath,
+                destFilePath: destFilePath,
+                documentProperties: documentProperties,
+                library: library,
+            });
 		}
 		else
 		{
 			trace("ERROR: Save document '" + destFilePath + "' fail - plugin '" + pluginName + "' not found.");
-			return false;
+			return Promise.resolve(false);
 		}
 	}
 }

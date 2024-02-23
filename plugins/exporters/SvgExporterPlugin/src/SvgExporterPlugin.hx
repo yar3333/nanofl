@@ -1,9 +1,9 @@
-import nanofl.ide.plugins.PluginApi;
+import js.lib.Promise;
 import htmlparser.XmlBuilder;
+import nanofl.ide.plugins.ExporterArgs;
+import nanofl.ide.plugins.PluginApi;
 import nanofl.engine.CustomProperty;
 import nanofl.engine.Debug.console;
-import nanofl.ide.library.IdeLibrary;
-import nanofl.ide.DocumentProperties;
 import nanofl.ide.plugins.ExporterPlugins;
 import nanofl.ide.plugins.IExporterPlugin;
 import svgexporter.SvgExporter;
@@ -26,23 +26,23 @@ class SvgExporterPlugin implements IExporterPlugin
 
     public function new() {}
 	
-	public function exportDocument(api:PluginApi, params:Dynamic, srcFilePath:String, destFilePath:String, documentProperties:DocumentProperties, library:IdeLibrary) : Bool
+	public function exportDocument(api:PluginApi, args:ExporterArgs) : Promise<Bool>
 	{
-		console.log("Plugin.exportDocument " + srcFilePath + " => " + destFilePath);
+		console.log("Plugin.exportDocument " + args.srcFilePath + " => " + args.destFilePath);
 		
 		var xml = new XmlBuilder();
 		xml.begin("svg")
 			.attr("xmlns", "http://www.w3.org/2000/svg")
-			.attr("width", documentProperties.width)
-			.attr("height", documentProperties.height)
+			.attr("width", args.documentProperties.width)
+			.attr("height", args.documentProperties.height)
 			.attr("xmlns:xlink", "http://www.w3.org/1999/xlink");
 			
-			new SvgExporter(library).export(xml);
+			new SvgExporter(args.library).export(xml);
 			
 		xml.end();
 		
-		api.fileSystem.saveContent(destFilePath, xml.toString());
+		api.fileSystem.saveContent(args.destFilePath, xml.toString());
 		
-		return true;
+		return Promise.resolve(true);
 	}
 }

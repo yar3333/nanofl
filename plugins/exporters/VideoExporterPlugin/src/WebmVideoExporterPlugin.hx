@@ -1,7 +1,7 @@
+import js.lib.Promise;
+import nanofl.ide.plugins.ExporterArgs;
 import nanofl.ide.plugins.PluginApi;
 import nanofl.engine.CustomProperty;
-import nanofl.ide.library.IdeLibrary;
-import nanofl.ide.DocumentProperties;
 import nanofl.ide.plugins.IExporterPlugin;
 
 // http://underpop.online.fr/f/ffmpeg/ffmpeg-all.html.gz
@@ -21,9 +21,8 @@ class WebmVideoExporterPlugin implements IExporterPlugin
 	
 	public function new() {}
 	
-	public function exportDocument(api:PluginApi, params:Dynamic, srcFilePath:String, destFilePath:String, documentProperties:DocumentProperties, library:IdeLibrary) : Bool
+	public function exportDocument(api:PluginApi, args:ExporterArgs) : Promise<Bool>
 	{
-		VideoExporter.run(api.fileSystem, api.processManager, api.folders, destFilePath, documentProperties, library);
-		return true;
+		return VideoExporter.run(api.fileSystem, api.processManager, api.folders, args.destFilePath, args.documentProperties, args.library);
 	}
 }

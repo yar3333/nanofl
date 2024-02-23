@@ -444,7 +444,7 @@ class Document extends OpenedFile
 			if (exporter != null)
 			{
 				if (!saveNative()) return Promise.resolve(false);
-                return Promise.resolve(DocumentExporterHelper.run(this, destPath, exporter));
+                return DocumentExporterHelper.run(this, destPath, exporter);
 			}
 			else
 			if (Path.extension(destPath) == "nfl")
