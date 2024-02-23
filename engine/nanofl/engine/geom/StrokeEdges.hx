@@ -87,7 +87,7 @@ class StrokeEdges
 		for (i in 0...strokes.length) groups.push([]);
 		for (e in edges)
 		{
-			var index = strokes.findIndex(function(stroke) return stroke.equ(e.stroke));
+			var index = strokes.findIndex(stroke -> stroke.equ(e.stroke));
 			groups[index].push(e);
 		}
 		return groups;
@@ -252,12 +252,12 @@ class StrokeEdges
 	
 	public static function fromEdges(edges:Array<Edge>, stroke:IStroke, selected=false) : Array<StrokeEdge>
 	{
-		return edges.map(function(e) return StrokeEdge.fromEdge(e, stroke, selected));
+		return edges.map(e -> StrokeEdge.fromEdge(e, stroke, selected));
 	}
 	
 	public static function replace(edges:Array<StrokeEdge>, search:Edge, replacement:Array<Edge>)
 	{
-		Edges.replace(edges, search, replacement.filter(function(e) return e.indexIn(edges) < 0));
+		Edges.replace(edges, search, replacement.filter(e -> e.indexIn(edges) < 0));
 	}
 	
 	/**

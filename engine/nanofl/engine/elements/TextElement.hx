@@ -196,7 +196,7 @@ class TextElement extends Element
 	
 	public function getText() : String
 	{
-		return textRuns.map(function(tr) return tr.characters).join("");
+		return textRuns.map(tr -> tr.characters).join("");
 	}
 	
 	public function createDisplayObject(frameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : nanofl.TextField

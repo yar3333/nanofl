@@ -115,53 +115,53 @@ class MenuTools
 	
 	public static function updateItemStates(container:JQuery, app:Application, openedFiles:OpenedFiles, clipboard:Clipboard, preferences:Preferences) : Void
 	{
-		enableItemLazy(container, "openedFile.save",		function() return openedFiles.active != null && openedFiles.active.canBeSaved());
+		enableItemLazy(container, "openedFile.save",		() -> openedFiles.active != null && openedFiles.active.canBeSaved());
 		
-		enableItemLazy(container, "openedFile.undo",		function() return openedFiles.active != null && openedFiles.active.canUndo());
-		enableItemLazy(container, "openedFile.redo",		function() return openedFiles.active != null && openedFiles.active.canRedo());
+		enableItemLazy(container, "openedFile.undo",		() -> openedFiles.active != null && openedFiles.active.canUndo());
+		enableItemLazy(container, "openedFile.redo",		() -> openedFiles.active != null && openedFiles.active.canRedo());
 		
-		enableItemLazy(container, "openedFile.cut",			function() return openedFiles.active != null && clipboard.canCut());
-		enableItemLazy(container, "openedFile.copy",		function() return openedFiles.active != null && clipboard.canCopy());
-		enableItemLazy(container, "openedFile.paste",		function() return openedFiles.active != null && clipboard.canPaste());
-		enableItemLazy(container, "openedFile.toggleSelection",function() return openedFiles.active != null);
-		enableItemLazy(container, "openedFile.deselectAll", function() return openedFiles.active != null);
+		enableItemLazy(container, "openedFile.cut",			() -> openedFiles.active != null && clipboard.canCut());
+		enableItemLazy(container, "openedFile.copy",		() -> openedFiles.active != null && clipboard.canCopy());
+		enableItemLazy(container, "openedFile.paste",		() -> openedFiles.active != null && clipboard.canPaste());
+		enableItemLazy(container, "openedFile.toggleSelection",() -> openedFiles.active != null);
+		enableItemLazy(container, "openedFile.deselectAll", () -> openedFiles.active != null);
 		
-		enableItemLazy(container, "document.save",			function() return app.document != null && app.document.canBeSaved());
-		enableItemLazy(container, "document.test",			function() return app.document != null);
-		enableItemLazy(container, "document.publish",		function() return app.document != null);
-		enableItemLazy(container, "document.properties",	function() return app.document != null);
-		enableItemLazy(container, "document.publishSettings",function() return app.document != null);
-		enableItemLazy(container, "document.saveAs",		function() return openedFiles.active != null && openedFiles.active.type == OpenedFileType.DOCUMENT);
+		enableItemLazy(container, "document.save",			() -> app.document != null && app.document.canBeSaved());
+		enableItemLazy(container, "document.test",			() -> app.document != null);
+		enableItemLazy(container, "document.publish",		() -> app.document != null);
+		enableItemLazy(container, "document.properties",	() -> app.document != null);
+		enableItemLazy(container, "document.publishSettings",() -> app.document != null);
+		enableItemLazy(container, "document.saveAs",		() -> openedFiles.active != null && openedFiles.active.type == OpenedFileType.DOCUMENT);
 		
-		enableItemLazy(container, "library.importImages", 	function() return app.document != null);
-		enableItemLazy(container, "library.importSounds", 	function() return app.document != null);
-		enableItemLazy(container, "library.importMeshes", 	function() return app.document != null);
+		enableItemLazy(container, "library.importImages", 	() -> app.document != null);
+		enableItemLazy(container, "library.importSounds", 	() -> app.document != null);
+		enableItemLazy(container, "library.importMeshes", 	() -> app.document != null);
 		
-		enableItemLazy(container, "document.undo",			function() return app.document != null && app.document.undoQueue.canUndo());
-		enableItemLazy(container, "document.redo",			function() return app.document != null && app.document.undoQueue.canRedo());
+		enableItemLazy(container, "document.undo",			() -> app.document != null && app.document.undoQueue.canUndo());
+		enableItemLazy(container, "document.redo",			() -> app.document != null && app.document.undoQueue.canRedo());
 		
-		enableItemLazy(container, "document.cut",			function() return app.document != null && clipboard.canCut());
-		enableItemLazy(container, "document.copy",			function() return app.document != null && clipboard.canCopy());
-		enableItemLazy(container, "document.paste",			function() return app.document != null && clipboard.canPaste());
+		enableItemLazy(container, "document.cut",			() -> app.document != null && clipboard.canCut());
+		enableItemLazy(container, "document.copy",			() -> app.document != null && clipboard.canCopy());
+		enableItemLazy(container, "document.paste",			() -> app.document != null && clipboard.canPaste());
 		
-		enableItemLazy(container, "editor.cut",				function() return tempActiveView(app, ActiveView.EDITOR,	function() return app.document != null && clipboard.canCut()));
-		enableItemLazy(container, "editor.copy",			function() return tempActiveView(app, ActiveView.EDITOR,	function() return app.document != null && clipboard.canCopy()));
-		enableItemLazy(container, "editor.paste",			function() return tempActiveView(app, ActiveView.EDITOR,	function() return app.document != null && clipboard.canPaste()));
+		enableItemLazy(container, "editor.cut",				() -> tempActiveView(app, ActiveView.EDITOR,	() -> app.document != null && clipboard.canCut()));
+		enableItemLazy(container, "editor.copy",			() -> tempActiveView(app, ActiveView.EDITOR,	() -> app.document != null && clipboard.canCopy()));
+		enableItemLazy(container, "editor.paste",			() -> tempActiveView(app, ActiveView.EDITOR,	() -> app.document != null && clipboard.canPaste()));
 		
-		enableItemLazy(container, "library.cut",			function() return tempActiveView(app, ActiveView.LIBRARY,	function() return app.document != null && clipboard.canCut()));
-		enableItemLazy(container, "library.copy",			function() return tempActiveView(app, ActiveView.LIBRARY,	function() return app.document != null && clipboard.canCopy()));
-		enableItemLazy(container, "library.paste",			function() return tempActiveView(app, ActiveView.LIBRARY,	function() return app.document != null && clipboard.canPaste()));
+		enableItemLazy(container, "library.cut",			() -> tempActiveView(app, ActiveView.LIBRARY,	() -> app.document != null && clipboard.canCut()));
+		enableItemLazy(container, "library.copy",			() -> tempActiveView(app, ActiveView.LIBRARY,	() -> app.document != null && clipboard.canCopy()));
+		enableItemLazy(container, "library.paste",			() -> tempActiveView(app, ActiveView.LIBRARY,	() -> app.document != null && clipboard.canPaste()));
 		
-		enableItemLazy(container, "timeline.cut",			function() return tempActiveView(app, ActiveView.TIMELINE,	function() return app.document != null && clipboard.canCut()));
-		enableItemLazy(container, "timeline.copy",			function() return tempActiveView(app, ActiveView.TIMELINE,	function() return app.document != null && clipboard.canCopy()));
-		enableItemLazy(container, "timeline.paste",			function() return tempActiveView(app, ActiveView.TIMELINE,	function() return app.document != null && clipboard.canPaste()));
+		enableItemLazy(container, "timeline.cut",			() -> tempActiveView(app, ActiveView.TIMELINE,	() -> app.document != null && clipboard.canCut()));
+		enableItemLazy(container, "timeline.copy",			() -> tempActiveView(app, ActiveView.TIMELINE,	() -> app.document != null && clipboard.canCopy()));
+		enableItemLazy(container, "timeline.paste",			() -> tempActiveView(app, ActiveView.TIMELINE,	() -> app.document != null && clipboard.canPaste()));
 		
-		enableItemLazy(container, "output.copy",			function() return tempActiveView(app, ActiveView.OUTPUT, function() return clipboard.canCopy()));
+		enableItemLazy(container, "output.copy",			() -> tempActiveView(app, ActiveView.OUTPUT, () -> clipboard.canCopy()));
 	}
 
 	public static function enableItem(container:JQuery, command:String, enable=true)
 	{
-		enableItemLazy(container, command, function() return enable);
+		enableItemLazy(container, command, () -> enable);
 	}
 
 	public static function enableItemLazy(container:JQuery, command:String, enable:Void->Bool)

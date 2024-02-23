@@ -67,12 +67,12 @@ class FontItem extends LibraryItem
 					{
 						font.load().then
 						(
-							function(font:js.html.FontFace)
+							(font:js.html.FontFace) ->
 							{
 								js.Browser.document.fonts.add(font);
 								resolve(null);
 							},
-							function(e)
+							e ->
 							{
 								trace("Font '" + family + "' loading error ('" + variant.urls.get(format) + "'):");
 								trace(e);
@@ -94,7 +94,7 @@ class FontItem extends LibraryItem
 	
 	function getExistsSupportedFormat(variant:FontVariant) : Promise<String>
 	{
-		return new Promise<String>(function(resolve, reject)
+		return new Promise<String>((resolve, reject) ->
 		{
 			//js.npm.DrFontSupport.getSupportedFormats(function(supports)
 			//{

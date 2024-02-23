@@ -58,7 +58,7 @@ class Library
             {
                 if (Std.isOfType(item, MovieClipItem))
                 {
-                    MovieClipItemTools.iterateInstances((cast item:MovieClipItem), true, function(instance:Instance, _)
+                    MovieClipItemTools.iterateInstances((cast item:MovieClipItem), true, (instance:Instance, _) ->
                     {
                         if (instance.namePath == namePath) instances.push(instance);
                     });
@@ -81,7 +81,7 @@ class Library
 	public function getItems(?includeScene:Bool) : Array<ILibraryItem>
     {
         var namePaths = items.keys().array();
-        if (!includeScene) namePaths = namePaths.filter(function(namePath) return namePath != SCENE_NAME_PATH);
+        if (!includeScene) namePaths = namePaths.filter(namePath -> namePath != SCENE_NAME_PATH);
         namePaths.sort((a, b) -> Reflect.compare(a.toLowerCase(), b.toLowerCase()));
         return namePaths.map(namePath -> items.get(namePath));
     }

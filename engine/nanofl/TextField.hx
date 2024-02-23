@@ -362,7 +362,7 @@ class TextField extends SolidContainer
 		
 		needUpdate = false;
 		TextRun.optimize(textRuns);
-		textRunsOnLastUpdate = textRuns.map(function(t) return t.clone());
+		textRunsOnLastUpdate = textRuns.map(t -> t.clone());
 		
 		globalBackground.visible = false;
 		borders.visible = false;
@@ -599,7 +599,7 @@ class TextField extends SolidContainer
 				selectable,
 				border,
 				dashedBorder,
-				recursive ? textRuns.map(function(t) return t.clone()) : textRuns,
+				recursive ? textRuns.map(t -> t.clone()) : textRuns,
 				recursive && newTextFormat != null ? newTextFormat.clone() : newTextFormat
 			)
 		);

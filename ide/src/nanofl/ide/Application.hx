@@ -150,7 +150,7 @@ class Application extends js.injecting.InjectContainer
 		if (path == null)
 		{
 			var importers = ImporterPlugins.plugins.array();
-			importers.sort(function(a, b) return Reflect.compare(a.name, b.name));
+			importers.sort((a, b) -> Reflect.compare(a.name, b.name));
 			
 			var filters = [];
 			var allExtensions = ["nfl"]; for (importer in importers) allExtensions = allExtensions.concat(importer.fileFilterExtensions);

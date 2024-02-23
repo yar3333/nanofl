@@ -21,7 +21,7 @@ class Console
 	
 	static function getFilterFunction(oldConsoleMethod:Dynamic->Void, filter:Array<Dynamic>->Bool) : Dynamic->Void
 	{
-		return Reflect.makeVarArgs(function(args)
+		return Reflect.makeVarArgs(args ->
 		{
 			if (filter(args))
 			{

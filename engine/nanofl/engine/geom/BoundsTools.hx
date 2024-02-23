@@ -55,7 +55,7 @@ class BoundsTools
 			new StraightLine(bounds.minX, bounds.maxY, bounds.minX, bounds.minY).getNearestPoint(pos.x, pos.y).point
 		];
 		
-		points.sort(function(a, b)
+		points.sort((a, b) ->
 		{
 			return Reflect.compare(PointTools.getDistP(pos, a), PointTools.getDistP(pos, b));
 		});

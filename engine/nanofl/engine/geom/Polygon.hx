@@ -122,7 +122,7 @@ class Polygon implements nanofl.engine.ISelectable
 	
 	function getFillIndex(fills:Array<IFill>) : Int
 	{
-		var r = fills.findIndex(function(f) return f.equ(fill));
+		var r = fills.findIndex(f -> f.equ(fill));
 		if (r < 0)
 		{
 			r = fills.length;
@@ -146,7 +146,7 @@ class Polygon implements nanofl.engine.ISelectable
 	public function isEdgeInside(edge:Edge) : Bool
 	{
 		Debug.assert(contours.length > 0);
-		return contours[0].isEdgeInside(edge) && contours.slice(1).foreach(function(c) return !c.isEdgeInside(edge));
+		return contours[0].isEdgeInside(edge) && contours.slice(1).foreach(c -> !c.isEdgeInside(edge));
 	}
 	
 	public function isEdgeAtLeastPartiallyInside(edge:Edge) : Bool
@@ -402,7 +402,7 @@ class Polygon implements nanofl.engine.ISelectable
 		var outers = [];
 		for (contour in contours)
 		{
-			if (contours.foreach(function(c) return c == contour || !contour.isNestedTo(c)))
+			if (contours.foreach(c -> c == contour || !contour.isNestedTo(c)))
 			{
 				outers.push(contour);
 			}
@@ -413,7 +413,7 @@ class Polygon implements nanofl.engine.ISelectable
 		var r = [];
 		for (outer in outers)
 		{
-			var inners = contours.filter(function(c) return c != outer && c.isNestedTo(outer));
+			var inners = contours.filter(c -> c != outer && c.isNestedTo(outer));
 			inners.unshift(outer);
 			r.push(new Polygon(fill, inners));
 		}
@@ -423,7 +423,7 @@ class Polygon implements nanofl.engine.ISelectable
 	public function equ(p:Polygon) : Bool
 	{
 		if (p.contours.length != contours.length) return false;
-		return contours.foreach(function(a) return p.contours.exists(function(b) return a.equ(b)));
+		return contours.foreach(a -> p.contours.exists(b -> a.equ(b)));
 	}
 	
 	public function normalize()
@@ -499,7 +499,7 @@ class Polygon implements nanofl.engine.ISelectable
 		for (e in c.edges)
 		{
 			if (!hasPoint(e.x3, e.y3)
-			 && !allEdges.exists(function(ee) return ee.y3 == e.y3)
+			 && !allEdges.exists(ee -> ee.y3 == e.y3)
 			 && isPointInside(e.x3, e.y3))
 			{
 				//trace("point inside: point(" + e.x3 + ", " + e.y3 + ") in contour " + contours[0]);

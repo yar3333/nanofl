@@ -50,7 +50,7 @@ class Code extends components.nanofl.popups.basepopup.Code
 					var v = variants.create
 					({
 						locals: variant.locals.join("\n"),
-						formatAndUrls: variant.urls.keys().sorted().map(function(format) return format + ": " + variant.urls.get(format)).join("\n"),
+						formatAndUrls: variant.urls.keys().sorted().map(format -> format + ": " + variant.urls.get(format)).join("\n"),
 						addVariant: "none",
 						removeVariant: ""
 					});
@@ -128,7 +128,7 @@ class Code extends components.nanofl.popups.basepopup.Code
 			(
 				item.q("#style").val(),
 				Std.parseInt(item.q("#weight").val()),
-				item.q("#locals").val().split("\n").map(StringTools.trim).filter(function(s) return s != ""),
+				item.q("#locals").val().split("\n").map(StringTools.trim).filter(s -> s != ""),
 				parseFormatAndUrls(item.q("#formatAndUrls").val())
 			));
 		}

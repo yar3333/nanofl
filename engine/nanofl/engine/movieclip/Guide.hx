@@ -16,7 +16,7 @@ class Guide
 		var path = guideLine.getPath(startProps, finishProps);
 		log("path = " + path.join("; "));
 		
-		var lens = path.map(function(e) return e.getLength());
+		var lens = path.map(e -> e.getLength());
 		
 		var sumLen = 0.0; for (len in lens) sumLen += len;
 		

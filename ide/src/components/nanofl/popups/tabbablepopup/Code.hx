@@ -46,7 +46,7 @@ class Code extends components.nanofl.popups.basepopup.Code
 	{
 		var items = JQuery.makeArray(template().parts.find(">li"));
 		items.pop();
-		var itemsHeight = items.map(x -> q(x).outerHeight(true)).fold(function(a, b) return a + b, 0);
+		var itemsHeight = items.map(x -> q(x).outerHeight(true)).fold((a, b) -> a + b, 0);
 		template().parts.find(">li:last-child").height(template().parts.height() - itemsHeight);
 	}
 	

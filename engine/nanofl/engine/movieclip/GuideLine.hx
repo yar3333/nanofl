@@ -33,7 +33,7 @@ class GuideLine
 		
 		vectors = cast this.shape.edges.copy();
 		for (edge in this.shape.edges) vectors.push(edge.clone().reverse());
-		vectors = vectors.filter(function(e) return e.x1 != e.x3 || e.y1 != e.y3);
+		vectors = vectors.filter(e -> e.x1 != e.x3 || e.y1 != e.y3);
 		
 		connections = getConnectionMatrix(vectors);
 		

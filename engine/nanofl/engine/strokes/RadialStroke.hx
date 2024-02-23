@@ -143,7 +143,7 @@ class RadialStroke extends BaseStroke implements IStroke
 	
 	public function toString()
 	{
-		return 'new RadialStroke(' + colors.map(function(s) return '"' + s + '"') + ', $ratios, $cx, $cy, $r, $fx, $fy)';
+		return 'new RadialStroke(' + colors.map(s -> '"' + s + '"') + ', $ratios, $cx, $cy, $r, $fx, $fy)';
 	}
 	
 	function arrEqu<T>(a:Array<T>, b:Array<T>) : Bool

@@ -370,7 +370,7 @@ class Edge
 		var pt = PointTools.roundGapP(np.point);
 		if (pt.x == x && pt.y == y && (pt.x != x1 || pt.y != y1) && (pt.x != x3 || pt.y != y3))
 		{
-			Debug.assert(np.t > 0 && np.t < 1, function() return
+			Debug.assert(np.t > 0 && np.t < 1, () ->
 				"edge = " + toString()
 				+"\n\t(x,y) = (" + x + "," + y + ")"
 				+ "\n\tnp = " + np.point.toString()
@@ -383,7 +383,7 @@ class Edge
 			r[0].y3 = r[1].y1 = y;
 			
 			Edges.normalize(r);
-			Debug.assert(r.length > 1, function() return
+			Debug.assert(r.length > 1, () ->
 				"edge = " + toString()
 				+"\n\t(x,y) = (" + x + "," + y + ")"
 				+ "\n\tnp = " + np.point.toString()

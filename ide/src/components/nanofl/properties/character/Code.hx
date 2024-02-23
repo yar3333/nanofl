@@ -87,7 +87,7 @@ class Code extends components.nanofl.properties.base.Code
 				else
 				{
 					var styles = ~/\s+/.split(format.style.trim().toLowerCase());
-					styles.sort(function(a, b) return a < b ? -1 : (a > b ? 1 : 0));
+					styles.sort((a, b) -> a < b ? -1 : (a > b ? 1 : 0));
 					style = styles.join(" ");
 				}
 				template().style.selectpicker().val(style);
@@ -194,7 +194,7 @@ class Code extends components.nanofl.properties.base.Code
 	@:profile
 	function bindFamilies(fonts:Array<Font>)
 	{
-		var fontOptions = fonts.map(function(font) return
+		var fontOptions = fonts.map(font ->
 			"<option value='" + font.family + "' data-content='"
 				+ "<span style=&quot;font-family:" + [ font.family ].concat(font.fallbacks).join(",") + ";display:inline-block;overflow-x:hidden&quot;>" + font.family + "</span>"
 			+ "'>" + font.family + "</option>");

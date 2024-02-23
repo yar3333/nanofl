@@ -136,7 +136,7 @@ class LinearStroke extends BaseStroke implements IStroke
 	
 	public function toString()
 	{
-		return 'new LinearStroke(' + colors.map(function(s) return '"' + s + '"') + ', $ratios, $x0, $y0, $x1, $y1)';
+		return 'new LinearStroke(' + colors.map(s -> '"' + s + '"') + ', $ratios, $x0, $y0, $x1, $y1)';
 	}
 	
 	function arrEqu<T>(a:Array<T>, b:Array<T>) : Bool

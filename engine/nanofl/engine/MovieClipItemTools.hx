@@ -20,7 +20,7 @@ class MovieClipItemTools
         
     static function findShapesInner(item:MovieClipItem, allFrames:Bool, matrix:Matrix, insideMask:Bool, callb:ShapeElement->{ item:MovieClipItem, layerIndex:Int, keyFrameIndex:Int, matrix:Matrix, insideMask:Bool }->Void)
     {
-        iterateElements(item, allFrames, insideMask, function(element:Element, e)
+        iterateElements(item, allFrames, insideMask, (element:Element, e) ->
         {
             if (Std.isOfType(element, ShapeElement))
             {
@@ -31,7 +31,7 @@ class MovieClipItemTools
         
     public static function findMovieClipItems(item:MovieClipItem, allFrames:Bool, ?matrix:Matrix, callb:MovieClipItem->Matrix->Bool->Void)
     {
-        findInstances(item, allFrames, matrix, function(instance:Instance, e)
+        findInstances(item, allFrames, matrix, (instance:Instance, e) ->
         {
             if (Std.isOfType(instance.symbol, MovieClipItem))
             {
@@ -44,7 +44,7 @@ class MovieClipItemTools
     {
         if (matrix == null) matrix = new Matrix();
         
-        iterateInstances(item, allFrames, insideMask, function(instance:Instance, e)
+        iterateInstances(item, allFrames, insideMask, (instance:Instance, e) ->
         {
             callb(instance, { item:item, layerIndex:e.layerIndex, keyFrameIndex:e.keyFrameIndex, matrix:matrix, insideMask:e.insideMask });
             if (Std.isOfType(instance.symbol, MovieClipItem))
@@ -56,7 +56,7 @@ class MovieClipItemTools
 
     public static function iterateInstances(item:MovieClipItem, allFrames:Bool, insideMask=false, callb:Instance->{ layerIndex:Int, keyFrameIndex:Int, insideMask:Bool }->Void)
     {
-        iterateElements(item, allFrames, insideMask, function(element:Element, e)
+        iterateElements(item, allFrames, insideMask, (element:Element, e) ->
         {
             if (Std.isOfType(element, Instance))
             {

@@ -61,7 +61,7 @@ class Code extends wquery.Component
 				units: p.units != null ? p.units : "",
 				minValue: p.minValue != null ? p.minValue : null,
 				maxValue: p.maxValue != null ? p.maxValue : null,
-				options: p.values != null ? p.values.map(function(s) return "<option>" + s + "</option>") : null,
+				options: p.values != null ? p.values.map(s -> "<option>" + s + "</option>") : null,
 				onChange: updateParams.bind(p.name, _)
 			};
 			

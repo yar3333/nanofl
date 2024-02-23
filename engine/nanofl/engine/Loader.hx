@@ -11,14 +11,14 @@ class Loader
 {
 	public static function image(url:String) : Promise<Image>
 	{
-		return new Promise<Image>(function(resolve, reject)
+		return new Promise<Image>((resolve, reject) ->
 		{
 			var image = new Image();
-			image.onload = function(_)
+			image.onload = _ ->
 			{
 				resolve(image);
 			};
-			image.onerror = function(_)
+			image.onerror = _ ->
 			{
 				console.error("Failed to load '" + url + "'.");
 				image.src = "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=";
@@ -30,7 +30,7 @@ class Loader
 	
 	public static function file(url:String) : Promise<String>
 	{
-		return new Promise<String>(function(resolve, reject)
+		return new Promise<String>((resolve, reject) ->
 		{
 			var xmlhttp = new XMLHttpRequest();
 			xmlhttp.responseType = js.html.XMLHttpRequestResponseType.TEXT;

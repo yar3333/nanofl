@@ -120,7 +120,7 @@ class Code extends wquery.Component
 			return { color:e.children().css("background-color"), ratio:Std.parseInt(e.css("margin-left").split("px")[0]) / width }
 		).array();
 		
-		items.sort(function(a, b) return a.ratio < b.ratio ? -1 : (a.ratio > b.ratio ? 1 : 0));
+		items.sort((a, b) -> a.ratio < b.ratio ? -1 : (a.ratio > b.ratio ? 1 : 0));
 		
 		return items;
 	}
@@ -128,7 +128,7 @@ class Code extends wquery.Component
 	public function get() : { colors:Array<String>, ratios:Array<Float> }
 	{
 		var items = getItems();
-		return { colors:items.map(function(e) return e.color), ratios:items.map(function(e) return e.ratio) };
+		return { colors:items.map(e -> e.color), ratios:items.map(e -> e.ratio) };
 	}
 	
 	public function set(colors:Array<String>, ratios:Array<Float>)
@@ -138,7 +138,7 @@ class Code extends wquery.Component
 		var width = controls.width() - controlWidth;
 		var x = controls.offset().left;
 		
-		controls.html(colors.map(function(c) return "<div class='chess-back'><div style='background-color:" + c + "'></div></div>").join(""));
+		controls.html(colors.map(c -> "<div class='chess-back'><div style='background-color:" + c + "'></div></div>").join(""));
 		var controlElements = controls.children();
 		for (i in 0...colors.length)
 		{

@@ -299,7 +299,7 @@ class Edges
 		var edge = edges[n];
 		edges.splice(n, 1);
 		
-		replacement = replacement.map(function(e)
+		replacement = replacement.map(e ->
 		{
 			var r = edge.clone();
 			r.x1 = e.x1;
@@ -351,8 +351,8 @@ class Edges
 		{
 			var j = 0; while (j < edgesB.length)
 			{
-				Debug.assert(i < edgesA.length, function() return "i = " + i + "; edgesA.length = " + edgesA.length);
-				Debug.assert(j < edgesB.length, function() return "j = " + j + "; edgesB.length = " + edgesB.length);
+				Debug.assert(i < edgesA.length, () -> "i = " + i + "; edgesA.length = " + edgesA.length);
+				Debug.assert(j < edgesB.length, () -> "j = " + j + "; edgesB.length = " + edgesB.length);
 				
 				var edgeA = edgesA[i];
 				var edgeB = edgesB[j];
@@ -692,12 +692,12 @@ class Edges
 		var r = new Array<Point>();
 		for (e in edges)
 		{
-			if (Edges.getPointUseCount(edges, e.x1, e.y1) == 1 && !r.exists(function(p) return p.x == e.x1 && p.y == e.y1))
+			if (Edges.getPointUseCount(edges, e.x1, e.y1) == 1 && !r.exists(p -> p.x == e.x1 && p.y == e.y1))
 			{
 				r.push({ x:e.x1, y:e.y1 });
 			}
 			
-			if (Edges.getPointUseCount(edges, e.x3, e.y3) == 1 && !r.exists(function(p) return p.x == e.x3 && p.y == e.y3))
+			if (Edges.getPointUseCount(edges, e.x3, e.y3) == 1 && !r.exists(p -> p.x == e.x3 && p.y == e.y3))
 			{
 				r.push({ x:e.x3, y:e.y3 });
 			}

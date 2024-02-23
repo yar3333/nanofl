@@ -259,7 +259,7 @@ class Document extends OpenedFile
 		if (newPath == null)
 		{
 			var exporters = ExporterPlugins.plugins.array();
-			exporters.sort(function(a, b) return Reflect.compare(a.name, b.name));
+			exporters.sort((a, b) -> Reflect.compare(a.name, b.name));
 			
 			var filters = [];
 			filters.push({ name:"NanoFL documents (*.nfl)", extensions:["nfl"] });

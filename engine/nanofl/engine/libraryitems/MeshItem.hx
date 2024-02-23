@@ -208,7 +208,7 @@ class MeshItem extends InstancableItem implements ITextureItem
 		if (_renderer == null)
 		{
 			#if ide
-			var oldLog = Console.filter("log", function(vv)
+			var oldLog = Console.filter("log", vv ->
 			{
 				return vv[0] != "THREE.WebGLRenderer" || !vv[1] || !~/^\d+$/.match(vv[1]);
 			});

@@ -204,7 +204,7 @@ abstract class Element
 		
 		if (points.length == 0 || points.length == 1 && points[0].x == 1e100 && points[0].y == 1e100) return { x:1e100, y:1e100 };
 		
-		points.sort(function(a, b)
+		points.sort((a, b) ->
 		{
 			return Reflect.compare(PointTools.getDistP(pos, a), PointTools.getDistP(pos, b));
 		});

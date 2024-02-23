@@ -91,7 +91,7 @@ class MotionTween
                     
                     Debug.assert(startFilters.length == finishFilters.length, "startFilters.length = " + startFilters.length + " != finishFilters.length = " + finishFilters.length);
                     
-                    targetInstance.setFilters(startFilters.mapi(function(i, startFilter) return startFilter.clone().tween(k, finishFilters[i])).array());
+                    targetInstance.setFilters(startFilters.mapi((i, startFilter) -> startFilter.clone().tween(k, finishFilters[i])).array());
                     
                     r.push(new TweenedElement(startElement, targetInstance));
                 }

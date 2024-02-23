@@ -45,8 +45,8 @@ class Code extends components.nanofl.properties.base.Code
 			case PropertiesObject.INSTANCE(_):
 				show();
 				
-				var filters = FilterPlugins.plugins.sorted(function(a, b) return Reflect.compare(a.label, b.label));
-				template().allFilters.html(filters.map(function(f) return "<li><a href='javascript:void(0)' data-name='" + f.name + "'>" + f.label + "</a></li>").join(""));
+				var filters = FilterPlugins.plugins.sorted((a, b) -> Reflect.compare(a.label, b.label));
+				template().allFilters.html(filters.map(f -> "<li><a href='javascript:void(0)' data-name='" + f.name + "'>" + f.label + "</a></li>").join(""));
 				rebind(true);
 				
 			case _:
@@ -61,7 +61,7 @@ class Code extends components.nanofl.properties.base.Code
 			case PropertiesObject.INSTANCE(item):
 				if (updateUsedFilters)
 				{
-					template().usedFilters.html(item.element.filters.mapi(function(i, f) return "<option value='" + i + "'>" + f.getLabel() + "</option>").join(""));
+					template().usedFilters.html(item.element.filters.mapi((i, f) -> "<option value='" + i + "'>" + f.getLabel() + "</option>").join(""));
 				}
 				
 				template().customProperties.clear();
@@ -114,8 +114,8 @@ class Code extends components.nanofl.properties.base.Code
 				
 				undoQueue.beginTransaction({ element:item.originalElement });
 				
-				var indexes = nn.map(function(s) return Std.parseInt(s));
-				indexes.sort(function(a, b) return -Reflect.compare(a, b));
+				var indexes = nn.map(s -> Std.parseInt(s));
+				indexes.sort((a, b) -> -Reflect.compare(a, b));
 				for (i in indexes)
 				{
 					item.element.filters.splice(i, 1);

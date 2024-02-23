@@ -200,7 +200,7 @@ class Layer
     public function getChildLayers() : Array<Layer>
     {
         var index = getIndex();
-        return layersContainer.layers.filter(function(layer) return layer.parentIndex == index);
+        return layersContainer.layers.filter(layer -> layer.parentIndex == index);
     }
     
     public function getTweenedElements(frameIndex:Int) : Array<TweenedElement>

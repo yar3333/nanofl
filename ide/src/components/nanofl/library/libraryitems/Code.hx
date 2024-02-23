@@ -308,7 +308,7 @@ class Code extends wquery.Component
 	
 	public function removeSelected()
 	{
-		app.document.library.removeItems(getSelectedItems().map(function(item) return item.namePath));
+		app.document.library.removeItems(getSelectedItems().map(item -> item.namePath));
 	}
 	
 	public function renameByUser(namePath:String) : Void

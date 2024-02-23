@@ -397,7 +397,7 @@ class Editor extends InjectContainer
 		var r = new Array<Element>();
 		var shapeElement = figure.extractSelected();
 		if (shapeElement != null && !shapeElement.isEmpty()) r.push(shapeElement);
-		r = r.concat(getSelectedItems().map(function(item) return item.originalElement));
+		r = r.concat(getSelectedItems().map(item -> item.originalElement));
 		return r;
 	}
 	
@@ -636,7 +636,7 @@ class Editor extends InjectContainer
 	@:allow(nanofl.ide.undo)
 	function getElementsState() : ElementsState<Element>
 	{
-		return new ElementsState(layers.map(function(layer) return layer.getElementsState()));
+		return new ElementsState(layers.map(layer -> layer.getElementsState()));
 	}
 	
 	@:profile

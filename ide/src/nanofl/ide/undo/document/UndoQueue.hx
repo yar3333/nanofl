@@ -116,7 +116,7 @@ class UndoQueue extends undoqueue.UndoQueue<Changes, Operation>
             oldTimelineState = document.navigator.pathItem.getTimeline().getTimelineState();
 		}
 		
-		if (changes.element != null && !oldElementStates.exists(function(e) return e.element == changes.element))
+		if (changes.element != null && !oldElementStates.exists(e -> e.element == changes.element))
 		{
 			log("\tsave ELEMENT " + changes.element.toString());
 			oldElementStates.push({ element:changes.element, state:changes.element.getState() });

@@ -820,7 +820,7 @@ class Code extends wquery.Component implements ITimeline
 	
 	function visibleAll_click(e)
 	{
-		var hasVisible = adapter.layers.exists(function(layer) return layer.visible);
+		var hasVisible = adapter.layers.exists(layer -> layer.visible);
 		getLayerNodes().find(">.timeline-visible>i").attr("class", hasVisible ? "custom-icon-remove" : "custom-icon-point");
 		
 		for (layer in adapter.layers)
@@ -833,7 +833,7 @@ class Code extends wquery.Component implements ITimeline
 	
 	function lockedAll_click(e)
 	{
-		var hasUnlocked = adapter.layers.exists(function(layer) return !layer.locked);
+		var hasUnlocked = adapter.layers.exists(layer -> !layer.locked);
 		getLayerNodes().find(">.timeline-locked>i").attr("class", hasUnlocked ? "icon-lock" : "custom-icon-point");
 		
 		for (layer in adapter.layers)

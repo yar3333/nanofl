@@ -142,7 +142,7 @@ class EditorLayer
     public function getChildLayers() : Array<EditorLayer>
     {
         var n = editor.layers.indexOf((cast this:EditorLayer));
-        return editor.layers.filter(function(l) return l.parentIndex == n);
+        return editor.layers.filter(l -> l.parentIndex == n);
     }
     
     public function getElementIndex(element:Element) : Int
@@ -179,7 +179,7 @@ class EditorLayer
     
     public function isShowSelection() : Bool
     {
-        return !layer.locked || layer.getChildLayers().exists(function(l) return !l.locked);
+        return !layer.locked || layer.getChildLayers().exists(l -> !l.locked);
     }
 
 	@:noprofile
@@ -419,7 +419,7 @@ class EditorLayer
 	
 	public function update()
 	{
-		container.visible = layer.visible && (layer.type != LayerType.mask || !layer.locked || layer.getChildLayers().exists(function(e) return !e.locked));
+		container.visible = layer.visible && (layer.type != LayerType.mask || !layer.locked || layer.getChildLayers().exists(e -> !e.locked));
 		
 		container.uncache();
 		if (parentIndex != null 

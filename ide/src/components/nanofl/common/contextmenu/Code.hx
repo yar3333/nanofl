@@ -71,7 +71,7 @@ class Code extends wquery.Component
 				MenuTools.updateItemStates(template().container, app, openedFiles, clipboard, preferences);
 				
 				template().container.find(">ul>li.divider").show();
-				var items = template().container.find(">ul>li").toArray().filter(function(item) return item.style.display != "none");
+				var items = template().container.find(">ul>li").toArray().filter(item -> item.style.display != "none");
 				
 				while (items.length > 0 && new JQuery(items[0]).hasClass("divider"))
 				{

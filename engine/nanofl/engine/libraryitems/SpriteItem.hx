@@ -126,8 +126,8 @@ class SpriteItem extends InstancableItem
 			
 			var data =
 			{
-				images: images.map(function(image) return library.realUrl(image)),
-				frames: frames.map(function(f) return [ f.x, f.y, f.width, f.height, images.indexOf(f.image), f.regX, f.regY ])
+				images: images.map(image -> library.realUrl(image)),
+				frames: frames.map(f -> [ f.x, f.y, f.width, f.height, images.indexOf(f.image), f.regX, f.regY ])
 			};
 			
 			spriteSheet = new easeljs.display.SpriteSheet(data);
@@ -135,7 +135,7 @@ class SpriteItem extends InstancableItem
 		
 		if (!spriteSheet.complete)
 		{
-			return new Promise(function(resolve, reject)
+			return new Promise((resolve, reject) ->
 			{
 				spriteSheet.addCompleteEventListener(function(_) resolve(null));
 			});

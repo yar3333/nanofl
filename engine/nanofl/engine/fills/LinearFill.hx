@@ -173,6 +173,6 @@ class LinearFill extends BaseFill implements IFill
 	
 	public function toString() : String
 	{
-		return 'new LinearFill(' + colors.map(function(s) return '"' + s + '"') + ', $ratios, $x0, $y0, $x1, $y1)';
+		return 'new LinearFill(' + colors.map(s -> '"' + s + '"') + ', $ratios, $x0, $y0, $x1, $y1)';
 	}
 }

@@ -198,7 +198,7 @@ class Contour
 		{
 			if (contours[i].edges.length == edges.length)
 			{
-				if (contours[i].edges.foreach(function(e) return e.indexIn(edges) >= 0)) return i;
+				if (contours[i].edges.foreach(e -> e.indexIn(edges) >= 0)) return i;
 			}
 		}
 		return -1;

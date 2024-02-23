@@ -42,7 +42,7 @@ class FileActions
 			switch (op)
 			{
 				case Operation.LIBRARY_REMOVE_ITEMS(oldLibraryState, newLibraryState):
-					var removedItemNamePaths = oldLibraryState.map(function(item) return item.namePath);
+					var removedItemNamePaths = oldLibraryState.map(item -> item.namePath);
 					for (item in newLibraryState) removedItemNamePaths.remove(item.namePath);
 					actions.push(FileAction.REMOVE_LIBRARY_ITEMS(removedItemNamePaths));
 					

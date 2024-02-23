@@ -10,7 +10,7 @@ class Contours
 	@:profile
 	public static function fromEdges(edges:Array<Edge>) : Array<Contour>
 	{
-		log(function() return "Contours.find(1): edges = " + edges.length);
+		log(() -> "Contours.find(1): edges = " + edges.length);
 		
 		Debug.assert(!Edges.hasDegenerated(edges), "Degenerated edges detected.");
 		Debug.assert(!Edges.hasDuplicates(edges), "Duplicated edges detected.");
@@ -19,10 +19,10 @@ class Contours
 		
 		removeTailEdges(edges);
 		
-		log(function() return "Contours.find(2): edges = " + edges.length + "; " + edges);
+		log(() -> "Contours.find(2): edges = " + edges.length + "; " + edges);
 		
 		var sequences = getSequencesFromEdges(edges);
-		//log(function() return "sequences = \n" + sequences.join("\n"));
+		//log(() -> "sequences = \n" + sequences.join("\n"));
 		
 		var vectors : Array<Edge> = edges.copy();
 		for (e in edges) vectors.push(e.clone().reverse());
@@ -44,7 +44,7 @@ class Contours
 			}
 		}
 		
-		log(function() return "Contours.find(3): r =\n" + r.join("\n"));
+		log(() -> "Contours.find(3): r =\n" + r.join("\n"));
 		
 		for (contour in r) Debug.assert(contour.isClockwise());
 		
@@ -58,7 +58,7 @@ class Contours
 		removeTailEdges(vectors);
 		
 		var sequences = getSequencesFromVectors(vectors);
-		//log(function() return "sequences = \n" + sequences.join("\n"));
+		//log(() -> "sequences = \n" + sequences.join("\n"));
 		
 		var connections = getConnections(vectors);
 		var excludes = new Vector<Bool>(vectors.length);
@@ -89,7 +89,7 @@ class Contours
 		
 		var indexes = [ startIndex ];
 		
-		log(function() return "!!!!!!!!!!! startIndex = " + startIndex + "; start = " + start + "; contours = " + r.length);
+		log(() -> "!!!!!!!!!!! startIndex = " + startIndex + "; start = " + start + "; contours = " + r.length);
 		var lastBestVectorIndex : Int = null;
 		
 		while (true)
@@ -97,7 +97,7 @@ class Contours
 			var nextIndex = findNext(indexes[indexes.length - 1], vectors, connections, excludes, lastBestVectorIndex);
 			if (nextIndex == null) break;
 			lastBestVectorIndex = null;
-			log(function() return "\tnextIndex = " + nextIndex + "; next = " + vectors[nextIndex]);
+			log(() -> "\tnextIndex = " + nextIndex + "; next = " + vectors[nextIndex]);
 			
 			Debug.assert(indexes.indexOf(nextIndex) < 0);
 			
@@ -119,7 +119,7 @@ class Contours
 					lastBestVectorIndex = indexes[n];
 					contourFound(indexes.slice(n), vectors, excludes, r);
 					indexes = indexes.slice(0, n);
-					log(function() return "Found inner loop n = " + n + "; lastBestVectorIndex = " + lastBestVectorIndex);
+					log(() -> "Found inner loop n = " + n + "; lastBestVectorIndex = " + lastBestVectorIndex);
 				}
 				else
 				{
@@ -145,21 +145,21 @@ class Contours
 	{
 		var nexts = connections[lastIndex];
 		
-		Debug.assert(nexts.length > 0, function() return "nexts = " + nexts + "; vectors = " + vectors);
+		Debug.assert(nexts.length > 0, () -> "nexts = " + nexts + "; vectors = " + vectors);
 		
-		//log(function() return "nexts.length = " + nexts.length);
+		//log(() -> "nexts.length = " + nexts.length);
 		
 		var last = vectors[lastIndex];
 		var lastTangent = last.getTangent(1) + Math.PI;
-		//log(function() return "/* last = */" + last + " // tan = " + lastTangent);
+		//log(() -> "/* last = */" + last + " // tan = " + lastTangent);
 		for (next in nexts)
 		{
 			var z = vectors[next].getTangent(0);
 			while (z <= lastTangent) z += Math.PI * 2;
-			//log(function() return "           " + vectors[next] + " // tan = " + z);
+			//log(() -> "           " + vectors[next] + " // tan = " + z);
 		}
 		
-		nexts.sort(function(a, b)
+		nexts.sort((a, b) ->
 		{
 			var tanA = vectors[a].getTangent(0); while (tanA <= lastTangent) tanA += Math.PI * 2;
 			var tanB = vectors[b].getTangent(0); while (tanB <= lastTangent) tanB += Math.PI * 2;
@@ -181,7 +181,7 @@ class Contours
 	@:profile
 	public static function mergeByCommonEdges(contours:Array<Contour>, counterClockwise:Bool) : Void
 	{
-		//log(function() return "mergeByCommonEdges vvvvvvvvvvvvvvvvvvvvvvvvvv");
+		//log(() -> "mergeByCommonEdges vvvvvvvvvvvvvvvvvvvvvvvvvv");
 		
 		var i = 0; while (i < contours.length)
 		{
@@ -217,13 +217,13 @@ class Contours
 			i++;
 		}
 		
-		//log(function() return "mergeByCommonEdges ^^^^^^^^^^^^^^^^^^^^^^^^^^");
+		//log(() -> "mergeByCommonEdges ^^^^^^^^^^^^^^^^^^^^^^^^^^");
 	}
 	
 	@:profile
 	public static function removeNested(contours:Array<Contour>) : Void
 	{
-		//log(function() return "removeNested vvvvvvvvvvvvvvvvvvvvvvvvvv");
+		//log(() -> "removeNested vvvvvvvvvvvvvvvvvvvvvvvvvv");
 		
 		var i = 0; while (i < contours.length)
 		{
@@ -242,7 +242,7 @@ class Contours
 			i++;
 		}
 		
-		//log(function() return "removeNested ^^^^^^^^^^^^^^^^^^^^^^^^^^");
+		//log(() -> "removeNested ^^^^^^^^^^^^^^^^^^^^^^^^^^");
 	}
 	
 	@:profile
@@ -283,10 +283,10 @@ class Contours
 	
 	public static function getTree(contours:Array<Contour>) : Array<Tree<Contour>>
 	{
-		var parents = contours.filter(function(a) return !contours.exists(function(b) return a != b && a.isNestedTo(b)));
+		var parents = contours.filter(a -> !contours.exists(b -> a != b && a.isNestedTo(b)));
 		var allChildren = contours.filter(x -> parents.indexOf(x) < 0);
 		
-		return parents.map(function(p) return
+		return parents.map(p ->
 		{
 			parent: p,
 			children: getTree(allChildren.filter(x -> x.isNestedTo(p)))
@@ -308,7 +308,7 @@ class Contours
 					dirs.push(j);
 				}
 			}
-			Debug.assert(dirs.length > 0, function() return "edges = " + vectors.slice(0, vectors.length>>1));
+			Debug.assert(dirs.length > 0, () -> "edges = " + vectors.slice(0, vectors.length>>1));
 			r.push(dirs);
 		}
 		return r;
@@ -329,7 +329,7 @@ class Contours
 	{
 		var r = [];
 		
-		edges = edges.filter(function(e) return !e.isDegenerated());
+		edges = edges.filter(e -> !e.isDegenerated());
 		
 		var ee = edges.copy();
 		while (ee.length > 0)
@@ -402,7 +402,7 @@ class Contours
 	{
 		var r = [];
 		
-		edges = edges.filter(function(e) return !e.isDegenerated());
+		edges = edges.filter(e -> !e.isDegenerated());
 		
 		var ee = edges.copy();
 		while (ee.length > 0)

@@ -131,7 +131,7 @@ class ShapeElement extends Element
 		var fills = new Array<IFill>();
 		for (p in polygons)
 		{
-			if (fills.findIndex(function(fill) return fill.equ(p.fill)) < 0)
+			if (fills.findIndex(fill -> fill.equ(p.fill)) < 0)
 			{
 				fills.push(p.fill);
 			}
@@ -283,17 +283,17 @@ class ShapeElement extends Element
 	
 	public function isAllSelected()
 	{
-		return edges.foreach(function(e) return e.selected) && polygons.foreach(function(e) return e.selected);
+		return edges.foreach(e -> e.selected) && polygons.foreach(e -> e.selected);
 	}
 	
 	public function hasSelectedEdges()
 	{
-		return edges.exists(function(e) return e.selected);
+		return edges.exists(e -> e.selected);
 	}
 	
 	public function hasSelectedPolygons()
 	{
-		return polygons.exists(function(e) return e.selected);
+		return polygons.exists(e -> e.selected);
 	}
 	
 	public function select(obj:{ selected:Bool })
@@ -348,7 +348,7 @@ class ShapeElement extends Element
 	
 	public function removeSelected()
 	{
-		var edgeWasRemoved = edges.exists(function(e) return e.selected);
+		var edgeWasRemoved = edges.exists(e -> e.selected);
 		
 		var i = 0; while (i < edges.length)
 		{
@@ -773,7 +773,7 @@ class ShapeElement extends Element
 		Debug.assert(!Edges.hasDuplicates(allEdges), allEdges.toString());
 		
 		var contours = Contours.fromEdges(allEdges);
-		//log(function() return "contours = " + contours.length);
+		//log(() -> "contours = " + contours.length);
 		
 		var outers = [];
 		var inners = [];
@@ -782,8 +782,8 @@ class ShapeElement extends Element
 			if (contour.isPointInside(x, y)) outers.push(contour);
 			else							 inners.push(contour);
 		}
-		//log(function() return "outers(1) = " + outers.length);
-		//log(function() return "inners(1) = " + inners.length);
+		//log(() -> "outers(1) = " + outers.length);
+		//log(() -> "inners(1) = " + inners.length);
 		
 		var i = 0; while (i < outers.length)
 		{
@@ -799,14 +799,14 @@ class ShapeElement extends Element
 			}
 			i++;
 		}
-		//log(function() return "outers(2) = " + outers.length);
+		//log(() -> "outers(2) = " + outers.length);
 		
 		if (outers.length == 0) return null;
 		
 		var outer = outers[0];
 		
-		inners = inners.filter(function(contour) return contour.isNestedTo(outer));
-		//log(function() return "inners(2) = " + inners.length);
+		inners = inners.filter(contour -> contour.isNestedTo(outer));
+		//log(() -> "inners(2) = " + inners.length);
 		
 		var i = 0; while (i < inners.length)
 		{
@@ -822,7 +822,7 @@ class ShapeElement extends Element
 			}
 			i++;
 		}
-		//log(function() return "inners(3) = " + inners.length);
+		//log(() -> "inners(3) = " + inners.length);
 		
 		Debug.assert(outer.isClockwise());
 		
@@ -886,7 +886,7 @@ class ShapeElement extends Element
 			var thisState = getState();
 			var shapeState = shape.getState();
 			
-			log(function() return "combine\nthisState=\n" + thisState + "\nshapeState=\n" + shapeState);
+			log(() -> "combine\nthisState=\n" + thisState + "\nshapeState=\n" + shapeState);
 			
 			try combineInner(this, shape)
 			catch (e:Dynamic)
@@ -906,9 +906,9 @@ class ShapeElement extends Element
 	
 	static function combineInner(shapeA:ShapeElement, shapeB:ShapeElement)
 	{
-		log(function() return "XXXXXXXXXXXXXXXX combineInner");
-		log(function() return "shapeA = " + shapeA.getState());
-		log(function() return "shapeB = " + shapeB.getState());
+		log(() -> "XXXXXXXXXXXXXXXX combineInner");
+		log(() -> "shapeA = " + shapeA.getState());
+		log(() -> "shapeB = " + shapeB.getState());
 		
 		shapeA.assertCorrect();
 		shapeB.assertCorrect();
@@ -917,7 +917,7 @@ class ShapeElement extends Element
 		var boundsB = shapeB.getBounds(false);
 		if (!BoundsTools.isIntersect(boundsA, boundsB))
 		{
-			log(function() return "bounds not intersect:\n\tboundsA = " + boundsA.toString() + "\n\tboundsB = " + boundsB.toString());
+			log(() -> "bounds not intersect:\n\tboundsA = " + boundsA.toString() + "\n\tboundsB = " + boundsB.toString());
 			shapeA.edges = Edges.concatUnique(shapeB.edges, shapeA.edges);
 			shapeA.polygons = shapeA.polygons.concat(shapeB.polygons);
 			return;
@@ -929,24 +929,24 @@ class ShapeElement extends Element
 		Debug.assert(!Edges.hasDuplicates(edgesA));
 		Debug.assert(!Edges.hasDuplicates(edgesB));
 		
-		log(function() return "\nBEFORE INTERSECT\nedgesA = " + edgesA + "\nedgesB = " + edgesB);
+		log(() -> "\nBEFORE INTERSECT\nedgesA = " + edgesA + "\nedgesB = " + edgesB);
 		
 		#if profiler Profiler.begin("ShapeElement.combine/intersect " + edgesA.length + " + " + edgesB.length); #end
-		Edges.intersect(edgesA, edgesB, function(search, replacement)
+		Edges.intersect(edgesA, edgesB, (search, replacement) ->
 		{
 			StrokeEdges.replace(shapeA.edges, search, replacement);
 			shapeB.replaceEdge(search, replacement);
 		});
 		#if profiler Profiler.end(); #end
 		
-		log(function() return "\nAFTER INTERSECT\nedgesA = " + edgesA + "\nedgesB = " + edgesB);
+		log(() -> "\nAFTER INTERSECT\nedgesA = " + edgesA + "\nedgesB = " + edgesB);
 		
-		shapeA.edges = shapeA.edges.filter(function(e) return !Polygons.isEdgeInside(shapeB.polygons, e));
+		shapeA.edges = shapeA.edges.filter(e -> !Polygons.isEdgeInside(shapeB.polygons, e));
 		shapeA.edges = Edges.concatUnique(shapeB.edges, shapeA.edges);
 		
-		log(function() return "shapeA.polygons = " + shapeA.polygons.length);
+		log(() -> "shapeA.polygons = " + shapeA.polygons.length);
 		shapeA.polygons = Polygons.fromEdges(Edges.concatUnique(edgesA, edgesB), shapeA.edges, shapeA.polygons.concat(shapeB.polygons));
-		log(function() return "RECONSTRUCT shapeA.polygons = " + shapeA.polygons.length + "; " + shapeA.polygons);
+		log(() -> "RECONSTRUCT shapeA.polygons = " + shapeA.polygons.length + "; " + shapeA.polygons);
 		
 		shapeA.assertCorrect();
 	}
@@ -959,13 +959,13 @@ class ShapeElement extends Element
 		
 		try
 		{
-			log(function() return "\nShapeElement.intersectSelf BEGIN ===================");
-			log(function() return "thisState = " + thisState.toString());
+			log(() -> "\nShapeElement.intersectSelf BEGIN ===================");
+			log(() -> "thisState = " + thisState.toString());
 			
 			var allEdges = getEdges();
 			
 			var changed = false;
-			Edges.intersectSelf(allEdges, function(search, replacement)
+			Edges.intersectSelf(allEdges, (search, replacement) ->
 			{
 				StrokeEdges.replace(edges, search, replacement);
 				changed = true;
@@ -974,13 +974,13 @@ class ShapeElement extends Element
 			log("changed = " + changed);
 			if (!changed) return false;
 			
-			log(function() return "AFTER INTERSECT");
-			log(function() return "getEdges =\n" + getEdges().join("; "));
+			log(() -> "AFTER INTERSECT");
+			log(() -> "getEdges =\n" + getEdges().join("; "));
 			
 			polygons = Polygons.fromEdges(allEdges, edges, polygons);
 			
-			log(function() return "AFTER RECONSTRUCT");
-			log(function() return "getEdges =\n" + getEdges().join("; "));
+			log(() -> "AFTER RECONSTRUCT");
+			log(() -> "getEdges =\n" + getEdges().join("; "));
 			
 			assertCorrect();
 		}
@@ -1011,8 +1011,8 @@ class ShapeElement extends Element
 	{
 		return new ShapeElement
 		(
-			ArrayTools.clone(edges.filter(function(e) return e.selected)),
-			ArrayTools.clone(polygons.filter(function(p) return p.selected))
+			ArrayTools.clone(edges.filter(e -> e.selected)),
+			ArrayTools.clone(polygons.filter(p -> p.selected))
 		);
 	}
 	
@@ -1161,9 +1161,9 @@ class ShapeElement extends Element
 		var points = [];
 		for (polygon in polygons)
 		{
-			points = points.concat(polygon.getEdges().map(function(edge) return edge.getNearestPoint(pos.x, pos.y).point));
+			points = points.concat(polygon.getEdges().map(edge -> edge.getNearestPoint(pos.x, pos.y).point));
 		}
-		points = points.concat(edges.map(function(edge) return edge.getNearestPointUseStrokeSize(pos.x, pos.y).point));
+		points = points.concat(edges.map(edge -> edge.getNearestPointUseStrokeSize(pos.x, pos.y).point));
 		
 		return points;
 	}
@@ -1261,7 +1261,7 @@ class ShapeElement extends Element
 		
 		return new ShapeElement
 		(
-			stroke != null ? edges.map(function(e) return StrokeEdge.fromEdge(e, stroke)) : [],
+			stroke != null ? edges.map(e -> StrokeEdge.fromEdge(e, stroke)) : [],
 			fill != null ? [ new Polygon(fill, [ new Contour(edges) ]) ] : []
 		);
 	}

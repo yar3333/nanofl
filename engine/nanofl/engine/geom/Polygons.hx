@@ -31,34 +31,34 @@ class Polygons
 		Debug.assert(!Polygons.hasDublicates(polygons));
 		Polygons.assertCorrect(polygons, false);
 		
-		log(function() return "mergeByCommonEdges\npolygons =\n" + polygons.map(function(p) return "\t" + p).join("\n") + "\nedges = " + edges.join("; "));
+		log(() -> "mergeByCommonEdges\npolygons =\n" + polygons.map(p -> "\t" + p).join("\n") + "\nedges = " + edges.join("; "));
 		
 		// check existing common edges in outer contours
 		var i = 0; while (i < polygons.length)
 		{
 			var j = i + 1; while (j < polygons.length)
 			{
-				log(function() return 'test i=$i and j=$j\n\t\t' + polygons[i].toString() + "\n\t\t" + polygons[j]);
+				log(() -> 'test i=$i and j=$j\n\t\t' + polygons[i].toString() + "\n\t\t" + polygons[j]);
 				if (polygons[i].fill.equ(polygons[j].fill))
 				{
-					log(function() return '\tfill match!');
+					log(() -> '\tfill match!');
 					Debug.assert(polygons[i].contours.length > 0);
 					Debug.assert(polygons[j].contours.length > 0);
 					
 					var commonEdges = Edges.getCommon(polygons[i].contours[0].edges, polygons[j].contours[0].edges);
-					log(function() return '\tcommonEdges = ' + commonEdges);
-					if (commonEdges.length > 0 && commonEdges.foreach(function(e) return e.indexIn(edges) < 0))
+					log(() -> '\tcommonEdges = ' + commonEdges);
+					if (commonEdges.length > 0 && commonEdges.foreach(e -> e.indexIn(edges) < 0))
 					{
 						var outerEdges = Edges.exclude(Edges.concatUnique(polygons[i].contours[0].edges, polygons[j].contours[0].edges), commonEdges);
 						
 						log("\tMERGE!");
 						if (outerEdges.length > 0)
 						{
-							//log(function() return ">>>outerEdges = " + outerEdges);
+							//log(() -> ">>>outerEdges = " + outerEdges);
 							var outerContours = Contours.fromEdges(outerEdges);
-							outerContours.sort(function(a, b) return a.isNestedTo(b) ? 1 : -1);
+							outerContours.sort((a, b) -> a.isNestedTo(b) ? 1 : -1);
 							for (k in 1...outerContours.length) outerContours[k].reverse();
-							//log(function() return ">>>outerContours =\n" + outerContours.join("\n"));
+							//log(() -> ">>>outerContours =\n" + outerContours.join("\n"));
 							
 							var inners = outerContours.slice(1).concat(polygons[i].contours.slice(1)).concat(polygons[j].contours.slice(1));
 							Contours.removeNested(inners);
@@ -74,9 +74,9 @@ class Polygons
 						}
 						else
 						{
-							Debug.assert(false, function() return "Two polygons with same outer contour = " + polygons[i].contours[0]);
+							Debug.assert(false, () -> "Two polygons with same outer contour = " + polygons[i].contours[0]);
 						}
-						//log(function() return "(1) RESULT\n" + polygons[i].toString());
+						//log(() -> "(1) RESULT\n" + polygons[i].toString());
 						
 						log("\tRemove polygon " + j);
 						polygons.splice(j, 1);
@@ -93,7 +93,7 @@ class Polygons
 		}
 		
 		log("==================================== in the middle ==========================");
-		log(function() return "// SOURCE:\n\t" + polygons.join("\n\t"));
+		log(() -> "// SOURCE:\n\t" + polygons.join("\n\t"));
 		
 		Polygons.assertCorrect(polygons, false);
 		
@@ -114,13 +114,13 @@ class Polygons
 						var innerI = polygons[i].contours[k];
 						
 						var commonEdges = Edges.getCommon(innerI.edges, outerJ.edges);
-						log(function() return "\tcommonEdges = " + commonEdges);
-						if (commonEdges.length > 0 && commonEdges.foreach(function(e) return e.indexIn(edges) < 0))
+						log(() -> "\tcommonEdges = " + commonEdges);
+						if (commonEdges.length > 0 && commonEdges.foreach(e -> e.indexIn(edges) < 0))
 						{
 							var innerEdges = Edges.exclude(Edges.concatUnique(innerI.edges, outerJ.edges), commonEdges);
-							log(function() return "\tinnerEdges = " + innerEdges);
+							log(() -> "\tinnerEdges = " + innerEdges);
 							
-							log(function() return '// MERGE $i and $j\n\t' + polygons[i] + "\n\t" + polygons[j]);
+							log(() -> '// MERGE $i and $j\n\t' + polygons[i] + "\n\t" + polygons[j]);
 							
 							polygons[i].contours.splice(k, 1);
 							
@@ -138,7 +138,7 @@ class Polygons
 								polygons[i].assertCorrect();
 							}
 							
-							log(function() return "// RESULT\n\t" + polygons[i]);
+							log(() -> "// RESULT\n\t" + polygons[i]);
 							
 							polygons.splice(j, 1);
 							if (i > j) i--;
@@ -234,7 +234,7 @@ class Polygons
 		Debug.assert(!Edges.hasDuplicates(edges), "Duplicated edges detected.");
 		Debug.assert(!Edges.hasDuplicates(strokeEdges), "Duplicated strokeEdges detected.");
 		
-		log(function() return "Polygons.getReconstructed vvvvvvvvvvvvvvvvvvvvvvvv");
+		log(() -> "Polygons.getReconstructed vvvvvvvvvvvvvvvvvvvvvvvv");
 		
 		var contours = Contours.fromEdges(edges);
 		
@@ -245,7 +245,7 @@ class Polygons
 			return original != null ? original.fill : null;
 		});
 		
-		log(function() return "Polygons.getReconstructed ^^^^^^^^^^^^^^^^^^^^^^^^ result =\n\t" + r.join(";\n\t"));
+		log(() -> "Polygons.getReconstructed ^^^^^^^^^^^^^^^^^^^^^^^^ result =\n\t" + r.join(";\n\t"));
 		
 		return r;
 	}
@@ -266,8 +266,8 @@ class Polygons
 				}
 			}
 			
-			//log(function() return ">>>OUTER = " + outer);
-			//log(function() return ">>>INNERS =\n" + inners.join("\n") + "\n");
+			//log(() -> ">>>OUTER = " + outer);
+			//log(() -> ">>>INNERS =\n" + inners.join("\n") + "\n");
 			
 			Contours.removeNested(inners);
 			Contours.mergeByCommonEdges(inners, true);
@@ -307,8 +307,8 @@ class Polygons
 	{
 		var edges = Contours.getEdges(originalContours);
 		
-		//log(function() return "\n\nPolygons.fromContours vvvvvvvvvvvvvvvvvvvvvvvvv fillEvenOdd = " + fillEvenOdd + "; originalContours = " + originalContours);
-		log(function() return "\n\nPolygons.fromContours vvvvvvvvvvvvvvvvvvvvvvvvv edges = " + edges.length);
+		//log(() -> "\n\nPolygons.fromContours vvvvvvvvvvvvvvvvvvvvvvvvv fillEvenOdd = " + fillEvenOdd + "; originalContours = " + originalContours);
+		log(() -> "\n\nPolygons.fromContours vvvvvvvvvvvvvvvvvvvvvvvvv edges = " + edges.length);
 		
 		var originalContoursNormalized = new Map<Contour, Array<Contour>>();
 		for (c in originalContours)
@@ -335,7 +335,7 @@ class Polygons
 			var edgesToTestFilling = [];
 			for (contour in originalContours)
 			{
-				if (originalContoursNormalized.get(contour).exists(function(c) return c.isPointInsideP(pt)))
+				if (originalContoursNormalized.get(contour).exists(c -> c.isPointInsideP(pt)))
 				{
 					edgesToTestFilling = edgesToTestFilling.concat(contour.edges);
 				}
@@ -344,7 +344,7 @@ class Polygons
 			return Edges.isPointInside(edgesToTestFilling, pt.x, pt.y, fillEvenOdd) ? fill : null;
 		});
 		
-		log(function() return "Polygons.fromContours ^^^^^^^^^^^^^^^^^^^^^^^^^");
+		log(() -> "Polygons.fromContours ^^^^^^^^^^^^^^^^^^^^^^^^^");
 		
 		return r;
 	}
@@ -373,7 +373,7 @@ class Polygons
 		
 		if (intergrityChecks)
 		{
-			Debug.assert(!hasDublicates(polygons), function() return "Has duplicates\n" + (Reflect.isFunction(message) ? message() : message));
+			Debug.assert(!hasDublicates(polygons), () -> "Has duplicates\n" + (Reflect.isFunction(message) ? message() : message));
 			
 			Edges.assertHasNoIntersections(Polygons.getEdges(polygons));
 			
@@ -381,7 +381,7 @@ class Polygons
 			{
 				for (p2 in polygons)
 				{
-					Debug.assert(p1 == p2 || p1.isContourOutside(p2.contours[0]), function() return "One polygon inside other\n" + p1 + "\n" + p2 + "\n" + (Reflect.isFunction(message) ? message() : message));
+					Debug.assert(p1 == p2 || p1.isContourOutside(p2.contours[0]), () -> "One polygon inside other\n" + p1 + "\n" + p2 + "\n" + (Reflect.isFunction(message) ? message() : message));
 				}
 			}
 		}

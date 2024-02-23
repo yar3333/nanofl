@@ -196,7 +196,7 @@ class GroupElement extends Element
 	
 	override function getNearestPointsLocal(pos:Point) : Array<Point>
 	{
-		return elements.map(function(element) return element.getNearestPoint(pos));
+		return elements.map(element -> element.getNearestPoint(pos));
 	}
 	
 	#if ide

@@ -50,8 +50,8 @@ class FilterDef
 			{
 				if (node.name != "BlurFilter") return node.name;
 				
-				fixParam(params, "blurX", function(s) return Std.string(Std.parseInt(s) * 2));
-				fixParam(params, "blurY", function(s) return Std.string(Std.parseInt(s) * 2));
+				fixParam(params, "blurX", s -> Std.string(Std.parseInt(s) * 2));
+				fixParam(params, "blurY", s -> Std.string(Std.parseInt(s) * 2));
 				return "BoxBlurFilter";
 			},
 			

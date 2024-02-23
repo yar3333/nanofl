@@ -170,7 +170,7 @@ class Code extends components.nanofl.popups.basepopup.Code
 			textureAtlases.set("atlas_0", new TextureAtlasParams());
 		}
 		
-		template().atlases.html(textureAtlases.keys().sorted().map(function(s) return '<option>$s</option>').join(""));
+		template().atlases.html(textureAtlases.keys().sorted().map(s -> '<option>$s</option>').join(""));
 	}
 	
 	function atlases_change(_)

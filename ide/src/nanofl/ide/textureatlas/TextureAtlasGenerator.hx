@@ -192,11 +192,11 @@ class TextureAtlasGenerator
 		{
 			switch (sortingMethod)
 			{
-				case SortingMethod.SortByMinSizeDesc:	r.push(function(a:ImageData, b:ImageData) return Std.min(b.canvas.width, b.canvas.height) - Std.min(a.canvas.width, a.canvas.height));
-				case SortingMethod.SortByMaxSizeDesc:	r.push(function(a:ImageData, b:ImageData) return Std.max(b.canvas.width, b.canvas.height) - Std.max(a.canvas.width, a.canvas.height));
-				case SortingMethod.SortByWidthDesc:		r.push(function(a:ImageData, b:ImageData) return b.canvas.width  - a.canvas.width);
-				case SortingMethod.SortByHeightDesc:	r.push(function(a:ImageData, b:ImageData) return b.canvas.height - a.canvas.height);
-				case SortingMethod.SortByAreaDesc:		r.push(function(a:ImageData, b:ImageData) return (b.canvas.width * b.canvas.height) - (a.canvas.width * a.canvas.height));
+				case SortingMethod.SortByMinSizeDesc:	r.push((a:ImageData, b:ImageData) -> Std.min(b.canvas.width, b.canvas.height) - Std.min(a.canvas.width, a.canvas.height));
+				case SortingMethod.SortByMaxSizeDesc:	r.push((a:ImageData, b:ImageData) -> Std.max(b.canvas.width, b.canvas.height) - Std.max(a.canvas.width, a.canvas.height));
+				case SortingMethod.SortByWidthDesc:		r.push((a:ImageData, b:ImageData) -> b.canvas.width  - a.canvas.width);
+				case SortingMethod.SortByHeightDesc:	r.push((a:ImageData, b:ImageData) -> b.canvas.height - a.canvas.height);
+				case SortingMethod.SortByAreaDesc:		r.push((a:ImageData, b:ImageData) -> (b.canvas.width * b.canvas.height) - (a.canvas.width * a.canvas.height));
 			}
 		}
 		return r;
