@@ -1349,7 +1349,7 @@ libraryData =
   "bucket": {
     "type": "movieclip",
     "version": "2.3.0",
-    "linkedClass": "McBucket",
+    "linkedClass": "Bucket",
     "autoPlay": false,
     "loop": false,
     "likeButton": false,
@@ -2970,7 +2970,7 @@ libraryData =
   "trash": {
     "type": "movieclip",
     "version": "2.3.0",
-    "linkedClass": "McTrash",
+    "linkedClass": "Trash",
     "autoPlay": false,
     "loop": false,
     "likeButton": false,
