@@ -113,11 +113,6 @@ class Application extends js.injecting.InjectContainer
 		
 		preferences.storage.applyToIDE(true);
 		
-		finishInitialization();
-	}
-	
-	function finishInitialization()
-	{
 		Log.onMessage.bind((_, e) ->
 		{
 			if      (e.type == "warn")  view.output.writeWarning(e.message);
@@ -125,14 +120,13 @@ class Application extends js.injecting.InjectContainer
 			else                        view.output.writeInfo(e.message);
 		});
 		
-        plugins.reload(false).then(_ ->
-        {
-            new CommandLine().process(errorCode ->
+        plugins.reload(false)
+            .then(_ -> CommandLine.process())
+            .then(success ->
             {
                 //checkForUpdates();
-                new ExternalChangesDetector().start();
+                ExternalChangesDetector.start();
             });
-        });
 	}
 	
 	public function createNewEmptyDocument(?callb:Document->Void) : Void

@@ -1,5 +1,6 @@
 package nanofl.ide;
 
+import js.lib.Promise;
 import js.Lib;
 import nanofl.ide.SafeCode;
 import nanofl.ide.sys.FileSystem;
@@ -19,16 +20,27 @@ class CommandLine extends InjectContainer
 	@inject var folders : Folders;
 	@inject var mainProcess : MainProcess;
 	
-	public function process(callb:Int->Void): Void
+    function new() super();
+
+    public static function process() : Promise<Bool>
+    {
+        return new Promise<Bool>((resolve, reject) ->
+        {
+            var commandLine = new CommandLine();
+            commandLine.processInner(resolve);
+        });
+    }
+
+	function processInner(callb:Bool->Void): Void
 	{
         var options = mainProcess.getCommandLineArgs();
         //Browser.console.log(options);
         processNextArg(options, callb);
 	}
 	
-	function processNextArg(args:Array<String>, callb:Int->Void)
+	function processNextArg(args:Array<String>, callb:Bool->Void)
 	{
-		if (args.length == 0) { callb(0); return; }
+		if (args.length == 0) { callb(true); return; }
 		
 		var arg = args.shift();
 		
@@ -48,7 +60,7 @@ class CommandLine extends InjectContainer
 				if (!r)
 				{
 					view.alerter.error(errorMessage);
-					callb(1);
+					callb(false);
 				}
 				else
 				{
@@ -64,7 +76,7 @@ class CommandLine extends InjectContainer
 				app.pid = args.shift();
 				Log.logFile = folders.temp + "/logs/" + app.pid + ".log";
 				Log.onMessage.bind(function(_, e) if (e.type == "error") app.quit(true, 1));
-				processNextArg(args, app.quit.bind(true, _));
+				processNextArg(args, success -> app.quit(true, success ? 0 : 1));
 			}
 			else
 			{
@@ -86,7 +98,7 @@ class CommandLine extends InjectContainer
 				app.document.export(destFileName).then((success:Bool) ->
 				{
 					if (success) processNextArg(args, callb);
-					else         callb(1);
+					else         callb(false);
 				});
 			}
 			else
@@ -195,10 +207,10 @@ class CommandLine extends InjectContainer
 		}
 	}
 	
-	function error(message:String, callb:Int->Void) : Void
+	function error(message:String, callb:Bool->Void) : Void
 	{
 		js.Browser.window.console.error("ERROR: " + message);
 		view.alerter.error(message);
-		callb(1);
+		callb(false);
 	}
 }

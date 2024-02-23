@@ -15,8 +15,16 @@ class ExternalChangesDetector extends InjectContainer
 	@inject var view : View;
 	
 	var timer : Timer;
+
+    function new() super();
+
+    public static function start()
+    {
+        final detector = new ExternalChangesDetector();
+        detector.startInner();
+    }
 	
-	public function start()
+	function startInner()
 	{
 		timer = new Timer(CHECKING_PERIOD);
 		timer.run = detectChanges;
