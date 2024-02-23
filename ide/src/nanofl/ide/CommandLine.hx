@@ -33,17 +33,13 @@ class CommandLine extends InjectContainer
 	{
         var args = mainProcess.getCommandLineArgs();
         //Browser.console.log(args);
-
-        var p = Promise.resolve({});
-        while (args.length > 0)
-        {
-            p = p.then(_ -> processNextArg(args));
-        }
-        return p;
+        return processNextArg(args);
 	}
 	
-	function processNextArg(args:Array<String>) : Promise<Dynamic>
+	function processNextArg(args:Array<String>) : Promise<{}>
 	{
+        if (args.length == 0) return Promise.resolve(null);
+
 		var arg = args.shift();
 
 		if (arg.endsWith(".js") || arg.endsWith(".jsnf"))
@@ -59,7 +55,7 @@ class CommandLine extends InjectContainer
 			return Timer.delayAsync(50).then(_ ->
 			{
 				view.movie.timeline.update();
-                return r ? null : error(errorMessage);
+                return r ? processNextArg(args) : error(errorMessage);
 			});
 		}
 		
@@ -70,7 +66,7 @@ class CommandLine extends InjectContainer
 				app.pid = args.shift();
 				Log.logFile = folders.temp + "/logs/" + app.pid + ".log";
 				Log.onMessage.bind(function(_, e) if (e.type == "error") app.quit(true, 1));
-                return Promise.resolve(null);
+                return processNextArg(args);
 			}
 			return error("File path expected after '-pid' option.");
 		}
@@ -78,12 +74,12 @@ class CommandLine extends InjectContainer
 		if (arg == "-fps")
 		{
 			view.fpsMeter.enable();
-			return Promise.resolve(null);
+			return processNextArg(args);
 		}
 		
 		if (arg == "-save")
 		{
-            return app.document.save();
+            return app.document.save().then(_ -> processNextArg(args));
 		}
 		
 		if (arg == "-export")
@@ -91,7 +87,7 @@ class CommandLine extends InjectContainer
 			if (args.length > 0 && !args[0].startsWith("-"))
 			{
 				var destFileName = args.shift();
-				return app.document.export(destFileName);
+				return app.document.export(destFileName).then(_ -> processNextArg(args));
 			}
             return error("Output file path expected after '-export' option.");
 		}
@@ -129,7 +125,7 @@ class CommandLine extends InjectContainer
 					Math.round(app.document.properties.height * k)
 				);
 				
-				return Promise.resolve(null);
+				return processNextArg(args);
 			}
 
 			return error("Size (like '200x100') expected after '-resize-fit' option.");
@@ -137,13 +133,13 @@ class CommandLine extends InjectContainer
 		
 		if (arg == "-publish")
 		{
-			return app.document.publish();
+			return app.document.publish().then(_ -> processNextArg(args));
 		}
 		
 		if (arg == "-quit")
 		{
 			app.quit(true);
-            return Promise.resolve(true);
+            return Promise.resolve(null);
 		}
 		
 		if (arg == "-scaleMode")
@@ -154,7 +150,7 @@ class CommandLine extends InjectContainer
 				{
 					var scaleMode = args.shift();
 					app.document.properties.scaleMode = scaleMode;
-					return Promise.resolve(null);
+					return processNextArg(args);
 				}
 				return error("Unknow scale mode ('" + args[0] + "').");
 			}
@@ -167,7 +163,7 @@ class CommandLine extends InjectContainer
 			{
 				var script = args.shift();
 				js.Lib.eval("'use strict';" + script);
-				return Promise.resolve(null);
+				return processNextArg(args);
 			}
             return error("JS code expected after '-script' option.");
 		}
@@ -176,7 +172,7 @@ class CommandLine extends InjectContainer
 		{
 			return app.openDocument(arg).then(doc ->
 			{
-				return doc != null ? null : error("Error loading '" + arg + "'.");
+				return doc != null ? processNextArg(args) : error("Error loading '" + arg + "'.");
 			});
 		}
 		
