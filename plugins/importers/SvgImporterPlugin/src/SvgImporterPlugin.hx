@@ -1,14 +1,14 @@
-import nanofl.ide.plugins.PluginApi;
-import haxe.io.Path;
-import htmlparser.XmlDocument;
 import js.lib.Promise;
+import haxe.io.Path;
+import stdlib.Debug;
+import nanofl.ide.plugins.ImporterArgs;
+import nanofl.ide.plugins.PluginApi;
+import htmlparser.XmlDocument;
 import nanofl.engine.CustomProperty;
-import nanofl.ide.DocumentProperties;
 import nanofl.ide.library.IdeLibrary;
 import nanofl.ide.library.IdeLibraryTools;
 import nanofl.ide.plugins.IImporterPlugin;
 import nanofl.ide.plugins.ImporterPlugins;
-import stdlib.Debug;
 import svgimport.Svg;
 import svgimport.SvgElement;
 import svgimport.SvgGroupExporter;
@@ -37,18 +37,18 @@ class SvgImporterPlugin implements IImporterPlugin
 		}
 	];
 	
-	public function importDocument(api:PluginApi, params:Dynamic, srcFilePath:String, destFilePath:String, documentProperties:DocumentProperties, library:IdeLibrary) : Promise<Bool>
+	public function importDocument(api:PluginApi, args:ImporterArgs) : Promise<Bool>
 	{
 		trace("Load");
 		
-		var xml = new XmlDocument(api.fileSystem.getContent(srcFilePath));
+		var xml = new XmlDocument(api.fileSystem.getContent(args.srcFilePath));
 		
 		trace("Parse");
 		
 		var svg = new Svg(xml);
 		
-		documentProperties.width = Math.round(svg.width);
-		documentProperties.height = Math.round(svg.height);
+		args.documentProperties.width = Math.round(svg.width);
+		args.documentProperties.height = Math.round(svg.height);
 		
 		if (svg.id != IdeLibrary.SCENE_NAME_PATH)
 		{
@@ -62,15 +62,15 @@ class SvgImporterPlugin implements IImporterPlugin
 		
 		for (elementID in svg.elements.keys())
 		{
-			if (!library.hasItem(elementID))
+			if (!args.library.hasItem(elementID))
 			{
 				switch (svg.elements.get(elementID))
 				{
 					case SvgElement.DisplayGroup(group):
-						new SvgGroupExporter(svg, library, group).exportToLibrary();
+						new SvgGroupExporter(svg, args.library, group).exportToLibrary();
 						
 					case SvgElement.DisplayPath(path):
-						new SvgPathExporter(svg, library, path).exportToLibrary();
+						new SvgPathExporter(svg, args.library, path).exportToLibrary();
 						
 					case _:
 						trace("ID for item type '" + svg.elements.get(elementID).getName() + "' is not supported.");
@@ -78,9 +78,9 @@ class SvgImporterPlugin implements IImporterPlugin
 			}
 		}
 		
-		if (params.optimize)
+		if (args.params.optimize)
 		{
-			IdeLibraryTools.optimize(library);
+			IdeLibraryTools.optimize(args.library);
 		}
 		
 		return Promise.resolve(true);

@@ -41,14 +41,8 @@ interface IImporterPlugin
 	
 	/**
 	 * This method must import document.
-	 * @param	params				Custom parameters specified by user (produced from `properties`).
-	 * @param	srcFilePath			Path to supported file (one of the `fileFilterExtensions`).
-	 * @param	destFilePath		Path to `*.nfl` file.
-	 * @param	documentProperties	Properties of the document.
-	 * @param	library				Document's library.
-	 * @param	callb				Call this after importing with a success bool flag.
 	 */
-	function importDocument(api:PluginApi, params:Dynamic, srcFilePath:String, destFilePath:String, documentProperties:DocumentProperties, library:IdeLibrary) : Promise<Bool>;
+	function importDocument(api:PluginApi, args:ImporterArgs) : Promise<Bool>;
 	
 	function getPublishPath(originalPath:String) : String;
 }

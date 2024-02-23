@@ -442,13 +442,13 @@ SvgImporterPlugin.main = function() {
 	nanofl.ide.plugins.ImporterPlugins.register(new SvgImporterPlugin());
 };
 SvgImporterPlugin.prototype = {
-	importDocument: function(api,params,srcFilePath,destFilePath,documentProperties,library) {
+	importDocument: function(api,args) {
 		haxe_Log.trace("Load",{ fileName : "src/SvgImporterPlugin.hx", lineNumber : 42, className : "SvgImporterPlugin", methodName : "importDocument"});
-		var xml = new htmlparser.XmlDocument(api.fileSystem.getContent(srcFilePath));
+		var xml = new htmlparser.XmlDocument(api.fileSystem.getContent(args.srcFilePath));
 		haxe_Log.trace("Parse",{ fileName : "src/SvgImporterPlugin.hx", lineNumber : 46, className : "SvgImporterPlugin", methodName : "importDocument"});
 		var svg = new svgimport_Svg(xml);
-		documentProperties.width = Math.round(svg.width);
-		documentProperties.height = Math.round(svg.height);
+		args.documentProperties.width = Math.round(svg.width);
+		args.documentProperties.height = Math.round(svg.height);
 		if(svg.id != nanofl.ide.library.IdeLibrary.SCENE_NAME_PATH) {
 			stdlib_Debug.assert(svg.id == "" || Object.prototype.hasOwnProperty.call(svg.elements.h,svg.id),null,{ fileName : "src/SvgImporterPlugin.hx", lineNumber : 55, className : "SvgImporterPlugin", methodName : "importDocument"});
 			var key = svg.id;
@@ -467,7 +467,7 @@ SvgImporterPlugin.prototype = {
 		var elementID_current = 0;
 		while(elementID_current < elementID_length) {
 			var elementID = elementID_keys[elementID_current++];
-			if(!library.hasItem(elementID)) {
+			if(!args.library.hasItem(elementID)) {
 				var _g = svg.elements.h[elementID];
 				if(_g == null) {
 					var e = svg.elements.h[elementID];
@@ -476,11 +476,11 @@ SvgImporterPlugin.prototype = {
 					switch(_g._hx_index) {
 					case 0:
 						var path = _g.path;
-						new svgimport_SvgPathExporter(svg,library,path).exportToLibrary();
+						new svgimport_SvgPathExporter(svg,args.library,path).exportToLibrary();
 						break;
 					case 1:
 						var group = _g.group;
-						new svgimport_SvgGroupExporter(svg,library,group).exportToLibrary();
+						new svgimport_SvgGroupExporter(svg,args.library,group).exportToLibrary();
 						break;
 					default:
 						var e1 = svg.elements.h[elementID];
@@ -489,8 +489,8 @@ SvgImporterPlugin.prototype = {
 				}
 			}
 		}
-		if(params.optimize) {
-			nanofl.ide.library.IdeLibraryTools.optimize(library);
+		if(args.params.optimize) {
+			nanofl.ide.library.IdeLibraryTools.optimize(args.library);
 		}
 		return Promise.resolve(true);
 	}

@@ -1,14 +1,15 @@
-import nanofl.ide.plugins.PluginApi;
-import flashimport.DocumentImporter;
-import flashimport.Macro;
-import haxe.io.Path;
 import js.lib.Promise;
+import haxe.io.Path;
+import stdlib.Uuid;
+import nanofl.ide.plugins.ImporterArgs;
+import nanofl.ide.plugins.PluginApi;
 import nanofl.engine.CustomProperty;
 import nanofl.ide.DocumentProperties;
 import nanofl.ide.library.IdeLibrary;
 import nanofl.ide.plugins.IImporterPlugin;
 import nanofl.ide.plugins.ImporterPlugins;
-import stdlib.Uuid;
+import flashimport.DocumentImporter;
+import flashimport.Macro;
 
 class FlashImporterPlugin implements IImporterPlugin
 {
@@ -35,12 +36,12 @@ class FlashImporterPlugin implements IImporterPlugin
 	
 	public function new() {}
 	
-	public function importDocument(api:PluginApi, params:Dynamic, srcFilePath:String, destFilePath:String, documentProperties:DocumentProperties, library:IdeLibrary) : Promise<Bool>
+	public function importDocument(api:PluginApi, args:ImporterArgs) : Promise<Bool>
 	{
-		if (Path.extension(srcFilePath) == "fla")
+		if (Path.extension(args.srcFilePath) == "fla")
 		{
 			var dir = api.folders.temp + "/unsaved/" + Uuid.newUuid();
-			api.zip.decompress(srcFilePath, dir);
+			api.zip.decompress(args.srcFilePath, dir);
 			
 			var xflFiles = api.fileSystem.readDirectory(dir).filter(function(s) return Path.extension(s).toLowerCase() == "xfl");
 			if (xflFiles.length == 0) throw "XFL file is not found";
@@ -50,10 +51,10 @@ class FlashImporterPlugin implements IImporterPlugin
 				api,
 				IMPORT_MEDIA_SCRIPT_TEMPLATE,
 				dir + "/" + xflFiles[0],
-				destFilePath,
-				documentProperties,
-				library,
-				params.importMedia
+				args.destFilePath,
+				args.documentProperties,
+				args.library,
+				args.params.importMedia
 			)
 			.then(function(success:Bool)
 			{
@@ -67,11 +68,11 @@ class FlashImporterPlugin implements IImporterPlugin
 			(
 				api,
 				IMPORT_MEDIA_SCRIPT_TEMPLATE,
-				srcFilePath,
-				destFilePath,
-				documentProperties,
-				library,
-				params.importMedia
+				args.srcFilePath,
+				args.destFilePath,
+				args.documentProperties,
+				args.library,
+				args.params.importMedia
 			);
 		}
 	}

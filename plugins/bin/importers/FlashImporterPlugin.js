@@ -112,10 +112,10 @@ FlashImporterPlugin.main = function() {
 	nanofl.ide.plugins.ImporterPlugins.register(new FlashImporterPlugin());
 };
 FlashImporterPlugin.prototype = {
-	importDocument: function(api,params,srcFilePath,destFilePath,documentProperties,library) {
-		if(haxe_io_Path.extension(srcFilePath) == "fla") {
+	importDocument: function(api,args) {
+		if(haxe_io_Path.extension(args.srcFilePath) == "fla") {
 			var dir = api.folders.get_temp() + "/unsaved/" + stdlib_Uuid.newUuid();
-			api.zip.decompress(srcFilePath,dir);
+			api.zip.decompress(args.srcFilePath,dir);
 			var _g = [];
 			var _g1 = 0;
 			var _g2 = api.fileSystem.readDirectory(dir);
@@ -130,12 +130,12 @@ FlashImporterPlugin.prototype = {
 			if(xflFiles.length == 0) {
 				throw haxe_Exception.thrown("XFL file is not found");
 			}
-			return flashimport_DocumentImporter.process(api,FlashImporterPlugin.IMPORT_MEDIA_SCRIPT_TEMPLATE,dir + "/" + xflFiles[0],destFilePath,documentProperties,library,params.importMedia).then(function(success) {
+			return flashimport_DocumentImporter.process(api,FlashImporterPlugin.IMPORT_MEDIA_SCRIPT_TEMPLATE,dir + "/" + xflFiles[0],args.destFilePath,args.documentProperties,args.library,args.params.importMedia).then(function(success) {
 				api.fileSystem.deleteAny(dir);
 				return success;
 			});
 		} else {
-			return flashimport_DocumentImporter.process(api,FlashImporterPlugin.IMPORT_MEDIA_SCRIPT_TEMPLATE,srcFilePath,destFilePath,documentProperties,library,params.importMedia);
+			return flashimport_DocumentImporter.process(api,FlashImporterPlugin.IMPORT_MEDIA_SCRIPT_TEMPLATE,args.srcFilePath,args.destFilePath,args.documentProperties,args.library,args.params.importMedia);
 		}
 	}
 	,getPublishPath: function(originalPath) {

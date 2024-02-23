@@ -24,7 +24,14 @@ class Importer
 		if (plugin != null)
 		{
             var pluginApi = new PluginApi();
-			return plugin.importDocument(pluginApi, CustomPropertiesTools.fix(params, plugin.properties), srcFilePath, destFilePath, documentProperties, library);
+			return plugin.importDocument(pluginApi,
+            {
+                params: CustomPropertiesTools.fix(params, plugin.properties),
+                srcFilePath: srcFilePath,
+                destFilePath: destFilePath,
+                documentProperties: documentProperties,
+                library: library,
+            });
 		}
 		else
 		{
