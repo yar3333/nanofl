@@ -26,7 +26,7 @@ class CodePublisher extends InjectContainer
 		this.destDir = destDir;
 		this.properties = properties;
 
-        supportDir = folders.application + "/" + "templates";
+        supportDir = folders.application + "/templates";
 	}
 
 	public static function publishHtmlAndJsFiles(destDir:String, properties:DocumentProperties, addLinkToThreeJs:Bool, addLinkToApplicationJs:Bool) : Void
@@ -36,7 +36,7 @@ class CodePublisher extends InjectContainer
 
 	function publishHtmlAndJsFilesInner(addLinkToThreeJs:Bool, addLinkToApplicationJs:Bool)
 	{
-		var template = fileSystem.getContent(supportDir + "/project.html");
+		var template = fileSystem.getContent(supportDir + "/index.html");
 
         final hasTextureAtlases = properties.publishSettings.useTextureAtlases && properties.publishSettings.textureAtlases.iterator().hasNext();
 		
