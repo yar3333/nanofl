@@ -1,6 +1,6 @@
 module.exports = {
 	mode: 'development',
-
+    
     entry: './src/application.ts',
     
     module: {
@@ -25,4 +25,9 @@ module.exports = {
         filename: 'application.js',
         path: __dirname + "/scripts",
     },
+
+	externals: {
+		"three": "THREE",
+        "three/addons/loaders/GLTFLoader.js" : "THREE_addons_GLTFLoader",
+	}
 };
