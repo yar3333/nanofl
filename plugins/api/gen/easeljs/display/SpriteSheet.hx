@@ -339,7 +339,7 @@ typedef SpriteSheetGetframeEvent = {
 	 
 **/
 @:native('createjs.SpriteSheet') extern class SpriteSheet extends createjs.events.EventDispatcher {
-	function new(data:Dynamic):Void;
+	function new(data:easeljs.display.SpriteSheetData):Void;
 	/**
 		
 			 * Indicates whether all images are finished loading.
@@ -358,7 +358,7 @@ typedef SpriteSheetGetframeEvent = {
 			 * Returns an array of all available animation names available on this sprite sheet as strings.
 			 
 	**/
-	var animations : Array<Dynamic>;
+	var animations : Array<String>;
 	/**
 		
 			 * Returns the total number of frames in the specified animation, or in the whole sprite

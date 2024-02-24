@@ -3,6 +3,7 @@ package nanofl.engine.libraryitems;
 import js.Browser;
 import js.lib.Error;
 import js.lib.Promise;
+import js.html.ImageElement;
 import nanofl.engine.ITextureItem;
 import nanofl.engine.ILibraryItem;
 import nanofl.engine.geom.Point;
@@ -22,7 +23,7 @@ class BitmapItem extends InstancableItem implements ITextureItem
     public var ext : String;
 	public var textureAtlas : String;
 	
-	public var image(default, null) : js.html.Image;
+	public var image(default, null) : ImageElement;
 	
 	public function new(namePath:String, ext:String)
 	{
@@ -51,9 +52,9 @@ class BitmapItem extends InstancableItem implements ITextureItem
 	{
 		Debug.assert(library != null, "You need to add item '" + namePath + "' to the library before preload call.");
 		
-		return TextureItemTools.getSpriteSheet(this) == null
+		return TextureAtlasTools.getSpriteSheet(this) == null
 						? preloadInner()
-						: TextureItemTools.preload(this);
+						: Promise.resolve(null);
 	}
 
     function preloadInner() : Promise<{}>
@@ -61,7 +62,7 @@ class BitmapItem extends InstancableItem implements ITextureItem
         #if ide
         return Loader.image(getUrl()).then(img -> { image = img; return null; });
         #else
-        return Loader.loadJsScript(library.realUrl(namePath + ".js")).then(_ -> 
+        return Loader.javaScript(library.realUrl(namePath + ".js")).then(_ -> 
         {
             return loadImageFromBase64(getLibraryFileContent(namePath + "." + ext));
         });
@@ -72,7 +73,7 @@ class BitmapItem extends InstancableItem implements ITextureItem
     {
         return new Promise((resolve, reject) ->
         {
-            image = cast Browser.document.createImageElement();
+            image = Browser.document.createImageElement();
             image.onload = () -> resolve(null);
             image.onerror = e -> reject(e);
             image.src = 'data:image/png;base64,' + imageDataBase64;
@@ -85,7 +86,7 @@ class BitmapItem extends InstancableItem implements ITextureItem
 		
 		if (r == null)
 		{
-			var spriteSheet = TextureItemTools.getSpriteSheet(this);
+			var spriteSheet = TextureAtlasTools.getSpriteSheet(this);
 			r =  spriteSheet == null
 				? new nanofl.Bitmap(this)
 				: new easeljs.display.Sprite(spriteSheet);

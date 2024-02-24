@@ -12,7 +12,7 @@ class BitmapItemTools
 		return isImageTransparent(item.image);
 	}
 	
-	static function isImageTransparent(image:js.html.Image)
+	static function isImageTransparent(image:js.html.ImageElement)
 	{
 		var canvas : js.html.CanvasElement = cast js.Browser.document.createElement("canvas");
 		canvas.width = image.width; 

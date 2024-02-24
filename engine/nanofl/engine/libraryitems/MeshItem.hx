@@ -74,9 +74,9 @@ class MeshItem extends InstancableItem implements ITextureItem
 	{
 		Debug.assert(library != null, "You need to add item '" + namePath + "' to the library before preload call.");
 		
-        var spriteSheet = TextureItemTools.getSpriteSheet(this);
+        var spriteSheet = TextureAtlasTools.getSpriteSheet(this);
         if (spriteSheet == null) return preloadInner();
-        else				     return TextureItemTools.preload(this);
+        else				     return Promise.resolve(null);
 	}
 
     function preloadInner() : Promise<{}>
@@ -87,7 +87,7 @@ class MeshItem extends InstancableItem implements ITextureItem
             return processPreloadedJson(haxe.Json.parse(s));
         });
         #else
-        return Loader.loadJsScript(library.realUrl(namePath + ".js")).then(_ -> 
+        return Loader.javaScript(library.realUrl(namePath + ".js")).then(_ -> 
         {
             return processPreloadedJson(getLibraryFileContent(namePath + ".gltf"));
         });
@@ -156,7 +156,7 @@ class MeshItem extends InstancableItem implements ITextureItem
 		
         if (r == null)
 		{
-			var spriteSheet = TextureItemTools.getSpriteSheet(this);
+			var spriteSheet = TextureAtlasTools.getSpriteSheet(this);
 			r =  spriteSheet == null
 				? new nanofl.Mesh(this)
 				: new easeljs.display.Sprite(spriteSheet);

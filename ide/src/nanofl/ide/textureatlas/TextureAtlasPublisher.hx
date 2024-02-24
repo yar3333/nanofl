@@ -1,11 +1,11 @@
 package nanofl.ide.textureatlas;
 
-import haxe.DynamicAccess;
-import nanofl.engine.TextureAtlasData;
 import haxe.Json;
+import haxe.DynamicAccess;
 import nanofl.ide.library.IdeLibrary;
 import nanofl.engine.ITextureItem;
 import nanofl.ide.sys.FileSystem;
+import easeljs.display.SpriteSheetData;
 import stdlib.StringTools;
 using stdlib.Lambda;
 
@@ -16,7 +16,7 @@ class TextureAtlasPublisher
         var names = library.getItemsAsIde(true).filterByType(ITextureItem).map(x -> x.textureAtlas).filter(x -> !StringTools.isNullOrEmpty(x)).distinct();
         names.sort(Reflect.compare);
 
-        var textureAtlasesData = new Array<Dynamic<TextureAtlasData>>();
+        var textureAtlasesData = new Array<Dynamic<SpriteSheetData>>();
 
         for (name in names)
         {
@@ -44,15 +44,17 @@ class TextureAtlasPublisher
     
     static function saveTextureAtlasImageAndGetUrl(fileSystem:FileSystem, textureAtlasName:String, textureAtlas:TextureAtlas, destDir:String) : String
     {
-        log("Save image of texture atlas '" + textureAtlasName + "' / " + textureAtlas.imagePng.length);
-        var imageUrl = "texture-atlases/" + textureAtlasName + ".png";
-        fileSystem.saveBinary(destDir + "/" + imageUrl, textureAtlas.imagePng);
-        return imageUrl;
+        log("Save image of texture atlas '" + textureAtlasName + "' / " + textureAtlas.imagePngAsBase64.length);
+        var imageAsJsUrl = "texture-atlases/" + textureAtlasName + ".js";
+        fileSystem.saveContent(destDir + "/" + imageAsJsUrl, 
+            'nanofl.textureAtlasImageFiles ||= {};\n'
+          + 'nanofl.textureAtlasImageFiles["' + textureAtlasName + '.png"] = "' + textureAtlas.imagePngAsBase64 + '";');
+        return imageAsJsUrl;
     }
         
-    static function getTextureAtlasDataPerNamePath(fileSystem:FileSystem, imageUrl:String, textureAtlas:TextureAtlas) : Dynamic<TextureAtlasData>
+    static function getTextureAtlasDataPerNamePath(fileSystem:FileSystem, imageUrl:String, textureAtlas:TextureAtlas) : Dynamic<SpriteSheetData>
     {
-        var r : DynamicAccess<TextureAtlasData> = {};
+        var r : DynamicAccess<SpriteSheetData> = {};
 
         var namePaths = Reflect.fields(textureAtlas.itemFrames);
         namePaths.sort(Reflect.compare);

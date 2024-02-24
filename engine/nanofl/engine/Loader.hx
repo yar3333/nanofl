@@ -1,17 +1,19 @@
 package nanofl.engine;
 
 import js.Browser;
+import js.lib.Error;
 import js.lib.Promise;
 import js.html.Image;
+import js.html.ImageElement;
 import js.html.XMLHttpRequest;
 import nanofl.engine.Debug.console;
 using stdlib.Lambda;
 
 class Loader
 {
-	public static function image(url:String) : Promise<Image>
+	public static function image(url:String) : Promise<ImageElement>
 	{
-		return new Promise<Image>((resolve, reject) ->
+		return new Promise<ImageElement>((resolve, reject) ->
 		{
 			var image = new Image();
 			image.onload = _ ->
@@ -22,7 +24,7 @@ class Loader
 			{
 				console.error("Failed to load '" + url + "'.");
 				image.src = "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=";
-				reject("Failed to load '" + url + "'.");
+				reject(new Error("Failed to load '" + url + "'."));
 			};
 			image.src = url;
 		});
@@ -44,8 +46,8 @@ class Loader
 					}
 					else
 					{
-						console.error("Failed to load '" + url + "': " + xmlhttp.status + " / " + xmlhttp.statusText);
-						reject("Failed to load '" + url + "': " + xmlhttp.status + " / " + xmlhttp.statusText);
+						console.error(new Error("Failed to load '" + url + "': " + xmlhttp.status + " / " + xmlhttp.statusText + "."));
+						reject(new Error("Failed to load '" + url + "': " + xmlhttp.status + " / " + xmlhttp.statusText + "."));
 					}
 				}
 			};
@@ -53,13 +55,8 @@ class Loader
 			xmlhttp.send();
 		});
 	}
-	
-	public static function queued<T>(urls:Array<String>, load:String->Promise<T>) : Promise<Array<T>>
-	{
-		return Promise.all(urls.map(x -> load(x)));
-	}
 
-    public static function loadJsScript(url:String) : Promise<{}>
+    public static function javaScript(url:String) : Promise<{}>
     {
         return new Promise<{}>((resolve, reject) -> 
         {
@@ -75,9 +72,15 @@ class Loader
             elem.addEventListener("error", e ->
             {
                 elem.remove();
-                reject(e);
+                console.error(new Error("Failed to load '" + url + "'."));
+                reject(new Error("Failed to load '" + url + "'."));
             });
             Browser.document.head.appendChild(elem);
         });
+    }
+	
+	public static function queued<T>(urls:Array<String>, load:String->Promise<T>) : Promise<Array<T>>
+    {
+        return Promise.all(urls.map(x -> load(x)));
     }
 }

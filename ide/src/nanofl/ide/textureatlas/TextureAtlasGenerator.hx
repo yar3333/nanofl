@@ -116,9 +116,9 @@ class TextureAtlasGenerator
 			Reflect.setField(itemFrames, item.namePath, indexes);
 		}
 		
-		var data = Base64.decode(canvas.toDataURL("image/png").substring("data:image/png;base64,".length));
+		var imagePngAsBase64 = canvas.toDataURL("image/png").substring("data:image/png;base64,".length);
 		
-		return { imagePng:data, frames:frames, itemFrames:itemFrames };
+		return { imagePngAsBase64:imagePngAsBase64, frames:frames, itemFrames:itemFrames };
 	}
 	
 	function getImages(items:Array<IIdeLibraryItem>) : Array<ImageData>

@@ -27,7 +27,8 @@ class SpriteItem extends nanofl.engine.libraryitems.SpriteItem
 	{
 		Debug.assert(library != null, "You need to add item '" + namePath + "' to the library before preload call.");
 		
-		return ensureSpriteSheet();
+		ensureSpriteSheet();
+        return Promise.resolve(null);
 	}
 	
 	override public function createDisplayObject(initFrameIndex:Int, childFrameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : easeljs.display.DisplayObject

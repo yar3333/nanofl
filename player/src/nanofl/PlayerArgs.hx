@@ -1,7 +1,7 @@
 package nanofl;
 
 import js.html.DivElement;
-import nanofl.engine.TextureAtlasData;
+import easeljs.display.SpriteSheetData;
 
 typedef PlayerArgs = 
 {
@@ -9,5 +9,5 @@ typedef PlayerArgs =
     var libraryData : Dynamic;
     @:optional var framerate : Float;
     @:optional var scaleMode: String;
-    @:optional var textureAtlasesData:Array<Dynamic<TextureAtlasData>>;
+    @:optional var textureAtlasesData:Array<Dynamic<SpriteSheetData>>;
 }

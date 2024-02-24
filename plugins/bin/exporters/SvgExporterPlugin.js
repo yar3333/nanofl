@@ -708,6 +708,31 @@ stdlib_LambdaArray.distinct = function(arr,equFunc) {
 	}
 	return r;
 };
+stdlib_LambdaArray.toMapManyInner = function(arr,keySelector,valueSelector) {
+	var r = new Map();
+	var _g = 0;
+	while(_g < arr.length) {
+		var item = arr[_g];
+		++_g;
+		var k = keySelector(item);
+		if(r.has(k)) {
+			r.get(k).push(valueSelector(item));
+		} else {
+			r.set(k,[valueSelector(item)]);
+		}
+	}
+	return r;
+};
+stdlib_LambdaArray.toMapOneInner = function(arr,keySelector,valueSelector) {
+	var r = new Map();
+	var _g = 0;
+	while(_g < arr.length) {
+		var item = arr[_g];
+		++_g;
+		r.set(keySelector(item),valueSelector(item));
+	}
+	return r;
+};
 var stdlib_LambdaIterable = function() { };
 stdlib_LambdaIterable.__name__ = true;
 stdlib_LambdaIterable.findIndex = function(it,f) {

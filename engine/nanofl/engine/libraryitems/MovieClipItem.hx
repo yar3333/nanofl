@@ -102,7 +102,7 @@ class MovieClipItem	extends InstancableItem
 		var r = super.createDisplayObject(initFrameIndex, childFrameIndexes);
 		if (r != null) return r;
 		
-		var spriteSheet = TextureItemTools.getSpriteSheet(this);
+		var spriteSheet = TextureAtlasTools.getSpriteSheet(this);
 		if (spriteSheet == null && exportAsSpriteSheet) spriteSheet = asSpriteSheet();
 		
 		if (spriteSheet == null)
@@ -191,7 +191,7 @@ class MovieClipItem	extends InstancableItem
 	
 	public function preload() : Promise<{}>
 	{
-		return TextureItemTools.preload(this);
+		return Promise.resolve(null);
 	}
 	
 	override public function equ(item:ILibraryItem) : Bool

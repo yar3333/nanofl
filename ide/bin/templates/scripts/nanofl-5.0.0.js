@@ -2283,7 +2283,17 @@ class nanofl_Player {
 		let canvas = window.document.createElement("canvas");
 		canvas.style.position = "absolute";
 		args.container.appendChild(canvas);
-		if(args.textureAtlasesData != null) {
+		let _this = nanofl_Player.library.getSounds();
+		let result = new Array(_this.length);
+		let _g = 0;
+		let _g1 = _this.length;
+		while(_g < _g1) {
+			let i = _g++;
+			let item = _this[i];
+			result[i] = { src : item.getUrl(), id : item.linkage};
+		}
+		createjs.Sound.registerSounds(result,null);
+		return nanofl_engine_TextureAtlasTools.resolveImages(args.textureAtlasesData).then(function(_) {
 			let _g = 0;
 			let _g1 = args.textureAtlasesData;
 			while(_g < _g1.length) {
@@ -2297,36 +2307,27 @@ class nanofl_Player {
 					nanofl_Player.spriteSheets[namePath] = new createjs.SpriteSheet(Reflect.field(textureAtlasData,namePath));
 				}
 			}
-		}
-		let _this = nanofl_Player.library.getSounds();
-		let result = new Array(_this.length);
-		let _g = 0;
-		let _g1 = _this.length;
-		while(_g < _g1) {
-			let i = _g++;
-			let item = _this[i];
-			result[i] = { src : item.getUrl(), id : item.linkage};
-		}
-		createjs.Sound.registerSounds(result,null);
-		nanofl_Player.library.preload().then(function(_) {
-			nanofl_Player.stage = new nanofl_Stage(canvas);
-			if(args.scaleMode != nanofl_engine_ScaleMode.custom) {
-				let originalWidth = args.container.offsetWidth;
-				let originalHeight = args.container.offsetHeight;
-				window.addEventListener("resize",function() {
+			return nanofl_Player.library.preload().then(function(_) {
+				nanofl_Player.stage = new nanofl_Stage(canvas);
+				if(args.scaleMode != nanofl_engine_ScaleMode.custom) {
+					let originalWidth = args.container.offsetWidth;
+					let originalHeight = args.container.offsetHeight;
+					window.addEventListener("resize",function() {
+						nanofl_Player.resize(args.scaleMode,originalWidth,originalHeight);
+					});
 					nanofl_Player.resize(args.scaleMode,originalWidth,originalHeight);
-				});
-				nanofl_Player.resize(args.scaleMode,originalWidth,originalHeight);
-			}
-			nanofl_Player.stage.addChild(nanofl_Player.scene = nanofl_Player.library.getSceneInstance().createDisplayObject(null));
-			nanofl_DisplayObjectTools.callMethod(nanofl_Player.scene,"init");
-			nanofl_DisplayObjectTools.callMethod(nanofl_Player.scene,"onEnterFrame");
-			nanofl_Player.stage.update();
-			createjs.Ticker.framerate = args.framerate;
-			return createjs.Ticker.addEventListener("tick",function() {
-				nanofl_Player.scene.advance();
+				}
+				nanofl_Player.stage.addChild(nanofl_Player.scene = nanofl_Player.library.getSceneInstance().createDisplayObject(null));
+				nanofl_DisplayObjectTools.callMethod(nanofl_Player.scene,"init");
 				nanofl_DisplayObjectTools.callMethod(nanofl_Player.scene,"onEnterFrame");
 				nanofl_Player.stage.update();
+				createjs.Ticker.framerate = args.framerate;
+				createjs.Ticker.addEventListener("tick",function() {
+					nanofl_Player.scene.advance();
+					nanofl_DisplayObjectTools.callMethod(nanofl_Player.scene,"onEnterFrame");
+					nanofl_Player.stage.update();
+				});
+				return null;
 			});
 		});
 	}
@@ -4163,6 +4164,20 @@ var nanofl_engine_LibraryItemType = $hxEnums["nanofl.engine.LibraryItemType"] = 
 };
 nanofl_engine_LibraryItemType.__constructs__ = [nanofl_engine_LibraryItemType.bitmap,nanofl_engine_LibraryItemType.folder,nanofl_engine_LibraryItemType.font,nanofl_engine_LibraryItemType.mesh,nanofl_engine_LibraryItemType.movieclip,nanofl_engine_LibraryItemType.sound,nanofl_engine_LibraryItemType.sprite];
 class nanofl_engine_Loader {
+	static image(url) {
+		return new Promise(function(resolve,reject) {
+			let image = new Image();
+			image.onload = function(_) {
+				resolve(image);
+			};
+			image.onerror = function(_) {
+				nanofl_engine_Debug.console.error("Failed to load '" + url + "'.");
+				image.src = "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=";
+				reject(new Error("Failed to load '" + url + "'."));
+			};
+			image.src = url;
+		});
+	}
 	static file(url) {
 		return new Promise(function(resolve,reject) {
 			let xmlhttp = new XMLHttpRequest();
@@ -4172,8 +4187,8 @@ class nanofl_engine_Loader {
 					if(xmlhttp.status == 200) {
 						resolve(xmlhttp.responseText);
 					} else {
-						nanofl_engine_Debug.console.error("Failed to load '" + url + "': " + xmlhttp.status + " / " + xmlhttp.statusText);
-						reject("Failed to load '" + url + "': " + xmlhttp.status + " / " + xmlhttp.statusText);
+						nanofl_engine_Debug.console.error(new Error("Failed to load '" + url + "': " + xmlhttp.status + " / " + xmlhttp.statusText + "."));
+						reject(new Error("Failed to load '" + url + "': " + xmlhttp.status + " / " + xmlhttp.statusText + "."));
 					}
 				}
 			};
@@ -4181,7 +4196,7 @@ class nanofl_engine_Loader {
 			xmlhttp.send();
 		});
 	}
-	static loadJsScript(url) {
+	static javaScript(url) {
 		return new Promise(function(resolve,reject) {
 			let elem = window.document.createElement("script");
 			elem.type = "text/javascript";
@@ -4193,7 +4208,8 @@ class nanofl_engine_Loader {
 			});
 			elem.addEventListener("error",function(e) {
 				elem.remove();
-				reject(e);
+				nanofl_engine_Debug.console.error(new Error("Failed to load '" + url + "'."));
+				reject(new Error("Failed to load '" + url + "'."));
 			});
 			window.document.head.appendChild(elem);
 		});
@@ -4304,7 +4320,7 @@ nanofl_engine_MovieClipItemTools.__name__ = "nanofl.engine.MovieClipItemTools";
 class nanofl_engine_ScaleMode {
 }
 nanofl_engine_ScaleMode.__name__ = "nanofl.engine.ScaleMode";
-class nanofl_engine_TextureItemTools {
+class nanofl_engine_TextureAtlasTools {
 	static getSpriteSheet(item) {
 		if(item.textureAtlas != null && item.textureAtlas != "" && Object.prototype.hasOwnProperty.call(nanofl_Player.spriteSheets,item.namePath)) {
 			return Reflect.field(nanofl_Player.spriteSheets,item.namePath);
@@ -4312,24 +4328,76 @@ class nanofl_engine_TextureItemTools {
 			return null;
 		}
 	}
-	static preload(item) {
-		let spriteSheet = nanofl_engine_TextureItemTools.getSpriteSheet(item);
-		if(spriteSheet != null) {
-			if(spriteSheet.complete) {
-				return Promise.resolve();
-			} else {
-				return new Promise(function(resolve,reject) {
-					spriteSheet.addEventListener("complete",function(_) {
-						resolve(null);
-					},null);
-				});
-			}
-		} else {
-			return Promise.resolve();
+	static resolveImages(textureAtlasesData) {
+		if(textureAtlasesData == null) {
+			return Promise.resolve(null);
 		}
+		let urlToImageStruct = new haxe_ds_StringMap();
+		let _g = 0;
+		while(_g < textureAtlasesData.length) {
+			let textureAtlasData = textureAtlasesData[_g];
+			++_g;
+			let _g1 = 0;
+			let _g2 = Reflect.fields(textureAtlasData);
+			while(_g1 < _g2.length) {
+				let namePath = _g2[_g1];
+				++_g1;
+				let spriteSheetData = Reflect.field(textureAtlasData,namePath);
+				let _g = 0;
+				let _g3 = spriteSheetData.images;
+				while(_g < _g3.length) {
+					let url = _g3[_g];
+					++_g;
+					if(typeof(url) == "string" && !Object.prototype.hasOwnProperty.call(urlToImageStruct.h,url)) {
+						let value = nanofl_engine_TextureAtlasTools.resolveImage(url);
+						urlToImageStruct.h[url] = value;
+					}
+				}
+			}
+		}
+		return Promise.all(Lambda.array(urlToImageStruct)).then(function(data) {
+			let urlToImage = stdlib_LambdaArray.toMapOneInner(data,function(x) {
+				return x.url;
+			},function(x) {
+				return x.image;
+			});
+			let _g = 0;
+			while(_g < textureAtlasesData.length) {
+				let textureAtlasData = textureAtlasesData[_g];
+				++_g;
+				let _g1 = 0;
+				let _g2 = Reflect.fields(textureAtlasData);
+				while(_g1 < _g2.length) {
+					let namePath = _g2[_g1];
+					++_g1;
+					let spriteSheetData = Reflect.field(textureAtlasData,namePath);
+					let _this = spriteSheetData.images;
+					let result = new Array(_this.length);
+					let _g = 0;
+					let _g3 = _this.length;
+					while(_g < _g3) {
+						let i = _g++;
+						let x = _this[i];
+						let tmp = urlToImage.get(x);
+						result[i] = tmp != null ? tmp : x;
+					}
+					spriteSheetData.images = result;
+				}
+			}
+			return null;
+		});
+	}
+	static resolveImage(url) {
+		return nanofl_engine_Loader.javaScript(url).then(function(_) {
+			let pngDataAsBase64 = nanofl.textureAtlasImageFiles[namePath + ".png"];
+			nanofl.textureAtlasImageFiles[namePath + ".png"] = null;
+			return nanofl_engine_Loader.image("data:image/png;base64," + pngDataAsBase64).then(function(image) {
+				return { url : url, image : image};
+			});
+		});
 	}
 }
-nanofl_engine_TextureItemTools.__name__ = "nanofl.engine.TextureItemTools";
+nanofl_engine_TextureAtlasTools.__name__ = "nanofl.engine.TextureAtlasTools";
 class nanofl_engine_coloreffects_ColorEffect {
 	static loadJson(obj) {
 		let _g = obj != null ? obj.type : null;
@@ -7000,16 +7068,16 @@ class nanofl_engine_libraryitems_BitmapItem extends nanofl_engine_libraryitems_I
 		return obj;
 	}
 	preload() {
-		stdlib_Debug.assert(this.library != null,"You need to add item '" + this.namePath + "' to the library before preload call.",{ fileName : "engine/nanofl/engine/libraryitems/BitmapItem.hx", lineNumber : 52, className : "nanofl.engine.libraryitems.BitmapItem", methodName : "preload"});
-		if(nanofl_engine_TextureItemTools.getSpriteSheet(this) == null) {
+		stdlib_Debug.assert(this.library != null,"You need to add item '" + this.namePath + "' to the library before preload call.",{ fileName : "engine/nanofl/engine/libraryitems/BitmapItem.hx", lineNumber : 53, className : "nanofl.engine.libraryitems.BitmapItem", methodName : "preload"});
+		if(nanofl_engine_TextureAtlasTools.getSpriteSheet(this) == null) {
 			return this.preloadInner();
 		} else {
-			return nanofl_engine_TextureItemTools.preload(this);
+			return Promise.resolve(null);
 		}
 	}
 	preloadInner() {
 		let _gthis = this;
-		return nanofl_engine_Loader.loadJsScript(this.library.realUrl(this.namePath + ".js")).then(function(_) {
+		return nanofl_engine_Loader.javaScript(this.library.realUrl(this.namePath + ".js")).then(function(_) {
 			return _gthis.loadImageFromBase64(_gthis.getLibraryFileContent(_gthis.namePath + "." + _gthis.ext));
 		});
 	}
@@ -7030,14 +7098,14 @@ class nanofl_engine_libraryitems_BitmapItem extends nanofl_engine_libraryitems_I
 	createDisplayObject(initFrameIndex,childFrameIndexes) {
 		let r = super.createDisplayObject(initFrameIndex,childFrameIndexes);
 		if(r == null) {
-			let spriteSheet = nanofl_engine_TextureItemTools.getSpriteSheet(this);
+			let spriteSheet = nanofl_engine_TextureAtlasTools.getSpriteSheet(this);
 			r = spriteSheet == null ? new nanofl_Bitmap(this) : new createjs.Sprite(spriteSheet);
 		}
 		r.setBounds(0,0,this.image.width,this.image.height);
 		return r;
 	}
 	updateDisplayObject(dispObj,childFrameIndexes) {
-		stdlib_Debug.assert(((dispObj) instanceof createjs.Bitmap),null,{ fileName : "engine/nanofl/engine/libraryitems/BitmapItem.hx", lineNumber : 101, className : "nanofl.engine.libraryitems.BitmapItem", methodName : "updateDisplayObject"});
+		stdlib_Debug.assert(((dispObj) instanceof createjs.Bitmap),null,{ fileName : "engine/nanofl/engine/libraryitems/BitmapItem.hx", lineNumber : 102, className : "nanofl.engine.libraryitems.BitmapItem", methodName : "updateDisplayObject"});
 		dispObj.image = this.image;
 		dispObj.setBounds(0,0,this.image.width,this.image.height);
 	}
@@ -7247,16 +7315,16 @@ class nanofl_engine_libraryitems_MeshItem extends nanofl_engine_libraryitems_Ins
 	}
 	preload() {
 		stdlib_Debug.assert(this.library != null,"You need to add item '" + this.namePath + "' to the library before preload call.",{ fileName : "engine/nanofl/engine/libraryitems/MeshItem.hx", lineNumber : 75, className : "nanofl.engine.libraryitems.MeshItem", methodName : "preload"});
-		let spriteSheet = nanofl_engine_TextureItemTools.getSpriteSheet(this);
+		let spriteSheet = nanofl_engine_TextureAtlasTools.getSpriteSheet(this);
 		if(spriteSheet == null) {
 			return this.preloadInner();
 		} else {
-			return nanofl_engine_TextureItemTools.preload(this);
+			return Promise.resolve(null);
 		}
 	}
 	preloadInner() {
 		let _gthis = this;
-		return nanofl_engine_Loader.loadJsScript(this.library.realUrl(this.namePath + ".js")).then(function(_) {
+		return nanofl_engine_Loader.javaScript(this.library.realUrl(this.namePath + ".js")).then(function(_) {
 			return _gthis.processPreloadedJson(_gthis.getLibraryFileContent(_gthis.namePath + ".gltf"));
 		});
 	}
@@ -7294,7 +7362,7 @@ class nanofl_engine_libraryitems_MeshItem extends nanofl_engine_libraryitems_Ins
 	createDisplayObject(initFrameIndex,childFrameIndexes) {
 		let r = super.createDisplayObject(initFrameIndex,childFrameIndexes);
 		if(r == null) {
-			let spriteSheet = nanofl_engine_TextureItemTools.getSpriteSheet(this);
+			let spriteSheet = nanofl_engine_TextureAtlasTools.getSpriteSheet(this);
 			r = spriteSheet == null ? new nanofl_Mesh(this) : new createjs.Sprite(spriteSheet);
 		}
 		return r;
@@ -7445,7 +7513,7 @@ class nanofl_engine_libraryitems_MovieClipItem extends nanofl_engine_libraryitem
 		if(r != null) {
 			return r;
 		}
-		let spriteSheet = nanofl_engine_TextureItemTools.getSpriteSheet(this);
+		let spriteSheet = nanofl_engine_TextureAtlasTools.getSpriteSheet(this);
 		if(spriteSheet == null && this.exportAsSpriteSheet) {
 			spriteSheet = this.asSpriteSheet();
 		}
@@ -7484,7 +7552,7 @@ class nanofl_engine_libraryitems_MovieClipItem extends nanofl_engine_libraryitem
 		return nanofl_engine_libraryitems_MovieClipItem.asSpriteSheet_spriteSheet;
 	}
 	preload() {
-		return nanofl_engine_TextureItemTools.preload(this);
+		return Promise.resolve(null);
 	}
 	equ(item) {
 		if(item == this) {
@@ -7702,23 +7770,22 @@ class nanofl_engine_libraryitems_SpriteItem extends nanofl_engine_libraryitems_I
 	}
 	preload() {
 		stdlib_Debug.assert(this.library != null,"You need to add item '" + this.namePath + "' to the library before preload call.",{ fileName : "engine/nanofl/engine/libraryitems/SpriteItem.hx", lineNumber : 87, className : "nanofl.engine.libraryitems.SpriteItem", methodName : "preload"});
-		if(nanofl_engine_TextureItemTools.getSpriteSheet(this) == null) {
-			return this.ensureSpriteSheet();
-		} else {
-			return nanofl_engine_TextureItemTools.preload(this);
+		if(nanofl_engine_TextureAtlasTools.getSpriteSheet(this) == null) {
+			this.ensureSpriteSheet();
 		}
+		return Promise.resolve(null);
 	}
 	createDisplayObject(initFrameIndex,childFrameIndexes) {
 		let r = super.createDisplayObject(initFrameIndex,childFrameIndexes);
 		if(r != null) {
 			return r;
 		}
-		let spriteSheet = nanofl_engine_TextureItemTools.getSpriteSheet(this);
+		let spriteSheet = nanofl_engine_TextureAtlasTools.getSpriteSheet(this);
 		if(spriteSheet == null) {
 			spriteSheet = this.spriteSheet;
 		}
-		stdlib_Debug.assert(spriteSheet != null,null,{ fileName : "engine/nanofl/engine/libraryitems/SpriteItem.hx", lineNumber : 101, className : "nanofl.engine.libraryitems.SpriteItem", methodName : "createDisplayObject"});
-		stdlib_Debug.assert(spriteSheet.complete,null,{ fileName : "engine/nanofl/engine/libraryitems/SpriteItem.hx", lineNumber : 102, className : "nanofl.engine.libraryitems.SpriteItem", methodName : "createDisplayObject"});
+		stdlib_Debug.assert(spriteSheet != null,null,{ fileName : "engine/nanofl/engine/libraryitems/SpriteItem.hx", lineNumber : 104, className : "nanofl.engine.libraryitems.SpriteItem", methodName : "createDisplayObject"});
+		stdlib_Debug.assert(spriteSheet.complete,null,{ fileName : "engine/nanofl/engine/libraryitems/SpriteItem.hx", lineNumber : 105, className : "nanofl.engine.libraryitems.SpriteItem", methodName : "createDisplayObject"});
 		let sprite = new createjs.Sprite(spriteSheet);
 		sprite.gotoAndStop(initFrameIndex);
 		return sprite;
@@ -7726,47 +7793,39 @@ class nanofl_engine_libraryitems_SpriteItem extends nanofl_engine_libraryitems_I
 	updateDisplayObject(dispObj,childFrameIndexes) {
 	}
 	ensureSpriteSheet() {
+		if(this.spriteSheet != null) {
+			return;
+		}
+		let images = [];
+		let _g = 0;
+		let _g1 = this.frames;
+		while(_g < _g1.length) {
+			let f = _g1[_g];
+			++_g;
+			if(images.indexOf(f.image) < 0) {
+				images.push(f.image);
+			}
+		}
 		let _gthis = this;
-		if(this.spriteSheet == null) {
-			let images = [];
-			let _g = 0;
-			let _g1 = this.frames;
-			while(_g < _g1.length) {
-				let f = _g1[_g];
-				++_g;
-				if(images.indexOf(f.image) < 0) {
-					images.push(f.image);
-				}
-			}
-			let result = new Array(images.length);
-			let _g2 = 0;
-			let _g3 = images.length;
-			while(_g2 < _g3) {
-				let i = _g2++;
-				result[i] = _gthis.library.realUrl(images[i]);
-			}
-			let data = result;
-			let _this = this.frames;
-			let result1 = new Array(_this.length);
-			let _g4 = 0;
-			let _g5 = _this.length;
-			while(_g4 < _g5) {
-				let i = _g4++;
-				let f = _this[i];
-				result1[i] = [f.x,f.y,f.width,f.height,images.indexOf(f.image),f.regX,f.regY];
-			}
-			let data1 = { images : data, frames : result1};
-			this.spriteSheet = new createjs.SpriteSheet(data1);
+		let result = new Array(images.length);
+		let _g2 = 0;
+		let _g3 = images.length;
+		while(_g2 < _g3) {
+			let i = _g2++;
+			result[i] = _gthis.library.realUrl(images[i]);
 		}
-		if(!this.spriteSheet.complete) {
-			return new Promise(function(resolve,reject) {
-				_gthis.spriteSheet.addEventListener("complete",function(_) {
-					resolve(null);
-				},null);
-			});
-		} else {
-			return Promise.resolve(null);
+		let data = result;
+		let _this = this.frames;
+		let result1 = new Array(_this.length);
+		let _g4 = 0;
+		let _g5 = _this.length;
+		while(_g4 < _g5) {
+			let i = _g4++;
+			let f = _this[i];
+			result1[i] = [f.x,f.y,f.width,f.height,images.indexOf(f.image),f.regX,f.regY];
 		}
+		let data1 = { images : data, frames : result1};
+		this.spriteSheet = new createjs.SpriteSheet(data1);
 	}
 	equ(item) {
 		if(!((item) instanceof nanofl_engine_libraryitems_SpriteItem)) {
@@ -8840,6 +8899,16 @@ class stdlib_LambdaArray {
 			++_g;
 			arr.push(e);
 		}
+	}
+	static toMapOneInner(arr,keySelector,valueSelector) {
+		let r = new Map();
+		let _g = 0;
+		while(_g < arr.length) {
+			let item = arr[_g];
+			++_g;
+			r.set(keySelector(item),valueSelector(item));
+		}
+		return r;
 	}
 }
 stdlib_LambdaArray.__name__ = "stdlib.LambdaArray";

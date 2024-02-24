@@ -1,13 +1,15 @@
 package nanofl;
 
-import js.lib.Error;
-import nanofl.engine.Library;
-import soundjs.Sound;
-import easeljs.display.SpriteSheet;
-import createjs.utils.Ticker;
 import js.Browser;
 import js.html.CanvasElement;
 import js.html.DivElement;
+import js.lib.Promise;
+import js.lib.Error;
+import createjs.utils.Ticker;
+import easeljs.display.SpriteSheet;
+import soundjs.Sound;
+import nanofl.engine.Library;
+import nanofl.engine.TextureAtlasTools;
 import nanofl.engine.ScaleMode;
 
 @:expose
@@ -26,7 +28,7 @@ class Player
 		//js.Syntax.code("$hx_exports.$extend = $extend");
 	}
 	
-	public static function init(args:PlayerArgs) : Void
+	public static function init(args:PlayerArgs) : Promise<{}>
 	{
         if (args.container == null) throw new Error("Player.init: argument `container` must be specified.");
         if (args.libraryData == null) throw new Error("Player.init: argument `libraryData` must be specified.");
@@ -42,46 +44,49 @@ class Player
 		canvas.style.position = "absolute";
 		args.container.appendChild(canvas);
 		
-		if (args.textureAtlasesData != null)
-		{
-			for (textureAtlasData in args.textureAtlasesData)
-			{
-				for (namePath in Reflect.fields(textureAtlasData))
-				{
-					Reflect.setField(spriteSheets, namePath, new SpriteSheet(Reflect.field(textureAtlasData, namePath)));
-				}
-			}
-		}
-		
 		Sound.registerSounds(library.getSounds().map(item -> { src:item.getUrl(), id:item.linkage }), null);
 		
-		library.preload().then(_ ->
-		{
-			stage = new nanofl.Stage(canvas);
-			
-			if (args.scaleMode != ScaleMode.custom)
-			{
-				var originalWidth = args.container.offsetWidth;
-				var originalHeight = args.container.offsetHeight;
-				Browser.window.addEventListener("resize", () -> resize(args.scaleMode, originalWidth, originalHeight));
-				resize(args.scaleMode, originalWidth, originalHeight);
-			}
-			
-			stage.addChild(scene = cast library.getSceneInstance().createDisplayObject(null));
-			
-			DisplayObjectTools.callMethod(scene, "init");
-			DisplayObjectTools.callMethod(scene, "onEnterFrame");
-			
-			stage.update();
-			
-			Ticker.framerate = args.framerate;
-			Ticker.addEventListener("tick", function()
-			{
-				scene.advance();
-				DisplayObjectTools.callMethod(scene, "onEnterFrame");
-				stage.update();
-			});
-		});
+        return TextureAtlasTools.resolveImages(args.textureAtlasesData)
+        .then(_ ->
+        {
+            for (textureAtlasData in args.textureAtlasesData)
+            {
+                for (namePath in Reflect.fields(textureAtlasData))
+                {
+                    Reflect.setField(spriteSheets, namePath, new SpriteSheet(Reflect.field(textureAtlasData, namePath)));
+                }
+            }
+
+            return library.preload().then(_ ->
+            {
+                stage = new nanofl.Stage(canvas);
+                
+                if (args.scaleMode != ScaleMode.custom)
+                {
+                    var originalWidth = args.container.offsetWidth;
+                    var originalHeight = args.container.offsetHeight;
+                    Browser.window.addEventListener("resize", () -> resize(args.scaleMode, originalWidth, originalHeight));
+                    resize(args.scaleMode, originalWidth, originalHeight);
+                }
+                
+                stage.addChild(scene = cast library.getSceneInstance().createDisplayObject(null));
+                
+                DisplayObjectTools.callMethod(scene, "init");
+                DisplayObjectTools.callMethod(scene, "onEnterFrame");
+                
+                stage.update();
+                
+                Ticker.framerate = args.framerate;
+                Ticker.addEventListener("tick", () ->
+                {
+                    scene.advance();
+                    DisplayObjectTools.callMethod(scene, "onEnterFrame");
+                    stage.update();
+                });
+
+                return null;
+            });
+        });
 	}
 	
 	static function resize(scaleMode:String, originalWidth:Int, originalHeight:Int)

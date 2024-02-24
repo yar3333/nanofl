@@ -85,17 +85,20 @@ class SpriteItem extends InstancableItem
 	public function preload() : Promise<{}>
 	{
 		Debug.assert(library != null, "You need to add item '" + namePath + "' to the library before preload call.");
+
+        if (TextureAtlasTools.getSpriteSheet(this) == null)
+        {
+            ensureSpriteSheet();
+        }
 		
-		return TextureItemTools.getSpriteSheet(this) == null
-					? ensureSpriteSheet()
-					: TextureItemTools.preload(this);
+		return Promise.resolve(null);
 	}
 	
 	override public function createDisplayObject(initFrameIndex:Int, childFrameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : easeljs.display.DisplayObject
 	{
 		var r = super.createDisplayObject(initFrameIndex, childFrameIndexes);
 		if (r != null) return r;
-		var spriteSheet = TextureItemTools.getSpriteSheet(this);
+		var spriteSheet = TextureAtlasTools.getSpriteSheet(this);
 		if (spriteSheet == null) spriteSheet = this.spriteSheet;
 		
 		Debug.assert(spriteSheet != null);
@@ -104,7 +107,7 @@ class SpriteItem extends InstancableItem
 		sprite.gotoAndStop(initFrameIndex);
 		return sprite;
 	}
-	
+        
 	public function updateDisplayObject(dispObj:easeljs.display.DisplayObject, childFrameIndexes:Array<{ element:IPathElement, frameIndex:Int }>)
 	{
 		//stdlib.Debug.assert(Std.isOfType(dispObj, easeljs.display.Sprite));
@@ -113,39 +116,26 @@ class SpriteItem extends InstancableItem
 		//	(cast dispObj:easeljs.display.Sprite).gotoAndStop(childFrameIndexes[0].frameIndex);
 		//}
 	}
-	
-	function ensureSpriteSheet() : Promise<{}>
-	{
-		if (spriteSheet == null)
-		{
-			var images = [];
-			for (f in frames)
-			{
-				if (images.indexOf(f.image) < 0) images.push(f.image);
-			}
-			
-			var data =
-			{
-				images: images.map(image -> library.realUrl(image)),
-				frames: frames.map(f -> [ f.x, f.y, f.width, f.height, images.indexOf(f.image), f.regX, f.regY ])
-			};
-			
-			spriteSheet = new easeljs.display.SpriteSheet(data);
-		}
-		
-		if (!spriteSheet.complete)
-		{
-			return new Promise((resolve, reject) ->
-			{
-				spriteSheet.addCompleteEventListener(function(_) resolve(null));
-			});
-		}
-		else
-		{
-			return Promise.resolve(null);
-		}
-	}
-	
+
+    function ensureSpriteSheet() : Void
+    {
+        if (spriteSheet != null) return;
+
+        var images = [];
+        for (f in frames)
+        {
+            if (images.indexOf(f.image) < 0) images.push(f.image);
+        }
+        
+        var data =
+        {
+            images: images.map(image -> library.realUrl(image)),
+            frames: frames.map(f -> [ f.x, f.y, f.width, f.height, images.indexOf(f.image), f.regX, f.regY ])
+        };
+        
+        spriteSheet = new easeljs.display.SpriteSheet(data);
+    }
+        
 	override public function getNearestPoint(pos:Point) : Point
 	{
 		if (frames.length == 0) return { x:1e100, y:1e100 };
