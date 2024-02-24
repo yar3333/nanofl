@@ -8,7 +8,12 @@
 		<script defer src="library.js"></script>
 		<script>
 			window.addEventListener("load", () => {
-				nanofl.Player.init(document.getElementById("container"), libraryData, 24, 'noScale', null);
+				nanofl.Player.init({
+                    container: document.getElementById("container"),
+                    libraryData: libraryData,
+                    framerate: 24,
+                    scaleMode: 'noScale',
+                });
 			});
 		</script>
 	</head>
