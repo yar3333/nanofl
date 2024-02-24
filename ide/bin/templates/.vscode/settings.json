@@ -1,0 +1,7 @@
+{
+    "files.exclude": {
+        "library": true,
+        "library.js": true,
+        "package-lock.json": true
+    }
+}

@@ -42,6 +42,13 @@ class CodeGenerator extends InjectContainer
         generator.generatePackageJsonFile(projectName, baseDir + "/package.json");
         generator.generateTsConfigJsonFile(baseDir + "/tsconfig.json");
         generator.generateWebpackConfigJsFile(baseDir + "/webpack.config.js");
+        generator.generateVsCode(baseDir + "/.vscode");
+    }
+
+    function generateVsCode(destVsCodeDir:String)
+    {
+        if (fileSystem.exists(destVsCodeDir)) return;
+        fileSystem.copyAny(folders.application + "/templates/.vscode", destVsCodeDir);
     }
 
     function generateApplicationTs(destTsFilePath:String)
