@@ -2264,34 +2264,40 @@ Object.assign(nanofl_Mesh.prototype, {
 	__class__: nanofl_Mesh
 });
 class nanofl_Player {
-	static init(container,libraryData,framerate,scaleMode,textureAtlasesData) {
-		if(scaleMode == null) {
-			scaleMode = "custom";
+	static init(args) {
+		if(args.container == null) {
+			throw new Error("Player.init: argument `container` must be specified.");
 		}
-		if(framerate == null) {
-			framerate = 24.0;
+		if(args.libraryData == null) {
+			throw new Error("Player.init: argument `libraryData` must be specified.");
 		}
-		nanofl_Player.container = container;
-		nanofl_Player.library = nanofl_engine_Library.loadFromJson("library",libraryData);
-		container.innerHTML = "";
+		if(args.scaleMode == null) {
+			args.scaleMode = "custom";
+		}
+		if(args.framerate == null) {
+			args.framerate = 24;
+		}
+		nanofl_Player.container = args.container;
+		nanofl_Player.library = nanofl_engine_Library.loadFromJson("library",args.libraryData);
+		args.container.innerHTML = "";
 		let canvas = window.document.createElement("canvas");
 		canvas.style.position = "absolute";
-		container.appendChild(canvas);
-		if(textureAtlasesData != null) {
+		args.container.appendChild(canvas);
+		if(args.textureAtlasesData != null) {
 			let _g = 0;
-			while(_g < textureAtlasesData.length) {
-				let textureAtlasData = textureAtlasesData[_g];
+			let _g1 = args.textureAtlasesData;
+			while(_g < _g1.length) {
+				let textureAtlasData = _g1[_g];
 				++_g;
-				let _g1 = 0;
-				let _g2 = Reflect.fields(textureAtlasData);
-				while(_g1 < _g2.length) {
-					let namePath = _g2[_g1];
-					++_g1;
+				let _g2 = 0;
+				let _g3 = Reflect.fields(textureAtlasData);
+				while(_g2 < _g3.length) {
+					let namePath = _g3[_g2];
+					++_g2;
 					nanofl_Player.spriteSheets[namePath] = new createjs.SpriteSheet(Reflect.field(textureAtlasData,namePath));
 				}
 			}
 		}
-		createjs.Sound.alternateExtensions = ["ogg","mp3","wav"];
 		let _this = nanofl_Player.library.getSounds();
 		let result = new Array(_this.length);
 		let _g = 0;
@@ -2304,19 +2310,19 @@ class nanofl_Player {
 		createjs.Sound.registerSounds(result,null);
 		nanofl_Player.library.preload().then(function(_) {
 			nanofl_Player.stage = new nanofl_Stage(canvas);
-			if(scaleMode != nanofl_engine_ScaleMode.custom) {
-				let originalWidth = container.offsetWidth;
-				let originalHeight = container.offsetHeight;
+			if(args.scaleMode != nanofl_engine_ScaleMode.custom) {
+				let originalWidth = args.container.offsetWidth;
+				let originalHeight = args.container.offsetHeight;
 				window.addEventListener("resize",function() {
-					nanofl_Player.resize(scaleMode,originalWidth,originalHeight);
+					nanofl_Player.resize(args.scaleMode,originalWidth,originalHeight);
 				});
-				nanofl_Player.resize(scaleMode,originalWidth,originalHeight);
+				nanofl_Player.resize(args.scaleMode,originalWidth,originalHeight);
 			}
 			nanofl_Player.stage.addChild(nanofl_Player.scene = nanofl_Player.library.getSceneInstance().createDisplayObject(null));
 			nanofl_DisplayObjectTools.callMethod(nanofl_Player.scene,"init");
 			nanofl_DisplayObjectTools.callMethod(nanofl_Player.scene,"onEnterFrame");
 			nanofl_Player.stage.update();
-			createjs.Ticker.framerate = framerate;
+			createjs.Ticker.framerate = args.framerate;
 			return createjs.Ticker.addEventListener("tick",function() {
 				nanofl_Player.scene.advance();
 				nanofl_DisplayObjectTools.callMethod(nanofl_Player.scene,"onEnterFrame");

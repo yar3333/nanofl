@@ -33,19 +33,35 @@ class SoundItem extends nanofl.engine.libraryitems.SoundItem
 	
 	public function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String) : IIdeLibraryItem
 	{
-		var generateAudioExtensions = [];
-		if (settings.isGenerateMp3Sounds) generateAudioExtensions.push("mp3");
-		if (settings.isGenerateOggSounds) generateAudioExtensions.push("ogg");
-		if (settings.isGenerateWavSounds) generateAudioExtensions.push("wav");
+        var srcFile = library.libraryDir + "/" + namePath + "." + ext;
+        var destFile = destLibraryDir + "/" + namePath + ".ogg";
+        if (!fileSystem.exists(destFile))
+        {
+            new nanofl.ide.MediaConvertor().convertAudio(srcFile, destFile, settings.audioQuality);
+        }
+        else
+        {
+            var srcTime = fileSystem.getLastModified(srcFile);
+            var destTime = fileSystem.getLastModified(destFile);
+            if (srcTime.getTime() > destTime.getTime())
+            {
+                new nanofl.ide.MediaConvertor().convertAudio(srcFile, destFile, settings.audioQuality);
+            }
+            else
+            {
+                var tempFile = fileSystem.getTempFilePath(".ogg");
+                new nanofl.ide.MediaConvertor().convertAudio(srcFile, tempFile, settings.audioQuality);
+                if (fileSystem.getSize(srcFile) != fileSystem.getSize(tempFile))
+                {
+                    fileSystem.copyFile(tempFile, destFile);
+                }
+                fileSystem.deleteFile(tempFile);
+            }
+        }
 		
-		for (destExt in generateAudioExtensions)
-		{
-			var srcFile = library.libraryDir + "/" + namePath + "." + ext;
-			var destFile = destLibraryDir + "/" + namePath + "." + destExt;
-			new nanofl.ide.MediaConvertor().convertAudio(srcFile, destFile, settings.audioQuality);
-		}
-		
-		return clone();
+        var r = clone();
+        r.ext = "ogg";
+        return r;
 	}
 	
 	/*override public function equ(item:ILibraryItem) : Bool

@@ -26,7 +26,13 @@
 		<script defer src="scripts/application.js"></script>
 		<script>
 			window.addEventListener("load", () => {
-				nanofl.Player.init(document.getElementById("container"), libraryData, {framerate}, '{scaleMode}', {textureAtlasesData});
+				nanofl.Player.init({
+                    container: document.getElementById("container"),
+                    libraryData: libraryData,
+                    framerate: {framerate},
+                    scaleMode: '{scaleMode}',
+                    textureAtlasesData: {textureAtlasesData},
+                });
 			});
 		</script>
 	</head>

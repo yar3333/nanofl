@@ -1,5 +1,6 @@
 package nanofl;
 
+import js.lib.Error;
 import nanofl.engine.Library;
 import soundjs.Sound;
 import easeljs.display.SpriteSheet;
@@ -8,7 +9,6 @@ import js.Browser;
 import js.html.CanvasElement;
 import js.html.DivElement;
 import nanofl.engine.ScaleMode;
-import nanofl.engine.TextureAtlasData;
 
 @:expose
 class Player
@@ -26,20 +26,25 @@ class Player
 		//js.Syntax.code("$hx_exports.$extend = $extend");
 	}
 	
-	public static function init(container:DivElement, libraryData:Dynamic, framerate=24.0, scaleMode="custom", ?textureAtlasesData:Array<Dynamic<TextureAtlasData>>) : Void
+	public static function init(args:PlayerArgs) : Void
 	{
-		Player.container = container;
-		Player.library = Library.loadFromJson("library", libraryData);
+        if (args.container == null) throw new Error("Player.init: argument `container` must be specified.");
+        if (args.libraryData == null) throw new Error("Player.init: argument `libraryData` must be specified.");
+        if (args.scaleMode == null) args.scaleMode = "custom";
+        if (args.framerate == null) args.framerate = 24;
+
+		Player.container = args.container;
+		Player.library = Library.loadFromJson("library", args.libraryData);
 		
-		container.innerHTML = "";
+		args.container.innerHTML = "";
 		
 		var canvas : CanvasElement = cast Browser.document.createCanvasElement();
 		canvas.style.position = "absolute";
-		container.appendChild(canvas);
+		args.container.appendChild(canvas);
 		
-		if (textureAtlasesData != null)
+		if (args.textureAtlasesData != null)
 		{
-			for (textureAtlasData in textureAtlasesData)
+			for (textureAtlasData in args.textureAtlasesData)
 			{
 				for (namePath in Reflect.fields(textureAtlasData))
 				{
@@ -48,19 +53,18 @@ class Player
 			}
 		}
 		
-		Sound.alternateExtensions = [ "ogg", "mp3", "wav" ];
 		Sound.registerSounds(library.getSounds().map(item -> { src:item.getUrl(), id:item.linkage }), null);
 		
 		library.preload().then(_ ->
 		{
 			stage = new nanofl.Stage(canvas);
 			
-			if (scaleMode != ScaleMode.custom)
+			if (args.scaleMode != ScaleMode.custom)
 			{
-				var originalWidth = container.offsetWidth;
-				var originalHeight = container.offsetHeight;
-				Browser.window.addEventListener("resize", () -> resize(scaleMode, originalWidth, originalHeight));
-				resize(scaleMode, originalWidth, originalHeight);
+				var originalWidth = args.container.offsetWidth;
+				var originalHeight = args.container.offsetHeight;
+				Browser.window.addEventListener("resize", () -> resize(args.scaleMode, originalWidth, originalHeight));
+				resize(args.scaleMode, originalWidth, originalHeight);
 			}
 			
 			stage.addChild(scene = cast library.getSceneInstance().createDisplayObject(null));
@@ -70,7 +74,7 @@ class Player
 			
 			stage.update();
 			
-			Ticker.framerate = framerate;
+			Ticker.framerate = args.framerate;
 			Ticker.addEventListener("tick", function()
 			{
 				scene.advance();

@@ -31,9 +31,6 @@ class Code extends components.nanofl.popups.basepopup.Code
 		
 		template().isConvertImagesIntoJpeg.prop("checked", settings.isConvertImagesIntoJpeg);
 		template().jpegQuality.val(settings.jpegQuality);
-		template().isGenerateMp3Sounds.prop("checked", settings.isGenerateMp3Sounds);
-		template().isGenerateOggSounds.prop("checked", settings.isGenerateOggSounds);
-		template().isGenerateWavSounds.prop("checked", settings.isGenerateWavSounds);
 		template().audioQuality.val(settings.audioQuality);
 		template().urlOnClick.prop("checked", settings.urlOnClick);
 		template().useLocalScripts.prop("checked", settings.useLocalScripts);
@@ -66,21 +63,6 @@ class Code extends components.nanofl.popups.basepopup.Code
 	function jpegQuality_change(_)
 	{
 		settings.jpegQuality = Std.parseInt(template().jpegQuality.val(), 80);
-	}
-	
-	function isGenerateMp3Sounds_change(_)
-	{
-		settings.isGenerateMp3Sounds = template().isGenerateMp3Sounds.prop("checked");
-	}
-	
-	function isGenerateOggSounds_change(_)
-	{
-		settings.isGenerateOggSounds = template().isGenerateOggSounds.prop("checked");
-	}
-	
-	function isGenerateWavSounds_change(_)
-	{
-		settings.isGenerateWavSounds = template().isGenerateWavSounds.prop("checked");
 	}
 	
 	function audioQuality_change(_)

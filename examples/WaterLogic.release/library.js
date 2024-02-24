@@ -867,31 +867,31 @@ libraryData =
     "type": "sound",
     "version": "2.3.0",
     "linkage": "bucket",
-    "ext": "wav"
+    "ext": "ogg"
   },
   "_sounds/sndMusic": {
     "type": "sound",
     "version": "2.3.0",
     "linkage": "music",
-    "ext": "wav"
+    "ext": "ogg"
   },
   "_sounds/sndTap": {
     "type": "sound",
     "version": "2.3.0",
     "linkage": "tap",
-    "ext": "wav"
+    "ext": "ogg"
   },
   "_sounds/sndTrash": {
     "type": "sound",
     "version": "2.3.0",
     "linkage": "trash",
-    "ext": "wav"
+    "ext": "ogg"
   },
   "_sounds/sndWater": {
     "type": "sound",
     "version": "2.3.0",
     "linkage": "water",
-    "ext": "wav"
+    "ext": "ogg"
   },
   "_splash/splash": {
     "type": "movieclip",

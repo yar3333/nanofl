@@ -15,15 +15,6 @@ class Template extends components.nanofl.popups.basepopup.Template
 	public var jpegQuality(get, never) : js.JQuery;
 	inline function get_jpegQuality() return component.q('#jpegQuality');
 	
-	public var isGenerateMp3Sounds(get, never) : js.JQuery;
-	inline function get_isGenerateMp3Sounds() return component.q('#isGenerateMp3Sounds');
-	
-	public var isGenerateOggSounds(get, never) : js.JQuery;
-	inline function get_isGenerateOggSounds() return component.q('#isGenerateOggSounds');
-	
-	public var isGenerateWavSounds(get, never) : js.JQuery;
-	inline function get_isGenerateWavSounds() return component.q('#isGenerateWavSounds');
-	
 	public var audioQuality(get, never) : js.JQuery;
 	inline function get_audioQuality() return component.q('#audioQuality');
 	

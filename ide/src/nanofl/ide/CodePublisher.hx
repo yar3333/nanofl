@@ -64,6 +64,7 @@ class CodePublisher extends InjectContainer
         if (!hasTextureAtlases)
         {
             template = template.replace('\t\t<script defer src="texture-atlases.js"></script>\r\n', '');
+            template = template.replace('                    textureAtlasesData: null,\r\n', '');
         }
             
         if (!addLinkToApplicationJs)
