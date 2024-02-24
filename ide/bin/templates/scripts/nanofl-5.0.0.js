@@ -1317,6 +1317,11 @@ class haxe_io_Path {
 	toString() {
 		return (this.dir == null ? "" : this.dir + (this.backslash ? "\\" : "/")) + this.file + (this.ext == null ? "" : "." + this.ext);
 	}
+	static withoutExtension(path) {
+		let s = new haxe_io_Path(path);
+		s.ext = null;
+		return s.toString();
+	}
 	static withoutDirectory(path) {
 		let s = new haxe_io_Path(path);
 		s.dir = null;
@@ -2294,17 +2299,19 @@ class nanofl_Player {
 		}
 		createjs.Sound.registerSounds(result,null);
 		return nanofl_engine_TextureAtlasTools.resolveImages(args.textureAtlasesData).then(function(_) {
-			let _g = 0;
-			let _g1 = args.textureAtlasesData;
-			while(_g < _g1.length) {
-				let textureAtlasData = _g1[_g];
-				++_g;
-				let _g2 = 0;
-				let _g3 = Reflect.fields(textureAtlasData);
-				while(_g2 < _g3.length) {
-					let namePath = _g3[_g2];
-					++_g2;
-					nanofl_Player.spriteSheets[namePath] = new createjs.SpriteSheet(Reflect.field(textureAtlasData,namePath));
+			if(args.textureAtlasesData != null) {
+				let _g = 0;
+				let _g1 = args.textureAtlasesData;
+				while(_g < _g1.length) {
+					let textureAtlasData = _g1[_g];
+					++_g;
+					let _g2 = 0;
+					let _g3 = Reflect.fields(textureAtlasData);
+					while(_g2 < _g3.length) {
+						let namePath = _g3[_g2];
+						++_g2;
+						nanofl_Player.spriteSheets[namePath] = new createjs.SpriteSheet(Reflect.field(textureAtlasData,namePath));
+					}
 				}
 			}
 			return nanofl_Player.library.preload().then(function(_) {
@@ -4389,8 +4396,9 @@ class nanofl_engine_TextureAtlasTools {
 	}
 	static resolveImage(url) {
 		return nanofl_engine_Loader.javaScript(url).then(function(_) {
-			let pngDataAsBase64 = nanofl.textureAtlasImageFiles[namePath + ".png"];
-			nanofl.textureAtlasImageFiles[namePath + ".png"] = null;
+			let name = haxe_io_Path.withoutDirectory(haxe_io_Path.withoutExtension(url));
+			let pngDataAsBase64 = window.nanofl.textureAtlasImageFiles[name + ".png"];
+			window.nanofl.textureAtlasImageFiles[name + ".png"] = null;
 			return nanofl_engine_Loader.image("data:image/png;base64," + pngDataAsBase64).then(function(image) {
 				return { url : url, image : image};
 			});

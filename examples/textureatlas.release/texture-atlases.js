@@ -3,7 +3,7 @@ textureAtlasesData =
   {
     "tweenBottle": {
       "images": [
-        "texture-atlases/atlas_0.png"
+        "texture-atlases/atlas_0.js"
       ],
       "frames": [
         [
@@ -406,7 +406,7 @@ textureAtlasesData =
     },
     "tweenLetter": {
       "images": [
-        "texture-atlases/atlas_0.png"
+        "texture-atlases/atlas_0.js"
       ],
       "frames": [
         [

@@ -49,11 +49,14 @@ class Player
         return TextureAtlasTools.resolveImages(args.textureAtlasesData)
         .then(_ ->
         {
-            for (textureAtlasData in args.textureAtlasesData)
+            if (args.textureAtlasesData != null)
             {
-                for (namePath in Reflect.fields(textureAtlasData))
+                for (textureAtlasData in args.textureAtlasesData)
                 {
-                    Reflect.setField(spriteSheets, namePath, new SpriteSheet(Reflect.field(textureAtlasData, namePath)));
+                    for (namePath in Reflect.fields(textureAtlasData))
+                    {
+                        Reflect.setField(spriteSheets, namePath, new SpriteSheet(Reflect.field(textureAtlasData, namePath)));
+                    }
                 }
             }
 

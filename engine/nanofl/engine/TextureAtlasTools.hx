@@ -1,5 +1,7 @@
 package nanofl.engine;
 
+import haxe.io.Path;
+import js.Browser;
 import js.Syntax;
 import js.lib.Promise;
 import js.html.ImageElement;
@@ -63,8 +65,9 @@ class TextureAtlasTools
     {
         return Loader.javaScript(url).then(_ ->
         {
-            final pngDataAsBase64 = untyped nanofl.textureAtlasImageFiles[namePath + ".png"];
-            untyped nanofl.textureAtlasImageFiles[namePath + ".png"] = null;
+            final name = Path.withoutDirectory(Path.withoutExtension(url));
+            final pngDataAsBase64 = (cast Browser.window).nanofl.textureAtlasImageFiles[cast name + ".png"];
+            (cast Browser.window).nanofl.textureAtlasImageFiles[cast name + ".png"] = null;
             return Loader.image("data:image/png;base64," + pngDataAsBase64).then(image -> ({ url:url, image:image }));
         });
     }
