@@ -1,6 +1,8 @@
 {
     "compilerOptions": {
         "target": "ES6",
-        "moduleResolution": "Bundler"
+        "moduleResolution": "Bundler",
+        "strict": true,
+        "strictNullChecks": false
     }
 }
