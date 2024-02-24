@@ -2,9 +2,9 @@
 
 export class Sounds
 {
-	static bucket(interrupt?:any, delay?:number, offset?:number, loop?:number, volume?:number, pan?:number) : createjs.AbstractSoundInstance { return createjs.Sound.play("bucket", interrupt, delay, offset, loop, volume, pan) }
-	static music(interrupt?:any, delay?:number, offset?:number, loop?:number, volume?:number, pan?:number) : createjs.AbstractSoundInstance { return createjs.Sound.play("music", interrupt, delay, offset, loop, volume, pan) }
-	static tap(interrupt?:any, delay?:number, offset?:number, loop?:number, volume?:number, pan?:number) : createjs.AbstractSoundInstance { return createjs.Sound.play("tap", interrupt, delay, offset, loop, volume, pan) }
-	static trash(interrupt?:any, delay?:number, offset?:number, loop?:number, volume?:number, pan?:number) : createjs.AbstractSoundInstance { return createjs.Sound.play("trash", interrupt, delay, offset, loop, volume, pan) }
-	static water(interrupt?:any, delay?:number, offset?:number, loop?:number, volume?:number, pan?:number) : createjs.AbstractSoundInstance { return createjs.Sound.play("water", interrupt, delay, offset, loop, volume, pan) }
+	static bucket(props?:nanofl.PlayPropsConfig) : createjs.AbstractSoundInstance { return createjs.Sound.play("bucket", props) }
+	static music(props?:nanofl.PlayPropsConfig) : createjs.AbstractSoundInstance { return createjs.Sound.play("music", props) }
+	static tap(props?:nanofl.PlayPropsConfig) : createjs.AbstractSoundInstance { return createjs.Sound.play("tap", props) }
+	static trash(props?:nanofl.PlayPropsConfig) : createjs.AbstractSoundInstance { return createjs.Sound.play("trash", props) }
+	static water(props?:nanofl.PlayPropsConfig) : createjs.AbstractSoundInstance { return createjs.Sound.play("water", props) }
 }

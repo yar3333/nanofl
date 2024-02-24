@@ -179,7 +179,7 @@ class CodeGenerator extends InjectContainer
 		
 		for (sound in sounds)
 		{
-			text += "\tstatic " + sound.linkage + "(interrupt?:any, delay?:number, offset?:number, loop?:number, volume?:number, pan?:number) : createjs.AbstractSoundInstance { return createjs.Sound.play(\"" + sound.linkage + "\", interrupt, delay, offset, loop, volume, pan) }\n";
+			text += "\tstatic " + sound.linkage + "(props?:nanofl.PlayPropsConfig) : createjs.AbstractSoundInstance { return createjs.Sound.play(\"" + sound.linkage + "\", props) }\n";
 		}
 		
 		text += "}\n";

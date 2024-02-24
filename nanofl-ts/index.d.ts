@@ -122,5 +122,51 @@ declare namespace nanofl
          * Called automaticaly before draw.
          */
         update() : void;
-    }    
+    }
+    
+    interface PlayPropsConfig
+    {
+        /**
+         * How to interrupt any currently playing instances of audio with the same source, if the maximum number of instances of the sound are already playing.
+         * Values are defined as INTERRUPT_TYPE constants on the Sound class, with the default defined by defaultInterruptBehavior.
+         * 
+         * createjs.Sound.INTERRUPT_***
+         */
+        interrupt?: any;
+        
+        /**
+         * The amount of time to delay the start of audio playback, in milliseconds.
+         */
+        delay?: number;
+
+        /**
+         * The offset from the start of the audio to begin playback, in milliseconds.
+         */
+        offset?: number;
+        
+        /**
+         * How many times the audio loops when it reaches the end of playback. The default is 0 (no loops), and -1 can be used for infinite playback.
+         */
+        loop?: number;
+        
+        /**
+         * The volume of the sound, between 0 and 1. Note that the master volume is applied against the individual volume.
+         */
+        volume?: number;
+        
+        /**
+         * The left-right pan of the sound (if supported), between -1 (left) and 1 (right).
+         */
+        pan?: number;
+        
+        /**
+         * To create an audio sprite (with duration), the initial offset to start playback and loop from, in milliseconds.
+         */
+        startTime?: number;
+        
+        /**
+         * To create an audio sprite (with startTime), the amount of time to play the clip for, in milliseconds.
+         */
+        duration?: number;
+    }   
 }
