@@ -30,7 +30,7 @@ HTML5 vector editor and animator. Help your to create animated banners, movie cl
 * Autoconvertion from Blender's `blend` to `GLTF`
 
 ### Texture atlases
-* [Generate texture atlases](/doc/generate_texture_atlases/)
+* [Generate texture atlases](/doc/generate_texture_atlases/index.md)
 
 ### Sounds
 * Seamless loops
