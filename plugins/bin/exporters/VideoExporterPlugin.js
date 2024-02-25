@@ -10,9 +10,24 @@ function $extend(from, fields) {
 var Main = function() { };
 Main.__name__ = true;
 Main.main = function() {
-	nanofl.ide.plugins.ExporterPlugins.register(new WebmVideoExporterPlugin());
+	nanofl.ide.plugins.ExporterPlugins.register(new Mp4VideoExporterPlugin());
 };
 Math.__name__ = true;
+var Mp4VideoExporterPlugin = function() {
+	this.properties = null;
+	this.fileDefaultExtension = "mp4";
+	this.fileFilterExtensions = ["mp4"];
+	this.fileFilterDescription = "MP4 Video (*.mp4)";
+	this.menuItemIcon = "custom-icon-film";
+	this.menuItemName = "MP4 Video (*.mp4)";
+	this.name = "Mp4VideoExporter";
+};
+Mp4VideoExporterPlugin.__name__ = true;
+Mp4VideoExporterPlugin.prototype = {
+	exportDocument: function(api,args) {
+		return VideoExporter.run(api.fileSystem,api.processManager,api.folders,args.destFilePath,args.documentProperties,args.library);
+	}
+};
 var VideoExporter = function() { };
 VideoExporter.__name__ = true;
 VideoExporter.run = function(fileSystem,processManager,folders,destFilePath,documentProperties,library) {
@@ -54,21 +69,6 @@ VideoExporter.run = function(fileSystem,processManager,folders,destFilePath,docu
 		var e = haxe_Exception.caught(_g);
 		$global.console.error(e);
 		return Promise.resolve(false);
-	}
-};
-var WebmVideoExporterPlugin = function() {
-	this.properties = null;
-	this.fileDefaultExtension = "mp4";
-	this.fileFilterExtensions = ["mp4"];
-	this.fileFilterDescription = "MP4 Video (*.mp4)";
-	this.menuItemIcon = "custom-icon-film";
-	this.menuItemName = "MP4 Video (*.mp4)";
-	this.name = "Mp4VideoExporter";
-};
-WebmVideoExporterPlugin.__name__ = true;
-WebmVideoExporterPlugin.prototype = {
-	exportDocument: function(api,args) {
-		return VideoExporter.run(api.fileSystem,api.processManager,api.folders,args.destFilePath,args.documentProperties,args.library);
 	}
 };
 var haxe_Exception = function(message,previous,native) {

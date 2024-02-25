@@ -4,6 +4,6 @@ class Main
 {
 	static function main() 
 	{
-		ExporterPlugins.register(new WebmVideoExporterPlugin());
+		ExporterPlugins.register(new Mp4VideoExporterPlugin());
 	}
 }
