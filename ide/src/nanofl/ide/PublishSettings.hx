@@ -20,7 +20,7 @@ class PublishSettings
 	public function new(useTextureAtlases=false, ?textureAtlases:Map<String, TextureAtlasParams>, isConvertImagesIntoJpeg=true, jpegQuality=80,  audioQuality=128, urlOnClick="", useLocalScripts=false)
 	{
 		this.useTextureAtlases = useTextureAtlases;
-		this.textureAtlases = textureAtlases != null ? textureAtlases : new Map();
+		this.textureAtlases = textureAtlases ?? new Map();
 		this.isConvertImagesIntoJpeg = isConvertImagesIntoJpeg;
 		this.jpegQuality = jpegQuality;
 		this.audioQuality = audioQuality;

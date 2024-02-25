@@ -35,7 +35,7 @@ class DocumentProperties extends InjectContainer
 		this.backgroundColor = backgroundColor;
 		this.framerate = framerate;
 		this.scaleMode = scaleMode;
-		this.publishSettings = publishSettings != null ? publishSettings : new PublishSettings();
+		this.publishSettings = publishSettings ?? new PublishSettings();
 	}
 	
 	public static function load(filePath:String, fileSystem:FileSystem) : DocumentProperties

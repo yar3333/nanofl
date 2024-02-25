@@ -8,7 +8,7 @@ import nanofl.ide.textureatlas.TextureAtlasParams;
 import nanofl.ide.ui.Popups;
 import stdlib.Std;
 using stdlib.Lambda;
-using StringTools;
+using stdlib.StringTools;
 
 @:rtti
 class Code extends components.nanofl.popups.basepopup.Code
@@ -23,8 +23,7 @@ class Code extends components.nanofl.popups.basepopup.Code
 	@inject var app : Application;
 	@inject var popups : Popups;
 	
-	var textureAtlases(get, never) : Map<String, TextureAtlasParams>;
-	inline function get_textureAtlases() return app.document.properties.publishSettings.textureAtlases;
+	var textureAtlases : Map<String, TextureAtlasParams>;
 	
 	override function init()
 	{
@@ -45,8 +44,10 @@ class Code extends components.nanofl.popups.basepopup.Code
 		};
 	}
 	
-	public function show()
+	public function show(textureAtlases:Map<String, TextureAtlasParams>)
 	{
+        this.textureAtlases = textureAtlases;
+
 		showPopup();
 		
 		var w = Std.max(100, Std.min(400, Math.round(q(js.Browser.window).width() / 2) - 100));
@@ -58,7 +59,7 @@ class Code extends components.nanofl.popups.basepopup.Code
 		
 		for (item in app.document.library.getItems().filterByType(ITextureItem))
 		{
-            if (item.textureAtlas != null && !textureAtlases.exists(item.textureAtlas))
+            if (!StringTools.isNullOrEmpty(item.textureAtlas) && !textureAtlases.exists(item.textureAtlas))
             {
                 textureAtlases.set(item.textureAtlas, new TextureAtlasParams());
             }
@@ -153,12 +154,9 @@ class Code extends components.nanofl.popups.basepopup.Code
 	
 	function isEmptyAtlas(name:String) : Bool
 	{
-		for (item in app.document.library.getItems())
+		for (item in app.document.library.getItems().filterByType(ITextureItem))
 		{
-			if (Std.isOfType(item, ITextureItem))
-			{
-				if ((cast item:ITextureItem).textureAtlas == name) return false;
-			}
+            if (item.textureAtlas == name) return false;
 		}
 		return true;
 	}
@@ -183,10 +181,7 @@ class Code extends components.nanofl.popups.basepopup.Code
 		var atlas = template().atlases.val();
 		if (atlas != null && atlas != "")
 		{
-			processTextureItems(template().library.getSelectedItems(), function(item)
-			{
-				item.textureAtlas = atlas;
-			});
+			processTextureItems(template().library.getSelectedItems(), item -> item.textureAtlas = atlas);
 		}
 		template().library.update();
 		template().atlas.update();
@@ -197,10 +192,7 @@ class Code extends components.nanofl.popups.basepopup.Code
 		var atlas = template().atlases.val();
 		if (atlas != null && atlas != "")
 		{
-			processTextureItems(template().atlas.getSelectedItems(), function(item)
-			{
-				item.textureAtlas = null;
-			});
+			processTextureItems(template().atlas.getSelectedItems(), item -> item.textureAtlas = null);
 		}
 		template().library.update();
 		template().atlas.update();

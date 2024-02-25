@@ -52,7 +52,7 @@ class Code extends components.nanofl.popups.basepopup.Code
 	
 	function manageTextureAtlases_click(_)
 	{
-		popups.textureAtlases.show();
+		popups.textureAtlases.show(settings.textureAtlases);
 	}
 	
 	function isConvertImagesIntoJpeg_change(_)
