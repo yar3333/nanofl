@@ -21,8 +21,8 @@ class Template extends components.nanofl.popups.basepopup.Template
 	public var spriteSheetableItem(get, never) : js.JQuery;
 	inline function get_spriteSheetableItem() return component.q('#spriteSheetableItem');
 	
-	public var exportAsSpriteSheet(get, never) : js.JQuery;
-	inline function get_exportAsSpriteSheet() return component.q('#exportAsSpriteSheet');
+	public var exportAsSprite(get, never) : js.JQuery;
+	inline function get_exportAsSprite() return component.q('#exportAsSprite');
 
 	public var meshItem(get, never) : js.JQuery;
 	inline function get_meshItem() return component.q('#meshItem');

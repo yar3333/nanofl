@@ -43,8 +43,16 @@ class MovieClipItem	extends InstancableItem
 	public var loop = true;
 	
 	public var likeButton = false;
-	public var exportAsSpriteSheet = false;
 	public var textureAtlas : String;
+
+    /**
+        Build `SpriteSheet` on-the-fly (every frame of movie clip become bitmap in SpriteSheet)
+        on first updateDisplayObject() call.
+        Fields `exportAsSprite` and `spriteSheet` are ignored if this movie clip included in texture atlas.
+    **/
+	public var exportAsSprite = false;
+    
+    var spriteSheet : easeljs.display.SpriteSheet = null;
 	
 	public static function createWithFrame(namePath:String, ?elements:Array<Element>, layerName="Layer 0") : MovieClipItem
 	{
@@ -86,7 +94,7 @@ class MovieClipItem	extends InstancableItem
 		obj.likeButton = likeButton;
 		obj.autoPlay = autoPlay;
 		obj.loop = loop;
-		obj.exportAsSpriteSheet = exportAsSpriteSheet;
+		obj.exportAsSprite = exportAsSprite;
 		obj.textureAtlas = textureAtlas;
 	}
 	
@@ -103,7 +111,7 @@ class MovieClipItem	extends InstancableItem
 		if (r != null) return r;
 		
 		var spriteSheet = TextureAtlasTools.getSpriteSheet(this);
-		if (spriteSheet == null && exportAsSpriteSheet) spriteSheet = asSpriteSheet();
+		if (spriteSheet == null && exportAsSprite) spriteSheet = asSpriteSheet();
 		
 		if (spriteSheet == null)
 		{
@@ -117,7 +125,7 @@ class MovieClipItem	extends InstancableItem
 	
 	public function updateDisplayObject(dispObj:easeljs.display.DisplayObject, childFrameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : Void
 	{
-		if (!exportAsSpriteSheet)
+		if (!exportAsSprite)
 		{
 			updateDisplayObjectInner(layers, dispObj, childFrameIndexes);
 		}
@@ -165,22 +173,20 @@ class MovieClipItem	extends InstancableItem
         }
 	}
 	
-	function asSpriteSheet() : easeljs.display.SpriteSheet
+    function asSpriteSheet() : easeljs.display.SpriteSheet
 	{
-        static var spriteSheet : easeljs.display.SpriteSheet = null;
-
 		if (spriteSheet == null)
 		{
 			var builder = new easeljs.utils.SpriteSheetBuilder();
 			
-			var t = exportAsSpriteSheet;
-			exportAsSpriteSheet = false;
+			var t = exportAsSprite;
+			exportAsSprite = false;
 			for (i in 0...getTotalFrames())
 			{
 				var mc = new MovieClip(this, i, null);
 				builder.addFrame(mc);
 			}
-			exportAsSpriteSheet = t;
+			exportAsSprite = t;
 			
 			spriteSheet = builder.build();
 		}
@@ -211,7 +217,7 @@ class MovieClipItem	extends InstancableItem
 		if (!ArrayTools.equ(mc._layers, _layers)) return false;
 		
 		if ((cast item:MovieClipItem).likeButton != likeButton) return false;
-		if ((cast item:MovieClipItem).exportAsSpriteSheet != exportAsSpriteSheet) return false;
+		if ((cast item:MovieClipItem).exportAsSprite != exportAsSprite) return false;
 		if ((cast item:MovieClipItem).textureAtlas != textureAtlas) return false;
 		
 		return true;
@@ -279,7 +285,7 @@ class MovieClipItem	extends InstancableItem
 		xml.attr("loop", loop, true);
 		
 		xml.attr("likeButton", likeButton, false);
-		xml.attr("exportAsSpriteSheet", exportAsSpriteSheet, false);
+		xml.attr("exportAsSprite", exportAsSprite, false);
 		xml.attr("textureAtlas", textureAtlas, null);
 		
 		for (layer in layers) layer.save(xml);
@@ -293,7 +299,7 @@ class MovieClipItem	extends InstancableItem
 		obj.loop = loop ?? true;
 		
 		obj.likeButton = likeButton ?? false;
-		obj.exportAsSpriteSheet = exportAsSpriteSheet ?? false;
+		obj.exportAsSprite = exportAsSprite ?? false;
 		obj.textureAtlas = textureAtlas ?? null;
 		
 		obj.layers = layers.map(x -> x.saveJson());
@@ -310,7 +316,7 @@ class MovieClipItem	extends InstancableItem
 		loop = xml.getAttr("loop", true);
 		
 		likeButton = xml.getAttr("likeButton", false);
-		exportAsSpriteSheet = xml.getAttr("exportAsSpriteSheet", false);
+		exportAsSprite = xml.getAttr("exportAsSprite", false);
 		textureAtlas = xml.getAttr("textureAtlas", null);
 
 		addLayersBlock
@@ -335,7 +341,7 @@ class MovieClipItem	extends InstancableItem
         loop = obj.loop;
         
         likeButton = obj.likeButton;
-        exportAsSpriteSheet = obj.exportAsSpriteSheet;
+        exportAsSprite = obj.exportAsSprite;
         textureAtlas = obj.textureAtlas;
 
 		addLayersBlock

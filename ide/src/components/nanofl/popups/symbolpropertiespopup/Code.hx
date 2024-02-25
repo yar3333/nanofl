@@ -44,7 +44,7 @@ class Code extends components.nanofl.popups.basepopup.Code
 		if (Std.isOfType(item, ISpriteSheetableItem))
 		{
 			template().spriteSheetableItem.show();
-			template().exportAsSpriteSheet.prop("checked", (cast item:ISpriteSheetableItem).exportAsSpriteSheet);
+			template().exportAsSprite.prop("checked", (cast item:ISpriteSheetableItem).exportAsSprite);
 		}
 		else
 		{
@@ -92,7 +92,7 @@ class Code extends components.nanofl.popups.basepopup.Code
 		
 		if (Std.isOfType(item, ISpriteSheetableItem))
 		{
-			(cast item:ISpriteSheetableItem).exportAsSpriteSheet = template().exportAsSpriteSheet.prop("checked");
+			(cast item:ISpriteSheetableItem).exportAsSprite = template().exportAsSprite.prop("checked");
 		}
 		
 		item.linkedClass = template().linkedClass.val();
