@@ -1,0 +1,7 @@
+<movieclip version="2.1.0">
+	<layer name="Layer 1">
+		<frame>
+			<instance libraryItem="Symbol 4" x="67" y="62" />
+		</frame>
+	</layer>
+</movieclip>

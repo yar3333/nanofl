@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>SVG - NanoFL vector and animation editor</title>
+		<link rel="stylesheet" href="/css/default.css" />
+		
+		<style>
+			.svgTable { margin-top:20px; width:100%; }
+			.svgTable td:first-child img { height:200px;  }
+			.svgTable td { max-width:300px; overflow:hidden; }
+			.svgTable .svgGood { background-color:#90ff90; color:#000; text-align:center; vertical-align:middle; }
+			.svgTable .svgBad { background-color:#ff9090; color:#000; text-align:center; vertical-align:middle; }
+			.svgTable .svgAlert { background-color:#ffff90; color:#000; text-align:center; vertical-align:middle; }
+		</style>
+	</head>
+	<body>
+		{/blocks/mainMenu.html}
+		
+		<div class="wrapper">
+			<h1>SVG</h1>
+			<p>
+				NanoFL has a SvgImporter plugin to convert SVG images into NanoFL documents.
+				Most basic features are well supported
+				(<a href="https://bitbucket.org/nanofl/nanofl/issues?q=svg%20import" traget="_blank">known issues</a>).
+			</p>
+			
+			<h2>Test samples</h2>
+			<p>Next table show conversion result SVG =&gt; NFL=&gt; PNG.</p>
+			<p>PNG images produced in batch mode by next command:</p>
+			<pre><code>nanoflc.exe NAME.svg -generator CreateJS,mode=HTML -resize-fit 300x200 -export NAME.png</code></pre>
+			<p>Some images may have strange position/size - it is normal (this mean strange position/size in SVG).</p>
+			<table class="table svgTable">
+				<tr><th>Original SVG</th><th>Imported into NanoFL</th><th>Comments</th></tr>
+				{samples.html}
+			</table>
+			
+			<hr />
+			<p>
+				Edit <a href="https://bitbucket.org/nanofl/site/src/default/docs/svg/samples.html" target="_blank">samples list </a> / 
+				<a href="https://bitbucket.org/nanofl/site/src/default/docs/svg/index.html" target="_blank">this page</a> at bitbucket
+			</p>
+		</div>
+		
+		{/blocks/footer.html}
+	</body>
+</html>

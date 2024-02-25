@@ -1,0 +1,16 @@
+<movieclip version="2.1.0">
+	<layer name="game_menu">
+		<frame>
+			<shape>
+				<fills>
+					<fill type="bitmap" bitmapPath="кирпич" repeat="no-repeat" x="-2.6" y="8.2" matrix="0.2399993896484375,0,0,0.2399993896484375" />
+				</fills>
+				<figure>
+					<polygon fillIndex="0">
+						<contour edges="M110.2,54.1L34.2,54.1L34.2,90.1L110.2,90.1L110.2,54.1" />
+					</polygon>
+				</figure>
+			</shape>
+		</frame>
+	</layer>
+</movieclip>

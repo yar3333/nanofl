@@ -1,0 +1,7 @@
+<movieclip version="2.0.0">
+	<layer name="Layer 3">
+		<frame>
+			<instance libraryItem="bmp" matrix="0.701766967773438,0,0,0.701766967773438" regX="152.45" regY="137.6" />
+		</frame>
+	</layer>
+</movieclip>

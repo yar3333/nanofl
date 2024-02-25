@@ -2,6 +2,7 @@
 
 HTML5 vector editor and animator. Help your to create animated banners, movie clips and games.
 
+* [Quick start](doc/quick_start/index.md)
 
 ## Features
 
@@ -18,7 +19,7 @@ HTML5 vector editor and animator. Help your to create animated banners, movie cl
 * Local `woff2` fonts
 * Import fonts from [Google Fonts](https://fonts.google.com/)
  
-### Coding
+### [Coding](doc/coding.md)
 * Based on [EaselJS](https://createjs.com/easeljs) library
 * Just `application.js` file
 * Template for [TypeScript](https://www.typescriptlang.org/) and [VS Code](https://code.visualstudio.com/)
@@ -29,8 +30,7 @@ HTML5 vector editor and animator. Help your to create animated banners, movie cl
 * Autoconvertion from Blender's `blend` to `GLTF`
 
 ### Texture atlases
-* External-created in [CreateJS/Zoe](http://www.createjs.com/zoe) format
-* [Generate atlases on publish](/doc/generate_texture_atlases/)
+* [Generate texture atlases](/doc/generate_texture_atlases/)
 
 ### Sounds
 * Seamless loops
@@ -47,9 +47,9 @@ HTML5 vector editor and animator. Help your to create animated banners, movie cl
 * Video (`mp4`) via FFMPEG
 
 ### And more
-* [Batch processing](/docs/command_line/)
+* [Batch processing](/doc/command_line/)
 * Plugin system (Filters, Importers, Exporters, library item Loaders)
-* [Scale Mode](/docs/scaleMode/) support
+* [Scale Mode](/doc/scale_mode/) support
 
 ## Credits
 * [CreateJS](http://www.createjs.com/) framework, gskinner

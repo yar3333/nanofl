@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Flash - NanoFL vector and animation editor</title>
+		<link rel="stylesheet" href="/css/default.css" />
+		
+		<style>
+			.flashTable { margin-top:20px; width:100%; }
+			.flashTable td:nth-child(1),
+			.flashTable td:nth-child(2) { width:300px; }
+			.flashTable td a, .flashTable td span { display:block; margin-bottom:5px; }
+			.flashTable td div, .flashTable td iframe { width:300px; height:200px; border:0; }
+			.flashTable .svgGood { background-color:#90ff90; color:#000; text-align:center; vertical-align:middle; }
+			.flashTable .svgBad { background-color:#ff9090; color:#000; text-align:center; vertical-align:middle; }
+			.flashTable .svgAlert { background-color:#ffff90; color:#000; text-align:center; vertical-align:middle; }
+		</style>
+	</head>
+	<body>
+		{/blocks/mainMenu.html}
+		
+		<div class="wrapper">
+			<h1>Flash</h1>
+			<p>
+				NanoFL has a FlashImporter plugin to convert Abode Flash CS5+ <code>FLA/XFL</code> documents into NanoFL documents.
+				Most features are well supported
+				(<a href="https://bitbucket.org/nanofl/nanofl/issues?q=flash%20importer" traget="_blank">known issues</a>).
+			</p>
+			
+			<h2>Test samples</h2>
+			<p>Next table show conversion result FLA =&gt; NFL.</p>
+			<p>NFL documents produced in batch mode by next command:</p>
+			<pre><code>nanoflc.exe NAME.fla -generator CreateJS,mode=HTML -scaleMode fit -export NAME/NAME.nfl</code></pre>
+			<table class="table flashTable">
+				<tr><th>Original FLA</th><th>Imported into NanoFL</th><th>Comments</th></tr>
+				{samples.html}
+			</table>
+			
+			<hr />
+			<p>
+				Edit <a href="https://bitbucket.org/nanofl/site/src/default/docs/flash/samples.html" target="_blank">samples list </a> / 
+				<a href="https://bitbucket.org/nanofl/site/src/default/docs/flash/index.html" target="_blank">this page</a> at bitbucket
+			</p>
+		</div>
+		
+		{/blocks/footer.html}
+	</body>
+</html>

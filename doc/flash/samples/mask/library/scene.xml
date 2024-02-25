@@ -1,0 +1,51 @@
+<movieclip version="2.1.0">
+	<layer name="Layer 2" type="mask">
+		<frame>
+			<shape>
+				<fills>
+					<fill type="solid" color="#FF0000" />
+				</fills>
+				<figure>
+					<polygon fillIndex="0">
+						<contour edges="M139.95,37L139.95,155L301.95,155L301.95,37L139.95,37" />
+					</polygon>
+				</figure>
+			</shape>
+		</frame>
+		<frame>
+			<shape>
+				<fills>
+					<fill type="solid" color="#FF0000" />
+				</fills>
+				<figure>
+					<polygon fillIndex="0">
+						<contour edges="M139.95,37L139.95,155L301.95,155L301.95,37L139.95,37" />
+					</polygon>
+				</figure>
+			</shape>
+		</frame>
+		<frame>
+			<instance libraryItem="Symbol 2" x="220.95" y="96" />
+		</frame>
+	</layer>
+	<layer name="Layer 1" parentIndex="0">
+		<frame>
+			<shape>
+				<fills>
+					<fill type="solid" color="#00FF00" />
+				</fills>
+				<figure>
+					<polygon fillIndex="0">
+						<contour edges="M253.45,115.45L253.45,233.45L415.45,233.45L415.45,115.45L253.45,115.45" />
+					</polygon>
+				</figure>
+			</shape>
+		</frame>
+		<frame>
+			<instance libraryItem="Symbol 1" x="334.45" y="174.45" />
+		</frame>
+		<frame>
+			<instance libraryItem="Symbol 1" x="334.45" y="174.45" />
+		</frame>
+	</layer>
+</movieclip>

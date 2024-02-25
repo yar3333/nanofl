@@ -1,0 +1,22 @@
+<movieclip version="2.1.0">
+	<layer name="Layer 1">
+		<frame>
+			<instance libraryItem="letter" name="ins1" x="320" y="38.5" regX="0.5" regY="0.5">
+				<color type="tint" color="#BF6E3A" multiplier="0.6" />
+			</instance>
+			<instance libraryItem="letter" name="ins1" x="411" y="38.5" regX="0.5" regY="0.5">
+				<color type="advanced" alphaMultiplier="0.828125" redMultiplier="0.69921875" greenMultiplier="0.8203125" blueMultiplier="0.8984375" alphaOffset="10" redOffset="-25" greenOffset="28" blueOffset="-14" />
+			</instance>
+			<instance libraryItem="letter" name="ins1" x="502" y="38.5" regX="0.5" regY="0.5">
+				<color type="alpha" value="0.26953125" />
+			</instance>
+			<instance libraryItem="letter" name="ins1" x="47" y="38.5" regX="0.5" regY="0.4" />
+			<instance libraryItem="letter" name="ins1" x="228.95" y="38.4" regX="0.65" regY="0.6">
+				<color type="brightness" value="0.5" />
+			</instance>
+			<instance libraryItem="letter" name="ins1" x="138.45" y="38.4" regX="0.65" regY="0.6">
+				<color type="brightness" value="-0.5" />
+			</instance>
+		</frame>
+	</layer>
+</movieclip>

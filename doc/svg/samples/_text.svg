@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 100" xmlns:xlink="http://www.w3.org/1999/xlink">
+	
+	<rect x="0" y="4" width="300" height="14" fill="none" stroke="red" />
+
+	<text x="0" y="15" font-size="16px">
+		<tspan style="font-weight: bold;">This is bold</tspan>, 
+		<tspan style="font-style: italic;">this   is italic</tspan> and
+		<tspan style="text-decoration: underline;">this is underline</tspan>
+	</text>
+</svg> 

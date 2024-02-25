@@ -1,0 +1,41 @@
+<movieclip version="2.1.0">
+	<layer name="Layer 1">
+		<frame>
+			<instance libraryItem="mc" matrix="0.467193603515625,0,0,0.518234252929688">
+				<filters>
+					<DropShadowFilter alpha="100" angle="77.4999960157231" blurX="32" blurY="32" color="#009900" distance="18" hideObject="true" inner="true" knockout="true" quality="2" strength="83" />
+				</filters>
+			</instance>
+			<instance libraryItem="mc" name="ikNode_3" x="130" y="0" matrix="0.467193603515625,0,0,0.518234252929688">
+				<filters>
+					<BoxBlurFilter blurX="30" blurY="30" quality="3" strength="100" />
+				</filters>
+			</instance>
+			<instance libraryItem="mc" name="ikNode_1" x="260" y="0" matrix="0.467193603515625,0,0,0.518234252929688">
+				<filters>
+					<GlowFilter alpha="100" blurX="16" blurY="16" color="#0000FF" inner="true" knockout="true" quality="2" strength="79" />
+				</filters>
+			</instance>
+			<instance libraryItem="mc" name="ikNode_4" x="390" y="0" matrix="0.467193603515625,0,0,0.518234252929688">
+				<filters>
+					<BevelFilter angle="49.9999988616352" blurX="10" blurY="10" highlightColor="#3300FF" shadowColor="#FFFF99" strength="100" />
+				</filters>
+			</instance>
+			<instance libraryItem="mc" x="0" y="130" matrix="0.467193603515625,0,0,0.518234252929688">
+				<filters>
+					<GradientGlowFilter blurX="10" blurY="10" strength="100" type="outer" />
+				</filters>
+			</instance>
+			<instance libraryItem="mc" name="ikNode_2" x="130" y="130" matrix="0.467193603515625,0,0,0.518234252929688">
+				<filters>
+					<GradientBevelFilter blurX="10" blurY="10" strength="100" />
+				</filters>
+			</instance>
+			<instance libraryItem="mc" x="260" y="130" matrix="0.467193603515625,0,0,0.518234252929688">
+				<filters>
+					<AdjustColorFilter blurX="10" blurY="10" brightness="19" contrast="11" hue="160" saturation="-44" strength="100" />
+				</filters>
+			</instance>
+		</frame>
+	</layer>
+</movieclip>

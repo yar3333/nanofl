@@ -1,0 +1,35 @@
+<movieclip version="2.1.0" likeButton="true" linkedClass="myButton">
+	<layer name="Layer 1">
+		<frame>
+			<text x="-23.5" y="-20.8" width="47" height="45">
+				<text-run characters="up" fillColor="#000099" size="34" style="bold" family="Times New Roman" kerning="false" />
+			</text>
+		</frame>
+		<frame>
+			<text x="-36.5" y="-20.8" width="75.5" height="45">
+				<text-run characters="over" fillColor="#000099" size="34" style="bold" family="Times New Roman" kerning="false" />
+			</text>
+		</frame>
+		<frame>
+			<text x="-45.5" y="-20.8" width="86.5" height="45">
+				<text-run characters="down" fillColor="#000099" align="center" size="34" style="bold" family="Times New Roman" kerning="false" />
+			</text>
+		</frame>
+		<frame>
+			<shape>
+				<fills>
+					<fill type="solid" color="#000099" />
+				</fills>
+				<strokes>
+					<stroke type="solid" color="#01407E" />
+				</strokes>
+				<figure>
+					<polygon fillIndex="0">
+						<contour edges="M-28.5,53.7L27.5,53.7L27.5,-48.3L-28.5,-48.3L-28.5,53.7" />
+					</polygon>
+					<edge strokeIndex="0" edges="M27.5,-48.3L27.5,53.7L-28.5,53.7L-28.5,-48.3L27.5,-48.3" />
+				</figure>
+			</shape>
+		</frame>
+	</layer>
+</movieclip>

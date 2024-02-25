@@ -1,0 +1,44 @@
+<movieclip version="2.1.0">
+	<layer name="lines">
+		<frame>
+			<shape>
+				<strokes>
+					<stroke type="solid" color="#000000" ignoreScale="true" />
+				</strokes>
+				<figure>
+					<edge strokeIndex="0" edges="M378.95,112L378.95,245M88,98L88,245M132.95,227L363.95,147M147.95,91L360.95,91M136.95,279.95L346.95,279.95" />
+				</figure>
+			</shape>
+		</frame>
+		<frame>
+			<shape>
+				<strokes>
+					<stroke type="solid" color="#000000" />
+				</strokes>
+				<figure>
+					<edge strokeIndex="0" edges="M378.95,112L378.95,245M88,98L88,245M132.95,227L363.95,147M147.95,91L360.95,91M136.95,279.95L346.95,279.95" />
+				</figure>
+			</shape>
+		</frame>
+		<frame>
+			<shape>
+				<strokes>
+					<stroke type="solid" color="#000000" thickness="2" />
+				</strokes>
+				<figure>
+					<edge strokeIndex="0" edges="M378.95,112L378.95,245M88,98L88,245M132.95,227L363.95,147M147.95,91L360.95,91M136.95,279.95L346.95,279.95" />
+				</figure>
+			</shape>
+		</frame>
+		<frame>
+			<shape>
+				<strokes>
+					<stroke type="solid" color="#000000" thickness="2" caps="square" />
+				</strokes>
+				<figure>
+					<edge strokeIndex="0" edges="M378.95,112L378.95,245M88,98L88,245M132.95,227L363.95,147M147.95,91L360.95,91M136.95,279.95L346.95,279.95" />
+				</figure>
+			</shape>
+		</frame>
+	</layer>
+</movieclip>

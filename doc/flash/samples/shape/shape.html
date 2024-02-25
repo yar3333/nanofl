@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<!--ALLOW_REGENERATION-->
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>shape</title>
+	</head>
+	<body style="background-color:#ffffff; margin:0; padding:0; font-size:0; overflow:hidden">
+		<canvas id="mainCanvas" width="550" height="400" style="position:relative"></canvas>
+		<script src="http://code.createjs.com/createjs-2014.12.12.combined.js"></script>
+		<script src="http://player.nanofl.com/nanofl-3.0.0.js"></script>
+		<script>
+			var serializedLibrary = 'cy21:nanofl.engine.Libraryy5:itemsby5:sceneCy40:nanofl.engine.libraryitems.MovieClipItemay19:exportAsSpriteSheetfy4:loopty8:autoPlayty10:likeButtonfy7:_layersaCy19:nanofl.engine.Layery4:namey9:Layer%201y4:typey6:normaly7:visiblety6:lockedfy11:parentIndexny10:_keyFramesaCy22:nanofl.engine.KeyFramey5:labely0:y8:durationi1y12:_motionTweenny9:_elementsacy35:nanofl.engine.elements.ShapeElementR14ty4:regYzy4:regXzy6:matrixcy25:nanofl.engine.geom.Matrixy1:ai1y1:bzy1:czy1:di1y2:txzy2:tyzgy5:edgesahy8:polygonsahy6:parentr7gCy31:nanofl.engine.elements.Instancey9:rotationYzy9:rotationXzR14tR25zR26zR27cR28R29i1R30zR31zR32i1R33i67R34i62gy8:namePathy10:Symbol%204R10R20y11:colorEffectny7:filtersahy9:blendModeR13y7:libraryr0R37r7gghy5:layerr5gghy15:layersContainerr2gghy11:linkedClassR20R41R2R46r0hgy10:Symbol%201CR3aR4fR5tR6tR7fR8aCR9R10R11R12R13R14tR15fR16nR17aCR18R19R20R21i1R22nR23acR24R14tR25zR26zR27cR28R29i1R30zR31zR32i1R33zR34zgR35acy29:nanofl.engine.geom.StrokeEdgey2:x1d-22.5y2:y1d22.5y2:x2zy2:y2zy2:x3d22.5y2:y3d-22.5y6:strokecy33:nanofl.engine.strokes.SolidStrokey9:thicknessi1y4:capsy5:roundy6:jointsR62y10:miterLimiti3y11:ignoreScalefy5:colory9:%237C0101gy8:selectedfghR36ahR37r21ghR47r19gghR48r16gghR49R20R41R50R46r0hgy10:Symbol%202CR3aR4fR5tR6tR7fR8aCR9R10R11R12R13R14tR15fR16nR17aCR18R19R20R21i1R22nR23acR24R14tR25zR26zR27cR28R29i1R30zR31zR32i1R33zR34zgR35acR51R52i-42R53i21R54d-19.5R55d-1.5R56i3R57i-24R58cR59R60i1R61R62R63R62R64i3R65fR66R67gR68fgcR51R52i3R53i-24R54d22.5R55zR56i42R57i24R58cR59R60i1R61R62R63R62R64i3R65fR66R67gR68fghR36ahR37r34ghR47r32gghR48r29gghR49R20R41R69R46r0hgy10:Symbol%203CR3aR4fR5tR6tR7fR8aCR9R10R11R12R13R14tR15fR16nR17aCR18R19R20R21i1R22nR23acR24R14tR25zR26zR27cR28R29i1R30zR31zR32i1R33zR34zgR35acR51R52i42R53i24R54zR55d22.5R56i-42R57i21R58cR59R60i1R61R62R63R62R64i3R65fR66R67gR68fgcR51R52i-42R53i21R54d-19.5R55d-1.5R56i3R57i-24R58cR59R60i1R61R62R63R62R64i3R65fR66R67gR68fgcR51R52i3R53i-24R54d22.5R55zR56i42R57i24R58cR59R60i1R61R62R63R62R64i3R65fR66R67gR68fghR36ahR37r49ghR47r47gghR48r44gghR49R20R41R70R46r0hgR42CR3aR4fR5tR6tR7fR8aCR9R10R11R12R13R14tR15fR16nR17aCR18R19R20R21i1R22nR23acR24R14tR25zR26zR27cR28R29i1R30zR31zR32i1R33zR34zgR35acR51R52i42R53i24R54zR55d22.5R56i-42R57i21R58cR59R60i1R61R62R63R62R64i3R65fR66R67gR68fgcR51R52i-42R53i21R54d-19.5R55d-1.5R56i3R57i-24R58cR59R60i1R61R62R63R62R64i3R65fR66R67gR68fgcR51R52i3R53i-24R54d22.5R55zR56i42R57i24R58cR59R60i1R61R62R63R62R64i3R65fR66R67gR68fghR36acy26:nanofl.engine.geom.Polygony4:fillcy29:nanofl.engine.fills.SolidFillR66y9:%2300CC00gy8:contoursacy26:nanofl.engine.geom.ContourR35acy23:nanofl.engine.geom.EdgeR52i-42R53i21R54zR55d22.5R56i42R57i24gcR77R52i42R53i24R54d22.5R55zR56i3R57i-24gcR77R52i3R53i-24R54d-19.5R55d-1.5R56i-42R57i21ghghR68fghR37r66ghR47r64gghR48r61gghR49R20R41R42R46r0hghy10:libraryDirR46g';
+			
+			nanofl.Player.init(document.getElementById("mainCanvas"), nanofl.DataTools.unserialize(serializedLibrary), 24, 'fit');
+		</script>
+	</body>
+</html>

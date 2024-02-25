@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 125 125" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<defs>
+		<!--<linearGradient id="grad" gradientTransform="" gradientUnits="userSpaceOnUse" x1="10" y1="20" x2="110" y2="120">-->
+		<!--<linearGradient id="grad" gradientTransform="" gradientUnits="userSpaceOnUse" x1="10" y1="20" x2="80" y2="90">-->
+		<linearGradient id="grad" gradientTransform="rotate(45)" x1="0.3" y1="0.2" x2="0.6" y2="0.8">
+		  <stop stop-color="red"  offset="0" />
+		  <stop stop-color="blue" offset="1" />
+		</linearGradient>
+	</defs>
+	<rect x="10" y="20" width="100" height="50" fill="url(#grad)" />
+</svg>

@@ -1,0 +1,16 @@
+<movieclip version="2.1.0" linkedClass="Brick2">
+	<layer name="Layer 1">
+		<frame>
+			<shape>
+				<fills>
+					<fill type="bitmap" bitmapPath="кирпич" repeat="no-repeat" x="-74.79999999999995" y="-63.89999999999999" matrix="0.2399993896484375,0,0,0.2399993896484375" />
+				</fills>
+				<figure>
+					<polygon fillIndex="0">
+						<contour edges="M38,-18L-38,-18L-38,18L38,18L38,-18" />
+					</polygon>
+				</figure>
+			</shape>
+		</frame>
+	</layer>
+</movieclip>

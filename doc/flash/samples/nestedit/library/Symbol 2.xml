@@ -1,0 +1,14 @@
+<movieclip version="2.1.0">
+	<layer name="Layer 1">
+		<frame>
+			<shape>
+				<strokes>
+					<stroke type="solid" color="#000000" thickness="2" />
+				</strokes>
+				<figure>
+					<edge strokeIndex="0" edges="M66.5,-4.65L-66.5,17M-66.5,-17L66.5,-7.45" />
+				</figure>
+			</shape>
+		</frame>
+	</layer>
+</movieclip>

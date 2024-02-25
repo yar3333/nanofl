@@ -1,0 +1,16 @@
+<movieclip version="2.1.0">
+	<layer name="auto">
+		<frame>
+			<shape>
+				<fills>
+					<fill type="radial" colors="#00FF00,rgba(255,255,255,0.341176470588235),#FF100E" ratios="0,0.768627450980392,1" cx="0" cy="0" r="1" />
+				</fills>
+				<figure>
+					<polygon fillIndex="0">
+						<contour edges="M-1.22,1.32L0.37,1.79L0.43,1.06L0.81,1.17L1,-1.3L-0.97,-1.87L-1.22,1.32" />
+					</polygon>
+				</figure>
+			</shape>
+		</frame>
+	</layer>
+</movieclip>

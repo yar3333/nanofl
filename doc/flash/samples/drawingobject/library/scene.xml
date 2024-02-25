@@ -1,0 +1,26 @@
+<movieclip version="2.1.0">
+	<layer name="Label">
+		<frame>
+			<group>
+				<shape>
+					<strokes>
+						<stroke type="solid" color="#0000FF" />
+					</strokes>
+					<figure>
+						<edge strokeIndex="0" edges="M148,124L235,168" />
+					</figure>
+				</shape>
+			</group>
+			<group>
+				<shape>
+					<strokes>
+						<stroke type="solid" color="#0000FF" />
+					</strokes>
+					<figure>
+						<edge strokeIndex="0" edges="M402.95,211L309,295" />
+					</figure>
+				</shape>
+			</group>
+		</frame>
+	</layer>
+</movieclip>

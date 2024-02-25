@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>ScaleMode - NanoFL vector and animation editor</title>
+		<link rel="stylesheet" href="/css/default.css" />
+		
+		<style>
+			.scaleMode iframe { width:1000px; height: 300px; border:solid 1px gray }
+		</style>
+	</head>
+	<body>
+		{/blocks/mainMenu.html}
+		
+		<div class="wrapper scaleMode">
+			<h1>ScaleMode</h1>
+			
+			<p>You can set scale mode for your document at <b>File</b> / <b>Properties</b> menu.</p>
+			
+			<h2>noScale</h2>
+			<p>Center viewport, don't scale.</p>
+			<iframe src="doc/noScale.html"></iframe>
+			
+			<h2>fit</h2>
+			<p>Center viewport, scale, keep aspect ratio, no cropping.</p>
+			<iframe src="doc/fit.html"></iframe>
+			
+			<h2>fill</h2>
+			<p>Center viewport, scale, keep aspect ratio, cropping.</p>
+			<iframe src="doc/fill.html"></iframe>
+			
+			<h2>stretch</h2>
+			<p>Scale, don't keep aspect ratio.</p>
+			<iframe src="doc/stretch.html"></iframe>
+			
+			<h2>custom</h2>
+			<p>Don't do anything.</p>
+			<iframe src="doc/custom.html"></iframe>
+			
+			<hr />
+			<p>
+				Edit <a href="https://bitbucket.org/nanofl/site/src/default/docs/scaleMode.html" target="_blank">this page</a> at bitbucket
+			</p>
+		</div>
+		
+		{/blocks/footer.html}
+	</body>
+</html>

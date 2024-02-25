@@ -1,0 +1,9 @@
+<nanofl version="2.0.0">
+	<param name="width" value="490" />
+	<param name="height" value="230" />
+	<param name="backgroundColor" value="#999999" />
+	<param name="framerate" value="24" />
+	<param name="scaleMode" value="custom" />
+	<param name="generator" value="CreateJS,mode=HTML,urlOnClick=" />
+	<param name="useTextureAtlases" value="false" />
+</nanofl>

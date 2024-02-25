@@ -1,0 +1,15 @@
+<movieclip version="2.1.0">
+	<layer name="Layer 1">
+		<frame>
+			<instance libraryItem="mc" x="223" y="177.3" matrix="0.25,0,0,1" />
+			<instance libraryItem="mc" x="154.5" y="176.95" matrix="0.700057983398438,0,0,1" />
+			<instance libraryItem="mc" x="63.5" y="178.95" />
+			<instance libraryItem="mc" x="274.5" y="176.95" matrix="0.0500030517578125,0,0,1" />
+			<instance libraryItem="mc" x="315.5" y="175.95" matrix="-0.375,0,0,1" />
+			<instance libraryItem="mc" x="386.5" y="176.95" matrix="-0.77484130859375,0,0,1" />
+			<instance libraryItem="mc" x="466.5" y="177.95" matrix="-1.00006103515625,0,0,1" />
+			<instance libraryItem="mc" x="149.5" y="294.9" matrix="-1.97512817382813,0,0,1" />
+			<instance libraryItem="mc" x="365.5" y="294.9" matrix="1,0,-0.102630615234375,1" />
+		</frame>
+	</layer>
+</movieclip>

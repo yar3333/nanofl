@@ -1,0 +1,7 @@
+<movieclip version="2.1.0">
+	<layer name="game_menu">
+		<frame>
+			<instance libraryItem="brick2" x="236.15" y="124.1" />
+		</frame>
+	</layer>
+</movieclip>
