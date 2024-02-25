@@ -8,7 +8,7 @@ import nanofl.ide.plugins.IExporterPlugin;
 // https://ffmpeg.org/ffmpeg-formats.html
 // ffmpeg -f rawvideo -pixel_format rgb24 -video_size 1920x1080 -framerate 10 -i pipe:0 result.mp4
 
-class WebmVideoExporterPlugin implements IExporterPlugin
+class Mp4VideoExporterPlugin implements IExporterPlugin
 {
 	public var name = "Mp4VideoExporter";
 	
