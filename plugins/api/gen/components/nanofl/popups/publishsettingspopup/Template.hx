@@ -9,5 +9,6 @@ package components.nanofl.popups.publishsettingspopup;
 	var audioQuality(get, never) : js.JQuery;
 	var urlOnClick(get, never) : js.JQuery;
 	var useLocalScripts(get, never) : js.JQuery;
+	var supportLocalFileOpen(get, never) : js.JQuery;
 	var publish(get, never) : js.JQuery;
 }

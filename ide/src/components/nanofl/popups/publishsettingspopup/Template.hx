@@ -24,11 +24,8 @@ class Template extends components.nanofl.popups.basepopup.Template
 	public var useLocalScripts(get, never) : js.JQuery;
 	inline function get_useLocalScripts() return component.q('#useLocalScripts');
 	
-	//public var shareForDevices(get, never) : js.JQuery;
-	//inline function get_shareForDevices() return component.q('#shareForDevices');
-	
-	//public var showShareForDevicesPopup(get, never) : js.JQuery;
-	//inline function get_showShareForDevicesPopup() return component.q('#showShareForDevicesPopup');
+	public var supportLocalFileOpen(get, never) : js.JQuery;
+	inline function get_supportLocalFileOpen() return component.q('#supportLocalFileOpen');
 	
 	public var publish(get, never) : js.JQuery;
 	inline function get_publish() return component.q('#publish');

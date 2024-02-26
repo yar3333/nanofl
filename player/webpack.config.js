@@ -28,5 +28,10 @@ module.exports = {
 	externals: {
 		"three": "THREE",
         "three/addons/loaders/GLTFLoader.js" : "THREE_addons_GLTFLoader",
-	}
+	},
+
+    performance: {
+        maxEntrypointSize: 512000,
+        maxAssetSize: 512000
+    }    
 }    

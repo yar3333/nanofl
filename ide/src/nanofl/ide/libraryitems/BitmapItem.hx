@@ -1,7 +1,8 @@
 package nanofl.ide.libraryitems;
 
+import js.lib.Error;
+import nanofl.engine.SerializationAsJsTools;
 import haxe.crypto.Base64;
-import nanofl.engine.Loader;
 import nanofl.engine.IPathElement;
 import htmlparser.HtmlNodeElement;
 import js.lib.Promise;
@@ -65,56 +66,88 @@ class BitmapItem extends nanofl.engine.libraryitems.BitmapItem
 	{
 		return [ namePath + ".*" ];
 	}
+
+	public function getUrl() return library.realUrl(namePath + "." + ext);
 	
 	public function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String) : IIdeLibraryItem
 	{
 		log("BitmapItem: publish " + namePath + "; ext = " + ext);
 
-        final imgInfo = getImageForPublish(fileSystem, settings);
-        if (imgInfo == null) return clone();
-
-        fileSystem.saveContent
-        (
-            destLibraryDir + "/" + namePath + ".js",
-            'nanofl.libraryFiles ||= {};\n'
-          + 'nanofl.libraryFiles["' + namePath + '.' + imgInfo.ext + '"] = "' + imgInfo.dataBase64 + '";'
-        );
-
-        var item = clone();
-        item.ext = imgInfo.ext;
-
-        return item;
-	}
-
-    function getImageForPublish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings) : { ext:String, dataBase64:String }
-    {
         if (settings.useTextureAtlases && textureAtlas != null && textureAtlas != "") return null;
 
         final srcFilePath = library.libraryDir + "/" + namePath + "." + ext;
-        if (settings.isConvertImagesIntoJpeg && !nanofl.ide.BitmapItemTools.isTransparent(library, this))
+        
+        if (!settings.supportLocalFileOpen)
         {
-            final destFilePath = fileSystem.getTempFilePath(".jpg");
-            final success = new nanofl.ide.MediaConvertor().convertImage(srcFilePath, destFilePath, settings.jpegQuality);
-            log("converted '" + namePath + "." + ext + "' => '" + namePath + ".jpg': " + (success ? "OK" : "FAIL"));
-            if (success)
+            if (settings.isConvertImagesIntoJpeg && !isImageHasAlpha(image))
             {
-                final dataBase64 = getFileContentAsBase64String(fileSystem, destFilePath);
-                fileSystem.deleteFile(destFilePath);
-                return { ext:"jpg", dataBase64:dataBase64 };
+                final destFilePath = destLibraryDir + "/" + namePath + ".jpg";
+                final success = new nanofl.ide.MediaConvertor().convertImage(srcFilePath, destFilePath, settings.jpegQuality);
+                log("Convert '" + namePath + "." + ext + "' => '" + namePath + ".jpg': " + (success ? "OK" : "FAIL"));
+                if (success)
+                {
+                    var item = clone();
+                    item.ext = "jpg";
+                    return item;
+                }
             }
+            
+            fileSystem.copyFile(srcFilePath, destLibraryDir + "/" + namePath + "." + ext);
+            return clone();
         }
+        else
+        {
+            if (settings.isConvertImagesIntoJpeg && !isImageHasAlpha(image))
+            {
+                final destFilePath = fileSystem.getTempFilePath(".jpg");
+                final success = new nanofl.ide.MediaConvertor().convertImage(srcFilePath, destFilePath, settings.jpegQuality);
+                log("Convert '" + namePath + "." + ext + "' => '" + namePath + ".jpg': " + (success ? "OK" : "FAIL"));
+                if (success)
+                {
+                    SerializationAsJsTools.save(fileSystem, destLibraryDir, namePath, "data:image/jpeg;base64," + Base64.encode(fileSystem.getBinary(destFilePath)));
+                    fileSystem.deleteFile(destFilePath);
+                    var item = clone();
+                    item.ext = "js";
+                    return item;
+                }
+            }
+                
+            SerializationAsJsTools.save(fileSystem, destLibraryDir, namePath, "data:" + getImageMimeType() + ";base64," + Base64.encode(fileSystem.getBinary(srcFilePath)));
+            var item = clone();
+            item.ext = "js";
+            return item;
+        }
+	}
 
-        return { ext:ext, dataBase64:getFileContentAsBase64String(fileSystem, srcFilePath) };
-    }
-
-    static function getFileContentAsBase64String(fileSystem:nanofl.ide.sys.FileSystem, filePath:String) : String
+    function getImageMimeType()
     {
-        var bytes = fileSystem.getBinary(filePath);
-        return Base64.encode(bytes);
+        switch (ext.toLowerCase())
+        {
+            case "png": return "image/png";
+            case "jpg" | "jpeg": return "image/jpeg";
+            case _: throw new Error("Can't detect MIME type for extension: " + ext);
+        }
     }
-	
+
 	public function getUsedSymbolNamePaths() : Array<String> return [ namePath ];
-	
+
+	static function isImageHasAlpha(image:js.html.ImageElement)
+    {
+        var canvas : js.html.CanvasElement = cast js.Browser.document.createElement("canvas");
+        canvas.width = image.width; 
+        canvas.height = image.height; 
+        var ctx = canvas.getContext2d();
+        ctx.drawImage(image, 0, 0); 
+        var data = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        var size = data.width * data.height;
+        var i = 3; while (i < size)
+        {
+            if (data.data[i] != 255) return true;
+            i += 4;
+        }
+        return false;
+    }
+
 	static function log(v:Dynamic, ?infos:haxe.PosInfos)
 	{
 		//trace(Reflect.isFunction(v) ? v() : v, infos);

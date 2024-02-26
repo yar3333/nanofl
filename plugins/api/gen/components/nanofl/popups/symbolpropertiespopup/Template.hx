@@ -8,7 +8,7 @@ package components.nanofl.popups.symbolpropertiespopup;
 	var autoPlay(get, never) : js.JQuery;
 	var loop(get, never) : js.JQuery;
 	var spriteSheetableItem(get, never) : js.JQuery;
-	var exportAsSpriteSheet(get, never) : js.JQuery;
+	var exportAsSprite(get, never) : js.JQuery;
 	var meshItem(get, never) : js.JQuery;
 	var renderAreaSize(get, never) : js.JQuery;
 	var loadLights(get, never) : js.JQuery;

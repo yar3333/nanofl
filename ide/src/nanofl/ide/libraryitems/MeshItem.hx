@@ -1,5 +1,7 @@
 package nanofl.ide.libraryitems;
 
+import haxe.Json;
+import nanofl.engine.SerializationAsJsTools;
 import nanofl.ide.sys.FileSystem;
 import nanofl.engine.IPathElement;
 import htmlparser.HtmlNodeElement;
@@ -72,13 +74,7 @@ class MeshItem extends nanofl.engine.libraryitems.MeshItem
         
         if (ext == "gltf")
         {
-            fileSystem.saveContent
-            (
-                destLibraryDir + "/" + namePath + ".js", 
-                'nanofl.libraryFiles ||= {};\n'
-              + 'nanofl.libraryFiles["' + namePath + '.gltf"] =\n'
-              + fileSystem.getContent(library.libraryDir + "/" + namePath + "." + ext)
-            );
+            SerializationAsJsTools.save(fileSystem, destLibraryDir, namePath, Json.parse(fileSystem.getContent(library.libraryDir + "/" + namePath + "." + ext)));
         }
 
         fileSystem.copyLibraryFiles(library.libraryDir, textureFiles, destLibraryDir);

@@ -7,6 +7,7 @@ extern class BitmapItem extends nanofl.engine.libraryitems.BitmapItem implements
 	override function createDisplayObject(initFrameIndex:Int, childFrameIndexes:Array<{ public var frameIndex(default, default) : Int; public var element(default, default) : nanofl.engine.IPathElement; }>):easeljs.display.DisplayObject;
 	function getFilePathToRunWithEditor():String;
 	function getLibraryFilePaths():Array<String>;
+	function getUrl():String;
 	function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String):nanofl.ide.libraryitems.IIdeLibraryItem;
 	function getUsedSymbolNamePaths():Array<String>;
 	static function parse(namePath:String, itemNode:htmlparser.HtmlNodeElement):nanofl.ide.libraryitems.BitmapItem;

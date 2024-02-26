@@ -87,10 +87,8 @@ class MeshItem extends InstancableItem implements ITextureItem
             return processPreloadedJson(haxe.Json.parse(s));
         });
         #else
-        return Loader.javaScript(library.realUrl(namePath + ".js")).then(_ -> 
-        {
-            return processPreloadedJson(getLibraryFileContent(namePath + ".gltf"));
-        });
+        if (textureAtlas != null && textureAtlas != "") return Promise.resolve(null);
+        return SerializationAsJsTools.load(library, namePath, true).then(json -> processPreloadedJson(json));
         #end
     }
 

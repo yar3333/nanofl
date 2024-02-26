@@ -16,8 +16,9 @@ class PublishSettings
 	public var audioQuality : Int;
 	public var urlOnClick : String;
 	public var useLocalScripts : Bool;
+	public var supportLocalFileOpen : Bool;
 	
-	public function new(useTextureAtlases=false, ?textureAtlases:Map<String, TextureAtlasParams>, isConvertImagesIntoJpeg=true, jpegQuality=80,  audioQuality=128, urlOnClick="", useLocalScripts=false)
+	public function new(useTextureAtlases=false, ?textureAtlases:Map<String, TextureAtlasParams>, isConvertImagesIntoJpeg=true, jpegQuality=80,  audioQuality=128, urlOnClick="", useLocalScripts=false, supportLocalFileOpen=false)
 	{
 		this.useTextureAtlases = useTextureAtlases;
 		this.textureAtlases = textureAtlases ?? new Map();
@@ -26,6 +27,7 @@ class PublishSettings
 		this.audioQuality = audioQuality;
 		this.urlOnClick = urlOnClick;
 		this.useLocalScripts = useLocalScripts;
+		this.supportLocalFileOpen = supportLocalFileOpen;
 	}
 	
 	public function equ(p:PublishSettings) : Bool
@@ -37,7 +39,8 @@ class PublishSettings
 			&& p.jpegQuality == jpegQuality
 			&& p.audioQuality == audioQuality
 			&& p.urlOnClick == urlOnClick
-			&& p.useLocalScripts == useLocalScripts;
+			&& p.useLocalScripts == useLocalScripts
+			&& p.supportLocalFileOpen == supportLocalFileOpen;
 	}
 	
 	public function clone() : PublishSettings
@@ -51,6 +54,7 @@ class PublishSettings
 			audioQuality,
 			urlOnClick,
 			useLocalScripts,
+			supportLocalFileOpen,
 		);
 	}
 	
@@ -71,6 +75,7 @@ class PublishSettings
 				case "audioQuality":			r.audioQuality = Std.parseInt(value);
 				case "urlOnClick":				r.urlOnClick = value;
 				case "useLocalScripts":			r.useLocalScripts = Std.bool(value);
+				case "supportLocalFileOpen":	r.supportLocalFileOpen = Std.bool(value);
 			}
 		}
 		
@@ -89,6 +94,7 @@ class PublishSettings
 			out.begin("param").attr("name", "audioQuality")				.attr("value", audioQuality)			.end();
 			out.begin("param").attr("name", "urlOnClick")				.attr("value", urlOnClick)				.end();
 			out.begin("param").attr("name", "useLocalScripts")			.attr("value", useLocalScripts)			.end();
+			out.begin("param").attr("name", "supportLocalFileOpen")		.attr("value", supportLocalFileOpen)	.end();
 			
 		out.end();
 		

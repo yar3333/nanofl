@@ -46,8 +46,6 @@ class BitmapItem extends InstancableItem implements ITextureItem
 	
 	public function getIcon() return "custom-icon-picture";
 	
-	public function getUrl() return library.realUrl(namePath + "." + ext);
-	
 	public function preload() : Promise<{}>
 	{
 		Debug.assert(library != null, "You need to add item '" + namePath + "' to the library before preload call.");
@@ -60,23 +58,23 @@ class BitmapItem extends InstancableItem implements ITextureItem
     function preloadInner() : Promise<{}>
     {
         #if ide
-        return Loader.image(getUrl()).then(img -> { image = img; return null; });
+        return Loader.image(library.realUrl(namePath + "." + ext)).then(img -> { image = img; return null; });
         #else
-        return Loader.javaScript(library.realUrl(namePath + ".js")).then(_ -> 
-        {
-            return loadImageFromBase64(getLibraryFileContent(namePath + "." + ext));
-        });
+        if (textureAtlas != null && textureAtlas != "") return Promise.resolve(null);
+        return ext == "js"
+                ? SerializationAsJsTools.load(library, namePath, true).then((dataUri:String) -> loadImageFromDataUri(dataUri))
+                : Loader.image(library.realUrl(namePath + "." + ext)).then(img -> { image = img; return null; });
         #end
     }
 
-    function loadImageFromBase64(imageDataBase64:String) : Promise<{}>
+    function loadImageFromDataUri(dataUri:String) : Promise<{}>
     {
         return new Promise((resolve, reject) ->
         {
             image = Browser.document.createImageElement();
             image.onload = () -> resolve(null);
             image.onerror = e -> reject(e);
-            image.src = 'data:image/png;base64,' + imageDataBase64;
+            image.src = dataUri;
         });
     }
 	

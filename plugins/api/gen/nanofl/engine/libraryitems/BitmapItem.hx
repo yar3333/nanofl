@@ -7,7 +7,6 @@ extern class BitmapItem extends nanofl.engine.libraryitems.InstancableItem imple
 	var image(default, null) : js.html.ImageElement;
 	override function clone():nanofl.engine.libraryitems.BitmapItem;
 	override function getIcon():String;
-	function getUrl():String;
 	override function preload():js.lib.Promise<{ }>;
 	override function createDisplayObject(initFrameIndex:Int, childFrameIndexes:Array<{ public var frameIndex(default, default) : Int; public var element(default, default) : nanofl.engine.IPathElement; }>):easeljs.display.DisplayObject;
 	override function updateDisplayObject(dispObj:easeljs.display.DisplayObject, childFrameIndexes:Array<{ public var frameIndex(default, default) : Int; public var element(default, default) : nanofl.engine.IPathElement; }>):Void;

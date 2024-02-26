@@ -1,8 +1,5 @@
 package nanofl.engine.libraryitems;
 
-import js.lib.Error;
-import js.Browser;
-import js.Syntax;
 import js.lib.Promise;
 
 #if ide
@@ -139,16 +136,4 @@ abstract class LibraryItem
     public abstract function loadPropertiesJson(obj:Dynamic) : Void;
     
     public abstract function toString() : String;
-
-    #if !ide
-    function getLibraryFileContent(path:String) : Dynamic
-    {
-        if (!(cast Browser.window).nanofl) throw new Error("Global `nanofl` is not found.");
-        if (!(cast Browser.window).nanofl.libraryFiles) throw new Error("Global `nanofl.libraryFiles` is not found.");
-        var libraryFiles = (cast Browser.window).nanofl.libraryFiles;
-        var r = Syntax.field(libraryFiles, path);
-        if (Syntax.typeof(r) == "undefined") throw new Error('Global `nanofl.libraryFiles["' + path + '"]` is not found.');
-        return r;
-    }
-    #end
 }
