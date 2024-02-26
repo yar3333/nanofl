@@ -8,7 +8,6 @@
 --library jsprop
 --library bootstrap
 --library easeljs
---library soundjs
 --library tweenjs
 --library preloadjs
 --library wquery

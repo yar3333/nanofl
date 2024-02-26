@@ -1,6 +1,6 @@
 package components.nanofl.library.librarypreview;
 
-import soundjs.Sound;
+import js.html.Audio;
 import nanofl.DisplayObjectTools;
 import nanofl.Stage;
 import nanofl.TextField;
@@ -24,6 +24,7 @@ class Code extends wquery.Component
     var stage : Stage;
 	
 	var soundPlaying : String = null;
+	var audioPlaying : Audio = null;
 	
 	public var item(default, set) : ILibraryItem;
 	function set_item(item:ILibraryItem) { this.item = item; update(); return item; }
@@ -156,29 +157,28 @@ class Code extends wquery.Component
 		{
 			if (soundPlaying != item.namePath)
 			{
-				Sound.alternateExtensions = [ "ogg", "mp3", "wav" ];
-				Sound.removeAllSounds();
-				Sound.removeAllEventListeners();
-				
-				var sound : SoundItem = cast item;
-				Sound.registerSound(sound.getUrl(), item.namePath, null, null);
-				Sound.addFileloadEventListener(function(_)
-				{
-					var s = Sound.play(item.namePath);
-					s.addCompleteEventListener(function(_)
-					{
-						soundPlaying = null;
-						update();
-					});
-				});
-				
-				soundPlaying = item.namePath;
-				update();
+                soundPlaying = item.namePath;
+                final sound : SoundItem = cast item;
+                sound.preload().then(_ ->
+                {
+                    if (soundPlaying == item.namePath)
+                    {
+                        audioPlaying = sound.play();
+                        audioPlaying.addEventListener("ended", () -> 
+                        {
+                            if (audioPlaying != null) { audioPlaying.pause(); audioPlaying = null; }
+                            soundPlaying = null;
+                            update();
+                        });     
+                    }
+                });
+
+                update();
 			}
 			else
 			{
-				Sound.stop();
-				soundPlaying = null;
+				if (audioPlaying != null) { audioPlaying.pause(); audioPlaying = null; }
+                soundPlaying = null;
 				update();
 			}
 		}

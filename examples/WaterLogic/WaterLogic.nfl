@@ -13,6 +13,7 @@
 		<param name="jpegQuality" value="80" />
 		<param name="audioQuality" value="128" />
 		<param name="urlOnClick" value="" />
-		<param name="useLocalScripts" value="false" />
+		<param name="useLocalScripts" value="true" />
+		<param name="supportLocalFileOpen" value="true" />
 	</publishSettings>
 </nanofl>

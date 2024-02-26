@@ -34,7 +34,7 @@ class Code extends components.nanofl.popups.basepopup.Code
 		template().audioQuality.val(settings.audioQuality);
 		template().urlOnClick.prop("checked", settings.urlOnClick);
 		template().useLocalScripts.prop("checked", settings.useLocalScripts);
-		//template().shareForDevices.prop("checked", settings.shareForDevices);
+		template().supportLocalFileOpen.prop("checked", settings.supportLocalFileOpen);
 	}
 	
 	override function onOK()
@@ -78,6 +78,11 @@ class Code extends components.nanofl.popups.basepopup.Code
 	function useLocalScripts_change(_)
 	{
 		settings.useLocalScripts = template().useLocalScripts.prop("checked");
+	}
+	
+	function supportLocalFileOpen_change(_)
+	{
+		settings.supportLocalFileOpen = template().supportLocalFileOpen.prop("checked");
 	}
 	
 	function publish_click(_)

@@ -4,49 +4,49 @@ libraryData =
     "type": "bitmap",
     "version": "2.3.0",
     "linkedClass": "",
-    "ext": "png",
+    "ext": "js",
     "textureAtlas": null
   },
   "_bitmaps/barrel3D": {
     "type": "bitmap",
     "version": "2.3.0",
     "linkedClass": "",
-    "ext": "png",
+    "ext": "js",
     "textureAtlas": null
   },
   "_bitmaps/barrels": {
     "type": "bitmap",
     "version": "2.3.0",
     "linkedClass": "",
-    "ext": "png",
+    "ext": "js",
     "textureAtlas": null
   },
   "_bitmaps/bucket": {
     "type": "bitmap",
     "version": "2.3.0",
     "linkedClass": "",
-    "ext": "png",
+    "ext": "js",
     "textureAtlas": null
   },
   "_bitmaps/floor": {
     "type": "bitmap",
     "version": "2.3.0",
     "linkedClass": "",
-    "ext": "jpg",
+    "ext": "js",
     "textureAtlas": null
   },
   "_bitmaps/trash": {
     "type": "bitmap",
     "version": "2.3.0",
     "linkedClass": "",
-    "ext": "png",
+    "ext": "js",
     "textureAtlas": null
   },
   "_bitmaps/wall": {
     "type": "bitmap",
     "version": "2.3.0",
     "linkedClass": "",
-    "ext": "jpg",
+    "ext": "js",
     "textureAtlas": null
   },
   "_buttons/Back": {
@@ -56,7 +56,7 @@ libraryData =
     "autoPlay": true,
     "loop": true,
     "likeButton": false,
-    "exportAsSpriteSheet": false,
+    "exportAsSprite": false,
     "textureAtlas": null,
     "layers": [
       {
@@ -174,7 +174,7 @@ libraryData =
     "autoPlay": true,
     "loop": true,
     "likeButton": true,
-    "exportAsSpriteSheet": false,
+    "exportAsSprite": false,
     "textureAtlas": null,
     "layers": [
       {
@@ -258,7 +258,7 @@ libraryData =
     "autoPlay": true,
     "loop": true,
     "likeButton": true,
-    "exportAsSpriteSheet": false,
+    "exportAsSprite": false,
     "textureAtlas": null,
     "layers": [
       {
@@ -348,7 +348,7 @@ libraryData =
     "autoPlay": true,
     "loop": true,
     "likeButton": true,
-    "exportAsSpriteSheet": false,
+    "exportAsSprite": false,
     "textureAtlas": null,
     "layers": [
       {
@@ -432,7 +432,7 @@ libraryData =
     "autoPlay": true,
     "loop": true,
     "likeButton": true,
-    "exportAsSpriteSheet": false,
+    "exportAsSprite": false,
     "textureAtlas": null,
     "layers": [
       {
@@ -516,7 +516,7 @@ libraryData =
     "autoPlay": true,
     "loop": true,
     "likeButton": false,
-    "exportAsSpriteSheet": false,
+    "exportAsSprite": false,
     "textureAtlas": null,
     "layers": [
       {
@@ -634,7 +634,7 @@ libraryData =
     "autoPlay": true,
     "loop": true,
     "likeButton": false,
-    "exportAsSpriteSheet": false,
+    "exportAsSprite": false,
     "textureAtlas": null,
     "layers": [
       {
@@ -752,7 +752,7 @@ libraryData =
     "autoPlay": true,
     "loop": true,
     "likeButton": false,
-    "exportAsSpriteSheet": false,
+    "exportAsSprite": false,
     "textureAtlas": null,
     "layers": [
       {
@@ -867,31 +867,31 @@ libraryData =
     "type": "sound",
     "version": "2.3.0",
     "linkage": "bucket",
-    "ext": "ogg"
+    "ext": "js"
   },
   "_sounds/sndMusic": {
     "type": "sound",
     "version": "2.3.0",
     "linkage": "music",
-    "ext": "ogg"
+    "ext": "js"
   },
   "_sounds/sndTap": {
     "type": "sound",
     "version": "2.3.0",
     "linkage": "tap",
-    "ext": "ogg"
+    "ext": "js"
   },
   "_sounds/sndTrash": {
     "type": "sound",
     "version": "2.3.0",
     "linkage": "trash",
-    "ext": "ogg"
+    "ext": "js"
   },
   "_sounds/sndWater": {
     "type": "sound",
     "version": "2.3.0",
     "linkage": "water",
-    "ext": "ogg"
+    "ext": "js"
   },
   "_splash/splash": {
     "type": "movieclip",
@@ -900,7 +900,7 @@ libraryData =
     "autoPlay": true,
     "loop": true,
     "likeButton": false,
-    "exportAsSpriteSheet": false,
+    "exportAsSprite": false,
     "textureAtlas": null,
     "layers": [
       {
@@ -1051,7 +1051,7 @@ libraryData =
     "autoPlay": true,
     "loop": true,
     "likeButton": false,
-    "exportAsSpriteSheet": false,
+    "exportAsSprite": false,
     "textureAtlas": null,
     "layers": [
       {
@@ -1110,7 +1110,7 @@ libraryData =
     "autoPlay": true,
     "loop": true,
     "likeButton": false,
-    "exportAsSpriteSheet": false,
+    "exportAsSprite": false,
     "textureAtlas": null,
     "layers": [
       {
@@ -1228,7 +1228,7 @@ libraryData =
     "autoPlay": true,
     "loop": true,
     "likeButton": false,
-    "exportAsSpriteSheet": false,
+    "exportAsSprite": false,
     "textureAtlas": null,
     "layers": [
       {
@@ -1315,7 +1315,7 @@ libraryData =
     "autoPlay": true,
     "loop": true,
     "likeButton": false,
-    "exportAsSpriteSheet": false,
+    "exportAsSprite": false,
     "textureAtlas": null,
     "layers": [
       {
@@ -1353,7 +1353,7 @@ libraryData =
     "autoPlay": false,
     "loop": false,
     "likeButton": false,
-    "exportAsSpriteSheet": false,
+    "exportAsSprite": false,
     "textureAtlas": null,
     "layers": [
       {
@@ -1633,7 +1633,7 @@ libraryData =
     "autoPlay": true,
     "loop": true,
     "likeButton": false,
-    "exportAsSpriteSheet": false,
+    "exportAsSprite": false,
     "textureAtlas": null,
     "layers": [
       {
@@ -1684,7 +1684,7 @@ libraryData =
     "autoPlay": true,
     "loop": true,
     "likeButton": false,
-    "exportAsSpriteSheet": false,
+    "exportAsSprite": false,
     "textureAtlas": null,
     "layers": [
       {
@@ -1728,7 +1728,7 @@ libraryData =
     "autoPlay": true,
     "loop": true,
     "likeButton": false,
-    "exportAsSpriteSheet": false,
+    "exportAsSprite": false,
     "textureAtlas": null,
     "layers": [
       {
@@ -1779,7 +1779,7 @@ libraryData =
     "autoPlay": true,
     "loop": true,
     "likeButton": false,
-    "exportAsSpriteSheet": false,
+    "exportAsSprite": false,
     "textureAtlas": null,
     "layers": [
       {
@@ -1805,7 +1805,7 @@ libraryData =
     "autoPlay": false,
     "loop": false,
     "likeButton": false,
-    "exportAsSpriteSheet": false,
+    "exportAsSprite": false,
     "textureAtlas": null,
     "layers": [
       {
@@ -1972,7 +1972,7 @@ libraryData =
     "autoPlay": true,
     "loop": true,
     "likeButton": false,
-    "exportAsSpriteSheet": false,
+    "exportAsSprite": false,
     "textureAtlas": null,
     "layers": [
       {
@@ -1998,7 +1998,7 @@ libraryData =
     "autoPlay": false,
     "loop": false,
     "likeButton": false,
-    "exportAsSpriteSheet": false,
+    "exportAsSprite": false,
     "textureAtlas": null,
     "layers": [
       {
@@ -2855,7 +2855,7 @@ libraryData =
     "autoPlay": false,
     "loop": false,
     "likeButton": false,
-    "exportAsSpriteSheet": false,
+    "exportAsSprite": false,
     "textureAtlas": null,
     "layers": [
       {
@@ -2974,7 +2974,7 @@ libraryData =
     "autoPlay": false,
     "loop": false,
     "likeButton": false,
-    "exportAsSpriteSheet": false,
+    "exportAsSprite": false,
     "textureAtlas": null,
     "layers": [
       {
@@ -3035,7 +3035,7 @@ libraryData =
     "autoPlay": true,
     "loop": true,
     "likeButton": false,
-    "exportAsSpriteSheet": false,
+    "exportAsSprite": false,
     "textureAtlas": null,
     "layers": [
       {
@@ -3073,7 +3073,7 @@ libraryData =
     "autoPlay": true,
     "loop": true,
     "likeButton": false,
-    "exportAsSpriteSheet": false,
+    "exportAsSprite": false,
     "textureAtlas": null,
     "layers": [
       {
@@ -3123,7 +3123,7 @@ libraryData =
     "autoPlay": true,
     "loop": true,
     "likeButton": false,
-    "exportAsSpriteSheet": false,
+    "exportAsSprite": false,
     "textureAtlas": null,
     "layers": [
       {

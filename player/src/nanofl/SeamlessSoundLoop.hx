@@ -1,32 +1,31 @@
 package nanofl;
 
+import js.html.Audio;
 import haxe.Timer;
 import js.Browser;
-import soundjs.AbstractSoundInstance;
-import soundjs.Sound;
 
 @:expose
 class SeamlessSoundLoop
 {
 	static var delay : Int;
 	
-	var sounds : Array<AbstractSoundInstance>;
+	var sounds : Array<Audio>;
 	var timer : Timer;
 	
 	var n = 1;
 	
-	public function new(sound:AbstractSoundInstance)
+	public function new(audio:Audio)
 	{
-		if (sound.duration == null || sound.duration == 0) return;
+		if (audio.duration == null || audio.duration == 0) return;
 		if (delay == null) delay = detectDelay();
-		sounds = [ sound, Sound.createInstance(sound.src) ];
+		sounds = [ audio, cast audio.cloneNode() ];
 		switchSound();
 	}
 	
 	public function stop()
 	{
-		sounds[0].destroy();
-		sounds[1].destroy();
+		sounds[0].pause(); sounds[0] = null;
+		sounds[1].pause(); sounds[1] = null;
 		timer.stop();
 	}
 	

@@ -1,5 +1,7 @@
 package nanofl.engine.libraryitems;
 
+import js.html.Audio;
+import js.Browser;
 import js.lib.Promise;
 import nanofl.engine.ILibraryItem;
 
@@ -16,6 +18,8 @@ class SoundItem extends LibraryItem
 	public var ext : String;
 	
 	public var linkage = "";
+
+    public var audio(default, null) : Audio;
 	
 	public function new(namePath:String, ext:String)
 	{
@@ -44,7 +48,39 @@ class SoundItem extends LibraryItem
 		return true;
 	}
 	
-    public function preload() : Promise<{}> return Promise.resolve();
+    public function preload() : Promise<{}>
+    {
+        stdlib.Debug.assert(linkage != null && linkage != "");
+
+        return ext.toLowerCase() == "js"
+            ? SerializationAsJsTools.load(library, namePath, true).then(dataUri -> preloadInner(dataUri))
+            : preloadInner(library.realUrl(namePath + "." + ext));
+    }
+
+    private function preloadInner(uri:String) : Promise<{}>
+    {
+        return new Promise((resolve, reject) ->
+        {
+            audio = new Audio();
+            audio.addEventListener("canplay", () -> resolve(null));
+            audio.addEventListener("error", e ->
+            {
+                Browser.console.warn("Error loading sound " + namePath, e);
+                resolve(null);
+            });
+            audio.src = uri;
+        });
+    }
+
+    @:keep
+    public function play() : Audio
+    {
+        stdlib.Debug.assert(audio != null);
+
+        var r : Audio = cast audio.cloneNode();
+        r.play();
+        return r;
+    }
 
     #if ide
 	function hasDataToSave() return linkage != "";

@@ -1,5 +1,7 @@
 package nanofl.ide.libraryitems;
 
+import haxe.crypto.Base64;
+import nanofl.engine.SerializationAsJsTools;
 import js.Browser;
 import htmlparser.HtmlNodeElement;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
@@ -58,9 +60,18 @@ class SoundItem extends nanofl.engine.libraryitems.SoundItem
                 fileSystem.deleteFile(tempFile);
             }
         }
-		
+
+        if (!settings.supportLocalFileOpen)
+        {
+            var r = clone();
+            r.ext = "ogg";
+            return r;
+        }
+
+        SerializationAsJsTools.save(fileSystem, destLibraryDir, namePath, "data:audio/ogg;base64," + Base64.encode(fileSystem.getBinary(destFile)));
+        fileSystem.deleteFile(destFile);
         var r = clone();
-        r.ext = "ogg";
+        r.ext = "js";
         return r;
 	}
 	

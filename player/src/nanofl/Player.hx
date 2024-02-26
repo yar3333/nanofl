@@ -7,7 +7,6 @@ import js.lib.Promise;
 import js.lib.Error;
 import createjs.utils.Ticker;
 import easeljs.display.SpriteSheet;
-import soundjs.Sound;
 import nanofl.engine.Library;
 import nanofl.engine.TextureAtlasTools;
 import nanofl.engine.ScaleMode;
@@ -43,8 +42,6 @@ class Player
 		var canvas : CanvasElement = cast Browser.document.createCanvasElement();
 		canvas.style.position = "absolute";
 		args.container.appendChild(canvas);
-		
-		Sound.registerSounds(library.getSounds().map(item -> { src:item.getUrl(), id:item.linkage }), null);
 		
         return TextureAtlasTools.resolveImages(args.textureAtlasesData)
         .then(_ ->

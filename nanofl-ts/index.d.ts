@@ -74,7 +74,7 @@ declare namespace nanofl
     
     class SeamlessSoundLoop
     {
-        constructor(sound:createjs.AbstractSoundInstance);
+        constructor(audio:HTMLAudioElement);
         stop() : void;
     }
     

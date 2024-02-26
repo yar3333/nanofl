@@ -2,9 +2,9 @@
 
 export class Sounds
 {
-	static bucket(props?:nanofl.PlayPropsConfig) : createjs.AbstractSoundInstance { return createjs.Sound.play("bucket", props) }
-	static music(props?:nanofl.PlayPropsConfig) : createjs.AbstractSoundInstance { return createjs.Sound.play("music", props) }
-	static tap(props?:nanofl.PlayPropsConfig) : createjs.AbstractSoundInstance { return createjs.Sound.play("tap", props) }
-	static trash(props?:nanofl.PlayPropsConfig) : createjs.AbstractSoundInstance { return createjs.Sound.play("trash", props) }
-	static water(props?:nanofl.PlayPropsConfig) : createjs.AbstractSoundInstance { return createjs.Sound.play("water", props) }
+	static bucket() : HTMLAudioElement { return nanofl.Player.library.getItem("_sounds/sndBucket").play() }
+	static music() : HTMLAudioElement { return nanofl.Player.library.getItem("_sounds/sndMusic").play() }
+	static tap() : HTMLAudioElement { return nanofl.Player.library.getItem("_sounds/sndTap").play() }
+	static trash() : HTMLAudioElement { return nanofl.Player.library.getItem("_sounds/sndTrash").play() }
+	static water() : HTMLAudioElement { return nanofl.Player.library.getItem("_sounds/sndWater").play() }
 }

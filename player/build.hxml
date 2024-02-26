@@ -9,7 +9,6 @@
 --library jsprop
 --library easeljs
 --library tweenjs
---library soundjs
 --library threejs
 --library threejs-addons
 nanofl.Player
