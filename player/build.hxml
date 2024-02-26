@@ -8,7 +8,6 @@
 --library datatools
 --library jsprop
 --library easeljs
---library tweenjs
 --library threejs
 --library threejs-addons
 nanofl.Player

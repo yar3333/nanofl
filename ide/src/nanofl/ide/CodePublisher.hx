@@ -74,7 +74,7 @@ class CodePublisher extends InjectContainer
 
         if (properties.publishSettings.useLocalScripts)
         {
-            template = ~/https:[^"]+?\/createjs[.]js/.replace(template, "scripts/createjs-1.0.0.js");
+            template = ~/https:[^"]+?\/easeljs[.]js/.replace(template, "scripts/easeljs-1.0.0.js");
             template = ~/https:[^"]+?\/nanofl-[0-9.]+?[.]js/.replace(template, "scripts/nanofl-" + Version.player + ".js");
             template = ~/https:[^"]+?\/three[.]module[.]js/.replace(template, "./scripts/three-r161.js");
             template = ~/https:[^"]+?\/three[@0-9.]*?\/examples\/jsm\//.replace(template, "./scripts/three-addons/");
@@ -89,7 +89,7 @@ class CodePublisher extends InjectContainer
 	{
         if (properties.publishSettings.useLocalScripts)
         {
-            exportScriptFile("createjs-1.0.0.js");
+            exportScriptFile("easeljs-1.0.0.js");
             if (addLinkToThreeJs)
             {
                 exportScriptFile("three-r161.js");
@@ -100,7 +100,7 @@ class CodePublisher extends InjectContainer
         }
         else
         {
-            fileSystem.deleteFile(destDir + "/scripts/createjs-1.0.0.js");
+            fileSystem.deleteFile(destDir + "/scripts/easeljs-1.0.0.js");
             fileSystem.deleteFile(destDir + "/scripts/three-r161.js");
             fileSystem.deleteDirectoryRecursively(destDir + "/scripts/three-addons");
             fileSystem.deleteFile(destDir + "/scripts/nanofl-" + Version.player + ".js");

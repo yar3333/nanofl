@@ -153,29 +153,6 @@ package easeljs.display;
 	var framerate : Float;
 	/**
 		
-			 * The TweenJS Timeline that is associated with this MovieClip. This is created automatically when the MovieClip
-			 * instance is initialized. Animations are created by adding <a href="http://tweenjs.com">TweenJS</a> Tween
-			 * instances to the timeline.
-			 * 
-			 * <h4>Example</h4>
-			 * 
-			 *      var tween = createjs.Tween.get(target).to({x:0}).to({x:100}, 30);
-			 *      var mc = new createjs.MovieClip();
-			 *      mc.timeline.addTween(tween);
-			 * 
-			 * Elements can be added and removed from the timeline by toggling an "_off" property
-			 * using the <code>tweenInstance.to()</code> method. Note that using <code>Tween.set</code> is not recommended to
-			 * create MovieClip animations. The following example will toggle the target off on frame 0, and then back on for
-			 * frame 1. You can use the "visible" property to achieve the same effect.
-			 * 
-			 *      var tween = createjs.Tween.get(target).to({_off:false})
-			 *          .wait(1).to({_off:true})
-			 *          .wait(1).to({_off:false});
-			 
-	**/
-	var timeline : tweenjs.Timeline;
-	/**
-		
 			 * Returns an array of objects with label and position (aka frame) properties, sorted by position.
 			 
 	**/
@@ -360,30 +337,6 @@ typedef MovieClipInitProps = {
 	**/
 	@:optional
 	var startPosition : Int;
-	/**
-		
-		     * The TweenJS Timeline that is associated with this MovieClip. This is created automatically when the MovieClip
-		     * instance is initialized. Animations are created by adding <a href="http://tweenjs.com">TweenJS</a> Tween
-		     * instances to the timeline.
-		     * 
-		     * <h4>Example</h4>
-		     * 
-		     *      var tween = createjs.Tween.get(target).to({x:0}).to({x:100}, 30);
-		     *      var mc = new createjs.MovieClip();
-		     *      mc.timeline.addTween(tween);
-		     * 
-		     * Elements can be added and removed from the timeline by toggling an "_off" property
-		     * using the <code>tweenInstance.to()</code> method. Note that using <code>Tween.set</code> is not recommended to
-		     * create MovieClip animations. The following example will toggle the target off on frame 0, and then back on for
-		     * frame 1. You can use the "visible" property to achieve the same effect.
-		     * 
-		     *      var tween = createjs.Tween.get(target).to({_off:false})
-		     *          .wait(1).to({_off:true})
-		     *          .wait(1).to({_off:false});
-		     
-	**/
-	@:optional
-	var timeline : tweenjs.Timeline;
 	/**
 		
 		     * Returns the duration of this MovieClip in frames.

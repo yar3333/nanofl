@@ -70,7 +70,7 @@ class MotionTween
         
         if (finishElements != null)
         {
-            var ease = tweenjs.Ease.get(easing / 100);
+            var ease = Ease.get(easing / 100);
             var k = ease(t);
             var instancesMap = getInstancesMap(startElements, finishElements);
             

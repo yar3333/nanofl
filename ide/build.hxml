@@ -8,8 +8,6 @@
 --library jsprop
 --library bootstrap
 --library easeljs
---library tweenjs
---library preloadjs
 --library wquery
 --library hxnodejs-re-htmlparser
 --library threejs

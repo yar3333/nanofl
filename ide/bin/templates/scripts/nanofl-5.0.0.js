@@ -3613,6 +3613,25 @@ class nanofl_engine_DrawTools {
 	}
 }
 nanofl_engine_DrawTools.__name__ = "nanofl.engine.DrawTools";
+class nanofl_engine_Ease {
+	static get(amount) {
+		if(amount < -1) {
+			amount = -1;
+		} else if(amount > 1) {
+			amount = 1;
+		}
+		return function(t) {
+			if(amount == 0) {
+				return t;
+			}
+			if(amount < 0) {
+				return t * (t * -amount + 1 + amount);
+			}
+			return t * ((2 - t) * amount + (1 - amount));
+		};
+	}
+}
+nanofl_engine_Ease.__name__ = "nanofl.engine.Ease";
 var nanofl_engine_ElementType = $hxEnums["nanofl.engine.ElementType"] = { __ename__:"nanofl.engine.ElementType",__constructs__:null
 	,shape: {_hx_name:"shape",_hx_index:0,__enum__:"nanofl.engine.ElementType",toString:$estr}
 	,instance: {_hx_name:"instance",_hx_index:1,__enum__:"nanofl.engine.ElementType",toString:$estr}
@@ -8291,7 +8310,7 @@ class nanofl_engine_movieclip_MotionTween {
 		let t = frameSubIndex / this.keyFrame.duration;
 		let r = [];
 		if(finishElements != null) {
-			let ease = createjs.Ease.get(this.easing / 100);
+			let ease = nanofl_engine_Ease.get(this.easing / 100);
 			let k = ease(t);
 			let instancesMap = this.getInstancesMap(startElements,finishElements);
 			let _g = 0;
