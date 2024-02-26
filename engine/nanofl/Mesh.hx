@@ -13,7 +13,7 @@ import nanofl.engine.libraryitems.MeshItem;
 @:expose
 #if profiler @:build(Profiler.buildMarked()) #end
 //@:build(JsProp.marked())
-class Mesh extends SolidContainer #if !ide implements IInstance #end
+class Mesh extends SolidContainer #if !ide implements IEventHandlers #end
 {
 	static var DEG_TO_RAD = Math.PI / 180;
 	
@@ -57,10 +57,6 @@ class Mesh extends SolidContainer #if !ide implements IInstance #end
 		symbol.updateDisplayObject(this, null);
 		
 		#if profiler }); #end
-		
-		#if !ide
-		InstanceTools.bindEventHandlers(this);
-		#end
 	}
 	
 	override public function clone(?recursive:Bool) : Mesh
@@ -143,7 +139,7 @@ class Mesh extends SolidContainer #if !ide implements IInstance #end
 	
 	#if !ide
 	
-	//{ IInstance
+	//{ IEventHandlers
 	public function onEnterFrame() : Void {}
 	public function onMouseDown(e:easeljs.events.MouseEvent) : Void {}
 	public function onMouseMove(e:easeljs.events.MouseEvent) : Void {}

@@ -3,8 +3,8 @@ package nanofl.engine.libraryitems;
 extern class MovieClipItem extends nanofl.engine.libraryitems.InstancableItem implements nanofl.engine.IFramedItem implements nanofl.engine.ISpriteSheetableItem implements nanofl.engine.ITextureItem implements nanofl.engine.ITimeline implements nanofl.engine.ILayersContainer {
 	function new(namePath:String):Void;
 	var _layers : Array<nanofl.engine.movieclip.Layer>;
-	var layers(get, never) : datatools.ArrayRO<nanofl.engine.movieclip.Layer>;
-	function get_layers():datatools.ArrayRO<nanofl.engine.movieclip.Layer>;
+	var layers(get, never) : Array<nanofl.engine.movieclip.Layer>;
+	function get_layers():Array<nanofl.engine.movieclip.Layer>;
 	var autoPlay : Bool;
 	var loop : Bool;
 	var likeButton : Bool;
@@ -36,6 +36,6 @@ extern class MovieClipItem extends nanofl.engine.libraryitems.InstancableItem im
 	override function loadPropertiesJson(obj:Dynamic):Void;
 	override function toString():String;
 	static function createWithFrame(namePath:String, ?elements:Array<nanofl.engine.elements.Element>, ?layerName:String):nanofl.engine.libraryitems.MovieClipItem;
-	static function updateDisplayObjectInner(layers:datatools.ArrayRO<nanofl.engine.movieclip.Layer>, dispObj:easeljs.display.DisplayObject, childFrameIndexes:Array<{ public var frameIndex(default, default) : Int; public var element(default, default) : nanofl.engine.IPathElement; }>):Void;
+	static function updateDisplayObjectInner(layers:Array<nanofl.engine.movieclip.Layer>, dispObj:easeljs.display.DisplayObject, childFrameIndexes:Array<{ public var frameIndex(default, default) : Int; public var element(default, default) : nanofl.engine.IPathElement; }>):Void;
 	static function loadFromJson(namePath:String, baseLibraryUrl:String):js.lib.Promise<nanofl.engine.libraryitems.MovieClipItem>;
 }

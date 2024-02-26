@@ -2,8 +2,8 @@ package components.nanofl.movie.timeline;
 
 extern class TimelineAdapterToEditor implements components.nanofl.movie.timeline.ITimelineAdapter {
 	function new(editor:nanofl.ide.editor.Editor, undoQueue:nanofl.ide.undo.document.UndoQueue, library:nanofl.ide.library.IdeLibrary, preferences:nanofl.ide.preferences.Preferences, pathItem:nanofl.ide.navigator.PathItem, navigator:nanofl.ide.navigator.Navigator, properties:nanofl.ide.DocumentProperties):Void;
-	var layers(get, never) : datatools.ArrayRO<TLLayer>;
-	private function get_layers():datatools.ArrayRO<TLLayer>;
+	var layers(get, never) : Array<TLLayer>;
+	private function get_layers():Array<TLLayer>;
 	var editable(get, never) : Bool;
 	private function get_editable():Bool;
 	var frameIndex(get, set) : Int;
@@ -33,12 +33,12 @@ extern class TimelineAdapterToEditor implements components.nanofl.movie.timeline
 	function onFrameRemoved():Void;
 	function onLayersSelectionChange(indexes:Array<Int>):Void;
 	function getTotalFrames():Int;
-	function addLayersBlock(layersToAdd:datatools.ArrayRO<TLLayer>, ?index:Int):Void;
+	function addLayersBlock(layersToAdd:Array<TLLayer>, ?index:Int):Void;
 	function removeLayer(index:Int):Void;
 	function addLayer(layer:TLLayer):Void;
 	function getNamePaths(keyFrame:TLKeyFrame):Array<String>;
 	function getLayerNestLevel(layer:TLLayer):Int;
 	function duplicateLayerWoFrames(layer:TLLayer):TLLayer;
-	function getLayerKeyFrames(layer:TLLayer):datatools.ArrayRO<TLKeyFrame>;
+	function getLayerKeyFrames(layer:TLLayer):Array<TLKeyFrame>;
 	function addKeyFrame(layer:TLLayer, keyFrame:TLKeyFrame):Void;
 }

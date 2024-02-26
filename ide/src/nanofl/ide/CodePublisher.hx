@@ -96,7 +96,7 @@ class CodePublisher extends InjectContainer
                 exportScriptFile("three-addons/loaders/GLTFLoader.js");
                 exportScriptFile("three-addons/utils/BufferGeometryUtils.js");
             }
-            exportScriptFile("nanofl-" + Version.player + ".js");
+            fileSystem.copyFile(supportDir + "/scripts/nanofl-" + Version.player + ".js", destDir + "/scripts/nanofl-" + Version.player + ".js");
         }
         else
         {

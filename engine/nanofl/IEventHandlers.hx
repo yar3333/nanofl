@@ -2,7 +2,7 @@ package nanofl;
 
 import easeljs.events.MouseEvent;
 
-interface IInstance
+interface IEventHandlers
 {
 	function onEnterFrame() : Void;
 	function onMouseDown(e:MouseEvent) : Void;

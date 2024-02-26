@@ -1,6 +1,6 @@
 {
     "name": "nanofl-ts",
-    "version": "0.0.5",
+    "version": "0.0.7",
     "description": "Typescript definitions for writing NanoFL applications",
     "homepage": "https://github.com/yar3333/nanofl/tree/main/nanofl-ts",
     "license": "MIT",

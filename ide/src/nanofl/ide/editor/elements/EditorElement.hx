@@ -276,7 +276,7 @@ abstract class EditorElement implements ISelectable
 		
 		metaDispObj.addClickEventListener(onClick);
 		
-		metaDispObj.addMousedownEventListener(function(e)
+		metaDispObj.addMouseDownEventListener(function(e)
 		{
 			if (!frame.keyFrame.layer.locked && e.nativeEvent.which == 1)
 			{
@@ -286,7 +286,7 @@ abstract class EditorElement implements ISelectable
 			}			
 		});
 		
-		metaDispObj.addPressupEventListener(function(e)
+		metaDispObj.addPressUpEventListener(function(e)
 		{
 			if (!frame.keyFrame.layer.locked && pressed)
 			{
@@ -296,7 +296,7 @@ abstract class EditorElement implements ISelectable
 			}
 		});
 		
-		metaDispObj.addDblclickEventListener(function(e)
+		metaDispObj.addDblClickEventListener(function(e)
 		{
 			if (!frame.keyFrame.layer.locked)
 			{

@@ -5,8 +5,8 @@ extern class KeyFrame implements nanofl.engine.IElementsContainer {
 	var layer : nanofl.engine.movieclip.Layer;
 	var label : String;
 	var duration : Int;
-	var elements(get, never) : datatools.ArrayRO<nanofl.engine.elements.Element>;
-	private function get_elements():datatools.ArrayRO<nanofl.engine.elements.Element>;
+	var elements(get, never) : Array<nanofl.engine.elements.Element>;
+	private function get_elements():Array<nanofl.engine.elements.Element>;
 	function getNextKeyFrame():nanofl.engine.movieclip.KeyFrame;
 	function addElement(element:nanofl.engine.elements.Element, ?index:Int):Void;
 	function removeElementAt(n:Int):Void;

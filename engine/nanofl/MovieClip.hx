@@ -11,7 +11,7 @@ import stdlib.Debug;
 using stdlib.StringTools;
 
 @:expose
-class MovieClip extends Container implements IInstance
+class MovieClip extends Container implements IEventHandlers
 {
 	var layerOfChild : Map<DisplayObject, Int>;
 	
@@ -35,8 +35,6 @@ class MovieClip extends Container implements IInstance
 		
 		paused = !symbol.autoPlay;
 		loop = symbol.loop;
-		
-		InstanceTools.bindEventHandlers(this);
 	}
 	
 	public function addChildToLayer(child:DisplayObject, layerIndex:Int) : DisplayObject
@@ -341,7 +339,7 @@ class MovieClip extends Container implements IInstance
 		return symbol.toString();
 	}
 	
-	//{ IInstance
+	//{ IEventHandlers
 	public function onEnterFrame() : Void {}
 	public function onMouseDown(e:MouseEvent) : Void {}
 	public function onMouseMove(e:MouseEvent) : Void {}

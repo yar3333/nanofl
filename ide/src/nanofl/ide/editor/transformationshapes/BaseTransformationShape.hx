@@ -42,7 +42,7 @@ class BaseTransformationShape extends Container
 		
 		if (handlers.mouseDown != null)
 		{
-			box.addMousedownEventListener(function(e)
+			box.addMouseDownEventListener(function(e)
 			{
 				e.stopPropagation();
 				pressed = true;
@@ -50,7 +50,7 @@ class BaseTransformationShape extends Container
 				if (needUpdate) stage.update();
 			});
 			
-			box.addPressmoveEventListener(function(e:MouseEvent)
+			box.addPressMoveEventListener(function(e:MouseEvent)
 			{
 				if (!pressed) return;
 				e.stopPropagation();
@@ -58,7 +58,7 @@ class BaseTransformationShape extends Container
 				if (needUpdate) stage.update();
 			});
 			
-			box.addPressupEventListener(function(e:MouseEvent)
+			box.addPressUpEventListener(function(e:MouseEvent)
 			{
 				if (!pressed) return;
 				e.stopPropagation();
@@ -77,7 +77,7 @@ class BaseTransformationShape extends Container
 				}
 			});
 			
-			box.addDblclickEventListener(function(e:MouseEvent)
+			box.addDblClickEventListener(function(e:MouseEvent)
 			{
 				e.stopPropagation();
 				if (handlers.mouseDoubleClick != null)

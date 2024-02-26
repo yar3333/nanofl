@@ -31,4 +31,6 @@ build.hxml
 --macro CodeGen.removeTypeMeta(":jsRequire :allow :rtti :autoBuild :build")
 --macro CodeGen.removeFieldMeta(":profile :allow :noprofile")
 
+--macro CodeGen.map("datatools.ArrayRO", "Array")
+
 --macro CodeGen.haxeExtern("../plugins/api/gen")

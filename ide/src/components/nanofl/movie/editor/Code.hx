@@ -227,7 +227,7 @@ class Code extends wquery.Component
 			}
 		});
 		
-		stage.addMousedownEventListener(function(e:MouseEvent)
+		stage.addMouseDownEventListener(function(e:MouseEvent)
 		{
 			if (e.nativeEvent.which == 1 || e.nativeEvent.which == 3)
 			{
@@ -242,7 +242,7 @@ class Code extends wquery.Component
 			}
 		});
 		
-		stage.addStagemousemoveEventListener(function(e:MouseEvent)
+		stage.addStageMouseMoveEventListener(function(e:MouseEvent)
 		{
 			if (app == null || app.document == null || app.document.editor.tool == null) return;
 			
@@ -253,7 +253,7 @@ class Code extends wquery.Component
 			//#if profiler }); #end
 		});
 		
-		stage.addStagemouseupEventListener(function(e:MouseEvent)
+		stage.addStageMouseUpEventListener(function(e:MouseEvent)
 		{
 			if (e.nativeEvent.which == 1 || e.nativeEvent.which == 3) 
 			{
@@ -282,7 +282,7 @@ class Code extends wquery.Component
 			}
 		});
 		
-		stage.addDblclickEventListener(function(e:MouseEvent)
+		stage.addDblClickEventListener(function(e:MouseEvent)
 		{
 			log("editor/stage doubleclick e.nativeEvent.which = " + e.nativeEvent.which);
 			

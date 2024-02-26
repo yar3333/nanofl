@@ -11,7 +11,7 @@ extern class Layer {
 	var parentLayer(get, never) : nanofl.engine.movieclip.Layer;
 	@:noCompletion
 	private function get_parentLayer():nanofl.engine.movieclip.Layer;
-	var keyFrames(get, never) : datatools.ArrayRO<nanofl.engine.movieclip.KeyFrame>;
+	var keyFrames(get, never) : Array<nanofl.engine.movieclip.KeyFrame>;
 	function getTotalFrames():Int;
 	function getFrame(frameIndex:Int):nanofl.engine.movieclip.Frame;
 	function addKeyFrame(keyFrame:nanofl.engine.movieclip.KeyFrame):Void;
@@ -20,7 +20,7 @@ extern class Layer {
 	function removeFrame(frameIndex:Int):Bool;
 	function getHumanType():String;
 	function getIcon():String;
-	function getNestLevel(layers:datatools.ArrayRO<nanofl.engine.movieclip.Layer>):Int;
+	function getNestLevel(layers:Array<nanofl.engine.movieclip.Layer>):Int;
 	function getChildLayers():Array<nanofl.engine.movieclip.Layer>;
 	function getTweenedElements(frameIndex:Int):Array<nanofl.engine.movieclip.TweenedElement>;
 	function loadProperties(node:htmlparser.HtmlNodeElement, version:String):Void;
@@ -28,7 +28,7 @@ extern class Layer {
 	function save(out:htmlparser.XmlBuilder):Void;
 	function saveJson():Dynamic;
 	function clone():nanofl.engine.movieclip.Layer;
-	function duplicate(keyFrames:datatools.ArrayRO<nanofl.engine.movieclip.KeyFrame>, parentIndex:Int):nanofl.engine.movieclip.Layer;
+	function duplicate(keyFrames:Array<nanofl.engine.movieclip.KeyFrame>, parentIndex:Int):nanofl.engine.movieclip.Layer;
 	function getIndex():Int;
 	function setLibrary(library:nanofl.engine.Library):Void;
 	function equ(layer:nanofl.engine.movieclip.Layer):Bool;

@@ -145,7 +145,31 @@ class DisplayObjectTools
 			Reflect.callMethod(parent, method, []);
 		}
 	}
-	
+
+	public static function dispatchMouseEvent(parent:DisplayObject, name:String, e:nanofl.MouseEvent)
+	{
+		if (Std.isOfType(parent, Container))
+		{
+			final children = (cast parent:Container).children.copy();
+            children.reverse();
+            for (child in children)
+            {
+                if (child.parent != null) dispatchMouseEvent(child, name, e);
+                if (e.canceled) return;
+            }
+		}
+		
+        if (parent.parent != null)
+        {
+            var method = Reflect.field(parent, name);
+            if (Reflect.isFunction(method))
+            {
+                e._target = parent;
+                Reflect.callMethod(parent, method, [ e ]);
+            }
+        }
+	}
+
 	public static function smartHitTest(obj:DisplayObject, x:Float, y:Float, minAlpha=1) : Bool
 	{
 		if (obj.cacheCanvas == null) return obj.hitTest(x, y);

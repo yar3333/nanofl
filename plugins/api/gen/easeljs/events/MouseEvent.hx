@@ -11,7 +11,7 @@ package easeljs.events;
 	 
 **/
 @:native('createjs.MouseEvent') extern class MouseEvent extends createjs.events.Event {
-	function new(type:String, bubbles:Bool, cancelable:Bool, stageX:Float, stageY:Float, nativeEvent:easeljs.events.MouseEvent, pointerID:Float, primary:Bool, rawX:Float, rawY:Float, ?relatedTarget:easeljs.display.DisplayObject):Void;
+	function new(type:String, bubbles:Bool, cancelable:Bool, stageX:Float, stageY:Float, nativeEvent:js.html.MouseEvent, pointerID:Float, primary:Bool, rawX:Float, rawY:Float, ?relatedTarget:easeljs.display.DisplayObject):Void;
 	/**
 		
 			 * The normalized x position on the stage. This will always be within the range 0 to stage width.

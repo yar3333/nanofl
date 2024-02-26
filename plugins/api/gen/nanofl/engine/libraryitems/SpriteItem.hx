@@ -2,9 +2,9 @@ package nanofl.engine.libraryitems;
 
 extern class SpriteItem extends nanofl.engine.libraryitems.InstancableItem implements nanofl.engine.ITextureItem implements nanofl.engine.ILayersContainer {
 	function new(namePath:String, frames:Array<nanofl.engine.SpriteItemFrame>):Void;
-	var layers(get, never) : datatools.ArrayRO<nanofl.engine.movieclip.Layer>;
+	var layers(get, never) : Array<nanofl.engine.movieclip.Layer>;
 	@:noCompletion
-	function get_layers():datatools.ArrayRO<nanofl.engine.movieclip.Layer>;
+	function get_layers():Array<nanofl.engine.movieclip.Layer>;
 	var likeButton : Bool;
 	var autoPlay : Bool;
 	var loop : Bool;

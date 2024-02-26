@@ -10,9 +10,9 @@ export class MusicButton extends base.MusicButton
 		this.musicOn();
     }
 	
-	onMouseUp(e:createjs.MouseEvent)
+	onMouseUp(e:nanofl.MouseEvent)
 	{
-		if (this.getBounds().contains(e.localX, e.localY))
+        if (this.getBounds().contains(e.localX, e.localY))
 		{
 			if (this.currentFrame == 1) this.musicOn();
 			else                        this.musicOff();

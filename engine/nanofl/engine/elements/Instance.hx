@@ -1,12 +1,10 @@
 package nanofl.engine.elements;
 
-import js.lib.Error;
 import datatools.ArrayRO;
 import datatools.ArrayTools;
 import datatools.NullTools;
 import nanofl.engine.IPathElement;
 import nanofl.engine.Library;
-import nanofl.engine.IInstance;
 import nanofl.engine.coloreffects.ColorEffect;
 import nanofl.engine.elements.Element;
 import nanofl.engine.geom.Point;
@@ -22,7 +20,6 @@ using htmlparser.HtmlParserTools;
 #end
 
 class Instance extends Element
-	implements IInstance
 	implements IPathElement
 {
 	function get_type() return ElementType.instance;

@@ -1,7 +1,7 @@
 package nanofl.ide.library;
 
 extern class IdeLibrary extends nanofl.engine.Library {
-	function new(libraryDir:String, ?items:datatools.ArrayRO<nanofl.ide.libraryitems.IIdeLibraryItem>):Void;
+	function new(libraryDir:String, ?items:Array<nanofl.ide.libraryitems.IIdeLibraryItem>):Void;
 	override function getItem(namePath:String):nanofl.ide.libraryitems.IIdeLibraryItem;
 	override function getSceneItem():nanofl.ide.libraryitems.MovieClipItem;
 	override function getSceneInstance():nanofl.engine.elements.Instance;

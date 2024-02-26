@@ -9,7 +9,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/createjs": "^0.0.32",
-    "nanofl-ts": "^0.0.5",
+    "nanofl-ts": "^0.0.7",
     "ts-loader": "^8.4.0",
     "typescript": "^5.3.3",
     "webpack": "^5.90.1",

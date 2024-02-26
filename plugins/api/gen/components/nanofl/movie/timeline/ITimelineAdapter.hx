@@ -1,7 +1,7 @@
 package components.nanofl.movie.timeline;
 
 interface ITimelineAdapter {
-	var layers(get, never) : datatools.ArrayRO<components.nanofl.movie.timeline.TLLayer>;
+	var layers(get, never) : Array<components.nanofl.movie.timeline.TLLayer>;
 	var editable(get, never) : Bool;
 	var frameIndex(get, set) : Int;
 	var layerIndex(get, set) : Int;
@@ -25,12 +25,12 @@ interface ITimelineAdapter {
 	function onFrameRemoved():Void;
 	function onLayersSelectionChange(indexes:Array<Int>):Void;
 	function getTotalFrames():Int;
-	function addLayersBlock(layersToAdd:datatools.ArrayRO<components.nanofl.movie.timeline.TLLayer>, ?index:Int):Void;
+	function addLayersBlock(layersToAdd:Array<components.nanofl.movie.timeline.TLLayer>, ?index:Int):Void;
 	function removeLayer(index:Int):Void;
 	function addLayer(layer:components.nanofl.movie.timeline.TLLayer):Void;
 	function getNamePaths(keyFrame:components.nanofl.movie.timeline.TLKeyFrame):Array<String>;
 	function getLayerNestLevel(layer:components.nanofl.movie.timeline.TLLayer):Int;
 	function duplicateLayerWoFrames(layer:components.nanofl.movie.timeline.TLLayer):components.nanofl.movie.timeline.TLLayer;
-	function getLayerKeyFrames(layer:components.nanofl.movie.timeline.TLLayer):datatools.ArrayRO<components.nanofl.movie.timeline.TLKeyFrame>;
+	function getLayerKeyFrames(layer:components.nanofl.movie.timeline.TLLayer):Array<components.nanofl.movie.timeline.TLKeyFrame>;
 	function addKeyFrame(layer:components.nanofl.movie.timeline.TLLayer, keyFrame:components.nanofl.movie.timeline.TLKeyFrame):Void;
 }

@@ -164,7 +164,7 @@ class TextField extends SolidContainer
 		textLines = [];
 		
 		#if ide
-		addMousedownEventListener(pressdown);
+		addMouseDownEventListener(pressdown);
 		#end
 		
 		addChild(globalBackground = new Shape());
@@ -812,8 +812,8 @@ class TextField extends SolidContainer
 			change.call(null);
 			updateStage();
 			
-			stage.addStagemousemoveEventListener(pressmove);
-			stage.addStagemouseupEventListener(pressup);
+			stage.addStageMouseMoveEventListener(pressmove);
+			stage.addStageMouseUpEventListener(pressup);
 		}
 	}
 		
@@ -831,8 +831,8 @@ class TextField extends SolidContainer
 	{
 		if (stage != null)
 		{
-			stage.removeStagemousemoveEventListener(pressmove);
-			stage.removeStagemouseupEventListener(pressup);
+			stage.removeStageMouseMoveEventListener(pressmove);
+			stage.removeStageMouseUpEventListener(pressup);
 		}
 		
 		if (dashedBorder && !editing) return;

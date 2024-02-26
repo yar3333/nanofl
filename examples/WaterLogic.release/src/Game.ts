@@ -187,7 +187,7 @@ export class Game extends base.Game
 		}
 	}
 	
-	onMouseDown(e:createjs.MouseEvent)
+	onMouseDown(e:nanofl.MouseEvent)
 	{
 		if (this.gameMode != 0) return;
 		
@@ -236,12 +236,12 @@ export class Game extends base.Game
 		}
 	}
 	
-	onMouseUp(e:createjs.MouseEvent) 
+	onMouseUp(e:nanofl.MouseEvent) 
 	{
 		if (this.gameMode != 0) return;
 	}
 	
-	onMouseMove(e:createjs.MouseEvent)
+	onMouseMove(e:nanofl.MouseEvent)
 	{
 		if (this.gameMode != 0) return;
 

@@ -7,6 +7,17 @@ declare namespace nanofl
     {
         getItem(namePath:string) : any;
     }
+    
+    class MouseEvent
+    {
+		readonly stageX : number;
+		readonly stageY : number;
+		
+        readonly localX : number;
+		readonly localY : number;
+		
+		cancel() : void;
+    }
 
     class DisplayObjectTools
     {
@@ -20,9 +31,9 @@ declare namespace nanofl
         constructor(bitmapLibraryItem:any);
         
         onEnterFrame() : void;
-        onMouseDown(e:createjs.MouseEvent) : void;
-        onMouseMove(e:createjs.MouseEvent) : void;
-        onMouseUp(e:createjs.MouseEvent) : void;
+        onMouseDown(e:nanofl.MouseEvent) : void;
+        onMouseMove(e:nanofl.MouseEvent) : void;
+        onMouseUp(e:nanofl.MouseEvent) : void;
     }
 
     class MovieClip extends createjs.Container
@@ -41,9 +52,9 @@ declare namespace nanofl
         getTotalFrames() : number;
         
         onEnterFrame() : void;
-        onMouseDown(e:createjs.MouseEvent) : void;
-        onMouseMove(e:createjs.MouseEvent) : void;
-        onMouseUp(e:createjs.MouseEvent) : void;
+        onMouseDown(e:nanofl.MouseEvent) : void;
+        onMouseMove(e:nanofl.MouseEvent) : void;
+        onMouseUp(e:nanofl.MouseEvent) : void;
     }    
 
     class Button extends MovieClip
