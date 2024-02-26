@@ -63,6 +63,13 @@ class CodeGenerator extends InjectContainer
         if (fileSystem.exists(destJsonFilePath)) return;
         var text = fileSystem.getContent(folders.application + "/templates/package.json");
         text = text.replace("{project}", projectName);
+
+        if (library.getMeshes().length == 0)
+        {
+            text = ~/[ \t]*"@types\/three"[^,]+?,\r?\n/.replace(text, "");
+            text = ~/[ \t]*"three"[^,]+?,\r?\n/.replace(text, "");
+        }
+
         fileSystem.saveContent(destJsonFilePath, text);
     }
 

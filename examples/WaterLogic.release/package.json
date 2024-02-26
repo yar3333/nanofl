@@ -1,5 +1,5 @@
 {
-  "name": "button",
+  "name": "WaterLogic",
   "version": "1.0.0",
   "description": "",
   "scripts": {
@@ -8,7 +8,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/createjs": "^0.0.32",
+    "@types/easeljs": "^1.0.5",
     "nanofl-ts": "^0.0.8",
     "ts-loader": "^8.4.0",
     "typescript": "^5.3.3",
