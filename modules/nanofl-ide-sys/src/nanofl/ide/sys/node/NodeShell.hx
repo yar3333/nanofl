@@ -3,12 +3,12 @@ package nanofl.ide.sys.node;
 import haxe.io.Path;
 import nanofl.ide.sys.ProcessManager;
 import nanofl.ide.sys.FileSystem;
-import nanofl.ide.sys.ShellRunner;
+import nanofl.ide.sys.Shell;
 import nanofl.ide.sys.Environment;
 import nanofl.ide.sys.node.core.NodeWindowsRegistry;
 import nanofl.ide.sys.node.core.ElectronApi;
 
-class NodeShellRunner implements ShellRunner
+class NodeShell implements Shell
 {
 	var fileSystem : FileSystem;
 	var processManager : ProcessManager;
@@ -20,6 +20,12 @@ class NodeShellRunner implements ShellRunner
 		this.processManager = processManager;
 		this.environment = environment;
 	}
+
+	public function openInExternalBrowser(url:String) : Void
+    {
+        log("URL = " + url);
+        js.Browser.window.open(url, "_blank");
+    }
 	
 	public function runWithEditor(document:String) : Bool
 	{

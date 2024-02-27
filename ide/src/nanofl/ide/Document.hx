@@ -1,5 +1,6 @@
 package nanofl.ide;
 
+import stdlib.Timer;
 import js.Browser.console;
 import js.lib.Promise;
 import haxe.io.Path;
@@ -26,7 +27,8 @@ import nanofl.ide.plugins.ImporterPlugins;
 import nanofl.ide.preferences.Preferences;
 import nanofl.ide.sys.FileSystem;
 import nanofl.ide.sys.Folders;
-import nanofl.ide.sys.WebServer;
+import nanofl.ide.sys.Shell;
+import nanofl.ide.sys.WebServerUtils;
 import nanofl.ide.ui.View;
 import nanofl.ide.undo.document.UndoQueue;
 import nanofl.ide.textureatlas.TextureAtlasPublisher;
@@ -45,7 +47,8 @@ class Document extends OpenedFile
 	@inject var newObjectParams : NewObjectParams;
 	@inject var folders : Folders;
 	@inject var clipboard : Clipboard;
-	@inject var webServer : WebServer;
+	@inject var shell : Shell;
+	@inject var webServerUtils : WebServerUtils;
 	@inject var recents : Recents;
 	
 	function get_type() return OpenedFileType.DOCUMENT;
@@ -494,9 +497,20 @@ class Document extends OpenedFile
             });
         });
 	}
-	
+
+    var webServer = { uid:null, address:null };
 	public function test() : Promise<Bool>
 	{
+        if (webServer.uid == null)
+        {
+            webServer.uid = webServerUtils.start(getPublishDirectory());
+            if (webServer.uid == null)
+            {
+                view.alerter.error("Can't run web server.");
+                return Promise.resolve(false);
+            }
+        }
+
 		return publish().then((success:Bool) ->
 		{
 			if (success)
@@ -505,14 +519,31 @@ class Document extends OpenedFile
 				
 				if (!fileSystem.exists(htmlFilePath))
 				{
-					view.alerter.error("File \"" + htmlFilePath + "\" not found.");
-					return false;
+					view.alerter.error("File \"" + htmlFilePath + "\" is not found.");
+					return Promise.resolve(false);
 				}
-				
-				webServer.openInBrowser(htmlFilePath);
+                
+                if (webServer.address == null)
+                {
+                    webServer.address = webServerUtils.getAddress(webServer.uid);
+                    if (webServer.address == null) return Timer.delayAsync(500).then(_ ->
+                    {
+                        webServer.address = webServerUtils.getAddress(webServer.uid);
+                        if (webServer.address == null)
+                        {
+                            view.alerter.error("Can't get web server address.");
+                            return false;
+                        }
+                        shell.openInExternalBrowser(webServer.address + "/index.html");
+                        return true;
+                    });
+                }
+
+                shell.openInExternalBrowser(webServer.address + "/index.html");
+                return Promise.resolve(true);
 			}
 			
-			return success;
+			return Promise.resolve(success);
 		});
 	}
 	
@@ -644,6 +675,8 @@ class Document extends OpenedFile
 	
 	public function dispose()
 	{
+        if (webServer.uid != null) webServerUtils.kill(webServer.uid);
+
 		if (isTemporary)
 		{
 			stdlib.Debug.assert(path.startsWith(folders.temp));

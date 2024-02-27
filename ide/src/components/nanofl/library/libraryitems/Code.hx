@@ -1,13 +1,12 @@
 package components.nanofl.library.libraryitems;
 
 import haxe.io.Path;
-import datatools.ArrayRO;
 import htmlparser.XmlBuilder;
 import nanofl.ide.Globals;
 import nanofl.ide.draganddrop.DragAndDrop;
 import nanofl.ide.draganddrop.IDragAndDrop;
 import nanofl.ide.preferences.Preferences;
-import nanofl.ide.sys.ShellRunner;
+import nanofl.ide.sys.Shell;
 import nanofl.ide.ui.Popups;
 import nanofl.ide.ui.View;
 import wquery.ComponentList;
@@ -21,9 +20,7 @@ import nanofl.engine.libraryitems.MovieClipItem;
 import nanofl.engine.libraryitems.SoundItem;
 import nanofl.ide.Application;
 import nanofl.ide.ISymbol;
-//import nanofl.ide.filesystem.ExternalRunner;
 import nanofl.ide.library.LibraryItems;
-import nanofl.ide.library.droppers.BaseLibraryItemToLibraryDropper;
 import nanofl.ide.library.droppers.LibraryItemToLibraryItemDropper;
 import nanofl.ide.navigator.PathItem;
 import nanofl.ide.ui.menu.ContextMenu;
@@ -44,7 +41,7 @@ class Code extends wquery.Component
 	@inject var preferences : Preferences;
 	@inject var popups : Popups;
 	@inject var app : Application;
-	@inject var shellRunner : ShellRunner;
+	@inject var shell : Shell;
 	@inject var dragAndDrop : DragAndDrop;
 	
 	var items : ComponentList<components.nanofl.library.libraryitem.Code>;
@@ -175,7 +172,7 @@ class Code extends wquery.Component
 				if (filePath != null)
 				{
 					filePath = Path.join([ app.document.library.libraryDir, filePath ]);
-					var success = shellRunner.runWithEditor(filePath);
+					var success = shell.runWithEditor(filePath);
 					if (!success) view.alerter.error("Not found system association with '" + Path.extension(filePath) + "' files.");
 				}
 			}

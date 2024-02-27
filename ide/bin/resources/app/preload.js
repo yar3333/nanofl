@@ -26,7 +26,7 @@ contextBridge.exposeInMainWorld('electronApi',
         ipcRenderer.sendSync('electronApi:setVar', objName, varName, value);
     },
     
-    getEnvVar: (varName) =>
+    getEnvVar: varName =>
     {
         return ipcRenderer.sendSync('electronApi:getEnvVar', varName);
     },
@@ -34,6 +34,19 @@ contextBridge.exposeInMainWorld('electronApi',
     setEnvVar: (varName, value) =>
     {
         ipcRenderer.sendSync('electronApi:setEnvVar', varName, value);
+    },
+
+    webServerStart: (uid, directoryToServe) =>
+    {
+        return ipcRenderer.sendSync('electronApi:webServerStart', uid, directoryToServe);
+    },
+    webServerGetAddress: uid =>
+    {
+        return ipcRenderer.sendSync('electronApi:webServerGetAddress', uid);
+    },
+    webServerKill: uid =>
+    {
+        return ipcRenderer.sendSync('electronApi:webServerKill', uid);
     },
 
     fs: fs,

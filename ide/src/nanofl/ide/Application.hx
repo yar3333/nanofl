@@ -7,7 +7,6 @@ import haxe.Timer;
 import haxe.io.Path;
 import js.Browser;
 import js.JQuery;
-import nanofl.ide.sys.Environment;
 import nanofl.ide.sys.FileSystem;
 import nanofl.engine.Version;
 import nanofl.engine.elements.Instance;
@@ -22,13 +21,6 @@ import nanofl.ide.plugins.Plugins;
 import nanofl.ide.preferences.Preferences;
 import nanofl.ide.preferences.PreferencesStorage;
 import nanofl.ide.sys.Folders;
-import nanofl.ide.sys.Fonts;
-import nanofl.ide.sys.HttpUtils;
-import nanofl.ide.sys.ProcessManager;
-import nanofl.ide.sys.ShellRunner;
-import nanofl.ide.sys.Uploader;
-import nanofl.ide.sys.WebServer;
-import nanofl.ide.sys.Zip;
 import nanofl.ide.ui.Popups;
 import nanofl.ide.ui.View;
 import stdlib.Uuid;
@@ -41,14 +33,6 @@ class Application extends js.injecting.InjectContainer
 {
 	@inject var fileSystem : FileSystem;
 	@inject var folders : Folders;
-	@inject var environment : Environment;
-	@inject var httpUtils : HttpUtils;
-	@inject var zip : Zip;
-	@inject var shellRunner : ShellRunner;
-	@inject var processManager : ProcessManager;
-	@inject var webServer : WebServer;
-	@inject var uploader : Uploader;
-	@inject var fonts : Fonts;
 	
 	var layout : ILayout;
 	var view : View;

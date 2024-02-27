@@ -17,8 +17,8 @@ class SysStuff
 		injector.map(ProcessManager, processManager);
 		injector.map(HttpUtils, new nanofl.ide.sys.node.NodeHttpUtils());
 		injector.map(Zip, new nanofl.ide.sys.node.NodeZip(fileSystem, processManager, folders));
-		injector.map(ShellRunner, new nanofl.ide.sys.node.NodeShellRunner(fileSystem, processManager, environment));
-		injector.map(WebServer, new nanofl.ide.sys.node.NodeWebServer());
+		injector.map(Shell, new nanofl.ide.sys.node.NodeShell(fileSystem, processManager, environment));
+		injector.map(WebServerUtils, new nanofl.ide.sys.node.NodeWebServerUtils());
 		injector.map(Uploader, new nanofl.ide.sys.Uploader(fileSystem));
 		injector.map(Fonts, new nanofl.ide.sys.node.NodeFonts());
 

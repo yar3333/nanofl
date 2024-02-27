@@ -501,31 +501,6 @@ haxe_Exception.prototype = $extend(Error.prototype,{
 	}
 	,__class__: haxe_Exception
 });
-var haxe_Log = function() { };
-haxe_Log.__name__ = "haxe.Log";
-haxe_Log.formatOutput = function(v,infos) {
-	var str = Std.string(v);
-	if(infos == null) {
-		return str;
-	}
-	var pstr = infos.fileName + ":" + infos.lineNumber;
-	if(infos.customParams != null) {
-		var _g = 0;
-		var _g1 = infos.customParams;
-		while(_g < _g1.length) {
-			var v = _g1[_g];
-			++_g;
-			str += ", " + Std.string(v);
-		}
-	}
-	return pstr + ": " + str;
-};
-haxe_Log.trace = function(v,infos) {
-	var str = haxe_Log.formatOutput(v,infos);
-	if(typeof(console) != "undefined" && console.log != null) {
-		console.log(str);
-	}
-};
 var haxe_ValueException = function(value,previous,native) {
 	haxe_Exception.call(this,String(value),previous,native);
 	this.value = value;
@@ -2176,10 +2151,10 @@ nanofl_ide_sys_ProcessManager.__name__ = "nanofl.ide.sys.ProcessManager";
 nanofl_ide_sys_ProcessManager.prototype = {
 	__class__: nanofl_ide_sys_ProcessManager
 };
-var nanofl_ide_sys_ShellRunner = $hx_exports["ShellRunner"] = function() { };
-nanofl_ide_sys_ShellRunner.__name__ = "nanofl.ide.sys.ShellRunner";
-nanofl_ide_sys_ShellRunner.prototype = {
-	__class__: nanofl_ide_sys_ShellRunner
+var nanofl_ide_sys_Shell = $hx_exports["Shell"] = function() { };
+nanofl_ide_sys_Shell.__name__ = "nanofl.ide.sys.Shell";
+nanofl_ide_sys_Shell.prototype = {
+	__class__: nanofl_ide_sys_Shell
 };
 var nanofl_ide_sys_SysStuff = $hx_exports["SysStuff"] = function() { };
 nanofl_ide_sys_SysStuff.__name__ = "nanofl.ide.sys.SysStuff";
@@ -2194,8 +2169,8 @@ nanofl_ide_sys_SysStuff.registerInInjector = function(injector) {
 	injector.map(nanofl_ide_sys_ProcessManager,processManager);
 	injector.map(nanofl_ide_sys_HttpUtils,new nanofl_ide_sys_node_NodeHttpUtils());
 	injector.map(nanofl_ide_sys_Zip,new nanofl_ide_sys_node_NodeZip(fileSystem,processManager,folders));
-	injector.map(nanofl_ide_sys_ShellRunner,new nanofl_ide_sys_node_NodeShellRunner(fileSystem,processManager,environment));
-	injector.map(nanofl_ide_sys_WebServer,new nanofl_ide_sys_node_NodeWebServer());
+	injector.map(nanofl_ide_sys_Shell,new nanofl_ide_sys_node_NodeShell(fileSystem,processManager,environment));
+	injector.map(nanofl_ide_sys_WebServerUtils,new nanofl_ide_sys_node_NodeWebServerUtils());
 	injector.map(nanofl_ide_sys_Uploader,new nanofl_ide_sys_Uploader(fileSystem));
 	injector.map(nanofl_ide_sys_Fonts,new nanofl_ide_sys_node_NodeFonts());
 	injector.map(nanofl_ide_sys_MainProcess,new nanofl_ide_sys_node_ElectronMainProcess());
@@ -2244,10 +2219,10 @@ nanofl_ide_sys_Uploader.prototype = {
 	}
 	,__class__: nanofl_ide_sys_Uploader
 };
-var nanofl_ide_sys_WebServer = $hx_exports["WebServer"] = function() { };
-nanofl_ide_sys_WebServer.__name__ = "nanofl.ide.sys.WebServer";
-nanofl_ide_sys_WebServer.prototype = {
-	__class__: nanofl_ide_sys_WebServer
+var nanofl_ide_sys_WebServerUtils = $hx_exports["WebServerUtils"] = function() { };
+nanofl_ide_sys_WebServerUtils.__name__ = "nanofl.ide.sys.WebServerUtils";
+nanofl_ide_sys_WebServerUtils.prototype = {
+	__class__: nanofl_ide_sys_WebServerUtils
 };
 var nanofl_ide_sys_Zip = $hx_exports["Zip"] = function() { };
 nanofl_ide_sys_Zip.__name__ = "nanofl.ide.sys.Zip";
@@ -2574,27 +2549,31 @@ nanofl_ide_sys_node_NodeProcessManager.prototype = {
 	}
 	,__class__: nanofl_ide_sys_node_NodeProcessManager
 };
-var nanofl_ide_sys_node_NodeShellRunner = function(fileSystem,processManager,environment) {
+var nanofl_ide_sys_node_NodeShell = function(fileSystem,processManager,environment) {
 	this.fileSystem = fileSystem;
 	this.processManager = processManager;
 	this.environment = environment;
 };
-nanofl_ide_sys_node_NodeShellRunner.__name__ = "nanofl.ide.sys.node.NodeShellRunner";
-nanofl_ide_sys_node_NodeShellRunner.log = function(v,infos) {
+nanofl_ide_sys_node_NodeShell.__name__ = "nanofl.ide.sys.node.NodeShell";
+nanofl_ide_sys_node_NodeShell.log = function(v,infos) {
 };
-nanofl_ide_sys_node_NodeShellRunner.prototype = {
-	runWithEditor: function(document) {
+nanofl_ide_sys_node_NodeShell.prototype = {
+	openInExternalBrowser: function(url) {
+		nanofl_ide_sys_node_NodeShell.log("URL = " + url,{ fileName : "src/nanofl/ide/sys/node/NodeShell.hx", lineNumber : 26, className : "nanofl.ide.sys.node.NodeShell", methodName : "openInExternalBrowser"});
+		window.open(url,"_blank");
+	}
+	,runWithEditor: function(document) {
 		var winReg = new nanofl_ide_sys_node_core_NodeWindowsRegistry(($_=window.electronApi.child_process,$bind($_,$_.execSync)));
 		var docType = winReg.getKeyValue("HKCR:\\." + haxe_io_Path.extension(document));
-		nanofl_ide_sys_node_NodeShellRunner.log("docType = " + docType,{ fileName : "src/nanofl/ide/sys/node/NodeShellRunner.hx", lineNumber : 29, className : "nanofl.ide.sys.node.NodeShellRunner", methodName : "runWithEditor"});
+		nanofl_ide_sys_node_NodeShell.log("docType = " + docType,{ fileName : "src/nanofl/ide/sys/node/NodeShell.hx", lineNumber : 35, className : "nanofl.ide.sys.node.NodeShell", methodName : "runWithEditor"});
 		if(docType == null) {
 			return false;
 		}
 		var command = winReg.getKeyValue("HKCR:\\" + docType + "\\shell\\edit\\command");
-		nanofl_ide_sys_node_NodeShellRunner.log("command(1) = " + command,{ fileName : "src/nanofl/ide/sys/node/NodeShellRunner.hx", lineNumber : 33, className : "nanofl.ide.sys.node.NodeShellRunner", methodName : "runWithEditor"});
+		nanofl_ide_sys_node_NodeShell.log("command(1) = " + command,{ fileName : "src/nanofl/ide/sys/node/NodeShell.hx", lineNumber : 39, className : "nanofl.ide.sys.node.NodeShell", methodName : "runWithEditor"});
 		if(command == null) {
 			command = winReg.getKeyValue("HKCR:\\" + docType + "\\shell\\open\\command");
-			nanofl_ide_sys_node_NodeShellRunner.log("command(2) = " + command,{ fileName : "src/nanofl/ide/sys/node/NodeShellRunner.hx", lineNumber : 38, className : "nanofl.ide.sys.node.NodeShellRunner", methodName : "runWithEditor"});
+			nanofl_ide_sys_node_NodeShell.log("command(2) = " + command,{ fileName : "src/nanofl/ide/sys/node/NodeShell.hx", lineNumber : 44, className : "nanofl.ide.sys.node.NodeShell", methodName : "runWithEditor"});
 		}
 		if(command == null) {
 			return false;
@@ -2608,7 +2587,7 @@ nanofl_ide_sys_node_NodeShellRunner.prototype = {
 				exeAndArgs[i] = this.fileSystem.absolutePath(document);
 			}
 		}
-		nanofl_ide_sys_node_NodeShellRunner.log("exeAndArgs = vvvvvvvvvvvv\n" + exeAndArgs.join("\n") + "\n^^^^^^^^^^^^",{ fileName : "src/nanofl/ide/sys/node/NodeShellRunner.hx", lineNumber : 49, className : "nanofl.ide.sys.node.NodeShellRunner", methodName : "runWithEditor"});
+		nanofl_ide_sys_node_NodeShell.log("exeAndArgs = vvvvvvvvvvvv\n" + exeAndArgs.join("\n") + "\n^^^^^^^^^^^^",{ fileName : "src/nanofl/ide/sys/node/NodeShell.hx", lineNumber : 55, className : "nanofl.ide.sys.node.NodeShell", methodName : "runWithEditor"});
 		return this.processManager.run(exeAndArgs[0],exeAndArgs.slice(1),false) == 0;
 	}
 	,parseCommand: function(command) {
@@ -2627,21 +2606,24 @@ nanofl_ide_sys_node_NodeShellRunner.prototype = {
 		});
 		return r;
 	}
-	,__class__: nanofl_ide_sys_node_NodeShellRunner
+	,__class__: nanofl_ide_sys_node_NodeShell
 };
-var nanofl_ide_sys_node_NodeWebServer = function() {
+var nanofl_ide_sys_node_NodeWebServerUtils = function() {
 };
-nanofl_ide_sys_node_NodeWebServer.__name__ = "nanofl.ide.sys.node.NodeWebServer";
-nanofl_ide_sys_node_NodeWebServer.log = function(v,infos) {
-	haxe_Log.trace(v,infos);
-};
-nanofl_ide_sys_node_NodeWebServer.prototype = {
-	openInBrowser: function(path) {
-		var url = "file://" + path;
-		nanofl_ide_sys_node_NodeWebServer.log("URL = " + url,{ fileName : "src/nanofl/ide/sys/node/NodeWebServer.hx", lineNumber : 12, className : "nanofl.ide.sys.node.NodeWebServer", methodName : "openInBrowser"});
-		window.open(url,"_blank");
+nanofl_ide_sys_node_NodeWebServerUtils.__name__ = "nanofl.ide.sys.node.NodeWebServerUtils";
+nanofl_ide_sys_node_NodeWebServerUtils.prototype = {
+	start: function(directoryToServe) {
+		nanofl_ide_sys_node_NodeWebServerUtils.start_uid++;
+		nanofl_ide_sys_node_core_ElectronApi.webServerStart(nanofl_ide_sys_node_NodeWebServerUtils.start_uid,directoryToServe);
+		return nanofl_ide_sys_node_NodeWebServerUtils.start_uid;
 	}
-	,__class__: nanofl_ide_sys_node_NodeWebServer
+	,getAddress: function(pid) {
+		return nanofl_ide_sys_node_core_ElectronApi.webServerGetAddress(pid);
+	}
+	,kill: function(pid) {
+		nanofl_ide_sys_node_core_ElectronApi.webServerKill(pid);
+	}
+	,__class__: nanofl_ide_sys_node_NodeWebServerUtils
 };
 var nanofl_ide_sys_node_NodeZip = function(fileSystem,processManager,folders) {
 	this.fileSystem = fileSystem;
@@ -2703,6 +2685,15 @@ nanofl_ide_sys_node_core_ElectronApi.getEnvVar = function(varName) {
 };
 nanofl_ide_sys_node_core_ElectronApi.createBuffer = function(data,byteOffset,length) {
 	return window.electronApi.createBuffer(data,byteOffset,length);
+};
+nanofl_ide_sys_node_core_ElectronApi.webServerStart = function(uid,directoryToServe) {
+	window.electronApi.webServerStart(uid,directoryToServe);
+};
+nanofl_ide_sys_node_core_ElectronApi.webServerGetAddress = function(uid) {
+	return window.electronApi.webServerGetAddress(uid);
+};
+nanofl_ide_sys_node_core_ElectronApi.webServerKill = function(uid) {
+	window.electronApi.webServerKill(uid);
 };
 var nanofl_ide_sys_node_core_NodeBufferTools = function() { };
 nanofl_ide_sys_node_core_NodeBufferTools.__name__ = "nanofl.ide.sys.node.core.NodeBufferTools";
@@ -3013,9 +3004,10 @@ nanofl_ide_sys_Fonts.__rtti = "<class path=\"nanofl.ide.sys.Fonts\" params=\"\" 
 nanofl_ide_sys_HttpUtils.__rtti = "<class path=\"nanofl.ide.sys.HttpUtils\" params=\"\" interface=\"1\">\n\t<requestGet public=\"1\" set=\"method\"><f a=\"url:?headers\">\n\t<c path=\"String\"/>\n\t<c path=\"Array\"><a>\n\t<value><c path=\"String\"/></value>\n\t<name><c path=\"String\"/></name>\n</a></c>\n\t<c path=\"js.lib.Promise\"><t path=\"nanofl.ide.sys.HttpRequestResult\"/></c>\n</f></requestGet>\n\t<requestPost public=\"1\" set=\"method\"><f a=\"url:?headers:?fields:?files\">\n\t<c path=\"String\"/>\n\t<c path=\"Array\"><a>\n\t<value><c path=\"String\"/></value>\n\t<name><c path=\"String\"/></name>\n</a></c>\n\t<c path=\"Array\"><a>\n\t<value><c path=\"String\"/></value>\n\t<name><c path=\"String\"/></name>\n</a></c>\n\t<c path=\"Array\"><a>\n\t<path><c path=\"String\"/></path>\n\t<name><c path=\"String\"/></name>\n</a></c>\n\t<c path=\"js.lib.Promise\"><t path=\"nanofl.ide.sys.HttpRequestResult\"/></c>\n</f></requestPost>\n\t<downloadFile public=\"1\" set=\"method\"><f a=\"url:destFilePath:?progress\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n\t<f a=\"\">\n\t\t<x path=\"Float\"/>\n\t\t<x path=\"Void\"/>\n\t</f>\n\t<c path=\"js.lib.Promise\"><x path=\"Bool\"/></c>\n</f></downloadFile>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":expose\"><e>\"HttpUtils\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
 nanofl_ide_sys_MainProcess.__rtti = "<class path=\"nanofl.ide.sys.MainProcess\" params=\"\" interface=\"1\">\n\t<getCommandLineArgs public=\"1\" set=\"method\"><f a=\"\"><c path=\"Array\"><c path=\"String\"/></c></f></getCommandLineArgs>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":expose\"><e>\"MainProcess\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
 nanofl_ide_sys_ProcessManager.__rtti = "<class path=\"nanofl.ide.sys.ProcessManager\" params=\"\" interface=\"1\">\n\t<run public=\"1\" set=\"method\"><f a=\"filePath:args:blocking:?directory:?env\">\n\t<c path=\"String\"/>\n\t<c path=\"Array\"><c path=\"String\"/></c>\n\t<x path=\"Bool\"/>\n\t<c path=\"String\"/>\n\t<d><c path=\"String\"/></d>\n\t<x path=\"Int\"/>\n</f></run>\n\t<runCaptured public=\"1\" set=\"method\"><f a=\"filePath:args:?directory:?env:?input\">\n\t<c path=\"String\"/>\n\t<c path=\"Array\"><c path=\"String\"/></c>\n\t<c path=\"String\"/>\n\t<d><c path=\"String\"/></d>\n\t<c path=\"String\"/>\n\t<a>\n\t\t<output><c path=\"String\"/></output>\n\t\t<exitCode><x path=\"Int\"/></exitCode>\n\t\t<error><c path=\"String\"/></error>\n\t</a>\n</f></runCaptured>\n\t<runPipedStdIn public=\"1\" set=\"method\"><f a=\"filePath:args:directory:env:getDataForStdIn\">\n\t<c path=\"String\"/>\n\t<c path=\"Array\"><c path=\"String\"/></c>\n\t<c path=\"String\"/>\n\t<d><c path=\"String\"/></d>\n\t<f a=\"\"><c path=\"js.lib.ArrayBuffer\"/></f>\n\t<c path=\"js.lib.Promise\"><t path=\"nanofl.ide.sys.ProcessResult\"/></c>\n</f></runPipedStdIn>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":expose\"><e>\"ProcessManager\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
-nanofl_ide_sys_ShellRunner.__rtti = "<class path=\"nanofl.ide.sys.ShellRunner\" params=\"\" interface=\"1\">\n\t<runWithEditor public=\"1\" set=\"method\"><f a=\"document\">\n\t<c path=\"String\"/>\n\t<x path=\"Bool\"/>\n</f></runWithEditor>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":expose\"><e>\"ShellRunner\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
+nanofl_ide_sys_Shell.__rtti = "<class path=\"nanofl.ide.sys.Shell\" params=\"\" interface=\"1\">\n\t<openInExternalBrowser public=\"1\" set=\"method\"><f a=\"url\">\n\t<c path=\"String\"/>\n\t<x path=\"Void\"/>\n</f></openInExternalBrowser>\n\t<runWithEditor public=\"1\" set=\"method\"><f a=\"document\">\n\t<c path=\"String\"/>\n\t<x path=\"Bool\"/>\n</f></runWithEditor>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":expose\"><e>\"Shell\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
 nanofl_ide_sys_Uploader.__rtti = "<class path=\"nanofl.ide.sys.Uploader\" params=\"\">\n\t<log set=\"method\" line=\"52\" static=\"1\"><f a=\"v:?infos\">\n\t<d/>\n\t<x path=\"Null\"><t path=\"haxe.PosInfos\"/></x>\n\t<x path=\"Void\"/>\n</f></log>\n\t<fileSystem><c path=\"nanofl.ide.sys.FileSystem\"/></fileSystem>\n\t<saveUploadedFiles public=\"1\" set=\"method\" line=\"19\"><f a=\"files:destDir\">\n\t<c path=\"Array\"><c path=\"js.html.File\"/></c>\n\t<c path=\"String\"/>\n\t<c path=\"js.lib.Promise\"><a/></c>\n</f></saveUploadedFiles>\n\t<new public=\"1\" set=\"method\" line=\"14\"><f a=\"fileSystem\">\n\t<c path=\"nanofl.ide.sys.FileSystem\"/>\n\t<x path=\"Void\"/>\n</f></new>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":expose\"><e>\"Uploader\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
-nanofl_ide_sys_WebServer.__rtti = "<class path=\"nanofl.ide.sys.WebServer\" params=\"\" interface=\"1\">\n\t<openInBrowser public=\"1\" set=\"method\"><f a=\"path\">\n\t<c path=\"String\"/>\n\t<x path=\"Void\"/>\n</f></openInBrowser>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":expose\"><e>\"WebServer\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
+nanofl_ide_sys_WebServerUtils.__rtti = "<class path=\"nanofl.ide.sys.WebServerUtils\" params=\"\" interface=\"1\">\n\t<start public=\"1\" set=\"method\">\n\t\t<f a=\"directoryToServe\">\n\t\t\t<c path=\"String\"/>\n\t\t\t<x path=\"Int\"/>\n\t\t</f>\n\t\t<haxe_doc>Start a web server process.\n        Several web servers can be started simultaneously.\n        Returns `uid`.</haxe_doc>\n\t</start>\n\t<getAddress public=\"1\" set=\"method\">\n\t\t<f a=\"uid\">\n\t\t\t<x path=\"Int\"/>\n\t\t\t<c path=\"String\"/>\n\t\t</f>\n\t\t<haxe_doc>Returns: URL like \"http://127.0.0.1:9990\".</haxe_doc>\n\t</getAddress>\n\t<kill public=\"1\" set=\"method\">\n\t\t<f a=\"uid\">\n\t\t\t<x path=\"Int\"/>\n\t\t\t<x path=\"Void\"/>\n\t\t</f>\n\t\t<haxe_doc>Kill specified web server process.</haxe_doc>\n\t</kill>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":expose\"><e>\"WebServerUtils\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
 nanofl_ide_sys_Zip.__rtti = "<class path=\"nanofl.ide.sys.Zip\" params=\"\" interface=\"1\">\n\t<compress public=\"1\" set=\"method\"><f a=\"srcDir:destZip:?relFilePaths\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n\t<c path=\"Array\"><c path=\"String\"/></c>\n\t<x path=\"Bool\"/>\n</f></compress>\n\t<decompress public=\"1\" set=\"method\"><f a=\"srcZip:destDir:?elevated\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n\t<x path=\"Bool\"/>\n\t<x path=\"Bool\"/>\n</f></decompress>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":expose\"><e>\"Zip\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
+nanofl_ide_sys_node_NodeWebServerUtils.start_uid = 0;
 stdlib_Uuid.counter = 0;
 })(typeof exports != "undefined" ? exports : typeof window != "undefined" ? window : typeof self != "undefined" ? self : this, typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);

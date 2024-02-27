@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog, clipboard, screen, shell } = require('electron/main');
+const { app, BrowserWindow, ipcMain, dialog, clipboard, screen, shell, utilityProcess } = require('electron/main');
 const path = require('path');
 const fs = require('node:fs');
 
@@ -84,6 +84,27 @@ ipcMain.on('electronApi:getEnvVar', (event, varName) =>
 ipcMain.on('electronApi:setEnvVar', (event, varName, value) =>
 {
     process.env[varName] = value;
+    event.returnValue = null;
+});
+
+const webServers = {};
+ipcMain.on('electronApi:webServerStart', (event, uid, directoryToServe) =>
+{
+    const child = utilityProcess.fork(path.join(__dirname, 'server.js'), [ directoryToServe ], { stdio:['ignore', 'pipe', 'ignore'] });
+    child.on('exit', () => { delete webServers[uid] });
+    child.stdout.on('data', data => { webServers[uid].address = (data + "").trim() });
+    webServers[uid] = { child:child, address:null };
+    event.returnValue = null;
+});
+ipcMain.on('electronApi:webServerGetAddress', (event, uid) =>
+{
+    event.returnValue = webServers[uid].address;
+});
+ipcMain.on('electronApi:webServerKill', (event, uid) =>
+{
+    if (!webServers[uid]) return;
+    try { webServers[uid].child.kill() } catch {}
+    delete webServers[uid];
     event.returnValue = null;
 });
 

@@ -54,4 +54,19 @@ class ElectronApi
     {
         return (cast Browser.window).electronApi.createBuffer(data, byteOffset, length);
     }
+
+    public static function webServerStart(uid:Int, directoryToServe:String) : Void
+    {
+        (cast Browser.window).electronApi.webServerStart(uid, directoryToServe);
+    }
+
+    public static function webServerGetAddress(uid:Int) : String
+    {
+        return (cast Browser.window).electronApi.webServerGetAddress(uid);
+    }
+    
+    public static function webServerKill(uid:Int) : Void
+    {
+        (cast Browser.window).electronApi.webServerKill(uid);
+    }
 }
