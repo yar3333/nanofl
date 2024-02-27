@@ -68,7 +68,12 @@ class MeshItem extends nanofl.engine.libraryitems.MeshItem
         return [ namePath + ".*" ].concat(textureFiles);
     }
         
-	public function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String) : IIdeLibraryItem
+    public function getDataToSaveBeforeCleanDestDirectoryAndPublish(fileSystem:nanofl.ide.sys.FileSystem, destLibraryDir:String) : Dynamic
+    {
+        return null;
+    }
+    
+    public function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String, savedData:Dynamic) : IIdeLibraryItem
     {
         log("MeshItem publish: " + namePath + "; textureFiles =\n\t" + textureFiles.join("\n\t"));
         

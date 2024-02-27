@@ -40,7 +40,12 @@ class SpriteItem extends nanofl.engine.libraryitems.SpriteItem
 		return sprite;
 	}
 	
-	public function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String) : IIdeLibraryItem
+    public function getDataToSaveBeforeCleanDestDirectoryAndPublish(fileSystem:nanofl.ide.sys.FileSystem, destLibraryDir:String) : Dynamic
+    {
+        return null;
+    }
+
+    public function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String, savedData:Dynamic) : IIdeLibraryItem
 	{
 		return null;
 	}

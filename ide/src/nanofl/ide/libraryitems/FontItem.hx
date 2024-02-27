@@ -23,8 +23,13 @@ class FontItem extends nanofl.engine.libraryitems.FontItem
 		copyBaseProperties(obj);
 		return obj;
 	}
-	
-	public function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String) : IIdeLibraryItem
+
+    public function getDataToSaveBeforeCleanDestDirectoryAndPublish(fileSystem:nanofl.ide.sys.FileSystem, destLibraryDir:String) : Dynamic
+    {
+        return null;
+    }
+        
+	public function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String, savedData:Dynamic) : IIdeLibraryItem
 	{
 		var files = [];
 		for (variant in variants)

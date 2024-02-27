@@ -33,45 +33,29 @@ class SoundItem extends nanofl.engine.libraryitems.SoundItem
         return r;
 	}
 	
-	public function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String) : IIdeLibraryItem
+    public function getDataToSaveBeforeCleanDestDirectoryAndPublish(fileSystem:nanofl.ide.sys.FileSystem, destLibraryDir:String) : Dynamic
+    {
+        var destFile = destLibraryDir + "/" + namePath + ".ogg";
+        if (!fileSystem.exists(destFile)) return null;
+        return { size:fileSystem.getSize(destFile), mtime:fileSystem.getLastModified(destFile).getTime(), content:fileSystem.getBinary(destFile) };
+    }
+
+	public function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String, savedData:Dynamic) : IIdeLibraryItem
 	{
         var srcFile = library.libraryDir + "/" + namePath + "." + ext;
         var destFile = destLibraryDir + "/" + namePath + ".ogg";
-        if (!fileSystem.exists(destFile))
+        new nanofl.ide.MediaConvertor().convertAudio(srcFile, destFile, settings.audioQuality);
+
+        if (fileSystem.exists(destFile) && savedData != null)
         {
-            new nanofl.ide.MediaConvertor().convertAudio(srcFile, destFile, settings.audioQuality);
-        }
-        else
-        {
-            var srcTime = fileSystem.getLastModified(srcFile);
-            var destTime = fileSystem.getLastModified(destFile);
-            if (srcTime.getTime() > destTime.getTime())
+            if (fileSystem.getSize(destFile) == savedData.size && fileSystem.getLastModified(srcFile).getTime() <= savedData.mtime)
             {
-                new nanofl.ide.MediaConvertor().convertAudio(srcFile, destFile, settings.audioQuality);
-            }
-            else
-            {
-                var tempFile = fileSystem.getTempFilePath(".ogg");
-                new nanofl.ide.MediaConvertor().convertAudio(srcFile, tempFile, settings.audioQuality);
-                if (fileSystem.getSize(srcFile) != fileSystem.getSize(tempFile))
-                {
-                    fileSystem.copyFile(tempFile, destFile);
-                }
-                fileSystem.deleteFile(tempFile);
+                fileSystem.saveBinary(destFile, savedData.content);
             }
         }
 
-        if (!settings.supportLocalFileOpen)
-        {
-            var r = clone();
-            r.ext = "ogg";
-            return r;
-        }
-
-        SerializationAsJsTools.save(fileSystem, destLibraryDir, namePath, "data:audio/ogg;base64," + Base64.encode(fileSystem.getBinary(destFile)));
-        fileSystem.deleteFile(destFile);
         var r = clone();
-        r.ext = "js";
+        r.ext = "ogg";
         return r;
 	}
 	

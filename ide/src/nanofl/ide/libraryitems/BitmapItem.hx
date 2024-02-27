@@ -68,8 +68,13 @@ class BitmapItem extends nanofl.engine.libraryitems.BitmapItem
 	}
 
 	public function getUrl() return library.realUrl(namePath + "." + ext);
-	
-	public function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String) : IIdeLibraryItem
+
+    public function getDataToSaveBeforeCleanDestDirectoryAndPublish(fileSystem:nanofl.ide.sys.FileSystem, destLibraryDir:String) : Dynamic
+    {
+        return null;
+    }
+        
+	public function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String, savedData:Dynamic) : IIdeLibraryItem
 	{
 		log("BitmapItem: publish " + namePath + "; ext = " + ext);
 

@@ -456,12 +456,17 @@ class EditorLibrary extends InjectContainer
 		var publishedItems = [];
 
         var destLibraryDir = destDir + "/library";
+        var usedItems = IdeLibraryTools.getUsedItems(library, settings.useTextureAtlases);
+        
+        final savedData = new Map<String, Dynamic>();
+        for (item in usedItems) savedData.set(item.namePath, item.getDataToSaveBeforeCleanDestDirectoryAndPublish(fileSystem, destLibraryDir));
+
         fileSystem.deleteAnyByPattern(destLibraryDir + "/*");
 		
-		for (item in IdeLibraryTools.getUsedItems(library, settings.useTextureAtlases))
+		for (item in usedItems)
 		{
 			log("Publish item " + item.namePath);
-			var publishedItem = item.publish(fileSystem, settings, destLibraryDir);
+			var publishedItem = item.publish(fileSystem, settings, destLibraryDir, savedData.get(item.namePath));
 			if (publishedItem != null) publishedItems.push(publishedItem);
 		}
 
