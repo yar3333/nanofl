@@ -2408,16 +2408,20 @@ class nanofl_SeamlessSoundLoop {
 		this.switchSound();
 	}
 	stop() {
-		this.sounds[0].pause();
-		this.sounds[0] = null;
-		this.sounds[1].pause();
-		this.sounds[1] = null;
-		this.timer.stop();
+		if(this.sounds[0] != null) {
+			this.sounds[0].pause();
+			this.sounds[0] = null;
+			this.sounds[1].pause();
+			this.sounds[1] = null;
+			this.timer.stop();
+		}
 	}
 	switchSound() {
 		this.n = this.n == 1 ? 0 : 1;
-		this.sounds[this.n].play();
-		this.timer = haxe_Timer.delay($bind(this,this.switchSound),Math.round(this.sounds[0].duration));
+		if(this.sounds[this.n] != null) {
+			this.sounds[this.n].play();
+			this.timer = haxe_Timer.delay($bind(this,this.switchSound),Math.round(this.sounds[0].duration));
+		}
 	}
 	detectDelay() {
 		let $window = window;
