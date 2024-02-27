@@ -4,49 +4,49 @@ libraryData =
     "type": "bitmap",
     "version": "2.3.0",
     "linkedClass": "",
-    "ext": "js",
+    "ext": "png",
     "textureAtlas": null
   },
   "_bitmaps/barrel3D": {
     "type": "bitmap",
     "version": "2.3.0",
     "linkedClass": "",
-    "ext": "js",
+    "ext": "png",
     "textureAtlas": null
   },
   "_bitmaps/barrels": {
     "type": "bitmap",
     "version": "2.3.0",
     "linkedClass": "",
-    "ext": "js",
+    "ext": "png",
     "textureAtlas": null
   },
   "_bitmaps/bucket": {
     "type": "bitmap",
     "version": "2.3.0",
     "linkedClass": "",
-    "ext": "js",
+    "ext": "png",
     "textureAtlas": null
   },
   "_bitmaps/floor": {
     "type": "bitmap",
     "version": "2.3.0",
     "linkedClass": "",
-    "ext": "js",
+    "ext": "jpg",
     "textureAtlas": null
   },
   "_bitmaps/trash": {
     "type": "bitmap",
     "version": "2.3.0",
     "linkedClass": "",
-    "ext": "js",
+    "ext": "png",
     "textureAtlas": null
   },
   "_bitmaps/wall": {
     "type": "bitmap",
     "version": "2.3.0",
     "linkedClass": "",
-    "ext": "js",
+    "ext": "jpg",
     "textureAtlas": null
   },
   "_buttons/Back": {
@@ -867,31 +867,31 @@ libraryData =
     "type": "sound",
     "version": "2.3.0",
     "linkage": "bucket",
-    "ext": "js"
+    "ext": "ogg"
   },
   "_sounds/sndMusic": {
     "type": "sound",
     "version": "2.3.0",
     "linkage": "music",
-    "ext": "js"
+    "ext": "ogg"
   },
   "_sounds/sndTap": {
     "type": "sound",
     "version": "2.3.0",
     "linkage": "tap",
-    "ext": "js"
+    "ext": "ogg"
   },
   "_sounds/sndTrash": {
     "type": "sound",
     "version": "2.3.0",
     "linkage": "trash",
-    "ext": "js"
+    "ext": "ogg"
   },
   "_sounds/sndWater": {
     "type": "sound",
     "version": "2.3.0",
     "linkage": "water",
-    "ext": "js"
+    "ext": "ogg"
   },
   "_splash/splash": {
     "type": "movieclip",

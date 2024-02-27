@@ -14,6 +14,6 @@
 		<param name="audioQuality" value="128" />
 		<param name="urlOnClick" value="" />
 		<param name="useLocalScripts" value="false" />
-		<param name="supportLocalFileOpen" value="true" />
+		<param name="supportLocalFileOpen" value="false" />
 	</publishSettings>
 </nanofl>
