@@ -1,7 +1,8 @@
-<movieclip version="2.2.0">
+<movieclip version="2.3.0">
 	<layer name="Layer 0" type="mask">
 		<frame>
 			<text x="15.130935967340434" y="-0.506992058466949" width="18" height="30">
+				<new-text-format characters="" fillColor="#000000" size="12" />
 				<text-run characters="T" fillColor="#000000" size="22" />
 			</text>
 		</frame>

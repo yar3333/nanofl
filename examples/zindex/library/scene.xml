@@ -1,4 +1,4 @@
-<movieclip version="2.2.0">
+<movieclip version="2.3.0">
 	<layer name="Layer 1">
 		<frame>
 			<instance libraryItem="Symbol 1" x="69.45" y="54.05" matrix="2.10240173339844,0,0,2.10240173339844" regX="36.5" regY="28.5" />

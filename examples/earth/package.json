@@ -3,18 +3,20 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "webpack"
+    "build": "webpack",
+    "start": "webpack serve"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/createjs": "^0.0.32",
+    "@types/easeljs": "^1.0.5",
     "@types/three": "^0.161.2",
-    "nanofl-ts": "^0.0.5",
+    "nanofl-ts": "^0.0.8",
     "three": "^0.161.0",
     "ts-loader": "^8.4.0",
     "typescript": "^5.3.3",
     "webpack": "^5.90.1",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.2"
   }
 }

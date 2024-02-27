@@ -7,7 +7,7 @@ libraryData =
     "autoPlay": true,
     "loop": true,
     "likeButton": false,
-    "exportAsSpriteSheet": false,
+    "exportAsSprite": false,
     "textureAtlas": null,
     "layers": [
       {
@@ -65,7 +65,7 @@ libraryData =
     "autoPlay": true,
     "loop": true,
     "likeButton": false,
-    "exportAsSpriteSheet": false,
+    "exportAsSprite": false,
     "textureAtlas": "atlas_0",
     "layers": [
       {
@@ -142,7 +142,7 @@ libraryData =
     "autoPlay": true,
     "loop": true,
     "likeButton": false,
-    "exportAsSpriteSheet": false,
+    "exportAsSprite": false,
     "textureAtlas": "atlas_0",
     "layers": [
       {

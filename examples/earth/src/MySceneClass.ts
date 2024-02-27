@@ -17,7 +17,7 @@ export class MySceneClass extends base.MySceneClass
 		this.txtFPS.text = Math.round(createjs.Ticker.getMeasuredFPS()) + "";
 	}
 
-    onMouseDown(e: createjs.MouseEvent): void
+    onMouseDown(e: nanofl.MouseEvent): void
     {
         console.log("onMouseDown");
     }

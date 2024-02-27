@@ -92,7 +92,7 @@ abstract class OpenedFile extends InjectContainer
 		openedFiles.titleChanged(this);
 	}
 	
-	public abstract function save() : Promise<Bool>;
+	public abstract function save(?force:Bool) : Promise<Bool>;
 	
 	public abstract function undo() : Void;
 	public abstract function redo() : Void;

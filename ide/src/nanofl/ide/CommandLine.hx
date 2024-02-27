@@ -79,7 +79,7 @@ class CommandLine extends InjectContainer
 		
 		if (arg == "-save")
 		{
-            return app.document.save().then(_ -> processNextArg(args));
+            return app.document.save(true).then(_ -> processNextArg(args));
 		}
 		
 		if (arg == "-export")

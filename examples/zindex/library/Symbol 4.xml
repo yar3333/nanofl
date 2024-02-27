@@ -1,4 +1,4 @@
-<movieclip version="2.2.0">
+<movieclip version="2.3.0">
 	<layer name="Layer 1">
 		<frame>
 			<group>
@@ -17,7 +17,8 @@
 					</figure>
 				</shape>
 			</group>
-			<text x="21.5" y="3.4" width="34.55" height="50.55" selectable="true">
+			<text x="21.5" y="3.4" width="34.55" height="52" selectable="true">
+				<new-text-format characters="" fillColor="#000000" size="12" />
 				<text-run characters="D" fillColor="#FF0000" size="42" family="Times New Roman" />
 			</text>
 		</frame>

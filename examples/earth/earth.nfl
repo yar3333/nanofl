@@ -11,11 +11,9 @@
 		<param name="useTextureAtlases" value="false" />
 		<param name="isConvertImagesIntoJpeg" value="true" />
 		<param name="jpegQuality" value="80" />
-		<param name="isGenerateMp3Sounds" value="true" />
-		<param name="isGenerateOggSounds" value="true" />
-		<param name="isGenerateWavSounds" value="true" />
 		<param name="audioQuality" value="128" />
 		<param name="urlOnClick" value="" />
 		<param name="useLocalScripts" value="false" />
+		<param name="supportLocalFileOpen" value="false" />
 	</publishSettings>
 </nanofl>

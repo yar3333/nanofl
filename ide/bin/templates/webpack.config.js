@@ -29,7 +29,7 @@ module.exports = {
 	externals: {
 		"three": "THREE",
         "three/addons/loaders/GLTFLoader.js" : "THREE_addons_GLTFLoader",
-	}
+	},
 	
 	devServer: {
         static: __dirname + "/../{project}.release",

@@ -8,8 +8,8 @@
             "type": "node",
             "request": "launch",
             "name": "Launch",
-            "runtimeExecutable": "cmd",
-            "runtimeArgs": [ "/c", "start", "file://${workspaceFolder}/index.html" ]
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [ "start" ]
         }
     ]
 }

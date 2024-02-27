@@ -247,17 +247,18 @@ class Document extends OpenedFile
 	}
 	
 	
-	public function save() : Promise<Bool>
+	public function save(?force:Bool) : Promise<Bool>
 	{
 		return saveAs
 		(
 			originalPath != null 
 				? (detectExporter(originalPath) != null ? originalPath : null)
-				: (!isTemporary ? path : null)
+				: (!isTemporary ? path : null),
+            force
 		);
 	}
 	
-	public function saveAs(?newPath:String) : Promise<Bool>
+	public function saveAs(?newPath:String, ?force:Bool) : Promise<Bool>
 	{
 		if (newPath == null)
 		{
@@ -297,7 +298,7 @@ class Document extends OpenedFile
             })
             .then(path ->
             {
-                return !StringTools.isNullOrEmpty(path) ? saveAs(path) : Promise.resolve(false);
+                return !StringTools.isNullOrEmpty(path) ? saveAs(path, force) : Promise.resolve(false);
             });
 		}
 		else
@@ -306,7 +307,7 @@ class Document extends OpenedFile
 			
 			if (Path.extension(newPath) == "nfl")
 			{
-                if (!saveNative()) return Promise.resolve(false);
+                if (!saveNative(force)) return Promise.resolve(false);
 
                 var success = saveNativeAs(newPath);
                 if (success)
@@ -667,9 +668,9 @@ class Document extends OpenedFile
 		}
 	}
 	
-	public function saveNative() : Bool
+	public function saveNative(force = false) : Bool
 	{
-		if (lastModified != null && !undoQueue.isDocumentModified()) return true;
+		if (!force && lastModified != null && !undoQueue.isDocumentModified()) return true;
 		
         undoQueue.commitTransaction();
         

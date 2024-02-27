@@ -1,4 +1,4 @@
-<movieclip version="2.2.0">
+<movieclip version="2.3.0">
 	<layer name="Layer 1" type="guide">
 		<frame duration="158">
 			<shape>
@@ -14,7 +14,7 @@
 		</frame>
 	</layer>
 	<layer name="Layer 2" parentIndex="0">
-		<frame duration="155" tweenType="motion" motionTweenEasing="-60" motionTweenRotateCount="-1" motionTweenOrientToPath="true">
+		<frame duration="155" tweenType="motion" motionTweenEasing="-60" motionTweenOrientToPath="true" motionTweenRotateCount="-1">
 			<instance libraryItem="Symbol 1" x="27.4" y="236.65" regX="11.5" regY="15.5" />
 		</frame>
 		<frame tweenType="motion">

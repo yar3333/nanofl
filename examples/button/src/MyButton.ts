@@ -7,7 +7,7 @@ export class MyButton extends base.MyButton
 		console.log("MyButton: init");
 	}
 
-    onMouseDown(e: createjs.MouseEvent)
+    onMouseDown(e: nanofl.MouseEvent)
     {
         super.onMouseDown(e);
 

@@ -1,4 +1,4 @@
-<movieclip version="2.2.0">
+<movieclip version="2.3.0">
 	<layer name="Layer 1">
 		<frame>
 			<instance libraryItem="pic" x="-40" y="-41.9" matrix="0.296295166015625,0,0,0.296295166015625" regX="135" regY="141.55" />
