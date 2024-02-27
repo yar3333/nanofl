@@ -19,11 +19,11 @@ package createjs;
  * 
  * See {{#crossLink "Filter"}}{{/crossLink}} for an more information on applying filters.
  */
-extern class BoxBlurFilter extends Filter
+extern class BoxBlurFilter extends easeljs.filters.Filter
 {
 	private static function __init__() : Void
 	{
-		haxe.macro.Compiler.includeFile("easeljs.filters.BoxBlurFilter.js", "inline");
+		haxe.macro.Compiler.includeFile("createjs/BoxBlurFilter.js", "inline");
 	}
 	
 	/**

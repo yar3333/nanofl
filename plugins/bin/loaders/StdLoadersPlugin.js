@@ -87,13 +87,6 @@ FontLoaderPlugin.prototype = {
 };
 var HxOverrides = function() { };
 HxOverrides.__name__ = true;
-HxOverrides.cca = function(s,index) {
-	var x = s.charCodeAt(index);
-	if(x != x) {
-		return undefined;
-	}
-	return x;
-};
 HxOverrides.substr = function(s,pos,len) {
 	if(len == null) {
 		len = s.length;
@@ -120,6 +113,15 @@ Lambda.exists = function(it,f) {
 		}
 	}
 	return false;
+};
+var Main = function() { };
+Main.__name__ = true;
+Main.main = function() {
+	nanofl.ide.plugins.LoaderPlugins.register(new BitmapLoaderPlugin());
+	nanofl.ide.plugins.LoaderPlugins.register(new FontLoaderPlugin());
+	nanofl.ide.plugins.LoaderPlugins.register(new SoundLoaderPlugin());
+	nanofl.ide.plugins.LoaderPlugins.register(new MovieClipLoaderPlugin());
+	nanofl.ide.plugins.LoaderPlugins.register(new MeshLoaderPlugin());
 };
 Math.__name__ = true;
 var MeshLoaderPlugin = function() {
@@ -245,75 +247,6 @@ SoundLoaderPlugin.prototype = {
 		return Promise.resolve(r);
 	}
 };
-var SpriteLoaderPlugin = function() {
-	this.properties = null;
-	this.menuItemIcon = "";
-	this.menuItemName = "Sprite";
-	this.priority = 500;
-	this.name = "SpriteLoader";
-};
-SpriteLoaderPlugin.__name__ = true;
-SpriteLoaderPlugin.prototype = {
-	load: function(api,params,baseDir,files) {
-		var r = [];
-		var h = files.h;
-		var file_h = h;
-		var file_keys = Object.keys(h);
-		var file_length = file_keys.length;
-		var file_current = 0;
-		while(file_current < file_length) {
-			var file = file_h[file_keys[file_current++]];
-			if(file.excluded) {
-				continue;
-			}
-			if(haxe_io_Path.extension(file.path) == "json") {
-				var namePath = [haxe_io_Path.withoutExtension(file.path)];
-				if(!Lambda.exists(r,(function(namePath) {
-					return function(item) {
-						return item.namePath == namePath[0];
-					};
-				})(namePath))) {
-					var json = file.get_json();
-					if(json != null && json.frames != null && json.images != null) {
-						var namePath1 = namePath[0];
-						var _this = json.frames;
-						var result = new Array(_this.length);
-						var _g = 0;
-						var _g1 = _this.length;
-						while(_g < _g1) {
-							var i = _g++;
-							var frame = _this[i];
-							result[i] = { image : json.images[frame[4]], x : frame[0], y : frame[1], width : frame[2], height : frame[3], regX : frame[5], regY : frame[6]};
-						}
-						r.push(new nanofl.ide.libraryitems.SpriteItem(namePath1,result));
-						var _g2 = 0;
-						var _g3 = json.images;
-						while(_g2 < _g3.length) {
-							var image = _g3[_g2];
-							++_g2;
-							var p = haxe_io_Path.join([haxe_io_Path.directory(namePath[0]),image]);
-							if(Object.prototype.hasOwnProperty.call(files.h,p)) {
-								files.h[p].exclude();
-							}
-						}
-						file.exclude();
-					}
-				}
-			}
-		}
-		return Promise.resolve(r);
-	}
-};
-var StdLoadersPlugin = function() { };
-StdLoadersPlugin.__name__ = true;
-StdLoadersPlugin.main = function() {
-	nanofl.ide.plugins.LoaderPlugins.register(new BitmapLoaderPlugin());
-	nanofl.ide.plugins.LoaderPlugins.register(new FontLoaderPlugin());
-	nanofl.ide.plugins.LoaderPlugins.register(new SoundLoaderPlugin());
-	nanofl.ide.plugins.LoaderPlugins.register(new MovieClipLoaderPlugin());
-	nanofl.ide.plugins.LoaderPlugins.register(new SpriteLoaderPlugin());
-	nanofl.ide.plugins.LoaderPlugins.register(new MeshLoaderPlugin());
-};
 var haxe_ds_StringMap = function() {
 	this.h = Object.create(null);
 };
@@ -354,132 +287,12 @@ haxe_io_Path.withoutExtension = function(path) {
 	s.ext = null;
 	return s.toString();
 };
-haxe_io_Path.directory = function(path) {
-	var s = new haxe_io_Path(path);
-	if(s.dir == null) {
-		return "";
-	}
-	return s.dir;
-};
 haxe_io_Path.extension = function(path) {
 	var s = new haxe_io_Path(path);
 	if(s.ext == null) {
 		return "";
 	}
 	return s.ext;
-};
-haxe_io_Path.join = function(paths) {
-	var _g = [];
-	var _g1 = 0;
-	var _g2 = paths;
-	while(_g1 < _g2.length) {
-		var v = _g2[_g1];
-		++_g1;
-		if(v != null && v != "") {
-			_g.push(v);
-		}
-	}
-	var paths = _g;
-	if(paths.length == 0) {
-		return "";
-	}
-	var path = paths[0];
-	var _g = 1;
-	var _g1 = paths.length;
-	while(_g < _g1) {
-		var i = _g++;
-		path = haxe_io_Path.addTrailingSlash(path);
-		path += paths[i];
-	}
-	return haxe_io_Path.normalize(path);
-};
-haxe_io_Path.normalize = function(path) {
-	var slash = "/";
-	path = path.split("\\").join(slash);
-	if(path == slash) {
-		return slash;
-	}
-	var target = [];
-	var _g = 0;
-	var _g1 = path.split(slash);
-	while(_g < _g1.length) {
-		var token = _g1[_g];
-		++_g;
-		if(token == ".." && target.length > 0 && target[target.length - 1] != "..") {
-			target.pop();
-		} else if(token == "") {
-			if(target.length > 0 || HxOverrides.cca(path,0) == 47) {
-				target.push(token);
-			}
-		} else if(token != ".") {
-			target.push(token);
-		}
-	}
-	var tmp = target.join(slash);
-	var acc_b = "";
-	var colon = false;
-	var slashes = false;
-	var _g_offset = 0;
-	var _g_s = tmp;
-	while(_g_offset < _g_s.length) {
-		var s = _g_s;
-		var index = _g_offset++;
-		var c = s.charCodeAt(index);
-		if(c >= 55296 && c <= 56319) {
-			c = c - 55232 << 10 | s.charCodeAt(index + 1) & 1023;
-		}
-		var c1 = c;
-		if(c1 >= 65536) {
-			++_g_offset;
-		}
-		var c2 = c1;
-		switch(c2) {
-		case 47:
-			if(!colon) {
-				slashes = true;
-			} else {
-				var i = c2;
-				colon = false;
-				if(slashes) {
-					acc_b += "/";
-					slashes = false;
-				}
-				acc_b += String.fromCodePoint(i);
-			}
-			break;
-		case 58:
-			acc_b += ":";
-			colon = true;
-			break;
-		default:
-			var i1 = c2;
-			colon = false;
-			if(slashes) {
-				acc_b += "/";
-				slashes = false;
-			}
-			acc_b += String.fromCodePoint(i1);
-		}
-	}
-	return acc_b;
-};
-haxe_io_Path.addTrailingSlash = function(path) {
-	if(path.length == 0) {
-		return "/";
-	}
-	var c1 = path.lastIndexOf("/");
-	var c2 = path.lastIndexOf("\\");
-	if(c1 < c2) {
-		if(c2 != path.length - 1) {
-			return path + "\\";
-		} else {
-			return path;
-		}
-	} else if(c1 != path.length - 1) {
-		return path + "/";
-	} else {
-		return path;
-	}
 };
 haxe_io_Path.prototype = {
 	toString: function() {
@@ -593,24 +406,15 @@ js_Boot.__string_rec = function(o,s) {
 		return String(o);
 	}
 };
-var js_three_ArrayLike = {};
-js_three_ArrayLike.get = function(this1,key) {
-	return this1[key];
-};
-js_three_ArrayLike.arrayWrite = function(this1,k,v) {
-	this1[k] = v;
-	return v;
-};
 function $getIterator(o) { if( o instanceof Array ) return new haxe_iterators_ArrayIterator(o); else return o.iterator(); }
 if(typeof(performance) != "undefined" ? typeof(performance.now) == "function" : false) {
 	HxOverrides.now = performance.now.bind(performance);
 }
-if( String.fromCodePoint == null ) String.fromCodePoint = function(c) { return c < 0x10000 ? String.fromCharCode(c) : String.fromCharCode((c>>10)+0xD7C0)+String.fromCharCode((c&0x3FF)+0xDC00); }
 String.__name__ = true;
 Array.__name__ = true;
 Date.__name__ = "Date";
 js_Boot.__toStr = ({ }).toString;
 BitmapLoaderPlugin.extensions = ["jpg","jpeg","png","gif","svg"];
 SoundLoaderPlugin.extensions = ["ogg","mp3","wav"];
-StdLoadersPlugin.main();
+Main.main();
 })({});

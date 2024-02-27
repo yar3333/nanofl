@@ -70,7 +70,6 @@ abstract class LibraryItem
             case mesh: new MeshItem(namePath, null, null);
             case movieclip: new MovieClipItem(namePath);
             case sound: new SoundItem(namePath, null);
-            case sprite: new SpriteItem(namePath, null);
         };
         if (item == null) return null;
         item.loadPropertiesJson(obj);

@@ -1,5 +1,4 @@
 --js ..\..\bin\exporters\VideoExporterPlugin.js
 --class-path ..\..\api\gen
 --class-path src
---library datatools
 --main Main

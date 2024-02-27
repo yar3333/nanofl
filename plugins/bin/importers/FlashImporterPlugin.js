@@ -580,7 +580,7 @@ Type.typeof = function(v) {
 var flashimport_DocumentImporter = function() { };
 flashimport_DocumentImporter.__name__ = "flashimport.DocumentImporter";
 flashimport_DocumentImporter.process = function(api,importMediaScriptTemplate,srcFilePath,destFilePath,destDocProp,destLibrary,runFlashToImportMedia) {
-	flashimport_DocumentImporter.log("DocumentImporter.process",{ fileName : "src/flashimport/DocumentImporter.hx", lineNumber : 22, className : "flashimport.DocumentImporter", methodName : "process"});
+	flashimport_DocumentImporter.log("DocumentImporter.process",{ fileName : "src-plugin/flashimport/DocumentImporter.hx", lineNumber : 22, className : "flashimport.DocumentImporter", methodName : "process"});
 	if(runFlashToImportMedia && flashimport_DocumentImporter.hasMedia(api,srcFilePath)) {
 		return flashimport_DocumentImporter.importMedia(api,importMediaScriptTemplate,srcFilePath,destFilePath,destLibrary).then(function(success) {
 			if(success) {
@@ -598,7 +598,7 @@ flashimport_DocumentImporter.hasMedia = function(api,srcFilePath) {
 	return htmlparser_HtmlParserTools.findOne(doc,">DOMDocument>media>*") != null;
 };
 flashimport_DocumentImporter.importMedia = function(api,importMediaScriptTemplate,srcFilePath,destFilePath,destLibrary) {
-	flashimport_DocumentImporter.log("DocumentImporter.importMedia",{ fileName : "src/flashimport/DocumentImporter.hx", lineNumber : 47, className : "flashimport.DocumentImporter", methodName : "importMedia"});
+	flashimport_DocumentImporter.log("DocumentImporter.importMedia",{ fileName : "src-plugin/flashimport/DocumentImporter.hx", lineNumber : 47, className : "flashimport.DocumentImporter", methodName : "importMedia"});
 	var destDir = haxe_io_Path.directory(destFilePath);
 	var scriptFilePath = api.folders.get_temp() + "/flashImporter.jsfl";
 	var script = StringTools.replace(StringTools.replace(importMediaScriptTemplate,"{SRC_FILE}",StringTools.replace(srcFilePath,"\\","/")),"{DEST_DIR}",StringTools.replace(destDir,"\\","/"));
@@ -619,7 +619,7 @@ flashimport_DocumentImporter.importMedia = function(api,importMediaScriptTemplat
 	});
 };
 flashimport_DocumentImporter.importXmlFiles = function(api,srcFilePath,destDocProp,destLibrary) {
-	flashimport_DocumentImporter.log("DocumentImporter.importXmlFiles BEGIN",{ fileName : "src/flashimport/DocumentImporter.hx", lineNumber : 80, className : "flashimport.DocumentImporter", methodName : "importXmlFiles"});
+	flashimport_DocumentImporter.log("DocumentImporter.importXmlFiles BEGIN",{ fileName : "src-plugin/flashimport/DocumentImporter.hx", lineNumber : 80, className : "flashimport.DocumentImporter", methodName : "importXmlFiles"});
 	var srcDir = haxe_io_Path.directory(srcFilePath);
 	var srcDoc = new htmlparser_XmlDocument(api.fileSystem.getContent(srcDir + "/DOMDocument.xml"));
 	var srcLibDir = srcDir + "/LIBRARY";
@@ -629,7 +629,7 @@ flashimport_DocumentImporter.importXmlFiles = function(api,srcFilePath,destDocPr
 	destDocProp.height = htmlparser_HtmlParserTools.getAttr(docPropNode,"height",400);
 	destDocProp.backgroundColor = htmlparser_HtmlParserTools.getAttr(docPropNode,"backgroundColor","#ffffff");
 	destDocProp.framerate = htmlparser_HtmlParserTools.getAttr(docPropNode,"frameRate",24);
-	flashimport_DocumentImporter.log("DocumentImporter.importXmlFiles load media",{ fileName : "src/flashimport/DocumentImporter.hx", lineNumber : 94, className : "flashimport.DocumentImporter", methodName : "importXmlFiles"});
+	flashimport_DocumentImporter.log("DocumentImporter.importXmlFiles load media",{ fileName : "src-plugin/flashimport/DocumentImporter.hx", lineNumber : 94, className : "flashimport.DocumentImporter", methodName : "importXmlFiles"});
 	var _g = 0;
 	var _g1 = docPropNode.find(">media>DOMSoundItem");
 	while(_g < _g1.length) {
@@ -642,7 +642,7 @@ flashimport_DocumentImporter.importXmlFiles = function(api,srcFilePath,destDocPr
 			}
 		}
 	}
-	flashimport_DocumentImporter.log("DocumentImporter.importXmlFiles load folders",{ fileName : "src/flashimport/DocumentImporter.hx", lineNumber : 107, className : "flashimport.DocumentImporter", methodName : "importXmlFiles"});
+	flashimport_DocumentImporter.log("DocumentImporter.importXmlFiles load folders",{ fileName : "src-plugin/flashimport/DocumentImporter.hx", lineNumber : 107, className : "flashimport.DocumentImporter", methodName : "importXmlFiles"});
 	var _g = 0;
 	var _g1 = docPropNode.find(">folders>DOMFolderItem");
 	while(_g < _g1.length) {
@@ -655,9 +655,9 @@ flashimport_DocumentImporter.importXmlFiles = function(api,srcFilePath,destDocPr
 			}
 		}
 	}
-	flashimport_DocumentImporter.log("DocumentImporter.importXmlFiles load document",{ fileName : "src/flashimport/DocumentImporter.hx", lineNumber : 120, className : "flashimport.DocumentImporter", methodName : "importXmlFiles"});
+	flashimport_DocumentImporter.log("DocumentImporter.importXmlFiles load document",{ fileName : "src-plugin/flashimport/DocumentImporter.hx", lineNumber : 120, className : "flashimport.DocumentImporter", methodName : "importXmlFiles"});
 	symbolLoader.loadFromXml(nanofl.ide.library.IdeLibrary.SCENE_NAME_PATH,srcDoc);
-	flashimport_DocumentImporter.log("DocumentImporter.importXmlFiles load symbols",{ fileName : "src/flashimport/DocumentImporter.hx", lineNumber : 123, className : "flashimport.DocumentImporter", methodName : "importXmlFiles"});
+	flashimport_DocumentImporter.log("DocumentImporter.importXmlFiles load symbols",{ fileName : "src-plugin/flashimport/DocumentImporter.hx", lineNumber : 123, className : "flashimport.DocumentImporter", methodName : "importXmlFiles"});
 	var _this = docPropNode.find(">symbols>Include");
 	var result = new Array(_this.length);
 	var _g = 0;
@@ -667,12 +667,12 @@ flashimport_DocumentImporter.importXmlFiles = function(api,srcFilePath,destDocPr
 		result[i] = htmlparser_HtmlParserTools.getAttrString(_this[i],"href");
 	}
 	var hrefs = result;
-	flashimport_DocumentImporter.log("DocumentImporter.importXmlFiles load library",{ fileName : "src/flashimport/DocumentImporter.hx", lineNumber : 126, className : "flashimport.DocumentImporter", methodName : "importXmlFiles"});
+	flashimport_DocumentImporter.log("DocumentImporter.importXmlFiles load library",{ fileName : "src-plugin/flashimport/DocumentImporter.hx", lineNumber : 126, className : "flashimport.DocumentImporter", methodName : "importXmlFiles"});
 	return new Promise(function(resolve,reject) {
 		var loadNext = null;
 		loadNext = function() {
 			if(hrefs.length == 0) {
-				flashimport_DocumentImporter.log("DocumentImporter.importXmlFiles END",{ fileName : "src/flashimport/DocumentImporter.hx", lineNumber : 133, className : "flashimport.DocumentImporter", methodName : "importXmlFiles"});
+				flashimport_DocumentImporter.log("DocumentImporter.importXmlFiles END",{ fileName : "src-plugin/flashimport/DocumentImporter.hx", lineNumber : 133, className : "flashimport.DocumentImporter", methodName : "importXmlFiles"});
 				resolve(true);
 			} else {
 				symbolLoader.loadFromFile(hrefs.shift());
@@ -726,7 +726,7 @@ var flashimport_EdgeData = function(edge) {
 	var reX1Y1X2Y2 = new EReg("^" + reNumber + "\\s+" + reNumber + "\\s+" + reNumber + "\\s+" + reNumber + "\\s*","i");
 	var lastX = 1.0e10;
 	var lastY = 1.0e10;
-	stdlib_Debug.assert(drawStr.length == 0 || StringTools.ltrim(drawStr).charAt(0) == "!","drawStr = " + drawStr,{ fileName : "src/flashimport/EdgeData.hx", lineNumber : 39, className : "flashimport.EdgeData", methodName : "new"});
+	stdlib_Debug.assert(drawStr.length == 0 || StringTools.ltrim(drawStr).charAt(0) == "!","drawStr = " + drawStr,{ fileName : "src-plugin/flashimport/EdgeData.hx", lineNumber : 39, className : "flashimport.EdgeData", methodName : "new"});
 	while(drawStr.length > 0) {
 		var opCode = drawStr.charAt(0);
 		drawStr = HxOverrides.substr(drawStr,1,null);
@@ -942,7 +942,7 @@ flashimport_ShapeConvertor.prototype = {
 				result[i] = StringTools.rpad(Std.string(fc.fill)," ",35) + " / " + fc.contour.getClockwiseProduct() + " / " + Std.string(fc.contour);
 			}
 			return "EdgeDataConvertor.convert(1) fillContours =\n\t" + result.join("\n\t");
-		},{ fileName : "src/flashimport/ShapeConvertor.hx", lineNumber : 34, className : "flashimport.ShapeConvertor", methodName : "convert"});
+		},{ fileName : "src-plugin/flashimport/ShapeConvertor.hx", lineNumber : 34, className : "flashimport.ShapeConvertor", methodName : "convert"});
 		return { edges : strokeAndFillEdges.strokeEdges, polygons : this.polygonsFromFillContours(fillContours)};
 	}
 	,parseEdges: function() {
@@ -1013,7 +1013,7 @@ flashimport_ShapeConvertor.prototype = {
 				result[i] = StringTools.rpad(Std.string(fe.fill)," ",35) + " / " + Std.string(fe.edge);
 			}
 			return "EdgeDataConvertor.parseEdges fillEdges =\n\t" + result.join("\n\t");
-		},{ fileName : "src/flashimport/ShapeConvertor.hx", lineNumber : 95, className : "flashimport.ShapeConvertor", methodName : "parseEdges"});
+		},{ fileName : "src-plugin/flashimport/ShapeConvertor.hx", lineNumber : 95, className : "flashimport.ShapeConvertor", methodName : "parseEdges"});
 		return { strokeEdges : strokeEdges, fillEdges : fillEdges};
 	}
 	,findFillContours: function(fillEdges) {
@@ -1072,8 +1072,8 @@ flashimport_ShapeConvertor.prototype = {
 				var inner = fillContours[_g1];
 				++_g1;
 				if(inner != outer && inner.contour.isNestedTo(outer.contour)) {
-					stdlib_Debug.assert(inner.contour != outer.contour,null,{ fileName : "src/flashimport/ShapeConvertor.hx", lineNumber : 154, className : "flashimport.ShapeConvertor", methodName : "polygonsFromFillContours"});
-					stdlib_Debug.assert(!inner.contour.equ(outer.contour),null,{ fileName : "src/flashimport/ShapeConvertor.hx", lineNumber : 155, className : "flashimport.ShapeConvertor", methodName : "polygonsFromFillContours"});
+					stdlib_Debug.assert(inner.contour != outer.contour,null,{ fileName : "src-plugin/flashimport/ShapeConvertor.hx", lineNumber : 154, className : "flashimport.ShapeConvertor", methodName : "polygonsFromFillContours"});
+					stdlib_Debug.assert(!inner.contour.equ(outer.contour),null,{ fileName : "src-plugin/flashimport/ShapeConvertor.hx", lineNumber : 155, className : "flashimport.ShapeConvertor", methodName : "polygonsFromFillContours"});
 					inners.push(inner.contour.clone().reverse());
 				}
 			}
@@ -1097,7 +1097,7 @@ flashimport_ShapeConvertor.prototype = {
 			var j = i + 1;
 			while(j < fillContours.length) {
 				if(fillContours[i].contour.equ(fillContours[j].contour)) {
-					haxe_Log.trace("Equ contours:\n\tfill[i] = " + Std.string(fillContours[i].fill) + "\n\tfill[j] = " + Std.string(fillContours[j].fill) + "\n\tcontour = " + Std.string(fillContours[i].contour),{ fileName : "src/flashimport/ShapeConvertor.hx", lineNumber : 180, className : "flashimport.ShapeConvertor", methodName : "assertFillContoursCorrect"});
+					haxe_Log.trace("Equ contours:\n\tfill[i] = " + Std.string(fillContours[i].fill) + "\n\tfill[j] = " + Std.string(fillContours[j].fill) + "\n\tcontour = " + Std.string(fillContours[i].contour),{ fileName : "src-plugin/flashimport/ShapeConvertor.hx", lineNumber : 180, className : "flashimport.ShapeConvertor", methodName : "assertFillContoursCorrect"});
 				}
 				++j;
 			}
@@ -1123,7 +1123,7 @@ flashimport_SymbolLoader.prototype = {
 	loadFromFile: function(href) {
 		var namePath = flashimport_PathTools.unescape(haxe_io_Path.withoutExtension(href));
 		if(!this.library.hasItem(namePath)) {
-			flashimport_SymbolLoader.log("Load item \"" + namePath + "\"",{ fileName : "src/flashimport/SymbolLoader.hx", lineNumber : 78, className : "flashimport.SymbolLoader", methodName : "loadFromFile"});
+			flashimport_SymbolLoader.log("Load item \"" + namePath + "\"",{ fileName : "src-plugin/flashimport/SymbolLoader.hx", lineNumber : 78, className : "flashimport.SymbolLoader", methodName : "loadFromFile"});
 			if(this.fileSystem.exists(this.srcLibDir + "/" + href)) {
 				this.loadFromXml(namePath,new htmlparser_XmlDocument(this.fileSystem.getContent(this.srcLibDir + "/" + href)));
 			}

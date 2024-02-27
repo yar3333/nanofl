@@ -34,8 +34,8 @@ extern class Document extends nanofl.ide.OpenedFile {
 	override function activate(?isCenterView:Bool):Void;
 	override function deactivate():Void;
 	function setProperties(properties:nanofl.ide.DocumentProperties):Void;
-	override function save():js.lib.Promise<Bool>;
-	function saveAs(?newPath:String):js.lib.Promise<Bool>;
+	override function save(?force:Bool):js.lib.Promise<Bool>;
+	function saveAs(?newPath:String, ?force:Bool):js.lib.Promise<Bool>;
 	function export(?destPath:String, ?plugin:nanofl.ide.plugins.IExporterPlugin):js.lib.Promise<Bool>;
 	function reload():js.lib.Promise<{ public var removed(default, default) : Array<nanofl.ide.libraryitems.IIdeLibraryItem>; public var added(default, default) : Array<nanofl.ide.libraryitems.IIdeLibraryItem>; }>;
 	function reloadWoTransactionForced():js.lib.Promise<{ public var removed(default, default) : Array<nanofl.ide.libraryitems.IIdeLibraryItem>; public var added(default, default) : Array<nanofl.ide.libraryitems.IIdeLibraryItem>; }>;
@@ -44,7 +44,7 @@ extern class Document extends nanofl.ide.OpenedFile {
 	function resize(width:Int, height:Int):Void;
 	override function canBeSaved():Bool;
 	override function dispose():Void;
-	function saveNative():Bool;
+	function saveNative(?force:Bool):Bool;
 	function runPreventingAutoReload<T>(f:() -> js.lib.Promise<T>):js.lib.Promise<T>;
 	override function getShortTitle():String;
 	override function getPath():String;

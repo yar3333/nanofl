@@ -4,8 +4,6 @@ import stdlib.Uuid;
 import nanofl.ide.plugins.ImporterArgs;
 import nanofl.ide.plugins.PluginApi;
 import nanofl.engine.CustomProperty;
-import nanofl.ide.DocumentProperties;
-import nanofl.ide.library.IdeLibrary;
 import nanofl.ide.plugins.IImporterPlugin;
 import nanofl.ide.plugins.ImporterPlugins;
 import flashimport.DocumentImporter;

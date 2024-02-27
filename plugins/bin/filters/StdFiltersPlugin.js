@@ -61,8 +61,8 @@ GlowFilterPlugin.prototype = {
 		return new createjs.GlowFilter(color,params.alpha / 100 * (params.strength / 100),params.blurX * 2,params.blurY * 2,1,params.quality,params.inner,params.knockout);
 	}
 };
-var StdFiltersPlugin = function() { };
-StdFiltersPlugin.main = function() {
+var Main = function() { };
+Main.main = function() {
 	nanofl.engine.plugins.FilterPlugins.register(new DropShadowFilterPlugin());
 	nanofl.engine.plugins.FilterPlugins.register(new BoxBlurFilterPlugin());
 	nanofl.engine.plugins.FilterPlugins.register(new GlowFilterPlugin());
@@ -1152,5 +1152,5 @@ _stage.addChild(_shape);</code></pre>
 
 	createjs.GlowFilter = createjs.promote(GlowFilter, "Filter");
 }());
-StdFiltersPlugin.main();
+Main.main();
 })(typeof exports != "undefined" ? exports : typeof window != "undefined" ? window : typeof self != "undefined" ? self : this, {});

@@ -23,7 +23,7 @@ extern class OpenedFile extends nanofl.ide.InjectContainer {
 	function saveWithPrompt():js.lib.Promise<Bool>;
 	function close(?force:Bool):js.lib.Promise<{ }>;
 	function undoStatusChanged():Void;
-	function save():js.lib.Promise<Bool>;
+	function save(?force:Bool):js.lib.Promise<Bool>;
 	function undo():Void;
 	function redo():Void;
 	function dispose():Void;

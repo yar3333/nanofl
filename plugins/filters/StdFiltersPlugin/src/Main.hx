@@ -1,6 +1,6 @@
 import nanofl.engine.plugins.FilterPlugins;
 
-class StdFiltersPlugin
+class Main
 {
 	static function main()
 	{

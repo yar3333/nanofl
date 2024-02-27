@@ -2,7 +2,6 @@
 --class-path ..\..\api\gen
 --class-path src
 --library stdlib
---library datatools
 --main SvgExporterPlugin
 -w -WExternWithExpr
 --cmd IF EXIST support IF NOT EXIST ..\..\bin\exporters\SvgExporterPlugin mkdir  ..\..\bin\exporters\SvgExporterPlugin

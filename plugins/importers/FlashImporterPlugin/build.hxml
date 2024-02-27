@@ -1,10 +1,16 @@
+--js bin\FlashMediaImporter.jsfl
+--library jsfl
+--class-path src-jsfl-helper
+--main FlashMediaImporter
+
+--next
+
 --js ..\..\bin\importers\FlashImporterPlugin.js
 --class-path ..\..\api\gen
---class-path src
+--class-path src-plugin
 --library stdlib
---library datatools
 --library HtmlParser
 --main FlashImporterPlugin
--w -WExternWithExpr -WDeprecated
+-w  -WDeprecated
 --cmd IF EXIST support IF NOT EXIST ..\..\bin\importers\FlashImporterPlugin mkdir  ..\..\bin\importers\FlashImporterPlugin
 --cmd IF EXIST support xcopy /E /Q /Y support ..\..\bin\importers\FlashImporterPlugin

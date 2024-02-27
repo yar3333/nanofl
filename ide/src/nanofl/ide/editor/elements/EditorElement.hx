@@ -10,7 +10,6 @@ import nanofl.engine.elements.Element;
 import nanofl.engine.elements.GroupElement;
 import nanofl.engine.elements.Instance;
 import nanofl.engine.elements.ShapeElement;
-import nanofl.engine.elements.SpriteFrameElement;
 import nanofl.engine.elements.TextElement;
 import nanofl.engine.movieclip.Frame;
 import nanofl.engine.geom.BoundsTools;
@@ -84,11 +83,6 @@ abstract class EditorElement implements ISelectable
 		if (Std.isOfType(tweenedElement.original, TextElement))
 		{
 			return new EditorElementText(layer, editor, navigator, view, frame, tweenedElement);
-		}
-		else
-		if (Std.isOfType(tweenedElement.original, SpriteFrameElement))
-		{
-			return new EditorElementRO(layer, editor, navigator, view, frame, tweenedElement);
 		}
 		else
 		{

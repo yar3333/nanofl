@@ -2,7 +2,6 @@ package nanofl.ide.library;
 
 import nanofl.ide.plugins.PluginApi;
 import nanofl.ide.libraryitems.MeshItem;
-import nanofl.ide.libraryitems.SpriteItem;
 import nanofl.ide.libraryitems.SoundItem;
 import nanofl.ide.libraryitems.FontItem;
 import nanofl.ide.libraryitems.BitmapItem;
@@ -127,9 +126,6 @@ class LibraryItems
         
         var soundItem = SoundItem.parse(namePath, itemNode);
         if (soundItem != null) return soundItem;
-        
-        var spriteItem = SpriteItem.parse(namePath, itemNode);
-        if (spriteItem != null) return spriteItem;
         
         var folderItem = FolderItem.parse(namePath, itemNode);
         if (folderItem != null) return folderItem;

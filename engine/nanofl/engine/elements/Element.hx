@@ -87,7 +87,6 @@ abstract class Element
             case text: new TextElement(null, null, null, null, null, null);
             case shape: new ShapeElement();
             case group: new GroupElement([]);
-            case spriteFrame: new SpriteFrameElement(null, 0);
         };
 
         if (element != null)

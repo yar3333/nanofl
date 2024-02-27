@@ -6,5 +6,4 @@ enum ElementType
     instance;
     group;
     text;
-    spriteFrame;
 }
