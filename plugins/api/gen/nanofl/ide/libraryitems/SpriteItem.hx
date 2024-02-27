@@ -5,7 +5,8 @@ extern class SpriteItem extends nanofl.engine.libraryitems.SpriteItem implements
 	override function save(fileSystem:nanofl.ide.sys.FileSystem):Void;
 	override function preload():js.lib.Promise<{ }>;
 	override function createDisplayObject(initFrameIndex:Int, childFrameIndexes:Array<{ public var frameIndex(default, default) : Int; public var element(default, default) : nanofl.engine.IPathElement; }>):easeljs.display.DisplayObject;
-	function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String):nanofl.ide.libraryitems.IIdeLibraryItem;
+	function getDataToSaveBeforeCleanDestDirectoryAndPublish(fileSystem:nanofl.ide.sys.FileSystem, destLibraryDir:String):Dynamic;
+	function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String, savedData:Dynamic):nanofl.ide.libraryitems.IIdeLibraryItem;
 	function getUsedSymbolNamePaths():Array<String>;
 	function getFilePathToRunWithEditor():String;
 	function getLibraryFilePaths():Array<String>;

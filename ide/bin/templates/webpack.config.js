@@ -23,11 +23,16 @@ module.exports = {
             name: 'window',
         },
         filename: 'application.js',
-        path: __dirname + "/scripts",
+        path: __dirname + "/../{project}.release/scripts",
     },
 
 	externals: {
 		"three": "THREE",
         "three/addons/loaders/GLTFLoader.js" : "THREE_addons_GLTFLoader",
 	}
+	
+	devServer: {
+        static: __dirname + "/../{project}.release",
+        open: true,
+    },
 };

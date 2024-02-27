@@ -8,7 +8,8 @@ extern class BitmapItem extends nanofl.engine.libraryitems.BitmapItem implements
 	function getFilePathToRunWithEditor():String;
 	function getLibraryFilePaths():Array<String>;
 	function getUrl():String;
-	function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String):nanofl.ide.libraryitems.IIdeLibraryItem;
+	function getDataToSaveBeforeCleanDestDirectoryAndPublish(fileSystem:nanofl.ide.sys.FileSystem, destLibraryDir:String):Dynamic;
+	function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String, savedData:Dynamic):nanofl.ide.libraryitems.IIdeLibraryItem;
 	function getUsedSymbolNamePaths():Array<String>;
 	static function parse(namePath:String, itemNode:htmlparser.HtmlNodeElement):nanofl.ide.libraryitems.BitmapItem;
 }

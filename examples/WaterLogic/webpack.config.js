@@ -1,7 +1,6 @@
 module.exports = {
 	mode: 'development',
-    devtool: false,
-
+    
     entry: './src/application.ts',
     
     module: {
@@ -24,6 +23,16 @@ module.exports = {
             name: 'window',
         },
         filename: 'application.js',
-        path: __dirname + "/scripts",
+        path: __dirname + "/../WaterLogic.release/scripts",
+    },
+
+	externals: {
+		"three": "THREE",
+        "three/addons/loaders/GLTFLoader.js" : "THREE_addons_GLTFLoader",
+	},
+	
+	devServer: {
+        static: __dirname + "/../WaterLogic.release",
+        open: true,
     },
 };
