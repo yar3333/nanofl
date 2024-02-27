@@ -169,8 +169,8 @@ class LibraryItems
 		{
 			var obj = (cast item:InstancableItem).createDisplayObject(0, null);
 			var bounds =  DisplayObjectTools.getInnerBounds(obj);
-			out.attr("width",  bounds.width);
-			out.attr("height", bounds.height);
+			out.attr("width",  bounds?.width ?? 0);
+			out.attr("height", bounds?.height ?? 0);
 		}
 		
 		LibraryItems.saveToXml(items, out);
