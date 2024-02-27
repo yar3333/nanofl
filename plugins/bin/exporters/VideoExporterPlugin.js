@@ -11,6 +11,7 @@ var Main = function() { };
 Main.__name__ = true;
 Main.main = function() {
 	nanofl.ide.plugins.ExporterPlugins.register(new Mp4VideoExporterPlugin());
+	nanofl.ide.plugins.ExporterPlugins.register(new WebmVideoExporterPlugin());
 };
 Math.__name__ = true;
 var Mp4VideoExporterPlugin = function() {
@@ -25,16 +26,16 @@ var Mp4VideoExporterPlugin = function() {
 Mp4VideoExporterPlugin.__name__ = true;
 Mp4VideoExporterPlugin.prototype = {
 	exportDocument: function(api,args) {
-		return VideoExporter.run(api.fileSystem,api.processManager,api.folders,args.destFilePath,args.documentProperties,args.library);
+		return VideoExporter.run(api.fileSystem,api.processManager,api.folders,args.destFilePath,args.documentProperties,args.library,"libx264");
 	}
 };
 var VideoExporter = function() { };
 VideoExporter.__name__ = true;
-VideoExporter.run = function(fileSystem,processManager,folders,destFilePath,documentProperties,library) {
+VideoExporter.run = function(fileSystem,processManager,folders,destFilePath,documentProperties,library,videoCodec) {
 	if(fileSystem.exists(destFilePath)) {
 		fileSystem.deleteFile(destFilePath);
 	}
-	var args = ["-f","rawvideo","-pixel_format","rgb24","-video_size",documentProperties.width + "x" + documentProperties.height,"-framerate",documentProperties.framerate + "","-i","pipe:0","-c:v","libx264",destFilePath];
+	var args = ["-f","rawvideo","-pixel_format","rgb24","-video_size",documentProperties.width + "x" + documentProperties.height,"-framerate",documentProperties.framerate + "","-i","pipe:0","-c:v",videoCodec,destFilePath];
 	var dataOut = new Uint8Array(documentProperties.width * documentProperties.height * 3);
 	var sceneFramesIterator = library.getSceneFramesIterator(documentProperties,true);
 	try {
@@ -69,6 +70,21 @@ VideoExporter.run = function(fileSystem,processManager,folders,destFilePath,docu
 		var e = haxe_Exception.caught(_g);
 		$global.console.error(e);
 		return Promise.resolve(false);
+	}
+};
+var WebmVideoExporterPlugin = function() {
+	this.properties = null;
+	this.fileDefaultExtension = "webm";
+	this.fileFilterExtensions = ["webm"];
+	this.fileFilterDescription = "WEBM Video (*.webm)";
+	this.menuItemIcon = "custom-icon-film";
+	this.menuItemName = "WEBM Video (*.webm)";
+	this.name = "WebmVideoExporter";
+};
+WebmVideoExporterPlugin.__name__ = true;
+WebmVideoExporterPlugin.prototype = {
+	exportDocument: function(api,args) {
+		return VideoExporter.run(api.fileSystem,api.processManager,api.folders,args.destFilePath,args.documentProperties,args.library,"libvpx");
 	}
 };
 var haxe_Exception = function(message,previous,native) {

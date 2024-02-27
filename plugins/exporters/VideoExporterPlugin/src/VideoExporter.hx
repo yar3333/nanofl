@@ -14,7 +14,7 @@ using StringTools;
 
 class VideoExporter
 {
-	public static function run(fileSystem:FileSystem, processManager:ProcessManager, folders:Folders, destFilePath:String, documentProperties:DocumentProperties, library:IdeLibrary) : Promise<Bool>
+	public static function run(fileSystem:FileSystem, processManager:ProcessManager, folders:Folders, destFilePath:String, documentProperties:DocumentProperties, library:IdeLibrary, videoCodec:String) : Promise<Bool>
 	{
         if (fileSystem.exists(destFilePath)) fileSystem.deleteFile(destFilePath);
 
@@ -25,7 +25,7 @@ class VideoExporter
             "-video_size", documentProperties.width + "x" + documentProperties.height,
             "-framerate", documentProperties.framerate + "",
             "-i", "pipe:0",
-            "-c:v", "libx264", //"-crf", "0",
+            "-c:v", videoCodec,
             destFilePath
         ];
             
