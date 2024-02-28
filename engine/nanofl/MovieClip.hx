@@ -3,15 +3,17 @@ package nanofl;
 import easeljs.display.Container;
 import easeljs.display.DisplayObject;
 import easeljs.events.MouseEvent;
-import easeljs.display.Sprite;
 import nanofl.engine.IPathElement;
 import nanofl.engine.LayerType;
 import nanofl.engine.libraryitems.MovieClipItem;
 import stdlib.Debug;
 using stdlib.StringTools;
+using stdlib.Lambda;
 
 @:expose
-class MovieClip extends Container implements IEventHandlers
+class MovieClip extends Container 
+    implements IEventHandlers
+    implements AdvancableDisplayObject
 {
 	var layerOfChild : Map<DisplayObject, Int>;
 	
@@ -206,7 +208,7 @@ class MovieClip extends Container implements IEventHandlers
 		var movieClipChanged = false;
 		
 		var createdDisplayObjects = new Array<DisplayObject>();
-		var keepedChildMovieClips = new Array<AdvancableDisplayObject>();
+		var keepedAdvancableChildren = new Array<AdvancableDisplayObject>();
 		
 		for (i in 0...symbol.layers.length)
 		{
@@ -218,22 +220,19 @@ class MovieClip extends Container implements IEventHandlers
 			
 			if (oldFrame != null && newFrame != null && oldFrame.keyFrame == newFrame.keyFrame)
 			{
-				if (newFrame.keyFrame.hasMotionTween())
-				{
-					var tweenedElements = layer.getTweenedElements(frameIndex);
-					var layerChildren = getLayerChildren(i);
-					Debug.assert(tweenedElements.length == layerChildren.length, "tweenedElements.length=" + tweenedElements.length + " != layerChildren.length=" + layerChildren.length);
-					for (i in 0...tweenedElements.length)
-					{
-						tweenedElements[i].current.updateDisplayObject(layerChildren[i], null);
-						layerChildren[i].visible = layer.type == LayerType.normal;
-						if (Std.isOfType(tweenedElements[i].current, MovieClip) || Std.isOfType(tweenedElements[i].current, Sprite))
-						{
-							keepedChildMovieClips.push(cast tweenedElements[i].current);
-						}
-					}
-					layerChanged = true;
-				}
+                var tweenedElements = layer.getTweenedElements(frameIndex);
+                var layerChildren = getLayerChildren(i);
+                Debug.assert(tweenedElements.length == layerChildren.length, "tweenedElements.length=" + tweenedElements.length + " != layerChildren.length=" + layerChildren.length);
+                for (i in 0...tweenedElements.length)
+                {
+                    tweenedElements[i].current.updateDisplayObject(layerChildren[i], null);
+                    layerChildren[i].visible = layer.type == LayerType.normal;
+                    if (Std.isOfType(layerChildren[i], AdvancableDisplayObject))
+                    {
+                        keepedAdvancableChildren.push((cast layerChildren[i] : AdvancableDisplayObject));
+                    }
+                }
+                layerChanged = true;
 			}
 			else
 			if (oldFrame != null || newFrame != null)
@@ -284,7 +283,7 @@ class MovieClip extends Container implements IEventHandlers
 		
 		for (obj in createdDisplayObjects) DisplayObjectTools.callMethod(obj, "init");
 		
-		return keepedChildMovieClips;
+		return keepedAdvancableChildren;
 	}
 	
 	function getFrameIndexByLabel(labelOrIndex:Dynamic) : Int
@@ -302,7 +301,7 @@ class MovieClip extends Container implements IEventHandlers
 		return null;
 	}
 	
-	public function advance()
+	public function advance(?time:Float)
 	{
 		var childrenToAdvance : Array<AdvancableDisplayObject> = null;
 		

@@ -119,7 +119,7 @@ class MovieClipItem	extends InstancableItem
 		}
 		else
 		{
-			return !likeButton ? new easeljs.display.Sprite(spriteSheet, initFrameIndex) : new nanofl.SpriteButton(spriteSheet);
+			return !likeButton ? new nanofl.Sprite(spriteSheet, initFrameIndex) : new nanofl.SpriteButton(spriteSheet);
 		}
 	}
 	
@@ -131,7 +131,7 @@ class MovieClipItem	extends InstancableItem
 		}
 		else
 		{
-            //Debug.assert(Std.isOfType(dispObj, easeljs.display.Sprite));
+            //Debug.assert(Std.isOfType(dispObj, nanofl.Sprite));
         }
     }
 

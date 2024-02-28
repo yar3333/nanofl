@@ -157,7 +157,7 @@ class MeshItem extends InstancableItem implements ITextureItem
 			var spriteSheet = TextureAtlasTools.getSpriteSheet(this);
 			r =  spriteSheet == null
 				? new nanofl.Mesh(this)
-				: new easeljs.display.Sprite(spriteSheet);
+				: new nanofl.Sprite(spriteSheet);
 		}
 		
 		//r.setBounds(0, 0, image.width, image.height);

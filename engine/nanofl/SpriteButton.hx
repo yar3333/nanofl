@@ -1,7 +1,6 @@
 package nanofl;
 
 import easeljs.events.MouseEvent;
-import easeljs.display.Sprite;
 import easeljs.display.SpriteSheet;
 
 @:expose
