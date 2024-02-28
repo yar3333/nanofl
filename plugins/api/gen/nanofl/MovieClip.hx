@@ -1,6 +1,6 @@
 package nanofl;
 
-extern class MovieClip extends easeljs.display.Container implements nanofl.IEventHandlers {
+extern class MovieClip extends easeljs.display.Container implements nanofl.AdvancableDisplayObject implements nanofl.IEventHandlers {
 	function new(symbol:nanofl.engine.libraryitems.MovieClipItem, initFrameIndex:Int, childFrameIndexes:Array<{ public var frameIndex(default, default) : Int; public var element(default, default) : nanofl.engine.IPathElement; }>):Void;
 	var symbol(default, null) : nanofl.engine.libraryitems.MovieClipItem;
 	var currentFrame(default, null) : Int;
@@ -23,7 +23,7 @@ extern class MovieClip extends easeljs.display.Container implements nanofl.IEven
 			 
 	**/
 	function gotoFrame(labelOrIndex:Dynamic):Array<nanofl.AdvancableDisplayObject>;
-	function advance():Void;
+	function advance(?time:Float):Void;
 	override function clone(?recursive:Bool):nanofl.MovieClip;
 	override function toString():String;
 	function onEnterFrame():Void;

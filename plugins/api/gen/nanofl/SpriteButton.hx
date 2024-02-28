@@ -1,5 +1,5 @@
 package nanofl;
 
-extern class SpriteButton extends easeljs.display.Sprite {
+extern class SpriteButton extends nanofl.Sprite {
 	function new(spriteSheet:easeljs.display.SpriteSheet):Void;
 }

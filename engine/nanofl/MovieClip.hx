@@ -312,11 +312,9 @@ class MovieClip extends Container
 		
 		if (childrenToAdvance == null)
 		{
-			for (child in children)
+			for (child in children.filterByType(AdvancableDisplayObject))
 			{
-				if (Std.isOfType(child, MovieClip)) (cast child:MovieClip).advance();
-				else
-				if (Std.isOfType(child, Sprite)) (cast child:Sprite).advance();
+				child.advance();
 			}
 		}
 		else

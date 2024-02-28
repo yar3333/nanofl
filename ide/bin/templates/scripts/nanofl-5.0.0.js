@@ -1776,15 +1776,11 @@ class nanofl_MovieClip extends createjs.Container {
 		}
 		if(childrenToAdvance == null) {
 			let _g = 0;
-			let _g1 = this.children;
+			let _g1 = stdlib_LambdaIterable.filterByType(this.children,nanofl_AdvancableDisplayObject);
 			while(_g < _g1.length) {
 				let child = _g1[_g];
 				++_g;
-				if(((child) instanceof nanofl_MovieClip)) {
-					child.advance();
-				} else if(((child) instanceof nanofl_Sprite)) {
-					child.advance();
-				}
+				child.advance();
 			}
 		} else {
 			let _g = 0;
@@ -8778,6 +8774,17 @@ class stdlib_LambdaIterable {
 			++n;
 		}
 		return -1;
+	}
+	static filterByType(it,klass) {
+		let r = [];
+		let x = $getIterator(it);
+		while(x.hasNext()) {
+			let x1 = x.next();
+			if(js_Boot.__instanceof(x1,klass)) {
+				r.push(x1);
+			}
+		}
+		return r;
 	}
 }
 stdlib_LambdaIterable.__name__ = "stdlib.LambdaIterable";

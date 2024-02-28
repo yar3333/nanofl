@@ -1,5 +1,10 @@
 package nanofl;
 
-typedef AdvancableDisplayObject = {
-	function advance():Void;
-};
+interface AdvancableDisplayObject {
+	/**
+		
+		        `time` is ignored.
+		    
+	**/
+	function advance(?time:Float):Void;
+}
