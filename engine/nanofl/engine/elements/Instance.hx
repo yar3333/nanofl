@@ -184,15 +184,7 @@ class Instance extends Element
 		}
 		
 		var dispObj = symbol.createDisplayObject(initFrameIndex, frameIndexes);
-		updateDisplayObjectProperties(dispObj);
-		updateDisplayObjectInstanceProperties(dispObj);
-		return dispObj;
-	}
-	
-	public function updateDisplayObject(dispObj:easeljs.display.DisplayObject, frameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : easeljs.display.DisplayObject
-	{
-		updateDisplayObjectProperties(dispObj);
-		symbol.updateDisplayObject(dispObj, frameIndexes);
+		updateDisplayObjectBaseProperties(dispObj);
 		updateDisplayObjectInstanceProperties(dispObj);
 		return dispObj;
 	}

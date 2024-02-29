@@ -166,9 +166,7 @@ abstract class Element
 	
 	public abstract function createDisplayObject(frameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : easeljs.display.DisplayObject;
 	
-	public abstract function updateDisplayObject(dispObj:easeljs.display.DisplayObject, frameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : easeljs.display.DisplayObject;
-	
-	function updateDisplayObjectProperties(dispObj:easeljs.display.DisplayObject)
+	function updateDisplayObjectBaseProperties(dispObj:easeljs.display.DisplayObject)
 	{
 		dispObj.visible = visible;
 		dispObj.set(matrix.decompose());

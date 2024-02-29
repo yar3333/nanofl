@@ -141,7 +141,9 @@ abstract class EditorElement implements ISelectable
 	
 	public function update()
 	{
-		currentElement.updateDisplayObject(dispObj, null);
+        final n = metaDispObj.children.indexOf(dispObj);
+        metaDispObj.removeChildAt(n);
+        metaDispObj.addChildAt(dispObj = originalElement.createDisplayObject(null), n);
 		updateTransformations();
 	}
 	

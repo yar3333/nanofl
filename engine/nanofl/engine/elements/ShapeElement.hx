@@ -231,21 +231,14 @@ class ShapeElement extends Element
 		StrokeEdges.drawSorted(edges, g, scaleSelection);
 	}
 	
-	public function createDisplayObject(frameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : easeljs.display.Shape
+	function createDisplayObject(frameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : easeljs.display.Shape
 	{
-		return updateDisplayObject(new easeljs.display.Shape(), null);
-	}
-	
-	function updateDisplayObject(dispObj:easeljs.display.DisplayObject, frameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : easeljs.display.Shape
-	{
-		stdlib.Debug.assert(Std.isOfType(dispObj, easeljs.display.Shape));
+        final shape = new easeljs.display.Shape();
 		
-		updateDisplayObjectProperties(dispObj);
-		
-		var shape : easeljs.display.Shape = cast dispObj;
+		updateDisplayObjectBaseProperties(shape);
 		
 		shape.graphics.clear();
-		var m = dispObj.getConcatenatedMatrix().invert();
+		var m = shape.getConcatenatedMatrix().invert();
 		draw(shape.graphics, (m.a + m.d) / 2);
 		
 		if (!isEmpty())

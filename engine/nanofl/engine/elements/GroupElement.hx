@@ -132,26 +132,16 @@ class GroupElement extends Element
 	
 	public function createDisplayObject(frameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : easeljs.display.DisplayObject
 	{
-		return updateDisplayObject(new easeljs.display.Container(), frameIndexes);
-	}
-	
-	public function updateDisplayObject(dispObj:easeljs.display.DisplayObject, frameIndexes:Array<{ element:IPathElement, frameIndex:Int }>)
-	{
-		Debug.assert(Std.isOfType(dispObj, easeljs.display.Container), toString());
+        final container = new easeljs.display.Container();
+
 		Debug.assert(elements.length > 0, toString());
 		
 		if (frameIndexes != null && frameIndexes.length > 0 && frameIndexes[0].element == this)
-		{
 			frameIndexes = frameIndexes.slice(1);
-		}
 		else
-		{
 			frameIndexes = null;
-		}
 		
-		updateDisplayObjectProperties(dispObj);
-		
-		var container : easeljs.display.Container = cast dispObj;
+		updateDisplayObjectBaseProperties(container);
 		
 		container.removeAllChildren();
 		
