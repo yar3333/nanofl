@@ -10,15 +10,15 @@ import nanofl.engine.elements.ShapeElement;
 
 class MovieClipItemTools
 {
-    public static function findShapes(item:MovieClipItem, allFrames:Bool, ?matrix:Matrix, callb:ShapeElement->{ item:MovieClipItem, layerIndex:Int, matrix:Matrix, insideMask:Bool }->Void)
+    public static function findShapes(item:MovieClipItem, allFrames:Bool, ?matrix:Matrix, callb:ShapeElement->{ item:MovieClipItem, layerIndex:Int, matrix:Matrix, insideMask:Bool }->Void) : Void
     {
         if (matrix == null) matrix = new Matrix();
         
         findShapesInner(item, allFrames, matrix, false, callb);
-        findMovieClipItems(item, allFrames, matrix, function(item, matrix, insideMask) findShapesInner(item, allFrames, matrix, insideMask, callb));
+        findMovieClipItems(item, allFrames, matrix, (item, matrix, insideMask) -> findShapesInner(item, allFrames, matrix, insideMask, callb));
     }
         
-    static function findShapesInner(item:MovieClipItem, allFrames:Bool, matrix:Matrix, insideMask:Bool, callb:ShapeElement->{ item:MovieClipItem, layerIndex:Int, keyFrameIndex:Int, matrix:Matrix, insideMask:Bool }->Void)
+    static function findShapesInner(item:MovieClipItem, allFrames:Bool, matrix:Matrix, insideMask:Bool, callb:ShapeElement->{ item:MovieClipItem, layerIndex:Int, keyFrameIndex:Int, matrix:Matrix, insideMask:Bool }->Void) : Void
     {
         iterateElements(item, allFrames, insideMask, (element:Element, e) ->
         {
@@ -29,7 +29,7 @@ class MovieClipItemTools
         });
     }
         
-    public static function findMovieClipItems(item:MovieClipItem, allFrames:Bool, ?matrix:Matrix, callb:MovieClipItem->Matrix->Bool->Void)
+    public static function findMovieClipItems(item:MovieClipItem, allFrames:Bool, ?matrix:Matrix, callb:MovieClipItem->Matrix->Bool->Void) : Void
     {
         findInstances(item, allFrames, matrix, (instance:Instance, e) ->
         {
@@ -53,7 +53,7 @@ class MovieClipItemTools
             }
         });
     }
-    
+
     public static function getInstances(item:MovieClipItem) : Array<Instance>
     {
         var r = new Array<Instance>();
