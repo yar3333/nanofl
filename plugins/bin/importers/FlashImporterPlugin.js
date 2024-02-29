@@ -3724,12 +3724,6 @@ nanofl_engine_IElementsContainer.__isInterface__ = true;
 nanofl_engine_IElementsContainer.prototype = {
 	__class__: nanofl_engine_IElementsContainer
 };
-var nanofl_engine_IFramedItem = function() { };
-nanofl_engine_IFramedItem.__name__ = "nanofl.engine.IFramedItem";
-nanofl_engine_IFramedItem.__isInterface__ = true;
-nanofl_engine_IFramedItem.prototype = {
-	__class__: nanofl_engine_IFramedItem
-};
 var nanofl_engine_ILayersContainer = function() { };
 nanofl_engine_ILayersContainer.__name__ = "nanofl.engine.ILayersContainer";
 nanofl_engine_ILayersContainer.__isInterface__ = true;
@@ -3760,12 +3754,6 @@ nanofl_engine_ISelectable.__name__ = "nanofl.engine.ISelectable";
 nanofl_engine_ISelectable.__isInterface__ = true;
 nanofl_engine_ISelectable.prototype = {
 	__class__: nanofl_engine_ISelectable
-};
-var nanofl_engine_ISpriteSheetableItem = function() { };
-nanofl_engine_ISpriteSheetableItem.__name__ = "nanofl.engine.ISpriteSheetableItem";
-nanofl_engine_ISpriteSheetableItem.__isInterface__ = true;
-nanofl_engine_ISpriteSheetableItem.prototype = {
-	__class__: nanofl_engine_ISpriteSheetableItem
 };
 var nanofl_engine_ITextureItem = function() { };
 nanofl_engine_ITextureItem.__name__ = "nanofl.engine.ITextureItem";

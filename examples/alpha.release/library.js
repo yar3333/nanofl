@@ -466,8 +466,8 @@ libraryData =
       {
         "name": "bottle",
         "type": "normal",
-        "visible": true,
-        "locked": false,
+        "visible": false,
+        "locked": true,
         "keyFrames": [
           {
             "label": "",
@@ -506,7 +506,7 @@ libraryData =
         "name": "mask",
         "type": "mask",
         "visible": true,
-        "locked": false,
+        "locked": true,
         "keyFrames": [
           {
             "label": "",
@@ -551,7 +551,7 @@ libraryData =
         "name": "water",
         "type": "normal",
         "visible": true,
-        "locked": false,
+        "locked": true,
         "parentIndex": 1,
         "keyFrames": [
           {

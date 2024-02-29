@@ -14,6 +14,7 @@ class Code extends components.nanofl.popups.basepopup.Code
 	{
 		this.item = item;
 		
+		template().loop.prop("checked", item.loop);
 		template().linkage.val(item.linkage);
 		
 		showPopup();
@@ -23,6 +24,7 @@ class Code extends components.nanofl.popups.basepopup.Code
 	{
 		app.document.undoQueue.beginTransaction({ libraryChangeItems:[ item.namePath ] });
 		
+		item.loop = template().loop.prop("checked");
 		item.linkage = template().linkage.val();
 		
 		app.document.undoQueue.commitTransaction();

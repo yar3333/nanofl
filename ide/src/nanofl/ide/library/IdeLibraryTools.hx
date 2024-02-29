@@ -113,8 +113,8 @@ class IdeLibraryTools
             MovieClipItemTools.getUsedNamePaths(mc, true, useTextureAtlases, usedNamePaths);
         }
 
+        usedNamePaths = usedNamePaths.concat(library.getSoundsAsIde().filter(x -> x.linkage != "" && !usedNamePaths.contains(x.namePath)).map(x -> x.namePath));
         usedNamePaths = usedNamePaths.concat(library.getFontItemsAsIde().map(x -> x.namePath));
-        usedNamePaths = usedNamePaths.concat(library.getSoundsAsIde().filter(x -> x.linkage != "").map(x -> x.namePath));
 
         final folderNamePaths = library.getItemsAsIde().filterByType(FolderItem).map(x -> x.namePath);
         while (true)

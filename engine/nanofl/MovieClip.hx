@@ -39,6 +39,14 @@ class MovieClip extends Container
 		
 		paused = !symbol.autoPlay;
 		loop = symbol.loop;
+
+        #if !ide
+        if (cast symbol.relatedSound)
+        {
+            final sound : nanofl.engine.libraryitems.SoundItem = cast Player.library.getItem(symbol.relatedSound);
+            sound.play();
+        }
+        #end
 	}
 	
 	public function addChildToLayer(child:DisplayObject, layerIndex:Int) : DisplayObject

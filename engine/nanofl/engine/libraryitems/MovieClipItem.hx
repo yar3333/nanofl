@@ -31,8 +31,6 @@ class MovieClipItem	extends InstancableItem
 	implements ILayersContainer
 	implements ITimeline
 	implements ITextureItem
-	implements ISpriteSheetableItem
-	implements IFramedItem
 {
 	function get_type() return LibraryItemType.movieclip;
 	
@@ -44,6 +42,8 @@ class MovieClipItem	extends InstancableItem
 	
 	public var likeButton = false;
 	public var textureAtlas : String;
+
+    public var relatedSound : String;
 
     /**
         Build `SpriteSheet` on-the-fly (every frame of movie clip become bitmap in SpriteSheet)
@@ -96,6 +96,7 @@ class MovieClipItem	extends InstancableItem
 		obj.loop = loop;
 		obj.exportAsSprite = exportAsSprite;
 		obj.textureAtlas = textureAtlas;
+		obj.relatedSound = relatedSound;
 	}
 	
 	public function getIcon()
@@ -209,6 +210,7 @@ class MovieClipItem	extends InstancableItem
 		if ((cast item:MovieClipItem).likeButton != likeButton) return false;
 		if ((cast item:MovieClipItem).exportAsSprite != exportAsSprite) return false;
 		if ((cast item:MovieClipItem).textureAtlas != textureAtlas) return false;
+		if ((cast item:MovieClipItem).relatedSound != relatedSound) return false;
 		
 		return true;
 	}
@@ -226,10 +228,7 @@ class MovieClipItem	extends InstancableItem
 				}
 			}
 		}
-		points.sort((a, b) ->
-		{
-			return Reflect.compare(PointTools.getDistP(pos, a), PointTools.getDistP(pos, b));
-		});
+		points.sort((a, b) -> Reflect.compare(PointTools.getDistP(pos, a), PointTools.getDistP(pos, b)));
 		return points.length > 0 ? points[0] : { x:1e100, y:1e100 };
 	}
 	
@@ -277,6 +276,7 @@ class MovieClipItem	extends InstancableItem
 		xml.attr("likeButton", likeButton, false);
 		xml.attr("exportAsSprite", exportAsSprite, false);
 		xml.attr("textureAtlas", textureAtlas, null);
+		xml.attr("relatedSound", relatedSound, "");
 		
 		for (layer in layers) layer.save(xml);
     }
@@ -291,6 +291,7 @@ class MovieClipItem	extends InstancableItem
 		obj.likeButton = likeButton ?? false;
 		obj.exportAsSprite = exportAsSprite ?? false;
 		obj.textureAtlas = textureAtlas ?? null;
+		obj.relatedSound = relatedSound ?? "";
 		
 		obj.layers = layers.map(x -> x.saveJson());
     }
@@ -308,6 +309,7 @@ class MovieClipItem	extends InstancableItem
 		likeButton = xml.getAttr("likeButton", false);
 		exportAsSprite = xml.getAttr("exportAsSprite", false);
 		textureAtlas = xml.getAttr("textureAtlas", null);
+		relatedSound = xml.getAttr("relatedSound", "");
 
 		addLayersBlock
         (
@@ -333,6 +335,7 @@ class MovieClipItem	extends InstancableItem
         likeButton = obj.likeButton;
         exportAsSprite = obj.exportAsSprite;
         textureAtlas = obj.textureAtlas;
+        relatedSound = obj.relatedSound ?? "";
 
 		addLayersBlock
         (

@@ -1527,6 +1527,10 @@ class nanofl_MovieClip extends createjs.Container {
 		symbol.updateDisplayObject(this,childFrameIndexes);
 		this.paused = !symbol.autoPlay;
 		this.loop = symbol.loop;
+		if(symbol.relatedSound) {
+			let sound = nanofl_Player.library.getItem(symbol.relatedSound);
+			sound.play();
+		}
 	}
 	addChildToLayer(child,layerIndex) {
 		this.layerOfChild.set(child,layerIndex);
@@ -1644,7 +1648,7 @@ class nanofl_MovieClip extends createjs.Container {
 			if(oldFrame != null && newFrame != null && oldFrame.keyFrame == newFrame.keyFrame) {
 				let tweenedElements = layer.getTweenedElements(frameIndex);
 				let layerChildren = this.getLayerChildren(i);
-				stdlib_Debug.assert(tweenedElements.length == layerChildren.length,"tweenedElements.length=" + tweenedElements.length + " != layerChildren.length=" + layerChildren.length,{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 227, className : "nanofl.MovieClip", methodName : "gotoFrame"});
+				stdlib_Debug.assert(tweenedElements.length == layerChildren.length,"tweenedElements.length=" + tweenedElements.length + " != layerChildren.length=" + layerChildren.length,{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 235, className : "nanofl.MovieClip", methodName : "gotoFrame"});
 				let _g = 0;
 				let _g1 = tweenedElements.length;
 				while(_g < _g1) {
@@ -1654,7 +1658,7 @@ class nanofl_MovieClip extends createjs.Container {
 					if(dispObj.visible) {
 						let tweenedElement = tweenedElements[i];
 						if(tweenedElement.current != tweenedElement.original) {
-							stdlib_Debug.assert(((tweenedElement.current) instanceof nanofl_engine_elements_Instance),null,{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 240, className : "nanofl.MovieClip", methodName : "gotoFrame"});
+							stdlib_Debug.assert(((tweenedElement.current) instanceof nanofl_engine_elements_Instance),null,{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 248, className : "nanofl.MovieClip", methodName : "gotoFrame"});
 							tweenedElement.current.updateDisplayObjectTweenedProperties(dispObj);
 						}
 					}
@@ -3788,10 +3792,6 @@ nanofl_engine_GroupKeyFrame.__super__ = nanofl_engine_movieclip_KeyFrame;
 Object.assign(nanofl_engine_GroupKeyFrame.prototype, {
 	__class__: nanofl_engine_GroupKeyFrame
 });
-class nanofl_engine_IFramedItem {
-}
-nanofl_engine_IFramedItem.__name__ = "nanofl.engine.IFramedItem";
-nanofl_engine_IFramedItem.__isInterface__ = true;
 class nanofl_engine_ILayersContainer {
 }
 nanofl_engine_ILayersContainer.__name__ = "nanofl.engine.ILayersContainer";
@@ -3822,10 +3822,6 @@ class nanofl_engine_ISelectable {
 }
 nanofl_engine_ISelectable.__name__ = "nanofl.engine.ISelectable";
 nanofl_engine_ISelectable.__isInterface__ = true;
-class nanofl_engine_ISpriteSheetableItem {
-}
-nanofl_engine_ISpriteSheetableItem.__name__ = "nanofl.engine.ISpriteSheetableItem";
-nanofl_engine_ISpriteSheetableItem.__isInterface__ = true;
 class nanofl_engine_ITextureItem {
 }
 nanofl_engine_ITextureItem.__name__ = "nanofl.engine.ITextureItem";
@@ -3926,34 +3922,41 @@ class nanofl_engine_Library {
 		if(Object.prototype.hasOwnProperty.call(_this.h,namePath)) {
 			delete(_this.h[namePath]);
 		}
-		if(((itemToRemove) instanceof nanofl_engine_libraryitems_InstancableItem)) {
-			let instances = [];
-			let h = this.items.h;
-			let item_h = h;
-			let item_keys = Object.keys(h);
-			let item_length = item_keys.length;
-			let item_current = 0;
-			while(item_current < item_length) {
-				let item = item_h[item_keys[item_current++]];
-				if(((item) instanceof nanofl_engine_libraryitems_MovieClipItem)) {
-					nanofl_engine_MovieClipItemTools.iterateInstances(item,true,null,function(instance,_) {
-						if(instance.namePath == namePath) {
-							instances.push(instance);
-						}
-					});
+		let h = this.items.h;
+		let item_h = h;
+		let item_keys = Object.keys(h);
+		let item_length = item_keys.length;
+		let item_current = 0;
+		while(item_current < item_length) {
+			let item = item_h[item_keys[item_current++]];
+			if(((item) instanceof nanofl_engine_libraryitems_MovieClipItem)) {
+				let mcItem = item;
+				let _g = 0;
+				let _g1 = [];
+				let _g2 = 0;
+				let _g3 = nanofl_engine_MovieClipItemTools.getInstances(mcItem);
+				while(_g2 < _g3.length) {
+					let v = _g3[_g2];
+					++_g2;
+					if(v.namePath == namePath) {
+						_g1.push(v);
+					}
 				}
-			}
-			let _g = 0;
-			while(_g < instances.length) {
-				let instance = instances[_g];
-				++_g;
-				instance.parent.removeElement(instance);
+				let _g4 = _g1;
+				while(_g < _g4.length) {
+					let instance = _g4[_g];
+					++_g;
+					instance.parent.removeElement(instance);
+				}
+				if(mcItem.relatedSound == itemToRemove.namePath) {
+					mcItem.relatedSound = "";
+				}
 			}
 		}
 	}
 	getItem(namePath) {
-		stdlib_Debug.assert(namePath != null,null,{ fileName : "engine/nanofl/engine/Library.hx", lineNumber : 73, className : "nanofl.engine.Library", methodName : "getItem"});
-		stdlib_Debug.assert(namePath != "",null,{ fileName : "engine/nanofl/engine/Library.hx", lineNumber : 74, className : "nanofl.engine.Library", methodName : "getItem"});
+		stdlib_Debug.assert(namePath != null,null,{ fileName : "engine/nanofl/engine/Library.hx", lineNumber : 74, className : "nanofl.engine.Library", methodName : "getItem"});
+		stdlib_Debug.assert(namePath != "",null,{ fileName : "engine/nanofl/engine/Library.hx", lineNumber : 75, className : "nanofl.engine.Library", methodName : "getItem"});
 		let r = this.items.h[namePath];
 		if(r != null) {
 			return r;
@@ -4192,6 +4195,13 @@ Object.assign(nanofl_engine_MeshParams.prototype, {
 	__class__: nanofl_engine_MeshParams
 });
 class nanofl_engine_MovieClipItemTools {
+	static getInstances(item) {
+		let r = [];
+		nanofl_engine_MovieClipItemTools.iterateInstances(item,true,null,function(instance,_) {
+			r.push(instance);
+		});
+		return r;
+	}
 	static iterateInstances(item,allFrames,insideMask,callb) {
 		if(insideMask == null) {
 			insideMask = false;
@@ -7386,6 +7396,7 @@ class nanofl_engine_libraryitems_MovieClipItem extends nanofl_engine_libraryitem
 		obj.loop = this.loop;
 		obj.exportAsSprite = this.exportAsSprite;
 		obj.textureAtlas = this.textureAtlas;
+		obj.relatedSound = this.relatedSound;
 	}
 	createDisplayObject(initFrameIndex,childFrameIndexes) {
 		let r = super.createDisplayObject(initFrameIndex,childFrameIndexes);
@@ -7412,7 +7423,7 @@ class nanofl_engine_libraryitems_MovieClipItem extends nanofl_engine_libraryitem
 		if(this.exportAsSprite) {
 			return;
 		}
-		stdlib_Debug.assert(((dispObj) instanceof nanofl_MovieClip),null,{ fileName : "engine/nanofl/engine/libraryitems/MovieClipItem.hx", lineNumber : 130, className : "nanofl.engine.libraryitems.MovieClipItem", methodName : "updateDisplayObject"});
+		stdlib_Debug.assert(((dispObj) instanceof nanofl_MovieClip),null,{ fileName : "engine/nanofl/engine/libraryitems/MovieClipItem.hx", lineNumber : 131, className : "nanofl.engine.libraryitems.MovieClipItem", methodName : "updateDisplayObject"});
 		let movieClip = dispObj;
 		movieClip.removeAllChildren();
 		movieClip.alpha = 1.0;
@@ -7492,6 +7503,9 @@ class nanofl_engine_libraryitems_MovieClipItem extends nanofl_engine_libraryitem
 		if(item.textureAtlas != this.textureAtlas) {
 			return false;
 		}
+		if(item.relatedSound != this.relatedSound) {
+			return false;
+		}
 		return true;
 	}
 	setLibrary(library) {
@@ -7514,6 +7528,8 @@ class nanofl_engine_libraryitems_MovieClipItem extends nanofl_engine_libraryitem
 		this.likeButton = obj.likeButton;
 		this.exportAsSprite = obj.exportAsSprite;
 		this.textureAtlas = obj.textureAtlas;
+		let tmp = obj.relatedSound;
+		this.relatedSound = tmp != null ? tmp : "";
 		let _this = obj.layers;
 		let result = new Array(_this.length);
 		let _g = 0;
@@ -7548,7 +7564,7 @@ class nanofl_engine_libraryitems_MovieClipItem extends nanofl_engine_libraryitem
 	}
 }
 nanofl_engine_libraryitems_MovieClipItem.__name__ = "nanofl.engine.libraryitems.MovieClipItem";
-nanofl_engine_libraryitems_MovieClipItem.__interfaces__ = [nanofl_engine_IFramedItem,nanofl_engine_ISpriteSheetableItem,nanofl_engine_ITextureItem,nanofl_engine_ITimeline,nanofl_engine_ILayersContainer];
+nanofl_engine_libraryitems_MovieClipItem.__interfaces__ = [nanofl_engine_ITextureItem,nanofl_engine_ITimeline,nanofl_engine_ILayersContainer];
 nanofl_engine_libraryitems_MovieClipItem.__super__ = nanofl_engine_libraryitems_InstancableItem;
 Object.assign(nanofl_engine_libraryitems_MovieClipItem.prototype, {
 	__class__: nanofl_engine_libraryitems_MovieClipItem
@@ -7562,11 +7578,13 @@ class nanofl_engine_libraryitems_SoundItem extends nanofl_engine_libraryitems_Li
 	}
 	_hx_constructor(namePath,ext) {
 		this.linkage = "";
+		this.loop = false;
 		super._hx_constructor(namePath);
 		this.ext = ext;
 	}
 	clone() {
 		let obj = new nanofl_engine_libraryitems_SoundItem(this.namePath,this.ext);
+		obj.loop = this.loop;
 		obj.linkage = this.linkage;
 		this.copyBaseProperties(obj);
 		return obj;
@@ -7581,13 +7599,16 @@ class nanofl_engine_libraryitems_SoundItem extends nanofl_engine_libraryitems_Li
 		if(item.ext != this.ext) {
 			return false;
 		}
+		if(item.loop != this.loop) {
+			return false;
+		}
 		if(item.linkage != this.linkage) {
 			return false;
 		}
 		return true;
 	}
 	preload() {
-		stdlib_Debug.assert(this.linkage != null && this.linkage != "",null,{ fileName : "engine/nanofl/engine/libraryitems/SoundItem.hx", lineNumber : 53, className : "nanofl.engine.libraryitems.SoundItem", methodName : "preload"});
+		stdlib_Debug.assert(this.linkage != null && this.linkage != "",null,{ fileName : "engine/nanofl/engine/libraryitems/SoundItem.hx", lineNumber : 56, className : "nanofl.engine.libraryitems.SoundItem", methodName : "preload"});
 		let _gthis = this;
 		if(this.ext.toLowerCase() == "js") {
 			return nanofl_engine_SerializationAsJsTools.load(this.library,this.namePath,true).then(function(dataUri) {
@@ -7609,19 +7630,22 @@ class nanofl_engine_libraryitems_SoundItem extends nanofl_engine_libraryitems_Li
 				resolve(null);
 			});
 			_gthis.audio.src = uri;
+			_gthis.audio.loop = _gthis.loop;
 		});
 	}
 	play() {
-		stdlib_Debug.assert(this.audio != null,null,{ fileName : "engine/nanofl/engine/libraryitems/SoundItem.hx", lineNumber : 78, className : "nanofl.engine.libraryitems.SoundItem", methodName : "play"});
+		stdlib_Debug.assert(this.audio != null,null,{ fileName : "engine/nanofl/engine/libraryitems/SoundItem.hx", lineNumber : 82, className : "nanofl.engine.libraryitems.SoundItem", methodName : "play"});
 		let r = this.audio.cloneNode();
 		r.play();
 		return r;
 	}
 	loadPropertiesJson(obj) {
-		let tmp = obj.linkage;
-		this.linkage = tmp != null ? tmp : "";
-		let tmp1 = obj.ext;
-		this.ext = tmp1 != null ? tmp1 : "";
+		let tmp = obj.loop;
+		this.loop = tmp != null && tmp;
+		let tmp1 = obj.linkage;
+		this.linkage = tmp1 != null ? tmp1 : "";
+		let tmp2 = obj.ext;
+		this.ext = tmp2 != null ? tmp2 : "";
 	}
 	toString() {
 		return "SoundItem(" + this.namePath + ")";

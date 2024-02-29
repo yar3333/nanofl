@@ -5,13 +5,10 @@ import nanofl.engine.IPathElement;
 import datatools.ArrayTools;
 import htmlparser.HtmlNodeElement;
 import js.lib.Promise;
-import nanofl.engine.LayerType;
 import nanofl.engine.elements.Element;
 import nanofl.engine.movieclip.KeyFrame;
 import nanofl.engine.movieclip.Layer;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
-import stdlib.Debug;
-import stdlib.Std;
 using stdlib.Lambda;
 
 class MovieClipItem extends nanofl.engine.libraryitems.MovieClipItem

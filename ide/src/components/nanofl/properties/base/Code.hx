@@ -44,13 +44,13 @@ abstract class Code extends wquery.Component
 		
 		bind(PropertiesObject.NONE);
 		
-		template().container.on("click", ">fieldset>legend", function(e)
+		template().container.on("click", ">fieldset>legend", e ->
 		{
 			var legend = q(e.currentTarget);
 			var fieldset = legend.parent();
 			if (!fieldset.hasClass("collapsed"))
 			{
-				fieldset.animate({ height:legend.height() + 2 }, fieldset.height() * 2, "linear", function()
+				fieldset.animate({ height:legend.height() + 2 }, fieldset.height() * 2, "linear", () ->
 				{
 					fieldset.addClass("collapsed");
 				});
@@ -62,7 +62,7 @@ abstract class Code extends wquery.Component
 				fieldset.height(cast "auto");
 				var destHeight = fieldset.height();
 				fieldset.height(saveHeight);
-				fieldset.animate({ height:destHeight }, 500, function() fieldset.height(cast "auto"));
+				fieldset.animate({ height:destHeight }, 500, () -> fieldset.height(cast "auto"));
 			}
 		});
 	}

@@ -100,6 +100,8 @@ class MovieClipItemTools
     public static function getUsedNamePaths(item:MovieClipItem, deep:Bool, useTextureAtlases:Bool, ?r:Array<String>) : Array<String>
     {
         if (r == null) r = new Array<String>();
+
+        if (!stdlib.StringTools.isNullOrEmpty(item.relatedSound)) r.push(item.relatedSound);
         
         if (useTextureAtlases && item.textureAtlas != "" && item.textureAtlas != null) return r;
 

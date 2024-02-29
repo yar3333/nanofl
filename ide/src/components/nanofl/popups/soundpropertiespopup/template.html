@@ -1,19 +1,16 @@
-<style>
-	.~container .form-horizontal .controls { margin-left:100px; }
-	.~container .form-horizontal .control-label { width:90px; }
-</style>
-
 <wq-content for="title">Sound Properties</wq-content>
 
 <wq-content for="controls">
-	<form class="form-horizontal">
-		<div class="control-group">
-			
-			<label class="control-label" for="width">Linkage:</label>
-			<div class="controls">
-				<input type="text" id="linkage" />
-			</div>
-			
-		</div>
-	</form>
+	<table class="tableform" style="margin-left:0">
+		<tbody>
+            <tr>
+                <td></td>
+                <td><label class="checkbox"><input id="loop" type="checkbox">Loop</label></td>
+            </tr>
+            <tr>
+				<td><label for="linkage">Linkage:</label></td>
+				<td><input id="linkage" type="text"></td>
+			</tr>
+        </tbody>
+    </table>
 </wq-content>

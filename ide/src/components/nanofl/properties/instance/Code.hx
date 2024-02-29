@@ -1,6 +1,5 @@
 package components.nanofl.properties.instance;
 
-import js.JQuery;
 import nanofl.ide.PropertiesObject;
 using StringTools;
 
@@ -17,7 +16,7 @@ class Code extends components.nanofl.properties.base.Code
 		return namePathWidth;
 	}
 	
-	var lastOptions : String;
+	var lastNamePathOptions : String;
 
 	@:profile
 	function updateInner()
@@ -30,23 +29,22 @@ class Code extends components.nanofl.properties.base.Code
 				
 				template().name.val(item.element.name);
 				
-				var templateNamePath = template().namePath;
 				var width = namePathWidth - scrollBarWidth;
 				
 				var options = library.getItemsAsIde()
 					.filter(item -> editor.isItemCanBeAdded(item))
-					.map(function(item)
+					.map(item ->
 					{
 						return "<option value='" + item.namePath + "' style='width:" + width + "px' title='" + item.namePath + "'>" + item.namePath + "</option>";
 					})
 					.join("");
 				
-				if (options != lastOptions)
+				if (options != lastNamePathOptions)
 				{
-					templateNamePath.html(options);
-					lastOptions = options;
+                    template().namePath.html(options);
+					lastNamePathOptions = options;
 				}
-				templateNamePath.val(item.element.namePath);
+                template().namePath.val(item.element.namePath);
 				
 			case PropertiesObject.TEXT(item, _):
 				if (item != null)

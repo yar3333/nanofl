@@ -53,8 +53,15 @@ class MovieClipItemTools
             }
         });
     }
-
-    public static function iterateInstances(item:MovieClipItem, allFrames:Bool, insideMask=false, callb:Instance->{ layerIndex:Int, keyFrameIndex:Int, insideMask:Bool }->Void)
+    
+    public static function getInstances(item:MovieClipItem) : Array<Instance>
+    {
+        var r = new Array<Instance>();
+        iterateInstances(item, true, (instance, _) -> r.push(instance));
+        return r;
+    }
+    
+    static function iterateInstances(item:MovieClipItem, allFrames:Bool, insideMask=false, callb:Instance->{ layerIndex:Int, keyFrameIndex:Int, insideMask:Bool }->Void)
     {
         iterateElements(item, allFrames, insideMask, (element:Element, e) ->
         {

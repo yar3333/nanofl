@@ -1,6 +1,6 @@
 package nanofl.engine.libraryitems;
 
-extern class MovieClipItem extends nanofl.engine.libraryitems.InstancableItem implements nanofl.engine.IFramedItem implements nanofl.engine.ISpriteSheetableItem implements nanofl.engine.ITextureItem implements nanofl.engine.ITimeline implements nanofl.engine.ILayersContainer {
+extern class MovieClipItem extends nanofl.engine.libraryitems.InstancableItem implements nanofl.engine.ITextureItem implements nanofl.engine.ITimeline implements nanofl.engine.ILayersContainer {
 	function new(namePath:String):Void;
 	var _layers : Array<nanofl.engine.movieclip.Layer>;
 	var layers(get, never) : Array<nanofl.engine.movieclip.Layer>;
@@ -9,6 +9,7 @@ extern class MovieClipItem extends nanofl.engine.libraryitems.InstancableItem im
 	var loop : Bool;
 	var likeButton : Bool;
 	var textureAtlas : String;
+	var relatedSound : String;
 	/**
 		
 		        Build `SpriteSheet` on-the-fly (every frame of movie clip become bitmap in SpriteSheet)

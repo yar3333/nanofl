@@ -8,7 +8,6 @@ import nanofl.engine.elements.Instance;
 import nanofl.engine.Font;
 import datatools.ArrayTools;
 import nanofl.engine.ILibraryItem;
-import nanofl.engine.elements.Element;
 import nanofl.engine.elements.TextElement;
 import nanofl.engine.libraryitems.*;
 import stdlib.Debug;
@@ -51,20 +50,22 @@ class Library
         
         items.remove(namePath);
         
-        if (Std.isOfType(itemToRemove, InstancableItem))
+        for (item in items)
         {
-            var instances = new Array<Element>();
-            for (item in items)
+            if (Std.isOfType(item, MovieClipItem))
             {
-                if (Std.isOfType(item, MovieClipItem))
+                final mcItem : MovieClipItem = cast item;
+
+                for (instance in MovieClipItemTools.getInstances(mcItem).filter(x -> x.namePath == namePath))
                 {
-                    MovieClipItemTools.iterateInstances((cast item:MovieClipItem), true, (instance:Instance, _) ->
-                    {
-                        if (instance.namePath == namePath) instances.push(instance);
-                    });
+                    instance.parent.removeElement(instance);
+                }
+
+                if (mcItem.relatedSound == itemToRemove.namePath)
+                {
+                    mcItem.relatedSound = "";
                 }
             }
-            for (instance in instances) instance.parent.removeElement(instance);
         }
     }    
 

@@ -17,6 +17,7 @@ class SoundItem extends LibraryItem
 	
 	public var ext : String;
 	
+	public var loop = false;
 	public var linkage = "";
 
     public var audio(default, null) : Audio;
@@ -30,6 +31,7 @@ class SoundItem extends LibraryItem
 	public function clone() : SoundItem
 	{
 		var obj = new SoundItem(namePath, ext);
+		obj.loop = loop;
 		obj.linkage = linkage;
 		copyBaseProperties(obj);
 		return obj;
@@ -44,6 +46,7 @@ class SoundItem extends LibraryItem
 		if (item.namePath != namePath) return false;
 		if (!Std.isOfType(item, SoundItem)) return false;
 		if ((cast item:SoundItem).ext != ext) return false;
+		if ((cast item:SoundItem).loop != loop) return false;
 		if ((cast item:SoundItem).linkage != linkage) return false;
 		return true;
 	}
@@ -69,6 +72,7 @@ class SoundItem extends LibraryItem
                 resolve(null);
             });
             audio.src = uri;
+            audio.loop = loop;
         });
     }
 
@@ -87,18 +91,21 @@ class SoundItem extends LibraryItem
 
     function saveProperties(xml:XmlBuilder) : Void
     {
+		xml.attr("loop", loop, false);
 		xml.attr("linkage", linkage, "");
 		xml.attr("ext", ext, "");
     }
 
     function savePropertiesJson(obj:Dynamic) : Void
     {
+        obj.loop = loop ?? false;
         obj.linkage = linkage ?? "";
         obj.ext = ext ?? "";
     }
     
     function loadProperties(xml:HtmlNodeElement) : Void
     {
+		loop = xml.getAttr("loop", false);
 		linkage = xml.getAttr("linkage", "");
         ext = xml.getAttr("ext", "");
     }
@@ -106,6 +113,7 @@ class SoundItem extends LibraryItem
     
     function loadPropertiesJson(obj:Dynamic) : Void
     {
+        loop = obj.loop ?? false;
         linkage = obj.linkage ?? "";
         ext = obj.ext ?? "";
     }
