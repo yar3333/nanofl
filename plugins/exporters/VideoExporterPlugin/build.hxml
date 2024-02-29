@@ -2,3 +2,4 @@
 --class-path ..\..\api\gen
 --class-path src
 --main Main
+AudioHelper

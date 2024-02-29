@@ -1,9 +1,10 @@
 package components.nanofl.popups.documentpropertiespopup;
 
+import stdlib.Std;
+import nanofl.engine.Library;
 import nanofl.ide.Application;
 import nanofl.ide.DocumentProperties;
-import nanofl.engine.Library;
-import stdlib.Std;
+import nanofl.ide.libraryitems.SoundItem;
 using stdlib.Lambda;
 
 @:rtti
@@ -16,7 +17,9 @@ class Code extends components.nanofl.popups.basepopup.Code
 	
 	@inject var app : Application;
 
-	public function show()
+    var lastRelatedSoundOptions = "";
+	
+    public function show()
 	{
 		template().width.val(app.document.properties.width);
 		template().height.val(app.document.properties.height);
@@ -28,6 +31,20 @@ class Code extends components.nanofl.popups.basepopup.Code
 		template().autoPlay.prop("checked", scene.autoPlay);
 		template().loop.prop("checked", scene.loop);
 		template().sceneLinkedClass.val(scene.linkedClass);
+
+        var options = "<option value=''></option>"
+            + app.document.library.getItems().filterByType(SoundItem)
+                .map(item ->
+                {
+                    return "<option value='" + item.namePath + "' title='" + item.namePath + "'>" + item.namePath + "</option>";
+                })
+                .join("");
+        if (options != lastRelatedSoundOptions)
+        {
+            template().relatedSound.html(options);
+            lastRelatedSoundOptions = options;
+        }
+        template().relatedSound.val(scene.relatedSound ?? "");
 		
 		showPopup();
 	}
@@ -50,6 +67,7 @@ class Code extends components.nanofl.popups.basepopup.Code
 		scene.autoPlay = template().autoPlay.prop("checked");
 		scene.loop = template().loop.prop("checked");
 		scene.linkedClass = template().sceneLinkedClass.val();
+		scene.relatedSound = template().relatedSound.val();
 		
 		app.document.undoQueue.commitTransaction();
 	}

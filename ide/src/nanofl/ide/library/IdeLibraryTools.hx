@@ -214,13 +214,10 @@ class IdeLibraryTools
 	{
 		for (item in getMovieClipItems(library))
 		{
-            MovieClipItemTools.iterateInstances(item, instance ->
+            for (instance in MovieClipItemTools.getInstances(item).filter(x -> x.namePath == namePath))
 			{
-				if (instance.namePath == namePath)
-				{
-					instance.matrix.appendMatrix(matrix);
-				}
-			});
+				instance.matrix.appendMatrix(matrix);
+			}
 		}
 	}
 }

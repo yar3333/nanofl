@@ -26,4 +26,7 @@ class Template extends components.nanofl.popups.basepopup.Template
 	
 	public var sceneLinkedClass(get, never) : js.JQuery;
 	inline function get_sceneLinkedClass() return component.q('#sceneLinkedClass');
+
+	public var relatedSound(get, never) : js.JQuery;
+	inline function get_relatedSound() return component.q('#relatedSound');
 }

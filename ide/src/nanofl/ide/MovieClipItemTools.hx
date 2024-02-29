@@ -12,7 +12,7 @@ class MovieClipItemTools
 {
 	public static function findInstances(item:MovieClipItem, callb:Instance->{ item:MovieClipItem, layerIndex:Int, keyFrameIndex:Int }->Void) : Void
 	{
-		iterateInstancesInner(item, (instance:Instance, e) ->
+		iterateInstances(item, (instance:Instance, e) ->
 		{
 			callb(instance, { item:item, layerIndex:e.layerIndex, keyFrameIndex:e.keyFrameIndex });
 			if (Std.isOfType(instance.symbol, MovieClipItem))
@@ -22,11 +22,14 @@ class MovieClipItemTools
 		});
 	}
 	
-	public static function iterateInstances(item:MovieClipItem, callb:Instance->Void) : Void
+	public static function getInstances(item:MovieClipItem) : Array<Instance>
 	{
-        iterateInstancesInner(item, (instance, _) -> callb(instance));
+        final r = new Array<Instance>();
+        iterateInstances(item, (instance, _) -> r.push(instance));
+        return r;
     }
-    static function iterateInstancesInner(item:MovieClipItem, callb:Instance->{ layerIndex:Int, keyFrameIndex:Int }->Void) : Void
+    
+    public static function iterateInstances(item:MovieClipItem, callb:Instance->{ layerIndex:Int, keyFrameIndex:Int }->Void) : Void
 	{
 		iterateElementsInner(item, (element:Element, e) ->
 		{
