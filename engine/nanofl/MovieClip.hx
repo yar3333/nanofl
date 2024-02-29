@@ -5,6 +5,7 @@ import easeljs.display.DisplayObject;
 import easeljs.events.MouseEvent;
 import nanofl.engine.IPathElement;
 import nanofl.engine.LayerType;
+import nanofl.engine.AdvancableDisplayObject;
 import nanofl.engine.libraryitems.MovieClipItem;
 import stdlib.Debug;
 using stdlib.StringTools;
@@ -225,7 +226,10 @@ class MovieClip extends Container
                 Debug.assert(tweenedElements.length == layerChildren.length, "tweenedElements.length=" + tweenedElements.length + " != layerChildren.length=" + layerChildren.length);
                 for (i in 0...tweenedElements.length)
                 {
-                    tweenedElements[i].current.updateDisplayObject(layerChildren[i], null);
+                    if (tweenedElements[i].current != tweenedElements[i].original)
+                    {
+                        tweenedElements[i].current.updateDisplayObject(layerChildren[i], null);
+                    }
                     layerChildren[i].visible = layer.type == LayerType.normal;
                     if (Std.isOfType(layerChildren[i], AdvancableDisplayObject))
                     {

@@ -1026,35 +1026,6 @@ haxe_Serializer.__name__ = "haxe.Serializer";
 Object.assign(haxe_Serializer.prototype, {
 	__class__: haxe_Serializer
 });
-class haxe_Timer {
-	constructor(time_ms) {
-		let me = this;
-		this.id = setInterval(function() {
-			me.run();
-		},time_ms);
-	}
-	stop() {
-		if(this.id == null) {
-			return;
-		}
-		clearInterval(this.id);
-		this.id = null;
-	}
-	run() {
-	}
-	static delay(f,time_ms) {
-		let t = new haxe_Timer(time_ms);
-		t.run = function() {
-			t.stop();
-			f();
-		};
-		return t;
-	}
-}
-haxe_Timer.__name__ = "haxe.Timer";
-Object.assign(haxe_Timer.prototype, {
-	__class__: haxe_Timer
-});
 class haxe_Unserializer {
 }
 haxe_Unserializer.__name__ = "haxe.Unserializer";
@@ -1506,13 +1477,6 @@ var THREE_Vector3 = (__webpack_require__(800).Vector3);
 var THREE_Group = (__webpack_require__(800).Group);
 var THREE_WebGLRenderer = (__webpack_require__(800).WebGLRenderer);
 var THREE_Scene = (__webpack_require__(800).Scene);
-class nanofl_AdvancableDisplayObject {
-}
-nanofl_AdvancableDisplayObject.__name__ = "nanofl.AdvancableDisplayObject";
-nanofl_AdvancableDisplayObject.__isInterface__ = true;
-Object.assign(nanofl_AdvancableDisplayObject.prototype, {
-	__class__: nanofl_AdvancableDisplayObject
-});
 class nanofl_IEventHandlers {
 }
 nanofl_IEventHandlers.__name__ = "nanofl.IEventHandlers";
@@ -1545,10 +1509,17 @@ nanofl_Bitmap.__super__ = createjs.Bitmap;
 Object.assign(nanofl_Bitmap.prototype, {
 	__class__: nanofl_Bitmap
 });
+class nanofl_engine_AdvancableDisplayObject {
+}
+nanofl_engine_AdvancableDisplayObject.__name__ = "nanofl.engine.AdvancableDisplayObject";
+nanofl_engine_AdvancableDisplayObject.__isInterface__ = true;
+Object.assign(nanofl_engine_AdvancableDisplayObject.prototype, {
+	__class__: nanofl_engine_AdvancableDisplayObject
+});
 class nanofl_MovieClip extends createjs.Container {
 	constructor(symbol,initFrameIndex,childFrameIndexes) {
 		super();
-		stdlib_Debug.assert(((symbol) instanceof nanofl_engine_libraryitems_MovieClipItem),null,{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 31, className : "nanofl.MovieClip", methodName : "new"});
+		stdlib_Debug.assert(((symbol) instanceof nanofl_engine_libraryitems_MovieClipItem),null,{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 32, className : "nanofl.MovieClip", methodName : "new"});
 		this.layerOfChild = new haxe_ds_ObjectMap();
 		this.symbol = symbol;
 		let tmp = initFrameIndex;
@@ -1673,14 +1644,16 @@ class nanofl_MovieClip extends createjs.Container {
 			if(oldFrame != null && newFrame != null && oldFrame.keyFrame == newFrame.keyFrame) {
 				let tweenedElements = layer.getTweenedElements(frameIndex);
 				let layerChildren = this.getLayerChildren(i);
-				stdlib_Debug.assert(tweenedElements.length == layerChildren.length,"tweenedElements.length=" + tweenedElements.length + " != layerChildren.length=" + layerChildren.length,{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 225, className : "nanofl.MovieClip", methodName : "gotoFrame"});
+				stdlib_Debug.assert(tweenedElements.length == layerChildren.length,"tweenedElements.length=" + tweenedElements.length + " != layerChildren.length=" + layerChildren.length,{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 226, className : "nanofl.MovieClip", methodName : "gotoFrame"});
 				let _g = 0;
 				let _g1 = tweenedElements.length;
 				while(_g < _g1) {
 					let i = _g++;
-					tweenedElements[i].current.updateDisplayObject(layerChildren[i],null);
+					if(tweenedElements[i].current != tweenedElements[i].original) {
+						tweenedElements[i].current.updateDisplayObject(layerChildren[i],null);
+					}
 					layerChildren[i].visible = layer.type == nanofl_engine_LayerType.normal;
-					if(js_Boot.__implements(layerChildren[i],nanofl_AdvancableDisplayObject)) {
+					if(js_Boot.__implements(layerChildren[i],nanofl_engine_AdvancableDisplayObject)) {
 						keepedAdvancableChildren.push(layerChildren[i]);
 					}
 				}
@@ -1776,7 +1749,7 @@ class nanofl_MovieClip extends createjs.Container {
 		}
 		if(childrenToAdvance == null) {
 			let _g = 0;
-			let _g1 = stdlib_LambdaIterable.filterByType(this.children,nanofl_AdvancableDisplayObject);
+			let _g1 = stdlib_LambdaIterable.filterByType(this.children,nanofl_engine_AdvancableDisplayObject);
 			while(_g < _g1.length) {
 				let child = _g1[_g];
 				++_g;
@@ -1845,7 +1818,7 @@ class nanofl_MovieClip extends createjs.Container {
 }
 $hx_exports["nanofl"]["MovieClip"] = nanofl_MovieClip;
 nanofl_MovieClip.__name__ = "nanofl.MovieClip";
-nanofl_MovieClip.__interfaces__ = [nanofl_AdvancableDisplayObject,nanofl_IEventHandlers];
+nanofl_MovieClip.__interfaces__ = [nanofl_engine_AdvancableDisplayObject,nanofl_IEventHandlers];
 nanofl_MovieClip.__super__ = createjs.Container;
 Object.assign(nanofl_MovieClip.prototype, {
 	__class__: nanofl_MovieClip
@@ -2332,64 +2305,13 @@ class nanofl_Player {
 }
 $hx_exports["nanofl"]["Player"] = nanofl_Player;
 nanofl_Player.__name__ = "nanofl.Player";
-class nanofl_SeamlessSoundLoop {
-	constructor(audio) {
-		this.n = 1;
-		if(audio.duration == null || audio.duration == 0) {
-			return;
-		}
-		if(nanofl_SeamlessSoundLoop.delay == null) {
-			nanofl_SeamlessSoundLoop.delay = this.detectDelay();
-		}
-		this.sounds = [audio,audio.cloneNode()];
-		this.switchSound();
-	}
-	stop() {
-		if(this.sounds[0] != null) {
-			this.sounds[0].pause();
-			this.sounds[0] = null;
-			this.sounds[1].pause();
-			this.sounds[1] = null;
-			this.timer.stop();
-		}
-	}
-	switchSound() {
-		this.n = this.n == 1 ? 0 : 1;
-		if(this.sounds[this.n] != null) {
-			this.sounds[this.n].play();
-			this.timer = haxe_Timer.delay($bind(this,this.switchSound),Math.round(this.sounds[0].duration));
-		}
-	}
-	detectDelay() {
-		let $window = window;
-		let document = window.document;
-		if($window.mozInnerScreenX != null && new EReg("firefox","i").match($global.navigator.userAgent)) {
-			return -25;
-		}
-		if(document.all) {
-			return -30;
-		}
-		if($window.chrome) {
-			return -25;
-		}
-		if(new EReg("safari","i").match($global.navigator.userAgent) && $window.getComputedStyle && !$window.globalStorage) {
-			return -30;
-		}
-		return 0;
-	}
-}
-$hx_exports["nanofl"]["SeamlessSoundLoop"] = nanofl_SeamlessSoundLoop;
-nanofl_SeamlessSoundLoop.__name__ = "nanofl.SeamlessSoundLoop";
-Object.assign(nanofl_SeamlessSoundLoop.prototype, {
-	__class__: nanofl_SeamlessSoundLoop
-});
 class nanofl_Sprite extends createjs.Sprite {
 	constructor(spriteSheet,frameOrAnimation) {
 		super(spriteSheet,frameOrAnimation);
 	}
 }
 nanofl_Sprite.__name__ = "nanofl.Sprite";
-nanofl_Sprite.__interfaces__ = [nanofl_AdvancableDisplayObject];
+nanofl_Sprite.__interfaces__ = [nanofl_engine_AdvancableDisplayObject];
 nanofl_Sprite.__super__ = createjs.Sprite;
 Object.assign(nanofl_Sprite.prototype, {
 	__class__: nanofl_Sprite
@@ -4675,7 +4597,7 @@ class nanofl_engine_elements_Element {
 		dispObj.visible = this.visible;
 		dispObj.set(this.matrix.decompose());
 		dispObj.filters = [];
-		dispObj.setBounds(null,null,null,null);
+		dispObj.setBounds();
 		dispObj.uncache();
 	}
 	equ(element) {
@@ -5304,17 +5226,15 @@ class nanofl_engine_elements_TextElement extends nanofl_engine_elements_Element 
 		return nanofl_TextRun.create(obj.characters,tmp != null ? tmp : "#000000",tmp1 != null ? tmp1 : "Times",tmp2 != null ? tmp2 : "",tmp3 != null ? tmp3 : 12.0,tmp4 != null ? tmp4 : "left",tmp5 != null ? tmp5 : 0.0,tmp6 != null ? tmp6 : "#000000",tmp7 != null ? tmp7 : true,tmp8 != null ? tmp8 : 0.0,tmp9 != null ? tmp9 : 2.0);
 	}
 	createDisplayObject(frameIndexes) {
-		let dispObj = new nanofl_TextField();
-		this.updateDisplayObject(dispObj,null);
-		if(this.name != "") {
-			dispObj.name = this.name;
-		}
-		return dispObj;
+		return this.updateDisplayObject(new nanofl_TextField(),null);
 	}
 	updateDisplayObject(dispObj,frameIndexes) {
-		stdlib_Debug.assert(((dispObj) instanceof nanofl_TextField),null,{ fileName : "engine/nanofl/engine/elements/TextElement.hx", lineNumber : 212, className : "nanofl.engine.elements.TextElement", methodName : "updateDisplayObject"});
+		stdlib_Debug.assert(((dispObj) instanceof nanofl_TextField),null,{ fileName : "engine/nanofl/engine/elements/TextElement.hx", lineNumber : 209, className : "nanofl.engine.elements.TextElement", methodName : "updateDisplayObject"});
 		this.updateDisplayObjectProperties(dispObj);
 		let tf = dispObj;
+		if(this.name != null && this.name != "") {
+			dispObj.name = this.name;
+		}
 		tf.width = this.width;
 		tf.height = this.height;
 		tf.selectable = this.selectable;
@@ -8854,7 +8774,6 @@ class stdlib_StringTools {
 }
 stdlib_StringTools.__name__ = "stdlib.StringTools";
 function $getIterator(o) { if( o instanceof Array ) return new haxe_iterators_ArrayIterator(o); else return o.iterator(); }
-function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $global.$haxeUID++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = m.bind(o); o.hx__closures__[m.__id__] = f; } return f; }
 $global.$haxeUID |= 0;
 if(typeof(performance) != "undefined" ? typeof(performance.now) == "function" : false) {
 	HxOverrides.now = performance.now.bind(performance);

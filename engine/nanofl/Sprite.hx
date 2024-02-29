@@ -1,6 +1,6 @@
 package nanofl;
 
 class Sprite extends easeljs.display.Sprite
-    implements AdvancableDisplayObject
+    implements nanofl.engine.AdvancableDisplayObject
 {
 }

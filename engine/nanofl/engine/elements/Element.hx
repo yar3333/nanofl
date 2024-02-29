@@ -174,7 +174,7 @@ abstract class Element
 		dispObj.set(matrix.decompose());
 		
 		dispObj.filters = [];
-		dispObj.setBounds(null, null, null, null);
+		dispObj.setBounds();
 		dispObj.uncache();
 	}
 	

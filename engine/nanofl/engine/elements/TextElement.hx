@@ -201,10 +201,7 @@ class TextElement extends Element
 	
 	public function createDisplayObject(frameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : nanofl.TextField
 	{
-		var dispObj = new nanofl.TextField();
-		updateDisplayObject(dispObj, null);
-		if (name != "") dispObj.name = name;
-		return dispObj;
+		return updateDisplayObject(new nanofl.TextField(), null);
 	}
 	
 	public function updateDisplayObject(dispObj:easeljs.display.DisplayObject, frameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : nanofl.TextField
@@ -214,6 +211,8 @@ class TextElement extends Element
 		updateDisplayObjectProperties(dispObj);
 		
 		var tf : nanofl.TextField = cast dispObj;
+		
+        if (name != null && name != "") dispObj.name = name;
 		
 		tf.width = width;
 		tf.height = height;
