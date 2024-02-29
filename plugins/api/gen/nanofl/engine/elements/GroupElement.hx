@@ -18,7 +18,6 @@ extern class GroupElement extends nanofl.engine.elements.Element implements nano
 	override function setLibrary(library:nanofl.engine.Library):Void;
 	function getChildren():Array<nanofl.engine.elements.Element>;
 	override function createDisplayObject(frameIndexes:Array<{ public var frameIndex(default, default) : Int; public var element(default, default) : nanofl.engine.IPathElement; }>):easeljs.display.DisplayObject;
-	override function updateDisplayObject(dispObj:easeljs.display.DisplayObject, frameIndexes:Array<{ public var frameIndex(default, default) : Int; public var element(default, default) : nanofl.engine.IPathElement; }>):easeljs.display.Container;
 	function getMaskFilter(layer:nanofl.engine.movieclip.Layer, frameIndex:Int):easeljs.display.Container;
 	function isScene():Bool;
 	function getNavigatorName():String;

@@ -6,6 +6,7 @@ import easeljs.events.MouseEvent;
 import nanofl.engine.IPathElement;
 import nanofl.engine.LayerType;
 import nanofl.engine.AdvancableDisplayObject;
+import nanofl.engine.elements.Instance;
 import nanofl.engine.libraryitems.MovieClipItem;
 import stdlib.Debug;
 using stdlib.StringTools;
@@ -226,14 +227,24 @@ class MovieClip extends Container
                 Debug.assert(tweenedElements.length == layerChildren.length, "tweenedElements.length=" + tweenedElements.length + " != layerChildren.length=" + layerChildren.length);
                 for (i in 0...tweenedElements.length)
                 {
-                    if (tweenedElements[i].current != tweenedElements[i].original)
+                    final dispObj = layerChildren[i];
+
+                    dispObj.visible = layer.type == LayerType.normal;
+
+                    if (dispObj.visible)
                     {
-                        tweenedElements[i].current.updateDisplayObject(layerChildren[i], null);
+                        final tweenedElement = tweenedElements[i];
+                        
+                        if (tweenedElement.current != tweenedElement.original)
+                        {
+                            Debug.assert(Std.isOfType(tweenedElement.current, Instance));
+                            (cast tweenedElement.current:Instance).updateDisplayObjectTweenedProperties(dispObj);
+                        }
                     }
-                    layerChildren[i].visible = layer.type == LayerType.normal;
-                    if (Std.isOfType(layerChildren[i], AdvancableDisplayObject))
+                    
+                    if (Std.isOfType(dispObj, AdvancableDisplayObject))
                     {
-                        keepedAdvancableChildren.push((cast layerChildren[i] : AdvancableDisplayObject));
+                        keepedAdvancableChildren.push((cast dispObj : AdvancableDisplayObject));
                     }
                 }
                 layerChanged = true;

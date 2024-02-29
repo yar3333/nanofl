@@ -189,7 +189,7 @@ class Instance extends Element
 		return dispObj;
 	}
 	
-	function updateDisplayObjectInstanceProperties(dispObj:easeljs.display.DisplayObject)
+	function updateDisplayObjectInstanceProperties(dispObj:easeljs.display.DisplayObject) : Void
 	{
 		if (dispObj.filters == null) dispObj.filters = [];
 		
@@ -210,6 +210,12 @@ class Instance extends Element
         {
             meshParams.applyToMesh((cast dispObj:nanofl.Mesh));
         }
+    }
+
+    public function updateDisplayObjectTweenedProperties(dispObj:easeljs.display.DisplayObject) : Void
+    {
+		updateDisplayObjectBaseProperties(dispObj);
+		updateDisplayObjectInstanceProperties(dispObj);
     }
 	
 	public function getNavigatorName() return namePath;

@@ -19,7 +19,6 @@ extern class Element {
 	function saveJson():{ var type : String; };
 	function translate(dx:Float, dy:Float):Void;
 	function createDisplayObject(frameIndexes:Array<{ public var frameIndex(default, default) : Int; public var element(default, default) : nanofl.engine.IPathElement; }>):easeljs.display.DisplayObject;
-	function updateDisplayObject(dispObj:easeljs.display.DisplayObject, frameIndexes:Array<{ public var frameIndex(default, default) : Int; public var element(default, default) : nanofl.engine.IPathElement; }>):easeljs.display.DisplayObject;
 	function transform(m:nanofl.engine.geom.Matrix, ?applyToStrokeAndFill:Bool):Void;
 	function equ(element:nanofl.engine.elements.Element):Bool;
 	function getNearestPoint(pos:nanofl.engine.geom.Point):nanofl.engine.geom.Point;

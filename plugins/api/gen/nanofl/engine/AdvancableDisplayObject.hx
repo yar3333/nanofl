@@ -1,4 +1,4 @@
-package nanofl;
+package nanofl.engine;
 
 interface AdvancableDisplayObject {
 	/**

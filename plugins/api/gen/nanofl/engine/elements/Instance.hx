@@ -21,7 +21,7 @@ extern class Instance extends nanofl.engine.elements.Element implements nanofl.e
 	@:noCompletion
 	function get_layers():Array<nanofl.engine.movieclip.Layer>;
 	override function createDisplayObject(frameIndexes:Array<{ public var frameIndex(default, default) : Int; public var element(default, default) : nanofl.engine.IPathElement; }>):easeljs.display.DisplayObject;
-	override function updateDisplayObject(dispObj:easeljs.display.DisplayObject, frameIndexes:Array<{ public var frameIndex(default, default) : Int; public var element(default, default) : nanofl.engine.IPathElement; }>):easeljs.display.DisplayObject;
+	function updateDisplayObjectTweenedProperties(dispObj:easeljs.display.DisplayObject):Void;
 	function getNavigatorName():String;
 	function getNavigatorIcon():String;
 	function getChildren():Array<nanofl.engine.elements.Element>;

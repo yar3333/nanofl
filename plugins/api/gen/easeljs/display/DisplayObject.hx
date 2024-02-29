@@ -484,6 +484,8 @@ package easeljs.display;
 	function getTransformedBounds():easeljs.geom.Rectangle;
 	/**
 		
+		     * https://createjs.com/docs/easeljs/classes/DisplayObject.html#method_setBounds
+		     *
 			 * Allows you to manually specify the bounds of an object that either cannot calculate their own bounds (ex. Shape &
 			 * Text) for future reference, or so the object can be included in Container bounds. Manually set bounds will always
 			 * override calculated bounds.
@@ -492,7 +494,7 @@ package easeljs.display;
 			 * with a 25px radius circle centered at 0,0 would have bounds of (-25, -25, 50, 50).
 			 
 	**/
-	function setBounds(x:Float, y:Float, width:Float, height:Float):Void;
+	function setBounds(?x:Float, ?y:Float, ?width:Float, ?height:Float):Void;
 	/**
 		
 			 * Returns a clone of this DisplayObject. Some properties that are specific to this instance's current context are

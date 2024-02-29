@@ -457,17 +457,17 @@ js_injecting_InjectorRO.__isInterface__ = true;
 js_injecting_InjectorRO.prototype = {
 	__class__: js_injecting_InjectorRO
 };
-var nanofl_AdvancableDisplayObject = function() { };
-nanofl_AdvancableDisplayObject.__name__ = true;
-nanofl_AdvancableDisplayObject.__isInterface__ = true;
-nanofl_AdvancableDisplayObject.prototype = {
-	__class__: nanofl_AdvancableDisplayObject
-};
 var nanofl_IEventHandlers = function() { };
 nanofl_IEventHandlers.__name__ = true;
 nanofl_IEventHandlers.__isInterface__ = true;
 nanofl_IEventHandlers.prototype = {
 	__class__: nanofl_IEventHandlers
+};
+var nanofl_engine_AdvancableDisplayObject = function() { };
+nanofl_engine_AdvancableDisplayObject.__name__ = true;
+nanofl_engine_AdvancableDisplayObject.__isInterface__ = true;
+nanofl_engine_AdvancableDisplayObject.prototype = {
+	__class__: nanofl_engine_AdvancableDisplayObject
 };
 var nanofl_engine_IElementsContainer = function() { };
 nanofl_engine_IElementsContainer.__name__ = true;

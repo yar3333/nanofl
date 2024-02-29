@@ -8,7 +8,6 @@ extern class ShapeElement extends nanofl.engine.elements.Element {
 	function ensureNoTransform():Void;
 	function draw(g:nanofl.engine.ShapeRender, scaleSelection:Float):Void;
 	override function createDisplayObject(frameIndexes:Array<{ public var frameIndex(default, default) : Int; public var element(default, default) : nanofl.engine.IPathElement; }>):easeljs.display.Shape;
-	override function updateDisplayObject(dispObj:easeljs.display.DisplayObject, frameIndexes:Array<{ public var frameIndex(default, default) : Int; public var element(default, default) : nanofl.engine.IPathElement; }>):easeljs.display.Shape;
 	override function clone():nanofl.engine.elements.ShapeElement;
 	override function translate(dx:Float, dy:Float):Void;
 	function isEmpty():Bool;

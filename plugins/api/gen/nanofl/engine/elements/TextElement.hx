@@ -11,7 +11,6 @@ extern class TextElement extends nanofl.engine.elements.Element {
 	var newTextFormat : nanofl.TextRun;
 	function getText():String;
 	override function createDisplayObject(frameIndexes:Array<{ public var frameIndex(default, default) : Int; public var element(default, default) : nanofl.engine.IPathElement; }>):nanofl.TextField;
-	override function updateDisplayObject(dispObj:easeljs.display.DisplayObject, frameIndexes:Array<{ public var frameIndex(default, default) : Int; public var element(default, default) : nanofl.engine.IPathElement; }>):nanofl.TextField;
 	function getMinSize(dispObj:easeljs.display.DisplayObject):{ var height : Float; var width : Float; };
 	override function getState():nanofl.ide.undo.states.ElementState;
 	override function setState(_state:nanofl.ide.undo.states.ElementState):Void;
