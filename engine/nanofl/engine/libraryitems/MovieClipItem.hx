@@ -125,18 +125,8 @@ class MovieClipItem	extends InstancableItem
 	
 	public function updateDisplayObject(dispObj:easeljs.display.DisplayObject, childFrameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : Void
 	{
-		if (!exportAsSprite)
-		{
-			updateDisplayObjectInner(layers, dispObj, childFrameIndexes);
-		}
-		else
-		{
-            //Debug.assert(Std.isOfType(dispObj, nanofl.Sprite));
-        }
-    }
-
-    public static function updateDisplayObjectInner(layers:ArrayRO<Layer>, dispObj:easeljs.display.DisplayObject, childFrameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : Void
-    {
+		if (exportAsSprite) return;
+		
         Debug.assert(Std.isOfType(dispObj, nanofl.MovieClip));
         
         var movieClip : nanofl.MovieClip = cast dispObj;

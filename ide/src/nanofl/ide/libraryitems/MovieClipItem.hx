@@ -58,7 +58,10 @@ class MovieClipItem extends nanofl.engine.libraryitems.MovieClipItem
 	
 	override public function updateDisplayObject(dispObj:easeljs.display.DisplayObject, childFrameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : Void
 	{
-        nanofl.engine.libraryitems.MovieClipItem.updateDisplayObjectInner(layers, dispObj, childFrameIndexes);
+        final saveExportAsSprite = exportAsSprite;
+        exportAsSprite = false;
+        super.updateDisplayObject(dispObj, childFrameIndexes);
+        exportAsSprite = saveExportAsSprite;
 	}
 	
 	override public function preload() : Promise<{}> return Promise.resolve();
