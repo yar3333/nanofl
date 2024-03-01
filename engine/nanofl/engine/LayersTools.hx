@@ -74,16 +74,18 @@ class LayersTools
 	public static function removeLayerWithChildren<Layer:TLayer>(obj:Container<Layer>, index:Int) : Array<Layer>
 	{
 		var n = index + 1; while (n < obj._layers.length && isLayerChildOf(obj, n, index)) n++;
+
+        final layerToRemoveCount = n - index;
 		
 		for (layer in obj._layers.slice(n))
 		{
-			if (layer.parentIndex != null)
+			if (layer.parentIndex != null && layer.parentIndex > index)
 			{
-				layer.parentIndex -= n - index;
+				layer.parentIndex -= layerToRemoveCount;
 			}
 		}
 		
-		var removedLayers = obj._layers.splice(index, n - index);
+		final removedLayers = obj._layers.splice(index, layerToRemoveCount);
 		for (layer in removedLayers) layer.parentIndex -= index;
 		removedLayers[0].parentIndex = null;
 		
