@@ -53,11 +53,14 @@ class SoundItem extends LibraryItem
 	
     public function preload() : Promise<{}>
     {
+        #if !ide
         stdlib.Debug.assert(linkage != null && linkage != "");
-
         return ext.toLowerCase() == "js"
             ? SerializationAsJsTools.load(library, namePath, true).then(dataUri -> preloadInner(dataUri))
             : preloadInner(library.realUrl(namePath + "." + ext));
+        #else
+        return Promise.resolve(null);
+        #end
     }
 
     private function preloadInner(uri:String) : Promise<{}>

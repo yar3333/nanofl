@@ -7608,7 +7608,7 @@ class nanofl_engine_libraryitems_SoundItem extends nanofl_engine_libraryitems_Li
 		return true;
 	}
 	preload() {
-		stdlib_Debug.assert(this.linkage != null && this.linkage != "",null,{ fileName : "engine/nanofl/engine/libraryitems/SoundItem.hx", lineNumber : 56, className : "nanofl.engine.libraryitems.SoundItem", methodName : "preload"});
+		stdlib_Debug.assert(this.linkage != null && this.linkage != "",null,{ fileName : "engine/nanofl/engine/libraryitems/SoundItem.hx", lineNumber : 57, className : "nanofl.engine.libraryitems.SoundItem", methodName : "preload"});
 		let _gthis = this;
 		if(this.ext.toLowerCase() == "js") {
 			return nanofl_engine_SerializationAsJsTools.load(this.library,this.namePath,true).then(function(dataUri) {
@@ -7634,7 +7634,7 @@ class nanofl_engine_libraryitems_SoundItem extends nanofl_engine_libraryitems_Li
 		});
 	}
 	play() {
-		stdlib_Debug.assert(this.audio != null,null,{ fileName : "engine/nanofl/engine/libraryitems/SoundItem.hx", lineNumber : 82, className : "nanofl.engine.libraryitems.SoundItem", methodName : "play"});
+		stdlib_Debug.assert(this.audio != null,null,{ fileName : "engine/nanofl/engine/libraryitems/SoundItem.hx", lineNumber : 85, className : "nanofl.engine.libraryitems.SoundItem", methodName : "play"});
 		let r = this.audio.cloneNode();
 		r.play();
 		return r;

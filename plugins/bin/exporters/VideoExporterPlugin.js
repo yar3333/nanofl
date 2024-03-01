@@ -9,58 +9,52 @@ function $extend(from, fields) {
 }
 var AudioHelper = function() { };
 AudioHelper.__name__ = true;
-AudioHelper.generateTempSoundFile = function(fileSystem,processManager,folders,documentProperties,library) {
-	var sounds = AudioHelper.getSounds(documentProperties.framerate,library.getSceneItem(),library);
-	if(sounds.length == 0) {
-		return null;
-	}
-	var destFilePath = fileSystem.getTempFilePath(".ogg");
-	if(!AudioHelper.mixSounds(processManager,folders,sounds,destFilePath)) {
-		return null;
-	}
-	return destFilePath;
-};
-AudioHelper.mixSounds = function(processManager,folders,sounds,destFilePath) {
+AudioHelper.getFFmpegArgsForMixTracks = function(tracks,startInputIndex) {
 	var args = [];
+	if(tracks.length == 0) {
+		return args;
+	}
 	var _g = 0;
-	while(_g < sounds.length) {
-		var sound = sounds[_g];
+	while(_g < tracks.length) {
+		var tracks1 = tracks[_g];
 		++_g;
+		if(tracks1.loopDurationMs != null) {
+			args.push("-stream_loop");
+			args.push("-1");
+			args.push("-t");
+			args.push(tracks1.loopDurationMs + "ms");
+		}
 		args.push("-i");
-		args.push(sound.filePath);
+		args.push(tracks1.filePath);
 	}
 	var filters = [];
 	var _g = 0;
-	var _g1 = sounds.length;
+	var _g1 = tracks.length;
 	while(_g < _g1) {
 		var i = _g++;
-		filters.push("[" + i + ":a]adelay=" + sounds[i].delayBeforeStartMs + ":all=1[a" + i + "]");
+		filters.push("[" + (i + startInputIndex) + ":a]adelay=" + tracks[i].delayBeforeStartMs + ":all=1[a" + i + "]");
 	}
 	var _g = [];
 	var _g1 = 0;
-	var _g2 = sounds.length;
+	var _g2 = tracks.length;
 	while(_g1 < _g2) {
 		var i = _g1++;
 		_g.push("[a" + i + "]");
 	}
-	filters.push(_g.join("") + "amix=inputs=" + sounds.length + "[a]");
+	filters.push(_g.join("") + "amix=inputs=" + tracks.length + "[a]");
 	args.push("-filter_complex");
 	args.push(filters.join(";"));
 	args.push("-map");
 	args.push("[a]");
-	args.push(destFilePath);
-	var r = processManager.runCaptured(folders.get_tools() + "/ffmpeg.exe",args,null,null);
-	return r.exitCode == 0;
+	return args;
 };
-AudioHelper.getSounds = function(framerate,item,library,r,addDelayMs) {
-	if(addDelayMs == null) {
-		addDelayMs = 0;
-	}
-	if(r == null) {
-		r = [];
-	}
+AudioHelper.getSceneTracks = function(framerate,library) {
+	return AudioHelper.getMovieClipTracksInner(framerate,library.getSceneItem(),library,[],0);
+};
+AudioHelper.getMovieClipTracksInner = function(framerate,item,library,r,addDelayMs) {
 	if(item.relatedSound != null && item.relatedSound != "") {
-		r.push({ delayBeforeStartMs : addDelayMs, filePath : library.getItem(item.relatedSound).getUrl()});
+		var mcSound = library.getItem(item.relatedSound);
+		r.push({ delayBeforeStartMs : addDelayMs, filePath : library.libraryDir + "/" + mcSound.namePath + "." + mcSound.ext, loopDurationMs : mcSound.loop ? Math.round(item.getTotalFrames() / framerate) : null});
 	}
 	nanofl.ide.MovieClipItemTools.iterateInstances(item,function(instance,data) {
 		if(((instance.get_symbol()) instanceof nanofl.ide.libraryitems.MovieClipItem)) {
@@ -72,11 +66,13 @@ AudioHelper.getSounds = function(framerate,item,library,r,addDelayMs) {
 				var i = _g++;
 				frameCount += layer.get_keyFrames()[i].duration;
 			}
-			var delayMs = addDelayMs + Math.round(frameCount * (1.0 / framerate));
-			AudioHelper.getSounds(framerate,instance.get_symbol(),library,r,delayMs);
+			var delayMs = addDelayMs + Math.round(frameCount / framerate);
+			AudioHelper.getMovieClipTracksInner(framerate,instance.get_symbol(),library,r,delayMs);
 		}
 	});
 	return r;
+};
+AudioHelper.getUrl = function() {
 };
 var Main = function() { };
 Main.__name__ = true;
@@ -97,18 +93,22 @@ var Mp4VideoExporterPlugin = function() {
 Mp4VideoExporterPlugin.__name__ = true;
 Mp4VideoExporterPlugin.prototype = {
 	exportDocument: function(api,args) {
-		return VideoExporter.run(api.fileSystem,api.processManager,api.folders,args.destFilePath,args.documentProperties,args.library,"libx264");
+		return VideoExporter.run(api.fileSystem,api.processManager,api.folders,args.destFilePath,args.documentProperties,args.library);
 	}
 };
 var VideoExporter = function() { };
 VideoExporter.__name__ = true;
-VideoExporter.run = function(fileSystem,processManager,folders,destFilePath,documentProperties,library,videoCodec) {
+VideoExporter.run = function(fileSystem,processManager,folders,destFilePath,documentProperties,library) {
 	if(fileSystem.exists(destFilePath)) {
 		fileSystem.deleteFile(destFilePath);
 	}
-	var args = ["-f","rawvideo","-pixel_format","rgb24","-video_size",documentProperties.width + "x" + documentProperties.height,"-framerate",documentProperties.framerate + "","-i","pipe:0","-c:v",videoCodec,destFilePath];
+	var videoArgs = ["-f","rawvideo","-pixel_format","rgb24","-video_size",documentProperties.width + "x" + documentProperties.height,"-framerate",documentProperties.framerate + "","-i","pipe:0"];
+	var audioTracks = AudioHelper.getSceneTracks(documentProperties.framerate,library);
+	var audioArgs = AudioHelper.getFFmpegArgsForMixTracks(audioTracks,1);
 	var dataOut = new Uint8Array(documentProperties.width * documentProperties.height * 3);
 	var sceneFramesIterator = library.getSceneFramesIterator(documentProperties,true);
+	var args = videoArgs.concat(audioArgs).concat(["-map","0:v",destFilePath]);
+	$global.console.log("FFmpeg: ",args);
 	try {
 		return processManager.runPipedStdIn(folders.get_tools() + "/ffmpeg.exe",args,null,null,function() {
 			if(!sceneFramesIterator.hasNext()) {
@@ -155,7 +155,7 @@ var WebmVideoExporterPlugin = function() {
 WebmVideoExporterPlugin.__name__ = true;
 WebmVideoExporterPlugin.prototype = {
 	exportDocument: function(api,args) {
-		return VideoExporter.run(api.fileSystem,api.processManager,api.folders,args.destFilePath,args.documentProperties,args.library,"libvpx");
+		return VideoExporter.run(api.fileSystem,api.processManager,api.folders,args.destFilePath,args.documentProperties,args.library);
 	}
 };
 var haxe_Exception = function(message,previous,native) {

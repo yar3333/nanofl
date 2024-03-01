@@ -23,6 +23,6 @@ class Mp4VideoExporterPlugin implements IExporterPlugin
 	
 	public function exportDocument(api:PluginApi, args:ExporterArgs) : Promise<Bool>
 	{
-		return VideoExporter.run(api.fileSystem, api.processManager, api.folders, args.destFilePath, args.documentProperties, args.library, "libx264");
+		return VideoExporter.run(api.fileSystem, api.processManager, api.folders, args.destFilePath, args.documentProperties, args.library/*, "libx264"*/);
 	}
 }

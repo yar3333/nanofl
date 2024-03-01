@@ -1,8 +1,4 @@
-import nanofl.ide.DocumentProperties;
-import nanofl.ide.sys.Folders;
-import nanofl.ide.sys.ProcessManager;
 import nanofl.ide.library.IdeLibrary;
-import nanofl.ide.sys.FileSystem;
 import nanofl.ide.libraryitems.MovieClipItem;
 import nanofl.ide.libraryitems.SoundItem;
 using nanofl.ide.MovieClipItemTools;
@@ -10,7 +6,6 @@ using nanofl.ide.MovieClipItemTools;
 /**
     https://ffmpeg.org/ffmpeg-filters.html#adelay
     https://ffmpeg.org/ffmpeg-filters.html#amix
-    https://ffmpeg.org/ffmpeg-filters.html#aloop
 
     ffmpeg  -i 1.mp3 \
             -i 2.mp3 \
@@ -24,63 +19,58 @@ using nanofl.ide.MovieClipItemTools;
         -map 0:v -map 1:a \
         -y output.mp4
 
-    ffmpeg -stream_loop 3 -i input.mp4 -c copy output.mp4
-
-
-    ffmpeg -i input.mp4 -filter_complex "loop=loop=-1" output.mp4
-
-
+    ffmpeg \
+        -stream_loop -1 \   // infinite loop (used before -i)
+        -t 10000ms \        // duration limit (used before -i)
+        -i input.mp4 -c copy output.mp4
 **/
 class AudioHelper
 {
-    public static function generateTempSoundFile(fileSystem:FileSystem, processManager:ProcessManager, folders:Folders, documentProperties:DocumentProperties, library:IdeLibrary) : String
-    {
-        final sounds = getSounds(documentProperties.framerate, library.getSceneItem(), library);
-        if (sounds.length == 0) return null;
-        
-        final destFilePath = fileSystem.getTempFilePath(".ogg");
-        if (!mixSounds(processManager, folders, sounds, destFilePath)) return null;
-        
-        return destFilePath;
-    }
-    
-    static function mixSounds(processManager:ProcessManager, folders:Folders, sounds:Array<{ delayBeforeStartMs:Int, filePath:String  }>, destFilePath:String) : Bool
+    public static function getFFmpegArgsForMixTracks(tracks:Array<AudioTrack>, startInputIndex:Int) : Array<String>
     {
         final args = [];
+        if (tracks.length == 0) return args;
         
-        for (sound in sounds)
+        for (tracks in tracks)
         {
-            args.push("-i");
-            args.push(sound.filePath);
+            if (tracks.loopDurationMs != null)
+            {
+                args.push("-stream_loop"); args.push("-1");
+                args.push("-t"); args.push(tracks.loopDurationMs + "ms");
+            }
+            args.push("-i"); args.push(tracks.filePath);
         }
 
         var filters = new Array<String>();
-        for (i in 0...sounds.length)
+        for (i in 0...tracks.length)
         {
-            filters.push("[" + i + ":a]adelay=" + sounds[i].delayBeforeStartMs + ":all=1[a" + i + "]");
-            // TODO: loop
+            filters.push("[" + (i + startInputIndex) + ":a]adelay=" + tracks[i].delayBeforeStartMs + ":all=1[a" + i + "]");
         }
-        filters.push([ for (i in 0...sounds.length) "[a" + i + "]" ].join("") + "amix=inputs=" + sounds.length + "[a]");
+        filters.push([ for (i in 0...tracks.length) "[a" + i + "]" ].join("") + "amix=inputs=" + tracks.length + "[a]");
 
-        args.push("-filter_complex");
-        args.push(filters.join(";"));
+        args.push("-filter_complex"); args.push(filters.join(";"));
 
-        args.push("-map");
-        args.push("[a]");
+        args.push("-map"); args.push("[a]");
 
-        args.push(destFilePath);
-
-        var r = processManager.runCaptured(folders.tools + "/ffmpeg.exe", args, null, null);
-        return r.exitCode == 0;
+        return args;
     }
 
-    static function getSounds(framerate:Float, item:MovieClipItem, library:IdeLibrary, ?r:Array<{ delayBeforeStartMs:Int, filePath:String  }>, addDelayMs=0) : Array<{ delayBeforeStartMs:Int, filePath:String  }>
+    public static function getSceneTracks(framerate:Float, library:IdeLibrary) : Array<AudioTrack>
     {
-        if (r == null) r = new Array<{ delayBeforeStartMs:Int, filePath:String }>();
+        return getMovieClipTracksInner(framerate, library.getSceneItem(), library, new Array<AudioTrack>(), 0);
+    }
 
+    static function getMovieClipTracksInner(framerate:Float, item:MovieClipItem, library:IdeLibrary, r:Array<AudioTrack>, addDelayMs:Int) : Array<AudioTrack>
+    {
         if (item.relatedSound != null && item.relatedSound != "")
         {
-            r.push({ delayBeforeStartMs:addDelayMs, filePath:(cast library.getItem(item.relatedSound) : SoundItem).getUrl() });
+            final mcSound : SoundItem = cast library.getItem(item.relatedSound);
+            r.push
+            ({
+                delayBeforeStartMs: addDelayMs, 
+                filePath: library.libraryDir + "/" + mcSound.namePath + "." + mcSound.ext,
+                loopDurationMs: mcSound.loop ? Math.round(item.getTotalFrames() / framerate) : null
+            });
         }
         
         item.iterateInstances((instance, data) ->
@@ -93,11 +83,15 @@ class AudioHelper
                 {
                     frameCount += layer.keyFrames[i].duration;
                 }
-                final delayMs = addDelayMs + Math.round(frameCount * (1.0 / framerate));
-                getSounds(framerate, (cast instance.symbol : MovieClipItem), library, r, delayMs);
+                final delayMs = addDelayMs + Math.round(frameCount / framerate);
+                getMovieClipTracksInner(framerate, (cast instance.symbol : MovieClipItem), library, r, delayMs);
             }
         });
 
         return r;
+    }
+
+    static function getUrl() {
+        
     }
 }

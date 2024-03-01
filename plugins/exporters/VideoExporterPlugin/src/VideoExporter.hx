@@ -14,24 +14,29 @@ using StringTools;
 
 class VideoExporter
 {
-	public static function run(fileSystem:FileSystem, processManager:ProcessManager, folders:Folders, destFilePath:String, documentProperties:DocumentProperties, library:IdeLibrary, videoCodec:String) : Promise<Bool>
+	public static function run(fileSystem:FileSystem, processManager:ProcessManager, folders:Folders, destFilePath:String, documentProperties:DocumentProperties, library:IdeLibrary) : Promise<Bool>
 	{
         if (fileSystem.exists(destFilePath)) fileSystem.deleteFile(destFilePath);
 
-        final args =
+        final videoArgs =
         [
             "-f", "rawvideo",
             "-pixel_format", "rgb24",
             "-video_size", documentProperties.width + "x" + documentProperties.height,
             "-framerate", documentProperties.framerate + "",
             "-i", "pipe:0",
-            "-c:v", videoCodec,
-            destFilePath
         ];
+
+        final audioTracks = AudioHelper.getSceneTracks(documentProperties.framerate, library);
+        final audioArgs = AudioHelper.getFFmpegArgsForMixTracks(audioTracks, 1);
             
         final dataOut = new Uint8Array(documentProperties.width * documentProperties.height * 3); // RGB
 
         var sceneFramesIterator = library.getSceneFramesIterator(documentProperties, true);
+
+        final args = videoArgs.concat(audioArgs).concat(["-map", "0:v", destFilePath]);
+
+        Browser.console.log("FFmpeg: ", args);
 
         try
         {
