@@ -486,8 +486,6 @@ class EditorLayer
 	
 	function swapItems(i:Int, j:Int)
 	{
-		var elements = frame.keyFrame.elements;
-		
 		var item = items[i];
 		items[i] = items[j];
 		items[j] = item;
