@@ -2164,15 +2164,16 @@ nanofl_ide_sys_SysStuff.registerInInjector = function(injector) {
 	var environment = new nanofl_ide_sys_node_NodeEnvironment();
 	var folders = new nanofl_ide_sys_node_NodeFolders(environment);
 	injector.map(nanofl_ide_sys_FileSystem,fileSystem);
+	injector.map(nanofl_ide_sys_ProcessManager,processManager);
 	injector.map(nanofl_ide_sys_Environment,environment);
 	injector.map(nanofl_ide_sys_Folders,folders);
-	injector.map(nanofl_ide_sys_ProcessManager,processManager);
 	injector.map(nanofl_ide_sys_HttpUtils,new nanofl_ide_sys_node_NodeHttpUtils());
 	injector.map(nanofl_ide_sys_Zip,new nanofl_ide_sys_node_NodeZip(fileSystem,processManager,folders));
 	injector.map(nanofl_ide_sys_Shell,new nanofl_ide_sys_node_NodeShell(fileSystem,processManager,environment));
 	injector.map(nanofl_ide_sys_WebServerUtils,new nanofl_ide_sys_node_NodeWebServerUtils());
 	injector.map(nanofl_ide_sys_Uploader,new nanofl_ide_sys_Uploader(fileSystem));
 	injector.map(nanofl_ide_sys_Fonts,new nanofl_ide_sys_node_NodeFonts());
+	injector.map(nanofl_ide_sys_VideoUtils,new nanofl_ide_sys_node_NodeVideoUtils(processManager,folders));
 	injector.map(nanofl_ide_sys_MainProcess,new nanofl_ide_sys_node_ElectronMainProcess());
 	injector.map(nanofl_ide_sys_Clipboard,new nanofl_ide_sys_node_ElectronClipboard());
 	injector.map(nanofl_ide_sys_Dialogs,new nanofl_ide_sys_node_ElectronDialogs());
@@ -2218,6 +2219,11 @@ nanofl_ide_sys_Uploader.prototype = {
 		return p;
 	}
 	,__class__: nanofl_ide_sys_Uploader
+};
+var nanofl_ide_sys_VideoUtils = $hx_exports["VideoUtils"] = function() { };
+nanofl_ide_sys_VideoUtils.__name__ = "nanofl.ide.sys.VideoUtils";
+nanofl_ide_sys_VideoUtils.prototype = {
+	__class__: nanofl_ide_sys_VideoUtils
 };
 var nanofl_ide_sys_WebServerUtils = $hx_exports["WebServerUtils"] = function() { };
 nanofl_ide_sys_WebServerUtils.__name__ = "nanofl.ide.sys.WebServerUtils";
@@ -2607,6 +2613,32 @@ nanofl_ide_sys_node_NodeShell.prototype = {
 		return r;
 	}
 	,__class__: nanofl_ide_sys_node_NodeShell
+};
+var nanofl_ide_sys_node_NodeVideoUtils = function(processManager,folders) {
+	this.processManager = processManager;
+	this.folders = folders;
+};
+nanofl_ide_sys_node_NodeVideoUtils.__name__ = "nanofl.ide.sys.node.NodeVideoUtils";
+nanofl_ide_sys_node_NodeVideoUtils.prototype = {
+	getFileInfo: function(filePath) {
+		var r = this.processManager.runCaptured(this.folders.get_tools() + "/ffprobe.exe",["-v","quiet","-print_format","json","-show_format","-show_streams",filePath]);
+		if(r.exitCode != 0) {
+			return null;
+		}
+		var info = JSON.parse(r.output);
+		var tmp = parseFloat(info.format.duration) * 1000;
+		var _this = info.streams;
+		var result = new Array(_this.length);
+		var _g = 0;
+		var _g1 = _this.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var x = _this[i];
+			result[i] = { index : x.index, type : x.codec_type, videoWidth : x.width, videoHeight : x.height, audioChannels : x.channels};
+		}
+		return { durationMs : tmp, streams : result};
+	}
+	,__class__: nanofl_ide_sys_node_NodeVideoUtils
 };
 var nanofl_ide_sys_node_NodeWebServerUtils = function() {
 };
@@ -3006,6 +3038,7 @@ nanofl_ide_sys_MainProcess.__rtti = "<class path=\"nanofl.ide.sys.MainProcess\" 
 nanofl_ide_sys_ProcessManager.__rtti = "<class path=\"nanofl.ide.sys.ProcessManager\" params=\"\" interface=\"1\">\n\t<run public=\"1\" set=\"method\"><f a=\"filePath:args:blocking:?directory:?env\">\n\t<c path=\"String\"/>\n\t<c path=\"Array\"><c path=\"String\"/></c>\n\t<x path=\"Bool\"/>\n\t<c path=\"String\"/>\n\t<d><c path=\"String\"/></d>\n\t<x path=\"Int\"/>\n</f></run>\n\t<runCaptured public=\"1\" set=\"method\"><f a=\"filePath:args:?directory:?env:?input\">\n\t<c path=\"String\"/>\n\t<c path=\"Array\"><c path=\"String\"/></c>\n\t<c path=\"String\"/>\n\t<d><c path=\"String\"/></d>\n\t<c path=\"String\"/>\n\t<a>\n\t\t<output><c path=\"String\"/></output>\n\t\t<exitCode><x path=\"Int\"/></exitCode>\n\t\t<error><c path=\"String\"/></error>\n\t</a>\n</f></runCaptured>\n\t<runPipedStdIn public=\"1\" set=\"method\"><f a=\"filePath:args:directory:env:getDataForStdIn\">\n\t<c path=\"String\"/>\n\t<c path=\"Array\"><c path=\"String\"/></c>\n\t<c path=\"String\"/>\n\t<d><c path=\"String\"/></d>\n\t<f a=\"\"><c path=\"js.lib.ArrayBuffer\"/></f>\n\t<c path=\"js.lib.Promise\"><t path=\"nanofl.ide.sys.ProcessResult\"/></c>\n</f></runPipedStdIn>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":expose\"><e>\"ProcessManager\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
 nanofl_ide_sys_Shell.__rtti = "<class path=\"nanofl.ide.sys.Shell\" params=\"\" interface=\"1\">\n\t<openInExternalBrowser public=\"1\" set=\"method\"><f a=\"url\">\n\t<c path=\"String\"/>\n\t<x path=\"Void\"/>\n</f></openInExternalBrowser>\n\t<runWithEditor public=\"1\" set=\"method\"><f a=\"document\">\n\t<c path=\"String\"/>\n\t<x path=\"Bool\"/>\n</f></runWithEditor>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":expose\"><e>\"Shell\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
 nanofl_ide_sys_Uploader.__rtti = "<class path=\"nanofl.ide.sys.Uploader\" params=\"\">\n\t<log set=\"method\" line=\"52\" static=\"1\"><f a=\"v:?infos\">\n\t<d/>\n\t<x path=\"Null\"><t path=\"haxe.PosInfos\"/></x>\n\t<x path=\"Void\"/>\n</f></log>\n\t<fileSystem><c path=\"nanofl.ide.sys.FileSystem\"/></fileSystem>\n\t<saveUploadedFiles public=\"1\" set=\"method\" line=\"19\"><f a=\"files:destDir\">\n\t<c path=\"Array\"><c path=\"js.html.File\"/></c>\n\t<c path=\"String\"/>\n\t<c path=\"js.lib.Promise\"><a/></c>\n</f></saveUploadedFiles>\n\t<new public=\"1\" set=\"method\" line=\"14\"><f a=\"fileSystem\">\n\t<c path=\"nanofl.ide.sys.FileSystem\"/>\n\t<x path=\"Void\"/>\n</f></new>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":expose\"><e>\"Uploader\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
+nanofl_ide_sys_VideoUtils.__rtti = "<class path=\"nanofl.ide.sys.VideoUtils\" params=\"\" interface=\"1\">\n\t<getFileInfo public=\"1\" set=\"method\"><f a=\"filePath\">\n\t<c path=\"String\"/>\n\t<t path=\"nanofl.ide.sys.VideoFileInfo\"/>\n</f></getFileInfo>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":expose\"><e>\"VideoUtils\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
 nanofl_ide_sys_WebServerUtils.__rtti = "<class path=\"nanofl.ide.sys.WebServerUtils\" params=\"\" interface=\"1\">\n\t<start public=\"1\" set=\"method\">\n\t\t<f a=\"directoryToServe\">\n\t\t\t<c path=\"String\"/>\n\t\t\t<x path=\"Int\"/>\n\t\t</f>\n\t\t<haxe_doc>Start a web server process.\n        Several web servers can be started simultaneously.\n        Returns `uid`.</haxe_doc>\n\t</start>\n\t<getAddress public=\"1\" set=\"method\">\n\t\t<f a=\"uid\">\n\t\t\t<x path=\"Int\"/>\n\t\t\t<c path=\"String\"/>\n\t\t</f>\n\t\t<haxe_doc>Returns: URL like \"http://127.0.0.1:9990\".</haxe_doc>\n\t</getAddress>\n\t<kill public=\"1\" set=\"method\">\n\t\t<f a=\"uid\">\n\t\t\t<x path=\"Int\"/>\n\t\t\t<x path=\"Void\"/>\n\t\t</f>\n\t\t<haxe_doc>Kill specified web server process.</haxe_doc>\n\t</kill>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":expose\"><e>\"WebServerUtils\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
 nanofl_ide_sys_Zip.__rtti = "<class path=\"nanofl.ide.sys.Zip\" params=\"\" interface=\"1\">\n\t<compress public=\"1\" set=\"method\"><f a=\"srcDir:destZip:?relFilePaths\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n\t<c path=\"Array\"><c path=\"String\"/></c>\n\t<x path=\"Bool\"/>\n</f></compress>\n\t<decompress public=\"1\" set=\"method\"><f a=\"srcZip:destDir:?elevated\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n\t<x path=\"Bool\"/>\n\t<x path=\"Bool\"/>\n</f></decompress>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":expose\"><e>\"Zip\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
 nanofl_ide_sys_node_NodeWebServerUtils.start_uid = 0;
