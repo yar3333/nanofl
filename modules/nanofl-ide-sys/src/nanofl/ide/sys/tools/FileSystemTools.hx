@@ -238,8 +238,8 @@ class FileSystemTools
 			(
 				fileSystem,
 				libraryDir,
-				function(file) r = maxDate(r, fileSystem.getLastModified(file)),
-				function(dir) { r = maxDate(r, fileSystem.getLastModified(dir)); return true; }
+				file -> r = maxDate(r, fileSystem.getLastModified(file)),
+				dir -> { r = maxDate(r, fileSystem.getLastModified(dir)); return true; }
 			);
 		}
 		
