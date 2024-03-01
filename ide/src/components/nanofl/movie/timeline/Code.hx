@@ -1079,24 +1079,27 @@ class Code extends wquery.Component implements ITimeline
 		}
 	}
 	
-	public function setSelectedLayerType(type:String)
+	public function setSelectedLayerType(humanType:String)
 	{
-		var indexes = getSelectedLayerIndexes();
-		Debug.assert(indexes.length == 1);
-		
-		setLayerType(adapter.layers[indexes[0]], type);
-		
-		preserveLayerSelection(function()
-		{
-			update();
-		});
+        final layerIndexes = getSelectedLayerIndexes();
+		Debug.assert(layerIndexes.length == 1);
+
+        final layer = adapter.layers[layerIndexes[0]];
+        if (layer.getHumanType() == humanType) return;
+        
+        adapter.beginTransaction();
+
+        setLayerType(layer, humanType);
+		preserveLayerSelection(() -> update());
+
+        adapter.commitTransaction();
 	}
 	
-	public function setLayerType(layer:TLLayer, type:String)
+	function setLayerType(layer:TLLayer, humanType:String)
 	{
 		var index = adapter.layers.indexOf(layer);
 		
-		switch (type)
+		switch (humanType)
 		{
 			case "normal":
 				if ([ "masked", "guided" ].has(layer.getHumanType()))
@@ -1124,7 +1127,7 @@ class Code extends wquery.Component implements ITimeline
 				layer.parentIndex = getPotentialParentLayerIndex(index);
 				
 			default:
-				throw "Timeline.setLayerType: type '" + type + "' is not supported.";
+				throw "Timeline.setLayerType: humanType '" + humanType + "' is not supported.";
 		}
 	}
 	
