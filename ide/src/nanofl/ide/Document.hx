@@ -233,7 +233,7 @@ class Document extends OpenedFile
 			
 			if (lastModified == null || lastModified.getTime() < realLastModified.getTime())
 			{
-				var properties = DocumentProperties.load(path, fileSystem);
+                var properties = DocumentProperties.load(path, fileSystem);
 				var library = new IdeLibrary(Path.join([ Path.directory(path), "library" ]));
 				return library.loadItems().then(_ ->
                 ({
@@ -477,7 +477,7 @@ class Document extends OpenedFile
         return loadRaw(fileSystem, path, !force ? lastModified : null).then((e:{ library:IdeLibrary, properties:DocumentProperties, lastModified:Date }) ->
         {
             if (e == null) return Promise.resolve({ added:[], removed:[] });
-            
+
             var itemsToRemove = library.getItems().filter(x -> !e.library.hasItem(x.namePath));
             var itemsToAdd = e.library.getItemsAsIde().filter(x -> !library.hasItem(x.namePath));
             
@@ -714,7 +714,7 @@ class Document extends OpenedFile
             Path.directory(path)
         );
 		
-		return { lastModified:Date.now(), errorMessage:null };
+		return { lastModified:Date.fromTime(Date.now().getTime() + 1), errorMessage:null };
 	}
 
     public function runPreventingAutoReload<T>(f:Void->Promise<T>) : Promise<T>
