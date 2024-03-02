@@ -29,7 +29,7 @@ build.hxml
 --macro CodeGen.include("htmlparser")
 
 --macro CodeGen.removeTypeMeta(":jsRequire :allow :rtti :autoBuild :build")
---macro CodeGen.removeFieldMeta(":profile :allow :noprofile")
+--macro CodeGen.removeFieldMeta(":profile :allow :noprofile inject")
 
 --macro CodeGen.map("datatools.ArrayRO", "Array")
 

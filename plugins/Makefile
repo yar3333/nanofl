@@ -3,7 +3,7 @@ JS_RESULTS = $(addprefix bin/,$(addsuffix .js,$(PLUGINS)))
 
 rebuild: clean build
 
-build: update_api $(JS_RESULTS)
+build: api $(JS_RESULTS)
 
 bin/%.js:
 	haxe --cwd $* build.hxml
@@ -11,8 +11,8 @@ bin/%.js:
 clean:
 	rm -rf bin/*
 
-update_api:
+api:
 	make -C api
 
-.PHONY: build rebuild clean update_api
+.PHONY: build rebuild clean api
 .SUFFIXES: 
