@@ -1,6 +1,6 @@
 package components.nanofl.movie.timeline;
 
-extern class Code extends wquery.Component implements nanofl.ide.timeline.ITimeline {
+extern class Code extends wquery.Component implements nanofl.ide.timeline.IIdeTimeline {
 	function new(parent:wquery.Component, parentNode:haxe.extern.EitherType<String, haxe.extern.EitherType<js.html.Element, js.JQuery>>, ?params:Dynamic, ?attachMode:wquery.AttachMode):Void;
 	function bind(adapter:components.nanofl.movie.timeline.ITimelineAdapter):Void;
 	function init():Void;
@@ -27,8 +27,7 @@ extern class Code extends wquery.Component implements nanofl.ide.timeline.ITimel
 	function getSelectedLayerIndexes():Array<Int>;
 	function gotoPrevFrame():Void;
 	function gotoNextFrame():Void;
-	function setSelectedLayerType(type:String):Void;
-	function setLayerType(layer:components.nanofl.movie.timeline.TLLayer, type:String):Void;
+	function setSelectedLayerType(humanType:String):Void;
 	function selectLayersByIndexes(layerIndexes:Array<Int>, ?replaceSelection:Bool):Void;
 	function play():Void;
 	function stop():Void;

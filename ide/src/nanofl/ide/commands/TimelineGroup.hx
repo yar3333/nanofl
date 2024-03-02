@@ -1,7 +1,7 @@
 package nanofl.ide.commands;
 
 import nanofl.ide.Clipboard;
-import nanofl.ide.timeline.ITimeline;
+import nanofl.ide.timeline.IIdeTimeline;
 import nanofl.ide.ui.View;
 
 @:rtti
@@ -10,7 +10,7 @@ class TimelineGroup extends BaseGroup
 	@inject var view : View;
 	@inject var clipboard : Clipboard;
 	
-	var timeline(get, never) : ITimeline; @:noCompletion function get_timeline() : ITimeline return view.movie.timeline;
+	var timeline(get, never) : IIdeTimeline; @:noCompletion function get_timeline() : IIdeTimeline return view.movie.timeline;
 	
 	public function insertFrame()		timeline.insertFrame();
 	public function convertToKeyFrame()	timeline.convertToKeyFrame();

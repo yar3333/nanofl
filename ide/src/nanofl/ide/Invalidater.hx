@@ -2,7 +2,7 @@ package nanofl.ide;
 
 import nanofl.ide.editor.Editor;
 import nanofl.ide.editor.Editor;
-import nanofl.ide.timeline.ITimeline;
+import nanofl.ide.timeline.IIdeTimeline;
 
 class Invalidater
 {
@@ -28,7 +28,7 @@ class Invalidater
 	
 	public function invalidateLibrary() { updateLibrary = true; return this; }
 	
-	public function updateInvalidated(editor:Editor, timeline:ITimeline, libraryView:components.nanofl.library.libraryview.Code)
+	public function updateInvalidated(editor:Editor, timeline:IIdeTimeline, libraryView:components.nanofl.library.libraryview.Code)
 	{
 		if (updateTimelineFrames) timeline.updateFrames();
 		else
