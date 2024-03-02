@@ -3,7 +3,7 @@ package nanofl.ide.navigator;
 import nanofl.engine.IPathElement;
 import nanofl.engine.movieclip.Frame;
 import nanofl.engine.movieclip.Layer;
-import nanofl.ide.ITimeline;
+import nanofl.ide.IIdeTimeline;
 import stdlib.Debug;
 using nanofl.engine.LayersTools;
 
@@ -57,7 +57,7 @@ class PathItem
             && p.frameIndex == frameIndex;
     }
     
-    public function getTimeline() : ITimeline return cast element.getTimeline();
+    public function getTimeline() : IIdeTimeline return cast element.getTimeline();
 	
 	public function clone() : PathItem
 	{

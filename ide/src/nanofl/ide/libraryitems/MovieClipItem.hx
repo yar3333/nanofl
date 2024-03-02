@@ -13,7 +13,7 @@ using stdlib.Lambda;
 
 class MovieClipItem extends nanofl.engine.libraryitems.MovieClipItem
 	implements IIdeInstancableItem
-	implements nanofl.ide.ITimeline
+	implements nanofl.ide.IIdeTimeline
 {
 	public static function createWithFrame(namePath:String, ?elements:Array<Element>, layerName="Layer 0") : MovieClipItem
 	{

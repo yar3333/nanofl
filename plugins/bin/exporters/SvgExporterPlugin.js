@@ -530,18 +530,18 @@ nanofl_engine_strokes_IStroke.__isInterface__ = true;
 nanofl_engine_strokes_IStroke.prototype = {
 	__class__: nanofl_engine_strokes_IStroke
 };
+var nanofl_ide_IIdeTimeline = function() { };
+nanofl_ide_IIdeTimeline.__name__ = true;
+nanofl_ide_IIdeTimeline.__isInterface__ = true;
+nanofl_ide_IIdeTimeline.__interfaces__ = [nanofl_engine_ITimeline];
+nanofl_ide_IIdeTimeline.prototype = {
+	__class__: nanofl_ide_IIdeTimeline
+};
 var nanofl_ide_ISymbol = function() { };
 nanofl_ide_ISymbol.__name__ = true;
 nanofl_ide_ISymbol.__isInterface__ = true;
 nanofl_ide_ISymbol.prototype = {
 	__class__: nanofl_ide_ISymbol
-};
-var nanofl_ide_ITimeline = function() { };
-nanofl_ide_ITimeline.__name__ = true;
-nanofl_ide_ITimeline.__isInterface__ = true;
-nanofl_ide_ITimeline.__interfaces__ = [nanofl_engine_ITimeline];
-nanofl_ide_ITimeline.prototype = {
-	__class__: nanofl_ide_ITimeline
 };
 var nanofl_ide_libraryitems_IIdeLibraryItem = function() { };
 nanofl_ide_libraryitems_IIdeLibraryItem.__name__ = true;

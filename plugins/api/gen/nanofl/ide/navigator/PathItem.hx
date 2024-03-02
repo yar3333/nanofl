@@ -15,6 +15,6 @@ extern class PathItem {
 	function getNavigatorName():String;
 	function isScene():Bool;
 	function equ(p:nanofl.ide.navigator.PathItem):Bool;
-	function getTimeline():nanofl.ide.ITimeline;
+	function getTimeline():nanofl.ide.IIdeTimeline;
 	function clone():nanofl.ide.navigator.PathItem;
 }
