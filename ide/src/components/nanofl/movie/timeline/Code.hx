@@ -14,7 +14,7 @@ import nanofl.engine.LayerType;
 import nanofl.engine.Version;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.draganddrop.AllowedDropEffect;
-import nanofl.ide.timeline.IIdeTimeline;
+import nanofl.ide.timeline.IEditorTimeline;
 import nanofl.ide.timeline.droppers.LayerToHeaderTitleDropper;
 import nanofl.ide.timeline.droppers.LayerToLayerDropper;
 import nanofl.ide.timeline.droppers.LayerToTitleDropper;
@@ -28,7 +28,7 @@ using stdlib.Lambda;
 
 #if profiler @:build(Profiler.buildMarked()) #end
 @:rtti
-class Code extends wquery.Component implements IIdeTimeline
+class Code extends wquery.Component implements IEditorTimeline
 {
 	static var imports =
 	{

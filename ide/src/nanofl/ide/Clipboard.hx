@@ -14,7 +14,7 @@ import nanofl.ide.library.LibraryItems;
 import nanofl.ide.preferences.Preferences;
 import nanofl.ide.sys.FileSystem;
 import nanofl.ide.sys.Folders;
-import nanofl.ide.timeline.IIdeTimeline;
+import nanofl.ide.timeline.IEditorTimeline;
 import nanofl.ide.ui.View;
 using StringTools;
 using stdlib.Lambda;
@@ -227,7 +227,7 @@ class Clipboard extends InjectContainer
 		}
 	}
 	
-	function pasteStringInner2(xml:XmlDocument, invalidater:Invalidater, editor:Editor, timeline:IIdeTimeline)
+	function pasteStringInner2(xml:XmlDocument, invalidater:Invalidater, editor:Editor, timeline:IEditorTimeline)
 	{
 		if (timeline.pasteFromXml(xml))
 		{

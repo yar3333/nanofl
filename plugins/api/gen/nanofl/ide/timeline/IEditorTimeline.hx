@@ -1,6 +1,6 @@
 package nanofl.ide.timeline;
 
-interface IIdeTimeline {
+interface IEditorTimeline {
 	function insertFrame():Void;
 	function convertToKeyFrame():Void;
 	function addBlankKeyFrame():Void;

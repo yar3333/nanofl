@@ -1,6 +1,6 @@
 package components.nanofl.movie.timeline;
 
-extern class Code extends wquery.Component implements nanofl.ide.timeline.IIdeTimeline {
+extern class Code extends wquery.Component implements nanofl.ide.timeline.IEditorTimeline {
 	function new(parent:wquery.Component, parentNode:haxe.extern.EitherType<String, haxe.extern.EitherType<js.html.Element, js.JQuery>>, ?params:Dynamic, ?attachMode:wquery.AttachMode):Void;
 	function bind(adapter:components.nanofl.movie.timeline.ITimelineAdapter):Void;
 	function init():Void;

@@ -9,5 +9,5 @@ extern class Invalidater {
 	function invalidateEditorLight():nanofl.ide.Invalidater;
 	function invalidateEditorDeep():nanofl.ide.Invalidater;
 	function invalidateLibrary():nanofl.ide.Invalidater;
-	function updateInvalidated(editor:nanofl.ide.editor.Editor, timeline:nanofl.ide.timeline.IIdeTimeline, libraryView:components.nanofl.library.libraryview.Code):Void;
+	function updateInvalidated(editor:nanofl.ide.editor.Editor, timeline:nanofl.ide.timeline.IEditorTimeline, libraryView:components.nanofl.library.libraryview.Code):Void;
 }
