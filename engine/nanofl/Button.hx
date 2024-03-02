@@ -1,6 +1,5 @@
 package nanofl;
 
-import easeljs.events.MouseEvent;
 import nanofl.engine.libraryitems.MovieClipItem;
 
 @:expose
@@ -24,7 +23,8 @@ class Button extends MovieClip
 		cursor = "pointer";
 	}
 	
-	override function onMouseDown(e:MouseEvent)
+	#if !ide
+    override function onMouseDown(e:easeljs.events.MouseEvent)
 	{
 		if (getTotalFrames() >= 3 && currentFrame != 2)
 		{
@@ -32,7 +32,7 @@ class Button extends MovieClip
 		}
 	}
 	
-	override function onMouseMove(e:MouseEvent)
+	override function onMouseMove(e:easeljs.events.MouseEvent)
 	{
 		if (getTotalFrames() >= 2 && currentFrame != 2)
 		{
@@ -40,11 +40,12 @@ class Button extends MovieClip
 		}
 	}
 	
-	override function onMouseUp(e:MouseEvent)
+	override function onMouseUp(e:easeljs.events.MouseEvent)
 	{
 		if (getTotalFrames() > 0 && currentFrame != 0)
 		{
 			gotoAndStop(0);
 		}
 	}
+    #end
 }

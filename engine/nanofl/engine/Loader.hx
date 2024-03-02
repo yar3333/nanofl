@@ -1,5 +1,6 @@
 package nanofl.engine;
 
+import js.html.VideoElement;
 import js.Browser;
 import js.lib.Error;
 import js.lib.Promise;
@@ -78,6 +79,25 @@ class Loader
             Browser.document.head.appendChild(elem);
         });
     }
+
+	public static function video(url:String) : Promise<VideoElement>
+	{
+		return new Promise<VideoElement>((resolve, reject) ->
+		{
+			var video = Browser.document.createVideoElement();
+			video.onloadedmetadata = _ ->
+			{
+				resolve(video);
+			};
+			video.onerror = _ ->
+			{
+				console.error("Failed to load '" + url + "'.");
+				//image.src = "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=";
+				reject(new Error("Failed to load '" + url + "'."));
+			};
+			video.src = url;
+		});
+	}
 	
 	public static function queued<T>(urls:Array<String>, load:String->Promise<T>) : Promise<Array<T>>
     {

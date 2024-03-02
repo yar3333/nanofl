@@ -3706,12 +3706,6 @@ js_injecting_InjectorRO.__isInterface__ = true;
 js_injecting_InjectorRO.prototype = {
 	__class__: js_injecting_InjectorRO
 };
-var nanofl_IEventHandlers = function() { };
-nanofl_IEventHandlers.__name__ = "nanofl.IEventHandlers";
-nanofl_IEventHandlers.__isInterface__ = true;
-nanofl_IEventHandlers.prototype = {
-	__class__: nanofl_IEventHandlers
-};
 var nanofl_engine_AdvancableDisplayObject = function() { };
 nanofl_engine_AdvancableDisplayObject.__name__ = "nanofl.engine.AdvancableDisplayObject";
 nanofl_engine_AdvancableDisplayObject.__isInterface__ = true;

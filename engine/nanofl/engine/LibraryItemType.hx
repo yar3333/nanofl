@@ -8,4 +8,5 @@ enum LibraryItemType
     mesh;
     movieclip;
     sound;
+    video;
 }

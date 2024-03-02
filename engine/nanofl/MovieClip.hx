@@ -2,7 +2,6 @@ package nanofl;
 
 import easeljs.display.Container;
 import easeljs.display.DisplayObject;
-import easeljs.events.MouseEvent;
 import nanofl.engine.IPathElement;
 import nanofl.engine.LayerType;
 import nanofl.engine.AdvancableDisplayObject;
@@ -14,7 +13,7 @@ using stdlib.Lambda;
 
 @:expose
 class MovieClip extends Container 
-    implements IEventHandlers
+    #if !ide implements IEventHandlers #end
     implements AdvancableDisplayObject
 {
 	var layerOfChild : Map<DisplayObject, Int>;
@@ -359,10 +358,12 @@ class MovieClip extends Container
 		return symbol.toString();
 	}
 	
+	#if !ide
 	//{ IEventHandlers
 	public function onEnterFrame() : Void {}
-	public function onMouseDown(e:MouseEvent) : Void {}
-	public function onMouseMove(e:MouseEvent) : Void {}
-	public function onMouseUp(e:MouseEvent) : Void {}
+	public function onMouseDown(e:easeljs.events.MouseEvent) : Void {}
+	public function onMouseMove(e:easeljs.events.MouseEvent) : Void {}
+	public function onMouseUp(e:easeljs.events.MouseEvent) : Void {}
 	//}
+	#end
 }

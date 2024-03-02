@@ -3,7 +3,8 @@ package nanofl;
 import nanofl.engine.libraryitems.InstancableItem;
 
 @:expose
-class Bitmap extends easeljs.display.Bitmap #if !ide implements IEventHandlers #end
+class Bitmap extends easeljs.display.Bitmap 
+    #if !ide implements IEventHandlers #end
 {
 	public var symbol(default, null) : InstancableItem;
 	
@@ -27,15 +28,12 @@ class Bitmap extends easeljs.display.Bitmap #if !ide implements IEventHandlers #
 		return symbol.toString();
 	}
 	
-	
 	#if !ide
-	
 	//{ IEventHandlers
 	public function onEnterFrame() : Void {}
 	public function onMouseDown(e:easeljs.events.MouseEvent) : Void {}
 	public function onMouseMove(e:easeljs.events.MouseEvent) : Void {}
 	public function onMouseUp(e:easeljs.events.MouseEvent) : Void {}
 	//}
-	
 	#end
 }

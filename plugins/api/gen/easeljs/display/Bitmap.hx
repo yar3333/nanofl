@@ -49,7 +49,7 @@ package easeljs.display;
 	 
 **/
 @:native('createjs.Bitmap') extern class Bitmap extends easeljs.display.DisplayObject {
-	function new(imageOrUri:haxe.extern.EitherType<String, haxe.extern.EitherType<js.html.ImageElement, js.html.CanvasElement>>):Void;
+	function new(imageOrUri:haxe.extern.EitherType<String, haxe.extern.EitherType<js.html.ImageElement, haxe.extern.EitherType<js.html.CanvasElement, easeljs.utils.VideoBuffer>>>):Void;
 	/**
 		
 			 * The source image to display. This can be a CanvasImageSource
