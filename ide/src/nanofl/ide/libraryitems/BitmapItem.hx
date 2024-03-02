@@ -16,7 +16,6 @@ class BitmapItem extends nanofl.engine.libraryitems.BitmapItem
 	{
 		var obj : BitmapItem = new BitmapItem(namePath, ext);
 		
-		obj.ext = ext;
 		obj.textureAtlas = textureAtlas;
 		obj.image = image;
 		

@@ -19,7 +19,7 @@ class CachedFile extends InjectContainer
 	{
 		if (_text == null)
 		{
-			_text = fileSystem.getContent(libraryDir + "/" + path);
+			_text = fileSystem.getContent(libraryDir + "/" + relativePath);
 		}
 		return _text;
 	}
@@ -39,12 +39,12 @@ class CachedFile extends InjectContainer
 				}
 				else
 				{
-					trace("Error XmlParser.parse(" + libraryDir + "/" + path + "): must have exactly one root element (" + doc.children.length + ").");
+					trace("Error XmlParser.parse(" + libraryDir + "/" + relativePath + "): must have exactly one root element (" + doc.children.length + ").");
 				}
 			}
 			catch (e:Dynamic)
 			{
-				trace("Error XmlParser.parse(" + libraryDir + "/" + path + "): " + ExceptionTools.string(e));
+				trace("Error XmlParser.parse(" + libraryDir + "/" + relativePath + "): " + ExceptionTools.string(e));
 			}
 		}
 		return _xml;
@@ -62,29 +62,19 @@ class CachedFile extends InjectContainer
 			}
 			catch (e:Dynamic)
 			{
-				trace("Error Json.parse(" + libraryDir + "/" + path + "): " + ExceptionTools.string(e));
+				trace("Error Json.parse(" + libraryDir + "/" + relativePath + "): " + ExceptionTools.string(e));
 			}
 		}
 		return _json;
 	}
 	
-	/**
-	 * Relative file path.
-	 */
-	public var path(default, null) : String;
+	public var relativePath(default, null) : String;
 	
-	/**
-	 * If true - skip this file.
-	 */
-	public var excluded(default, null) = false;
-	
-	public function new(libraryDir:String, path:String)
+	public function new(libraryDir:String, relativePath:String)
 	{
 		super();
 		
 		this.libraryDir = libraryDir;
-		this.path = path;
+		this.relativePath = relativePath;
 	}
-	
-	public function exclude() excluded = true;
 }

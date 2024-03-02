@@ -60,16 +60,6 @@ class LibraryItems
                         Debug.assert(item != null, "Loader " + loader.name + " returns null.");
                         r.push(item);
                     }
-					
-					for (file in cachedFiles)
-					{
-						if (file.excluded)
-						{
-							log("exclude " + file.path);
-							cachedFiles.remove(file.path);
-						}
-					}
-					
 					return r;
 				});
 			});

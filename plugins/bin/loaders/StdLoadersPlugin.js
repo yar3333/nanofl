@@ -19,12 +19,12 @@ BitmapLoaderPlugin.prototype = {
 		var file_current = 0;
 		while(file_current < file_length) {
 			var file = file_h[file_keys[file_current++]];
-			if(file.excluded) {
+			if(!Object.prototype.hasOwnProperty.call(files.h,file.relativePath)) {
 				continue;
 			}
-			var ext = haxe_io_Path.extension(file.path);
+			var ext = haxe_io_Path.extension(file.relativePath);
 			if(ext != null && BitmapLoaderPlugin.extensions.indexOf(ext.toLowerCase()) >= 0) {
-				var namePath = [haxe_io_Path.withoutExtension(file.path)];
+				var namePath = [haxe_io_Path.withoutExtension(file.relativePath)];
 				if(!Lambda.exists(r,(function(namePath) {
 					return function(item) {
 						return item.namePath == namePath[0];
@@ -32,13 +32,18 @@ BitmapLoaderPlugin.prototype = {
 				})(namePath))) {
 					var tmp = files.h[namePath[0] + ".xml"];
 					var xmlFile = tmp != null ? tmp : files.h[namePath[0] + ".bitmap"];
-					var item = xmlFile != null && xmlFile.get_xml() != null && xmlFile.get_xml().name == "bitmap" ? nanofl.ide.libraryitems.BitmapItem.parse(namePath[0],xmlFile.get_xml()) : new nanofl.ide.libraryitems.BitmapItem(namePath[0],ext);
-					if(xmlFile != null) {
-						xmlFile.exclude();
+					var tmp1 = xmlFile != null ? xmlFile.get_xml() : null;
+					var item = (tmp1 != null ? tmp1.name : null) == "bitmap" ? nanofl.ide.libraryitems.BitmapItem.parse(namePath[0],xmlFile.get_xml()) : new nanofl.ide.libraryitems.BitmapItem(namePath[0],ext);
+					var key = xmlFile != null ? xmlFile.relativePath : null;
+					if(Object.prototype.hasOwnProperty.call(files.h,key)) {
+						delete(files.h[key]);
 					}
 					r.push(item);
 				}
-				file.exclude();
+				var key1 = file.relativePath;
+				if(Object.prototype.hasOwnProperty.call(files.h,key1)) {
+					delete(files.h[key1]);
+				}
 			}
 		}
 		return Promise.resolve(r);
@@ -62,11 +67,11 @@ FontLoaderPlugin.prototype = {
 		var file_current = 0;
 		while(file_current < file_length) {
 			var file = file_h[file_keys[file_current++]];
-			if(file.excluded) {
+			if(!Object.prototype.hasOwnProperty.call(files.h,file.relativePath)) {
 				continue;
 			}
-			if(["xml","font"].indexOf(haxe_io_Path.extension(file.path)) >= 0) {
-				var namePath = [haxe_io_Path.withoutExtension(file.path)];
+			if(["xml","font"].indexOf(haxe_io_Path.extension(file.relativePath)) >= 0) {
+				var namePath = [haxe_io_Path.withoutExtension(file.relativePath)];
 				if(!Lambda.exists(r,(function(namePath) {
 					return function(item) {
 						return item.namePath == namePath[0];
@@ -76,7 +81,10 @@ FontLoaderPlugin.prototype = {
 						var font = nanofl.ide.libraryitems.FontItem.parse(namePath[0],file.get_xml());
 						if(font != null) {
 							r.push(font);
-							file.exclude();
+							var key = file.relativePath;
+							if(Object.prototype.hasOwnProperty.call(files.h,key)) {
+								delete(files.h[key]);
+							}
 						}
 					}
 				}
@@ -122,6 +130,7 @@ Main.main = function() {
 	nanofl.ide.plugins.LoaderPlugins.register(new SoundLoaderPlugin());
 	nanofl.ide.plugins.LoaderPlugins.register(new MovieClipLoaderPlugin());
 	nanofl.ide.plugins.LoaderPlugins.register(new MeshLoaderPlugin());
+	nanofl.ide.plugins.LoaderPlugins.register(new VideoLoaderPlugin());
 };
 Math.__name__ = true;
 var MeshLoaderPlugin = function() {
@@ -143,12 +152,12 @@ MeshLoaderPlugin.prototype = {
 		var file_current = 0;
 		while(file_current < file_length) {
 			var file = file_h[file_keys[file_current++]];
-			if(file.excluded) {
+			if(!Object.prototype.hasOwnProperty.call(files.h,file.relativePath)) {
 				continue;
 			}
-			var ext = haxe_io_Path.extension(file.path);
+			var ext = haxe_io_Path.extension(file.relativePath);
 			if(extensions.indexOf(ext) != -1) {
-				var item = nanofl.ide.libraryitems.MeshItem.load(haxe_io_Path.withoutExtension(file.path),ext,files);
+				var item = nanofl.ide.libraryitems.MeshItem.load(haxe_io_Path.withoutExtension(file.relativePath),ext,files);
 				if(item != null) {
 					r.push(item);
 				}
@@ -175,11 +184,11 @@ MovieClipLoaderPlugin.prototype = {
 		var file_current = 0;
 		while(file_current < file_length) {
 			var file = file_h[file_keys[file_current++]];
-			if(file.excluded) {
+			if(!Object.prototype.hasOwnProperty.call(files.h,file.relativePath)) {
 				continue;
 			}
-			if(["json","xml","movieclip"].indexOf(haxe_io_Path.extension(file.path)) >= 0) {
-				var namePath = [haxe_io_Path.withoutExtension(file.path)];
+			if(["json","xml","movieclip"].indexOf(haxe_io_Path.extension(file.relativePath)) >= 0) {
+				var namePath = [haxe_io_Path.withoutExtension(file.relativePath)];
 				if(!Lambda.exists(r,(function(namePath) {
 					return function(item) {
 						return item.namePath == namePath[0];
@@ -189,13 +198,19 @@ MovieClipLoaderPlugin.prototype = {
 						var mc = nanofl.ide.libraryitems.MovieClipItem.parse(namePath[0],file.get_xml());
 						if(mc != null) {
 							r.push(mc);
-							file.exclude();
+							var key = file.relativePath;
+							if(Object.prototype.hasOwnProperty.call(files.h,key)) {
+								delete(files.h[key]);
+							}
 						}
 					} else if(file.get_json() != null) {
 						var mc1 = nanofl.ide.libraryitems.MovieClipItem.parseJson(namePath[0],file.get_xml());
 						if(mc1 != null) {
 							r.push(mc1);
-							file.exclude();
+							var key1 = file.relativePath;
+							if(Object.prototype.hasOwnProperty.call(files.h,key1)) {
+								delete(files.h[key1]);
+							}
 						}
 					}
 				}
@@ -222,12 +237,12 @@ SoundLoaderPlugin.prototype = {
 		var file_current = 0;
 		while(file_current < file_length) {
 			var file = file_h[file_keys[file_current++]];
-			if(file.excluded) {
+			if(!Object.prototype.hasOwnProperty.call(files.h,file.relativePath)) {
 				continue;
 			}
-			var ext = haxe_io_Path.extension(file.path);
+			var ext = haxe_io_Path.extension(file.relativePath);
 			if(ext != null && SoundLoaderPlugin.extensions.indexOf(ext.toLowerCase()) >= 0) {
-				var namePath = [haxe_io_Path.withoutExtension(file.path)];
+				var namePath = [haxe_io_Path.withoutExtension(file.relativePath)];
 				if(!Lambda.exists(r,(function(namePath) {
 					return function(item) {
 						return item.namePath == namePath[0];
@@ -236,12 +251,63 @@ SoundLoaderPlugin.prototype = {
 					var tmp = files.h[namePath[0] + ".xml"];
 					var xmlFile = tmp != null ? tmp : files.h[namePath[0] + ".sound"];
 					var item = xmlFile != null && xmlFile.get_xml() != null && xmlFile.get_xml().name == "sound" ? nanofl.ide.libraryitems.SoundItem.parse(namePath[0],xmlFile.get_xml()) : new nanofl.ide.libraryitems.SoundItem(namePath[0],ext);
-					if(xmlFile != null) {
-						xmlFile.exclude();
+					var key = xmlFile != null ? xmlFile.relativePath : null;
+					if(Object.prototype.hasOwnProperty.call(files.h,key)) {
+						delete(files.h[key]);
 					}
 					r.push(item);
 				}
-				file.exclude();
+				var key1 = file.relativePath;
+				if(Object.prototype.hasOwnProperty.call(files.h,key1)) {
+					delete(files.h[key1]);
+				}
+			}
+		}
+		return Promise.resolve(r);
+	}
+};
+var VideoLoaderPlugin = function() {
+	this.properties = null;
+	this.menuItemIcon = "";
+	this.menuItemName = "Video";
+	this.priority = 100;
+	this.name = "VideoLoader";
+};
+VideoLoaderPlugin.__name__ = true;
+VideoLoaderPlugin.prototype = {
+	load: function(api,params,baseDir,files) {
+		var r = [];
+		var h = files.h;
+		var file_h = h;
+		var file_keys = Object.keys(h);
+		var file_length = file_keys.length;
+		var file_current = 0;
+		while(file_current < file_length) {
+			var file = file_h[file_keys[file_current++]];
+			if(!Object.prototype.hasOwnProperty.call(files.h,file.relativePath)) {
+				continue;
+			}
+			var ext = haxe_io_Path.extension(file.relativePath);
+			if(ext != null && VideoLoaderPlugin.extensions.indexOf(ext.toLowerCase()) >= 0) {
+				var namePath = [haxe_io_Path.withoutExtension(file.relativePath)];
+				if(!Lambda.exists(r,(function(namePath) {
+					return function(item) {
+						return item.namePath == namePath[0];
+					};
+				})(namePath))) {
+					var xmlFile = files.h[namePath[0] + ".xml"];
+					var tmp = xmlFile != null ? xmlFile.get_xml() : null;
+					var item = (tmp != null ? tmp.name : null) == "video" ? nanofl.ide.libraryitems.VideoItem.parse(namePath[0],xmlFile.get_xml()) : new nanofl.ide.libraryitems.VideoItem(namePath[0],ext);
+					var key = xmlFile != null ? xmlFile.relativePath : null;
+					if(Object.prototype.hasOwnProperty.call(files.h,key)) {
+						delete(files.h[key]);
+					}
+					r.push(item);
+				}
+				var key1 = file.relativePath;
+				if(Object.prototype.hasOwnProperty.call(files.h,key1)) {
+					delete(files.h[key1]);
+				}
 			}
 		}
 		return Promise.resolve(r);
@@ -416,5 +482,6 @@ Date.__name__ = "Date";
 js_Boot.__toStr = ({ }).toString;
 BitmapLoaderPlugin.extensions = ["jpg","jpeg","png","gif","svg"];
 SoundLoaderPlugin.extensions = ["ogg","mp3","wav"];
+VideoLoaderPlugin.extensions = ["mp4","webm","mkv","gif"];
 Main.main();
 })({});

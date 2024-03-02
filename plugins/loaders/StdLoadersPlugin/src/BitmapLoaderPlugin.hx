@@ -27,22 +27,22 @@ class BitmapLoaderPlugin implements ILoaderPlugin
         
         for (file in files)
         {
-            if (file.excluded) continue;
+            if (!files.exists(file.relativePath)) continue;
             
-            var ext = Path.extension(file.path);
+            var ext = Path.extension(file.relativePath);
             if (ext != null && extensions.indexOf(ext.toLowerCase()) >= 0)
             {
-                var namePath = Path.withoutExtension(file.path);
+                var namePath = Path.withoutExtension(file.relativePath);
                 if (!r.exists(item -> item.namePath == namePath))
                 {
                     var xmlFile = files.get(namePath + ".xml") ?? files.get(namePath + ".bitmap"); // ".bitmap" - obsolete
-                    var item = xmlFile != null && xmlFile.xml != null && xmlFile.xml.name == "bitmap"
+                    var item = xmlFile?.xml?.name == "bitmap"
                             ? BitmapItem.parse(namePath, xmlFile.xml)
                             : new BitmapItem(namePath, ext);
-                    xmlFile?.exclude();
+                    files.remove(xmlFile?.relativePath);
                     r.push(item);
                 }
-                file.exclude();
+                files.remove(file.relativePath);
             }
         }
         

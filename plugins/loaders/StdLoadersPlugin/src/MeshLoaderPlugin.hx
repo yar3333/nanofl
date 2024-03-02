@@ -25,12 +25,12 @@ class MeshLoaderPlugin implements ILoaderPlugin
         
         for (file in files)
         {
-            if (file.excluded) continue;
+            if (!files.exists(file.relativePath)) continue;
             
-            var ext = Path.extension(file.path);
+            var ext = Path.extension(file.relativePath);
             if (extensions.contains(ext))
             {
-                var item = MeshItem.load(Path.withoutExtension(file.path), ext, files);
+                var item = MeshItem.load(Path.withoutExtension(file.relativePath), ext, files);
                 if (item != null) r.push(item);
             }
         }

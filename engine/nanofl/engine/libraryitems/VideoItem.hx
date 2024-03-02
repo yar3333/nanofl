@@ -16,7 +16,7 @@ using htmlparser.HtmlParserTools;
 
 class VideoItem extends InstancableItem
 {
-	function get_type() return LibraryItemType.bitmap;
+	function get_type() return LibraryItemType.video;
 	
     public var ext : String;
 
@@ -35,8 +35,9 @@ class VideoItem extends InstancableItem
 	{
 		var obj : VideoItem = new VideoItem(namePath, ext);
 		
-		obj.ext = ext;
-		obj.video = video;
+		obj.autoPlay = autoPlay;
+		obj.loop = loop;
+		obj.video = cast video.cloneNode();
 		
 		copyBaseProperties(obj);
 		
@@ -72,7 +73,7 @@ class VideoItem extends InstancableItem
 		(cast dispObj:nanofl.Video).setBounds(0, 0, video.videoWidth, video.videoHeight);
 	}
 	
-	public function getDisplayObjectClassName() return "nanofl.Bitmap";
+	public function getDisplayObjectClassName() return "nanofl.Video";
 	
 	override public function equ(item:ILibraryItem) : Bool
 	{

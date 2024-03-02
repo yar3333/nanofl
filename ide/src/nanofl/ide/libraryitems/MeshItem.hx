@@ -98,7 +98,7 @@ class MeshItem extends nanofl.engine.libraryitems.MeshItem
             var r = new MeshItem(namePath, "gltf", originalExt);
             
             r.loadProperties(xmlFile.xml);
-            xmlFile.exclude();
+            files.remove(xmlFile.relativePath);
             
             var dataFileName = namePath + "." + r.ext;
             if (!files.exists(dataFileName)) return null;
@@ -130,7 +130,7 @@ class MeshItem extends nanofl.engine.libraryitems.MeshItem
         //     case "json":
         //         for (filePath in getTextureFiles(dataFile.path, dataFile.json)) files.get(filePath).exclude();
         // }
-        dataFile.exclude();
+        files.remove(dataFile.relativePath);
     }
 
 	static function log(v:Dynamic, ?infos:haxe.PosInfos)

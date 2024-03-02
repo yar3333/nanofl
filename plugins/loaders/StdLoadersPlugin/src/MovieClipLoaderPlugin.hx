@@ -25,11 +25,11 @@ class MovieClipLoaderPlugin implements ILoaderPlugin
         
         for (file in files)
         {
-            if (file.excluded) continue;
+            if (!files.exists(file.relativePath)) continue;
             
-            if ([ "json", "xml", "movieclip" ].indexOf(Path.extension(file.path)) >= 0)
+            if ([ "json", "xml", "movieclip" ].indexOf(Path.extension(file.relativePath)) >= 0)
             {
-                var namePath = Path.withoutExtension(file.path);
+                var namePath = Path.withoutExtension(file.relativePath);
                 if (!r.exists(item -> item.namePath == namePath))
                 {
                     if (file.xml != null)
@@ -38,7 +38,7 @@ class MovieClipLoaderPlugin implements ILoaderPlugin
                         if (mc != null)
                         {
                             r.push(mc);
-                            file.exclude();
+                            files.remove(file.relativePath);
                         }
                     }
                     else if (file.json != null)
@@ -47,7 +47,7 @@ class MovieClipLoaderPlugin implements ILoaderPlugin
                         if (mc != null)
                         {
                             r.push(mc);
-                            file.exclude();
+                            files.remove(file.relativePath);
                         }
                     }
                 }
