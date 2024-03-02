@@ -4161,7 +4161,7 @@ class nanofl_engine_Loader {
 				elem.remove();
 				resolve(null);
 			});
-			elem.addEventListener("error",function(e) {
+			elem.addEventListener("error",function(_) {
 				elem.remove();
 				nanofl_engine_Debug.console.error(new Error("Failed to load '" + url + "'."));
 				reject(new Error("Failed to load '" + url + "'."));
@@ -6902,7 +6902,7 @@ class nanofl_engine_libraryitems_LibraryItem {
 			item = new nanofl_engine_libraryitems_FontItem(namePath);
 			break;
 		case 3:
-			item = new nanofl_engine_libraryitems_MeshItem(namePath,null,null);
+			item = new nanofl_engine_libraryitems_MeshItem(namePath);
 			break;
 		case 4:
 			item = new nanofl_engine_libraryitems_MovieClipItem(namePath);
@@ -7224,36 +7224,32 @@ Object.assign(nanofl_engine_libraryitems_FontItem.prototype, {
 	__class__: nanofl_engine_libraryitems_FontItem
 });
 class nanofl_engine_libraryitems_MeshItem extends nanofl_engine_libraryitems_InstancableItem {
-	constructor(namePath,ext,originalExt) {
+	constructor(namePath) {
 		nanofl_engine_libraryitems_LibraryItem._hx_skip_constructor = true;
 		super();
 		nanofl_engine_libraryitems_LibraryItem._hx_skip_constructor = false;
-		this._hx_constructor(namePath,ext,originalExt);
+		this._hx_constructor(namePath);
 	}
-	_hx_constructor(namePath,ext,originalExt) {
-		this.textureFiles = [];
+	_hx_constructor(namePath) {
 		this.loadLights = false;
 		this.renderAreaSize = 256;
 		super._hx_constructor(namePath);
-		this.ext = ext;
-		this.originalExt = originalExt;
 	}
 	get_type() {
 		return nanofl_engine_LibraryItemType.mesh;
 	}
 	clone() {
-		let obj = new nanofl_engine_libraryitems_MeshItem(this.namePath,this.ext,this.originalExt);
+		let obj = new nanofl_engine_libraryitems_MeshItem(this.namePath);
 		obj.textureAtlas = this.textureAtlas;
 		obj.renderAreaSize = this.renderAreaSize;
 		obj.loadLights = this.loadLights;
 		obj.scene = this.scene != null ? this.scene.clone(true) : null;
 		obj.boundingRadius = this.boundingRadius;
-		obj.textureFiles = this.textureFiles;
 		this.copyBaseProperties(obj);
 		return obj;
 	}
 	preload() {
-		stdlib_Debug.assert(this.library != null,"You need to add item '" + this.namePath + "' to the library before preload call.",{ fileName : "engine/nanofl/engine/libraryitems/MeshItem.hx", lineNumber : 75, className : "nanofl.engine.libraryitems.MeshItem", methodName : "preload"});
+		stdlib_Debug.assert(this.library != null,"You need to add item '" + this.namePath + "' to the library before preload call.",{ fileName : "engine/nanofl/engine/libraryitems/MeshItem.hx", lineNumber : 69, className : "nanofl.engine.libraryitems.MeshItem", methodName : "preload"});
 		let spriteSheet = nanofl_engine_TextureAtlasTools.getSpriteSheet(this);
 		if(spriteSheet == null) {
 			return this.preloadInner();
@@ -7271,8 +7267,8 @@ class nanofl_engine_libraryitems_MeshItem extends nanofl_engine_libraryitems_Ins
 		});
 	}
 	processPreloadedJson(json) {
-		nanofl_engine_libraryitems_MeshItem.log("processPreloadedJson",{ fileName : "engine/nanofl/engine/libraryitems/MeshItem.hx", lineNumber : 97, className : "nanofl.engine.libraryitems.MeshItem", methodName : "processPreloadedJson"});
-		nanofl_engine_libraryitems_MeshItem.log(json,{ fileName : "engine/nanofl/engine/libraryitems/MeshItem.hx", lineNumber : 98, className : "nanofl.engine.libraryitems.MeshItem", methodName : "processPreloadedJson"});
+		nanofl_engine_libraryitems_MeshItem.log("processPreloadedJson",{ fileName : "engine/nanofl/engine/libraryitems/MeshItem.hx", lineNumber : 91, className : "nanofl.engine.libraryitems.MeshItem", methodName : "processPreloadedJson"});
+		nanofl_engine_libraryitems_MeshItem.log(json,{ fileName : "engine/nanofl/engine/libraryitems/MeshItem.hx", lineNumber : 92, className : "nanofl.engine.libraryitems.MeshItem", methodName : "processPreloadedJson"});
 		let loader = new GLTFLoader();
 		let _gthis = this;
 		return loader.parseAsync(json,this.library.realUrl("")).then(function(gltf) {
@@ -7290,7 +7286,7 @@ class nanofl_engine_libraryitems_MeshItem extends nanofl_engine_libraryitems_Ins
 		this.boundingRadius = 0.0;
 		let _gthis = this;
 		this.scene.traverse(function(object) {
-			nanofl_engine_libraryitems_MeshItem.log("MeshItem.updateBoundingRadius object " + object.type + " / " + object.name,{ fileName : "engine/nanofl/engine/libraryitems/MeshItem.hx", lineNumber : 134, className : "nanofl.engine.libraryitems.MeshItem", methodName : "updateBoundingRadius"});
+			nanofl_engine_libraryitems_MeshItem.log("MeshItem.updateBoundingRadius object " + object.type + " / " + object.name,{ fileName : "engine/nanofl/engine/libraryitems/MeshItem.hx", lineNumber : 120, className : "nanofl.engine.libraryitems.MeshItem", methodName : "updateBoundingRadius"});
 			if(object.type == "Mesh") {
 				let mesh = object;
 				mesh.updateMatrixWorld(true);
@@ -7299,7 +7295,7 @@ class nanofl_engine_libraryitems_MeshItem extends nanofl_engine_libraryitems_Ins
 			}
 		});
 		this.boundingRadius = Math.sqrt(this.boundingRadius);
-		nanofl_engine_libraryitems_MeshItem.log("MeshItem.updateBoundingRadius boundingRadius = " + this.boundingRadius,{ fileName : "engine/nanofl/engine/libraryitems/MeshItem.hx", lineNumber : 148, className : "nanofl.engine.libraryitems.MeshItem", methodName : "updateBoundingRadius"});
+		nanofl_engine_libraryitems_MeshItem.log("MeshItem.updateBoundingRadius boundingRadius = " + this.boundingRadius,{ fileName : "engine/nanofl/engine/libraryitems/MeshItem.hx", lineNumber : 133, className : "nanofl.engine.libraryitems.MeshItem", methodName : "updateBoundingRadius"});
 	}
 	createDisplayObject(initFrameIndex,childFrameIndexes) {
 		let r = super.createDisplayObject(initFrameIndex,childFrameIndexes);
@@ -7310,7 +7306,7 @@ class nanofl_engine_libraryitems_MeshItem extends nanofl_engine_libraryitems_Ins
 		return r;
 	}
 	updateDisplayObject(dispObj,childFrameIndexes) {
-		stdlib_Debug.assert(((dispObj) instanceof nanofl_Mesh),null,{ fileName : "engine/nanofl/engine/libraryitems/MeshItem.hx", lineNumber : 170, className : "nanofl.engine.libraryitems.MeshItem", methodName : "updateDisplayObject"});
+		stdlib_Debug.assert(((dispObj) instanceof nanofl_Mesh),null,{ fileName : "engine/nanofl/engine/libraryitems/MeshItem.hx", lineNumber : 155, className : "nanofl.engine.libraryitems.MeshItem", methodName : "updateDisplayObject"});
 		let mesh = dispObj;
 		mesh.scene = new THREE_Scene();
 		mesh.scene.fog = datatools_NullTools.clone(this.scene.fog);
@@ -7357,9 +7353,6 @@ class nanofl_engine_libraryitems_MeshItem extends nanofl_engine_libraryitems_Ins
 		if(!super.equ(item)) {
 			return false;
 		}
-		if(item.ext != this.ext) {
-			return false;
-		}
 		if(item.textureAtlas != this.textureAtlas) {
 			return false;
 		}
@@ -7376,16 +7369,12 @@ class nanofl_engine_libraryitems_MeshItem extends nanofl_engine_libraryitems_Ins
 			throw new Error("Type of item must be '" + Std.string(this.get_type()) + "', but '" + Std.string(obj.type) + "' found.");
 		}
 		super.loadPropertiesJson(obj);
-		let tmp = obj.ext;
-		this.ext = tmp != null ? tmp : null;
-		let tmp1 = obj.originalExt;
-		this.originalExt = tmp1 != null ? tmp1 : null;
-		let tmp2 = obj.textureAtlas;
-		this.textureAtlas = tmp2 != null ? tmp2 : null;
-		let tmp3 = obj.renderAreaSize;
-		this.renderAreaSize = tmp3 != null ? tmp3 : 256;
-		let tmp4 = obj.loadLights;
-		this.loadLights = tmp4 != null && tmp4;
+		let tmp = obj.textureAtlas;
+		this.textureAtlas = tmp != null ? tmp : null;
+		let tmp1 = obj.renderAreaSize;
+		this.renderAreaSize = tmp1 != null ? tmp1 : 256;
+		let tmp2 = obj.loadLights;
+		this.loadLights = tmp2 != null && tmp2;
 	}
 	toString() {
 		return "MeshItem(" + this.namePath + ")";
@@ -7724,17 +7713,18 @@ class nanofl_engine_libraryitems_VideoItem extends nanofl_engine_libraryitems_In
 		this.ext = ext;
 	}
 	get_type() {
-		return nanofl_engine_LibraryItemType.bitmap;
+		return nanofl_engine_LibraryItemType.video;
 	}
 	clone() {
 		let obj = new nanofl_engine_libraryitems_VideoItem(this.namePath,this.ext);
-		obj.ext = this.ext;
-		obj.video = this.video;
+		obj.autoPlay = this.autoPlay;
+		obj.loop = this.loop;
+		obj.video = this.video.cloneNode();
 		this.copyBaseProperties(obj);
 		return obj;
 	}
 	preload() {
-		stdlib_Debug.assert(this.library != null,"You need to add item '" + this.namePath + "' to the library before preload call.",{ fileName : "engine/nanofl/engine/libraryitems/VideoItem.hx", lineNumber : 50, className : "nanofl.engine.libraryitems.VideoItem", methodName : "preload"});
+		stdlib_Debug.assert(this.library != null,"You need to add item '" + this.namePath + "' to the library before preload call.",{ fileName : "engine/nanofl/engine/libraryitems/VideoItem.hx", lineNumber : 51, className : "nanofl.engine.libraryitems.VideoItem", methodName : "preload"});
 		let _gthis = this;
 		return nanofl_engine_Loader.video(this.library.realUrl(this.namePath + "." + this.ext)).then(function(vid) {
 			_gthis.video = vid;
@@ -7750,7 +7740,7 @@ class nanofl_engine_libraryitems_VideoItem extends nanofl_engine_libraryitems_In
 		return r;
 	}
 	updateDisplayObject(dispObj,childFrameIndexes) {
-		stdlib_Debug.assert(((dispObj) instanceof nanofl_Video),null,{ fileName : "engine/nanofl/engine/libraryitems/VideoItem.hx", lineNumber : 70, className : "nanofl.engine.libraryitems.VideoItem", methodName : "updateDisplayObject"});
+		stdlib_Debug.assert(((dispObj) instanceof nanofl_Video),null,{ fileName : "engine/nanofl/engine/libraryitems/VideoItem.hx", lineNumber : 71, className : "nanofl.engine.libraryitems.VideoItem", methodName : "updateDisplayObject"});
 		dispObj.video = this.video.cloneNode();
 		dispObj.setBounds(0,0,this.video.videoWidth,this.video.videoHeight);
 	}

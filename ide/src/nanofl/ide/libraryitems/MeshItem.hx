@@ -14,7 +14,7 @@ class MeshItem extends nanofl.engine.libraryitems.MeshItem
 {
 	override public function clone() : MeshItem
     {
-        var obj = new MeshItem(namePath, ext, originalExt);
+        var obj = new MeshItem(namePath);
         
         obj.textureAtlas = textureAtlas;
         obj.renderAreaSize = renderAreaSize;
@@ -22,7 +22,6 @@ class MeshItem extends nanofl.engine.libraryitems.MeshItem
         
         obj.scene = scene != null ? cast scene.clone(true) : null;
         obj.boundingRadius = boundingRadius;
-        obj.textureFiles = textureFiles;
         
         copyBaseProperties(obj);
         
@@ -36,7 +35,7 @@ class MeshItem extends nanofl.engine.libraryitems.MeshItem
         //var version = itemNode.getAttribute("version");
         //if (version == null || version == "") version = "1.0.0";
         
-        var item = new MeshItem(namePath, itemNode.getAttribute("ext"), itemNode.getAttribute("originalExt"));
+        var item = new MeshItem(namePath);
         item.loadProperties(itemNode);
         return item;
     } 
@@ -58,14 +57,13 @@ class MeshItem extends nanofl.engine.libraryitems.MeshItem
 	
 	public function getFilePathToRunWithEditor() : String 
     {
-        return originalExt != null && originalExt != ""
-            ? namePath + "." + originalExt
-            : namePath + "." + ext;
+        // TODO: blend if exists
+        return namePath + ".gltf";
     }
         
 	public function getLibraryFilePaths() : Array<String>
     {
-        return [ namePath + ".*" ].concat(textureFiles);
+        return [ namePath + ".*" ];
     }
         
     public function getDataToSaveBeforeCleanDestDirectoryAndPublish(fileSystem:nanofl.ide.sys.FileSystem, destLibraryDir:String) : Dynamic
@@ -75,63 +73,14 @@ class MeshItem extends nanofl.engine.libraryitems.MeshItem
     
     public function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String, savedData:Dynamic) : IIdeLibraryItem
     {
-        log("MeshItem publish: " + namePath + "; textureFiles =\n\t" + textureFiles.join("\n\t"));
+        log("MeshItem publish: " + namePath);
         
-        if (ext == "gltf")
-        {
-            SerializationAsJsTools.save(fileSystem, destLibraryDir, namePath, Json.parse(fileSystem.getContent(library.libraryDir + "/" + namePath + "." + ext)));
-        }
-
-        fileSystem.copyLibraryFiles(library.libraryDir, textureFiles, destLibraryDir);
+        SerializationAsJsTools.save(fileSystem, destLibraryDir, namePath, Json.parse(fileSystem.getContent(library.libraryDir + "/" + namePath + ".gltf")));
 
         return clone();
     }
-        
+    
 	public function getUsedSymbolNamePaths() : Array<String> return [ namePath ];
-
-    // for BlenderLoaderPlugin
-    public static function load(namePath:String, originalExt:String, files:Map<String, nanofl.ide.filesystem.CachedFile>) : MeshItem
-    {
-        var xmlFile = files.get(namePath + ".xml");
-        if (xmlFile != null && xmlFile.xml != null && xmlFile.xml.name == "mesh")
-        {
-            var r = new MeshItem(namePath, "gltf", originalExt);
-            
-            r.loadProperties(xmlFile.xml);
-            files.remove(xmlFile.relativePath);
-            
-            var dataFileName = namePath + "." + r.ext;
-            if (!files.exists(dataFileName)) return null;
-            
-            excludeDataFileAndRelatedFiles(files.get(dataFileName), files);
-            
-            return r;
-        }
-        
-        if (files.exists(namePath + ".gltf"))
-        {
-            var file = files.get(namePath + ".gltf");
-            log("Mesh " + namePath + ".gltf loaded:");
-            log(file.json);
-            if (!file.json.scenes) return null;
-            
-            excludeDataFileAndRelatedFiles(file, files);
-            
-            return new MeshItem(namePath, "gltf", originalExt);
-        }
-        
-        return null;
-    }
-
-	static function excludeDataFileAndRelatedFiles(dataFile:nanofl.ide.filesystem.CachedFile, files:Map<String, nanofl.ide.filesystem.CachedFile>)
-    {
-        // switch (haxe.io.Path.extension(dataFile.path))
-        // {
-        //     case "json":
-        //         for (filePath in getTextureFiles(dataFile.path, dataFile.json)) files.get(filePath).exclude();
-        // }
-        files.remove(dataFile.relativePath);
-    }
 
 	static function log(v:Dynamic, ?infos:haxe.PosInfos)
 	{

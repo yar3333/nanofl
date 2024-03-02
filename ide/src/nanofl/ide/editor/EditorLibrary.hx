@@ -1,19 +1,17 @@
 package nanofl.ide.editor;
 
-import nanofl.ide.textureatlas.TextureAtlasPublisher;
 import haxe.io.Path;
-import stdlib.ExceptionTools;
 import js.lib.Promise;
-import htmlparser.HtmlNodeElement;
 import js.Browser;
-import js.Browser.console;
 import js.html.File;
+import stdlib.ExceptionTools;
+import stdlib.Std;
+import htmlparser.HtmlNodeElement;
 import nanofl.engine.FontVariant;
 import nanofl.ide.MovieClipItemTools;
+import nanofl.ide.plugins.LoaderPlugins;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
-import nanofl.engine.elements.Element;
 import nanofl.engine.elements.Instance;
-import nanofl.engine.elements.ShapeElement;
 import nanofl.ide.libraryitems.*;
 import nanofl.engine.movieclip.KeyFrame;
 import nanofl.engine.movieclip.Layer;
@@ -28,14 +26,12 @@ import nanofl.ide.sys.Uploader;
 import nanofl.ide.ui.Popups;
 import nanofl.ide.ui.View;
 import nanofl.ide.undo.states.LibraryState;
-import stdlib.Std;
 using stdlib.StringTools;
 using stdlib.Lambda;
 
 @:rtti
 class EditorLibrary extends InjectContainer
 {
-	@inject var app : Application;
 	@inject var popups : Popups;
 	@inject var view : View;
 	@inject var fileSystem : FileSystem;
@@ -87,21 +83,21 @@ class EditorLibrary extends InjectContainer
 	{
 		document.undoQueue.beginTransaction({ libraryRemoveItems:namePaths });
 		
-		var n = app.document.navigator.editPath.findIndex(x -> Std.isOfType(x.element, Instance) && namePaths.indexOf((cast x.element:Instance).symbol.namePath) >= 0);
+		var n = document.navigator.editPath.findIndex(x -> Std.isOfType(x.element, Instance) && namePaths.indexOf((cast x.element:Instance).symbol.namePath) >= 0);
 		if (n >= 0)
 		{
-			app.document.navigator.navigateTo(app.document.navigator.editPath.slice(0, n));
+			document.navigator.navigateTo(document.navigator.editPath.slice(0, n));
 		}
 		else
 		{
-			app.document.navigator.navigateTo(app.document.navigator.editPath);
+			document.navigator.navigateTo(document.navigator.editPath);
 		}
 		
 		for (namePath in namePaths) library.removeItem(namePath);
 		
 		document.undoQueue.commitTransaction();
 		
-		app.document.editor.rebind();
+		document.editor.rebind();
 		view.movie.timeline.update();
 		view.movie.timeline.update();
 		update();
@@ -182,7 +178,7 @@ class EditorLibrary extends InjectContainer
 	
 	public function createEmptyMovieClip()
 	{
-		popups.prompt.show("Create Empty Movie Clip", "Enter new symbol name:", getNextItemName(), function(namePath)
+		popups.prompt.show("Create Empty Movie Clip", "Enter new symbol name:", getNextItemName(), namePath ->
 		{
 			if (namePath != null && namePath != "")
 			{
@@ -201,7 +197,7 @@ class EditorLibrary extends InjectContainer
 	
 	public function createFolder()
 	{
-		popups.prompt.show("Create Folder", "Enter new folder name:", getNextItemName(), function(namePath)
+		popups.prompt.show("Create Folder", "Enter new folder name:", getNextItemName(), namePath ->
 		{
 			if (namePath != null && namePath != "")
 			{
@@ -218,111 +214,41 @@ class EditorLibrary extends InjectContainer
 		});
 	}
 	
-	public function importFiles(?paths:Array<String>, folderPath="") : Promise<{}>
+	public function importFiles(folderPath="") : Promise<{}>
 	{
-		if (paths == null)
-		{
-			return popups.showOpenFile
-			(
-				"Select files to import into library", 
-				[
-					{ name:"All supported files", extensions:["png", "jpg", "svg", "wav", "mp3", "ogg"] },
-					{ name:"Image files", extensions:["png", "jpg", "svg"] },
-					{ name:"Sound files", extensions:["wav", "mp3", "ogg"] }
-				],
-				true
-			)
-            .then(r ->
-            {
-                // TODO: check - may be return true/false?
-                return r.filePaths != null ? importFiles(r.filePaths, folderPath) : null;
-            });
-		}
-		else
-		{
-			view.waiter.show();
-			
-			var files = [];
-			for (path in paths)
-			{
-				var file = Path.withoutDirectory(path);
-				var destLocalPath = Path.join([ folderPath, file ]);
-				var dest = Path.join([ library.libraryDir, destLocalPath ]);
-				fileSystem.copyFile(path, dest);
-				files.push(destLocalPath);
-			}
-			
-			return LibraryItems.load(preferences, library.libraryDir, files).then(function(items:Array<IIdeLibraryItem>)
-			{
-				for (item in items)
-				{
-					library.addItem(item);
-				}
-				
-				return library.preload().then(function(_)
-				{
-					view.waiter.hide();
-					update();
-					return null;
-				});
-			});
-		}
-	}
-	
-	public function importImages(folderPath="") : Promise<{}>
-	{
-		return popups.showOpenFile
-		(
-			"Select image files to import into library", 
-			[
-				{ name:"Image files", extensions:["png", "jpg", "svg"] }
-			],
-			true
-		)
-        .then(r ->
+        var filters = LoaderPlugins.plugins.filter(x -> x.extensions != null && x.extensions.length > 0)
+                                           .map(x -> { name:x.menuItemName + " files", extensions:x.extensions });
+        
+        filters.unshift({ name:"All supported files", extensions:filters.flatMap(x -> x.extensions).distinct() });
+        
+        return popups.showOpenFile("Select files to import into library", filters, true)
+                .then(r -> 
+                {
+                    if (r.filePaths != null)
+                    {
+                        importFilesInner(r.filePaths, folderPath);
+                    }
+                    return null;
+                });
+    }
+    
+    function importFilesInner(paths:Array<String>, folderPath="") : Void
+    {
+        for (path in paths)
         {
-            return app.document.library.importFiles(r.filePaths, folderPath);
-        });
-	}
-	
-	public function importSounds(folderPath="") : Promise<{}>
-	{
-		return popups.showOpenFile
-		(
-			"Select sound files to import into library",
-			[
-				{ name:"Sound files", extensions:["wav", "mp3", "ogg"] }
-			],
-			true
-		)
-        .then(r ->
-        {
-            return app.document.library.importFiles(r.filePaths, folderPath);
-        });
-	}
-	
-	public function importMeshes(folderPath="") : Promise<{}>
-	{
-		return popups.showOpenFile
-		(
-			"Select mesh files to import into library",
-			[
-				{ name:"Mesh files", extensions:["blend", "json"] }
-			],
-			true
-		)
-        .then(r ->
-        {
-            return app.document.library.importFiles(r.filePaths, folderPath);
-        });
-	}
+            var file = Path.withoutDirectory(path);
+            var destLocalPath = Path.join([ folderPath, file ]);
+            var dest = Path.join([ library.libraryDir, destLocalPath ]);
+            fileSystem.copyFile(path, dest);
+        }
+    }
 	
 	public function importFont()
 	{
 		popups.fontImport.show();
 	}
 	
-	public function addFiles(files:Array<File>, folderPath="") : Promise<Array<IIdeLibraryItem>>
+	public function addUploadedFiles(files:Array<File>, folderPath="") : Promise<Array<IIdeLibraryItem>>
 	{
         return document.runPreventingAutoReload(() ->
         {
@@ -345,9 +271,9 @@ class EditorLibrary extends InjectContainer
 		});
 	}
 	
-	public function loadFilesFromClipboard() : Bool
+	public function addFilesFromClipboard() : Bool
 	{
-        log("EditorLibrary.loadFilesFromClipboard");
+        log("EditorLibrary.addFilesFromClipboard");
         if (!document.saveNative()) return false;
         clipboard.loadFilesFromClipboard(libraryDir);
         return true;
@@ -378,7 +304,7 @@ class EditorLibrary extends InjectContainer
 		
 		document.undoQueue.commitTransaction();
 		
-		app.document.editor.rebind();
+		document.editor.rebind();
 		view.movie.timeline.update();
 		view.movie.timeline.update();
 		update();
@@ -417,14 +343,14 @@ class EditorLibrary extends InjectContainer
                 {
                     if (element.fixErrors())
                     {
-                        //console.log("Fix errors in the element \"" + element.toString() + "\".");
+                        //Browser.console.log("Fix errors in the element \"" + element.toString() + "\".");
                         wasFixed = true;
                     }
                 }
                 catch (e:Dynamic)
                 {
-                    console.log("Exception while fixing element in " + item.namePath + ":");
-                    console.log(ExceptionTools.wrap(e).toString());
+                    Browser.console.log("Exception while fixing element in " + item.namePath + ":");
+                    Browser.console.log(ExceptionTools.wrap(e).toString());
                     log(original);
                 }
 			}

@@ -35,6 +35,13 @@ interface ILoaderPlugin {
 	var properties : Array<nanofl.engine.CustomProperty>;
 	/**
 		
+		     * Supported file extensions (w/o dot prefix). 
+		     * Used in file import to library dialog.
+		     
+	**/
+	var extensions : Array<String>;
+	/**
+		
 			 * Method must detect loadable files and return created LibraryItems.
 			 * Use file.exclude() for processed files (to prevent loading them from other loaders).
 			 

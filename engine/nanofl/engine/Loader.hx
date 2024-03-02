@@ -70,7 +70,7 @@ class Loader
                 elem.remove();
                 resolve(null);
             });
-            elem.addEventListener("error", e ->
+            elem.addEventListener("error", _ ->
             {
                 elem.remove();
                 console.error(new Error("Failed to load '" + url + "'."));

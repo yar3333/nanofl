@@ -10,14 +10,14 @@ using Lambda;
 
 class SoundLoaderPlugin implements ILoaderPlugin
 {
-	static var extensions = [ "ogg", "mp3", "wav" ];
-	
 	public var name = "SoundLoader";
 	public var priority = 300;
 	
 	public var menuItemName = "Sound";
 	public var menuItemIcon = "";
 	public var properties : Array<CustomProperty> = null;
+
+    public var extensions = [ "ogg", "mp3", "wav" ];
 	
 	public function new() {}
 	
@@ -35,10 +35,8 @@ class SoundLoaderPlugin implements ILoaderPlugin
                 var namePath = Path.withoutExtension(file.relativePath);
                 if (!r.exists(item -> item.namePath == namePath))
                 {
-                    var xmlFile = files.get(namePath + ".xml") ?? files.get(namePath + ".sound");   // ".sound" - obsolete
-                    var item = xmlFile != null && xmlFile.xml != null && xmlFile.xml.name == "sound"
-                                    ? SoundItem.parse(namePath, xmlFile.xml)
-                                    : new SoundItem(namePath, ext);
+                    var xmlFile = files.get(namePath + ".xml");
+                    var item = (xmlFile?.xml != null ? SoundItem.parse(namePath, xmlFile.xml) : null) ?? new SoundItem(namePath, ext);
                     files.remove(xmlFile?.relativePath);
                     r.push(item);
                 }

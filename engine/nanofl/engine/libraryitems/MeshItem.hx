@@ -31,8 +31,6 @@ class MeshItem extends InstancableItem implements ITextureItem
 	
 	public static inline var DEFAULT_RENDER_AREA_SIZE = 256;
 	
-	public var ext : String;
-	public var originalExt : String;
 	public var textureAtlas : String;
 	public var renderAreaSize = DEFAULT_RENDER_AREA_SIZE;
 	public var loadLights = false;
@@ -42,18 +40,15 @@ class MeshItem extends InstancableItem implements ITextureItem
 	var _renderer : Renderer;
 	public var renderer(get, never) : Renderer;
 	var _rendererLoadLights : Bool;
-	var textureFiles = new Array<String>();
 	
-	public function new(namePath:String, ext:String, originalExt:String)
+	public function new(namePath:String)
 	{
 		super(namePath);
-		this.ext = ext;
-		this.originalExt = originalExt;
 	}
 	
 	public function clone() : MeshItem
 	{
-		var obj = new MeshItem(namePath, ext, originalExt);
+		var obj = new MeshItem(namePath);
 		
 		obj.textureAtlas = textureAtlas;
 		obj.renderAreaSize = renderAreaSize;
@@ -61,7 +56,6 @@ class MeshItem extends InstancableItem implements ITextureItem
 		
 		obj.scene = scene != null ? cast scene.clone(true) : null;
 		obj.boundingRadius = boundingRadius;
-		obj.textureFiles = textureFiles;
 		
 		copyBaseProperties(obj);
 		
@@ -82,7 +76,7 @@ class MeshItem extends InstancableItem implements ITextureItem
     function preloadInner() : Promise<{}>
     {
         #if ide
-        return Loader.file(library.realUrl(namePath + "." + ext)).then(s -> 
+        return Loader.file(library.realUrl(namePath + ".gltf")).then(s -> 
         {
             return processPreloadedJson(haxe.Json.parse(s));
         });
@@ -111,14 +105,6 @@ class MeshItem extends InstancableItem implements ITextureItem
                 scene.add(gltf.scene);
             }
 
-            // scene.traverse(object->
-            // {
-            //     if (object.type == Object3dType.Mesh)
-            //     {
-            //         (cast object:Mesh).material.overdraw = 1;
-            //     }
-            // });
-            
             updateBoundingRadius();
 
             return null;
@@ -138,7 +124,6 @@ class MeshItem extends InstancableItem implements ITextureItem
 				var mesh : js.three.objects.Mesh = cast object;
 				mesh.updateMatrixWorld(true);
                 mesh.geometry.computeBoundingSphere();
-                // TODO: center
                 boundingRadius = Math.max(boundingRadius, mesh.geometry.boundingSphere.radius);
 			}
 		});
@@ -237,7 +222,6 @@ class MeshItem extends InstancableItem implements ITextureItem
 	{
 		if (!Std.is(item, MeshItem)) return false;
 		if (!super.equ(item)) return false;
-		if ((cast item:MeshItem).ext != ext) return false;
 		if ((cast item:MeshItem).textureAtlas != textureAtlas) return false;
 		if ((cast item:MeshItem).renderAreaSize != renderAreaSize) return false;
 		if ((cast item:MeshItem).loadLights != loadLights) return false;
@@ -255,7 +239,6 @@ class MeshItem extends InstancableItem implements ITextureItem
 	function hasDataToSave() : Bool
     {
         return linkedClass != null && linkedClass != ""
-            || originalExt != null && originalExt != ""
             || textureAtlas != null && textureAtlas != "";
     }
 
@@ -263,8 +246,6 @@ class MeshItem extends InstancableItem implements ITextureItem
     {
         super.saveProperties(xml);
 
-		xml.attr("ext", ext, null);
-		xml.attr("originalExt", originalExt, null);
 		xml.attr("textureAtlas", textureAtlas, null);
 		xml.attr("renderAreaSize", renderAreaSize, DEFAULT_RENDER_AREA_SIZE);
 		xml.attr("loadLights", loadLights, false);
@@ -274,8 +255,6 @@ class MeshItem extends InstancableItem implements ITextureItem
     {
         super.savePropertiesJson(obj);
 		
-        obj.ext = ext ?? null;
-		obj.originalExt = originalExt ?? null;
 		obj.textureAtlas = textureAtlas ?? null;
 		obj.renderAreaSize = renderAreaSize ?? DEFAULT_RENDER_AREA_SIZE;
 		obj.loadLights = loadLights ?? false;
@@ -285,7 +264,6 @@ class MeshItem extends InstancableItem implements ITextureItem
     {
         super.loadProperties(xml);
 
-		originalExt = xml.getAttr("originalExt", null);
 		textureAtlas = xml.getAttr("textureAtlas", null);
 		renderAreaSize = xml.getAttr("renderAreaSize", MeshItem.DEFAULT_RENDER_AREA_SIZE);
 		loadLights = xml.getAttr("loadLights", false);
@@ -298,8 +276,6 @@ class MeshItem extends InstancableItem implements ITextureItem
         
         super.loadPropertiesJson(obj);
 
-		ext = obj.ext ?? null;
-		originalExt = obj.originalExt ?? null;
 		textureAtlas = obj.textureAtlas ?? null;
 		renderAreaSize = obj.renderAreaSize ?? DEFAULT_RENDER_AREA_SIZE;
 		loadLights = obj.loadLights ?? false;

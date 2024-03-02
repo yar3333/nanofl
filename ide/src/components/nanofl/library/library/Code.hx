@@ -21,7 +21,7 @@ class Code extends components.nanofl.library.libraryview.Code
 	{
 		super.init();
 		
-		dragAndDrop.ready.then(function(api:IDragAndDrop)
+		dragAndDrop.ready.then((api:IDragAndDrop) ->
 		{
 			api.droppable
 			(
@@ -29,9 +29,9 @@ class Code extends components.nanofl.library.libraryview.Code
 				[
 					"libraryItem" => new LibraryItemToLibraryDropper(app, template().items)
 				],
-				function(files:Array<File>, e:JqEvent)
+				(files:Array<File>, _) ->
 				{
-					app.document.library.addFiles(files, "");
+					app.document.library.addUploadedFiles(files, "");
 				}
 			);
 		});

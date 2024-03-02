@@ -1,9 +1,7 @@
 package nanofl.engine.libraryitems;
 
 extern class MeshItem extends nanofl.engine.libraryitems.InstancableItem implements nanofl.engine.ITextureItem {
-	function new(namePath:String, ext:String, originalExt:String):Void;
-	var ext : String;
-	var originalExt : String;
+	function new(namePath:String):Void;
 	var textureAtlas : String;
 	var renderAreaSize : Int;
 	var loadLights : Bool;

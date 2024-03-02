@@ -6,32 +6,41 @@ import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.libraryitems.MeshItem;
 import nanofl.ide.filesystem.CachedFile;
 import nanofl.ide.plugins.ILoaderPlugin;
+using Lambda;
 
 class MeshLoaderPlugin implements ILoaderPlugin
 {
 	public var name = "MeshLoader";
 	public var priority = 600;
+
 	public var menuItemName = "Mesh";
 	public var menuItemIcon = "";
 	public var properties : Array<CustomProperty> = null;
+    
+    public var extensions = [ "gltf" ];
 	
 	public function new() {}
 	
-	public function load(api:PluginApi, params:Dynamic, baseDir:String, files:Map<String, CachedFile>) : js.lib.Promise<Array<IIdeLibraryItem>>
+	public function load(api:PluginApi, params:Dynamic, baseDir:String, files:Map<String, CachedFile>) : Promise<Array<IIdeLibraryItem>>
 	{
         var r = new Array<IIdeLibraryItem>();
-        
-        var extensions = [ "xml", "gltf" ];
         
         for (file in files)
         {
             if (!files.exists(file.relativePath)) continue;
             
             var ext = Path.extension(file.relativePath);
-            if (extensions.contains(ext))
+            if (ext != null && extensions.indexOf(ext.toLowerCase()) >= 0)
             {
-                var item = MeshItem.load(Path.withoutExtension(file.relativePath), ext, files);
-                if (item != null) r.push(item);
+                var namePath = Path.withoutExtension(file.relativePath);
+                if (!r.exists(item -> item.namePath == namePath))
+                {
+                    var xmlFile = files.get(namePath + ".xml");
+                    var item = (xmlFile?.xml != null ? MeshItem.parse(namePath, xmlFile.xml) : null) ?? new MeshItem(namePath);
+                    files.remove(xmlFile?.relativePath);
+                    r.push(item);
+                }
+                files.remove(file.relativePath);
             }
         }
         

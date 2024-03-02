@@ -34,6 +34,12 @@ interface ILoaderPlugin
 	 * Custom properties for tune by user. Can be null or empty array if there are no customizable parameters.
 	 */
 	var properties : Array<CustomProperty>;
+
+    /**
+     * Supported file extensions (w/o dot prefix). 
+     * Used in file import to library dialog.
+     */
+    var extensions: Array<String>;
 	
 	/**
 	 * Method must detect loadable files and return created LibraryItems.

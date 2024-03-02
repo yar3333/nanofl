@@ -3,6 +3,7 @@
 var $estr = function() { return js_Boot.__string_rec(this,''); },$hxEnums = $hxEnums || {};
 var BlenderLoaderPlugin = function() {
 	this.blenderExePath = null;
+	this.extensions = ["blend"];
 	this.properties = [{ type : "info", label : "This plugin automatically run Blender to convert *.blend in your library into *.gltf." + " Ensure you have <a href='http://blender.org/'>Blender</a> installed."},{ type : "file", name : "blenderPath", label : "Path to the blender.exe", description : "Select path to the blender.exe", defaultValue : "", fileFilters : [{ description : "Executable files (*.exe)", extensions : ["exe"]}]}];
 	this.menuItemIcon = "url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAACXBIWXMAADXTAAA10wEMIUN3AAAC20lEQVQoz23JTWxUVRgG4Pd859x756+97dBOW+jUpEwqUAEppAiTNKRqJ2BMGg1hgSwIEHeGjRsNkjTRBXFhJDEpGoNuFDYNYMRosDTWmIJRws+Ean/uUAhT2qnTdjq3M/fM+Vy589k+gojwf5gFmGsCAEtJEgzDAP/3Kp1OAwBIQAohBAlIX1Nlu1scPLE//vXlqbqjo9nCtagNRUTGGDYAILu7u2HbDjQ5bIQyRkhDUmFV2zPtoVLnqQPt55pbN8lsvnqDiBCNONKybFbGMMAa+xLVYy3xWAoyrEnZFDCVn2i+M5Vfm3lze+OZDrd9z6c3nh6bL5YLUZukeDVzEGH48aFdj/7uaNsQ9znEVsQVbnIbIG0ETpxr66UaLXvqWdGf+3hs9Y1sPvhdZDIZMACX/GQ10OvJcGnv232Jzzd1bm2N9RwJKhteUOsaIi4Kujp+Xi3msksf3BT9siu1mSCIFipOcWdTZeCdV9outsXrmyM7BnmuqV9+dv2BuDQxh+mySy/t7tFq/KNoTBeeowpbpqa1OtmZu/BhenmkMci7FX+V7dat4vtf7+G7W1P44c8choav4nGtSYn6jXienvSphPxny8lU7quXU9Q7PIHhlnAheXAPHSovPDLtLV3014yHNT/A4f4X0UBl6JU8QhFLInu6bnHlTJTfPRAbAhROp0Nn+XyK8+d2VOfvj/LPdzz+5uYD9rxZLlw8ovV74OvH638RnxzvOXvXW7r75ag3AqDBdbBt7FR4ZGdzJbEcRGuys09YERdV7zeuW5uVRdmgM1+UBmWlbe/YH7PFh8tLi1FJ1OJrjvw0ZR7v6oj1diUQtlbuQy7dE44MKFdurL717er7415wTbz+2iH1bGGBJ27dFgBcIbCRGQ0WYUvfZqe/tyOUtBSZ7Hww++PD8pWVdXObBMpiYGAASilMT09jcnJSAnBIIAbAMgwJwAKgAZSEQCAYNSsU8v8FJek74SxGiM4AAAAASUVORK5CYII=)";
 	this.menuItemName = "Blender";
@@ -21,66 +22,42 @@ BlenderLoaderPlugin.prototype = {
 		this.api = api;
 		var params = _params;
 		var blendFiles = Lambda.filter(files,function(file) {
-			if(!file.excluded) {
-				return haxe_io_Path.extension(file.path) == "blend";
-			} else {
-				return false;
-			}
+			return haxe_io_Path.extension(file.relativePath) == "blend";
 		});
-		if(blendFiles.length > 0 && this.detectBlenderPath(params)) {
-			var items = [];
-			var p = Promise.resolve(items);
-			var _g = 0;
-			while(_g < blendFiles.length) {
-				var file = [blendFiles[_g]];
-				++_g;
-				p = p.then((function(file) {
-					return function(_) {
-						return _gthis.loadFile(baseDir,file[0],files,items);
-					};
-				})(file));
-			}
-			return p;
-		} else {
+		if(blendFiles.length == 0 || !this.detectBlenderPath(params)) {
 			return Promise.resolve([]);
 		}
+		var result = new Array(blendFiles.length);
+		var _g = 0;
+		var _g1 = blendFiles.length;
+		while(_g < _g1) {
+			var i = _g++;
+			result[i] = _gthis.loadFile(baseDir,blendFiles[i],files);
+		}
+		return Promise.all(result).then(function(_) {
+			return [];
+		});
 	}
-	,loadFile: function(baseDir,file,files,items) {
-		var namePath = haxe_io_Path.withoutExtension(file.path);
+	,loadFile: function(baseDir,file,files) {
+		var namePath = haxe_io_Path.withoutExtension(file.relativePath);
 		var relDestFilePath = namePath + ".gltf";
-		var blendFilePath = baseDir + "/" + file.path;
+		var blendFilePath = baseDir + "/" + file.relativePath;
 		var destFilePath = baseDir + "/" + relDestFilePath;
 		if(!this.api.fileSystem.exists(destFilePath) || this.api.fileSystem.getLastModified(destFilePath).getTime() < this.api.fileSystem.getLastModified(blendFilePath).getTime()) {
 			var script = "import bpy; bpy.ops.export_scene.gltf(filepath='" + destFilePath + "', export_format='GLTF_EMBEDDED')";
 			var result = this.api.processManager.runCaptured(this.blenderExePath,["-b",blendFilePath,"--python-expr",script]);
 			if(result.exitCode == 0 && this.api.fileSystem.exists(destFilePath)) {
-				if(!Object.prototype.hasOwnProperty.call(files.h,relDestFilePath)) {
-					var value = new nanofl.ide.filesystem.CachedFile(baseDir,relDestFilePath);
-					files.h[relDestFilePath] = value;
-				}
+				var value = new nanofl.ide.filesystem.CachedFile(baseDir,relDestFilePath);
+				files.h[relDestFilePath] = value;
 			} else {
-				nanofl.engine.Debug.console.error("Error [" + result.exitCode + "] while conversion '" + file.path + "' to '" + relDestFilePath + "':\n" + StringTools.replace(result.output,"\r\n","\n") + (result.output != "" ? "\n" : "") + StringTools.replace(result.error,"\r\n","\n"));
+				nanofl.engine.Debug.console.error("Error [" + result.exitCode + "] while conversion '" + file.relativePath + "' to '" + relDestFilePath + "':\n" + StringTools.replace(result.output,"\r\n","\n") + (result.output != "" ? "\n" : "") + StringTools.replace(result.error,"\r\n","\n"));
 			}
-			var item;
-			if(Object.prototype.hasOwnProperty.call(files.h,relDestFilePath)) {
-				item = nanofl.ide.libraryitems.MeshItem.load(namePath,"blend",files);
-			} else {
-				throw new Error("File '" + relDestFilePath + "' is not found.");
-			}
-			file.exclude();
-			items.push(item);
-			return Promise.resolve(items);
-		} else {
-			var item;
-			if(Object.prototype.hasOwnProperty.call(files.h,relDestFilePath)) {
-				item = nanofl.ide.libraryitems.MeshItem.load(namePath,"blend",files);
-			} else {
-				throw new Error("File '" + relDestFilePath + "' is not found.");
-			}
-			file.exclude();
-			items.push(item);
-			return Promise.resolve(items);
 		}
+		var key = file.relativePath;
+		if(Object.prototype.hasOwnProperty.call(files.h,key)) {
+			delete(files.h[key]);
+		}
+		return Promise.resolve(null);
 	}
 	,detectBlenderPath: function(params) {
 		if(this.blenderExePath == null) {

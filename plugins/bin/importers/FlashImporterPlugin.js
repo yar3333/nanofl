@@ -3824,11 +3824,23 @@ nanofl_ide_sys_Fonts.__isInterface__ = true;
 nanofl_ide_sys_Fonts.prototype = {
 	__class__: nanofl_ide_sys_Fonts
 };
+var nanofl_ide_sys_HttpUtils = function() { };
+nanofl_ide_sys_HttpUtils.__name__ = "nanofl.ide.sys.HttpUtils";
+nanofl_ide_sys_HttpUtils.__isInterface__ = true;
+nanofl_ide_sys_HttpUtils.prototype = {
+	__class__: nanofl_ide_sys_HttpUtils
+};
 var nanofl_ide_sys_ProcessManager = function() { };
 nanofl_ide_sys_ProcessManager.__name__ = "nanofl.ide.sys.ProcessManager";
 nanofl_ide_sys_ProcessManager.__isInterface__ = true;
 nanofl_ide_sys_ProcessManager.prototype = {
 	__class__: nanofl_ide_sys_ProcessManager
+};
+var nanofl_ide_sys_VideoUtils = function() { };
+nanofl_ide_sys_VideoUtils.__name__ = "nanofl.ide.sys.VideoUtils";
+nanofl_ide_sys_VideoUtils.__isInterface__ = true;
+nanofl_ide_sys_VideoUtils.prototype = {
+	__class__: nanofl_ide_sys_VideoUtils
 };
 var nanofl_ide_sys_Zip = function() { };
 nanofl_ide_sys_Zip.__name__ = "nanofl.ide.sys.Zip";

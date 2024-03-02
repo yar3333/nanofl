@@ -1,7 +1,5 @@
 package nanofl.ide.libraryitems;
 
-import haxe.crypto.Base64;
-import nanofl.engine.SerializationAsJsTools;
 import js.Browser;
 import htmlparser.HtmlNodeElement;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
@@ -23,12 +21,6 @@ class SoundItem extends nanofl.engine.libraryitems.SoundItem
 		
 		var r = new SoundItem(namePath, itemNode.getAttribute("ext"));
         r.loadProperties(itemNode);
-
-        if (r.ext == null || r.ext == "")
-        {
-            Browser.console.warn("SoundItem.parse: ext is empty | " + namePath);
-            r.ext = "wav";
-        }
 
         return r;
 	}
@@ -58,11 +50,6 @@ class SoundItem extends nanofl.engine.libraryitems.SoundItem
         r.ext = "ogg";
         return r;
 	}
-	
-	/*override public function equ(item:ILibraryItem) : Bool
-	{
-		return super.equ(item);
-	}*/
 	
 	public function getFilePathToRunWithEditor() : String return null;
 	

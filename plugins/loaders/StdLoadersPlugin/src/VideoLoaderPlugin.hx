@@ -10,8 +10,6 @@ using Lambda;
 
 class VideoLoaderPlugin implements ILoaderPlugin
 {
-	static var extensions = [ "mp4", "webm", "mkv", "gif" ];
-	
 	public var name = "VideoLoader";
 	public var priority = 100;
 	
@@ -19,7 +17,9 @@ class VideoLoaderPlugin implements ILoaderPlugin
 	public var menuItemIcon = "";
 	public var properties : Array<CustomProperty> = null;
 	
-	public function new() {}
+	public var extensions = [ "mp4", "webm", "mkv" ];
+	
+    public function new() {}
 	
 	public function load(api:PluginApi, params:Dynamic, baseDir:String, files:Map<String, CachedFile>) : js.lib.Promise<Array<IIdeLibraryItem>>
 	{
@@ -36,9 +36,7 @@ class VideoLoaderPlugin implements ILoaderPlugin
                 if (!r.exists(item -> item.namePath == namePath))
                 {
                     var xmlFile = files.get(namePath + ".xml");
-                    var item = xmlFile?.xml?.name == "video"
-                            ? VideoItem.parse(namePath, xmlFile.xml)
-                            : new VideoItem(namePath, ext);
+                    var item = (xmlFile?.xml != null ? VideoItem.parse(namePath, xmlFile.xml) : null) ?? new VideoItem(namePath, ext);
                     files.remove(xmlFile?.relativePath);
                     r.push(item);
                 }

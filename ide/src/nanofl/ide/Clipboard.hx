@@ -187,7 +187,7 @@ class Clipboard extends InjectContainer
 						libraryAddItems: true
 					});
 					
-					final success = app.document.library.loadFilesFromClipboard();
+					final success = app.document.library.addFilesFromClipboard();
                     log("loadFilesFromClipboard " + success);
                     if (success)
                     {

@@ -136,6 +136,7 @@ class MenuTools
 		enableItemLazy(container, "library.importImages", 	() -> app.document != null);
 		enableItemLazy(container, "library.importSounds", 	() -> app.document != null);
 		enableItemLazy(container, "library.importMeshes", 	() -> app.document != null);
+		enableItemLazy(container, "library.importVideos", 	() -> app.document != null);
 		
 		enableItemLazy(container, "document.undo",			() -> app.document != null && app.document.undoQueue.canUndo());
 		enableItemLazy(container, "document.redo",			() -> app.document != null && app.document.undoQueue.canRedo());

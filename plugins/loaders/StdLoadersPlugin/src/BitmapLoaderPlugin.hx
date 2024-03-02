@@ -10,8 +10,6 @@ using Lambda;
 
 class BitmapLoaderPlugin implements ILoaderPlugin
 {
-	static var extensions = [ "jpg", "jpeg", "png", "gif", "svg" ];
-	
 	public var name = "BitmapLoader";
 	public var priority = 100;
 	
@@ -19,7 +17,9 @@ class BitmapLoaderPlugin implements ILoaderPlugin
 	public var menuItemIcon = "";
 	public var properties : Array<CustomProperty> = null;
 	
-	public function new() {}
+	public var extensions = [ "svg", "png", "jpg" ];
+	
+    public function new() {}
 	
 	public function load(api:PluginApi, params:Dynamic, baseDir:String, files:Map<String, CachedFile>) : js.lib.Promise<Array<IIdeLibraryItem>>
 	{
@@ -35,10 +35,8 @@ class BitmapLoaderPlugin implements ILoaderPlugin
                 var namePath = Path.withoutExtension(file.relativePath);
                 if (!r.exists(item -> item.namePath == namePath))
                 {
-                    var xmlFile = files.get(namePath + ".xml") ?? files.get(namePath + ".bitmap"); // ".bitmap" - obsolete
-                    var item = xmlFile?.xml?.name == "bitmap"
-                            ? BitmapItem.parse(namePath, xmlFile.xml)
-                            : new BitmapItem(namePath, ext);
+                    var xmlFile = files.get(namePath + ".xml");
+                    var item = (xmlFile?.xml != null ? BitmapItem.parse(namePath, xmlFile.xml) : null) ?? new BitmapItem(namePath, ext);
                     files.remove(xmlFile?.relativePath);
                     r.push(item);
                 }

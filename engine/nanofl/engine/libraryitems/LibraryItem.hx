@@ -67,7 +67,7 @@ abstract class LibraryItem
             case bitmap: new BitmapItem(namePath, null);
             case folder: null;
             case font: new FontItem(namePath);
-            case mesh: new MeshItem(namePath, null, null);
+            case mesh: new MeshItem(namePath);
             case movieclip: new MovieClipItem(namePath);
             case sound: new SoundItem(namePath, null);
             case video: new VideoItem(namePath, null);

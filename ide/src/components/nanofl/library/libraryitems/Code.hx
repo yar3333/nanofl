@@ -99,11 +99,11 @@ class Code extends wquery.Component
 				[
 					"libraryItem" => new LibraryItemToLibraryItemDropper(app, this)
 				],
-				function(files:Array<File>, e:JqEvent)
+				(files:Array<File>, e:JqEvent) ->
 				{
 					if (readOnly) return;
 					
-					app.document.library.addFiles(files, LibraryItemToLibraryItemDropper.getTargetFolderForDrop(app, e));
+					app.document.library.addUploadedFiles(files, LibraryItemToLibraryItemDropper.getTargetFolderForDrop(app, e));
 				}
 			);
 		});
@@ -278,8 +278,6 @@ class Code extends wquery.Component
 	
 	function updateVisibility()
 	{
-		var prefixesToHide = [];
-		
 		for (element in getElements())
 		{
 			var namePath : String = element.attr("data-name-path");

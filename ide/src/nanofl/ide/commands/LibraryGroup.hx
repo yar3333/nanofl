@@ -24,9 +24,6 @@ class LibraryGroup extends BaseGroup
 	public function removeUnused()			app.document.library.removeUnusedItems();
 	public function selectUnused()			app.document.library.selectUnusedItems();
 	public function importFont()			app.document.library.importFont();
-	public function importImages()			app.document.library.importImages();
-	public function importSounds()			app.document.library.importSounds();
-	public function importMeshes()			app.document.library.importMeshes();
 	public function properties()			app.document.library.showPropertiesPopup();
 	public function createFolder()			app.document.library.createFolder();
 	

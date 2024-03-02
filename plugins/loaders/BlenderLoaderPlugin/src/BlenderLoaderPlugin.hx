@@ -1,15 +1,14 @@
-import js.lib.Promise;
-import blenderloader.BlenderDetector;
-import blenderloader.Params;
 import haxe.io.Path;
+import js.lib.Promise;
 import nanofl.engine.CustomProperty;
 import nanofl.engine.Debug.console;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
-import nanofl.ide.libraryitems.MeshItem;
 import nanofl.ide.plugins.PluginApi;
 import nanofl.ide.filesystem.CachedFile;
 import nanofl.ide.plugins.ILoaderPlugin;
 import nanofl.ide.plugins.LoaderPlugins;
+import blenderloader.BlenderDetector;
+import blenderloader.Params;
 using StringTools;
 using Lambda;
 
@@ -31,6 +30,8 @@ class BlenderLoaderPlugin implements ILoaderPlugin
 						   + " Ensure you have <a href='http://blender.org/'>Blender</a> installed." },
 		{ type:"file", name:"blenderPath", label:"Path to the blender.exe", description:"Select path to the blender.exe", defaultValue:"", fileFilters:[ { description:"Executable files (*.exe)", extensions:[ "exe" ] } ] }
 	];
+
+    public var extensions = [ "blend" ];
 	
 	var blenderExePath : String = null;
 
@@ -39,39 +40,27 @@ class BlenderLoaderPlugin implements ILoaderPlugin
     public function new() {}
 	
 	/**
-	 * Not really load items, just convert Blender's `*.blend` files into ThreeJS's `*.json`
-	 * and let StdLoaders plugin to load *.json.
+	 * Not really load items, just convert `*.blend` files into `*.gltf`
+	 * and let StdLoadersPlugin to load `*.gltf` later.
 	 */
 	public function load(api:PluginApi, _params:Dynamic, baseDir:String, files:Map<String, CachedFile>) : js.lib.Promise<Array<IIdeLibraryItem>>
 	{
         this.api = api;
 
 		var params = (cast _params : Params);
-		var blendFiles = files.filter(file -> !file.excluded && Path.extension(file.path) == "blend");
-		
-		if (blendFiles.length > 0 && detectBlenderPath(params))
-		{
-			var items = new Array<IIdeLibraryItem>();
-			
-			var p = js.lib.Promise.resolve(items);
-			for (file in blendFiles)
-			{
-				p = p.then(_ -> loadFile(baseDir, file, files, items));
-			}
-			return p; 
-		}
-		else
-		{
-			return js.lib.Promise.resolve([]);
-		}
+		var blendFiles = files.filter(file -> Path.extension(file.relativePath) == "blend");
+
+        if (blendFiles.length == 0 || !detectBlenderPath(params)) return Promise.resolve([]);
+
+        return Promise.all(blendFiles.map(x -> loadFile(baseDir, x, files))).then(_ -> []);
 	}
 	
-	function loadFile(baseDir:String, file:CachedFile, files:Map<String, CachedFile>, items:Array<IIdeLibraryItem>) : Promise<Array<IIdeLibraryItem>>
+	function loadFile(baseDir:String, file:CachedFile, files:Map<String, CachedFile>) : Promise<{}>
 	{
-        var namePath = Path.withoutExtension(file.path);
+        var namePath = Path.withoutExtension(file.relativePath);
         var relDestFilePath = namePath + ".gltf";
         
-        var blendFilePath = baseDir + "/" + file.path;
+        var blendFilePath = baseDir + "/" + file.relativePath;
         var destFilePath = baseDir + "/" + relDestFilePath;
         
         if (!api.fileSystem.exists(destFilePath) || api.fileSystem.getLastModified(destFilePath).getTime() < api.fileSystem.getLastModified(blendFilePath).getTime())
@@ -83,28 +72,17 @@ class BlenderLoaderPlugin implements ILoaderPlugin
             
             if (result.exitCode == 0 && api.fileSystem.exists(destFilePath))
             {
-                if (!files.exists(relDestFilePath))
-                {
-                    files.set(relDestFilePath, new CachedFile(baseDir, relDestFilePath));
-                }
+                files.set(relDestFilePath, new CachedFile(baseDir, relDestFilePath));
             }
             else
             {
-                console.error("Error [" + result.exitCode + "] while conversion '" + file.path + "' to '" + relDestFilePath + "':\n" + result.output.replace("\r\n", "\n") + (result.output != "" ? "\n" : "") + result.error.replace("\r\n", "\n"));
+                console.error("Error [" + result.exitCode + "] while conversion '" + file.relativePath + "' to '" + relDestFilePath + "':\n" + result.output.replace("\r\n", "\n") + (result.output != "" ? "\n" : "") + result.error.replace("\r\n", "\n"));
             }
-            
-            var item = files.exists(relDestFilePath) ? MeshItem.load(namePath, "blend", files) : throw new js.lib.Error("File '" + relDestFilePath + "' is not found.");
-            file.exclude();
-            items.push(item);
-            return Promise.resolve(items);
         }
-        else
-        {
-            var item = files.exists(relDestFilePath) ? MeshItem.load(namePath, "blend", files) : throw new js.lib.Error("File '" + relDestFilePath + "' is not found.");
-            file.exclude();
-            items.push(item);
-            return Promise.resolve(items);
-        }
+
+        files.remove(file.relativePath);
+
+        return Promise.resolve(null);
 	}
 	
 	function detectBlenderPath(params:Params) : Bool

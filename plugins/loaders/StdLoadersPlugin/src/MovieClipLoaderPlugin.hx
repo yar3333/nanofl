@@ -16,6 +16,8 @@ class MovieClipLoaderPlugin implements ILoaderPlugin
 	public var menuItemName = "MovieClip";
 	public var menuItemIcon = "";
 	public var properties : Array<CustomProperty> = null;
+
+    public var extensions = [];
 	
 	public function new() {}
 	
@@ -27,28 +29,16 @@ class MovieClipLoaderPlugin implements ILoaderPlugin
         {
             if (!files.exists(file.relativePath)) continue;
             
-            if ([ "json", "xml", "movieclip" ].indexOf(Path.extension(file.relativePath)) >= 0)
+            if (Path.extension(file.relativePath) == "xml")
             {
                 var namePath = Path.withoutExtension(file.relativePath);
                 if (!r.exists(item -> item.namePath == namePath))
                 {
-                    if (file.xml != null)
+                    var mc = file.xml != null ? MovieClipItem.parse(namePath, file.xml) : null;
+                    if (mc != null)
                     {
-                        var mc = MovieClipItem.parse(namePath, file.xml);
-                        if (mc != null)
-                        {
-                            r.push(mc);
-                            files.remove(file.relativePath);
-                        }
-                    }
-                    else if (file.json != null)
-                    {
-                        var mc = MovieClipItem.parseJson(namePath, file.xml);
-                        if (mc != null)
-                        {
-                            r.push(mc);
-                            files.remove(file.relativePath);
-                        }
+                        r.push(mc);
+                        files.remove(file.relativePath);
                     }
                 }
             }

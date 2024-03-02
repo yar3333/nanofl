@@ -121,10 +121,10 @@ class Code extends wquery.Component
 				[
 					"libraryItem" => new LibraryItemToEditorDropper()
 				],
-				function(files:Array<File>, e:JqEvent)
+				(files:Array<File>, e:JqEvent) ->
 				{
 					log("editor.drop files");
-					app.document.library.addFiles(files, "").then(function(items:Array<IIdeLibraryItem>)
+					app.document.library.addUploadedFiles(files, "").then((items:Array<IIdeLibraryItem>) ->
 					{
 						for (item in items) LibraryItemToEditorDropper.processItem(app, view, item, e);
 					});
@@ -132,7 +132,7 @@ class Code extends wquery.Component
 			);
 		});
 		
-		template().contextMenu.build(template().content, preferences.storage.getMenu("editorContextMenu"), function(menu:nanofl.ide.ui.menu.ContextMenu, e:JqEvent, _)
+		template().contextMenu.build(template().content, preferences.storage.getMenu("editorContextMenu"), (menu:nanofl.ide.ui.menu.ContextMenu, e:JqEvent, _) ->
 		{
 			if (!app.document.editor.tool.allowContextMenu()) return false;
 			
