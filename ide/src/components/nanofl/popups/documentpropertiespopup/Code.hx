@@ -26,6 +26,7 @@ class Code extends components.nanofl.popups.basepopup.Code
 		template().backgroundColor.value = app.document.properties.backgroundColor;
 		template().framerate.val(app.document.properties.framerate);
 		template().scaleMode.val(app.document.properties.scaleMode);
+		template().clickToStart.prop("checked", app.document.properties.clickToStart);
 		
 		var scene = app.document.library.getSceneItem();
 		template().autoPlay.prop("checked", scene.autoPlay);
@@ -60,6 +61,7 @@ class Code extends components.nanofl.popups.basepopup.Code
 			template().backgroundColor.value,
 			Std.parseFloat(template().framerate.val()),
 			template().scaleMode.val(),
+            template().clickToStart.prop("checked"),
 			app.document.properties.publishSettings
 		));
 		

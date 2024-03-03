@@ -103,11 +103,9 @@ class EditorLibrary extends InjectContainer
 		update();
 	}
 	
-	public function copyAndChangeDir(libraryDir:String) : Void
+	public function changeDir(libraryDir:String) : Void
 	{
-		var oldLibraryDir = library.libraryDir;
 		library.libraryDir = libraryDir;
-		fileSystem.syncDirectory(oldLibraryDir, libraryDir);
 	}
 	
 	public function getNextItemName() : String

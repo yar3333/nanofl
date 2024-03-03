@@ -24,6 +24,9 @@ class Template extends components.nanofl.popups.basepopup.Template
 	public var loop(get, never) : js.JQuery;
 	inline function get_loop() return component.q('#loop');
 	
+	public var clickToStart(get, never) : js.JQuery;
+	inline function get_clickToStart() return component.q('#clickToStart');
+	
 	public var sceneLinkedClass(get, never) : js.JQuery;
 	inline function get_sceneLinkedClass() return component.q('#sceneLinkedClass');
 

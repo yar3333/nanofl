@@ -47,6 +47,7 @@ class CodePublisher extends InjectContainer
 		template = template.replace("{framerate}", Std.string(properties.framerate));
 		template = template.replace("{scaleMode}", properties.scaleMode);
 		template = template.replace("{textureAtlasesData}", hasTextureAtlases ? "textureAtlasesData" : "null");
+		template = template.replace("{clickToStart}", properties.clickToStart ? "true" : "false");
 		template = template.replace("{preContainer}", properties.publishSettings.urlOnClick != "" ? "<a href='" + properties.publishSettings.urlOnClick + "' target='_blank'>\n\t\t\t" : "");
 		template = template.replace("{postContainer}", properties.publishSettings.urlOnClick != "" ? "\n\t\t</a>" : "");
 		template = template.replace("{playerVersion}", Version.player);

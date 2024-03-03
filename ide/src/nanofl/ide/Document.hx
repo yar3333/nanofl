@@ -353,15 +353,19 @@ class Document extends OpenedFile
 		}
 		else
 		{
-			var oldPath = path;
-			path = newPath;
-			library.copyAndChangeDir(Path.directory(newPath) + "/library");
-			fileSystem.syncDirectory(Path.directory(oldPath) + "/src", Path.directory(newPath) + "/src");
-			lastModified = null;
-			var success = saveNative();
-			if (success) originalPath = null;
+			final oldPath = path;
+			
+            fileSystem.copyAny(Path.directory(oldPath), Path.directory(newPath));
+			library.changeDir(Path.directory(newPath) + "/library");
+			
+            lastModified = null;
+            path = newPath;
+			final success = saveNative();
+			
+            if (success) originalPath = null;
 			else         path = oldPath;
-			return success;
+			
+            return success;
 		}
 	}
 	

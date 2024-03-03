@@ -8,6 +8,7 @@ typedef PlayerArgs =
     var container : DivElement;
     var libraryData : Dynamic;
     @:optional var framerate : Float;
-    @:optional var scaleMode: String;
-    @:optional var textureAtlasesData:Array<Dynamic<SpriteSheetData>>;
+    @:optional var scaleMode : String;
+    @:optional var textureAtlasesData : Array<Dynamic<SpriteSheetData>>;
+    @:optional var clickToStart : Bool;
 }

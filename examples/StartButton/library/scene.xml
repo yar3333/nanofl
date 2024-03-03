@@ -1,0 +1,40 @@
+<movieclip version="2.3.0">
+	<layer name="Layer 1">
+		<frame>
+			<shape>
+				<fills>
+					<fill type="solid" color="#000000" />
+				</fills>
+				<strokes>
+					<stroke type="solid" color="rgba(0,0,0,0.45)" thickness="8" />
+					<stroke type="solid" color="#000000" />
+				</strokes>
+				<figure>
+					<polygon fillIndex="0">
+						<contour edges="M43.9,95.17L98.98,63.68L44.63,29.32L43.78,28.7C43.69,78.56,43.9,95.17" />
+					</polygon>
+					<edge strokeIndex="0" edges="M43.78,28.7C43.69,78.56,43.9,95.17L98.98,63.68L44.63,29.32" />
+					<edge strokeIndex="1" edges="M43.66,95.05L43.67,95.3" />
+				</figure>
+			</shape>
+		</frame>
+	</layer>
+	<layer name="Layer 0">
+		<frame>
+			<shape>
+				<fills>
+					<fill type="solid" color="#369CBD" />
+				</fills>
+				<strokes>
+					<stroke type="solid" color="rgba(54,156,189,0.5)" thickness="10" />
+				</strokes>
+				<figure>
+					<polygon fillIndex="0">
+						<contour edges="M118.83,40.77C109.31,18.42,86.9,8.96C63.85,-0.51,40.88,8.96C18.47,18.42,8.95,40.77C-0.46,63.8,8.95,86.91C18.47,109.26,40.88,118.72C63.85,128.2,86.9,118.72C109.31,109.26,118.83,86.91C128.25,63.8,118.83,40.77" />
+					</polygon>
+					<edge strokeIndex="0" edges="M118.83,40.77C109.31,18.42,86.9,8.96C63.85,-0.51,40.88,8.96C18.47,18.42,8.95,40.77C-0.46,63.8,8.95,86.91C18.47,109.26,40.88,118.72C63.85,128.2,86.9,118.72C109.31,109.26,118.83,86.91C128.25,63.8,118.83,40.77" />
+				</figure>
+			</shape>
+		</frame>
+	</layer>
+</movieclip>

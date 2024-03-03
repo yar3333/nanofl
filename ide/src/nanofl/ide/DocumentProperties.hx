@@ -1,12 +1,12 @@
 package nanofl.ide;
 
+import stdlib.Std;
 import htmlparser.HtmlNodeElement;
 import htmlparser.XmlDocument;
 import nanofl.ide.sys.FileSystem;
 import nanofl.engine.Version;
 import nanofl.ide.PublishSettings;
 import nanofl.ide.textureatlas.TextureAtlases;
-import stdlib.Std;
 using StringTools;
 using stdlib.Lambda;
 
@@ -23,9 +23,10 @@ class DocumentProperties extends InjectContainer
 	public var backgroundColor : String;
 	public var framerate : Float;
 	public var scaleMode : String;
+	public var clickToStart : Bool;
 	public var publishSettings : PublishSettings;
 	
-	public function new(title="", width=800, height=600, backgroundColor="#FFFFFF", framerate=24.0, scaleMode="noScale", ?publishSettings:PublishSettings)
+	public function new(title="", width=800, height=600, backgroundColor="#FFFFFF", framerate=24.0, scaleMode="noScale", clickToStart=false, ?publishSettings:PublishSettings)
 	{
 		super();
 		
@@ -35,6 +36,7 @@ class DocumentProperties extends InjectContainer
 		this.backgroundColor = backgroundColor;
 		this.framerate = framerate;
 		this.scaleMode = scaleMode;
+		this.clickToStart = clickToStart;
 		this.publishSettings = publishSettings ?? new PublishSettings();
 	}
 	
@@ -109,6 +111,9 @@ class DocumentProperties extends InjectContainer
 			case "scaleMode":
 				r.scaleMode = value;
 				
+			case "clickToStart":
+				r.clickToStart = Std.bool(value);
+				
 			case _:
 				return false;
 		}
@@ -128,6 +133,7 @@ class DocumentProperties extends InjectContainer
 				out.begin("param").attr("name", "backgroundColor").attr("value", nanofl.engine.ColorTools.normalize(backgroundColor)).end();
 				out.begin("param").attr("name", "framerate").attr("value", framerate).end();
 				out.begin("param").attr("name", "scaleMode").attr("value", scaleMode).end();
+				out.begin("param").attr("name", "clickToStart").attr("value", clickToStart).end();
 			out.end();
 			
 			publishSettings.save(out);
@@ -151,6 +157,7 @@ class DocumentProperties extends InjectContainer
 			&& p.backgroundColor == backgroundColor
 			&& p.framerate == framerate
 			&& p.scaleMode == scaleMode
+			&& p.clickToStart == clickToStart
 			&& p.publishSettings.equ(publishSettings);
 	}
 	
@@ -164,6 +171,7 @@ class DocumentProperties extends InjectContainer
 			backgroundColor,
 			framerate,
 			scaleMode,
+			clickToStart,
 			publishSettings.clone()
 		);
 	}

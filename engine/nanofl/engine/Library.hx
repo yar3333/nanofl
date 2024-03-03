@@ -20,7 +20,7 @@ class Library
 {
 	public static var SCENE_NAME_PATH(default, never) = "scene";
 	
-	@:allow(nanofl.ide.editor.EditorLibrary.copyAndChangeDir)
+	@:allow(nanofl.ide.editor.EditorLibrary.changeDir)
 	public var libraryDir(default, null) : String;
 	
     var items = new Map<String, ILibraryItem>();
