@@ -20,10 +20,11 @@ FontLoaderPlugin.prototype = {
 		var file_current = 0;
 		while(file_current < file_length) {
 			var file = file_h[file_keys[file_current++]];
-			if(!Object.prototype.hasOwnProperty.call(files.h,file.relativePath)) {
+			if(file == null) {
 				continue;
 			}
-			if(haxe_io_Path.extension(file.relativePath) == "xml") {
+			var tmp = haxe_io_Path.extension(file.relativePath);
+			if((tmp != null ? tmp.toLowerCase() : null) == "xml") {
 				if(file.get_xml() != null) {
 					var font = nanofl.ide.libraryitems.FontItem.parse(haxe_io_Path.withoutExtension(file.relativePath),file.get_xml());
 					if(font != null) {
@@ -75,11 +76,11 @@ ImageLoaderPlugin.prototype = {
 		var file_current = 0;
 		while(file_current < file_length) {
 			var file = file_h[file_keys[file_current++]];
-			if(!Object.prototype.hasOwnProperty.call(files.h,file.relativePath)) {
+			if(file == null) {
 				continue;
 			}
 			var ext = haxe_io_Path.extension(file.relativePath);
-			if(ext != null && this.extensions.indexOf(ext.toLowerCase()) >= 0) {
+			if(this.extensions.indexOf(ext != null ? ext.toLowerCase() : null) != -1) {
 				var namePath = [haxe_io_Path.withoutExtension(file.relativePath)];
 				if(!Lambda.exists(r,(function(namePath) {
 					return function(item) {
@@ -146,11 +147,11 @@ MeshLoaderPlugin.prototype = {
 		var file_current = 0;
 		while(file_current < file_length) {
 			var file = file_h[file_keys[file_current++]];
-			if(!Object.prototype.hasOwnProperty.call(files.h,file.relativePath)) {
+			if(file == null) {
 				continue;
 			}
 			var ext = haxe_io_Path.extension(file.relativePath);
-			if(ext != null && this.extensions.indexOf(ext.toLowerCase()) >= 0) {
+			if(this.extensions.indexOf(ext != null ? ext.toLowerCase() : null) != -1) {
 				var namePath = [haxe_io_Path.withoutExtension(file.relativePath)];
 				if(!Lambda.exists(r,(function(namePath) {
 					return function(item) {
@@ -188,21 +189,18 @@ MovieClipLoaderPlugin.prototype = {
 	load: function(api,params,baseDir,files) {
 		var r = [];
 		var h = files.h;
-		var _g_h = h;
-		var _g_keys = Object.keys(h);
-		var _g_length = _g_keys.length;
-		var _g_current = 0;
-		while(_g_current < _g_length) {
-			var key = _g_keys[_g_current++];
-			var _g_key = key;
-			var _g_value = _g_h[key];
-			var relativePath = _g_key;
-			var file = _g_value;
-			if(!Object.prototype.hasOwnProperty.call(files.h,relativePath)) {
+		var file_h = h;
+		var file_keys = Object.keys(h);
+		var file_length = file_keys.length;
+		var file_current = 0;
+		while(file_current < file_length) {
+			var file = file_h[file_keys[file_current++]];
+			if(file == null) {
 				continue;
 			}
-			if(haxe_io_Path.extension(relativePath) == "xml") {
-				var namePath = [haxe_io_Path.withoutExtension(relativePath)];
+			var tmp = haxe_io_Path.extension(file.relativePath);
+			if((tmp != null ? tmp.toLowerCase() : null) == "xml") {
+				var namePath = [haxe_io_Path.withoutExtension(file.relativePath)];
 				if(!Lambda.exists(r,(function(namePath) {
 					return function(item) {
 						return item.namePath == namePath[0];
@@ -211,8 +209,9 @@ MovieClipLoaderPlugin.prototype = {
 					var mc = file.get_xml() != null ? nanofl.ide.libraryitems.MovieClipItem.parse(namePath[0],file.get_xml()) : null;
 					if(mc != null) {
 						r.push(mc);
-						if(Object.prototype.hasOwnProperty.call(files.h,relativePath)) {
-							delete(files.h[relativePath]);
+						var key = file.relativePath;
+						if(Object.prototype.hasOwnProperty.call(files.h,key)) {
+							delete(files.h[key]);
 						}
 					}
 				}
@@ -240,11 +239,11 @@ SoundLoaderPlugin.prototype = {
 		var file_current = 0;
 		while(file_current < file_length) {
 			var file = file_h[file_keys[file_current++]];
-			if(!Object.prototype.hasOwnProperty.call(files.h,file.relativePath)) {
+			if(file == null) {
 				continue;
 			}
 			var ext = haxe_io_Path.extension(file.relativePath);
-			if(ext != null && this.extensions.indexOf(ext.toLowerCase()) >= 0) {
+			if(this.extensions.indexOf(ext != null ? ext.toLowerCase() : null) != -1) {
 				var namePath = [haxe_io_Path.withoutExtension(file.relativePath)];
 				if(!Lambda.exists(r,(function(namePath) {
 					return function(item) {
@@ -282,22 +281,18 @@ VideoLoaderPlugin.prototype = {
 	load: function(api,params,baseDir,files) {
 		var r = [];
 		var h = files.h;
-		var _g_h = h;
-		var _g_keys = Object.keys(h);
-		var _g_length = _g_keys.length;
-		var _g_current = 0;
-		while(_g_current < _g_length) {
-			var key = _g_keys[_g_current++];
-			var _g_key = key;
-			var _g_value = _g_h[key];
-			var relativePath = _g_key;
-			var file = _g_value;
-			if(!Object.prototype.hasOwnProperty.call(files.h,relativePath)) {
+		var file_h = h;
+		var file_keys = Object.keys(h);
+		var file_length = file_keys.length;
+		var file_current = 0;
+		while(file_current < file_length) {
+			var file = file_h[file_keys[file_current++]];
+			if(file == null) {
 				continue;
 			}
-			var ext = haxe_io_Path.extension(relativePath);
-			if(ext != null && this.extensions.indexOf(ext.toLowerCase()) >= 0) {
-				var namePath = [haxe_io_Path.withoutExtension(relativePath)];
+			var ext = haxe_io_Path.extension(file.relativePath);
+			if(this.extensions.indexOf(ext != null ? ext.toLowerCase() : null) != -1) {
+				var namePath = [haxe_io_Path.withoutExtension(file.relativePath)];
 				if(!Lambda.exists(r,(function(namePath) {
 					return function(item) {
 						return item.namePath == namePath[0];
@@ -306,14 +301,15 @@ VideoLoaderPlugin.prototype = {
 					var xmlFile = files.h[namePath[0] + ".xml"];
 					var tmp = (xmlFile != null ? xmlFile.get_xml() : null) != null ? nanofl.ide.libraryitems.VideoItem.parse(namePath[0],xmlFile.get_xml()) : null;
 					var item = tmp != null ? tmp : new nanofl.ide.libraryitems.VideoItem(namePath[0],ext);
-					var key1 = xmlFile != null ? xmlFile.relativePath : null;
-					if(Object.prototype.hasOwnProperty.call(files.h,key1)) {
-						delete(files.h[key1]);
+					var key = xmlFile != null ? xmlFile.relativePath : null;
+					if(Object.prototype.hasOwnProperty.call(files.h,key)) {
+						delete(files.h[key]);
 					}
 					r.push(item);
 				}
-				if(Object.prototype.hasOwnProperty.call(files.h,relativePath)) {
-					delete(files.h[relativePath]);
+				var key1 = file.relativePath;
+				if(Object.prototype.hasOwnProperty.call(files.h,key1)) {
+					delete(files.h[key1]);
 				}
 			}
 		}

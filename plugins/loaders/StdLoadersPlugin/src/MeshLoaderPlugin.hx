@@ -27,10 +27,10 @@ class MeshLoaderPlugin implements ILoaderPlugin
         
         for (file in files)
         {
-            if (!files.exists(file.relativePath)) continue;
+            if (file == null) continue;
             
             var ext = Path.extension(file.relativePath);
-            if (ext != null && extensions.indexOf(ext.toLowerCase()) >= 0)
+            if (extensions.contains(ext?.toLowerCase()))
             {
                 var namePath = Path.withoutExtension(file.relativePath);
                 if (!r.exists(item -> item.namePath == namePath))
