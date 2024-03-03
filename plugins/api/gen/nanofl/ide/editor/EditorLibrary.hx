@@ -11,7 +11,7 @@ extern class EditorLibrary extends nanofl.ide.InjectContainer {
 	function canRenameItem(oldNamePath:String, newNamePath:String):Bool;
 	function renameItems(itemRenames:Array<{ public var oldNamePath(default, default) : String; public var newNamePath(default, default) : String; }>):Void;
 	function removeItems(namePaths:Array<String>):Void;
-	function copyAndChangeDir(libraryDir:String):Void;
+	function changeDir(libraryDir:String):Void;
 	function getNextItemName():String;
 	function hasItem(namePath:String):Bool;
 	function addFont(family:String, variants:Array<nanofl.engine.FontVariant>):Void;

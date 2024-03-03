@@ -9,6 +9,7 @@ package components.nanofl.popups.documentpropertiespopup;
 	var scaleMode(get, never) : js.JQuery;
 	var autoPlay(get, never) : js.JQuery;
 	var loop(get, never) : js.JQuery;
+	var clickToStart(get, never) : js.JQuery;
 	var sceneLinkedClass(get, never) : js.JQuery;
 	var relatedSound(get, never) : js.JQuery;
 }
