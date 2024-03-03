@@ -166,14 +166,11 @@ abstract class Element
 	
 	public abstract function createDisplayObject(frameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : easeljs.display.DisplayObject;
 	
-	function updateDisplayObjectBaseProperties(dispObj:easeljs.display.DisplayObject)
+	function elementUpdateDisplayObjectBaseProperties(dispObj:easeljs.display.DisplayObject)
 	{
 		dispObj.visible = visible;
 		dispObj.set(matrix.decompose());
-		
 		dispObj.filters = [];
-		dispObj.setBounds();
-		dispObj.uncache();
 	}
 	
 	public function transform(m:Matrix, applyToStrokeAndFill=true) : Void

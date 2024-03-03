@@ -12,9 +12,6 @@
 			{ "name":"------------------" },
 			{ "name":"Import",				"id":"import", "items":
 				[
-					{ "name":"Images into library (png/jpeg/svg)",		"command":"library.importImages",	"icon":"custom-icon-picture" },
-					{ "name":"Sounds into library (wav/mp3/ogg)",		"command":"library.importSounds",	"icon":"custom-icon-sound" },
-					{ "name":"Meshes into library (blend/json)",		"command":"library.importMeshes",	"icon":"custom-icon-cube" }
 				]
 			},
 			{ "name":"Export",				"id":"export", "items":[] },
@@ -78,6 +75,7 @@
 		[
 			{ "name":"New Movie Clip...",					"command":"library.newEmptyMovieClip",		"icon":"custom-icon-film" },
 			{ "name":"New Folder...",						"command":"library.newFolder",				"icon":"custom-icon-folder-close" },
+			{ "name":"Import files...",						"command":"library.importFiles",			"icon":"custom-icon-plus" },
 			{ "name":"------------------" },
 			{ "name":"Add Font Manually...",				"command":"library.addFontManually",		"icon":"custom-icon-font" },
 			{ "name":"Import Font from Google Fonts...",	"command":"library.importFont",				"icon":"custom-icon-google" },

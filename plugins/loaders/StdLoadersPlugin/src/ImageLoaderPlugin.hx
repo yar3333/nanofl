@@ -8,12 +8,12 @@ import nanofl.ide.filesystem.CachedFile;
 import nanofl.ide.plugins.ILoaderPlugin;
 using Lambda;
 
-class BitmapLoaderPlugin implements ILoaderPlugin
+class ImageLoaderPlugin implements ILoaderPlugin
 {
-	public var name = "BitmapLoader";
+	public var name = "ImageLoader";
 	public var priority = 100;
 	
-	public var menuItemName = "Bitmap";
+	public var menuItemName = "Image";
 	public var menuItemIcon = "";
 	public var properties : Array<CustomProperty> = null;
 	

@@ -184,12 +184,12 @@ class Instance extends Element
 		}
 		
 		var dispObj = symbol.createDisplayObject(initFrameIndex, frameIndexes);
-		updateDisplayObjectBaseProperties(dispObj);
-		updateDisplayObjectInstanceProperties(dispObj);
+		elementUpdateDisplayObjectBaseProperties(dispObj);
+		elementUpdateDisplayObjectInstanceProperties(dispObj);
 		return dispObj;
 	}
 	
-	function updateDisplayObjectInstanceProperties(dispObj:easeljs.display.DisplayObject) : Void
+	function elementUpdateDisplayObjectInstanceProperties(dispObj:easeljs.display.DisplayObject) : Void
 	{
 		if (dispObj.filters == null) dispObj.filters = [];
 		
@@ -214,8 +214,12 @@ class Instance extends Element
 
     public function updateDisplayObjectTweenedProperties(dispObj:easeljs.display.DisplayObject) : Void
     {
-		updateDisplayObjectBaseProperties(dispObj);
-		updateDisplayObjectInstanceProperties(dispObj);
+		elementUpdateDisplayObjectBaseProperties(dispObj);
+
+        //dispObj.setBounds(); // ????
+		//dispObj.uncache(); // ????
+
+		elementUpdateDisplayObjectInstanceProperties(dispObj);
     }
 	
 	public function getNavigatorName() return namePath;

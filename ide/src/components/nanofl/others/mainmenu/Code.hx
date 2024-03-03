@@ -57,7 +57,6 @@ class Code extends wquery.Component implements IMainMenuView
 		var items = preferences.storage.getMenu("mainMenu");
 		
 		var importMenuItem = MenuTools.findItem(items, "import");
-		if (ImporterPlugins.plugins.iterator().hasNext()) importMenuItem.items.push({ name:"------------------" });
 		for (importer in ImporterPlugins.plugins)
 		{
 			importMenuItem.items.push

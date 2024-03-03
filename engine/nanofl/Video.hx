@@ -26,12 +26,12 @@ class Video extends SolidContainer
 		this.symbol = symbol;
 		symbol.updateDisplayObject(this, null);
 
-        video.loop = symbol.loop;
-        if (!symbol.autoPlay) video.pause();
-        else                  video.play();
-        
+        #if ide
+        bitmap = new easeljs.display.Bitmap(symbol.poster);
+        #else
         bitmap = new easeljs.display.Bitmap(new VideoBuffer(video));
-        
+        #end
+
         addChild(bitmap);
 	}
 
@@ -47,7 +47,7 @@ class Video extends SolidContainer
 	{
 		return symbol.toString();
 	}
-	
+
 	#if !ide
 	//{ IEventHandlers
 	public function onEnterFrame() : Void {}

@@ -87,17 +87,18 @@ class Code extends components.nanofl.popups.basepopup.Code
 		
 		popups.textureAtlasProperties.show("atlas_" + i, new TextureAtlasParams(), e ->
 		{
-			if (!textureAtlases.exists(e.name))
-			{
-				textureAtlases.set(e.name, e.params);
-				updateAtlasSelector();
-				template().atlases.val(e.name);
-				template().atlas.update();
-			}
-			else
-			{
-				js.Browser.window.alert("Texture Atlas '" + e.name + "' already exists.");
-			}
+            if (e.name == "") return;
+            
+            if (textureAtlases.exists(e.name))
+            {
+                js.Browser.window.alert("Texture Atlas '" + e.name + "' already exists.");
+                return;
+            }
+
+            textureAtlases.set(e.name, e.params);
+            updateAtlasSelector();
+            template().atlases.val(e.name);
+            template().atlas.update();
 		});
 	}
 	

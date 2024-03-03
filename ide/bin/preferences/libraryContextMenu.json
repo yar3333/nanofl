@@ -1,4 +1,5 @@
 [
-	{ "name":"Create Folder",			"command":"library.createFolder",		"icon":"" },
-	{ "name":"Select unused Items",		"command":"library.selectUnused",		"icon":"" }
+	{ "name":"Create Folder...",		"command":"library.createFolder",		"icon":"custom-icon-folder-close" },
+	{ "name":"Import files...",			"command":"library.importFiles",		"icon":"custom-icon-plus" },
+	{ "name":"Select unused Items",		"command":"library.selectUnused",		"icon":"" }	
 ]

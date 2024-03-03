@@ -133,10 +133,7 @@ class MenuTools
 		enableItemLazy(container, "document.publishSettings",() -> app.document != null);
 		enableItemLazy(container, "document.saveAs",		() -> openedFiles.active != null && openedFiles.active.type == OpenedFileType.DOCUMENT);
 		
-		enableItemLazy(container, "library.importImages", 	() -> app.document != null);
-		enableItemLazy(container, "library.importSounds", 	() -> app.document != null);
-		enableItemLazy(container, "library.importMeshes", 	() -> app.document != null);
-		enableItemLazy(container, "library.importVideos", 	() -> app.document != null);
+		enableItemLazy(container, "library.importFiles", 	() -> app.document != null);
 		
 		enableItemLazy(container, "document.undo",			() -> app.document != null && app.document.undoQueue.canUndo());
 		enableItemLazy(container, "document.redo",			() -> app.document != null && app.document.undoQueue.canRedo());

@@ -1,6 +1,5 @@
 package nanofl.ide.libraryitems;
 
-import js.Browser;
 import htmlparser.HtmlNodeElement;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
 
@@ -10,7 +9,9 @@ class SoundItem extends nanofl.engine.libraryitems.SoundItem
 	override public function clone() : SoundItem
 	{
 		var obj = new SoundItem(namePath, ext);
+        obj.loop = loop;
 		obj.linkage = linkage;
+        obj.audio = cast audio?.cloneNode();
 		copyBaseProperties(obj);
 		return obj;
 	}

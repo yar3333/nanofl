@@ -203,7 +203,7 @@ class TextElement extends Element
 	{
         final tf = new nanofl.TextField();
 		
-		updateDisplayObjectBaseProperties(tf);
+		elementUpdateDisplayObjectBaseProperties(tf);
 		
         tf.name = name;
 		

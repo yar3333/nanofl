@@ -1,5 +1,6 @@
 package components.nanofl.library.libraryitems;
 
+import js.Browser;
 import haxe.io.Path;
 import htmlparser.XmlBuilder;
 import nanofl.ide.Globals;
@@ -411,13 +412,20 @@ class Code extends wquery.Component
 			},
 			setData: function(jq:JQuery, value:String)
 			{
-				if (Path.withoutDirectory(namePath) != value)
+				if (value != "" && Path.withoutDirectory(namePath) != value)
 				{
 					var newNamePath = Path.join([ Path.directory(namePath), value ]); 
-					app.document.library.renameItems([{ oldNamePath:namePath, newNamePath:newNamePath }]);
-					view.library.activeItem = null;
-					app.document.library.update();
-					view.library.activeItem = app.document.library.getItem(newNamePath);
+                    if (!app.document.library.hasItem(newNamePath))
+                    {
+                        app.document.library.renameItems([{ oldNamePath:namePath, newNamePath:newNamePath }]);
+                        view.library.activeItem = null;
+                        app.document.library.update();
+                        view.library.activeItem = app.document.library.getItem(newNamePath);
+                    }
+                    else
+                    {
+                        Browser.alert("Symbol '" + newNamePath + "' already exists.");
+                    }
 				}
 			},
 			cssClass: "inPlaceEdit"

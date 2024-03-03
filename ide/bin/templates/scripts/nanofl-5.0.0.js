@@ -3096,12 +3096,6 @@ class nanofl_Video extends nanofl_SolidContainer {
 		stdlib_Debug.assert(((symbol) instanceof nanofl_engine_libraryitems_VideoItem),null,{ fileName : "engine/nanofl/Video.hx", lineNumber : 24, className : "nanofl.Video", methodName : "new"});
 		this.symbol = symbol;
 		symbol.updateDisplayObject(this,null);
-		this.video.loop = symbol.loop;
-		if(!symbol.autoPlay) {
-			this.video.pause();
-		} else {
-			this.video.play();
-		}
 		this.bitmap = new createjs.Bitmap(new createjs.VideoBuffer(this.video));
 		this.addChild(this.bitmap);
 	}
@@ -4172,7 +4166,8 @@ class nanofl_engine_Loader {
 	static video(url) {
 		return new Promise(function(resolve,reject) {
 			let video = window.document.createElement("video");
-			video.onloadedmetadata = function(_) {
+			video.currentTime = 0.001;
+			video.oncanplay = function(_) {
 				resolve(video);
 			};
 			video.onerror = function(_) {
@@ -4659,12 +4654,10 @@ class nanofl_engine_elements_Element {
 		obj.regX = this.regX;
 		obj.regY = this.regY;
 	}
-	updateDisplayObjectBaseProperties(dispObj) {
+	elementUpdateDisplayObjectBaseProperties(dispObj) {
 		dispObj.visible = this.visible;
 		dispObj.set(this.matrix.decompose());
 		dispObj.filters = [];
-		dispObj.setBounds();
-		dispObj.uncache();
 	}
 	equ(element) {
 		if(js_Boot.getClass(element) != js_Boot.getClass(this)) {
@@ -4820,7 +4813,7 @@ class nanofl_engine_elements_GroupElement extends nanofl_engine_elements_Element
 		} else {
 			frameIndexes = null;
 		}
-		this.updateDisplayObjectBaseProperties(container);
+		this.elementUpdateDisplayObjectBaseProperties(container);
 		container.removeAllChildren();
 		let topElement = null;
 		let _g = 0;
@@ -4924,11 +4917,11 @@ class nanofl_engine_elements_Instance extends nanofl_engine_elements_Element {
 			frameIndexes = null;
 		}
 		let dispObj = this.get_symbol().createDisplayObject(initFrameIndex,frameIndexes);
-		this.updateDisplayObjectBaseProperties(dispObj);
-		this.updateDisplayObjectInstanceProperties(dispObj);
+		this.elementUpdateDisplayObjectBaseProperties(dispObj);
+		this.elementUpdateDisplayObjectInstanceProperties(dispObj);
 		return dispObj;
 	}
-	updateDisplayObjectInstanceProperties(dispObj) {
+	elementUpdateDisplayObjectInstanceProperties(dispObj) {
 		if(dispObj.filters == null) {
 			dispObj.filters = [];
 		}
@@ -4955,8 +4948,8 @@ class nanofl_engine_elements_Instance extends nanofl_engine_elements_Element {
 		}
 	}
 	updateDisplayObjectTweenedProperties(dispObj) {
-		this.updateDisplayObjectBaseProperties(dispObj);
-		this.updateDisplayObjectInstanceProperties(dispObj);
+		this.elementUpdateDisplayObjectBaseProperties(dispObj);
+		this.elementUpdateDisplayObjectInstanceProperties(dispObj);
 	}
 	setLibrary(library) {
 		this.library = library;
@@ -5086,7 +5079,7 @@ class nanofl_engine_elements_ShapeElement extends nanofl_engine_elements_Element
 	}
 	createDisplayObject(frameIndexes) {
 		let shape = new createjs.Shape();
-		this.updateDisplayObjectBaseProperties(shape);
+		this.elementUpdateDisplayObjectBaseProperties(shape);
 		shape.graphics.clear();
 		let m = shape.getConcatenatedMatrix().invert();
 		this.draw(shape.graphics,(m.a + m.d) / 2);
@@ -5283,7 +5276,7 @@ class nanofl_engine_elements_TextElement extends nanofl_engine_elements_Element 
 	}
 	createDisplayObject(frameIndexes) {
 		let tf = new nanofl_TextField();
-		this.updateDisplayObjectBaseProperties(tf);
+		this.elementUpdateDisplayObjectBaseProperties(tf);
 		tf.name = this.name;
 		tf.width = this.width;
 		tf.height = this.height;
@@ -7719,30 +7712,40 @@ class nanofl_engine_libraryitems_VideoItem extends nanofl_engine_libraryitems_In
 		let obj = new nanofl_engine_libraryitems_VideoItem(this.namePath,this.ext);
 		obj.autoPlay = this.autoPlay;
 		obj.loop = this.loop;
-		obj.video = this.video.cloneNode();
+		let tmp = this.video;
+		obj.video = tmp != null ? tmp.cloneNode() : null;
+		obj.poster = this.poster;
 		this.copyBaseProperties(obj);
 		return obj;
 	}
 	preload() {
-		stdlib_Debug.assert(this.library != null,"You need to add item '" + this.namePath + "' to the library before preload call.",{ fileName : "engine/nanofl/engine/libraryitems/VideoItem.hx", lineNumber : 51, className : "nanofl.engine.libraryitems.VideoItem", methodName : "preload"});
+		stdlib_Debug.assert(this.library != null,"You need to add item '" + this.namePath + "' to the library before preload call.",{ fileName : "engine/nanofl/engine/libraryitems/VideoItem.hx", lineNumber : 56, className : "nanofl.engine.libraryitems.VideoItem", methodName : "preload"});
 		let _gthis = this;
-		return nanofl_engine_Loader.video(this.library.realUrl(this.namePath + "." + this.ext)).then(function(vid) {
-			_gthis.video = vid;
+		return nanofl_engine_Loader.video(this.library.realUrl(this.namePath + "." + this.ext)).then(function(video) {
+			let tmp = window.document.createElement("canvas");
+			_gthis.poster = tmp;
+			_gthis.poster.width = video.videoWidth;
+			_gthis.poster.height = video.videoHeight;
+			_gthis.poster.getContext("2d",null).drawImage(video,0,0,_gthis.poster.width,_gthis.poster.height);
+			_gthis.video = video;
 			return null;
 		});
 	}
 	createDisplayObject(initFrameIndex,childFrameIndexes) {
 		let r = super.createDisplayObject(initFrameIndex,childFrameIndexes);
-		if(r == null) {
-			r = new nanofl_Video(this);
+		let tmp = r;
+		if(tmp != null) {
+			return tmp;
+		} else {
+			return new nanofl_Video(this);
 		}
-		r.setBounds(0,0,this.video.videoWidth,this.video.videoHeight);
-		return r;
 	}
 	updateDisplayObject(dispObj,childFrameIndexes) {
-		stdlib_Debug.assert(((dispObj) instanceof nanofl_Video),null,{ fileName : "engine/nanofl/engine/libraryitems/VideoItem.hx", lineNumber : 71, className : "nanofl.engine.libraryitems.VideoItem", methodName : "updateDisplayObject"});
+		stdlib_Debug.assert(((dispObj) instanceof nanofl_Video),null,{ fileName : "engine/nanofl/engine/libraryitems/VideoItem.hx", lineNumber : 76, className : "nanofl.engine.libraryitems.VideoItem", methodName : "updateDisplayObject"});
 		dispObj.video = this.video.cloneNode();
-		dispObj.setBounds(0,0,this.video.videoWidth,this.video.videoHeight);
+		dispObj.video.loop = this.loop;
+		dispObj.video.autoplay = this.autoPlay;
+		dispObj.setBounds(0,0,this.poster.width,this.poster.height);
 	}
 	equ(item) {
 		if(!((item) instanceof nanofl_engine_libraryitems_VideoItem)) {
@@ -7758,6 +7761,9 @@ class nanofl_engine_libraryitems_VideoItem extends nanofl_engine_libraryitems_In
 			return false;
 		}
 		if(item.loop != this.loop) {
+			return false;
+		}
+		if(item.poster != this.poster) {
 			return false;
 		}
 		return true;

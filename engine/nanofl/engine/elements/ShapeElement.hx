@@ -235,7 +235,7 @@ class ShapeElement extends Element
 	{
         final shape = new easeljs.display.Shape();
 		
-		updateDisplayObjectBaseProperties(shape);
+		elementUpdateDisplayObjectBaseProperties(shape);
 		
 		shape.graphics.clear();
 		var m = shape.getConcatenatedMatrix().invert();

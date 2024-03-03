@@ -180,18 +180,16 @@ class EditorLibrary extends InjectContainer
 	{
 		popups.prompt.show("Create Empty Movie Clip", "Enter new symbol name:", getNextItemName(), namePath ->
 		{
-			if (namePath != null && namePath != "")
-			{
-				if (!hasItem(namePath))
-				{
-					addItems([ MovieClipItem.createWithFrame(namePath) ]);
-					update();
-				}
-				else
-				{
-					Browser.window.alert("Symbol '" + namePath + "' already exists.");
-				}
-			}
+			if (namePath == null || namePath == "") return;
+
+            if (hasItem(namePath))
+            {
+                Browser.window.alert("Symbol '" + namePath + "' already exists.");
+                return;
+            }
+
+            addItems([ MovieClipItem.createWithFrame(namePath) ]);
+            update();
 		});
 	}
 	
@@ -199,18 +197,16 @@ class EditorLibrary extends InjectContainer
 	{
 		popups.prompt.show("Create Folder", "Enter new folder name:", getNextItemName(), namePath ->
 		{
-			if (namePath != null && namePath != "")
-			{
-				if (!hasItem(namePath))
-				{
-					addItems([ new FolderItem(namePath) ]);
-					update();
-				}
-				else
-				{
-					Browser.window.alert("Symbol '" + namePath + "' already exists.");
-				}
-			}
+			if (namePath == null || namePath == "") return;
+            
+            if (hasItem(namePath))
+            {
+                Browser.window.alert("Symbol '" + namePath + "' already exists.");
+                return;
+            }
+				
+            addItems([ new FolderItem(namePath) ]);
+            update();
 		});
 	}
 	

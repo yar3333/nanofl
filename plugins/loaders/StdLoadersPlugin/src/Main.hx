@@ -4,7 +4,7 @@ class Main
 {
 	static function main()
 	{
-		LoaderPlugins.register(new BitmapLoaderPlugin());
+		LoaderPlugins.register(new ImageLoaderPlugin());
 		LoaderPlugins.register(new FontLoaderPlugin());
 		LoaderPlugins.register(new SoundLoaderPlugin());
 		LoaderPlugins.register(new MovieClipLoaderPlugin());

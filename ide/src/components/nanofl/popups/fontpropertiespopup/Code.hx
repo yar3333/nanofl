@@ -86,9 +86,16 @@ class Code extends components.nanofl.popups.basepopup.Code
 		if (font == null)
 		{
 			var family = template().family.val().trim();
-			if (app.document.library.hasItem(family))
+            
+            if (family == "")
+            {
+                template().family.focus();
+                return;
+            }
+			
+            if (app.document.library.hasItem(family))
 			{
-				js.Browser.alert("Symbol '" + family + "' already exists. Change family name, please.");
+				js.Browser.alert("Symbol '" + family + "' already exists.");
 				template().family.focus();
 				return;
 			}

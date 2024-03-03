@@ -141,7 +141,7 @@ class GroupElement extends Element
 		else
 			frameIndexes = null;
 		
-		updateDisplayObjectBaseProperties(container);
+		elementUpdateDisplayObjectBaseProperties(container);
 		
 		container.removeAllChildren();
 		

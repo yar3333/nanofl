@@ -1,5 +1,7 @@
 package nanofl.engine.libraryitems;
 
+import js.Browser;
+import js.html.CanvasElement;
 import js.lib.Error;
 import js.lib.Promise;
 import nanofl.engine.ILibraryItem;
@@ -24,6 +26,8 @@ class VideoItem extends InstancableItem
     public var loop = true;
 	
 	public var video(default, null) : VideoElement;
+
+    public var poster(default, null) : CanvasElement;
 	
 	public function new(namePath:String, ext:String)
 	{
@@ -37,7 +41,8 @@ class VideoItem extends InstancableItem
 		
 		obj.autoPlay = autoPlay;
 		obj.loop = loop;
-		obj.video = cast video.cloneNode();
+		obj.video = cast video?.cloneNode();
+		obj.poster = poster;
 		
 		copyBaseProperties(obj);
 		
@@ -49,30 +54,37 @@ class VideoItem extends InstancableItem
 	public function preload() : Promise<{}>
 	{
 		Debug.assert(library != null, "You need to add item '" + namePath + "' to the library before preload call.");
-        return Loader.video(library.realUrl(namePath + "." + ext)).then(vid -> { video = vid; return null; });
+        return Loader.video(library.realUrl(namePath + "." + ext)).then(video -> 
+        { 
+            poster = Browser.document.createCanvasElement();
+            poster.width = video.videoWidth;
+            poster.height = video.videoHeight;
+            poster.getContext2d().drawImage(video, 0, 0, poster.width, poster.height);
+            this.video = video; 
+            return null; 
+        });
     }
 
 	override public function createDisplayObject(initFrameIndex:Int, childFrameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : easeljs.display.DisplayObject
 	{
 		var r = super.createDisplayObject(initFrameIndex, childFrameIndexes);
-		
-		if (r == null)
-		{
-			r =  new nanofl.Video(this);
-		}
-		
-		r.setBounds(0, 0, video.videoWidth, video.videoHeight);
-		
-		return r;
+    	return r ?? new nanofl.Video(this);
 	}
 	
 	public function updateDisplayObject(dispObj:easeljs.display.DisplayObject, childFrameIndexes:Array<{ element:IPathElement, frameIndex:Int }>)
 	{
 		Debug.assert(Std.isOfType(dispObj, nanofl.Video));
+
 		(cast dispObj:nanofl.Video).video = (cast video.cloneNode() : VideoElement);
-		(cast dispObj:nanofl.Video).setBounds(0, 0, video.videoWidth, video.videoHeight);
+        (cast dispObj:nanofl.Video).video.loop = this.loop;
+
+        #if !ide
+        (cast dispObj:nanofl.Video).video.autoplay = this.autoPlay;
+        #end
+
+		(cast dispObj:nanofl.Video).setBounds(0, 0, poster.width, poster.height);
 	}
-	
+
 	public function getDisplayObjectClassName() return "nanofl.Video";
 	
 	override public function equ(item:ILibraryItem) : Bool
@@ -82,6 +94,7 @@ class VideoItem extends InstancableItem
 		if ((cast item:VideoItem).ext != ext) return false;
 		if ((cast item:VideoItem).autoPlay != autoPlay) return false;
 		if ((cast item:VideoItem).loop != loop) return false;
+		if ((cast item:VideoItem).poster != poster) return false;
 		return true;
 	}
 	

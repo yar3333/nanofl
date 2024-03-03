@@ -85,16 +85,17 @@ class Loader
 		return new Promise<VideoElement>((resolve, reject) ->
 		{
 			var video = Browser.document.createVideoElement();
-			video.onloadedmetadata = _ ->
-			{
-				resolve(video);
-			};
+            video.currentTime = 0.001;
+
+			video.oncanplay = _ -> resolve(video);
+
 			video.onerror = _ ->
 			{
 				console.error("Failed to load '" + url + "'.");
 				//image.src = "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=";
 				reject(new Error("Failed to load '" + url + "'."));
 			};
+
 			video.src = url;
 		});
 	}
