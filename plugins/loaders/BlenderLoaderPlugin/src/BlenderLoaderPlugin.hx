@@ -48,7 +48,7 @@ class BlenderLoaderPlugin implements ILoaderPlugin
         this.api = api;
 
 		var params = (cast _params : Params);
-		var blendFiles = files.filter(file -> Path.extension(file.relativePath)?.toLowerCase() == "blend");
+		var blendFiles = files.filter(file -> file != null && Path.extension(file.relativePath).toLowerCase() == "blend");
 
         if (blendFiles.length == 0 || !detectBlenderPath(params)) return Promise.resolve([]);
 

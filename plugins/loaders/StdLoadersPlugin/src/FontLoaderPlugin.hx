@@ -29,7 +29,7 @@ class FontLoaderPlugin implements ILoaderPlugin
         {
             if (file == null) continue;
             
-            if (Path.extension(file.relativePath)?.toLowerCase() == "xml")
+            if (Path.extension(file.relativePath).toLowerCase() == "xml")
             {
                 if (file.xml != null)
                 {

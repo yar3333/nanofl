@@ -29,7 +29,7 @@ class MovieClipLoaderPlugin implements ILoaderPlugin
         {
             if (file == null) continue;
             
-            if (Path.extension(file.relativePath)?.toLowerCase() == "xml")
+            if (Path.extension(file.relativePath).toLowerCase() == "xml")
             {
                 var namePath = Path.withoutExtension(file.relativePath);
                 if (!r.exists(item -> item.namePath == namePath))

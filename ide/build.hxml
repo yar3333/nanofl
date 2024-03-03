@@ -18,3 +18,4 @@
 --library nanofl-ide-globals
 --library nanofl-ide-keyboard
 --macro stdlib.Macro.expose('nanofl')
+nanofl.ide.libraryitems.VideoItem

@@ -22,8 +22,11 @@ BlenderLoaderPlugin.prototype = {
 		this.api = api;
 		var params = _params;
 		var blendFiles = Lambda.filter(files,function(file) {
-			var tmp = haxe_io_Path.extension(file.relativePath);
-			return (tmp != null ? tmp.toLowerCase() : null) == "blend";
+			if(file != null) {
+				return haxe_io_Path.extension(file.relativePath).toLowerCase() == "blend";
+			} else {
+				return false;
+			}
 		});
 		if(blendFiles.length == 0 || !this.detectBlenderPath(params)) {
 			return Promise.resolve([]);

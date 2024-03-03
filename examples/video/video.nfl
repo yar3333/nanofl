@@ -5,7 +5,7 @@
 		<param name="height" value="900" />
 		<param name="backgroundColor" value="#999999" />
 		<param name="framerate" value="24" />
-		<param name="scaleMode" value="noScale" />
+		<param name="scaleMode" value="fit" />
 	</general>
 	<publishSettings>
 		<param name="useTextureAtlases" value="false" />

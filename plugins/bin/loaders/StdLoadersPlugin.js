@@ -23,8 +23,7 @@ FontLoaderPlugin.prototype = {
 			if(file == null) {
 				continue;
 			}
-			var tmp = haxe_io_Path.extension(file.relativePath);
-			if((tmp != null ? tmp.toLowerCase() : null) == "xml") {
+			if(haxe_io_Path.extension(file.relativePath).toLowerCase() == "xml") {
 				if(file.get_xml() != null) {
 					var font = nanofl.ide.libraryitems.FontItem.parse(haxe_io_Path.withoutExtension(file.relativePath),file.get_xml());
 					if(font != null) {
@@ -80,7 +79,7 @@ ImageLoaderPlugin.prototype = {
 				continue;
 			}
 			var ext = haxe_io_Path.extension(file.relativePath);
-			if(this.extensions.indexOf(ext != null ? ext.toLowerCase() : null) != -1) {
+			if(this.extensions.indexOf(ext.toLowerCase()) != -1) {
 				var namePath = [haxe_io_Path.withoutExtension(file.relativePath)];
 				if(!Lambda.exists(r,(function(namePath) {
 					return function(item) {
@@ -151,7 +150,7 @@ MeshLoaderPlugin.prototype = {
 				continue;
 			}
 			var ext = haxe_io_Path.extension(file.relativePath);
-			if(this.extensions.indexOf(ext != null ? ext.toLowerCase() : null) != -1) {
+			if(this.extensions.indexOf(ext.toLowerCase()) != -1) {
 				var namePath = [haxe_io_Path.withoutExtension(file.relativePath)];
 				if(!Lambda.exists(r,(function(namePath) {
 					return function(item) {
@@ -198,8 +197,7 @@ MovieClipLoaderPlugin.prototype = {
 			if(file == null) {
 				continue;
 			}
-			var tmp = haxe_io_Path.extension(file.relativePath);
-			if((tmp != null ? tmp.toLowerCase() : null) == "xml") {
+			if(haxe_io_Path.extension(file.relativePath).toLowerCase() == "xml") {
 				var namePath = [haxe_io_Path.withoutExtension(file.relativePath)];
 				if(!Lambda.exists(r,(function(namePath) {
 					return function(item) {
@@ -243,7 +241,7 @@ SoundLoaderPlugin.prototype = {
 				continue;
 			}
 			var ext = haxe_io_Path.extension(file.relativePath);
-			if(this.extensions.indexOf(ext != null ? ext.toLowerCase() : null) != -1) {
+			if(this.extensions.indexOf(ext.toLowerCase()) != -1) {
 				var namePath = [haxe_io_Path.withoutExtension(file.relativePath)];
 				if(!Lambda.exists(r,(function(namePath) {
 					return function(item) {
@@ -291,7 +289,7 @@ VideoLoaderPlugin.prototype = {
 				continue;
 			}
 			var ext = haxe_io_Path.extension(file.relativePath);
-			if(this.extensions.indexOf(ext != null ? ext.toLowerCase() : null) != -1) {
+			if(this.extensions.indexOf(ext.toLowerCase()) != -1) {
 				var namePath = [haxe_io_Path.withoutExtension(file.relativePath)];
 				if(!Lambda.exists(r,(function(namePath) {
 					return function(item) {
