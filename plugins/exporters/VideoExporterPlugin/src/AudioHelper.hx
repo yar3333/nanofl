@@ -1,6 +1,8 @@
+import nanofl.engine.movieclip.Layer;
 import nanofl.ide.library.IdeLibrary;
 import nanofl.ide.libraryitems.MovieClipItem;
 import nanofl.ide.libraryitems.SoundItem;
+import nanofl.ide.libraryitems.VideoItem;
 using nanofl.ide.MovieClipItemTools;
 
 /**
@@ -26,6 +28,8 @@ using nanofl.ide.MovieClipItemTools;
 **/
 class AudioHelper
 {
+    static final MAX_DURATION = 2000000000;
+
     public static function getFFmpegArgsForMixTracks(tracks:Array<AudioTrack>, startInputIndex:Int) : Array<String>
     {
         final args = [];
@@ -33,10 +37,10 @@ class AudioHelper
         
         for (tracks in tracks)
         {
-            if (tracks.loopDurationMs != null)
+            if (tracks.durationMs != null)
             {
-                args.push("-stream_loop"); args.push("-1");
-                args.push("-t"); args.push(tracks.loopDurationMs + "ms");
+                if (tracks.loop) args.push("-stream_loop"); args.push("-1");
+                if (tracks.durationMs != null) args.push("-t"); args.push(tracks.durationMs + "ms");
             }
             args.push("-i"); args.push(tracks.filePath);
         }
@@ -57,10 +61,10 @@ class AudioHelper
 
     public static function getSceneTracks(framerate:Float, library:IdeLibrary) : Array<AudioTrack>
     {
-        return getMovieClipTracksInner(framerate, library.getSceneItem(), library, new Array<AudioTrack>(), 0);
+        return getMovieClipTracksInner(framerate, library.getSceneItem(), library, new Array<AudioTrack>(), 0, MAX_DURATION);
     }
 
-    static function getMovieClipTracksInner(framerate:Float, item:MovieClipItem, library:IdeLibrary, r:Array<AudioTrack>, addDelayMs:Int) : Array<AudioTrack>
+    static function getMovieClipTracksInner(framerate:Float, item:MovieClipItem, library:IdeLibrary, r:Array<AudioTrack>, addDelayMs:Int, mcLivingMs:Int) : Array<AudioTrack>
     {
         if (item.relatedSound != null && item.relatedSound != "")
         {
@@ -69,29 +73,58 @@ class AudioHelper
             ({
                 delayBeforeStartMs: addDelayMs, 
                 filePath: library.libraryDir + "/" + mcSound.namePath + "." + mcSound.ext,
-                loopDurationMs: mcSound.loop ? Math.round(item.getTotalFrames() / framerate) : null
+                loop: mcSound.loop,
+                durationMs: mcSound.loop ? Math.round(item.getTotalFrames() / framerate) : null, // TODO: improve loop duration, kill sound on mc remove, detect between-keyframes mc keeping
             });
         }
         
         item.iterateInstances((instance, data) ->
         {
-            if (Std.isOfType(instance.symbol, MovieClipItem))
+            if (Std.isOfType(instance.symbol, MovieClipItem) || Std.isOfType(instance.symbol, VideoItem))
             {
                 final layer = item.layers[data.layerIndex];
-                var frameCount = 0;
-                for (i in 0...data.keyFrameIndex)
+                final delayMs = Math.round(getFrameCoundBeforeKeyFrame(layer, data.keyFrameIndex) / framerate);
+                final maxInnerLivingFrames = getItemsMaxLivingFrames(item, layer, data.keyFrameIndex);
+                final maxInnerLivingMs = maxInnerLivingFrames < MAX_DURATION 
+                            ? Math.round(Math.min(mcLivingMs - delayMs, maxInnerLivingFrames / framerate))
+                            : MAX_DURATION;
+                
+                if (Std.isOfType(instance.symbol, MovieClipItem))
                 {
-                    frameCount += layer.keyFrames[i].duration;
+                    getMovieClipTracksInner(framerate, (cast instance.symbol : MovieClipItem), library, r, addDelayMs + delayMs, maxInnerLivingMs);
                 }
-                final delayMs = addDelayMs + Math.round(frameCount / framerate);
-                getMovieClipTracksInner(framerate, (cast instance.symbol : MovieClipItem), library, r, delayMs);
+                else if (Std.isOfType(instance.symbol, VideoItem))
+                {
+                    final mcVideo : VideoItem = cast library.getItem(item.relatedSound);
+                    r.push
+                    ({
+                        delayBeforeStartMs: addDelayMs + delayMs, 
+                        filePath: library.libraryDir + "/" + mcVideo.namePath + "." + mcVideo.ext,
+                        loop: mcVideo.loop,
+                        durationMs: maxInnerLivingMs, // TODO: improve loop duration, kill sound on mc remove, detect between-keyframes mc keeping
+                    });
+                }
             }
         });
 
         return r;
     }
 
-    static function getUrl() {
-        
+    static function getFrameCoundBeforeKeyFrame(layer:Layer, keyFrameIndex:Int) : Int
+    {
+        var r = 0; 
+        for (i in 0...keyFrameIndex)
+        {
+            r += layer.keyFrames[i].duration;
+        }
+        return r;
+    }
+
+    static function getItemsMaxLivingFrames(item:MovieClipItem, layer:Layer, keyFrameIndex:Int) : Int
+    {
+        final keyFrame = layer.keyFrames[keyFrameIndex];
+        if (keyFrameIndex < layer.keyFrames.length - 1) return keyFrame.duration;
+        if (getFrameCoundBeforeKeyFrame(layer, keyFrameIndex) + keyFrame.duration < item.getTotalFrames()) return keyFrame.duration;
+        return MAX_DURATION; // keyframe's items live at end of timeline => don't limited duration
     }
 }

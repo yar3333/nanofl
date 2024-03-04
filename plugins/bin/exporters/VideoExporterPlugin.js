@@ -18,11 +18,15 @@ AudioHelper.getFFmpegArgsForMixTracks = function(tracks,startInputIndex) {
 	while(_g < tracks.length) {
 		var tracks1 = tracks[_g];
 		++_g;
-		if(tracks1.loopDurationMs != null) {
-			args.push("-stream_loop");
+		if(tracks1.durationMs != null) {
+			if(tracks1.loop) {
+				args.push("-stream_loop");
+			}
 			args.push("-1");
-			args.push("-t");
-			args.push(tracks1.loopDurationMs + "ms");
+			if(tracks1.durationMs != null) {
+				args.push("-t");
+			}
+			args.push(tracks1.durationMs + "ms");
 		}
 		args.push("-i");
 		args.push(tracks1.filePath);
@@ -49,30 +53,48 @@ AudioHelper.getFFmpegArgsForMixTracks = function(tracks,startInputIndex) {
 	return args;
 };
 AudioHelper.getSceneTracks = function(framerate,library) {
-	return AudioHelper.getMovieClipTracksInner(framerate,library.getSceneItem(),library,[],0);
+	return AudioHelper.getMovieClipTracksInner(framerate,library.getSceneItem(),library,[],0,AudioHelper.MAX_DURATION);
 };
-AudioHelper.getMovieClipTracksInner = function(framerate,item,library,r,addDelayMs) {
+AudioHelper.getMovieClipTracksInner = function(framerate,item,library,r,addDelayMs,mcLivingMs) {
 	if(item.relatedSound != null && item.relatedSound != "") {
 		var mcSound = library.getItem(item.relatedSound);
-		r.push({ delayBeforeStartMs : addDelayMs, filePath : library.libraryDir + "/" + mcSound.namePath + "." + mcSound.ext, loopDurationMs : mcSound.loop ? Math.round(item.getTotalFrames() / framerate) : null});
+		r.push({ delayBeforeStartMs : addDelayMs, filePath : library.libraryDir + "/" + mcSound.namePath + "." + mcSound.ext, loop : mcSound.loop, durationMs : mcSound.loop ? Math.round(item.getTotalFrames() / framerate) : null});
 	}
 	nanofl.ide.MovieClipItemTools.iterateInstances(item,function(instance,data) {
-		if(((instance.get_symbol()) instanceof nanofl.ide.libraryitems.MovieClipItem)) {
+		if(((instance.get_symbol()) instanceof nanofl.ide.libraryitems.MovieClipItem) || ((instance.get_symbol()) instanceof nanofl.ide.libraryitems.VideoItem)) {
 			var layer = item.get_layers()[data.layerIndex];
-			var frameCount = 0;
-			var _g = 0;
-			var _g1 = data.keyFrameIndex;
-			while(_g < _g1) {
-				var i = _g++;
-				frameCount += layer.get_keyFrames()[i].duration;
+			var delayMs = Math.round(AudioHelper.getFrameCoundBeforeKeyFrame(layer,data.keyFrameIndex) / framerate);
+			var maxInnerLivingFrames = AudioHelper.getItemsMaxLivingFrames(item,layer,data.keyFrameIndex);
+			var maxInnerLivingMs = maxInnerLivingFrames < AudioHelper.MAX_DURATION ? Math.round(Math.min(mcLivingMs - delayMs,maxInnerLivingFrames / framerate)) : AudioHelper.MAX_DURATION;
+			if(((instance.get_symbol()) instanceof nanofl.ide.libraryitems.MovieClipItem)) {
+				AudioHelper.getMovieClipTracksInner(framerate,instance.get_symbol(),library,r,addDelayMs + delayMs,maxInnerLivingMs);
+			} else if(((instance.get_symbol()) instanceof nanofl.ide.libraryitems.VideoItem)) {
+				var mcVideo = library.getItem(item.relatedSound);
+				r.push({ delayBeforeStartMs : addDelayMs + delayMs, filePath : library.libraryDir + "/" + mcVideo.namePath + "." + mcVideo.ext, loop : mcVideo.loop, durationMs : maxInnerLivingMs});
 			}
-			var delayMs = addDelayMs + Math.round(frameCount / framerate);
-			AudioHelper.getMovieClipTracksInner(framerate,instance.get_symbol(),library,r,delayMs);
 		}
 	});
 	return r;
 };
-AudioHelper.getUrl = function() {
+AudioHelper.getFrameCoundBeforeKeyFrame = function(layer,keyFrameIndex) {
+	var r = 0;
+	var _g = 0;
+	var _g1 = keyFrameIndex;
+	while(_g < _g1) {
+		var i = _g++;
+		r += layer.get_keyFrames()[i].duration;
+	}
+	return r;
+};
+AudioHelper.getItemsMaxLivingFrames = function(item,layer,keyFrameIndex) {
+	var keyFrame = layer.get_keyFrames()[keyFrameIndex];
+	if(keyFrameIndex < layer.get_keyFrames().length - 1) {
+		return keyFrame.duration;
+	}
+	if(AudioHelper.getFrameCoundBeforeKeyFrame(layer,keyFrameIndex) + keyFrame.duration < item.getTotalFrames()) {
+		return keyFrame.duration;
+	}
+	return AudioHelper.MAX_DURATION;
 };
 var Main = function() { };
 Main.__name__ = true;
@@ -304,5 +326,6 @@ String.__name__ = true;
 Array.__name__ = true;
 Date.__name__ = "Date";
 js_Boot.__toStr = ({ }).toString;
+AudioHelper.MAX_DURATION = 2000000000;
 Main.main();
 })(typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);
