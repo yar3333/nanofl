@@ -3,6 +3,7 @@ package nanofl;
 import js.lib.Promise;
 import js.html.MediaElement;
 import js.html.VideoElement;
+import nanofl.engine.InstanceDisplayObject;
 import nanofl.engine.AdvancableDisplayObject;
 import nanofl.engine.libraryitems.VideoItem;
 import stdlib.Debug;
@@ -11,6 +12,7 @@ using stdlib.Lambda;
 
 @:expose
 class Video extends SolidContainer
+    implements InstanceDisplayObject
     implements AdvancableDisplayObject
     #if !ide implements IEventHandlers #end
 {

@@ -1,9 +1,11 @@
 package nanofl;
 
+import nanofl.engine.InstanceDisplayObject;
 import nanofl.engine.libraryitems.InstancableItem;
 
 @:expose
 class Bitmap extends easeljs.display.Bitmap 
+    implements InstanceDisplayObject
     #if !ide implements IEventHandlers #end
 {
 	public var symbol(default, null) : InstancableItem;

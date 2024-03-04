@@ -8,12 +8,15 @@ import js.three.objects.Group;
 import js.three.cameras.PerspectiveCamera;
 import js.three.scenes.Scene;
 import js.three.math.Vector3;
+import nanofl.engine.InstanceDisplayObject;
 import nanofl.engine.libraryitems.MeshItem;
 
 @:expose
 #if profiler @:build(Profiler.buildMarked()) #end
 //@:build(JsProp.marked())
-class Mesh extends SolidContainer #if !ide implements IEventHandlers #end
+class Mesh extends SolidContainer 
+    implements InstanceDisplayObject
+    #if !ide implements IEventHandlers #end
 {
 	static var DEG_TO_RAD = Math.PI / 180;
 	
