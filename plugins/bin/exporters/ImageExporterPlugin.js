@@ -47,10 +47,11 @@ JpegImageExporterPlugin.prototype = {
 		if(!sceneFramesIterator.hasNext()) {
 			return Promise.resolve(false);
 		}
-		var ctx = sceneFramesIterator.next();
-		var data = ctx.canvas.toDataURL("image/jpeg").split(",")[1];
-		api.fileSystem.saveBinary(args.destFilePath,haxe_crypto_Base64.decode(data));
-		return Promise.resolve(true);
+		return sceneFramesIterator.next().then(function(ctx) {
+			var data = ctx.canvas.toDataURL("image/jpeg").split(",")[1];
+			api.fileSystem.saveBinary(args.destFilePath,haxe_crypto_Base64.decode(data));
+			return true;
+		});
 	}
 };
 var Main = function() { };
@@ -76,10 +77,11 @@ PngImageExporterPlugin.prototype = {
 		if(!sceneFramesIterator.hasNext()) {
 			return Promise.resolve(false);
 		}
-		var ctx = sceneFramesIterator.next();
-		var data = ctx.canvas.toDataURL("image/png").split(",")[1];
-		api.fileSystem.saveBinary(args.destFilePath,haxe_crypto_Base64.decode(data));
-		return Promise.resolve(true);
+		return sceneFramesIterator.next().then(function(ctx) {
+			var data = ctx.canvas.toDataURL("image/png").split(",")[1];
+			api.fileSystem.saveBinary(args.destFilePath,haxe_crypto_Base64.decode(data));
+			return true;
+		});
 	}
 };
 var haxe_Exception = function(message,previous,native) {

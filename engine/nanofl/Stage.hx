@@ -3,9 +3,14 @@ package nanofl;
 @:expose
 class Stage extends easeljs.display.Stage
 {
-	public function new(canvas:Dynamic) 
+    public var framerate(default, null) : Float;
+
+	public function new(canvas:Dynamic, framerate:Float) 
 	{
 		super(canvas);
+        
+        this.framerate = framerate;
+
 		tickOnUpdate = false;
 		
 		#if !ide

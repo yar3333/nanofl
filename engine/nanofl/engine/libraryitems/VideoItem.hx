@@ -26,8 +26,6 @@ class VideoItem extends InstancableItem
     public var loop = true;
 	
 	public var video(default, null) : VideoElement;
-
-    public var poster(default, null) : CanvasElement;
 	
 	public function new(namePath:String, ext:String)
 	{
@@ -41,8 +39,7 @@ class VideoItem extends InstancableItem
 		
 		obj.autoPlay = autoPlay;
 		obj.loop = loop;
-		obj.video = cast video?.cloneNode();
-		obj.poster = poster;
+		obj.video = cast video?.cloneNode(true);
 		
 		copyBaseProperties(obj);
 		
@@ -56,11 +53,14 @@ class VideoItem extends InstancableItem
 		Debug.assert(library != null, "You need to add item '" + namePath + "' to the library before preload call.");
         return Loader.video(library.realUrl(namePath + "." + ext)).then(video -> 
         { 
-            poster = Browser.document.createCanvasElement();
+            final poster = Browser.document.createCanvasElement();
             poster.width = video.videoWidth;
             poster.height = video.videoHeight;
             poster.getContext2d().drawImage(video, 0, 0, poster.width, poster.height);
-            this.video = video; 
+            video.poster = poster.toDataURL();
+            
+            this.video = video;
+            
             return null; 
         });
     }
@@ -76,13 +76,14 @@ class VideoItem extends InstancableItem
 		Debug.assert(Std.isOfType(dispObj, nanofl.Video));
 
 		(cast dispObj:nanofl.Video).video = (cast video.cloneNode() : VideoElement);
-        (cast dispObj:nanofl.Video).video.loop = this.loop;
 
-        #if !ide
+        (cast dispObj:nanofl.Video).video.loop = this.loop;
+        
+        #if !ide 
         (cast dispObj:nanofl.Video).video.autoplay = this.autoPlay;
         #end
 
-		(cast dispObj:nanofl.Video).setBounds(0, 0, poster.width, poster.height);
+		(cast dispObj:nanofl.Video).setBounds(0, 0, video.videoWidth, video.videoHeight);
 	}
 
 	public function getDisplayObjectClassName() return "nanofl.Video";
@@ -94,7 +95,6 @@ class VideoItem extends InstancableItem
 		if ((cast item:VideoItem).ext != ext) return false;
 		if ((cast item:VideoItem).autoPlay != autoPlay) return false;
 		if ((cast item:VideoItem).loop != loop) return false;
-		if ((cast item:VideoItem).poster != poster) return false;
 		return true;
 	}
 	

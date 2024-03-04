@@ -39,13 +39,25 @@ ImageSequenceExporter.run = function(type,applyBackgroundColor,fileSystem,destFi
 	var baseDestFilePath = haxe_io_Path.withoutExtension(destFilePath) + "_";
 	var ext = "." + haxe_io_Path.extension(destFilePath);
 	var sceneFramesIterator = library.getSceneFramesIterator(documentProperties,applyBackgroundColor);
-	var i = 0;
-	while(sceneFramesIterator.hasNext()) {
-		var ctx = sceneFramesIterator.next();
-		var data = ctx.canvas.toDataURL(type).split(",")[1];
-		fileSystem.saveBinary(baseDestFilePath + StringTools.lpad(Std.string(i++),"0",digits) + ext,haxe_crypto_Base64.decode(data));
-	}
-	return Promise.resolve(true);
+	return new Promise(function(resolve,reject) {
+		var i = 0;
+		var generateNextImageFile = null;
+		generateNextImageFile = function() {
+			if(!sceneFramesIterator.hasNext()) {
+				resolve(true);
+				return;
+			}
+			sceneFramesIterator.next().then(function(ctx) {
+				var data = ctx.canvas.toDataURL(type).split(",")[1];
+				i += 1;
+				fileSystem.saveBinary(baseDestFilePath + StringTools.lpad(Std.string(i - 1),"0",digits) + ext,haxe_crypto_Base64.decode(data));
+				return haxe_Timer.delay(function() {
+					generateNextImageFile();
+				},0);
+			});
+		};
+		generateNextImageFile();
+	});
 };
 var JpegImageSequenceExporterPlugin = function() {
 	this.properties = null;
@@ -124,6 +136,32 @@ haxe_Exception.prototype = $extend(Error.prototype,{
 		return this.__nativeException;
 	}
 });
+var haxe_Timer = function(time_ms) {
+	var me = this;
+	this.id = setInterval(function() {
+		me.run();
+	},time_ms);
+};
+haxe_Timer.__name__ = true;
+haxe_Timer.delay = function(f,time_ms) {
+	var t = new haxe_Timer(time_ms);
+	t.run = function() {
+		t.stop();
+		f();
+	};
+	return t;
+};
+haxe_Timer.prototype = {
+	stop: function() {
+		if(this.id == null) {
+			return;
+		}
+		clearInterval(this.id);
+		this.id = null;
+	}
+	,run: function() {
+	}
+};
 var haxe_ValueException = function(value,previous,native) {
 	haxe_Exception.call(this,String(value),previous,native);
 	this.value = value;

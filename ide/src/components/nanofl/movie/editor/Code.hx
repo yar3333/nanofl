@@ -90,7 +90,7 @@ class Code extends wquery.Component
 		
 		canvas = cast template().content[0];
 		
-		stage = new Stage(canvas);
+		stage = new Stage(canvas, 0);
 		
 		stage.addChild(background = new Shape());
 		stage.addChild(sceneBox = new Shape());

@@ -1,5 +1,6 @@
 package nanofl.ide.library;
 
+import js.lib.Promise;
 import easeljs.display.Shape;
 import easeljs.display.Graphics;
 import js.html.CanvasRenderingContext2D;
@@ -8,11 +9,11 @@ import js.html.CanvasElement;
 
 class SceneFramesIterator
 {
-    var frameNum = 0;
-    var totalFrames : Int;
     var stage : nanofl.Stage;
     var scene : nanofl.MovieClip;
     var ctx : CanvasRenderingContext2D;
+
+    var curFrame = 0;
 
     @:noapi
     public function new(documentProperties:DocumentProperties, library:IdeLibrary, applyBackgroundColor:Bool)
@@ -21,9 +22,7 @@ class SceneFramesIterator
         canvas.width = documentProperties.width;
         canvas.height = documentProperties.height;
         
-        totalFrames = library.getSceneItem().getTotalFrames();
-
-        stage = new nanofl.Stage(canvas);
+        stage = new nanofl.Stage(canvas, documentProperties.framerate);
         scene = cast library.getSceneInstance().createDisplayObject(null);
         
         if (applyBackgroundColor)
@@ -40,14 +39,16 @@ class SceneFramesIterator
         ctx = canvas.getContext2d({ willReadFrequently:true });
     }
 
-    public function hasNext() : Bool return frameNum < totalFrames;
+    public function hasNext() : Bool return curFrame < scene.getTotalFrames();
 
-    public function next() : CanvasRenderingContext2D
+    public function next() : Promise<CanvasRenderingContext2D>
     {
-        if (frameNum >= totalFrames) return null;
         stage.update();
-        frameNum++;
-        if (frameNum < totalFrames) scene.advance();
-        return ctx;
+
+        curFrame++;
+        
+        return scene.currentFrame < scene.getTotalFrames() - 1
+                    ? scene.advance().then(_ -> ctx)
+                    : Promise.resolve(ctx);
     }
 }

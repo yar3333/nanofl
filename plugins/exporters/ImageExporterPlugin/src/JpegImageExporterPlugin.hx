@@ -23,11 +23,11 @@ class JpegImageExporterPlugin implements IExporterPlugin
         var sceneFramesIterator = args.library.getSceneFramesIterator(args.documentProperties, true);
         if (!sceneFramesIterator.hasNext()) return Promise.resolve(false);
         
-        var ctx = sceneFramesIterator.next();
-        
-		var data = ctx.canvas.toDataURL("image/jpeg").split(",")[1];
-		api.fileSystem.saveBinary(args.destFilePath, Base64.decode(data));
-        
-		return Promise.resolve(true);
+        return sceneFramesIterator.next().then(ctx ->
+        {
+            var data = ctx.canvas.toDataURL("image/jpeg").split(",")[1];
+            api.fileSystem.saveBinary(args.destFilePath, Base64.decode(data));
+            return true;
+        });
 	}
 }

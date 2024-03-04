@@ -9,7 +9,7 @@ type ProcessResult =
 
 export namespace process_utils
 {
-    export function runPipedStdIn(filePath:string, args:Array<string>, directory:string, env:{[name:string]: string}, getDataForStdIn:()=>ArrayBuffer) : Promise<ProcessResult>
+    export function runPipedStdIn(filePath:string, args:Array<string>, directory:string, env:{[name:string]: string}, getDataForStdIn:()=>Promise<ArrayBuffer>) : Promise<ProcessResult>
     {
         var options : SpawnOptions = { stdio: "pipe" };
         if (directory != null) options.cwd = directory;
@@ -47,22 +47,17 @@ export namespace process_utils
 
             function sendNextChunk()
             {
-                while (true)
+                getDataForStdIn().then(data =>
                 {
-                    const data = getDataForStdIn();
-                    if (data == null)
-                    {
-                        if (!process.stdin) { reject("process.stdin is null"); return; }
-                        process.stdin.end();
-                        break;
-                    }
                     if (!process.stdin) { reject("process.stdin is null"); return; }
+                    
+                    if (data == null) { process.stdin.end(); return; }
+                    
                     if (!process.stdin.write(Buffer.from(data)))
-                    {
                         process.stdin.once("drain", () => sendNextChunk());
-                        break;
-                    }
-                }
+                    else
+                        setTimeout(() => sendNextChunk(), 1);
+                });
             }
 
             sendNextChunk();

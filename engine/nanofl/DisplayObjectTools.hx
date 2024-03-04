@@ -222,6 +222,11 @@ class DisplayObjectTools
 			s += "Shape";
 		}
 		else
+		if (Std.isOfType(obj, Video))
+		{
+			s += "Video(" + (cast obj:Video).symbol.namePath + ")";
+		}
+		else
 		{
 			s += "Unknow";
 		}

@@ -1,3 +1,4 @@
+import js.html.ImageData;
 import js.Browser;
 import js.lib.Uint8Array;
 import js.lib.Promise;
@@ -42,29 +43,13 @@ class VideoExporter
         {
             return processManager.runPipedStdIn(folders.tools + "/ffmpeg.exe", args, null, null, () ->
             {
-                if (!sceneFramesIterator.hasNext()) return null;
+                if (!sceneFramesIterator.hasNext()) return Promise.resolve(null);
                 
-                var ctx = sceneFramesIterator.next();
-                final dataIn = ctx.getImageData(0, 0, documentProperties.width, documentProperties.height).data;
-                var pIn = 0;
-                var pOut = 0;
-                var i = 0; while (i < documentProperties.height)
+                return sceneFramesIterator.next().then(ctx ->
                 {
-                    var j = 0; while (j < documentProperties.width)
-                    {
-                        final r = dataIn[pIn++];
-                        final g = dataIn[pIn++];
-                        final b = dataIn[pIn++];
-                        final a = dataIn[pIn++];
-                        dataOut[pOut++] = r;
-                        dataOut[pOut++] = g;
-                        dataOut[pOut++] = b;
-                        j++;
-                    }
-                    i++;
-                }
-
-                return dataOut.buffer;
+                    imageDataToRgbArray(ctx.getImageData(0, 0, documentProperties.width, documentProperties.height), dataOut);
+                    return dataOut.buffer;
+                });
             })
             .then(r ->
             {
@@ -77,4 +62,24 @@ class VideoExporter
             return Promise.resolve(false);
         }
 	}
+
+    static function imageDataToRgbArray(imageData:ImageData, outBuffer:Uint8Array) : Void
+    {
+        final pixIn = imageData.data;
+        var pIn = 0;
+        var pOut = 0;
+        for (i in 0...imageData.height)
+        {
+            for (j in 0...imageData.width)
+            {
+                final r = pixIn[pIn++];
+                final g = pixIn[pIn++];
+                final b = pixIn[pIn++];
+                final a = pixIn[pIn++];
+                outBuffer[pOut++] = r;
+                outBuffer[pOut++] = g;
+                outBuffer[pOut++] = b;
+            }
+        }
+    }
 }

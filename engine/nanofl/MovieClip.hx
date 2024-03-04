@@ -1,5 +1,6 @@
 package nanofl;
 
+import js.lib.Promise;
 import easeljs.display.Container;
 import easeljs.display.DisplayObject;
 import nanofl.engine.IPathElement;
@@ -323,7 +324,7 @@ class MovieClip extends Container
 		return null;
 	}
 	
-	public function advance(?time:Float)
+	public function advance() : js.lib.Promise<{}>
 	{
 		var childrenToAdvance : Array<AdvancableDisplayObject> = null;
 		
@@ -332,17 +333,7 @@ class MovieClip extends Container
 			childrenToAdvance = gotoFrame(loop ? (currentFrame + 1) % getTotalFrames() : stdlib.Std.min(currentFrame + 1, getTotalFrames() - 1));
 		}
 		
-		if (childrenToAdvance == null)
-		{
-			for (child in children.filterByType(AdvancableDisplayObject))
-			{
-				child.advance();
-			}
-		}
-		else
-		{
-			for (child in childrenToAdvance) child.advance();
-		}
+        return cast Promise.all((childrenToAdvance ?? children.filterByType(AdvancableDisplayObject)).map(x -> x.advance()));
 	}
 	
 	override public function clone(?recursive:Bool) : MovieClip 

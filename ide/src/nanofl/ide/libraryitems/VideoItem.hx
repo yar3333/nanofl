@@ -13,7 +13,6 @@ class VideoItem extends nanofl.engine.libraryitems.VideoItem
 		obj.autoPlay = autoPlay;
 		obj.loop = loop;
 		obj.video = cast video?.cloneNode();
-		obj.poster = poster;
 		
 		copyBaseProperties(obj);
 		

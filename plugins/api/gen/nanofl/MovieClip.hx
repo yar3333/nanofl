@@ -23,7 +23,7 @@ extern class MovieClip extends easeljs.display.Container implements nanofl.engin
 			 
 	**/
 	function gotoFrame(labelOrIndex:Dynamic):Array<nanofl.engine.AdvancableDisplayObject>;
-	function advance(?time:Float):Void;
+	function advance():js.lib.Promise<{ }>;
 	override function clone(?recursive:Bool):nanofl.MovieClip;
 	override function toString():String;
 	static function applyMask(mask:easeljs.display.DisplayObject, obj:easeljs.display.DisplayObject):Bool;

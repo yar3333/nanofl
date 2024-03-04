@@ -1,6 +1,7 @@
 import js.lib.Promise;
-import haxe.crypto.Base64;
+import haxe.Timer;
 import haxe.io.Path;
+import haxe.crypto.Base64;
 import nanofl.ide.library.IdeLibrary;
 import nanofl.ide.DocumentProperties;
 import nanofl.ide.sys.FileSystem;
@@ -18,14 +19,22 @@ class ImageSequenceExporter
 
         var sceneFramesIterator = library.getSceneFramesIterator(documentProperties, applyBackgroundColor);
 
-        var i = 0;
-        while (sceneFramesIterator.hasNext())
+        return new Promise<Bool>((resolve, reject) ->
         {
-            var ctx = sceneFramesIterator.next();
-			var data = ctx.canvas.toDataURL(type).split(",")[1];
-			fileSystem.saveBinary(baseDestFilePath + Std.string(i++).lpad("0", digits) + ext, Base64.decode(data));
-        }
-		
-		return Promise.resolve(true);
+            var i = 0;
+
+            function generateNextImageFile()
+            {
+                if (!sceneFramesIterator.hasNext()) { resolve(true); return; }
+                sceneFramesIterator.next().then(ctx ->
+                {
+                    var data = ctx.canvas.toDataURL(type).split(",")[1];
+                    fileSystem.saveBinary(baseDestFilePath + Std.string(i++).lpad("0", digits) + ext, Base64.decode(data));
+                    Timer.delay(() -> generateNextImageFile(), 0);
+                });
+            }
+
+            generateNextImageFile();
+        });
 	}
 }

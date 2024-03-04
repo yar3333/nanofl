@@ -112,28 +112,12 @@ VideoExporter.run = function(fileSystem,processManager,folders,destFilePath,docu
 	try {
 		return processManager.runPipedStdIn(folders.get_tools() + "/ffmpeg.exe",args,null,null,function() {
 			if(!sceneFramesIterator.hasNext()) {
-				return null;
+				return Promise.resolve(null);
 			}
-			var ctx = sceneFramesIterator.next();
-			var dataIn = ctx.getImageData(0,0,documentProperties.width,documentProperties.height).data;
-			var pIn = 0;
-			var pOut = 0;
-			var i = 0;
-			while(i < documentProperties.height) {
-				var j = 0;
-				while(j < documentProperties.width) {
-					var r = dataIn[pIn++];
-					var g = dataIn[pIn++];
-					var b = dataIn[pIn++];
-					var a = dataIn[pIn++];
-					dataOut[pOut++] = r;
-					dataOut[pOut++] = g;
-					dataOut[pOut++] = b;
-					++j;
-				}
-				++i;
-			}
-			return dataOut.buffer;
+			return sceneFramesIterator.next().then(function(ctx) {
+				VideoExporter.imageDataToRgbArray(ctx.getImageData(0,0,documentProperties.width,documentProperties.height),dataOut);
+				return dataOut.buffer;
+			});
 		}).then(function(r) {
 			return r.code == 0;
 		});
@@ -141,6 +125,28 @@ VideoExporter.run = function(fileSystem,processManager,folders,destFilePath,docu
 		var e = haxe_Exception.caught(_g);
 		$global.console.error(e);
 		return Promise.resolve(false);
+	}
+};
+VideoExporter.imageDataToRgbArray = function(imageData,outBuffer) {
+	var pixIn = imageData.data;
+	var pIn = 0;
+	var pOut = 0;
+	var _g = 0;
+	var _g1 = imageData.height;
+	while(_g < _g1) {
+		var i = _g++;
+		var _g2 = 0;
+		var _g3 = imageData.width;
+		while(_g2 < _g3) {
+			var j = _g2++;
+			var r = pixIn[pIn++];
+			var g = pixIn[pIn++];
+			var b = pixIn[pIn++];
+			var a = pixIn[pIn++];
+			outBuffer[pOut++] = r;
+			outBuffer[pOut++] = g;
+			outBuffer[pOut++] = b;
+		}
 	}
 };
 var WebmVideoExporterPlugin = function() {

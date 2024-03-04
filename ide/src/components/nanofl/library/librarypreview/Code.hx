@@ -1,5 +1,6 @@
 package components.nanofl.library.librarypreview;
 
+import js.html.CanvasElement;
 import js.html.Audio;
 import nanofl.DisplayObjectTools;
 import nanofl.Stage;
@@ -20,7 +21,7 @@ class Code extends wquery.Component
 {
 	@inject var app : Application;
 	
-	var canvas : js.html.CanvasElement;
+	var canvas : CanvasElement;
     var stage : Stage;
 	
 	var soundPlaying : String = null;
@@ -34,7 +35,7 @@ class Code extends wquery.Component
 		Globals.injector.injectInto(this);
 		
 		canvas = cast template().canvas[0];
-		stage = new Stage(canvas);
+		stage = new Stage(canvas, 0);
 	}
 	
 	public function resize(maxWidth:Int, maxHeight:Int)

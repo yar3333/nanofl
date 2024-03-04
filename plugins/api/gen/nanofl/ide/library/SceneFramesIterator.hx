@@ -2,5 +2,5 @@ package nanofl.ide.library;
 
 extern class SceneFramesIterator {
 	function hasNext():Bool;
-	function next():js.html.CanvasRenderingContext2D;
+	function next():js.lib.Promise<js.html.CanvasRenderingContext2D>;
 }

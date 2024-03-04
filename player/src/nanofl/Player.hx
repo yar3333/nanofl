@@ -60,7 +60,7 @@ class Player
 
             return library.preload().then(_ ->
             {
-                stage = new nanofl.Stage(canvas);
+                stage = new nanofl.Stage(canvas, args.framerate);
                 
                 if (args.scaleMode != ScaleMode.custom)
                 {

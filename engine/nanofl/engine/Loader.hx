@@ -87,14 +87,13 @@ class Loader
 			var video = Browser.document.createVideoElement();
             video.currentTime = 0.001;
 
-			video.oncanplay = _ -> resolve(video);
+			video.addEventListener("loadeddata", () -> resolve(video), { once:true });
 
-			video.onerror = _ ->
-			{
+			video.addEventListener("error", () ->
+            {
 				console.error("Failed to load '" + url + "'.");
-				//image.src = "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=";
 				reject(new Error("Failed to load '" + url + "'."));
-			};
+            });
 
 			video.src = url;
 		});
