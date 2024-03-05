@@ -1,5 +1,7 @@
 package nanofl.ide.library;
 
+import js.lib.Error;
+import js.html.VideoElement;
 import js.lib.Promise;
 import easeljs.display.Shape;
 import easeljs.display.Graphics;
@@ -46,9 +48,28 @@ class SceneFramesIterator
         stage.update();
 
         curFrame++;
+
+        if (scene.currentFrame >= scene.getTotalFrames() - 1) Promise.resolve(ctx);
         
-        return scene.currentFrame < scene.getTotalFrames() - 1
-                    ? scene.advance().then(_ -> ctx)
-                    : Promise.resolve(ctx);
+        scene.advance();
+        
+        final videoPromises = new Array<Promise<{}>>();
+        DisplayObjectTools.iterateTreeFromBottomToTop(scene, obj ->
+        {
+            if (Std.isOfType(obj, nanofl.Video))
+            {
+                final videoObj : nanofl.Video = cast obj;
+                if (videoObj.video.seeking)
+                {
+                    videoPromises.push(new Promise((resolve, reject) ->
+                    {
+                        videoObj.video.addEventListener("loadeddata", () -> resolve(null), { once:true });
+                        videoObj.video.addEventListener("error", () -> reject(new Error("Unable to load video: " + videoObj.video.src)), { once:true });
+                    }));
+                }
+            }
+        });
+
+        return Promise.all(videoPromises).then(_ -> ctx);
     }
 }

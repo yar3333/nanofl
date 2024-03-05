@@ -57,39 +57,32 @@ class MovieClipGotoHelper
         
         if (oldFrame != null && newFrame != null && oldFrame.keyFrame == newFrame.keyFrame)
         {
-            if (oldFrame.keyFrame.hasMotionTween())
+            var tweenedElements = layer.getTweenedElements(newFrameIndex);
+            var layerChildren = mc.getLayerChildren(layerIndex);
+            Debug.assert(tweenedElements.length == layerChildren.length, "tweenedElements.length=" + tweenedElements.length + " != layerChildren.length=" + layerChildren.length);
+            for (i in 0...tweenedElements.length)
             {
-                var tweenedElements = layer.getTweenedElements(newFrameIndex);
-                var layerChildren = mc.getLayerChildren(layerIndex);
-                Debug.assert(tweenedElements.length == layerChildren.length, "tweenedElements.length=" + tweenedElements.length + " != layerChildren.length=" + layerChildren.length);
-                for (i in 0...tweenedElements.length)
+                final dispObj = layerChildren[i];
+
+                //dispObj.visible = layer.type == LayerType.normal;
+
+                if (dispObj.visible)
                 {
-                    final dispObj = layerChildren[i];
-
-                    //dispObj.visible = layer.type == LayerType.normal;
-
-                    if (dispObj.visible)
-                    {
-                        final tweenedElement = tweenedElements[i];
-                        
-                        if (tweenedElement.current != tweenedElement.original)
-                        {
-                            Debug.assert(Std.isOfType(tweenedElement.current, Instance));
-                            (cast tweenedElement.current:Instance).updateDisplayObjectTweenedProperties(dispObj);
-                        }
-                    }
+                    final tweenedElement = tweenedElements[i];
                     
-                    if (Std.isOfType(dispObj, AdvancableDisplayObject))
+                    if (tweenedElement.current != tweenedElement.original)
                     {
-                        keepedAdvancableChildren.push((cast dispObj : AdvancableDisplayObject));
+                        Debug.assert(Std.isOfType(tweenedElement.current, Instance));
+                        (cast tweenedElement.current:Instance).updateDisplayObjectTweenedProperties(dispObj);
                     }
                 }
-                layerChanged = true;
+                
+                if (Std.isOfType(dispObj, AdvancableDisplayObject))
+                {
+                    keepedAdvancableChildren.push((cast dispObj : AdvancableDisplayObject));
+                }
             }
-            else
-            {
-                keepedAdvancableChildren.addRange(mc.getLayerChildren(layerIndex).filterByType(AdvancableDisplayObject));
-            }
+            layerChanged = true;
         }
         //else // keep children between related keyframes on motion tween
         //if (oldFrame != null && newFrame != null && newFrameIndex == oldFrameIndex + 1 && oldFrame.keyFrame.hasMotionTween()) 

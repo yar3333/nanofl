@@ -131,24 +131,31 @@ class DisplayObjectTools
 		
 		return r;
 	}
+
+    public static function iterateTreeFromBottomToTop(parent:DisplayObject, callb:DisplayObject->Void) : Void
+    {
+		if (Std.isOfType(parent, Container) && !Std.isOfType(parent, SolidContainer))
+		{
+			for (child in (cast parent:Container).children) callb(child);
+		}
+        callb(parent);
+    }
 	
 	public static function callMethod(parent:DisplayObject, name:String)
 	{
-		if (Std.isOfType(parent, Container))
-		{
-			for (child in (cast parent:Container).children) callMethod(child, name);
-		}
-		
-		var method = Reflect.field(parent, name);
-		if (Reflect.isFunction(method))
-		{
-			Reflect.callMethod(parent, method, []);
-		}
+        iterateTreeFromBottomToTop(parent, obj ->
+        {
+            var method = Reflect.field(obj, name);
+            if (Reflect.isFunction(method))
+            {
+                Reflect.callMethod(obj, method, []);
+            }
+        });
 	}
 
 	public static function dispatchMouseEvent(parent:DisplayObject, name:String, e:nanofl.MouseEvent)
 	{
-		if (Std.isOfType(parent, Container))
+		if (Std.isOfType(parent, Container) && !Std.isOfType(parent, SolidContainer))
 		{
 			final children = (cast parent:Container).children.copy();
             children.reverse();

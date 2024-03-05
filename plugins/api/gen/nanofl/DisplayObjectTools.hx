@@ -6,6 +6,7 @@ extern class DisplayObjectTools {
 	static function smartUncache(obj:easeljs.display.DisplayObject):Void;
 	static function getOuterBounds(obj:easeljs.display.DisplayObject, ?ignoreSelf:Bool):easeljs.geom.Rectangle;
 	static function getInnerBounds(obj:easeljs.display.DisplayObject):easeljs.geom.Rectangle;
+	static function iterateTreeFromBottomToTop(parent:easeljs.display.DisplayObject, callb:easeljs.display.DisplayObject -> Void):Void;
 	static function callMethod(parent:easeljs.display.DisplayObject, name:String):Void;
 	static function dispatchMouseEvent(parent:easeljs.display.DisplayObject, name:String, e:nanofl.MouseEvent):Void;
 	static function smartHitTest(obj:easeljs.display.DisplayObject, x:Float, y:Float, ?minAlpha:Int):Bool;

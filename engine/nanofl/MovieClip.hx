@@ -236,18 +236,20 @@ class MovieClip extends Container
 		return null;
 	}
 	
-	public function advance() : js.lib.Promise<{}>
+	public function advance(?time:Float) : Void
 	{
         final totalFrames = getTotalFrames();
-    	final helper = gotoFrame
+    	
+        final helper = gotoFrame
         (
             paused || totalFrames <= 1 || (!loop && currentFrame == totalFrames - 1)
                 ? currentFrame 
                 : (currentFrame + 1) % totalFrames
         );
-        var r = cast Promise.all(helper.keepedAdvancableChildren.map(x -> x.advance()));
+        
+        for (child in helper.keepedAdvancableChildren) child.advance();
+        
         for (obj in helper.createdDisplayObjects) DisplayObjectTools.callMethod(obj, "init");
-        return r;
 	}
 	
 	override public function clone(?recursive:Bool) : MovieClip 

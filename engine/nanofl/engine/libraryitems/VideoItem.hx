@@ -25,7 +25,11 @@ class VideoItem extends InstancableItem
     public var autoPlay = true;
     public var loop = true;
 	
-	public var video(default, null) : VideoElement;
+    // set on preload()
+    public var width(default, null) : Int;
+    public var height(default, null) : Int;
+    public var duration(default, null) : Float;
+    public var poster(default, null) : CanvasElement;
 	
 	public function new(namePath:String, ext:String)
 	{
@@ -39,7 +43,11 @@ class VideoItem extends InstancableItem
 		
 		obj.autoPlay = autoPlay;
 		obj.loop = loop;
-		obj.video = cast video?.cloneNode(true);
+
+        obj.width = width;
+        obj.height = height;
+        obj.duration = duration;
+        obj.poster = poster;
 		
 		copyBaseProperties(obj);
 		
@@ -52,15 +60,14 @@ class VideoItem extends InstancableItem
 	{
 		Debug.assert(library != null, "You need to add item '" + namePath + "' to the library before preload call.");
         return Loader.video(library.realUrl(namePath + "." + ext)).then(video -> 
-        { 
-            final poster = Browser.document.createCanvasElement();
-            poster.width = video.videoWidth;
-            poster.height = video.videoHeight;
-            poster.getContext2d().drawImage(video, 0, 0, poster.width, poster.height);
-            video.poster = poster.toDataURL();
-            
-            this.video = video;
-            
+        {
+            width = video.videoWidth;
+            height = video.videoHeight;
+            duration = video.duration;
+            poster = Browser.document.createCanvasElement();
+            poster.width = width;
+            poster.height = height;
+            poster.getContext2d().drawImage(video, 0, 0, width, height);
             return null; 
         });
     }
@@ -75,15 +82,14 @@ class VideoItem extends InstancableItem
 	{
 		Debug.assert(Std.isOfType(dispObj, nanofl.Video));
 
-		(cast dispObj:nanofl.Video).video = (cast video.cloneNode() : VideoElement);
+        final videoObj : nanofl.Video = cast dispObj;
 
-        (cast dispObj:nanofl.Video).video.loop = this.loop;
-        
-        #if !ide 
-        (cast dispObj:nanofl.Video).video.autoplay = this.autoPlay;
-        #end
+		videoObj.video = Browser.document.createVideoElement();
+        videoObj.video.src = library.realUrl(namePath + "." + ext);
+        videoObj.video.loop = this.loop;
+        #if !ide videoObj.video.autoplay = this.autoPlay; #end
 
-		(cast dispObj:nanofl.Video).setBounds(0, 0, video.videoWidth, video.videoHeight);
+		(cast dispObj:nanofl.Video).setBounds(0, 0, width, height);
 	}
 
 	public function getDisplayObjectClassName() return "nanofl.Video";
@@ -100,7 +106,7 @@ class VideoItem extends InstancableItem
 	
 	override public function getNearestPoint(pos:Point) : Point
 	{
-		var bounds = { minX:0.0, minY:0.0, maxX:video.videoWidth+0.0, maxY:video.videoHeight+0.0 };
+		var bounds = { minX:0.0, minY:0.0, maxX:width+0.0, maxY:height+0.0 };
 		return bounds.getNearestPoint(pos);
 	}
 

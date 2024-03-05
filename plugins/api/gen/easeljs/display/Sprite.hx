@@ -171,8 +171,7 @@ typedef SpriteChangeEvent = {
 			 * Advances the playhead. This occurs automatically each tick by default.
 			 
 	**/
-	@:native("advance")
-	function advanceNative(?time:Float):Void;
+	function advance(?time:Float):Void;
 	/**
 		
 			 * Returns a {{#crossLink "Rectangle"}}{{/crossLink}} instance defining the bounds of the current frame relative to

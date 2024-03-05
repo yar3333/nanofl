@@ -2,5 +2,8 @@ package nanofl.engine;
 
 interface AdvancableDisplayObject
 {
-    function advance() : js.lib.Promise<{}>;
+    /**
+        `time` is ignored.
+    **/
+    function advance(?time:Float) : Void;
 }
