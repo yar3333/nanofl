@@ -1517,7 +1517,7 @@ Object.assign(nanofl_engine_AdvancableDisplayObject.prototype, {
 class nanofl_MovieClip extends createjs.Container {
 	constructor(symbol,initFrameIndex,childFrameIndexes) {
 		super();
-		stdlib_Debug.assert(((symbol) instanceof nanofl_engine_libraryitems_MovieClipItem),null,{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 35, className : "nanofl.MovieClip", methodName : "new"});
+		stdlib_Debug.assert(((symbol) instanceof nanofl_engine_libraryitems_MovieClipItem),null,{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 34, className : "nanofl.MovieClip", methodName : "new"});
 		this.layerOfChild = new Map();
 		this.symbol = symbol;
 		let tmp = initFrameIndex;
@@ -1592,49 +1592,6 @@ class nanofl_MovieClip extends createjs.Container {
 	getTotalFrames() {
 		return this.symbol.getTotalFrames();
 	}
-	maskChild(child) {
-		let n = this.layerOfChild.get(child);
-		if(n != null) {
-			let parentLayerIndex = this.symbol.get_layers()[n].parentIndex;
-			if(parentLayerIndex != null && this.symbol.get_layers()[parentLayerIndex].type == nanofl_engine_LayerType.mask) {
-				let mask = new createjs.Container();
-				let _g = 0;
-				let _g1 = this.getChildrenByLayerIndex(parentLayerIndex);
-				while(_g < _g1.length) {
-					let obj = _g1[_g];
-					++_g;
-					let clonedObj = obj.clone(true);
-					clonedObj.visible = true;
-					nanofl_DisplayObjectTools.smartCache(clonedObj);
-					mask.addChild(clonedObj);
-				}
-				return nanofl_MovieClip.applyMask(mask,child);
-			}
-		}
-		return false;
-	}
-	uncacheChild(child) {
-		child.uncache();
-		if(nanofl_DisplayObjectTools.autoHitArea) {
-			child.hitArea = null;
-		}
-		let layerIndex = this.layerOfChild.get(child);
-		if(layerIndex != null && this.symbol.get_layers()[layerIndex].type == nanofl_engine_LayerType.mask) {
-			let _g = 0;
-			let _g1 = this.children;
-			while(_g < _g1.length) {
-				let c = _g1[_g];
-				++_g;
-				let n = this.layerOfChild.get(c);
-				if(n != null && this.symbol.get_layers()[n].parentIndex == layerIndex) {
-					c.uncache();
-					if(nanofl_DisplayObjectTools.autoHitArea) {
-						c.hitArea = null;
-					}
-				}
-			}
-		}
-	}
 	getChildrenByLayerIndex(layerIndex) {
 		let r = [];
 		let _g = 0;
@@ -1650,8 +1607,8 @@ class nanofl_MovieClip extends createjs.Container {
 	}
 	gotoFrame(labelOrIndex) {
 		let newFrameIndex = this.getFrameIndexByLabel(labelOrIndex);
-		stdlib_Debug.assert(newFrameIndex >= 0,"Frame index must not be negative.",{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 228, className : "nanofl.MovieClip", methodName : "gotoFrame"});
-		stdlib_Debug.assert(newFrameIndex < this.getTotalFrames(),"Frame index must be less than total frames count.",{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 229, className : "nanofl.MovieClip", methodName : "gotoFrame"});
+		stdlib_Debug.assert(newFrameIndex >= 0,"Frame index must not be negative.",{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 139, className : "nanofl.MovieClip", methodName : "gotoFrame"});
+		stdlib_Debug.assert(newFrameIndex < this.getTotalFrames(),"Frame index must be less than total frames count.",{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 140, className : "nanofl.MovieClip", methodName : "gotoFrame"});
 		return new nanofl_engine_MovieClipGotoHelper(this,newFrameIndex);
 	}
 	getFrameIndexByLabel(labelOrIndex) {
@@ -1707,43 +1664,6 @@ class nanofl_MovieClip extends createjs.Container {
 	}
 	onMouseUp(e) {
 	}
-	static applyMask(mask,obj) {
-		let objBounds = nanofl_DisplayObjectTools.getOuterBounds(obj);
-		if(objBounds == null || objBounds.width == 0 || objBounds.height == 0) {
-			return false;
-		}
-		mask = mask.clone(true);
-		mask.transformMatrix = obj.getMatrix().invert();
-		mask.visible = true;
-		let maskContainer = new createjs.Container();
-		maskContainer.addChild(mask);
-		let maskContainerBounds = nanofl_DisplayObjectTools.getOuterBounds(maskContainer);
-		if(maskContainerBounds == null || maskContainerBounds.width == 0 || maskContainerBounds.height == 0) {
-			obj.visible = false;
-			return false;
-		}
-		nanofl_DisplayObjectTools.smartCache(mask);
-		if(((obj) instanceof createjs.Container)) {
-			let _g = 0;
-			let _g1 = obj.children;
-			while(_g < _g1.length) {
-				let child = _g1[_g];
-				++_g;
-				nanofl_DisplayObjectTools.smartCache(child);
-			}
-		}
-		let intersection = maskContainerBounds.intersection(objBounds);
-		if(intersection == null || intersection.width == 0 || intersection.height == 0) {
-			obj.visible = false;
-			return false;
-		}
-		let union = objBounds.union(intersection);
-		maskContainer.cache(union.x,union.y,union.width,union.height);
-		let objBounds2 = nanofl_DisplayObjectTools.getOuterBounds(obj,true);
-		obj.cache(objBounds2.x,objBounds2.y,objBounds2.width,objBounds2.height);
-		new createjs.AlphaMaskFilter(maskContainer.cacheCanvas).applyFilter(obj.cacheCanvas.getContext("2d",null),0,0,objBounds.width | 0,objBounds.height | 0);
-		return true;
-	}
 }
 $hx_exports["nanofl"]["MovieClip"] = nanofl_MovieClip;
 nanofl_MovieClip.__name__ = "nanofl.MovieClip";
@@ -1790,49 +1710,6 @@ Object.assign(nanofl_Button.prototype, {
 	__class__: nanofl_Button
 });
 class nanofl_DisplayObjectTools {
-	static smartCache(obj) {
-		if(obj.visible && obj.cacheCanvas == null) {
-			if(((obj) instanceof createjs.Container) && !((obj) instanceof nanofl_SolidContainer)) {
-				let _g = 0;
-				let _g1 = obj.children;
-				while(_g < _g1.length) {
-					let child = _g1[_g];
-					++_g;
-					nanofl_DisplayObjectTools.smartCache(child);
-				}
-			}
-			if(obj.parent == null || !((obj.parent) instanceof nanofl_MovieClip) || !obj.parent.maskChild(obj)) {
-				if(obj.filters != null && obj.filters.length > 0) {
-					let bounds = nanofl_DisplayObjectTools.getInnerBounds(obj);
-					if(bounds != null && bounds.width > 0 && bounds.height > 0) {
-						obj.cache(bounds.x,bounds.y,bounds.width,bounds.height);
-						if(nanofl_DisplayObjectTools.autoHitArea) {
-							let hitArea = new createjs.Container();
-							let hitBmp = new createjs.Bitmap(obj.cacheCanvas);
-							hitBmp.x = obj.bitmapCache.offX + obj.bitmapCache._filterOffX;
-							hitBmp.y = obj.bitmapCache.offY + obj.bitmapCache._filterOffY;
-							hitArea.addChild(hitBmp);
-							obj.hitArea = hitArea;
-						}
-					}
-				}
-			}
-		}
-	}
-	static smartUncache(obj) {
-		let inspiredByChild = null;
-		while(obj != null) {
-			obj.uncache();
-			if(nanofl_DisplayObjectTools.autoHitArea) {
-				obj.hitArea = null;
-			}
-			if(((obj) instanceof nanofl_MovieClip) && inspiredByChild != null) {
-				obj.uncacheChild(inspiredByChild);
-			}
-			inspiredByChild = obj;
-			obj = obj.parent;
-		}
-	}
 	static getOuterBounds(obj,ignoreSelf) {
 		if(ignoreSelf == null) {
 			ignoreSelf = false;
@@ -1999,7 +1876,7 @@ class nanofl_DisplayObjectTools {
 		if(((obj) instanceof nanofl_TextField)) {
 			s += " '" + StringTools.replace(StringTools.replace(obj.text,"\r"," "),"\n"," ") + "'";
 		}
-		console.log("engine/nanofl/DisplayObjectTools.hx:251:",s);
+		console.log("engine/nanofl/DisplayObjectTools.hx:204:",s);
 		if(((obj) instanceof createjs.Container) && !((obj) instanceof nanofl_SolidContainer)) {
 			let _g = 0;
 			let _g1 = obj.children;
@@ -2015,6 +1892,62 @@ class nanofl_DisplayObjectTools {
 			return "null";
 		}
 		return rect.x + "," + rect.y + " " + rect.width + " x " + rect.height;
+	}
+	static recache(dispObj,force) {
+		if(force == null) {
+			force = false;
+		}
+		let childChanged = false;
+		if(((dispObj) instanceof createjs.Container) && !((dispObj) instanceof nanofl_SolidContainer)) {
+			let _g = 0;
+			let _g1 = dispObj.children;
+			while(_g < _g1.length) {
+				let child = _g1[_g];
+				++_g;
+				if(nanofl_DisplayObjectTools.recache(child)) {
+					childChanged = true;
+				}
+			}
+		}
+		if(((dispObj) instanceof nanofl_MovieClip)) {
+			let mc = dispObj;
+			let masks_h = { };
+			let _g = 0;
+			let _g1 = mc.symbol.get_layers().length;
+			while(_g < _g1) {
+				let layerIndex = _g++;
+				let layer = mc.symbol.get_layers()[layerIndex];
+				let tmp = layer.get_parentLayer();
+				if((tmp != null ? tmp.type : null) == nanofl_engine_LayerType.mask) {
+					let _g = 0;
+					let _g1 = mc.getChildrenByLayerIndex(layerIndex);
+					while(_g < _g1.length) {
+						let child = _g1[_g];
+						++_g;
+						let mask = masks_h[layer.parentIndex];
+						if(mask == null) {
+							mask = nanofl_engine_MaskTools.createMaskFromMovieClipLayer(mc,layer.parentIndex);
+							masks_h[layer.parentIndex] = mask;
+						}
+						nanofl_engine_MaskTools.applyMaskToDisplayObject(mask,child);
+					}
+				}
+			}
+		}
+		if(!force && !childChanged && dispObj.cacheCanvas == null && (dispObj.filters == null || dispObj.filters.length == 0)) {
+			return false;
+		}
+		dispObj.uncache();
+		if(force || dispObj.filters != null && dispObj.filters.length > 0) {
+			nanofl_DisplayObjectTools.cache(dispObj);
+		}
+		return true;
+	}
+	static cache(dispObj) {
+		let bounds = nanofl_DisplayObjectTools.getInnerBounds(dispObj);
+		if(bounds != null && bounds.width > 0 && bounds.height > 0) {
+			dispObj.cache(bounds.x,bounds.y,bounds.width,bounds.height);
+		}
 	}
 }
 $hx_exports["nanofl"]["DisplayObjectTools"] = nanofl_DisplayObjectTools;
@@ -2331,7 +2264,13 @@ class nanofl_Stage extends createjs.Stage {
 		},null);
 	}
 	update(params) {
-		nanofl_DisplayObjectTools.smartCache(this);
+		let _g = 0;
+		let _g1 = this.children;
+		while(_g < _g1.length) {
+			let child = _g1[_g];
+			++_g;
+			nanofl_DisplayObjectTools.recache(child);
+		}
 		super.update(params);
 	}
 }
@@ -4154,6 +4093,47 @@ class nanofl_engine_Loader {
 	}
 }
 nanofl_engine_Loader.__name__ = "nanofl.engine.Loader";
+class nanofl_engine_MaskTools {
+	static createMaskFromMovieClipLayer(mc,layerIndex) {
+		let mask = new createjs.Container();
+		let _g = 0;
+		let _g1 = mc.getChildrenByLayerIndex(layerIndex);
+		while(_g < _g1.length) {
+			let obj = _g1[_g];
+			++_g;
+			let clonedObj = obj.clone(true);
+			clonedObj.visible = true;
+			mask.addChild(clonedObj);
+		}
+		return mask;
+	}
+	static applyMaskToDisplayObject(mask,obj) {
+		let objBounds = nanofl_DisplayObjectTools.getOuterBounds(obj);
+		if(objBounds == null || objBounds.width == 0 || objBounds.height == 0) {
+			return;
+		}
+		mask.transformMatrix = obj.getMatrix().invert();
+		let maskContainer = new createjs.Container();
+		maskContainer.addChild(mask);
+		let maskContainerBounds = nanofl_DisplayObjectTools.getOuterBounds(maskContainer);
+		if(maskContainerBounds == null || maskContainerBounds.width == 0 || maskContainerBounds.height == 0) {
+			obj.visible = false;
+			return;
+		}
+		let intersection = maskContainerBounds.intersection(objBounds);
+		if(intersection == null || intersection.width == 0 || intersection.height == 0) {
+			obj.visible = false;
+			return;
+		}
+		obj.visible = true;
+		let union = objBounds.union(intersection);
+		maskContainer.cache(union.x,union.y,union.width,union.height);
+		let objBounds2 = nanofl_DisplayObjectTools.getOuterBounds(obj,true);
+		obj.cache(objBounds2.x,objBounds2.y,objBounds2.width,objBounds2.height);
+		new createjs.AlphaMaskFilter(maskContainer.cacheCanvas).applyFilter(obj.cacheCanvas.getContext("2d",null),0,0,objBounds.width | 0,objBounds.height | 0);
+	}
+}
+nanofl_engine_MaskTools.__name__ = "nanofl.engine.MaskTools";
 class nanofl_engine_MeshParams {
 	constructor() {
 		this.directionalLightRotationY = 0.0;
@@ -4227,18 +4207,12 @@ class nanofl_engine_MovieClipGotoHelper {
 		this.oldFrameIndex = mc.currentFrame;
 		this.newFrameIndex = newFrameIndex;
 		this.symbol = mc.symbol;
-		let movieClipChanged = false;
 		let _g = 0;
 		let _g1 = this.symbol.get_layers();
 		while(_g < _g1.length) {
 			let layer = _g1[_g];
 			++_g;
-			if(this.processLayer(layer)) {
-				movieClipChanged = true;
-			}
-		}
-		if(movieClipChanged) {
-			nanofl_DisplayObjectTools.smartUncache(mc);
+			this.processLayer(layer);
 		}
 		mc.currentFrame = newFrameIndex;
 	}
@@ -4246,39 +4220,20 @@ class nanofl_engine_MovieClipGotoHelper {
 		let oldFrame = layer.getFrame(this.oldFrameIndex);
 		let newFrame = layer.getFrame(this.newFrameIndex);
 		if(oldFrame == null && newFrame == null) {
-			return false;
+			return;
 		}
-		let layerChanged = false;
 		if(oldFrame != null && newFrame != null && oldFrame.keyFrame == newFrame.keyFrame) {
-			layerChanged = this.processSameKeyFrame(layer,newFrame);
+			this.processSameKeyFrame(layer,newFrame);
 		} else if(oldFrame != null && newFrame != null) {
-			layerChanged = this.processRelativeKeyFrames(layer,oldFrame,newFrame);
+			this.processRelativeKeyFrames(layer,oldFrame,newFrame);
 		} else if(oldFrame != null || newFrame != null) {
-			layerChanged = this.processSeparatedKeyFrames(layer,oldFrame,newFrame);
+			this.processSeparatedKeyFrames(layer,oldFrame,newFrame);
 		}
-		if(layerChanged) {
-			if(layer.type == nanofl_engine_LayerType.mask) {
-				let _g = 0;
-				let _g1 = layer.getChildLayers();
-				while(_g < _g1.length) {
-					let childLayer = _g1[_g];
-					++_g;
-					let _g2 = 0;
-					let _g3 = this.mc.getChildrenByLayerIndex(childLayer.getIndex());
-					while(_g2 < _g3.length) {
-						let child = _g3[_g2];
-						++_g2;
-						child.uncache();
-					}
-				}
-			}
-		}
-		return layerChanged;
 	}
 	processSameKeyFrame(layer,newFrame) {
 		let tweenedElements = newFrame.keyFrame.getTweenedElements(newFrame.subIndex);
 		let displayObjects = this.mc.getChildrenByLayerIndex(layer.getIndex());
-		stdlib_Debug.assert(tweenedElements.length == displayObjects.length,"tweenedElements.length=" + tweenedElements.length + " != displayObjects.length=" + displayObjects.length,{ fileName : "engine/nanofl/engine/MovieClipGotoHelper.hx", lineNumber : 96, className : "nanofl.engine.MovieClipGotoHelper", methodName : "processSameKeyFrame"});
+		stdlib_Debug.assert(tweenedElements.length == displayObjects.length,"tweenedElements.length=" + tweenedElements.length + " != displayObjects.length=" + displayObjects.length,{ fileName : "engine/nanofl/engine/MovieClipGotoHelper.hx", lineNumber : 77, className : "nanofl.engine.MovieClipGotoHelper", methodName : "processSameKeyFrame"});
 		let _g = 0;
 		let _g1 = tweenedElements.length;
 		while(_g < _g1) {
@@ -4287,7 +4242,7 @@ class nanofl_engine_MovieClipGotoHelper {
 			if(dispObj.visible) {
 				let tweenedElement = tweenedElements[i];
 				if(tweenedElement.current != tweenedElement.original) {
-					stdlib_Debug.assert(((tweenedElement.current) instanceof nanofl_engine_elements_Instance),null,{ fileName : "engine/nanofl/engine/MovieClipGotoHelper.hx", lineNumber : 108, className : "nanofl.engine.MovieClipGotoHelper", methodName : "processSameKeyFrame"});
+					stdlib_Debug.assert(((tweenedElement.current) instanceof nanofl_engine_elements_Instance),null,{ fileName : "engine/nanofl/engine/MovieClipGotoHelper.hx", lineNumber : 89, className : "nanofl.engine.MovieClipGotoHelper", methodName : "processSameKeyFrame"});
 					tweenedElement.current.updateDisplayObjectTweenedProperties(dispObj);
 				}
 			}
@@ -7618,8 +7573,7 @@ class nanofl_engine_libraryitems_MovieClipItem extends nanofl_engine_libraryitem
 		}
 		stdlib_Debug.assert(((dispObj) instanceof nanofl_MovieClip),null,{ fileName : "engine/nanofl/engine/libraryitems/MovieClipItem.hx", lineNumber : 131, className : "nanofl.engine.libraryitems.MovieClipItem", methodName : "updateDisplayObject"});
 		let movieClip = dispObj;
-		movieClip.removeAllChildren();
-		movieClip.alpha = 1.0;
+		stdlib_Debug.assert(movieClip.children.length == 0,null,{ fileName : "engine/nanofl/engine/libraryitems/MovieClipItem.hx", lineNumber : 134, className : "nanofl.engine.libraryitems.MovieClipItem", methodName : "updateDisplayObject"});
 		let topElement = null;
 		let topElementLayer = null;
 		let i = this.get_layers().length - 1;
@@ -7629,13 +7583,13 @@ class nanofl_engine_libraryitems_MovieClipItem extends nanofl_engine_libraryitem
 			while(_g < _g1.length) {
 				let tweenedElement = _g1[_g];
 				++_g;
-				if(childFrameIndexes == null || childFrameIndexes.length == 0 || childFrameIndexes[0].element != tweenedElement.original) {
+				if(childFrameIndexes != null && childFrameIndexes.length != 0 && childFrameIndexes[0].element == tweenedElement.original) {
+					topElement = tweenedElement.current;
+					topElementLayer = i;
+				} else {
 					let obj = tweenedElement.current.createDisplayObject(childFrameIndexes);
 					obj.visible = this.get_layers()[i].type == nanofl_engine_LayerType.normal;
 					movieClip.addChildToLayer(obj,i);
-				} else if(childFrameIndexes != null && childFrameIndexes.length != 0 && childFrameIndexes[0].element == tweenedElement.original) {
-					topElement = tweenedElement.current;
-					topElementLayer = i;
 				}
 			}
 			--i;
@@ -8187,20 +8141,6 @@ class nanofl_engine_movieclip_Layer {
 	addKeyFrame(keyFrame) {
 		this._keyFrames.push(keyFrame);
 		keyFrame.layer = this;
-	}
-	getChildLayers() {
-		let index = this.getIndex();
-		let _g = [];
-		let _g1 = 0;
-		let _g2 = this.layersContainer.get_layers();
-		while(_g1 < _g2.length) {
-			let v = _g2[_g1];
-			++_g1;
-			if(v.parentIndex == index) {
-				_g.push(v);
-			}
-		}
-		return _g;
 	}
 	getTweenedElements(frameIndex) {
 		let frame = this.getFrame(frameIndex);

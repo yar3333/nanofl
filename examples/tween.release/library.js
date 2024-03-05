@@ -9,6 +9,7 @@ libraryData =
     "likeButton": false,
     "exportAsSprite": false,
     "textureAtlas": null,
+    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -102,6 +103,7 @@ libraryData =
     "likeButton": false,
     "exportAsSprite": false,
     "textureAtlas": null,
+    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -159,7 +161,11 @@ libraryData =
                 "regX": 0,
                 "regY": 0,
                 "blendMode": "normal",
-                "meshParams": 0
+                "meshParams": 0,
+                "colorEffect": {
+                  "type": "alpha",
+                  "value": 0.12
+                }
               }
             ]
           }

@@ -16,8 +16,6 @@ extern class MovieClip extends easeljs.display.Container implements nanofl.engin
 	function gotoAndStop(labelOrIndex:Dynamic):Void;
 	function gotoAndPlay(labelOrIndex:Dynamic):Void;
 	function getTotalFrames():Int;
-	function maskChild(child:easeljs.display.DisplayObject):Bool;
-	function uncacheChild(child:easeljs.display.DisplayObject):Void;
 	function getChildrenByLayerIndex(layerIndex:Int):Array<easeljs.display.DisplayObject>;
 	/**
 		
@@ -28,5 +26,4 @@ extern class MovieClip extends easeljs.display.Container implements nanofl.engin
 	function advance(?time:Float):Void;
 	override function clone(?recursive:Bool):nanofl.MovieClip;
 	override function toString():String;
-	static function applyMask(mask:easeljs.display.DisplayObject, obj:easeljs.display.DisplayObject):Bool;
 }

@@ -4,7 +4,9 @@
 			<instance libraryItem="letter" name="ins1" x="127" y="79.5" />
 		</frame>
 		<frame>
-			<instance libraryItem="letter" name="ins1" x="463" y="318.5" matrix="0.266769409179688,0.07147216796875,-0.1241455078125,0.463333129882813" />
+			<instance libraryItem="letter" name="ins1" x="463" y="318.5" matrix="0.266769409179688,0.07147216796875,-0.1241455078125,0.463333129882813">
+				<color type="alpha" value="0.12" />
+			</instance>
 		</frame>
 	</layer>
 </movieclip>
