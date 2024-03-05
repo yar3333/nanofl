@@ -8,7 +8,7 @@ import datatools.ArrayTools;
 import js.html.CanvasElement;
 import js.html.File;
 import nanofl.DisplayObjectTools;
-import nanofl.Stage;
+import easeljs.display.Stage; // use native Stage to manual mask control
 import nanofl.engine.elements.Instance;
 import nanofl.engine.geom.Matrix;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
@@ -90,7 +90,7 @@ class Code extends wquery.Component
 		
 		canvas = cast template().content[0];
 		
-		stage = new Stage(canvas, 0);
+		stage = new Stage(canvas);
 		
 		stage.addChild(background = new Shape());
 		stage.addChild(sceneBox = new Shape());

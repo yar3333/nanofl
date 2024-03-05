@@ -1,5 +1,6 @@
 package nanofl.ide.editor;
 
+import nanofl.engine.MaskTools;
 import easeljs.display.Container;
 import nanofl.engine.movieclip.GuideLine;
 import nanofl.MovieClip;
@@ -421,13 +422,17 @@ class EditorLayer
 	{
 		container.visible = layer.visible && (layer.type != LayerType.mask || !layer.locked || layer.getChildLayers().exists(e -> !e.locked));
 		
-		container.uncache();
-		if (parentIndex != null 
-		 && layer.parentLayer.type == LayerType.mask
+		DisplayObjectTools.recache(container);
+		
+        if (layer.parentLayer?.type == LayerType.mask
 		 && layer.parentLayer.locked
 		 && layer.parentLayer.getChildLayers().foreach(x -> x.locked))
 		{
-			MovieClip.applyMask(editor.layers[parentIndex].container, container);
+            final mask = editor.layers[parentIndex].container;
+            final saveVisible = mask.visible;
+            mask.visible = true;
+			MaskTools.applyMaskToDisplayObject(mask, container);
+            mask.visible = saveVisible;
 		}
 	}
 	

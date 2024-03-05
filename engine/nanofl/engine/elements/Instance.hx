@@ -215,10 +215,6 @@ class Instance extends Element
     public function updateDisplayObjectTweenedProperties(dispObj:easeljs.display.DisplayObject) : Void
     {
 		elementUpdateDisplayObjectBaseProperties(dispObj);
-
-        //dispObj.setBounds(); // ????
-		//dispObj.uncache(); // ????
-
 		elementUpdateDisplayObjectInstanceProperties(dispObj);
     }
 	

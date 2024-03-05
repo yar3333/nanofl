@@ -1,5 +1,6 @@
 package nanofl;
 
+import nanofl.engine.MaskTools;
 import nanofl.engine.LayerType;
 import easeljs.display.Container;
 import easeljs.display.DisplayObject;
@@ -229,6 +230,7 @@ class DisplayObjectTools
         {
             final mc : MovieClip = cast dispObj;
             final masks = new Map<Int, Container>();
+            
             for (layerIndex in 0...mc.symbol.layers.length)
             {
                 final layer = mc.symbol.layers[layerIndex];
@@ -239,10 +241,10 @@ class DisplayObjectTools
                         var mask = masks.get(layer.parentIndex);
                         if (mask == null)
                         {
-                            mask = mc.getMask(layer.parentIndex);
+                            mask = MaskTools.createMaskFromMovieClipLayer(mc, layer.parentIndex);
                             masks.set(layer.parentIndex, mask);
                         }
-                        MovieClip.applyMask(mask, child);
+                        MaskTools.applyMaskToDisplayObject(mask, child);
                     }
                 }
             }
