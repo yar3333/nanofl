@@ -58,6 +58,7 @@ libraryData =
     "likeButton": false,
     "exportAsSprite": false,
     "textureAtlas": null,
+    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -176,6 +177,7 @@ libraryData =
     "likeButton": true,
     "exportAsSprite": false,
     "textureAtlas": null,
+    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -260,6 +262,7 @@ libraryData =
     "likeButton": true,
     "exportAsSprite": false,
     "textureAtlas": null,
+    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -350,6 +353,7 @@ libraryData =
     "likeButton": true,
     "exportAsSprite": false,
     "textureAtlas": null,
+    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -434,6 +438,7 @@ libraryData =
     "likeButton": true,
     "exportAsSprite": false,
     "textureAtlas": null,
+    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -518,6 +523,7 @@ libraryData =
     "likeButton": false,
     "exportAsSprite": false,
     "textureAtlas": null,
+    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -636,6 +642,7 @@ libraryData =
     "likeButton": false,
     "exportAsSprite": false,
     "textureAtlas": null,
+    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -754,6 +761,7 @@ libraryData =
     "likeButton": false,
     "exportAsSprite": false,
     "textureAtlas": null,
+    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -866,30 +874,35 @@ libraryData =
   "_sounds/sndBucket": {
     "type": "sound",
     "version": "2.3.0",
+    "loop": false,
     "linkage": "bucket",
     "ext": "ogg"
   },
   "_sounds/sndMusic": {
     "type": "sound",
     "version": "2.3.0",
+    "loop": false,
     "linkage": "music",
     "ext": "ogg"
   },
   "_sounds/sndTap": {
     "type": "sound",
     "version": "2.3.0",
+    "loop": false,
     "linkage": "tap",
     "ext": "ogg"
   },
   "_sounds/sndTrash": {
     "type": "sound",
     "version": "2.3.0",
+    "loop": false,
     "linkage": "trash",
     "ext": "ogg"
   },
   "_sounds/sndWater": {
     "type": "sound",
     "version": "2.3.0",
+    "loop": false,
     "linkage": "water",
     "ext": "ogg"
   },
@@ -902,6 +915,7 @@ libraryData =
     "likeButton": false,
     "exportAsSprite": false,
     "textureAtlas": null,
+    "relatedSound": "",
     "layers": [
       {
         "name": "Barrels",
@@ -1053,6 +1067,7 @@ libraryData =
     "likeButton": false,
     "exportAsSprite": false,
     "textureAtlas": null,
+    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 5",
@@ -1112,6 +1127,7 @@ libraryData =
     "likeButton": false,
     "exportAsSprite": false,
     "textureAtlas": null,
+    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 3",
@@ -1230,6 +1246,7 @@ libraryData =
     "likeButton": false,
     "exportAsSprite": false,
     "textureAtlas": null,
+    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -1317,6 +1334,7 @@ libraryData =
     "likeButton": false,
     "exportAsSprite": false,
     "textureAtlas": null,
+    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -1355,6 +1373,7 @@ libraryData =
     "likeButton": false,
     "exportAsSprite": false,
     "textureAtlas": null,
+    "relatedSound": "",
     "layers": [
       {
         "name": "neck",
@@ -1635,6 +1654,7 @@ libraryData =
     "likeButton": false,
     "exportAsSprite": false,
     "textureAtlas": null,
+    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -1686,6 +1706,7 @@ libraryData =
     "likeButton": false,
     "exportAsSprite": false,
     "textureAtlas": null,
+    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -1730,6 +1751,7 @@ libraryData =
     "likeButton": false,
     "exportAsSprite": false,
     "textureAtlas": null,
+    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -1781,6 +1803,7 @@ libraryData =
     "likeButton": false,
     "exportAsSprite": false,
     "textureAtlas": null,
+    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -1807,6 +1830,7 @@ libraryData =
     "likeButton": false,
     "exportAsSprite": false,
     "textureAtlas": null,
+    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 2",
@@ -1974,6 +1998,7 @@ libraryData =
     "likeButton": false,
     "exportAsSprite": false,
     "textureAtlas": null,
+    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -2000,6 +2025,7 @@ libraryData =
     "likeButton": false,
     "exportAsSprite": false,
     "textureAtlas": null,
+    "relatedSound": "",
     "layers": [
       {
         "name": "Label",
@@ -2857,6 +2883,7 @@ libraryData =
     "likeButton": false,
     "exportAsSprite": false,
     "textureAtlas": null,
+    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -2976,6 +3003,7 @@ libraryData =
     "likeButton": false,
     "exportAsSprite": false,
     "textureAtlas": null,
+    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -3037,6 +3065,7 @@ libraryData =
     "likeButton": false,
     "exportAsSprite": false,
     "textureAtlas": null,
+    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -3075,6 +3104,7 @@ libraryData =
     "likeButton": false,
     "exportAsSprite": false,
     "textureAtlas": null,
+    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 2",
@@ -3125,6 +3155,7 @@ libraryData =
     "likeButton": false,
     "exportAsSprite": false,
     "textureAtlas": null,
+    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",

@@ -72,12 +72,6 @@ declare namespace nanofl
         static init(canvas:HTMLCanvasElement, library:Library, framerate?:number, scaleMode?:string, textureAtlasesData?:Record<string, { images:string[], frames:number[] }>) : void;
     }
     
-    class SeamlessSoundLoop
-    {
-        constructor(audio:HTMLAudioElement);
-        stop() : void;
-    }
-    
     class TextField extends createjs.Container
     {
         border : boolean;
