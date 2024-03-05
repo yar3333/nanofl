@@ -1,5 +1,10 @@
 package nanofl.engine;
 
+import js.lib.Error;
+import easeljs.display.Shape;
+import nanofl.engine.elements.Element;
+import nanofl.engine.movieclip.Frame;
+import nanofl.engine.movieclip.Layer;
 import easeljs.display.DisplayObject;
 import nanofl.engine.LayerType;
 import nanofl.engine.AdvancableDisplayObject;
@@ -15,12 +20,11 @@ class MovieClipGotoHelper
     final oldFrameIndex : Int;
     final newFrameIndex : Int;
     final symbol : MovieClipItem;
-
-    var movieClipChanged = false;
     
     public final createdDisplayObjects = new Array<DisplayObject>();
     public final keepedAdvancableChildren : Array<AdvancableDisplayObject>;
 
+    @:access(nanofl.MovieClip.currentFrame)
     public function new(mc:MovieClip, newFrameIndex:Int)
     {
         if (mc.currentFrame == newFrameIndex)
@@ -36,9 +40,11 @@ class MovieClipGotoHelper
         this.newFrameIndex = newFrameIndex;
         this.symbol = mc.symbol;
 		
-		for (layerIndex in 0...symbol.layers.length)
+        var movieClipChanged = false;
+
+		for (layer in symbol.layers)
 		{
-			processLayer(layerIndex);
+			if (processLayer(layer)) movieClipChanged = true;
 		}
 		
 		if (movieClipChanged) DisplayObjectTools.smartUncache(mc);
@@ -46,89 +52,157 @@ class MovieClipGotoHelper
 		mc.currentFrame = newFrameIndex;
     }
 
-
-    public function processLayer(layerIndex:Int) : Void
+    public function processLayer(layer:Layer) : Bool
     {
-        var layerChanged = false;
-        
-        var layer = symbol.layers[layerIndex];
         var oldFrame = layer.getFrame(oldFrameIndex);
         var newFrame = layer.getFrame(newFrameIndex);
+
+        if (oldFrame == null && newFrame == null) return false;
+        
+        var layerChanged = false;
         
         if (oldFrame != null && newFrame != null && oldFrame.keyFrame == newFrame.keyFrame)
         {
-            var tweenedElements = layer.getTweenedElements(newFrameIndex);
-            var layerChildren = mc.getLayerChildren(layerIndex);
-            Debug.assert(tweenedElements.length == layerChildren.length, "tweenedElements.length=" + tweenedElements.length + " != layerChildren.length=" + layerChildren.length);
-            for (i in 0...tweenedElements.length)
-            {
-                final dispObj = layerChildren[i];
-
-                //dispObj.visible = layer.type == LayerType.normal;
-
-                if (dispObj.visible)
-                {
-                    final tweenedElement = tweenedElements[i];
-                    
-                    if (tweenedElement.current != tweenedElement.original)
-                    {
-                        Debug.assert(Std.isOfType(tweenedElement.current, Instance));
-                        (cast tweenedElement.current:Instance).updateDisplayObjectTweenedProperties(dispObj);
-                    }
-                }
-                
-                if (Std.isOfType(dispObj, AdvancableDisplayObject))
-                {
-                    keepedAdvancableChildren.push((cast dispObj : AdvancableDisplayObject));
-                }
-            }
-            layerChanged = true;
+            layerChanged = processSameKeyFrame(layer, newFrame);
         }
-        //else // keep children between related keyframes on motion tween
-        //if (oldFrame != null && newFrame != null && newFrameIndex == oldFrameIndex + 1 && oldFrame.keyFrame.hasMotionTween()) 
-        //{
-
-
-        //}
+        else if (oldFrame != null && newFrame != null)
+        {
+            layerChanged = processRelativeKeyFrames(layer, oldFrame, newFrame);
+        }
         else if (oldFrame != null || newFrame != null)
         {
-            if (oldFrame != null)
-            {
-                var j = 0; while (j < mc.children.length)
-                {
-                    if (mc.layerOfChild.get(mc.children[j]) == layerIndex) mc.removeChildAt(j);
-                    else j++;
-                }
-            }
-            
-            if (newFrame != null)
-            {
-                for (tweenedElement in layer.getTweenedElements(newFrameIndex))
-                {
-                    var obj = tweenedElement.current.createDisplayObject(null);
-                    obj.visible = layer.type == LayerType.normal;
-                    mc.addChildToLayer(obj, layerIndex);
-                    createdDisplayObjects.push(obj);
-                }
-            }
-            
-            layerChanged = true;
+            layerChanged = processSeparatedKeyFrames(layer, oldFrame, newFrame);
         }
         
         if (layerChanged)
         {
-            movieClipChanged = true;
-            
             if (layer.type == LayerType.mask)
             {
-                for (i in 0...symbol.layers.length)
+                for (childLayer in layer.getChildLayers())
                 {
-                    if (symbol.layers[i].parentIndex == layerIndex)
-                    {
-                        for (child in mc.getLayerChildren(i)) child.uncache();
-                    }
+                    for (child in mc.getChildrenByLayerIndex(childLayer.getIndex())) child.uncache();
                 }
             }
-        }        
+        }
+
+        return layerChanged;     
+    }
+
+    function processSameKeyFrame(layer:Layer, newFrame:Frame) : Bool
+    {
+        var tweenedElements = newFrame.keyFrame.getTweenedElements(newFrame.subIndex);
+        var displayObjects = mc.getChildrenByLayerIndex(layer.getIndex());
+        
+        Debug.assert(tweenedElements.length == displayObjects.length, "tweenedElements.length=" + tweenedElements.length + " != displayObjects.length=" + displayObjects.length);
+        
+        for (i in 0...tweenedElements.length)
+        {
+            final dispObj = displayObjects[i];
+
+            if (dispObj.visible)
+            {
+                final tweenedElement = tweenedElements[i];
+                
+                if (tweenedElement.current != tweenedElement.original)
+                {
+                    Debug.assert(Std.isOfType(tweenedElement.current, Instance));
+                    (cast tweenedElement.current:Instance).updateDisplayObjectTweenedProperties(dispObj);
+                }
+            }
+            
+            if (Std.isOfType(dispObj, AdvancableDisplayObject))
+            {
+                keepedAdvancableChildren.push((cast dispObj : AdvancableDisplayObject));
+            }
+        }
+        
+        return true; // layerChanged
+    }
+
+    function processRelativeKeyFrames(layer:Layer, oldFrame:Frame, newFrame:Frame) : Bool
+    {
+        final layerIndex = layer.getIndex();
+        final tweenedElements = newFrame.keyFrame.getTweenedElements(newFrame.subIndex);
+        final displayObjects = mc.getChildrenByLayerIndex(layer.getIndex());
+
+        var matched = 0; while (matched < tweenedElements.length)
+        {
+            final elem = tweenedElements[matched].current;
+            final dispObj = displayObjects[matched];
+            if (!isElementMatchDisplayObject(elem, dispObj)) break;
+            
+            switch (elem.type)
+            {
+                case shape:
+                    mc.replaceChild(dispObj, createDisplayObject(layer, layerIndex, elem));
+
+                case instance:
+                    (cast elem:Instance).updateDisplayObjectTweenedProperties(dispObj);
+
+                case text:
+                    mc.replaceChild(dispObj, createDisplayObject(layer, layerIndex, elem));
+
+                case group:
+                    throw new Error("Element type 'group' is unexpected.");
+            }
+
+            matched++;
+        }
+
+        while (displayObjects.length > matched)
+        {
+            mc.removeChild(displayObjects.pop());
+        }
+
+        final layerIndex = layer.getIndex();
+        for (tweenedElement in tweenedElements.slice(matched))
+        {
+            createDisplayObject(layer, layerIndex, tweenedElement.current);
+        }
+        
+        return true;
+    }
+
+    function processSeparatedKeyFrames(layer:Layer, oldFrame:Frame, newFrame:Frame) : Bool
+    {
+        final layerIndex = layer.getIndex();
+
+        if (oldFrame != null)
+        {
+            for (child in mc.getChildrenByLayerIndex(layerIndex))
+            {
+                mc.removeChild(child);
+            }
+        }
+        
+        if (newFrame != null)
+        {
+            for (tweenedElement in layer.getTweenedElements(newFrameIndex))
+            {
+                createDisplayObject(layer, layerIndex, tweenedElement.current);
+            }
+        }
+
+        return true;
+    }
+
+    function createDisplayObject(layer:Layer, layerIndex:Int, element:Element) : DisplayObject
+    {
+        var obj = element.createDisplayObject(null);
+        obj.visible = layer.type == LayerType.normal;
+        mc.addChildToLayer(obj, layerIndex);
+        createdDisplayObjects.push(obj);
+        return obj;
+    }
+
+    static function isElementMatchDisplayObject(elem:Element, dispObj:DisplayObject) : Bool
+    {
+        return switch (elem.type)
+        {
+            case instance: Std.isOfType(dispObj, InstanceDisplayObject) && (cast elem : Instance).namePath == (cast dispObj : InstanceDisplayObject).symbol.namePath;
+            case shape: Std.isOfType(dispObj, Shape);
+            case text: Std.isOfType(dispObj, TextField);
+            case group: throw new Error("Element type 'group' is unexpected.");
+        }
     }
 }

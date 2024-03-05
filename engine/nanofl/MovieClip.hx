@@ -1,5 +1,6 @@
 package nanofl;
 
+import js.lib.Map;
 import js.lib.Promise;
 import easeljs.display.Container;
 import easeljs.display.DisplayObject;
@@ -13,7 +14,6 @@ using stdlib.StringTools;
 using stdlib.Lambda;
 
 @:expose
-@:allow(nanofl.engine.MovieClipGotoHelper)
 class MovieClip extends Container 
     #if !ide implements IEventHandlers #end
     implements InstanceDisplayObject
@@ -72,15 +72,24 @@ class MovieClip extends Container
 	
 	override public function removeChild(child:DisplayObject) : Bool
 	{
-		layerOfChild.remove(child);
+		layerOfChild.delete(child);
 		return super.removeChild(child);
 	}
 	
 	override public function removeChildAt(index:Int) : Bool
 	{
-		layerOfChild.remove(children[index]);
+		layerOfChild.delete(children[index]);
 		return super.removeChildAt(index);
 	}
+
+    public function replaceChild(oldChild:DisplayObject, newChild:DisplayObject)
+    {
+        final layerIndex = layerOfChild.get(oldChild);
+        final childIndex = getChildIndex(oldChild);
+        removeChildAt(childIndex);
+        layerOfChild.set(newChild, layerIndex);
+        addChildAt(newChild, childIndex);
+    }
 	
 	public function play()
 	{
@@ -120,7 +129,7 @@ class MovieClip extends Container
 			if (parentLayerIndex != null && symbol.layers[parentLayerIndex].type == LayerType.mask)
 			{
 				var mask = new Container();
-				for (obj in getLayerChildren(parentLayerIndex))
+				for (obj in getChildrenByLayerIndex(parentLayerIndex))
 				{
 					var clonedObj = obj.clone(true);
 					clonedObj.visible = true;
@@ -199,7 +208,7 @@ class MovieClip extends Container
 		return true;
 	}
 	
-	function getLayerChildren(layerIndex:Int) : Array<DisplayObject>
+	public function getChildrenByLayerIndex(layerIndex:Int) : Array<DisplayObject>
 	{
 		var r = [];
 		for (child in children)

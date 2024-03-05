@@ -10,6 +10,7 @@ extern class MovieClip extends easeljs.display.Container implements nanofl.engin
 	override function removeAllChildren():Void;
 	override function removeChild(child:easeljs.display.DisplayObject):Bool;
 	override function removeChildAt(index:Int):Bool;
+	function replaceChild(oldChild:easeljs.display.DisplayObject, newChild:easeljs.display.DisplayObject):Void;
 	function play():Void;
 	function stop():Void;
 	function gotoAndStop(labelOrIndex:Dynamic):Void;
@@ -17,6 +18,7 @@ extern class MovieClip extends easeljs.display.Container implements nanofl.engin
 	function getTotalFrames():Int;
 	function maskChild(child:easeljs.display.DisplayObject):Bool;
 	function uncacheChild(child:easeljs.display.DisplayObject):Void;
+	function getChildrenByLayerIndex(layerIndex:Int):Array<easeljs.display.DisplayObject>;
 	/**
 		
 			 * Return keeped children MovieClips. Return null if all children are keeped.
