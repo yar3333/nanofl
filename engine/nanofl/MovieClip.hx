@@ -1,7 +1,6 @@
 package nanofl;
 
 import js.lib.Map;
-import js.lib.Promise;
 import easeljs.display.Container;
 import easeljs.display.DisplayObject;
 import nanofl.engine.IPathElement;
@@ -119,78 +118,44 @@ class MovieClip extends Container
 	{
 		return symbol.getTotalFrames();
 	}
+
+    public function getMask(layerIndex:Int) : Container
+    {
+        var mask = new Container();
+        for (obj in getChildrenByLayerIndex(layerIndex))
+        {
+            var clonedObj = obj.clone(true);
+            clonedObj.visible = true;
+            mask.addChild(clonedObj);
+        }
+        return mask;
+    }
 	
-	public function maskChild(child:DisplayObject)
-	{
-		var n = layerOfChild.get(child);
-		if (n != null)
-		{
-			var parentLayerIndex = symbol.layers[n].parentIndex;
-			if (parentLayerIndex != null && symbol.layers[parentLayerIndex].type == LayerType.mask)
-			{
-				var mask = new Container();
-				for (obj in getChildrenByLayerIndex(parentLayerIndex))
-				{
-					var clonedObj = obj.clone(true);
-					clonedObj.visible = true;
-					DisplayObjectTools.smartCache(clonedObj);
-					mask.addChild(clonedObj);
-				}
-				return applyMask(mask, child);
-			}
-		}
-		return false;
-	}
-	
-	public function uncacheChild(child:DisplayObject)
-	{
-		child.uncache();
-		if (DisplayObjectTools.autoHitArea) child.hitArea = null;
-		var layerIndex = layerOfChild.get(child);
-		if (layerIndex != null && symbol.layers[layerIndex].type == LayerType.mask)
-		{
-			for (c in children)
-			{
-				var n = layerOfChild.get(c);
-				if (n != null && symbol.layers[n].parentIndex == layerIndex)
-				{
-					c.uncache();
-					if (DisplayObjectTools.autoHitArea) c.hitArea = null;
-				}
-			}
-		}
-	}
-	
-	public static function applyMask(mask:DisplayObject, obj:DisplayObject) : Bool
+	public static function applyMask(mask:DisplayObject, obj:DisplayObject) : Void
 	{
 		var objBounds = DisplayObjectTools.getOuterBounds(obj);
-		if (objBounds == null || objBounds.width == 0 || objBounds.height == 0) return false;
+		if (objBounds == null || objBounds.width == 0 || objBounds.height == 0) return;
 		//trace("objBounds = " + objBounds);
 		
 		mask = mask.clone(true);
-		mask.transformMatrix = obj.getMatrix().invert();
-		mask.visible = true;
-		
+        mask.transformMatrix = obj.getMatrix().invert();
+
 		var maskContainer = new Container();
 		maskContainer.addChild(mask);
 		
 		var maskContainerBounds = DisplayObjectTools.getOuterBounds(maskContainer);
-		if (maskContainerBounds == null || maskContainerBounds.width == 0 || maskContainerBounds.height == 0) { obj.visible = false; return false; }
+		if (maskContainerBounds == null || maskContainerBounds.width == 0 || maskContainerBounds.height == 0) { obj.visible = false; return; }
 		//trace("maskContainerBounds = " + maskContainerBounds);
-		
-		DisplayObjectTools.smartCache(mask);
-		
-		if (Std.isOfType(obj, Container))
-		{
-			for (child in (cast obj:Container).children)
-			{
-				DisplayObjectTools.smartCache(child);
-			}
-		}
+        
+        DisplayObjectTools.recache(mask, true);
+        obj.visible = true;
+        DisplayObjectTools.recache(obj, true);
 		
 		var intersection = maskContainerBounds.intersection(objBounds);
-		if (intersection == null || intersection.width == 0 || intersection.height == 0) { obj.visible = false; return false; }
+		if (intersection == null || intersection.width == 0 || intersection.height == 0) { obj.visible = false; return; }
 		//trace("intersection = " + intersection);
+
+        obj.visible = true;
 		
 		var union = objBounds.union(intersection);
 		//trace("union = " + union);
@@ -204,8 +169,6 @@ class MovieClip extends Container
 		
 		new easeljs.filters.AlphaMaskFilter(maskContainer.cacheCanvas).applyFilter(obj.cacheCanvas.getContext2d(), 0, 0, Std.int(objBounds.width), Std.int(objBounds.height));
 		//nanofl.ide.CanvasTracer.trace(obj.cacheCanvas, "obj(4)");
-		
-		return true;
 	}
 	
 	public function getChildrenByLayerIndex(layerIndex:Int) : Array<DisplayObject>

@@ -168,7 +168,7 @@ abstract class Element
 	
 	function elementUpdateDisplayObjectBaseProperties(dispObj:easeljs.display.DisplayObject)
 	{
-		dispObj.visible = visible;
+		//dispObj.visible = visible;
 		dispObj.set(matrix.decompose());
 		dispObj.filters = [];
 	}

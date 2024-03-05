@@ -40,52 +40,33 @@ class MovieClipGotoHelper
         this.newFrameIndex = newFrameIndex;
         this.symbol = mc.symbol;
 		
-        var movieClipChanged = false;
-
 		for (layer in symbol.layers)
 		{
-			if (processLayer(layer)) movieClipChanged = true;
+			processLayer(layer);
 		}
-		
-		if (movieClipChanged) DisplayObjectTools.smartUncache(mc);
 		
 		mc.currentFrame = newFrameIndex;
     }
 
-    public function processLayer(layer:Layer) : Bool
+    public function processLayer(layer:Layer) : Void
     {
         var oldFrame = layer.getFrame(oldFrameIndex);
         var newFrame = layer.getFrame(newFrameIndex);
 
-        if (oldFrame == null && newFrame == null) return false;
-        
-        var layerChanged = false;
+        if (oldFrame == null && newFrame == null) return;
         
         if (oldFrame != null && newFrame != null && oldFrame.keyFrame == newFrame.keyFrame)
         {
-            layerChanged = processSameKeyFrame(layer, newFrame);
+            processSameKeyFrame(layer, newFrame);
         }
         else if (oldFrame != null && newFrame != null)
         {
-            layerChanged = processRelativeKeyFrames(layer, oldFrame, newFrame);
+            processRelativeKeyFrames(layer, oldFrame, newFrame);
         }
         else if (oldFrame != null || newFrame != null)
         {
-            layerChanged = processSeparatedKeyFrames(layer, oldFrame, newFrame);
+            processSeparatedKeyFrames(layer, oldFrame, newFrame);
         }
-        
-        if (layerChanged)
-        {
-            if (layer.type == LayerType.mask)
-            {
-                for (childLayer in layer.getChildLayers())
-                {
-                    for (child in mc.getChildrenByLayerIndex(childLayer.getIndex())) child.uncache();
-                }
-            }
-        }
-
-        return layerChanged;     
     }
 
     function processSameKeyFrame(layer:Layer, newFrame:Frame) : Bool

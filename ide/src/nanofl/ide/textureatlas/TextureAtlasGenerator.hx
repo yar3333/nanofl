@@ -136,7 +136,6 @@ class TextureAtlasGenerator
 				var item : IIdeInstancableItem = cast item;
 				var instance = item.newInstance();
 				var dispObj = instance.createDisplayObject(null);
-				DisplayObjectTools.smartCache(dispObj);
 				
 				if (Std.isOfType(dispObj, MovieClip))
 				{
@@ -215,6 +214,8 @@ class TextureAtlasGenerator
 	
 	function cacheDisplayObject(obj:DisplayObject)
 	{
+        DisplayObjectTools.recache(obj, true);
+
 		if (obj.cacheCanvas != null) return;
 		
 		var bounds = DisplayObjectTools.getOuterBounds(obj);

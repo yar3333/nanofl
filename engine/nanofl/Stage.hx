@@ -1,5 +1,10 @@
 package nanofl;
 
+import nanofl.engine.LayerType;
+import js.lib.Map;
+import easeljs.display.Container;
+import easeljs.display.DisplayObject;
+
 @:expose
 class Stage extends easeljs.display.Stage
 {
@@ -33,7 +38,7 @@ class Stage extends easeljs.display.Stage
 	
 	override public function update(?params:Dynamic)
 	{
-		DisplayObjectTools.smartCache(this);
-		super.update(params);
+        for (child in children) DisplayObjectTools.recache(child);
+        super.update(params);
 	}
 }
