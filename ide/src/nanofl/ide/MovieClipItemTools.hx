@@ -31,7 +31,7 @@ class MovieClipItemTools
     
     public static function iterateInstances(item:MovieClipItem, callb:Instance->{ layerIndex:Int, keyFrameIndex:Int }->Void) : Void
 	{
-		iterateElementsInner(item, (element:Element, e) ->
+		iterateElements(item, (element:Element, e) ->
 		{
 			if (Std.isOfType(element, Instance))
 			{
@@ -43,11 +43,11 @@ class MovieClipItemTools
 	public static function getElements(item:MovieClipItem) : Array<Element>
 	{
         var r = [];
-        iterateElementsInner(item, (element, _) -> r.push(element));
+        iterateElements(item, (element, _) -> r.push(element));
         return r;
     }
 
-	static function iterateElementsInner(item:MovieClipItem, callb:Element->{ layerIndex:Int, keyFrameIndex:Int }->Void)
+	public static function iterateElements(item:MovieClipItem, callb:Element->{ layerIndex:Int, keyFrameIndex:Int }->Void)
 	{
 		for (layerIndex in 0...item.layers.length)
 		{

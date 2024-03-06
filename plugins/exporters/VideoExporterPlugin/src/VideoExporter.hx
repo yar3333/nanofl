@@ -66,20 +66,16 @@ class VideoExporter
     static function imageDataToRgbArray(imageData:ImageData, outBuffer:Uint8Array) : Void
     {
         final pixIn = imageData.data;
+        
         var pIn = 0;
         var pOut = 0;
-        for (i in 0...imageData.height)
+        
+        for (_ in 0...(imageData.width * imageData.height))
         {
-            for (j in 0...imageData.width)
-            {
-                final r = pixIn[pIn++];
-                final g = pixIn[pIn++];
-                final b = pixIn[pIn++];
-                final a = pixIn[pIn++];
-                outBuffer[pOut++] = r;
-                outBuffer[pOut++] = g;
-                outBuffer[pOut++] = b;
-            }
+            outBuffer[pOut++] = pixIn[pIn++]; // R
+            outBuffer[pOut++] = pixIn[pIn++]; // G
+            outBuffer[pOut++] = pixIn[pIn++]; // B
+            pIn++; // skip A
         }
     }
 }

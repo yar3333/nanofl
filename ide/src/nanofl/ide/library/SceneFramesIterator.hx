@@ -1,7 +1,6 @@
 package nanofl.ide.library;
 
 import js.lib.Error;
-import js.html.VideoElement;
 import js.lib.Promise;
 import easeljs.display.Shape;
 import easeljs.display.Graphics;
@@ -49,7 +48,7 @@ class SceneFramesIterator
 
         curFrame++;
 
-        if (scene.currentFrame >= scene.getTotalFrames() - 1) Promise.resolve(ctx);
+        if (scene.currentFrame >= scene.getTotalFrames() - 1) return Promise.resolve(ctx);
         
         scene.advance();
         
