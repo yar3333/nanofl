@@ -18,7 +18,7 @@ class Code extends wquery.Component
 		
 		template().container.off("click", ">li>a");
 		
-		template().container.on("click", ">li>a", function(e:JqEvent)
+		template().container.on("click", ">li>a", (e:JqEvent) ->
 		{
 			var index : Int = q(e.currentTarget).data("index");
 			

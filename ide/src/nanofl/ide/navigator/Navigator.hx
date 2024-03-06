@@ -40,12 +40,14 @@ class Navigator extends InjectContainer
 	
 	public function navigateDown(container:IPathElement)
 	{
+        document.undoQueue.commitTransaction();
 		editPath.push(new PathItem(container));
 		update(false);
 	}
 	
 	public function navigateTo(editPath:Array<PathItem>, isCenterView=true)
 	{
+        document.undoQueue.commitTransaction();
 		this.editPath = editPath;
 		update(isCenterView);
 	}
