@@ -59,7 +59,6 @@ class EditorLayer
 		this.view = view;
 		
 		this.layer = layer;
-		this.frameIndex = frameIndex;
 		this.frame = layer.getFrame(frameIndex);
 		
 		if (frame != null)
