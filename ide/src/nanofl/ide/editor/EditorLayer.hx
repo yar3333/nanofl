@@ -3,7 +3,6 @@ package nanofl.ide.editor;
 import nanofl.engine.MaskTools;
 import easeljs.display.Container;
 import nanofl.engine.movieclip.GuideLine;
-import nanofl.MovieClip;
 import nanofl.engine.IPathElement;
 import nanofl.engine.elements.ShapeElement;
 import nanofl.engine.elements.TextElement;
@@ -70,7 +69,7 @@ class EditorLayer
 			
 			for (tweenedElement in frame.keyFrame.getTweenedElements(frame.subIndex))
 			{
-				addItem(tweenedElement);
+				addDisplayObject(tweenedElement);
 			}
 			
 			shape = cast(items[0], EditorElementShape);
@@ -184,7 +183,7 @@ class EditorLayer
     }
 
 	@:noprofile
-	function addItem(tweenedElement:TweenedElement, ?index:Int) : EditorElement
+	function addDisplayObject(tweenedElement:TweenedElement, ?index:Int) : EditorElement
 	{
 		var item = EditorElement.create(this, editor, navigator, view, frame, tweenedElement);
 		
@@ -197,7 +196,7 @@ class EditorLayer
 	public function addElement(element:Element, ?index:Int) : EditorElement
 	{
 		frame.keyFrame.addElement(element, index);
-		return addItem(new TweenedElement(element, element), index);
+		return addDisplayObject(new TweenedElement(element, element), index);
 	}
 	
 	function removeItemAt(index:Int)

@@ -139,20 +139,6 @@ class Editor extends InjectContainer
 		update();
 	}
 	
-	@:profile
-	function rebindElement(element:Element)
-	{
-		for (item in getItems(true))
-		{
-			if (item.currentElement == element)
-			{
-				item.rebind();
-				tool.itemChanged(item);
-				break;
-			}
-		}
-	}
-	
 	public function hasSelected() : Bool
 	{
 		for (layer in layers)
@@ -572,7 +558,6 @@ class Editor extends InjectContainer
 		view.movie.editor.rebind(isCenterView);
 		view.properties.update();
 		view.movie.zoomer.update();
-		
 	}
 	
 	@:profile
@@ -751,8 +736,7 @@ class Editor extends InjectContainer
 		if (instance.namePath == newNamePath) return;
 		
 		instance.namePath = newNamePath;
-		rebindElement(instance);
-		container.stage.update();
+		updateElement(instance);
 	}
 	
 	public function saveSelectedToXml(out:XmlBuilder) : Array<IIdeLibraryItem>

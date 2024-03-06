@@ -143,19 +143,8 @@ abstract class EditorElement implements ISelectable
 	{
         final n = metaDispObj.children.indexOf(dispObj);
         metaDispObj.removeChildAt(n);
-        metaDispObj.addChildAt(dispObj = originalElement.createDisplayObject(null), n);
-		updateTransformations();
-	}
-	
-	public function rebind()
-	{
-		var parent = dispObj.parent;
-		var n = parent.getChildIndex(dispObj);
-		parent.removeChildAt(n);
-		
-		parent.addChildAt(dispObj = currentElement.createDisplayObject(null), n);
-		
-		updateTransformations();
+        metaDispObj.addChildAt(dispObj = currentElement.createDisplayObject(null), n);
+        updateTransformations();
 	}
 	
 	public function getBounds() : Rectangle
