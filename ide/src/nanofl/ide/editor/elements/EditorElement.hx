@@ -22,7 +22,6 @@ import nanofl.ide.editor.NewObjectParams;
 import nanofl.ide.PropertiesObject;
 import nanofl.ide.editor.EditorLayer;
 import nanofl.ide.ui.View;
-import stdlib.Debug;
 using nanofl.engine.geom.PointTools;
 using Lambda;
 

@@ -29,14 +29,13 @@ using nanofl.engine.geom.PointTools;
 #if profiler @:build(Profiler.buildMarked()) #end
 class EditorLayer
 {
-	var editor : Editor;
-	var navigator : Navigator;
-	var view : View;
+	final editor : Editor;
+	final navigator : Navigator;
+	final view : View;
 	
-	var layer(default, null) : Layer;
-	var frameIndex(default, null) : Int;
-	var frame(default, null) : Frame;
-	var items(default, null) = new Array<EditorElement>();
+	final layer : Layer;
+	final frame : Frame;
+    final items = new Array<EditorElement>();
 	
 	public var editable(get, never) : Bool;
 	@:noCompletion function get_editable() return layer.type != LayerType.folder

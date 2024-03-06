@@ -154,21 +154,16 @@ VideoExporter.imageDataToRgbArray = function(imageData,outBuffer) {
 	var pIn = 0;
 	var pOut = 0;
 	var _g = 0;
-	var _g1 = imageData.height;
+	var _g1 = imageData.width * imageData.height;
 	while(_g < _g1) {
-		var i = _g++;
-		var _g2 = 0;
-		var _g3 = imageData.width;
-		while(_g2 < _g3) {
-			var j = _g2++;
-			var r = pixIn[pIn++];
-			var g = pixIn[pIn++];
-			var b = pixIn[pIn++];
-			var a = pixIn[pIn++];
-			outBuffer[pOut++] = r;
-			outBuffer[pOut++] = g;
-			outBuffer[pOut++] = b;
-		}
+		var _ = _g++;
+		var r = pixIn[pIn++];
+		var g = pixIn[pIn++];
+		var b = pixIn[pIn++];
+		++pIn;
+		outBuffer[pOut++] = r;
+		outBuffer[pOut++] = g;
+		outBuffer[pOut++] = b;
 	}
 };
 var WebmVideoExporterPlugin = function() {
