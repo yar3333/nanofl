@@ -105,7 +105,7 @@ abstract class EditorElement implements ISelectable
 		metaDispObj = new Container();
 		metaDispObj.mouseEnabled = !frame.keyFrame.layer.locked;
 		
-		metaDispObj.addChild(dispObj = originalElement.createDisplayObject(null));
+		metaDispObj.addChild(dispObj = originalElement.createDisplayObject());
 		metaDispObj.addChild(selectionBoxShape = new Shape());
 		metaDispObj.addChild(emptyClipMark = emptyClipMarkPattern.clone());
 		metaDispObj.addChild(emptyClipMarkSelected = emptyClipMarkSelectedPattern.clone());
@@ -142,7 +142,7 @@ abstract class EditorElement implements ISelectable
 	{
         final n = metaDispObj.children.indexOf(dispObj);
         metaDispObj.removeChildAt(n);
-        metaDispObj.addChildAt(dispObj = currentElement.createDisplayObject(null), n);
+        metaDispObj.addChildAt(dispObj = currentElement.createDisplayObject(), n);
         updateTransformations();
 	}
 	

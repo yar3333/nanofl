@@ -170,20 +170,9 @@ class Instance extends Element
 		return Std.isOfType(symbol, ILayersContainer) ? (cast symbol:ILayersContainer).layers : null;
 	}
 	
-	public function createDisplayObject(frameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : easeljs.display.DisplayObject
+	public function createDisplayObject() : easeljs.display.DisplayObject
 	{
-		var initFrameIndex = 0;
-		if (frameIndexes != null && frameIndexes.length > 0 && frameIndexes[0].element == this)
-		{
-			initFrameIndex = frameIndexes[0].frameIndex;
-			frameIndexes = frameIndexes.slice(1);
-		}
-		else
-		{
-			frameIndexes = null;
-		}
-		
-		var dispObj = symbol.createDisplayObject(initFrameIndex, frameIndexes);
+		var dispObj = symbol.createDisplayObject();
 		elementUpdateDisplayObjectBaseProperties(dispObj);
 		elementUpdateDisplayObjectInstanceProperties(dispObj);
 		return dispObj;

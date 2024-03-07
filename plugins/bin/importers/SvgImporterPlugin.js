@@ -1216,6 +1216,12 @@ nanofl_engine_fills_IFill.__isInterface__ = true;
 nanofl_engine_fills_IFill.prototype = {
 	__class__: nanofl_engine_fills_IFill
 };
+var nanofl_engine_libraryitems_ISpritableItem = function() { };
+nanofl_engine_libraryitems_ISpritableItem.__name__ = "nanofl.engine.libraryitems.ISpritableItem";
+nanofl_engine_libraryitems_ISpritableItem.__isInterface__ = true;
+nanofl_engine_libraryitems_ISpritableItem.prototype = {
+	__class__: nanofl_engine_libraryitems_ISpritableItem
+};
 var nanofl_engine_strokes_IStroke = function() { };
 nanofl_engine_strokes_IStroke.__name__ = "nanofl.engine.strokes.IStroke";
 nanofl_engine_strokes_IStroke.__isInterface__ = true;
@@ -1833,7 +1839,7 @@ svgimport_BaseExporter.prototype = {
 				if(filterDefs.length > 0) {
 					element = this.elementsToLibraryItem([element],this.getNextFreeID(prefixID)).newInstance();
 					(js_Boot.__cast(element , nanofl.engine.elements.Instance)).filters = filterDefs;
-					var displayObject = element.createDisplayObject(null);
+					var displayObject = element.createDisplayObject();
 					var elemBounds = displayObject.getBounds();
 					if(elemBounds != null) {
 						var maskBounds;
@@ -3139,7 +3145,7 @@ svgimport_SvgTextExporter.prototype = $extend(svgimport_BaseExporter.prototype,{
 		}
 		var r1 = new nanofl.engine.elements.TextElement(r,0,0,false,false,_g);
 		r1.matrix = this.text.matrix.clone();
-		var t = r1.createDisplayObject(null);
+		var t = r1.createDisplayObject();
 		var fontHeight = nanofl.TextField.measureFontHeight(this.text.fontFamily,this.text.fontStyle,this.text.fontSize);
 		var fontBaselineCoef = nanofl.TextField.measureFontBaselineCoef(this.text.fontFamily,this.text.fontStyle);
 		r1.matrix.appendTransform(0,-fontHeight * fontBaselineCoef - nanofl.TextField.PADDING);

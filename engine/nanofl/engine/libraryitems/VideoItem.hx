@@ -72,26 +72,12 @@ class VideoItem extends InstancableItem
         });
     }
 
-	override public function createDisplayObject(initFrameIndex:Int, childFrameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : easeljs.display.DisplayObject
+	override public function createDisplayObject() : easeljs.display.DisplayObject
 	{
-		var r = super.createDisplayObject(initFrameIndex, childFrameIndexes);
+		var r = super.createDisplayObject();
     	return r ?? new nanofl.Video(this);
 	}
 	
-	public function updateDisplayObject(dispObj:easeljs.display.DisplayObject, childFrameIndexes:Array<{ element:IPathElement, frameIndex:Int }>)
-	{
-		Debug.assert(Std.isOfType(dispObj, nanofl.Video));
-
-        final videoObj : nanofl.Video = cast dispObj;
-
-		videoObj.video = Browser.document.createVideoElement();
-        videoObj.video.src = library.realUrl(namePath + "." + ext);
-        videoObj.video.loop = this.loop;
-        #if !ide videoObj.video.autoplay = this.autoPlay; #end
-
-		(cast dispObj:nanofl.Video).setBounds(0, 0, width, height);
-	}
-
 	public function getDisplayObjectClassName() return "nanofl.Video";
 	
 	override public function equ(item:ILibraryItem) : Bool

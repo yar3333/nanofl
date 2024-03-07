@@ -5,10 +5,10 @@ import js.lib.Error;
 import datatools.ArrayRO;
 import datatools.ArrayTools;
 import js.lib.Promise;
+import easeljs.display.SpriteSheet;
 import nanofl.engine.ILayersContainer;
 import nanofl.engine.ITextureItem;
 import nanofl.engine.ITimeline;
-import nanofl.engine.LayerType;
 import nanofl.engine.Library;
 import nanofl.engine.ILibraryItem;
 import nanofl.engine.elements.Element;
@@ -18,7 +18,6 @@ import nanofl.engine.geom.PointTools;
 import nanofl.engine.movieclip.Frame;
 import nanofl.engine.movieclip.KeyFrame;
 import nanofl.engine.movieclip.Layer;
-import stdlib.Debug;
 import stdlib.Std;
 
 #if ide
@@ -31,11 +30,12 @@ class MovieClipItem	extends InstancableItem
 	implements ILayersContainer
 	implements ITimeline
 	implements ITextureItem
+    implements ISpritableItem
 {
 	function get_type() return LibraryItemType.movieclip;
 	
 	public var _layers = new Array<Layer>();
-	public var layers(get, never) : ArrayRO<Layer>; public function get_layers() return _layers;
+	public var layers(get, never) : ArrayRO<Layer>; function get_layers() return _layers;
 	
 	public var autoPlay = true;
 	public var loop = true;
@@ -46,13 +46,13 @@ class MovieClipItem	extends InstancableItem
     public var relatedSound : String;
 
     /**
-        Build `SpriteSheet` on-the-fly (every frame of movie clip become bitmap in SpriteSheet)
-        on first updateDisplayObject() call.
+        Build `SpriteSheet` on-the-fly (every frame of movie clip become bitmap in SpriteSheet) on first DisplayObject creating.
         Fields `exportAsSprite` and `spriteSheet` are ignored if this movie clip included in texture atlas.
     **/
 	public var exportAsSprite = false;
     
-    var spriteSheet : easeljs.display.SpriteSheet = null;
+    var _spriteSheet : easeljs.display.SpriteSheet = null;
+    public var spriteSheet(get, never) : easeljs.display.SpriteSheet;
 	
 	public static function createWithFrame(namePath:String, ?elements:Array<Element>, layerName="Layer 0") : MovieClipItem
 	{
@@ -106,85 +106,51 @@ class MovieClipItem	extends InstancableItem
 		return "custom-icon-film";
 	}
 	
-	override public function createDisplayObject(initFrameIndex:Int, childFrameIndexes:Array<{ element:IPathElement, frameIndex:Int }>)
+	override public function createDisplayObject()
 	{
-		var r = super.createDisplayObject(initFrameIndex, childFrameIndexes);
+		var r = super.createDisplayObject();
 		if (r != null) return r;
 		
-		var spriteSheet = TextureAtlasTools.getSpriteSheet(this);
-		if (spriteSheet == null && exportAsSprite) spriteSheet = asSpriteSheet();
-		
-		if (spriteSheet == null)
+        return switch(spriteSheet == null)
 		{
-			return !likeButton ? new nanofl.MovieClip(this, initFrameIndex, childFrameIndexes) : new nanofl.Button(this);
-		}
-		else
-		{
-			return !likeButton ? new nanofl.Sprite(spriteSheet, initFrameIndex) : new nanofl.SpriteButton(spriteSheet);
+            case true:  !likeButton ? new nanofl.MovieClip(this) : new nanofl.Button(this);
+            case false: !likeButton ? new nanofl.Sprite(this)    : new nanofl.SpriteButton(this);
 		}
 	}
-	
-	public function updateDisplayObject(dispObj:easeljs.display.DisplayObject, childFrameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : Void
+
+    function get_spriteSheet() : easeljs.display.SpriteSheet
 	{
-		if (exportAsSprite) return;
-		
-        Debug.assert(Std.isOfType(dispObj, nanofl.MovieClip));
-        
-        var movieClip : nanofl.MovieClip = cast dispObj;
-        Debug.assert(movieClip.children.length == 0);
-        
-        //movieClip.removeAllChildren();
-        //movieClip.alpha = 1.0;
-        
-        var topElement : Element = null;
-        var topElementLayer : Int = null;
-        
-        var i = layers.length - 1; while (i >= 0)
-        {
-            for (tweenedElement in layers[i].getTweenedElements(movieClip.currentFrame))
+        #if ide return null; #end
+		if (_spriteSheet == null)
+		{
+            _spriteSheet = TextureAtlasTools.getSpriteSheet(this);
+            if (exportAsSprite && _spriteSheet == null)
             {
-                if (childFrameIndexes != null && childFrameIndexes.length != 0 && childFrameIndexes[0].element == cast tweenedElement.original)
+                var builder = new easeljs.utils.SpriteSheetBuilder();
+                
+                var t = exportAsSprite;
+                exportAsSprite = false;
+                for (i in 0...getTotalFrames())
                 {
-                    topElement = tweenedElement.current;
-                    topElementLayer = i;
+                    var mc = new MovieClip(this, i);
+                    builder.addFrame(mc);
                 }
-                else
-                {
-                    var obj = tweenedElement.current.createDisplayObject(childFrameIndexes);
-                    obj.visible = layers[i].type == LayerType.normal;
-                    movieClip.addChildToLayer(obj, i);
-                }
+                exportAsSprite = t;
+                
+                _spriteSheet = builder.build();
             }
-            i--;
-        }
-        
-        if (topElement != null)
-        {
-            movieClip.addChildToLayer(topElement.createDisplayObject(childFrameIndexes), topElementLayer);
-        }
-	}
-	
-    function asSpriteSheet() : easeljs.display.SpriteSheet
-	{
-		if (spriteSheet == null)
-		{
-			var builder = new easeljs.utils.SpriteSheetBuilder();
-			
-			var t = exportAsSprite;
-			exportAsSprite = false;
-			for (i in 0...getTotalFrames())
-			{
-				var mc = new MovieClip(this, i, null);
-				builder.addFrame(mc);
-			}
-			exportAsSprite = t;
-			
-			spriteSheet = builder.build();
 		}
-		return spriteSheet;
+		return _spriteSheet;
 	}
 	
-	public function getDisplayObjectClassName() return !likeButton ? "nanofl.MovieClip" : "nanofl.Button";
+	public function getDisplayObjectClassName()
+    {
+        return switch(exportAsSprite)
+        {
+            case false: !likeButton ? "nanofl.MovieClip" : "nanofl.Button";
+            case true:  !likeButton ? "nanofl.Sprite"    : "nanofl.SpriteButton";
+        }
+    }
 	
 	public function preload() : Promise<{}>
 	{

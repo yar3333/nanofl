@@ -24,7 +24,7 @@ class SceneFramesIterator
         canvas.height = documentProperties.height;
         
         stage = new nanofl.Stage(canvas, documentProperties.framerate);
-        scene = cast library.getSceneInstance().createDisplayObject(null);
+        scene = cast library.getSceneInstance().createDisplayObject();
         
         if (applyBackgroundColor)
         {

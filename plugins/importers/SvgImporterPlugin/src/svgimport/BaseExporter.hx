@@ -75,7 +75,7 @@ class BaseExporter
 					cast(element, Instance).filters = filterDefs;
 					
 					#if !server
-					var displayObject = element.createDisplayObject(null);
+					var displayObject = element.createDisplayObject();
 					var elemBounds =  displayObject.getBounds();
 					//trace("elemBounds = " + elemBounds);
 					if (elemBounds != null)

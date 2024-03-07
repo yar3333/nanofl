@@ -3773,6 +3773,12 @@ nanofl_engine_fills_IFill.__isInterface__ = true;
 nanofl_engine_fills_IFill.prototype = {
 	__class__: nanofl_engine_fills_IFill
 };
+var nanofl_engine_libraryitems_ISpritableItem = function() { };
+nanofl_engine_libraryitems_ISpritableItem.__name__ = "nanofl.engine.libraryitems.ISpritableItem";
+nanofl_engine_libraryitems_ISpritableItem.__isInterface__ = true;
+nanofl_engine_libraryitems_ISpritableItem.prototype = {
+	__class__: nanofl_engine_libraryitems_ISpritableItem
+};
 var nanofl_engine_strokes_IStroke = function() { };
 nanofl_engine_strokes_IStroke.__name__ = "nanofl.engine.strokes.IStroke";
 nanofl_engine_strokes_IStroke.__isInterface__ = true;
@@ -4175,6 +4181,11 @@ stdlib_LambdaIterable.findLastIndex = function(it,f) {
 stdlib_LambdaIterable.sorted = function(it,cmp) {
 	var r = Lambda.array(it);
 	r.sort(cmp != null ? cmp : Reflect.compare);
+	return r;
+};
+stdlib_LambdaIterable.reversed = function(it) {
+	var r = Lambda.array(it);
+	r.reverse();
 	return r;
 };
 stdlib_LambdaIterable.filterByType = function(it,klass) {

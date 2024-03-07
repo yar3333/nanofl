@@ -25,7 +25,9 @@ import htmlparser.XmlBuilder;
 using htmlparser.HtmlParserTools;
 #end
 
-class MeshItem extends InstancableItem implements ITextureItem
+class MeshItem extends InstancableItem 
+    implements ITextureItem
+    implements ISpritableItem
 {
 	function get_type() return LibraryItemType.mesh;
 	
@@ -41,7 +43,9 @@ class MeshItem extends InstancableItem implements ITextureItem
 	public var renderer(get, never) : Renderer;
 	var _rendererLoadLights : Bool;
 	
-	public function new(namePath:String)
+    public var spriteSheet(get, never) : easeljs.display.SpriteSheet;
+	
+    public function new(namePath:String)
 	{
 		super(namePath);
 	}
@@ -133,51 +137,24 @@ class MeshItem extends InstancableItem implements ITextureItem
 		log("MeshItem.updateBoundingRadius boundingRadius = " + boundingRadius);
 	}
 	
-	override public function createDisplayObject(initFrameIndex:Int, childFrameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : easeljs.display.DisplayObject
+	override public function createDisplayObject() : easeljs.display.DisplayObject
 	{
-		var r = super.createDisplayObject(initFrameIndex, childFrameIndexes);
-		
-        if (r == null)
-		{
-			var spriteSheet = TextureAtlasTools.getSpriteSheet(this);
-			r =  spriteSheet == null
-				? new nanofl.Mesh(this)
-				: new nanofl.Sprite(spriteSheet);
-		}
-		
-		//r.setBounds(0, 0, image.width, image.height);
-		
-		return r;
+		var r = super.createDisplayObject();
+        if (r != null) return r;
+
+        return spriteSheet == null
+            ? new nanofl.Mesh(this)
+            : new nanofl.Sprite(this);
 	}
-	
-	public function updateDisplayObject(dispObj:easeljs.display.DisplayObject, childFrameIndexes:Array<{ element:IPathElement, frameIndex:Int }>)
+
+    function get_spriteSheet() : easeljs.display.SpriteSheet
 	{
-		Debug.assert(Std.is(dispObj, nanofl.Mesh));
-		
-		var mesh : nanofl.Mesh = cast dispObj;
-		
-		mesh.scene = new Scene();
-		mesh.scene.fog = NullTools.clone(scene.fog);
-		
-		mesh.scene.add(mesh.group = new Group());
-		
-		for (object in scene.children)
-		{
-			switch (object.type)
-			{
-				case AmbientLight, DirectionalLight, SpotLight, PointLight, HemisphereLight, RectAreaLight:
-					if (loadLights)
-					{
-						mesh.group.add(object.clone());
-					}
-					
-				case _:
-					mesh.group.add(object.clone());
-			}
-		}
-		
-		mesh.update();
-	}
+        #if ide 
+        return null;
+        #else
+        return TextureAtlasTools.getSpriteSheet(this);
+        #end
+    }
 	
 	function get_renderer() : Renderer
 	{

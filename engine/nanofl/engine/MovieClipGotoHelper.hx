@@ -169,7 +169,7 @@ class MovieClipGotoHelper
 
     function createDisplayObject(layer:Layer, layerIndex:Int, element:Element) : DisplayObject
     {
-        var obj = element.createDisplayObject(null);
+        var obj = element.createDisplayObject();
         obj.visible = layer.type == LayerType.normal;
         mc.addChildToLayer(obj, layerIndex);
         createdDisplayObjects.push(obj);

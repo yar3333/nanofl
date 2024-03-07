@@ -74,7 +74,7 @@ class Code extends wquery.Component
                 var instance = (cast item:InstancableItem).newInstance();
                 if (instance != null)
                 {
-                    var obj = instance.createDisplayObject(null);
+                    var obj = instance.createDisplayObject();
                     stage.addChild(obj);
                     var bounds = DisplayObjectTools.getOuterBounds(obj);
                     if (bounds != null)

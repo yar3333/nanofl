@@ -36,7 +36,7 @@ abstract class InstancableItem extends LibraryItem
 	
 	public abstract function getDisplayObjectClassName() : String;
 	
-	public function createDisplayObject(initFrameIndex:Int, childFrameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : easeljs.display.DisplayObject
+	public function createDisplayObject() : easeljs.display.DisplayObject
 	{
 		#if !ide
 		if (linkedClass != "")
@@ -48,8 +48,6 @@ abstract class InstancableItem extends LibraryItem
 		#end
 		return null;
 	}
-	
-	public abstract function updateDisplayObject(dispObj:easeljs.display.DisplayObject, childFrameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : Void;
 	
 	public function getNearestPoint(pos:Point) : Point return { x:1e100, y:1e100 };
     

@@ -157,7 +157,7 @@ class LibraryItems
 		
 		if (Std.isOfType(item, InstancableItem))
 		{
-			var obj = (cast item:InstancableItem).createDisplayObject(0, null);
+			var obj = (cast item:InstancableItem).createDisplayObject();
 			var bounds =  DisplayObjectTools.getInnerBounds(obj);
 			out.attr("width",  bounds?.width ?? 0);
 			out.attr("height", bounds?.height ?? 0);

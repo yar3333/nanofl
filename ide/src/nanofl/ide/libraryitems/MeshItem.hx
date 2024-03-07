@@ -46,13 +46,9 @@ class MeshItem extends nanofl.engine.libraryitems.MeshItem
         return preloadInner();
 	}
         
-	override public function createDisplayObject(initFrameIndex:Int, childFrameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : easeljs.display.DisplayObject
+	override public function createDisplayObject() : easeljs.display.DisplayObject
     {
-        var r = new nanofl.Mesh(this);
-        
-        //r.setBounds(0, 0, image.width, image.height);
-        
-        return r;
+        return new nanofl.Mesh(this);
     }
 	
 	public function getFilePathToRunWithEditor() : String 

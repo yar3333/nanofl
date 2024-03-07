@@ -1,20 +1,21 @@
 package nanofl;
 
 import nanofl.engine.InstanceDisplayObject;
-import nanofl.engine.libraryitems.InstancableItem;
+import nanofl.engine.libraryitems.BitmapItem;
 
 @:expose
 class Bitmap extends easeljs.display.Bitmap 
     implements InstanceDisplayObject
     #if !ide implements IEventHandlers #end
 {
-	public var symbol(default, null) : InstancableItem;
+	public var symbol(default, null) : BitmapItem;
 	
-	public function new(symbol:InstancableItem)
+	public function new(symbol:BitmapItem)
 	{
 		super(null);
 		this.symbol = symbol;
-		symbol.updateDisplayObject(this, null);
+		image = symbol.image;
+		setBounds(0, 0, symbol.image.width, symbol.image.height);
 	}
 	
 	override public function clone(?recursive:Bool) : Bitmap

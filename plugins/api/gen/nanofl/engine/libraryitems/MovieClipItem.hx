@@ -1,10 +1,10 @@
 package nanofl.engine.libraryitems;
 
-extern class MovieClipItem extends nanofl.engine.libraryitems.InstancableItem implements nanofl.engine.ITextureItem implements nanofl.engine.ITimeline implements nanofl.engine.ILayersContainer {
+extern class MovieClipItem extends nanofl.engine.libraryitems.InstancableItem implements nanofl.engine.libraryitems.ISpritableItem implements nanofl.engine.ITextureItem implements nanofl.engine.ITimeline implements nanofl.engine.ILayersContainer {
 	function new(namePath:String):Void;
 	var _layers : Array<nanofl.engine.movieclip.Layer>;
 	var layers(get, never) : Array<nanofl.engine.movieclip.Layer>;
-	function get_layers():Array<nanofl.engine.movieclip.Layer>;
+	private function get_layers():Array<nanofl.engine.movieclip.Layer>;
 	var autoPlay : Bool;
 	var loop : Bool;
 	var likeButton : Bool;
@@ -12,12 +12,12 @@ extern class MovieClipItem extends nanofl.engine.libraryitems.InstancableItem im
 	var relatedSound : String;
 	/**
 		
-		        Build `SpriteSheet` on-the-fly (every frame of movie clip become bitmap in SpriteSheet)
-		        on first updateDisplayObject() call.
+		        Build `SpriteSheet` on-the-fly (every frame of movie clip become bitmap in SpriteSheet) on first DisplayObject creating.
 		        Fields `exportAsSprite` and `spriteSheet` are ignored if this movie clip included in texture atlas.
 		    
 	**/
 	var exportAsSprite : Bool;
+	var spriteSheet(get, never) : easeljs.display.SpriteSheet;
 	function addLayer(layer:nanofl.engine.movieclip.Layer):Void;
 	function addLayersBlock(layersToAdd:Array<nanofl.engine.movieclip.Layer>, ?index:Int):Void;
 	function removeLayer(index:Int):Void;
@@ -26,8 +26,8 @@ extern class MovieClipItem extends nanofl.engine.libraryitems.InstancableItem im
 	function getTotalFrames():Int;
 	override function clone():nanofl.engine.libraryitems.MovieClipItem;
 	override function getIcon():String;
-	override function createDisplayObject(initFrameIndex:Int, childFrameIndexes:Array<{ public var frameIndex(default, default) : Int; public var element(default, default) : nanofl.engine.IPathElement; }>):easeljs.display.DisplayObject;
-	override function updateDisplayObject(dispObj:easeljs.display.DisplayObject, childFrameIndexes:Array<{ public var frameIndex(default, default) : Int; public var element(default, default) : nanofl.engine.IPathElement; }>):Void;
+	override function createDisplayObject():easeljs.display.DisplayObject;
+	private function get_spriteSheet():easeljs.display.SpriteSheet;
 	override function getDisplayObjectClassName():String;
 	override function preload():js.lib.Promise<{ }>;
 	override function equ(item:nanofl.engine.ILibraryItem):Bool;

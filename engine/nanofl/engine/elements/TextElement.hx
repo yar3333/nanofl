@@ -199,7 +199,7 @@ class TextElement extends Element
 		return textRuns.map(tr -> tr.characters).join("");
 	}
 	
-	public function createDisplayObject(frameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : nanofl.TextField
+	public function createDisplayObject() : nanofl.TextField
 	{
         final tf = new nanofl.TextField();
 		
@@ -286,7 +286,7 @@ class TextElement extends Element
 	#if ide
 	public function breakApart() : Array<TextElement>
 	{
-		var tf = createDisplayObject(null);
+		var tf = createDisplayObject();
 		tf.update();
 		
 		var r = [];
@@ -320,7 +320,7 @@ class TextElement extends Element
 	#if ide
 	override public function fixErrors() : Bool 
 	{
-		var tf = createDisplayObject(null);
+		var tf = createDisplayObject();
 		tf.update();
 		if (width < tf.width || height < tf.height)
 		{

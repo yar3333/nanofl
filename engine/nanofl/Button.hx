@@ -7,17 +7,13 @@ class Button extends MovieClip
 {
 	public function new(symbol:MovieClipItem)
 	{
-		super(symbol, 0, null);
+		super(symbol);
 		
 		stop();
 		
 		if (getTotalFrames() >= 4)
 		{
-			var hitSymbol = cast(symbol.duplicate("__nanofl_temp"), MovieClipItem);
-			hitSymbol.likeButton = false;
-			hitSymbol.linkedClass = "";
-			hitArea = hitSymbol.createDisplayObject(3, null);
-			hitSymbol.remove();
+			hitArea = new MovieClip(symbol, 3);
 		}
 		
 		cursor = "pointer";

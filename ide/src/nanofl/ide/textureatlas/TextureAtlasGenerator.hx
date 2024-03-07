@@ -135,7 +135,7 @@ class TextureAtlasGenerator
 			{
 				var item : IIdeInstancableItem = cast item;
 				var instance = item.newInstance();
-				var dispObj = instance.createDisplayObject(null);
+				var dispObj = instance.createDisplayObject();
 				
 				if (Std.isOfType(dispObj, MovieClip))
 				{

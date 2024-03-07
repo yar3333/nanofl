@@ -3,7 +3,6 @@ package nanofl.ide.libraryitems;
 import js.lib.Error;
 import nanofl.engine.SerializationAsJsTools;
 import haxe.crypto.Base64;
-import nanofl.engine.IPathElement;
 import htmlparser.HtmlNodeElement;
 import js.lib.Promise;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
@@ -42,11 +41,11 @@ class BitmapItem extends nanofl.engine.libraryitems.BitmapItem
 		return preloadInner();
 	}
 	
-	override public function createDisplayObject(initFrameIndex:Int, childFrameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : easeljs.display.DisplayObject
+	override public function createDisplayObject() : easeljs.display.DisplayObject
 	{
 		var r = new nanofl.Bitmap(this);
 		
-		r.setBounds(0, 0, image.width, image.height);
+		r.setBounds(0, 0, image.width, image.height); // TODO: need this?
 		
 		return r;
 	}

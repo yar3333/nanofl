@@ -48,25 +48,10 @@ class MovieClipItem extends nanofl.engine.libraryitems.MovieClipItem
 		return r;
 	}
 	
-	override public function createDisplayObject(initFrameIndex:Int, childFrameIndexes:Array<{ element:IPathElement, frameIndex:Int }>)
+	override public function createDisplayObject()
 	{
-		return new nanofl.MovieClip(this, initFrameIndex, childFrameIndexes);
+		return new nanofl.MovieClip(this);
 	}
-	
-	override public function updateDisplayObject(dispObj:easeljs.display.DisplayObject, childFrameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : Void
-	{
-        final saveExportAsSprite = exportAsSprite;
-        exportAsSprite = false;
-        super.updateDisplayObject(dispObj, childFrameIndexes);
-        exportAsSprite = saveExportAsSprite;
-	}
-	
-	override public function preload() : Promise<{}> return Promise.resolve();
-	
-	/*override public function equ(item:ILibraryItem) : Bool
-	{
-		return super.equ(item);
-	}*/
 	
 	public function getUsedSymbolNamePaths() : Array<String>
 	{

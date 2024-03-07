@@ -193,7 +193,7 @@ class SvgExporter
 	{
 		#if !server
 		
-		var tf : nanofl.TextField = text.createDisplayObject(null);
+		var tf : nanofl.TextField = text.createDisplayObject();
 		tf.update();
 		
 		var y = nanofl.TextField.PADDING;

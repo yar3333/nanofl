@@ -77,7 +77,7 @@ class LibraryItemToEditorDropper
 	
 	static function addElementIntoEditor(app:Application, view:View, element:Element, e:JqEvent)
 	{
-		var obj = element.createDisplayObject(null);
+		var obj = element.createDisplayObject();
 		var bounds = DisplayObjectTools.getInnerBounds(obj);
 		
 		if (bounds == null) bounds = new Rectangle(0, 0, 0, 0);

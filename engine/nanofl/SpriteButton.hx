@@ -1,27 +1,23 @@
 package nanofl;
 
 import easeljs.events.MouseEvent;
-import easeljs.display.SpriteSheet;
+import nanofl.engine.libraryitems.MovieClipItem;
 
 @:expose
 class SpriteButton extends Sprite
 {
-	public function new(spriteSheet:SpriteSheet)
+	public function new(symbol:MovieClipItem)
 	{
-		super(spriteSheet);
+		super(symbol);
 		
 		stop();
 		
-		if (spriteSheet.getNumFrames() >= 4)
+		if (symbol.spriteSheet.getNumFrames() >= 4)
 		{
 			hitArea = spriteSheet.getFrame(3);
 		}
 		
 		cursor = "pointer";
-		
-		//Player.stage.addStagemousedownEventListener(stageMouseEventProxy.bind(onMouseDown));
-		//Player.stage.addStagemousemoveEventListener(stageMouseEventProxy.bind(onMouseMove));
-		//Player.stage.addStagemouseupEventListener(stageMouseEventProxy.bind(onMouseUp));
 	}
 	
 	function onMouseDown(e:MouseEvent)
@@ -46,13 +42,5 @@ class SpriteButton extends Sprite
 		{
 			gotoAndStop(0);
 		}
-	}
-	
-	function stageMouseEventProxy(f:MouseEvent->Void, e:MouseEvent)
-	{
-		var t = e.currentTarget;
-		e.currentTarget = this;
-		f(e);
-		e.currentTarget = t;
 	}
 }

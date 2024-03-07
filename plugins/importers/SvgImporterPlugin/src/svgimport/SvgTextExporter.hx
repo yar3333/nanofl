@@ -51,7 +51,7 @@ class SvgTextExporter extends BaseExporter
 		
 		#if js
 			
-			var t : nanofl.TextField = cast r.createDisplayObject(null);
+			var t : nanofl.TextField = cast r.createDisplayObject();
 			
 			var fontHeight = nanofl.TextField.measureFontHeight(text.fontFamily, text.fontStyle, text.fontSize);
 			var fontBaselineCoef = nanofl.TextField.measureFontBaselineCoef(text.fontFamily, text.fontStyle);

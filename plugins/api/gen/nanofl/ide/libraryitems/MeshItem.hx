@@ -4,7 +4,7 @@ extern class MeshItem extends nanofl.engine.libraryitems.MeshItem implements nan
 	function new(namePath:String):Void;
 	override function clone():nanofl.ide.libraryitems.MeshItem;
 	override function preload():js.lib.Promise<{ }>;
-	override function createDisplayObject(initFrameIndex:Int, childFrameIndexes:Array<{ public var frameIndex(default, default) : Int; public var element(default, default) : nanofl.engine.IPathElement; }>):easeljs.display.DisplayObject;
+	override function createDisplayObject():easeljs.display.DisplayObject;
 	function getFilePathToRunWithEditor():String;
 	function getLibraryFilePaths():Array<String>;
 	function getDataToSaveBeforeCleanDestDirectoryAndPublish(fileSystem:nanofl.ide.sys.FileSystem, destLibraryDir:String):Dynamic;

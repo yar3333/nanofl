@@ -16,7 +16,9 @@ import htmlparser.XmlBuilder;
 using htmlparser.HtmlParserTools;
 #end
 
-class BitmapItem extends InstancableItem implements ITextureItem
+class BitmapItem extends InstancableItem 
+    implements ITextureItem
+    implements ISpritableItem
 {
 	function get_type() return LibraryItemType.bitmap;
 	
@@ -24,6 +26,8 @@ class BitmapItem extends InstancableItem implements ITextureItem
 	public var textureAtlas : String;
 	
 	public var image(default, null) : ImageElement;
+
+    public var spriteSheet(get, never) : easeljs.display.SpriteSheet;
 	
 	public function new(namePath:String, ext:String)
 	{
@@ -78,29 +82,30 @@ class BitmapItem extends InstancableItem implements ITextureItem
         });
     }
 	
-	override public function createDisplayObject(initFrameIndex:Int, childFrameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : easeljs.display.DisplayObject
+	override public function createDisplayObject() : easeljs.display.DisplayObject
 	{
-		var r = super.createDisplayObject(initFrameIndex, childFrameIndexes);
+		var r = super.createDisplayObject();
 		
 		if (r == null)
 		{
-			var spriteSheet = TextureAtlasTools.getSpriteSheet(this);
-			r =  spriteSheet == null
+			r = spriteSheet == null
 				? new nanofl.Bitmap(this)
-				: new nanofl.Sprite(spriteSheet);
+				: new nanofl.Sprite(this);
 		}
 		
 		r.setBounds(0, 0, image.width, image.height);
 		
 		return r;
 	}
-	
-	public function updateDisplayObject(dispObj:easeljs.display.DisplayObject, childFrameIndexes:Array<{ element:IPathElement, frameIndex:Int }>)
+
+    function get_spriteSheet() : easeljs.display.SpriteSheet
 	{
-		Debug.assert(Std.isOfType(dispObj, easeljs.display.Bitmap));
-		(cast dispObj:easeljs.display.Bitmap).image = image;
-		(cast dispObj:easeljs.display.Bitmap).setBounds(0, 0, image.width, image.height);
-	}
+        #if ide 
+        return null;
+        #else
+        return TextureAtlasTools.getSpriteSheet(this);
+        #end
+    }
 	
 	public function getDisplayObjectClassName() return "nanofl.Bitmap";
 	

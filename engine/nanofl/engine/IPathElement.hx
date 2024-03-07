@@ -1,8 +1,8 @@
 package nanofl.engine;
 
+import datatools.ArrayRO;
 import easeljs.display.DisplayObject;
 import nanofl.engine.geom.Matrix;
-import datatools.ArrayRO;
 import nanofl.engine.elements.Element;
 
 interface IPathElement extends ILayersContainer
@@ -14,7 +14,7 @@ interface IPathElement extends ILayersContainer
 	function getNavigatorName() : String;
 	function getNavigatorIcon() : String;
 	function getChildren() : ArrayRO<Element>;
-	function createDisplayObject(frameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : DisplayObject;
+	function createDisplayObject() : DisplayObject;
 	
 	function getTimeline() : ITimeline;
 }

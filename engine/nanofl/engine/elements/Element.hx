@@ -164,7 +164,7 @@ abstract class Element
 		matrix.translate(dx, dy);
 	}
 	
-	public abstract function createDisplayObject(frameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : easeljs.display.DisplayObject;
+	public abstract function createDisplayObject() : easeljs.display.DisplayObject;
 	
 	function elementUpdateDisplayObjectBaseProperties(dispObj:easeljs.display.DisplayObject)
 	{

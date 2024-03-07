@@ -933,6 +933,11 @@ stdlib_LambdaIterable.sorted = function(it,cmp) {
 	r.sort(cmp != null ? cmp : Reflect.compare);
 	return r;
 };
+stdlib_LambdaIterable.reversed = function(it) {
+	var r = Lambda.array(it);
+	r.reverse();
+	return r;
+};
 stdlib_LambdaIterable.filterByType = function(it,klass) {
 	var r = [];
 	var x = $getIterator(it);

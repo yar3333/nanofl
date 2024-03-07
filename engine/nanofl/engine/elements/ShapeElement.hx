@@ -231,7 +231,7 @@ class ShapeElement extends Element
 		StrokeEdges.drawSorted(edges, g, scaleSelection);
 	}
 	
-	function createDisplayObject(frameIndexes:Array<{ element:IPathElement, frameIndex:Int }>) : easeljs.display.Shape
+	function createDisplayObject() : easeljs.display.Shape
 	{
         final shape = new easeljs.display.Shape();
 		

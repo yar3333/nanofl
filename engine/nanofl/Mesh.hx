@@ -1,5 +1,6 @@
 package nanofl;
 
+import datatools.NullTools;
 import js.html.CanvasRenderingContext2D;
 import js.three.lights.AmbientLight;
 import js.three.lights.DirectionalLight;
@@ -57,7 +58,27 @@ class Mesh extends SolidContainer
 		if (symbol.renderAreaSize % 2 != 0) d++;
 		setBounds(-d, -d, d, d);
 		
-		symbol.updateDisplayObject(this, null);
+		scene = new Scene();
+		scene.fog = NullTools.clone(scene.fog);
+		
+		scene.add(group = new Group());
+		
+		for (object in scene.children)
+		{
+			switch (object.type)
+			{
+				case AmbientLight, DirectionalLight, SpotLight, PointLight, HemisphereLight, RectAreaLight:
+					if (symbol.loadLights)
+					{
+						group.add(object.clone());
+					}
+					
+				case _:
+					group.add(object.clone());
+			}
+		}
+		
+		update();
 		
 		#if profiler }); #end
 	}

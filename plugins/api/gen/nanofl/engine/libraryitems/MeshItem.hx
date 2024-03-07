@@ -1,6 +1,6 @@
 package nanofl.engine.libraryitems;
 
-extern class MeshItem extends nanofl.engine.libraryitems.InstancableItem implements nanofl.engine.ITextureItem {
+extern class MeshItem extends nanofl.engine.libraryitems.InstancableItem implements nanofl.engine.libraryitems.ISpritableItem implements nanofl.engine.ITextureItem {
 	function new(namePath:String):Void;
 	var textureAtlas : String;
 	var renderAreaSize : Int;
@@ -8,11 +8,12 @@ extern class MeshItem extends nanofl.engine.libraryitems.InstancableItem impleme
 	var scene(default, null) : js.three.scenes.Scene;
 	var boundingRadius : Float;
 	var renderer(get, never) : js.three.renderers.Renderer;
+	var spriteSheet(get, never) : easeljs.display.SpriteSheet;
 	override function clone():nanofl.engine.libraryitems.MeshItem;
 	override function getIcon():String;
 	override function preload():js.lib.Promise<{ }>;
-	override function createDisplayObject(initFrameIndex:Int, childFrameIndexes:Array<{ public var frameIndex(default, default) : Int; public var element(default, default) : nanofl.engine.IPathElement; }>):easeljs.display.DisplayObject;
-	override function updateDisplayObject(dispObj:easeljs.display.DisplayObject, childFrameIndexes:Array<{ public var frameIndex(default, default) : Int; public var element(default, default) : nanofl.engine.IPathElement; }>):Void;
+	override function createDisplayObject():easeljs.display.DisplayObject;
+	private function get_spriteSheet():easeljs.display.SpriteSheet;
 	private function get_renderer():js.three.renderers.Renderer;
 	override function getDisplayObjectClassName():String;
 	override function equ(item:nanofl.engine.ILibraryItem):Bool;

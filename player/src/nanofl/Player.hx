@@ -104,7 +104,7 @@ class Player
 
     static function start()
     {
-        stage.addChild(scene = cast library.getSceneInstance().createDisplayObject(null));
+        stage.addChild(scene = cast library.getSceneInstance().createDisplayObject());
         
         DisplayObjectTools.callMethod(scene, "init");
         DisplayObjectTools.callMethod(scene, "onEnterFrame");

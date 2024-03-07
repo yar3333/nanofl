@@ -1,5 +1,6 @@
 package nanofl;
 
+import js.Browser;
 import js.html.MediaElement;
 import js.html.VideoElement;
 import nanofl.engine.InstanceDisplayObject;
@@ -17,7 +18,6 @@ class Video extends SolidContainer
 {
 	public var symbol(default, null) : VideoItem;
     
-    @:allow(nanofl.engine.libraryitems.VideoItem.updateDisplayObject)
     public var video(default, null) : VideoElement;
 
     public var currentFrame(default, null) : Int;
@@ -30,10 +30,16 @@ class Video extends SolidContainer
         Debug.assert(Std.isOfType(symbol, VideoItem));
 
         this.symbol = symbol;
-		symbol.updateDisplayObject(this, null);
-        duration = symbol.duration;
+        
+		video = Browser.document.createVideoElement();
+        video.src = symbol.library.realUrl(symbol.namePath + "." + symbol.ext);
+        video.loop = symbol.loop;
+        #if !ide video.autoplay = symbol.autoPlay; #end
 
-        currentFrame = 0;
+        duration = symbol.duration;
+		setBounds(0, 0, symbol.width, symbol.height);
+
+        currentFrame = 0; // TODO: FIX
 
         if (video.readyState >= MediaElement.HAVE_CURRENT_DATA)
         {

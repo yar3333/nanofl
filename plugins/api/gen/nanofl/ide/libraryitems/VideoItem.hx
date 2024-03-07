@@ -9,5 +9,6 @@ extern class VideoItem extends nanofl.engine.libraryitems.VideoItem implements n
 	function getDataToSaveBeforeCleanDestDirectoryAndPublish(fileSystem:nanofl.ide.sys.FileSystem, destLibraryDir:String):Dynamic;
 	function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String, savedData:Dynamic):nanofl.ide.libraryitems.IIdeLibraryItem;
 	function getUsedSymbolNamePaths():Array<String>;
+	override function createDisplayObject():nanofl.Video;
 	static function parse(namePath:String, xml:htmlparser.HtmlNodeElement):nanofl.ide.libraryitems.VideoItem;
 }

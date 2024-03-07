@@ -1,10 +1,10 @@
 package components.nanofl.movie.editor;
 
+import nanofl.ide.editor.EditorMilk;
 import easeljs.display.Container;
 import easeljs.events.MouseEvent;
 import easeljs.geom.Rectangle;
 import easeljs.display.Shape;
-import datatools.ArrayTools;
 import js.html.CanvasElement;
 import js.html.File;
 import nanofl.DisplayObjectTools;
@@ -36,8 +36,6 @@ class Code extends wquery.Component
 		"context-menu": components.nanofl.common.contextmenu.Code
 	};
 	
-	static var MILK_POWER = 0.5;
-	static var MILK_COLOR = 255;
 	static var ZOOM_SENS = 0.25;
 	
 	@inject var app : Application;
@@ -53,7 +51,7 @@ class Code extends wquery.Component
 	
 	var root : Container;
 	
-	var milk : Container;
+	var milk : EditorMilk;
 	
 	var field : Container;
 	
@@ -63,8 +61,6 @@ class Code extends wquery.Component
 	var controls : Container;
 	
 	var centerCross : Shape;
-	
-	var lastMilkEditPath : Array<PathItem>;
 	
 	@:allow(nanofl.ide.editor.Editor)
 	var zoomLevel(get, set) : Float;
@@ -81,8 +77,8 @@ class Code extends wquery.Component
 	function get_viewY() return root.y;
 	function set_viewY(value:Float) return root.y = value;
 	
-	var editPath(get, never) : Array<PathItem>; @:noCompletion function get_editPath() : Array<PathItem> return app.document.navigator.editPath;
-	var pathItem(get, never) : PathItem; @:noCompletion function get_pathItem() : PathItem return editPath[editPath.length - 1];
+	var editPath(get, never) : Array<PathItem>; @:noCompletion function get_editPath() return app.document.navigator.editPath;
+	var pathItem(get, never) : PathItem; @:noCompletion function get_pathItem() return editPath[editPath.length - 1];
 	
 	function init()
 	{
@@ -96,8 +92,7 @@ class Code extends wquery.Component
 		stage.addChild(sceneBox = new Shape());
 		stage.addChild(root = new Container());
 		
-		root.addChild(milk = new Container());
-		milk.filters = [ new easeljs.filters.ColorFilter(1 - MILK_POWER, 1 - MILK_POWER, 1 - MILK_POWER, 1, MILK_COLOR * MILK_POWER, MILK_COLOR * MILK_POWER, MILK_COLOR * MILK_POWER, 0) ];
+		root.addChild(milk = new EditorMilk());
 		
 		root.addChild(field = new Container());
 		field.addChild(container = new Container());
@@ -308,7 +303,7 @@ class Code extends wquery.Component
 	{
 		updateBackground();
 		
-		updateMilk();
+		milk.update();
 		
 		var mat = new Matrix();
 		for (pi in editPath)
@@ -388,21 +383,6 @@ class Code extends wquery.Component
 		#if profiler Profiler.measure("editor.Client", "stage.update", function() { #end
 			stage.update();
 		#if profiler }); #end
-	}
-	
-	@:profile
-	function updateMilk()
-	{
-		if (lastMilkEditPath != null && ArrayTools.equ(editPath, lastMilkEditPath)) return;
-		
-		lastMilkEditPath = editPath.map(x -> x.clone());
-		
-		milk.uncache();
-		milk.removeAllChildren();
-		
-		pathItem.element.visible = false;
-		milk.addChild(editPath[0].element.createDisplayObject(editPath.map(x -> { element:x.element, frameIndex:x.frameIndex })));
-		pathItem.element.visible = true;
 	}
 	
 	@:profile

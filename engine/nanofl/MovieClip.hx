@@ -14,9 +14,9 @@ using stdlib.Lambda;
 
 @:expose
 class MovieClip extends Container 
-    #if !ide implements IEventHandlers #end
     implements InstanceDisplayObject
     implements AdvancableDisplayObject
+    #if !ide implements IEventHandlers #end
 {
 	var layerOfChild : Map<DisplayObject, Int>;
 	
@@ -27,19 +27,29 @@ class MovieClip extends Container
 	public var paused : Bool;
 	public var loop : Bool;
 	
-	public function new(symbol:MovieClipItem, initFrameIndex:Int, childFrameIndexes:Array<{ element:IPathElement, frameIndex:Int }>)
+	public function new(symbol:MovieClipItem, initFrame = 0)
 	{
 		super();
 		
         Debug.assert(Std.isOfType(symbol, MovieClipItem));
 		
-        layerOfChild = new Map<DisplayObject, Int>();
 		this.symbol = symbol;
-		currentFrame = initFrameIndex ?? 0;
-		symbol.updateDisplayObject(this, childFrameIndexes);
-		
+		currentFrame = initFrame;
 		paused = !symbol.autoPlay;
 		loop = symbol.loop;
+		
+        layerOfChild = new Map<DisplayObject, Int>();
+        var i = symbol.layers.length - 1; while (i >= 0)
+        {
+            for (tweenedElement in symbol.layers[i].getTweenedElements(currentFrame))
+            {
+                var obj = tweenedElement.current.createDisplayObject();
+                obj.visible = symbol.layers[i].type == LayerType.normal;
+                addChildToLayer(obj, i);
+            }
+            i--;
+        }
+		
 
         #if !ide
         if (cast symbol.relatedSound)
@@ -176,7 +186,7 @@ class MovieClip extends Container
 	{
 		return (cast this)._cloneProps
 		(
-			new MovieClip(symbol, currentFrame, null)
+			new MovieClip(symbol, currentFrame)
 		);
 	}
 	
