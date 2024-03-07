@@ -36,6 +36,8 @@ class EditorLayer
 	final layer : Layer;
 	final frame : Frame;
     final items = new Array<EditorElement>();
+
+    public final elementLifeTracker : ElementLifeTracker;
 	
 	public var editable(get, never) : Bool;
 	@:noCompletion function get_editable() return layer.type != LayerType.folder
@@ -47,12 +49,12 @@ class EditorLayer
 	public var parentIndex(get, never) : Int; function get_parentIndex() return layer.parentIndex;
 	public var type(get, never) : LayerType; function get_type() return layer.type;
 	
-    public var shape(default, null) : EditorElementShape;
+    public final shape : EditorElementShape;
 	
-	public var container(default, null) = new Container();
+	public final container = new Container();
 	
 	@:noapi 
-	public function new(editor:Editor, navigator:Navigator, view:View, layer:Layer, frameIndex:Int)
+	public function new(editor:Editor, navigator:Navigator, view:View, layer:Layer, frameIndex:Int, elementLifeTracker:ElementLifeTracker)
 	{
 		this.editor = editor;
 		this.navigator = navigator;
@@ -60,6 +62,8 @@ class EditorLayer
 		
 		this.layer = layer;
 		this.frame = layer.getFrame(frameIndex);
+        
+        this.elementLifeTracker = elementLifeTracker;
 		
 		if (frame != null)
 		{
@@ -70,7 +74,7 @@ class EditorLayer
 				addDisplayObject(tweenedElement);
 			}
 			
-			shape = cast(items[0], EditorElementShape);
+			shape = (cast items[0] : EditorElementShape);
 		}
 		
 		update();

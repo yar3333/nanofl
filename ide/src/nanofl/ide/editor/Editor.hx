@@ -540,12 +540,14 @@ class Editor extends InjectContainer
 		if (tool != null) tool.endEditing();
 		
 		view.movie.timeline.updateActiveLayerFrames();
+
+        final elementLifeTracker = createElementLifeTracker();
 		
 		layers = [];
 		container.removeAllChildren();
 		for (layer in pathItem.element.layers)
 		{
-			var editorLayer = new EditorLayer(this, document.navigator, view, layer, pathItem.frameIndex);
+			var editorLayer = new EditorLayer(this, document.navigator, view, layer, pathItem.frameIndex, elementLifeTracker);
 			layers.push(editorLayer);
 			container.addChildAt(editorLayer.container, 0);
 		}
@@ -913,4 +915,19 @@ class Editor extends InjectContainer
 			view.movie.editor.viewY = savedViewState.y;
 		}
 	}
+
+    function createElementLifeTracker() : ElementLifeTracker
+    {
+        if (!Std.isOfType(pathItem.element, Instance)) return null;
+        final instance : Instance = cast pathItem.element;
+        if (!Std.isOfType(instance.symbol, MovieClipItem)) return null;
+        final mcItem : MovieClipItem = cast instance.symbol;
+        
+        final saveAutoPlay = mcItem.autoPlay;
+        mcItem.autoPlay = false;
+        final r = new ElementLifeTracker(mcItem, true);
+        mcItem.autoPlay = saveAutoPlay;
+        
+        return r;
+    }
 }
