@@ -37,8 +37,6 @@ class EditorLayer
 	final frame : Frame;
     final items = new Array<EditorElement>();
 
-    public final elementLifeTracker : ElementLifeTracker;
-	
 	public var editable(get, never) : Bool;
 	@:noCompletion function get_editable() return layer.type != LayerType.folder
 	                                           && frame != null
@@ -54,7 +52,7 @@ class EditorLayer
 	public final container = new Container();
 	
 	@:noapi 
-	public function new(editor:Editor, navigator:Navigator, view:View, layer:Layer, frameIndex:Int, elementLifeTracker:ElementLifeTracker)
+	public function new(editor:Editor, navigator:Navigator, view:View, layer:Layer, frameIndex:Int)
 	{
 		this.editor = editor;
 		this.navigator = navigator;
@@ -63,8 +61,6 @@ class EditorLayer
 		this.layer = layer;
 		this.frame = layer.getFrame(frameIndex);
         
-        this.elementLifeTracker = elementLifeTracker;
-		
 		if (frame != null)
 		{
 			frame.keyFrame.getShape(true).deselectAll();

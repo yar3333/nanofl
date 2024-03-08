@@ -114,16 +114,16 @@ class MovieClipGotoHelper
             
             switch (elem.type)
             {
-                case shape:
+                case ElementType.shape:
                     mc.replaceChild(dispObj, createDisplayObject(layer, layerIndex, elem));
 
-                case instance:
+                case ElementType.instance:
                     (cast elem:Instance).updateDisplayObjectTweenedProperties(dispObj);
 
-                case text:
+                case ElementType.text:
                     mc.replaceChild(dispObj, createDisplayObject(layer, layerIndex, elem));
 
-                case group:
+                case ElementType.group:
                     throw new Error("Element type 'group' is unexpected.");
             }
 
@@ -180,10 +180,10 @@ class MovieClipGotoHelper
     {
         return switch (elem.type)
         {
-            case instance: Std.isOfType(dispObj, InstanceDisplayObject) && (cast elem : Instance).namePath == (cast dispObj : InstanceDisplayObject).symbol.namePath;
-            case shape: Std.isOfType(dispObj, Shape);
-            case text: Std.isOfType(dispObj, TextField);
-            case group: throw new Error("Element type 'group' is unexpected.");
+            case ElementType.instance: Std.isOfType(dispObj, InstanceDisplayObject) && (cast elem : Instance).namePath == (cast dispObj : InstanceDisplayObject).symbol.namePath;
+            case ElementType.shape: Std.isOfType(dispObj, Shape);
+            case ElementType.text: Std.isOfType(dispObj, TextField);
+            case ElementType.group: throw new Error("Element type 'group' is unexpected.");
         }
     }
 }

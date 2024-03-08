@@ -1,11 +1,13 @@
 package nanofl.ide.editor.elements;
 
 import js.lib.Error;
+import stdlib.Debug;
 import easeljs.display.Container;
 import easeljs.display.DisplayObject;
 import easeljs.events.MouseEvent;
 import easeljs.geom.Rectangle;
 import easeljs.display.Shape;
+import nanofl.engine.AdvancableDisplayObject;
 import nanofl.engine.elements.Element;
 import nanofl.engine.elements.GroupElement;
 import nanofl.engine.elements.Instance;
@@ -22,8 +24,9 @@ import nanofl.ide.editor.NewObjectParams;
 import nanofl.ide.PropertiesObject;
 import nanofl.ide.editor.EditorLayer;
 import nanofl.ide.ui.View;
+import nanofl.ide.libraryitems.MovieClipItem;
 using nanofl.engine.geom.PointTools;
-using Lambda;
+using stdlib.Lambda;
 
 #if profiler @:build(Profiler.buildMarked()) #end
 abstract class EditorElement implements ISelectable
@@ -105,7 +108,7 @@ abstract class EditorElement implements ISelectable
 		metaDispObj = new Container();
 		metaDispObj.mouseEnabled = !frame.keyFrame.layer.locked;
 		
-		metaDispObj.addChild(dispObj = originalElement.createDisplayObject());
+		metaDispObj.addChild(dispObj = createDisplayObjectForElement(originalElement));
 		metaDispObj.addChild(selectionBoxShape = new Shape());
 		metaDispObj.addChild(emptyClipMark = emptyClipMarkPattern.clone());
 		metaDispObj.addChild(emptyClipMarkSelected = emptyClipMarkSelectedPattern.clone());
@@ -120,6 +123,52 @@ abstract class EditorElement implements ISelectable
 		
 		update();
 	}
+
+    function createDisplayObjectForElement(element:Element) : DisplayObject
+    {
+        final dispObj = element.createDisplayObject();
+        Debug.assert(Std.isOfType(dispObj, AdvancableDisplayObject));
+        
+        final advanceFrames = getAdvanceFrames(element);
+        Debug.assert(advanceFrames >= 0);
+        
+        (cast dispObj:AdvancableDisplayObject).advanceTo(advanceFrames);
+
+        return dispObj;
+    }
+
+    function getAdvanceFrames(element:Element) : Int
+    {
+        final mcPathItem = navigator.editPath.reversed().find(x -> x.getTimeline() != null);
+        final mcPathItemIndex = navigator.editPath.indexOf(mcPathItem);
+        
+        final instance : Instance = cast mcPathItem.element;
+        Debug.assert(Std.isOfType(instance, Instance));
+        
+        final mcItem : MovieClipItem = cast instance.symbol;
+        Debug.assert(Std.isOfType(mcItem, MovieClipItem));
+
+        if (mcPathItemIndex < navigator.editPath.length - 1) element = cast navigator.editPath[mcPathItemIndex + 1].element;
+        Debug.assert(Std.isOfType(element, Element));
+
+        var layerIndex : Int = -1;
+        var keyFrameIndex : Int = -1;
+        MovieClipItemTools.iterateElements(mcItem, (elem, data) ->
+        {
+            if (elem == element)
+            {
+                layerIndex = data.layerIndex;
+                keyFrameIndex = data.keyFrameIndex;
+            }
+        });
+        Debug.assert(layerIndex >= 0);
+        Debug.assert(keyFrameIndex >= 0);
+
+        final layer = mcItem.layers[layerIndex];
+        final keyFrame = layer.keyFrames[keyFrameIndex];
+
+        return mcPathItem.frameIndex - keyFrame.getIndex(); // TODO: detect between-keyframes-keeping
+    }
 	
 	public function updateTransformations()
 	{

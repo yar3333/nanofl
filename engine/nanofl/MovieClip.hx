@@ -181,6 +181,13 @@ class MovieClip extends Container
         
         for (obj in helper.createdDisplayObjects) DisplayObjectTools.callMethod(obj, "init");
 	}
+    
+    #if ide
+    public function advanceTo(advanceFrames:Int)
+    {
+        //Debug.methodNotSupported(this);
+    }
+    #end
 	
 	override public function clone(?recursive:Bool) : MovieClip 
 	{

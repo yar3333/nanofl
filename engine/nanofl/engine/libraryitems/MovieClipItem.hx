@@ -31,6 +31,7 @@ class MovieClipItem	extends InstancableItem
 	implements ITimeline
 	implements ITextureItem
     implements ISpritableItem
+    implements IPlayableItem
 {
 	function get_type() return LibraryItemType.movieclip;
 	

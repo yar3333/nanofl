@@ -1,6 +1,5 @@
 package nanofl.ide;
 
-import js.lib.Map;
 import nanofl.engine.LibraryItemType;
 import nanofl.engine.ElementType;
 import nanofl.engine.elements.Instance;
@@ -10,20 +9,17 @@ using nanofl.ide.MovieClipItemTools;
 
 typedef ElementLifeTrack =
 {
+    var element : Element;
     var globalFrameIndex : Int;
     var lifetimeFrames : Int;
 }
 
 class ElementLifeTracker
 {
-    final checkAutoPlay : Bool;
+    public final tracks = new Array<ElementLifeTrack>();
 
-    public final tracks = new Map<Element, ElementLifeTrack>();
-
-    public function new(item:MovieClipItem, checkAutoPlay:Bool)
+    public function new(item:MovieClipItem)
     {
-        this.checkAutoPlay = checkAutoPlay;
-  
         processMovieClipItem(item, 0, item.getTotalFrames());
     }
     
@@ -33,15 +29,16 @@ class ElementLifeTracker
 
         item.iterateElements((element, data) ->
         {
-            if (checkAutoPlay && !item.autoPlay && data.keyFrameIndex > 0) return;
+            if (!item.autoPlay && data.keyFrameIndex > 0) return;
 
             final layer = item.layers[data.layerIndex];
             final keyFrame = layer.keyFrames[data.keyFrameIndex];
             final frameIndex = keyFrame.getIndex();
             final lifetimeFrames = frameIndex + keyFrame.duration < itemTotalFrames ? keyFrame.duration : lifetimeOnParent;
 
-            tracks.set(element,
-            {
+            tracks.push
+            ({
+                element: element,
                 globalFrameIndex: globalFrameIndex + frameIndex,
                 lifetimeFrames: lifetimeFrames
             });

@@ -83,10 +83,10 @@ abstract class Element
     {
         var element : Element = switch (ElementType.createByName(obj.type))
         {
-            case instance: new Instance(null);
-            case text: new TextElement(null, null, null, null, null, null);
-            case shape: new ShapeElement();
-            case group: new GroupElement([]);
+            case ElementType.instance: new Instance(null);
+            case ElementType.text: new TextElement(null, null, null, null, null, null);
+            case ElementType.shape: new ShapeElement();
+            case ElementType.group: new GroupElement([]);
         };
 
         if (element != null)

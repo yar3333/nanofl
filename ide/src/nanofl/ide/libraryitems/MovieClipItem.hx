@@ -1,10 +1,8 @@
 package nanofl.ide.libraryitems;
 
 import nanofl.engine.MovieClipItemTools;
-import nanofl.engine.IPathElement;
 import datatools.ArrayTools;
 import htmlparser.HtmlNodeElement;
-import js.lib.Promise;
 import nanofl.engine.elements.Element;
 import nanofl.engine.movieclip.KeyFrame;
 import nanofl.engine.movieclip.Layer;

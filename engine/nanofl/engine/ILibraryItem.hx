@@ -7,9 +7,6 @@ interface ILibraryItem
 {
 	var library(default, null) : Library;
 	
-	//@:allow(nanofl.engine.Library.renameItemInner)
-	//@:allow(nanofl.engine.Library.setState)
-	//var namePath(default, null) : String;
 	var namePath : String;
 	
 	var type(get, never) : LibraryItemType;
@@ -22,7 +19,6 @@ interface ILibraryItem
 
     public function loadPropertiesJson(obj:Dynamic) : Void;
 	
-	//@:allow(nanofl.engine.Library)
 	public function setLibrary(library:Library) : Void;
 	
 	public function duplicate(newNamePath:String) : ILibraryItem;

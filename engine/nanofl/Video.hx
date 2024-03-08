@@ -100,4 +100,11 @@ class Video extends SolidContainer
         video.currentTime = Math.min(Math.max(0, duration - 0.0001), currentFrame / framerate + 0.0001);
         #end
     }
+
+    #if ide
+    public function advanceTo(advanceFrames:Int)
+    {
+        // TODO: is this method need?
+    }
+    #end
 }
