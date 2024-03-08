@@ -3,7 +3,6 @@ package nanofl;
 import js.lib.Map;
 import easeljs.display.Container;
 import easeljs.display.DisplayObject;
-import nanofl.engine.IPathElement;
 import nanofl.engine.LayerType;
 import nanofl.engine.InstanceDisplayObject;
 import nanofl.engine.AdvancableDisplayObject;
@@ -49,7 +48,6 @@ class MovieClip extends Container
             }
             i--;
         }
-		
 
         #if !ide
         if (cast symbol.relatedSound)
@@ -139,9 +137,6 @@ class MovieClip extends Container
 		return r;
 	}
 	
-	/**
-	 * Return keeped children MovieClips. Return null if all children are keeped.
-	 */
 	#if ide public #end
 	function gotoFrame(labelOrIndex:Dynamic) : nanofl.engine.MovieClipGotoHelper
 	{
