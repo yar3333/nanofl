@@ -166,7 +166,7 @@ class Instance extends Element
 	public var layers(get, never) : ArrayRO<Layer>;
 	@:noCompletion public function get_layers()
 	{
-		return Std.isOfType(symbol, ILayersContainer) ? (cast symbol:ILayersContainer).layers : null;
+		return Std.isOfType(symbol, MovieClipItem) ? (cast symbol:MovieClipItem).layers : null;
 	}
 	
 	public function createDisplayObject() : easeljs.display.DisplayObject

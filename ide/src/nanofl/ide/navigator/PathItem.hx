@@ -9,7 +9,8 @@ using nanofl.engine.LayersTools;
 
 class PathItem
 {
-	public var element : Instance;
+	public final element : Instance;
+    public final mcItem : MovieClipItem;
 	
 	public var layerIndex(default, null) : Int;
 	public var frameIndex(default, null) : Int;
@@ -22,7 +23,10 @@ class PathItem
 	
     public function new(element:Instance, layerIndex=0, frameIndex=0)
 	{
+        Debug.assert(Std.isOfType(element.symbol, MovieClipItem));
+
 		this.element = element;
+        this.mcItem = cast element.symbol;
 		this.layerIndex = layerIndex;
 		this.frameIndex = frameIndex;
 	}

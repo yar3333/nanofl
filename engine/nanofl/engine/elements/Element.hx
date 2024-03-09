@@ -1,10 +1,10 @@
 package nanofl.engine.elements;
 
-import nanofl.engine.IElementsContainer;
 import nanofl.engine.Library;
 import nanofl.engine.geom.Matrix;
 import nanofl.engine.geom.Point;
 import nanofl.engine.geom.PointTools;
+import nanofl.engine.movieclip.KeyFrame;
 import stdlib.Debug;
 using StringTools;
 
@@ -17,7 +17,7 @@ using stdlib.Lambda;
 
 abstract class Element
 {
-	public var parent : IElementsContainer;
+	public var parent : KeyFrame;
 
     public var type(get, never) : ElementType;
 	abstract function get_type() : ElementType;

@@ -6,7 +6,6 @@ import datatools.ArrayRO;
 import datatools.ArrayTools;
 import js.lib.Promise;
 import easeljs.display.SpriteSheet;
-import nanofl.engine.ILayersContainer;
 import nanofl.engine.ITextureItem;
 import nanofl.engine.Library;
 import nanofl.engine.ILibraryItem;
@@ -26,7 +25,6 @@ using htmlparser.HtmlParserTools;
 #end
 
 class MovieClipItem	extends InstancableItem
-	implements ILayersContainer
 	implements ITextureItem
     implements ISpritableItem
     implements IPlayableItem

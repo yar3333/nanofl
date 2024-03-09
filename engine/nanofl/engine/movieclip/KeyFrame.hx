@@ -2,7 +2,6 @@ package nanofl.engine.movieclip;
 
 import nanofl.engine.IMotionTween;
 import datatools.ArrayRO;
-import nanofl.engine.IElementsContainer;
 import nanofl.engine.Library;
 import datatools.ArrayTools;
 import nanofl.engine.elements.Element;
@@ -18,7 +17,6 @@ using htmlparser.HtmlParserTools;
 #end
 
 class KeyFrame
-    implements IElementsContainer
 {
 	public var layer : Layer;
 	

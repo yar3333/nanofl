@@ -2,10 +2,10 @@ package nanofl.engine.movieclip;
 
 import datatools.ArrayRO;
 import datatools.ArrayTools;
-import nanofl.engine.ILayersContainer;
 import nanofl.engine.Library;
 import nanofl.engine.movieclip.KeyFrame;
 import nanofl.engine.LayerType;
+import nanofl.engine.libraryitems.MovieClipItem;
 using stdlib.Lambda;
 
 #if ide
@@ -16,7 +16,7 @@ using htmlparser.HtmlParserTools;
 
 class Layer
 {
-	public var layersContainer : ILayersContainer;
+	public var layersContainer : MovieClipItem;
 	
 	public var name : String;
 	public var type : LayerType;
