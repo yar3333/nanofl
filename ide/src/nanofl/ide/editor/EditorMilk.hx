@@ -10,15 +10,14 @@ class EditorMilk extends Container
 	static final MILK_POWER = 0.5;
 	static final MILK_COLOR = 255;
 
-	@inject var app : Application;
-	
+	final app : Application;
     var lastMilkEditPath : Array<PathItem>;
 
-    public function new()
+    public function new(app:Application)
     {
         super();
-		
-        Globals.injector.injectInto(this);
+
+        this.app = app;
         		
         filters = [ new easeljs.filters.ColorFilter(1 - MILK_POWER, 1 - MILK_POWER, 1 - MILK_POWER, 1, MILK_COLOR * MILK_POWER, MILK_COLOR * MILK_POWER, MILK_COLOR * MILK_POWER, 0) ];
     }

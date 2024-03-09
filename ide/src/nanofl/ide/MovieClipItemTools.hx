@@ -51,19 +51,21 @@ class MovieClipItemTools
 	{
 		for (layerIndex in 0...item.layers.length)
 		{
-			var layer = item.layers[layerIndex];
-			if (layer.keyFrames.length > 0)
-			{
-				for (keyFrameIndex in 0...layer.keyFrames.length)
-				{
-					var keyFrame = layer.keyFrames[keyFrameIndex];
-					for (element in keyFrame.elements)
-					{
-						callb(element, { keyFrameIndex:keyFrameIndex, layerIndex:layerIndex });
-					}
-				}
-			}
+            iterateElementsOnLayer(item, layerIndex, callb);
 		}
+	}
+
+	public static function iterateElementsOnLayer(item:MovieClipItem, layerIndex:Int, callb:Element->{ layerIndex:Int, keyFrameIndex:Int }->Void)
+	{
+        final layer = item.layers[layerIndex];
+        for (keyFrameIndex in 0...layer.keyFrames.length)
+        {
+            final keyFrame = layer.keyFrames[keyFrameIndex];
+            for (element in keyFrame.elements)
+            {
+                callb(element, { keyFrameIndex:keyFrameIndex, layerIndex:layerIndex });
+            }
+        }
 	}
 	
     public static function getUsedNamePathCount(item:MovieClipItem, ?r:Map<String, Int>) : Map<String, Int>

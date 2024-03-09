@@ -92,7 +92,7 @@ class Code extends wquery.Component
 		stage.addChild(sceneBox = new Shape());
 		stage.addChild(root = new Container());
 		
-		root.addChild(milk = new EditorMilk());
+		root.addChild(milk = new EditorMilk(app));
 		
 		root.addChild(field = new Container());
 		field.addChild(container = new Container());

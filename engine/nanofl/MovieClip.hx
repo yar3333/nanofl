@@ -1,12 +1,17 @@
 package nanofl;
 
+import stdlib.Std;
 import js.lib.Map;
 import easeljs.display.Container;
 import easeljs.display.DisplayObject;
+import easeljs.display.Shape;
 import nanofl.engine.LayerType;
 import nanofl.engine.InstanceDisplayObject;
 import nanofl.engine.AdvancableDisplayObject;
 import nanofl.engine.libraryitems.MovieClipItem;
+import nanofl.engine.ElementType;
+import nanofl.engine.elements.Element;
+import nanofl.engine.elements.Instance;
 import stdlib.Debug;
 using stdlib.StringTools;
 using stdlib.Lambda;
@@ -178,9 +183,41 @@ class MovieClip extends Container
 	}
     
     #if ide
-    public function advanceTo(advanceFrames:Int)
+    public function advanceTo(lifetimeOnParent:Int)
     {
-        //Debug.methodNotSupported(this);
+        Debug.assert(currentFrame == 0);
+        if (lifetimeOnParent == 0) return;
+        
+        if (!paused)
+        {
+            gotoFrame
+            (
+                loop ? lifetimeOnParent % getTotalFrames() 
+                     : Std.min(lifetimeOnParent, getTotalFrames() - 1)
+            );
+        }
+
+        final tracker = nanofl.ide.ElementLifeTracker.createForMovieClip(symbol, false);
+        final tracks = tracker.tracks.filter(x -> x.startFrameIndex <= currentFrame && x.startFrameIndex + x.lifetimeFrames > currentFrame);
+        for (i in 0...children.length)
+        {
+            final track = tracks[i];
+            final dispObj = children[i];
+            if (Std.isOfType(dispObj, AdvancableDisplayObject))
+            {
+                (cast dispObj:AdvancableDisplayObject).advanceTo(!paused ? currentFrame - track.startFrameIndex : lifetimeOnParent);
+            }
+        }
+    }
+
+    static function isElementMatchDisplayObject(elem:Element, dispObj:DisplayObject) : Bool
+    {
+        return switch (elem.type)
+        {
+            case ElementType.instance: Std.isOfType(dispObj, InstanceDisplayObject) && (cast elem : Instance).namePath == (cast dispObj : InstanceDisplayObject).symbol.namePath;
+            case ElementType.shape: Std.isOfType(dispObj, Shape);
+            case ElementType.text: Std.isOfType(dispObj, TextField);
+        }
     }
     #end
 	
