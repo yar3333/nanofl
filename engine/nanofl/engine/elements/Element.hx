@@ -12,6 +12,7 @@ using StringTools;
 import htmlparser.HtmlNodeElement;
 import htmlparser.XmlBuilder;
 using htmlparser.HtmlParserTools;
+using stdlib.Lambda;
 #end
 
 abstract class Element
@@ -26,6 +27,8 @@ abstract class Element
 	public var matrix = new Matrix();
 	public var regX = 0.0;
 	public var regY = 0.0;
+
+    public var groups = new Array<String>();
 	
     function new() {}
 	
@@ -57,25 +60,37 @@ abstract class Element
 	}
 	
 	#if ide
-    public static function parse(node:HtmlNodeElement, version:String) : Element
+    public static function parse(node:HtmlNodeElement, version:String, ?groups:Array<String>) : Array<Element>
 	{
-		var element : Element = switch (node.name)
+		if (groups == null) groups = [];
+        
+        if (node.name == "group") // obsolete
+		{
+            final group = stdlib.Uuid.newUuid();
+            final r = new Array<Element>();
+            for (child in node.children) r.addRange(parse(child, version, groups.concat([group])));
+            return r;
+        }
+        
+        var element : Element = switch (node.name)
 		{
 			case "instance": new Instance(null);
 			case "text": new TextElement(null, null, null, null, null, null);
 			case "shape": new ShapeElement();
-			case "group": new GroupElement([]);
             case _: null;
 		};
 		
-		if (element != null)
-		{
-			element.visible = true;
-			if (!element.loadProperties(node, version)) return null;
-			Debug.assert(element.matrix != null);
-		}
+		if (element == null)
+        {
+            js.Browser.console.warn("Unexpected element: " + node.name);
+            return [];
+        }
+
+        element.visible = true;
+        if (!element.loadProperties(node, version)) return [];
+        Debug.assert(element.matrix != null);
 		
-		return element;
+		return [ element ];
 	}
     #end
 
@@ -86,7 +101,6 @@ abstract class Element
             case ElementType.instance: new Instance(null);
             case ElementType.text: new TextElement(null, null, null, null, null, null);
             case ElementType.shape: new ShapeElement();
-            case ElementType.group: new GroupElement([]);
         };
 
         if (element != null)
@@ -105,6 +119,7 @@ abstract class Element
 		matrix = Matrix.load(node);
 		regX = node.getAttr("regX", 0.0);
 		regY = node.getAttr("regY", 0.0);
+        groups = node.getAttr("groups", "").split(",").map(x -> x.trim()).filter(x -> x != "");
 		return true;
 	}
     #end
@@ -114,6 +129,7 @@ abstract class Element
 		matrix = Matrix.loadJson(obj);
 		regX = obj.regX ?? 0.0;
 		regY = obj.regY ?? 0.0;
+        groups = obj.groups ?? new Array<String>();
 		return true;
 	}
 	
@@ -139,6 +155,7 @@ abstract class Element
 		matrix.save(out);
 		out.attr("regX", regX, 0.0);
 		out.attr("regY", regY, 0.0);
+		if (groups.length > 0) out.attr("groups", groups.join(","));
 	}
 
 	function savePropertiesJson(obj:Dynamic) : Void
@@ -146,6 +163,7 @@ abstract class Element
         matrix.saveJson(obj);
         obj.regX = regX ?? 0.0;
         obj.regY = regY ?? 0.0;
+        if (groups.length > 0) obj.groups = groups;
 	}
     #end
 	

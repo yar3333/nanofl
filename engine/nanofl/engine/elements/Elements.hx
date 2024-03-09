@@ -2,6 +2,7 @@ package nanofl.engine.elements;
 
 import datatools.ArrayRO;
 import datatools.ArrayTools;
+using stdlib.Lambda;
 
 class Elements
 {
@@ -12,11 +13,7 @@ class Elements
 		
 		for (node in base.children)
 		{
-			var element = Element.parse(node, version);
-			if (element != null)
-			{
-				elements.push(element);
-			}
+    		elements.addRange(Element.parse(node, version) ?? []);
 		}
 		
 		return elements;
@@ -37,23 +34,6 @@ class Elements
 		}
 		
 		return elements;
-	}
-	
-	public static function expandGroups(elements:ArrayRO<Element>) : Array<Element>
-	{
-		var r = new Array<Element>();
-		for (element in elements)
-		{
-			if (Std.isOfType(element, GroupElement))
-			{
-				r = r.concat(expandGroups((cast element:GroupElement).getChildren()));
-			}
-			else
-			{
-				r.push(element);
-			}
-		}
-		return r;
 	}
 	
 	#if ide

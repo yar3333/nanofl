@@ -9,7 +9,6 @@ import easeljs.geom.Rectangle;
 import easeljs.display.Shape;
 import nanofl.engine.AdvancableDisplayObject;
 import nanofl.engine.elements.Element;
-import nanofl.engine.elements.GroupElement;
 import nanofl.engine.elements.Instance;
 import nanofl.engine.elements.ShapeElement;
 import nanofl.engine.elements.TextElement;
@@ -25,6 +24,7 @@ import nanofl.ide.PropertiesObject;
 import nanofl.ide.editor.EditorLayer;
 import nanofl.ide.ui.View;
 import nanofl.ide.libraryitems.MovieClipItem;
+import nanofl.ide.MovieClipItemTools;
 using nanofl.engine.geom.PointTools;
 using stdlib.Lambda;
 
@@ -70,11 +70,6 @@ abstract class EditorElement implements ISelectable
 		if (Std.isOfType(tweenedElement.original, Instance))
 		{
 			return new EditorElementInstance(layer, editor, navigator, view, frame, tweenedElement);
-		}
-		else
-		if (Std.isOfType(tweenedElement.original, GroupElement))
-		{
-			return new EditorElementGroup(layer, editor, navigator, view, frame, tweenedElement);
 		}
 		else
 		if (Std.isOfType(tweenedElement.original, ShapeElement))

@@ -4,7 +4,6 @@ import htmlparser.XmlBuilder;
 import nanofl.engine.Debug.console;
 import nanofl.engine.elements.Element;
 import nanofl.engine.elements.Elements;
-import nanofl.engine.elements.GroupElement;
 import nanofl.engine.elements.Instance;
 import nanofl.engine.elements.ShapeElement;
 import nanofl.engine.elements.TextElement;
@@ -92,7 +91,7 @@ class SvgExporter
 				
 				xml.begin("clipPath").attr("id", layerID);
 				
-				for (element in Elements.expandGroups(layer.keyFrames[0].elements))
+				for (element in layer.keyFrames[0].elements)
 				{
 					if (Std.is(element, ShapeElement))
 					{
@@ -156,15 +155,6 @@ class SvgExporter
 				xml.attr("xlink:href", "#" + instance.symbol.namePath);
 				exportMatrix(instance.matrix, xml);
 			xml.end();
-		}
-		else
-		if (Std.is(element, GroupElement))
-		{
-			var group : GroupElement = cast element;
-			for (e in group.getChildren())
-			{
-				exportElement(e, xml);
-			}
 		}
 		else
 		if (Std.is(element, ShapeElement))

@@ -83,7 +83,7 @@ class MovieClipItemTools
                 for (keyFrameIndex in 0...(allFrames ? layer.keyFrames.length : 1))
                 {
                     var keyFrame = layer.keyFrames[keyFrameIndex];
-                    for (element in Elements.expandGroups(keyFrame.elements))
+                    for (element in keyFrame.elements)
                     {
                         callb(element, { keyFrameIndex:keyFrameIndex, layerIndex:layerIndex, insideMask:localInsideMask });
                     }

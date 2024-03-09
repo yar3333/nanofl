@@ -8,8 +8,8 @@ extern class EditorLayer {
 	private function get_parentIndex():Int;
 	var type(get, never) : nanofl.engine.LayerType;
 	private function get_type():nanofl.engine.LayerType;
-	var shape(default, null) : nanofl.ide.editor.elements.EditorElementShape;
-	var container(default, null) : easeljs.display.Container;
+	var shape : nanofl.ide.editor.elements.EditorElementShape;
+	var container : easeljs.display.Container;
 	function addElements(elements:Array<nanofl.engine.elements.Element>, ?index:Int):Array<nanofl.ide.editor.elements.EditorElement>;
 	function removeSelected():Void;
 	function hasItem(item:nanofl.ide.editor.elements.EditorElement):Bool;

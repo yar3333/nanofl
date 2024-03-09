@@ -122,9 +122,6 @@ class MovieClipGotoHelper
 
                 case ElementType.text:
                     mc.replaceChild(dispObj, createDisplayObject(layer, layerIndex, elem));
-
-                case ElementType.group:
-                    throw new Error("Element type 'group' is unexpected.");
             }
 
             matched++;
@@ -183,7 +180,6 @@ class MovieClipGotoHelper
             case ElementType.instance: Std.isOfType(dispObj, InstanceDisplayObject) && (cast elem : Instance).namePath == (cast dispObj : InstanceDisplayObject).symbol.namePath;
             case ElementType.shape: Std.isOfType(dispObj, Shape);
             case ElementType.text: Std.isOfType(dispObj, TextField);
-            case ElementType.group: throw new Error("Element type 'group' is unexpected.");
         }
     }
 }

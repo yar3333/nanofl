@@ -4,6 +4,5 @@ enum ElementType
 {
     shape;
     instance;
-    group;
     text;
 }

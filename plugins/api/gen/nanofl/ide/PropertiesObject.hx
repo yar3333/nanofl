@@ -6,5 +6,5 @@ extern enum PropertiesObject {
 	NONE;
 	KEY_FRAME(keyFrame:nanofl.engine.movieclip.KeyFrame);
 	INSTANCE(item:nanofl.ide.editor.elements.EditorElementInstance);
-	GROUP(item:nanofl.ide.editor.elements.EditorElementGroup);
+	GROUP(items:Array<nanofl.ide.editor.elements.EditorElement>);
 }

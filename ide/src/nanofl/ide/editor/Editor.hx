@@ -1,5 +1,6 @@
 package nanofl.ide.editor;
 
+import stdlib.Uuid;
 import easeljs.display.Container;
 import easeljs.geom.Rectangle;
 import htmlparser.XmlBuilder;
@@ -10,7 +11,6 @@ import nanofl.engine.Version;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.engine.elements.Element;
 import nanofl.engine.elements.Elements;
-import nanofl.engine.elements.GroupElement;
 import nanofl.engine.elements.Instance;
 import nanofl.engine.elements.ShapeElement;
 import nanofl.engine.geom.Matrix;
@@ -508,13 +508,16 @@ class Editor extends InjectContainer
 			elements.push(item.originalElement);
 		}
 		
-		if (elements.length > 0)
+		if (elements.length > 1)
 		{
 			document.undoQueue.beginTransaction({ figure:true, elements:true });
 			
 			removeSelectedInner();
-			var editedElement = activeLayer.addElement(new GroupElement(elements));
-			editedElement.selected = true;
+            final groupId = Uuid.newUuid();
+            for (elem in elements)
+            {
+                elem.groups.push(groupId);
+            }
 			
 			document.undoQueue.commitTransaction();
 			tool.selectionChange();

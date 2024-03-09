@@ -12,7 +12,6 @@ import nanofl.engine.coloreffects.ColorEffectTint;
 import nanofl.engine.ColorTools;
 import nanofl.engine.Debug.console;
 import nanofl.engine.elements.Element;
-import nanofl.engine.elements.GroupElement;
 import nanofl.engine.elements.Instance;
 import nanofl.engine.elements.ShapeElement;
 import nanofl.engine.elements.TextElement;
@@ -208,11 +207,11 @@ class SymbolLoader
 					}
 					else
 					{
-						r.push(new GroupElement(loadShape(namePath, element, parentMatrix)));
+						r.addRange(loadShape(namePath, element, parentMatrix));
 					}
 					
 				case "DOMRectangleObject":
-					r.push(new GroupElement(loadDrawing(namePath, element, parentMatrix, function(strokes, fills)
+					r.addRange(loadDrawing(namePath, element, parentMatrix, (strokes, fills) ->
 					{
 						return ShapeElement.createRectangle
 						(
@@ -227,10 +226,10 @@ class SymbolLoader
 							strokes.length > 0 ? strokes[0] : null,
 							fills.length > 0 ? fills[0] : null
 						);
-					})));
+					}));
 					
 				case "DOMOvalObject":
-					r.push(new GroupElement(loadDrawing(namePath, element, parentMatrix, function(strokes, fills)
+					r.addRange(loadDrawing(namePath, element, parentMatrix, (strokes, fills) ->
 					{
 						return ShapeElement.createOval
 						(
@@ -245,7 +244,7 @@ class SymbolLoader
 							strokes.length > 0 ? strokes[0] : null,
 							fills.length > 0 ? fills[0] : null
 						);
-					})));
+					}));
 					
 				case "DOMStaticText", "DOMDynamicText", "DOMInputText":
 					r.push(loadText(element, parentMatrix));
@@ -254,10 +253,8 @@ class SymbolLoader
 					var elements = element.find(">members>*");
 					if (elements.length > 0)
 					{
-						var m = MatrixParser.load(element.findOne(">matrix>Matrix"));
-						var group = new GroupElement(loadElements(namePath, elements, m.clone().invert().prependMatrix(parentMatrix)));
-						group.matrix = m;
-						r.push(group);
+						final m = MatrixParser.load(element.findOne(">matrix>Matrix"));
+                        r.addRange(loadElements(namePath, elements, parentMatrix.appendMatrix(m))); // TODO: check matrix
 					}
 					
 				case "DOMTLFText":
@@ -272,7 +269,7 @@ class SymbolLoader
 	
 	function loadShape(namePath:String, element:HtmlNodeElement, parentMatrix:Matrix) : Array<Element>
 	{
-		return loadDrawing(namePath, element, parentMatrix, function(strokes, fills)
+		return loadDrawing(namePath, element, parentMatrix, (strokes, fills) ->
 		{
 			return new ShapeConvertor(strokes, fills, loadEdgeDatas(element)).convert();
 		});

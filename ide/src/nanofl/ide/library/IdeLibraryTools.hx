@@ -1,6 +1,5 @@
 package nanofl.ide.library;
 
-import nanofl.engine.Library;
 import nanofl.engine.LayerType;
 import nanofl.ide.MovieClipItemTools;
 import nanofl.engine.elements.Element;
@@ -25,7 +24,7 @@ class IdeLibraryTools
 			
 			var itemsToRemove = new Array<String>();
 			
-			MovieClipItemTools.findInstances(library.getSceneItem(), (instance:Instance, parent) ->
+			MovieClipItemTools.findInstances(library.getSceneItem(), (instance, parent) ->
 			{
 				if (uses.get(instance.namePath) == 1)
 				{

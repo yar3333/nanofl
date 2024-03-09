@@ -4,5 +4,4 @@ package nanofl.engine;
 	text;
 	shape;
 	instance;
-	group;
 }
