@@ -8,7 +8,6 @@ import js.lib.Promise;
 import easeljs.display.SpriteSheet;
 import nanofl.engine.ILayersContainer;
 import nanofl.engine.ITextureItem;
-import nanofl.engine.ITimeline;
 import nanofl.engine.Library;
 import nanofl.engine.ILibraryItem;
 import nanofl.engine.elements.Element;
@@ -28,7 +27,6 @@ using htmlparser.HtmlParserTools;
 
 class MovieClipItem	extends InstancableItem
 	implements ILayersContainer
-	implements ITimeline
 	implements ITextureItem
     implements ISpritableItem
     implements IPlayableItem

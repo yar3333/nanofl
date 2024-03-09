@@ -3,7 +3,6 @@ package nanofl.ide.libraryitems;
 import haxe.Json;
 import nanofl.engine.SerializationAsJsTools;
 import nanofl.ide.sys.FileSystem;
-import nanofl.engine.IPathElement;
 import htmlparser.HtmlNodeElement;
 import js.lib.Promise;
 import nanofl.ide.libraryitems.IIdeLibraryItem;

@@ -11,7 +11,6 @@ import nanofl.ide.Document;
 import nanofl.ide.preferences.Preferences;
 import nanofl.ide.ui.View;
 import nanofl.ide.undo.states.NavigatorState;
-import nanofl.engine.IPathElement;
 using stdlib.Lambda;
 using nanofl.engine.LayersTools;
 
@@ -38,7 +37,7 @@ class Navigator extends InjectContainer
 		this.editPath = [];
 	}
 	
-	public function navigateDown(container:IPathElement)
+	public function navigateDown(container:Instance)
 	{
         document.undoQueue.commitTransaction();
 		editPath.push(new PathItem(container));
@@ -132,7 +131,7 @@ class Navigator extends InjectContainer
 		{
 			editPath.push(new PathItem
             (
-                (cast parent.frame.keyFrame.elements[next.elementIndex] : IPathElement),
+                (cast parent.frame.keyFrame.elements[next.elementIndex] : Instance),
                 next.layerIndex,
                 next.frameIndex
             ));

@@ -3,12 +3,12 @@ package nanofl.engine.elements;
 import datatools.ArrayRO;
 import datatools.ArrayTools;
 import datatools.NullTools;
-import nanofl.engine.IPathElement;
 import nanofl.engine.Library;
 import nanofl.engine.coloreffects.ColorEffect;
 import nanofl.engine.elements.Element;
 import nanofl.engine.geom.Point;
 import nanofl.engine.libraryitems.InstancableItem;
+import nanofl.engine.libraryitems.MovieClipItem;
 import nanofl.engine.movieclip.Layer;
 import stdlib.Debug;
 using stdlib.Lambda;
@@ -20,7 +20,6 @@ using htmlparser.HtmlParserTools;
 #end
 
 class Instance extends Element
-	implements IPathElement
 {
 	function get_type() return ElementType.instance;
 	
@@ -224,9 +223,9 @@ class Instance extends Element
 		return r;
 	}
 	
-	public function getTimeline() : nanofl.engine.ITimeline
+	public function getTimeline() : MovieClipItem
 	{
-		return Std.isOfType(symbol, nanofl.engine.ITimeline) ? cast symbol : null;
+		return Std.isOfType(symbol, MovieClipItem) ? cast symbol : null;
 	}
 	
 	override function getNearestPointsLocal(pos:Point) : Array<Point>

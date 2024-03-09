@@ -21,7 +21,8 @@ private typedef TLFrame = components.nanofl.movie.timeline.TLFrame;
 private typedef TLLayer = components.nanofl.movie.timeline.TLLayer;
 private typedef TLKeyFrame = components.nanofl.movie.timeline.TLKeyFrame;
 
-class TimelineAdapterToEditor implements components.nanofl.movie.timeline.ITimelineAdapter
+class TimelineAdapterToEditor 
+    implements components.nanofl.movie.timeline.ITimelineAdapter
 {
 	var editor : Editor;
 	var undoQueue : UndoQueue;

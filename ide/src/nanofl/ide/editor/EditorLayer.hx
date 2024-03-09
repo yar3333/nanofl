@@ -1,9 +1,9 @@
 package nanofl.ide.editor;
 
+import nanofl.engine.elements.Instance;
 import nanofl.engine.MaskTools;
 import easeljs.display.Container;
 import nanofl.engine.movieclip.GuideLine;
-import nanofl.engine.IPathElement;
 import nanofl.engine.elements.ShapeElement;
 import nanofl.engine.elements.TextElement;
 import nanofl.engine.geom.Edge;
@@ -278,10 +278,10 @@ class EditorLayer
 			var item = items[i];
 			if (item.selected)
 			{
-				if (Std.isOfType(item.originalElement, IPathElement))
+				if (Std.isOfType(item.originalElement, Instance))
 				{
 					removeItemAt(i);
-					var containerElement : IPathElement = cast item.originalElement;
+					var containerElement : Instance = cast item.originalElement;
 					for (child in containerElement.getChildren())
 					{
 						if (Std.isOfType(child, ShapeElement))
