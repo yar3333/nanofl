@@ -1,5 +1,6 @@
 package nanofl.ide;
 
+import stdlib.Debug;
 import nanofl.engine.movieclip.Layer;
 import js.lib.Set;
 import nanofl.engine.LibraryItemType;
@@ -8,16 +9,19 @@ import nanofl.engine.elements.Instance;
 import nanofl.engine.elements.Element;
 import nanofl.engine.libraryitems.MovieClipItem;
 using nanofl.engine.MovieClipItemTools;
+using stdlib.Lambda;
 
 typedef ElementLifeTrack =
 {
-    var element : Element;
+    var sameElementSequence : Array<Element>;
     var startFrameIndex : Int;
     var lifetimeFrames : Int;
 }
 
 class ElementLifeTracker
 {
+    var ignoreElements = new Set<Element>();
+    
     public final tracks = new Array<ElementLifeTrack>();
 
     function new() {}
@@ -25,7 +29,8 @@ class ElementLifeTracker
     public static function createForMovieClip(item:MovieClipItem, deep:Bool) : ElementLifeTracker
     {
         var r = new ElementLifeTracker();
-        r.processMovieClipItem(item, 0, item.getTotalFrames(), deep, new Set<Element>());
+        r.processMovieClipItem(item, 0, item.getTotalFrames(), deep);
+        r.ignoreElements = null;
         return r;
     }
 
@@ -33,20 +38,21 @@ class ElementLifeTracker
     {
         final itemTotalFrames = item.getTotalFrames();
         var r = new ElementLifeTracker();
-        r.processLayer(item, layerIndex, itemTotalFrames, 0, itemTotalFrames, deep, new Set<Element>());
+        r.processLayer(item, layerIndex, itemTotalFrames, 0, itemTotalFrames, deep);
+        r.ignoreElements = null;
         return r;
     }
 
-    function processMovieClipItem(item:MovieClipItem, globalFrameIndex:Int, lifetimeOnParent:Int, deep:Bool, ignoreElements:Set<Element>)
+    function processMovieClipItem(item:MovieClipItem, globalFrameIndex:Int, lifetimeOnParent:Int, deep:Bool)
     {
         final itemTotalFrames = item.getTotalFrames();
         for (layerIndex in 0...item.layers.length)
         {
-            processLayer(item, layerIndex, itemTotalFrames, 0, itemTotalFrames, deep, ignoreElements);
+            processLayer(item, layerIndex, itemTotalFrames, 0, itemTotalFrames, deep);
         }
     }
     
-    function processLayer(item:MovieClipItem, layerIndex:Int, itemTotalFrames:Int, globalFrameIndex:Int, lifetimeOnParent:Int, deep:Bool, ignoreElements:Set<Element>)
+    function processLayer(item:MovieClipItem, layerIndex:Int, itemTotalFrames:Int, globalFrameIndex:Int, lifetimeOnParent:Int, deep:Bool)
     {
         final layer = item.layers[layerIndex];
         
@@ -58,16 +64,15 @@ class ElementLifeTracker
                 if (ignoreElements.has(element)) continue;
                 if (!item.autoPlay && keyFrameIndex > 0) continue;
 
-                final frameIndex = keyFrame.getIndex();
-                final duration = detectElementDuration(item, layer, keyFrameIndex, element, ignoreElements);
-                final lifetimeFrames = frameIndex + duration < itemTotalFrames ? duration : lifetimeOnParent;
+                final sameElementSequence = [ element ];
+                final duration = detectRelatedElementsAndDuration(layer, keyFrameIndex, element, sameElementSequence);
                 
-                final parent : MovieClipItem = cast element.parent;
-                stdlib.Debug.assert(Std.isOfType(parent, MovieClipItem));
+                final frameIndex = keyFrame.getIndex();
+                final lifetimeFrames = frameIndex + duration < itemTotalFrames ? duration : lifetimeOnParent;
 
                 tracks.push
                 ({
-                    element: element,
+                    sameElementSequence: sameElementSequence,
                     startFrameIndex: globalFrameIndex + frameIndex,
                     lifetimeFrames: lifetimeFrames
                 });
@@ -78,35 +83,58 @@ class ElementLifeTracker
                     {
                         final instance : Instance = cast element;
                         final mcChild : MovieClipItem = cast instance.symbol;
-                        processMovieClipItem(mcChild, globalFrameIndex + frameIndex, lifetimeFrames, true, ignoreElements);
+                        processMovieClipItem(mcChild, globalFrameIndex + frameIndex, lifetimeFrames, true);
                     }
                 }
             }
         }
     }
 
-    function detectElementDuration(parent:MovieClipItem, layer:Layer, keyFrameIndex:Int, element:Element, ignoreElements:Set<Element>) : Int
+    function detectRelatedElementsAndDuration(baseLayer:Layer, baseKeyFrameIndex:Int, baseElement:Element, sameElementSequence:Array<Element>) : Int
     {
-        final baseKeyFrame = layer.keyFrames[keyFrameIndex];
+        final baseKeyFrame = baseLayer.keyFrames[baseKeyFrameIndex];
         
-        if (element.type != ElementType.instance) return baseKeyFrame.duration;
+        if (baseElement.type != ElementType.instance) return baseKeyFrame.duration;
+
+        final baseElements = baseKeyFrame.elements.skipWhile(x -> x.type == ElementType.shape);
 
         var r = baseKeyFrame.duration;
-        for (keyFrame in layer.keyFrames.slice(keyFrameIndex + 1))
+        for (curKeyFrame in baseLayer.keyFrames.slice(baseKeyFrameIndex + 1))
         {
-            for (i in 0...(baseKeyFrame.elements.indexOf(element) + 1))
-            {
-                final a = keyFrame.elements[i];
-                final b = baseKeyFrame.elements[i];
-                
-                if (a.type != b.type) return r;
-                if (a.type != ElementType.instance) continue;
-                if ((cast a:Instance).namePath != (cast b:Instance).namePath) return r;
-                
-                ignoreElements.add(a);
-                r += keyFrame.duration;
-            }
+            final curInstance = findMatch(baseElements, curKeyFrame.elements.skipWhile(x -> x.type == ElementType.shape), (cast baseElement : Instance));
+            if (curInstance == null) break;
+            ignoreElements.add(curInstance);
+            sameElementSequence.push(curInstance);
+            r += curKeyFrame.duration;
         }
         return r;
+    }
+
+    static function findMatch(a:Array<Element>, b:Array<Element>, instanceInA:Instance) : Instance
+    {
+        final limit = a.indexOf(instanceInA);
+        Debug.assert(limit >= 0);
+
+        if (b.length < limit + 1) return null;
+        
+        for (i in 0...(limit + 1))
+        {
+            final elemA = a[i];
+            final elemB = b[i];
+            
+            if (elemA.type != elemB.type) return null;
+            if (elemA.type != ElementType.instance) return null;
+            if ((cast elemA:Instance).namePath != (cast elemB:Instance).namePath) return null;
+        }
+
+        return (cast b[limit] : Instance);
+    }
+
+    public function getTrackOne(element:Element) : ElementLifeTrack
+    {
+        final tracks = tracks.filter(x -> x.sameElementSequence.contains(element));
+        if (tracks.length == 0) return null;
+        Debug.assert(tracks.length == 1);
+        return tracks[0];
     }
 }

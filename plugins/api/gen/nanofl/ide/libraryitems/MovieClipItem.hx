@@ -1,6 +1,6 @@
 package nanofl.ide.libraryitems;
 
-extern class MovieClipItem extends nanofl.engine.libraryitems.MovieClipItem implements nanofl.ide.IIdeTimeline implements nanofl.ide.libraryitems.IIdeInstancableItem {
+extern class MovieClipItem extends nanofl.engine.libraryitems.MovieClipItem implements nanofl.ide.libraryitems.IIdeInstancableItem {
 	function new(namePath:String):Void;
 	override function clone():nanofl.ide.libraryitems.MovieClipItem;
 	override function createDisplayObject():nanofl.MovieClip;

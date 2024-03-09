@@ -1123,7 +1123,7 @@ flashimport_SymbolLoader.prototype = {
 	loadFromFile: function(href) {
 		var namePath = flashimport_PathTools.unescape(haxe_io_Path.withoutExtension(href));
 		if(!this.library.hasItem(namePath)) {
-			flashimport_SymbolLoader.log("Load item \"" + namePath + "\"",{ fileName : "src-plugin/flashimport/SymbolLoader.hx", lineNumber : 78, className : "flashimport.SymbolLoader", methodName : "loadFromFile"});
+			flashimport_SymbolLoader.log("Load item \"" + namePath + "\"",{ fileName : "src-plugin/flashimport/SymbolLoader.hx", lineNumber : 77, className : "flashimport.SymbolLoader", methodName : "loadFromFile"});
 			if(this.fileSystem.exists(this.srcLibDir + "/" + href)) {
 				this.loadFromXml(namePath,new htmlparser_XmlDocument(this.fileSystem.getContent(this.srcLibDir + "/" + href)));
 			}
@@ -1211,33 +1211,31 @@ flashimport_SymbolLoader.prototype = {
 				var elements1 = element[0].find(">members>*");
 				if(elements1.length > 0) {
 					var m = flashimport_MatrixParser.load(htmlparser_HtmlParserTools.findOne(element[0],">matrix>Matrix"));
-					var group = new nanofl.engine.elements.GroupElement(this.loadElements(namePath,elements1,m.clone().invert().prependMatrix(parentMatrix)));
-					group.matrix = m;
-					r.push(group);
+					stdlib_LambdaArray.addRange(r,this.loadElements(namePath,elements1,parentMatrix.appendMatrix(m)));
 				}
 				break;
 			case "DOMDynamicText":case "DOMInputText":case "DOMStaticText":
 				r.push(this.loadText(element[0],parentMatrix));
 				break;
 			case "DOMOvalObject":
-				r.push(new nanofl.engine.elements.GroupElement(this.loadDrawing(namePath,element[0],parentMatrix,(function(element) {
+				stdlib_LambdaArray.addRange(r,this.loadDrawing(namePath,element[0],parentMatrix,(function(element) {
 					return function(strokes,fills) {
 						return nanofl.engine.elements.ShapeElement.createOval(htmlparser_HtmlParserTools.getAttrFloat(element[0],"x") + htmlparser_HtmlParserTools.getAttrFloat(element[0],"objectWidth") / 2,htmlparser_HtmlParserTools.getAttrFloat(element[0],"y") + htmlparser_HtmlParserTools.getAttrFloat(element[0],"objectHeight") / 2,htmlparser_HtmlParserTools.getAttrFloat(element[0],"objectWidth") / 2,htmlparser_HtmlParserTools.getAttrFloat(element[0],"objectHeight") / 2,htmlparser_HtmlParserTools.getAttrFloat(element[0],"startAngle",0.0),htmlparser_HtmlParserTools.getAttrFloat(element[0],"endAngle",360.0),htmlparser_HtmlParserTools.getAttrFloat(element[0],"innerRadius",0.0),htmlparser_HtmlParserTools.getAttrBool(element[0],"closePath",true),strokes.length > 0 ? strokes[0] : null,fills.length > 0 ? fills[0] : null);
 					};
-				})(element))));
+				})(element)));
 				break;
 			case "DOMRectangleObject":
-				r.push(new nanofl.engine.elements.GroupElement(this.loadDrawing(namePath,element[0],parentMatrix,(function(element) {
+				stdlib_LambdaArray.addRange(r,this.loadDrawing(namePath,element[0],parentMatrix,(function(element) {
 					return function(strokes,fills) {
 						return nanofl.engine.elements.ShapeElement.createRectangle(htmlparser_HtmlParserTools.getAttrFloat(element[0],"x"),htmlparser_HtmlParserTools.getAttrFloat(element[0],"y"),htmlparser_HtmlParserTools.getAttrFloat(element[0],"objectWidth"),htmlparser_HtmlParserTools.getAttrFloat(element[0],"objectHeight"),htmlparser_HtmlParserTools.getAttrFloat(element[0],"topLeftRadius",0.0),htmlparser_HtmlParserTools.getAttrFloat(element[0],"topRightRadius",0.0),htmlparser_HtmlParserTools.getAttrFloat(element[0],"bottomRightRadius",0.0),htmlparser_HtmlParserTools.getAttrFloat(element[0],"bottomLeftRadius",0.0),strokes.length > 0 ? strokes[0] : null,fills.length > 0 ? fills[0] : null);
 					};
-				})(element))));
+				})(element)));
 				break;
 			case "DOMShape":
 				if(!htmlparser_HtmlParserTools.getAttr(element[0],"isDrawingObject",false)) {
 					r = r.concat(this.loadShape(namePath,element[0],parentMatrix));
 				} else {
-					r.push(new nanofl.engine.elements.GroupElement(this.loadShape(namePath,element[0],parentMatrix)));
+					stdlib_LambdaArray.addRange(r,this.loadShape(namePath,element[0],parentMatrix));
 				}
 				break;
 			case "DOMTLFText":
@@ -3742,13 +3740,6 @@ nanofl_engine_IMotionTween.__isInterface__ = true;
 nanofl_engine_IMotionTween.prototype = {
 	__class__: nanofl_engine_IMotionTween
 };
-var nanofl_engine_IPathElement = function() { };
-nanofl_engine_IPathElement.__name__ = "nanofl.engine.IPathElement";
-nanofl_engine_IPathElement.__isInterface__ = true;
-nanofl_engine_IPathElement.__interfaces__ = [nanofl_engine_ILayersContainer];
-nanofl_engine_IPathElement.prototype = {
-	__class__: nanofl_engine_IPathElement
-};
 var nanofl_engine_ISelectable = function() { };
 nanofl_engine_ISelectable.__name__ = "nanofl.engine.ISelectable";
 nanofl_engine_ISelectable.__isInterface__ = true;
@@ -3760,12 +3751,6 @@ nanofl_engine_ITextureItem.__name__ = "nanofl.engine.ITextureItem";
 nanofl_engine_ITextureItem.__isInterface__ = true;
 nanofl_engine_ITextureItem.prototype = {
 	__class__: nanofl_engine_ITextureItem
-};
-var nanofl_engine_ITimeline = function() { };
-nanofl_engine_ITimeline.__name__ = "nanofl.engine.ITimeline";
-nanofl_engine_ITimeline.__isInterface__ = true;
-nanofl_engine_ITimeline.prototype = {
-	__class__: nanofl_engine_ITimeline
 };
 var nanofl_engine_fills_IFill = function() { };
 nanofl_engine_fills_IFill.__name__ = "nanofl.engine.fills.IFill";
@@ -3779,18 +3764,17 @@ nanofl_engine_libraryitems_ISpritableItem.__isInterface__ = true;
 nanofl_engine_libraryitems_ISpritableItem.prototype = {
 	__class__: nanofl_engine_libraryitems_ISpritableItem
 };
+var nanofl_engine_libraryitems_IPlayableItem = function() { };
+nanofl_engine_libraryitems_IPlayableItem.__name__ = "nanofl.engine.libraryitems.IPlayableItem";
+nanofl_engine_libraryitems_IPlayableItem.__isInterface__ = true;
+nanofl_engine_libraryitems_IPlayableItem.prototype = {
+	__class__: nanofl_engine_libraryitems_IPlayableItem
+};
 var nanofl_engine_strokes_IStroke = function() { };
 nanofl_engine_strokes_IStroke.__name__ = "nanofl.engine.strokes.IStroke";
 nanofl_engine_strokes_IStroke.__isInterface__ = true;
 nanofl_engine_strokes_IStroke.prototype = {
 	__class__: nanofl_engine_strokes_IStroke
-};
-var nanofl_ide_IIdeTimeline = function() { };
-nanofl_ide_IIdeTimeline.__name__ = "nanofl.ide.IIdeTimeline";
-nanofl_ide_IIdeTimeline.__isInterface__ = true;
-nanofl_ide_IIdeTimeline.__interfaces__ = [nanofl_engine_ITimeline];
-nanofl_ide_IIdeTimeline.prototype = {
-	__class__: nanofl_ide_IIdeTimeline
 };
 var nanofl_ide_ISymbol = function() { };
 nanofl_ide_ISymbol.__name__ = "nanofl.ide.ISymbol";
@@ -4197,6 +4181,14 @@ stdlib_LambdaIterable.filterByType = function(it,klass) {
 			r.push(x1);
 		}
 	}
+	return r;
+};
+stdlib_LambdaIterable.skipWhile = function(it,f) {
+	var iterator = $getIterator(it);
+	while(iterator.hasNext() && f(iterator.next())) {
+	}
+	var r = [];
+	while(iterator.hasNext()) r.push(iterator.next());
 	return r;
 };
 var stdlib_LambdaIterator = function() { };

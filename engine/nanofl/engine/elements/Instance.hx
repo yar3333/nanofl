@@ -181,7 +181,6 @@ class Instance extends Element
 	{
 		if (dispObj.filters == null) dispObj.filters = [];
 		
-		dispObj.alpha = 1.0;
 		if (colorEffect != null) colorEffect.apply(dispObj);
 		
 		for (filter in filters)

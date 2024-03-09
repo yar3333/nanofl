@@ -949,6 +949,14 @@ stdlib_LambdaIterable.filterByType = function(it,klass) {
 	}
 	return r;
 };
+stdlib_LambdaIterable.skipWhile = function(it,f) {
+	var iterator = $getIterator(it);
+	while(iterator.hasNext() && f(iterator.next())) {
+	}
+	var r = [];
+	while(iterator.hasNext()) r.push(iterator.next());
+	return r;
+};
 var stdlib_LambdaIterator = function() { };
 stdlib_LambdaIterator.__name__ = true;
 stdlib_LambdaIterator.array = function(it) {

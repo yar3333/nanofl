@@ -1,6 +1,6 @@
 package nanofl.engine.elements;
 
-extern class Instance extends nanofl.engine.elements.Element implements nanofl.engine.IPathElement {
+extern class Instance extends nanofl.engine.elements.Element {
 	function new(namePath:String, ?name:String, ?colorEffect:nanofl.engine.coloreffects.ColorEffect, ?filters:Array<nanofl.engine.FilterDef>, ?blendMode:nanofl.engine.BlendModes, ?meshParams:nanofl.engine.MeshParams):Void;
 	var namePath : String;
 	var name : String;
@@ -25,7 +25,7 @@ extern class Instance extends nanofl.engine.elements.Element implements nanofl.e
 	function getNavigatorName():String;
 	function getNavigatorIcon():String;
 	function getChildren():Array<nanofl.engine.elements.Element>;
-	function getTimeline():nanofl.engine.ITimeline;
+	function getTimeline():nanofl.engine.libraryitems.MovieClipItem;
 	override function setLibrary(library:nanofl.engine.Library):Void;
 	override function equ(element:nanofl.engine.elements.Element):Bool;
 	function getFilters():Array<nanofl.engine.FilterDef>;

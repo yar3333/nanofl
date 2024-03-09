@@ -1,5 +1,6 @@
 package nanofl;
 
+import nanofl.engine.movieclip.KeyFrame;
 import stdlib.Std;
 import js.lib.Map;
 import easeljs.display.Container;
@@ -198,26 +199,36 @@ class MovieClip extends Container
         }
 
         final tracker = nanofl.ide.ElementLifeTracker.createForMovieClip(symbol, false);
-        final tracks = tracker.tracks.filter(x -> x.startFrameIndex <= currentFrame && x.startFrameIndex + x.lifetimeFrames > currentFrame);
-        for (i in 0...children.length)
+
+        for (layerIndex in 0...symbol.layers.length)
         {
-            final track = tracks[i];
-            final dispObj = children[i];
-            if (Std.isOfType(dispObj, AdvancableDisplayObject))
+            final layer = symbol.layers[layerIndex];
+            final frame = layer.getFrame(currentFrame);
+            if (frame == null) continue;
+            final elements = frame.keyFrame.elements;
+            final dispObjs = getChildrenByLayerIndex(layerIndex);
+            Debug.assert(elements.length == dispObjs.length);
+            
+            for (j in 0...elements.length)
             {
+                final dispObj = dispObjs[j];
+                if (!Std.isOfType(dispObj, AdvancableDisplayObject)) continue;
+                final track = tracker.getTrackOne(elements[j]);
+                Debug.assert(track != null);
                 (cast dispObj:AdvancableDisplayObject).advanceTo(!paused ? currentFrame - track.startFrameIndex : lifetimeOnParent);
             }
         }
     }
 
-    static function isElementMatchDisplayObject(elem:Element, dispObj:DisplayObject) : Bool
+    public function getChildByElement(elem:Element) : DisplayObject
     {
-        return switch (elem.type)
-        {
-            case ElementType.instance: Std.isOfType(dispObj, InstanceDisplayObject) && (cast elem : Instance).namePath == (cast dispObj : InstanceDisplayObject).symbol.namePath;
-            case ElementType.shape: Std.isOfType(dispObj, Shape);
-            case ElementType.text: Std.isOfType(dispObj, TextField);
-        }
+        final keyFrame : KeyFrame = cast elem.parent;
+        final layerIndex = keyFrame.layer.getIndex();
+        final elements = keyFrame.elements;
+        final displayObjects = getChildrenByLayerIndex(layerIndex);
+        final n = elements.indexOf(elem);
+        Debug.assert(n >= 0);
+        return displayObjects[n];
     }
     #end
 	

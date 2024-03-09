@@ -1,6 +1,6 @@
 package nanofl.engine.libraryitems;
 
-extern class MovieClipItem extends nanofl.engine.libraryitems.InstancableItem implements nanofl.engine.libraryitems.IPlayableItem implements nanofl.engine.libraryitems.ISpritableItem implements nanofl.engine.ITextureItem implements nanofl.engine.ITimeline implements nanofl.engine.ILayersContainer {
+extern class MovieClipItem extends nanofl.engine.libraryitems.InstancableItem implements nanofl.engine.libraryitems.IPlayableItem implements nanofl.engine.libraryitems.ISpritableItem implements nanofl.engine.ITextureItem implements nanofl.engine.ILayersContainer {
 	function new(namePath:String):Void;
 	var _layers : Array<nanofl.engine.movieclip.Layer>;
 	var layers(get, never) : Array<nanofl.engine.movieclip.Layer>;

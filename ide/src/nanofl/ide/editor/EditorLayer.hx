@@ -1,5 +1,6 @@
 package nanofl.ide.editor;
 
+import nanofl.ide.ElementLifeTracker.ElementLifeTrack;
 import nanofl.engine.elements.Instance;
 import nanofl.engine.MaskTools;
 import easeljs.display.Container;
@@ -50,6 +51,8 @@ class EditorLayer
     public final shape : EditorElementShape;
 	
 	public final container = new Container();
+
+    var elementLifeTracker : ElementLifeTracker;
 	
 	@:noapi 
 	public function new(editor:Editor, navigator:Navigator, view:View, layer:Layer, frameIndex:Int)
@@ -65,6 +68,7 @@ class EditorLayer
 		{
 			frame.keyFrame.getShape(true).deselectAll();
 			
+            elementLifeTracker = ElementLifeTracker.createForLayer(navigator.pathItem.getTimeline(), layer.getIndex(), false);
 			for (tweenedElement in frame.keyFrame.getTweenedElements(frame.subIndex))
 			{
 				addDisplayObject(tweenedElement);
@@ -183,7 +187,7 @@ class EditorLayer
 	@:noprofile
 	function addDisplayObject(tweenedElement:TweenedElement, ?index:Int) : EditorElement
 	{
-		var item = EditorElement.create(this, editor, navigator, view, frame, tweenedElement);
+		var item = EditorElement.create(this, editor, navigator, view, frame, tweenedElement, elementLifeTracker.getTrackOne(tweenedElement.original));
 		
 		container.addChildAt(item.metaDispObj, index != null ? index : container.numChildren);
 		items.insert(index != null ? index : items.length, item);
@@ -194,6 +198,7 @@ class EditorLayer
 	public function addElement(element:Element, ?index:Int) : EditorElement
 	{
 		frame.keyFrame.addElement(element, index);
+        elementLifeTracker = ElementLifeTracker.createForLayer(navigator.pathItem.getTimeline(), layer.getIndex(), false);
 		return addDisplayObject(new TweenedElement(element, element), index);
 	}
 	

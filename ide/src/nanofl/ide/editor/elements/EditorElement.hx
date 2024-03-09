@@ -1,5 +1,7 @@
 package nanofl.ide.editor.elements;
 
+import js.Browser;
+import nanofl.ide.ElementLifeTracker.ElementLifeTrack;
 import js.lib.Error;
 import stdlib.Debug;
 import easeljs.display.Container;
@@ -64,22 +66,26 @@ abstract class EditorElement implements ISelectable
 	
 	public var width(get, set) : Float;
 	public var height(get, set) : Float;
+
+    final track : ElementLifeTrack;
 	
-	public static function create(layer:EditorLayer, editor:Editor, navigator:Navigator, view:View, frame:Frame, tweenedElement:TweenedElement) : EditorElement
+	public static function create(layer:EditorLayer, editor:Editor, navigator:Navigator, view:View, frame:Frame, tweenedElement:TweenedElement, track:ElementLifeTrack) : EditorElement
 	{
+        Debug.assert(track != null);
+        
 		if (Std.isOfType(tweenedElement.original, Instance))
 		{
-			return new EditorElementInstance(layer, editor, navigator, view, frame, tweenedElement);
+			return new EditorElementInstance(layer, editor, navigator, view, frame, tweenedElement, track);
 		}
 		else
 		if (Std.isOfType(tweenedElement.original, ShapeElement))
 		{
-			return new EditorElementShape(layer, editor, navigator, view, frame, tweenedElement);
+			return new EditorElementShape(layer, editor, navigator, view, frame, tweenedElement, track);
 		}
 		else
 		if (Std.isOfType(tweenedElement.original, TextElement))
 		{
-			return new EditorElementText(layer, editor, navigator, view, frame, tweenedElement);
+			return new EditorElementText(layer, editor, navigator, view, frame, tweenedElement, track);
 		}
 		else
 		{
@@ -87,7 +93,7 @@ abstract class EditorElement implements ISelectable
 		}
 	}
 	
-	function new(layer:EditorLayer, editor:Editor, navigator:Navigator, view:View, frame:Frame, tweenedElement:TweenedElement)
+	function new(layer:EditorLayer, editor:Editor, navigator:Navigator, view:View, frame:Frame, tweenedElement:TweenedElement, track:ElementLifeTrack)
 	{
 		preparePatterns();
 		
@@ -96,14 +102,15 @@ abstract class EditorElement implements ISelectable
 		this.navigator = navigator;
 		this.view = view;
 		this.frame = frame;
+        this.track = track;
 		
 		originalElement = tweenedElement.original;
 		currentElement = tweenedElement.current;
-		
+
 		metaDispObj = new Container();
 		metaDispObj.mouseEnabled = !frame.keyFrame.layer.locked;
 		
-		metaDispObj.addChild(dispObj = createDisplayObjectForElement(originalElement));
+		metaDispObj.addChild(dispObj = createDisplayObjectForElement());
 		metaDispObj.addChild(selectionBoxShape = new Shape());
 		metaDispObj.addChild(emptyClipMark = emptyClipMarkPattern.clone());
 		metaDispObj.addChild(emptyClipMarkSelected = emptyClipMarkSelectedPattern.clone());
@@ -116,55 +123,21 @@ abstract class EditorElement implements ISelectable
 		
 		attachEventHandlers();
 		
-		update();
+		updateTransformations();
 	}
 
-    function createDisplayObjectForElement(element:Element) : DisplayObject
+    function createDisplayObjectForElement() : DisplayObject
     {
-        final dispObj = element.createDisplayObject();
-        Debug.assert(Std.isOfType(dispObj, AdvancableDisplayObject));
-        
-        final advanceFrames = getAdvanceFrames(element);
-        Debug.assert(advanceFrames >= 0);
-        
-        (cast dispObj:AdvancableDisplayObject).advanceTo(advanceFrames);
+        final dispObj = currentElement.createDisplayObject();
+
+        if (Std.isOfType(dispObj, AdvancableDisplayObject))
+        {
+            (cast dispObj:AdvancableDisplayObject).advanceTo(navigator.pathItem.frameIndex - track.startFrameIndex);
+        }
 
         return dispObj;
     }
 
-    function getAdvanceFrames(element:Element) : Int
-    {
-        final mcPathItem = navigator.editPath.reversed().find(x -> x.getTimeline() != null);
-        final mcPathItemIndex = navigator.editPath.indexOf(mcPathItem);
-        
-        final instance : Instance = cast mcPathItem.element;
-        Debug.assert(Std.isOfType(instance, Instance));
-        
-        final mcItem : MovieClipItem = cast instance.symbol;
-        Debug.assert(Std.isOfType(mcItem, MovieClipItem));
-
-        if (mcPathItemIndex < navigator.editPath.length - 1) element = cast navigator.editPath[mcPathItemIndex + 1].element;
-        Debug.assert(Std.isOfType(element, Element));
-
-        var layerIndex : Int = -1;
-        var keyFrameIndex : Int = -1;
-        MovieClipItemTools.iterateElements(mcItem, (elem, data) ->
-        {
-            if (elem == element)
-            {
-                layerIndex = data.layerIndex;
-                keyFrameIndex = data.keyFrameIndex;
-            }
-        });
-        Debug.assert(layerIndex >= 0);
-        Debug.assert(keyFrameIndex >= 0);
-
-        final layer = mcItem.layers[layerIndex];
-        final keyFrame = layer.keyFrames[keyFrameIndex];
-
-        return mcPathItem.frameIndex - keyFrame.getIndex(); // TODO: detect between-keyframes-keeping
-    }
-	
 	public function updateTransformations()
 	{
 		var properties = currentElement.matrix.decompose();
@@ -186,7 +159,7 @@ abstract class EditorElement implements ISelectable
 	{
         final n = metaDispObj.children.indexOf(dispObj);
         metaDispObj.removeChildAt(n);
-        metaDispObj.addChildAt(dispObj = currentElement.createDisplayObject(), n);
+        metaDispObj.addChildAt(dispObj = createDisplayObjectForElement(), n);
         updateTransformations();
 	}
 	

@@ -1185,13 +1185,6 @@ nanofl_engine_IMotionTween.__isInterface__ = true;
 nanofl_engine_IMotionTween.prototype = {
 	__class__: nanofl_engine_IMotionTween
 };
-var nanofl_engine_IPathElement = function() { };
-nanofl_engine_IPathElement.__name__ = "nanofl.engine.IPathElement";
-nanofl_engine_IPathElement.__isInterface__ = true;
-nanofl_engine_IPathElement.__interfaces__ = [nanofl_engine_ILayersContainer];
-nanofl_engine_IPathElement.prototype = {
-	__class__: nanofl_engine_IPathElement
-};
 var nanofl_engine_ISelectable = function() { };
 nanofl_engine_ISelectable.__name__ = "nanofl.engine.ISelectable";
 nanofl_engine_ISelectable.__isInterface__ = true;
@@ -1203,12 +1196,6 @@ nanofl_engine_ITextureItem.__name__ = "nanofl.engine.ITextureItem";
 nanofl_engine_ITextureItem.__isInterface__ = true;
 nanofl_engine_ITextureItem.prototype = {
 	__class__: nanofl_engine_ITextureItem
-};
-var nanofl_engine_ITimeline = function() { };
-nanofl_engine_ITimeline.__name__ = "nanofl.engine.ITimeline";
-nanofl_engine_ITimeline.__isInterface__ = true;
-nanofl_engine_ITimeline.prototype = {
-	__class__: nanofl_engine_ITimeline
 };
 var nanofl_engine_fills_IFill = function() { };
 nanofl_engine_fills_IFill.__name__ = "nanofl.engine.fills.IFill";
@@ -1222,18 +1209,17 @@ nanofl_engine_libraryitems_ISpritableItem.__isInterface__ = true;
 nanofl_engine_libraryitems_ISpritableItem.prototype = {
 	__class__: nanofl_engine_libraryitems_ISpritableItem
 };
+var nanofl_engine_libraryitems_IPlayableItem = function() { };
+nanofl_engine_libraryitems_IPlayableItem.__name__ = "nanofl.engine.libraryitems.IPlayableItem";
+nanofl_engine_libraryitems_IPlayableItem.__isInterface__ = true;
+nanofl_engine_libraryitems_IPlayableItem.prototype = {
+	__class__: nanofl_engine_libraryitems_IPlayableItem
+};
 var nanofl_engine_strokes_IStroke = function() { };
 nanofl_engine_strokes_IStroke.__name__ = "nanofl.engine.strokes.IStroke";
 nanofl_engine_strokes_IStroke.__isInterface__ = true;
 nanofl_engine_strokes_IStroke.prototype = {
 	__class__: nanofl_engine_strokes_IStroke
-};
-var nanofl_ide_IIdeTimeline = function() { };
-nanofl_ide_IIdeTimeline.__name__ = "nanofl.ide.IIdeTimeline";
-nanofl_ide_IIdeTimeline.__isInterface__ = true;
-nanofl_ide_IIdeTimeline.__interfaces__ = [nanofl_engine_ITimeline];
-nanofl_ide_IIdeTimeline.prototype = {
-	__class__: nanofl_ide_IIdeTimeline
 };
 var nanofl_ide_ISymbol = function() { };
 nanofl_ide_ISymbol.__name__ = "nanofl.ide.ISymbol";

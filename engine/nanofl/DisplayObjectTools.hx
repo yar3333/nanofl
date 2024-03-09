@@ -250,11 +250,11 @@ class DisplayObjectTools
             }
         }
 
-        if (!force && !childChanged && dispObj.cacheCanvas == null && (dispObj.filters == null || dispObj.filters.length == 0)) return false;
+        if (!force && !childChanged && dispObj.cacheCanvas == null && !isNeedCache(dispObj)) return false;
         
         dispObj.uncache();
         
-        if (force || (dispObj.filters != null && dispObj.filters.length > 0))
+        if (force || isNeedCache(dispObj))
         {
             cache(dispObj);
         }
@@ -269,5 +269,10 @@ class DisplayObjectTools
         {
             dispObj.cache(bounds.x, bounds.y, bounds.width, bounds.height);
         }
-    }   
+    }
+
+    static function isNeedCache(dispObj:DisplayObject) : Bool
+    {
+        return dispObj.alpha != 1 || dispObj.filters != null && dispObj.filters.length > 0;
+    }  
 }

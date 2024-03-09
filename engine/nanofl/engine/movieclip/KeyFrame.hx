@@ -37,7 +37,7 @@ class KeyFrame
 		this.duration = duration;
 		this._elements = elements != null ? elements : [];
 		
-		for (element in this.elements)
+        for (element in this.elements)
 		{
 			element.parent = this;
 		}
@@ -222,6 +222,7 @@ class KeyFrame
 		{
 			frame.addElement(element);
 		}
+
 		return frame;
 	}
     #end

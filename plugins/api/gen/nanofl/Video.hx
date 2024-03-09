@@ -9,4 +9,5 @@ extern class Video extends nanofl.SolidContainer implements nanofl.engine.Advanc
 	override function clone(?recursive:Bool):nanofl.MovieClip;
 	override function toString():String;
 	function advance(?time:Float):Void;
+	function advanceTo(advanceFrames:Int):Void;
 }

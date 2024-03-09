@@ -493,13 +493,6 @@ nanofl_engine_IMotionTween.__isInterface__ = true;
 nanofl_engine_IMotionTween.prototype = {
 	__class__: nanofl_engine_IMotionTween
 };
-var nanofl_engine_IPathElement = function() { };
-nanofl_engine_IPathElement.__name__ = true;
-nanofl_engine_IPathElement.__isInterface__ = true;
-nanofl_engine_IPathElement.__interfaces__ = [nanofl_engine_ILayersContainer];
-nanofl_engine_IPathElement.prototype = {
-	__class__: nanofl_engine_IPathElement
-};
 var nanofl_engine_ISelectable = function() { };
 nanofl_engine_ISelectable.__name__ = true;
 nanofl_engine_ISelectable.__isInterface__ = true;
@@ -511,12 +504,6 @@ nanofl_engine_ITextureItem.__name__ = true;
 nanofl_engine_ITextureItem.__isInterface__ = true;
 nanofl_engine_ITextureItem.prototype = {
 	__class__: nanofl_engine_ITextureItem
-};
-var nanofl_engine_ITimeline = function() { };
-nanofl_engine_ITimeline.__name__ = true;
-nanofl_engine_ITimeline.__isInterface__ = true;
-nanofl_engine_ITimeline.prototype = {
-	__class__: nanofl_engine_ITimeline
 };
 var nanofl_engine_fills_IFill = function() { };
 nanofl_engine_fills_IFill.__name__ = true;
@@ -530,18 +517,17 @@ nanofl_engine_libraryitems_ISpritableItem.__isInterface__ = true;
 nanofl_engine_libraryitems_ISpritableItem.prototype = {
 	__class__: nanofl_engine_libraryitems_ISpritableItem
 };
+var nanofl_engine_libraryitems_IPlayableItem = function() { };
+nanofl_engine_libraryitems_IPlayableItem.__name__ = true;
+nanofl_engine_libraryitems_IPlayableItem.__isInterface__ = true;
+nanofl_engine_libraryitems_IPlayableItem.prototype = {
+	__class__: nanofl_engine_libraryitems_IPlayableItem
+};
 var nanofl_engine_strokes_IStroke = function() { };
 nanofl_engine_strokes_IStroke.__name__ = true;
 nanofl_engine_strokes_IStroke.__isInterface__ = true;
 nanofl_engine_strokes_IStroke.prototype = {
 	__class__: nanofl_engine_strokes_IStroke
-};
-var nanofl_ide_IIdeTimeline = function() { };
-nanofl_ide_IIdeTimeline.__name__ = true;
-nanofl_ide_IIdeTimeline.__isInterface__ = true;
-nanofl_ide_IIdeTimeline.__interfaces__ = [nanofl_engine_ITimeline];
-nanofl_ide_IIdeTimeline.prototype = {
-	__class__: nanofl_ide_IIdeTimeline
 };
 var nanofl_ide_ISymbol = function() { };
 nanofl_ide_ISymbol.__name__ = true;
@@ -785,6 +771,14 @@ stdlib_LambdaIterable.filterByType = function(it,klass) {
 			r.push(x1);
 		}
 	}
+	return r;
+};
+stdlib_LambdaIterable.skipWhile = function(it,f) {
+	var iterator = $getIterator(it);
+	while(iterator.hasNext() && f(iterator.next())) {
+	}
+	var r = [];
+	while(iterator.hasNext()) r.push(iterator.next());
 	return r;
 };
 var stdlib_LambdaIterator = function() { };
@@ -1372,7 +1366,7 @@ svgexporter_SvgExporter.prototype = {
 				this.layerItems.set(layer,layerID);
 				xml.begin("clipPath").attr("id",layerID);
 				var _g2 = 0;
-				var _g3 = nanofl.engine.elements.Elements.expandGroups(layer.get_keyFrames()[0].get_elements());
+				var _g3 = layer.get_keyFrames()[0].get_elements();
 				while(_g2 < _g3.length) {
 					var element = _g3[_g2];
 					++_g2;
@@ -1426,15 +1420,6 @@ svgexporter_SvgExporter.prototype = {
 			xml.attr("xlink:href","#" + instance.get_symbol().namePath);
 			this.exportMatrix(instance.matrix,xml);
 			xml.end();
-		} else if(((element) instanceof nanofl.engine.elements.GroupElement)) {
-			var group = element;
-			var _g = 0;
-			var _g1 = group.getChildren();
-			while(_g < _g1.length) {
-				var e = _g1[_g];
-				++_g;
-				this.exportElement(e,xml);
-			}
 		} else if(((element) instanceof nanofl.engine.elements.ShapeElement)) {
 			if(this.shapePaths.h.__keys__[element.__id__] != null) {
 				this.exportExistShapeElement(element,null,xml);

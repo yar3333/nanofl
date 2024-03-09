@@ -7,4 +7,5 @@ interface AdvancableDisplayObject {
 		    
 	**/
 	function advance(?time:Float):Void;
+	function advanceTo(advanceFrames:Int):Void;
 }

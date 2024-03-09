@@ -6,6 +6,7 @@ extern class MovieClipItemTools {
 	static function iterateInstances(item:nanofl.ide.libraryitems.MovieClipItem, callb:(nanofl.engine.elements.Instance, { public var layerIndex(default, default) : Int; public var keyFrameIndex(default, default) : Int; }) -> Void):Void;
 	static function getElements(item:nanofl.ide.libraryitems.MovieClipItem):Array<nanofl.engine.elements.Element>;
 	static function iterateElements(item:nanofl.ide.libraryitems.MovieClipItem, callb:(nanofl.engine.elements.Element, { public var layerIndex(default, default) : Int; public var keyFrameIndex(default, default) : Int; }) -> Void):Void;
+	static function iterateElementsOnLayer(item:nanofl.ide.libraryitems.MovieClipItem, layerIndex:Int, callb:(nanofl.engine.elements.Element, { public var layerIndex(default, default) : Int; public var keyFrameIndex(default, default) : Int; }) -> Void):Void;
 	static function getUsedNamePathCount(item:nanofl.ide.libraryitems.MovieClipItem, ?r:Map<String, Int>):Map<String, Int>;
 	static function getUsedNamePaths(item:nanofl.ide.libraryitems.MovieClipItem, deep:Bool, useTextureAtlases:Bool, ?r:Array<String>):Array<String>;
 }

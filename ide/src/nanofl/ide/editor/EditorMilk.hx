@@ -36,24 +36,20 @@ class EditorMilk extends Container
         final milkChild = editPath[0].element.createDisplayObject();
 		editPath[editPath.length - 1].element.visible = true;
 
-        // move pathItems to top & set currentFrame
-        var obj : Container = cast milkChild;
-        for (i in 0...(editPath.length - 2))
+        var obj : MovieClip = cast milkChild;
+        for (i in 0...editPath.length)
         {
-            Debug.assert(Std.isOfType(obj, Container));
-
-            if (editPath[i].frameIndex != 0)
-            {
-                Debug.assert(Std.isOfType(obj, MovieClip));
-                (cast obj : MovieClip).gotoAndStop(editPath[i].frameIndex);
-            }
+            Debug.assert(Std.isOfType(obj, MovieClip));
             
-            final n = editPath[i].element.getChildren().indexOf(cast editPath[i + 1].element);
-            Debug.assert(n >= 0);
-            final child : Container = cast obj.getChildAt(n); 
-            obj.removeChildAt(n);
-            obj.addChild(child);
-            obj = child;
+            if (i < editPath.length - 1)
+            {
+                obj.advanceTo(editPath[i].frameIndex);
+                obj = cast obj.getChildByElement(editPath[i + 1].element);
+            }
+            else
+            {
+                obj.visible = false;
+            }
         }
 
 		addChild(milkChild);
