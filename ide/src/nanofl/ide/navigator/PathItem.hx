@@ -1,5 +1,6 @@
 package nanofl.ide.navigator;
 
+import nanofl.engine.Library;
 import nanofl.engine.elements.Instance;
 import nanofl.engine.movieclip.Frame;
 import nanofl.engine.movieclip.Layer;
@@ -52,7 +53,7 @@ class PathItem
     
     public function getNavigatorIcon() return element.getNavigatorIcon();
     public function getNavigatorName() return element.getNavigatorName();
-    public function isScene() return element.isScene();
+    public function isScene() return element.namePath == Library.SCENE_NAME_PATH;
     
     public function equ(p:PathItem) : Bool
     {

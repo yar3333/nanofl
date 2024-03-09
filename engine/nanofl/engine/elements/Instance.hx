@@ -134,8 +134,6 @@ class Instance extends Element
 		return obj;
 	}
 	
-	public function isScene() return namePath == Library.SCENE_NAME_PATH;
-	
 	#if ide
 	override public function getState() : nanofl.ide.undo.states.ElementState
 	{

@@ -166,8 +166,8 @@ class Code extends wquery.Component
 			menu.toggleItem("editor.copy", isForSelected);
 			//menu.toggleItem("editor.paste", true);
 			
-			menu.toggleItem("document.properties", !isForSelected && isPathItemIsMovieClip() && pathItem.element.isScene());
-			menu.toggleItem("editor.properties", !isForSelected && isPathItemIsMovieClip() && !pathItem.element.isScene());
+			menu.toggleItem("document.properties", !isForSelected && isPathItemIsMovieClip() && pathItem.isScene());
+			menu.toggleItem("editor.properties", !isForSelected && isPathItemIsMovieClip() && !pathItem.isScene());
 			
 			return true;
 		});
@@ -319,7 +319,7 @@ class Code extends wquery.Component
 		{
 			if (editPath.length == 1)
 			{
-				var bounds = pathItem.element.isScene()
+				var bounds = pathItem.isScene()
 					? new Rectangle(0, 0, app.document.properties.width, app.document.properties.height)
 					: DisplayObjectTools.getOuterBounds(container);
 				
@@ -348,11 +348,11 @@ class Code extends wquery.Component
 		#if profiler Profiler.measure("editor.Client", "updateMinors", function() { #end
 			template().content.css("cursor", app.document.editor.tool.getCursor());
 			
-			var baseContainer = editPath[0].element.isScene() ? root : container;
+			var baseContainer = editPath[0].isScene() ? root : container;
 			var pos = baseContainer.localToGlobal(0, 0);
 			template().container.css("background-position", pos.x + "px " + pos.y + "px");
 			
-			centerCross.visible = !pathItem.element.isScene() && app.document.editor.tool.isShowCenterCross();
+			centerCross.visible = !pathItem.isScene() && app.document.editor.tool.isShowCenterCross();
 			if (centerCross.visible)
 			{
 				var pt = field.localToGlobal(0, 0).half();
@@ -360,7 +360,7 @@ class Code extends wquery.Component
 				centerCross.y = pt.y;
 			}
 			
-			sceneBox.visible = editPath[0].element.isScene();
+			sceneBox.visible = editPath[0].isScene();
 			if (sceneBox.visible)
 			{
 				var pt1 = root.localToGlobal(0, 0).half();
