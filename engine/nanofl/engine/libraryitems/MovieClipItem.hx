@@ -76,7 +76,7 @@ class MovieClipItem	extends InstancableItem
 	 * Add block of layers into timeline.
 	 * Assume that layers' parentIndex referenced inside block.
 	 */
-	public function addLayersBlock(layersToAdd:Array<Layer>, ?index:Int)
+	public function addLayersBlock(layersToAdd:ArrayRO<Layer>, ?index:Int)
 	{
 		if (index == null || index < 0 || index > _layers.length) index = _layers.length;
 		

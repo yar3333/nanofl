@@ -1,20 +1,23 @@
 package components.nanofl.movie.timeline;
 
+import haxe.Timer;
+import js.JQuery;
+import js.Browser;
 import stdlib.ExceptionTools;
+import wquery.ComponentList;
+import htmlparser.XmlBuilder;
+import htmlparser.XmlNodeElement;
+import nanofl.engine.LayerType;
+import nanofl.engine.Version;
+import nanofl.engine.movieclip.Layer;
+import nanofl.engine.movieclip.KeyFrame;
 import nanofl.ide.Globals;
 import nanofl.ide.draganddrop.DragAndDrop;
 import nanofl.ide.draganddrop.IDragAndDrop;
-import wquery.ComponentList;
-import js.JQuery;
-import haxe.Timer;
-import htmlparser.XmlBuilder;
-import htmlparser.XmlNodeElement;
-import js.Browser;
-import nanofl.engine.LayerType;
-import nanofl.engine.Version;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.draganddrop.AllowedDropEffect;
-import nanofl.ide.timeline.IEditorTimeline;
+import nanofl.ide.timeline.ITimelineView;
+import nanofl.ide.timeline.EditorTimeline;
 import nanofl.ide.timeline.droppers.LayerToHeaderTitleDropper;
 import nanofl.ide.timeline.droppers.LayerToLayerDropper;
 import nanofl.ide.timeline.droppers.LayerToTitleDropper;
@@ -28,7 +31,8 @@ using stdlib.Lambda;
 
 #if profiler @:build(Profiler.buildMarked()) #end
 @:rtti
-class Code extends wquery.Component implements IEditorTimeline
+class Code extends wquery.Component 
+    implements ITimelineView
 {
 	static var imports =
 	{
@@ -44,7 +48,7 @@ class Code extends wquery.Component implements IEditorTimeline
 	
 	var layers : ComponentList<components.nanofl.movie.timelinelayer.Code>;
 	
-	var adapter : ITimelineAdapter;
+	var adapter : EditorTimeline;
 	
 	function getLayerNodes() : JQuery return template().content.find(">div");
 	function getLayerNodeByIndex(n:Int) : JQuery return template().content.find(">div:nth-child(" + (n + 1) + ")");
@@ -55,7 +59,7 @@ class Code extends wquery.Component implements IEditorTimeline
 	function getFrameNodesByLayerIndex(n:Int, filter="") : JQuery return template().content.find(">div:nth-child(" + (n + 1) + ")>.frames-content>*>*" + filter);
 	function getFrameNodesByLayer(elem:JQuery, filter="") : JQuery return elem.find(">.frames-content>*>*" + filter);
 	
-	function getLayerByLayerNode(elem:JQuery) : TLLayer return adapter.layers[elem.index()];
+	function getLayerByLayerNode(elem:JQuery) : Layer return adapter.layers[elem.index()];
 	
 	var mouseDownOnHeader : Bool;
 	var mouseDownOnFrame : JQuery;
@@ -65,7 +69,7 @@ class Code extends wquery.Component implements IEditorTimeline
 	
 	var freeze = false;
 	
-	public function bind(adapter:ITimelineAdapter)
+	public function bind(adapter:EditorTimeline)
 	{
 		this.adapter = adapter;
 		
@@ -813,7 +817,7 @@ class Code extends wquery.Component implements IEditorTimeline
 	}
 	
 	@:profile
-	public function getAciveFrame() : TLKeyFrame
+	public function getAciveFrame() : KeyFrame
 	{
 		return adapter != null ? adapter.layers[adapter.layerIndex].getFrame(adapter.frameIndex).keyFrame : null;
 	}
@@ -1030,7 +1034,7 @@ class Code extends wquery.Component implements IEditorTimeline
 		return r;
 	}
 	
-	function iterateSelectedKeyFrames(callb:TLKeyFrame->Void) 
+	function iterateSelectedKeyFrames(callb:KeyFrame->Void) 
 	{
 		var layerNodes = getLayerNodes();
 		for (i in 0...layerNodes.length)
@@ -1095,7 +1099,7 @@ class Code extends wquery.Component implements IEditorTimeline
         adapter.commitTransaction();
 	}
 	
-	function setLayerType(layer:TLLayer, humanType:String)
+	function setLayerType(layer:Layer, humanType:String)
 	{
 		var index = adapter.layers.indexOf(layer);
 		
@@ -1150,7 +1154,7 @@ class Code extends wquery.Component implements IEditorTimeline
 		return null;
 	}
 	
-	function iterateSelectedFrames(callb:{ layerIndex:Int, frameIndex:Int, layer:TLLayer, frameNode:js.html.Element }->Void)
+	function iterateSelectedFrames(callb:{ layerIndex:Int, frameIndex:Int, layer:Layer, frameNode:js.html.Element }->Void)
 	{
 		for (i in 0...adapter.layers.length)
 		{
@@ -1167,7 +1171,7 @@ class Code extends wquery.Component implements IEditorTimeline
 		}
 	}
 	
-	function iterateSelectedFramesReversed(callb:{ layerIndex:Int, frameIndex:Int, layer:TLLayer, frameNode:js.html.Element }->Void)
+	function iterateSelectedFramesReversed(callb:{ layerIndex:Int, frameIndex:Int, layer:Layer, frameNode:js.html.Element }->Void)
 	{
 		for (i in 0...adapter.layers.length)
 		{
@@ -1244,7 +1248,7 @@ class Code extends wquery.Component implements IEditorTimeline
 		}
 	}
 	
-	public function getActiveKeyFrame() : TLKeyFrame
+	public function getActiveKeyFrame() : KeyFrame
 	{
 		return adapter.layers[adapter.layerIndex].getFrame(adapter.frameIndex)?.keyFrame;
 	}

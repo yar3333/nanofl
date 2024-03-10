@@ -1,10 +1,9 @@
-package components.nanofl.movie.timeline;
+package nanofl.ide.timeline;
 
 import htmlparser.HtmlNodeElement;
-import nanofl.engine.LayerType;
 import datatools.ArrayRO;
 import nanofl.engine.elements.Elements;
-import nanofl.ide.libraryitems.IIdeLibraryItem;
+import nanofl.engine.LayerType;
 import nanofl.engine.movieclip.KeyFrame;
 import nanofl.engine.movieclip.Layer;
 import nanofl.ide.DocumentProperties;
@@ -13,15 +12,11 @@ import nanofl.ide.library.IdeLibrary;
 import nanofl.ide.navigator.Navigator;
 import nanofl.ide.navigator.PathItem;
 import nanofl.ide.preferences.Preferences;
+import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.ui.menu.MenuItem;
 import nanofl.ide.undo.document.UndoQueue;
 
-private typedef TLFrame = components.nanofl.movie.timeline.TLFrame;
-private typedef TLLayer = components.nanofl.movie.timeline.TLLayer;
-private typedef TLKeyFrame = components.nanofl.movie.timeline.TLKeyFrame;
-
-class TimelineAdapterToEditor 
-    implements components.nanofl.movie.timeline.ITimelineAdapter
+class EditorTimeline
 {
 	var editor : Editor;
 	var undoQueue : UndoQueue;
@@ -31,8 +26,8 @@ class TimelineAdapterToEditor
 	var navigator : Navigator;
 	var properties : DocumentProperties;
 	
-	public var layers(get, never) : ArrayRO<TLLayer>;
-	function get_layers() : ArrayRO<TLLayer> return pathItem.mcItem.layers;
+	public var layers(get, never) : ArrayRO<Layer>;
+	function get_layers() : ArrayRO<Layer> return pathItem.mcItem.layers;
 	
 	public var editable(get, never) : Bool;
 	function get_editable() : Bool return pathItem.mcItem != null; // TODO: group
@@ -71,10 +66,10 @@ class TimelineAdapterToEditor
 	public function getFrameContextMenu() : Array<MenuItem> return preferences.storage.getMenu("frameContextMenu");
 	
 	public function getLibraryItems(namePaths:Array<String>) : Array<IIdeLibraryItem> return namePaths.map(library.getItem);
-	public function addNewKeyFrameToLayer(layer:TLLayer) : Void cast(layer, Layer).addKeyFrame(new KeyFrame());
-	public function newLayer(name:String, ?type:LayerType) : TLLayer return new Layer(name, type);
+	public function addNewKeyFrameToLayer(layer:Layer) : Void cast(layer, Layer).addKeyFrame(new KeyFrame());
+	public function newLayer(name:String, ?type:LayerType) : Layer return new Layer(name, type);
     
-    public function parseLayer(layerNode:HtmlNodeElement, version:String) : TLLayer
+    public function parseLayer(layerNode:HtmlNodeElement, version:String) : Layer
     {
         var layer = new Layer("");
         layer.loadProperties(layerNode, version);
@@ -93,9 +88,9 @@ class TimelineAdapterToEditor
 	
 	public function getTotalFrames() : Int return pathItem.getTotalFrames();
 	
-	public function addLayersBlock(layersToAdd:ArrayRO<TLLayer>, ?index:Int) : Void 
+	public function addLayersBlock(layersToAdd:ArrayRO<Layer>, ?index:Int) : Void 
 	{
-		pathItem.mcItem.addLayersBlock((cast layersToAdd : Array<Layer>), index);
+		pathItem.mcItem.addLayersBlock(layersToAdd, index);
 	}
 	
 	public function removeLayer(index:Int) : Void 
@@ -103,33 +98,33 @@ class TimelineAdapterToEditor
 		pathItem.mcItem.removeLayer(index);
 	}
 	
-	public function addLayer(layer:TLLayer) : Void 
+	public function addLayer(layer:Layer) : Void 
 	{
-		pathItem.mcItem.addLayer((cast layer:Layer));
+		pathItem.mcItem.addLayer(layer);
 	}
 	
-	public function getNamePaths(keyFrame:TLKeyFrame) : Array<String> 
+	public function getNamePaths(keyFrame:KeyFrame) : Array<String> 
 	{
-		return Elements.getUsedSymbolNamePaths((cast keyFrame:KeyFrame).elements);
+		return Elements.getUsedSymbolNamePaths(keyFrame.elements);
 	}
 	
-	public function getLayerNestLevel(layer:TLLayer) : Int
+	public function getLayerNestLevel(layer:Layer) : Int
 	{
-		return (cast layer:Layer).getNestLevel(pathItem.mcItem.layers);
+		return layer.getNestLevel(pathItem.mcItem.layers);
 	}
 	
-	public function duplicateLayerWoFrames(layer:TLLayer) : TLLayer
+	public function duplicateLayerWoFrames(layer:Layer) : Layer
 	{
-		return (cast layer:Layer).duplicate([], null);
+		return layer.duplicate([], null);
 	}
 	
-	public function getLayerKeyFrames(layer:TLLayer) : ArrayRO<TLKeyFrame>
+	public function getLayerKeyFrames(layer:Layer) : ArrayRO<KeyFrame>
 	{
-		return (cast layer:Layer).keyFrames;
+		return layer.keyFrames;
 	}
 	
-	public function addKeyFrame(layer:TLLayer, keyFrame:TLKeyFrame) : Void
+	public function addKeyFrame(layer:Layer, keyFrame:KeyFrame) : Void
 	{
-		(cast layer:Layer).addKeyFrame((cast keyFrame:KeyFrame));
+		layer.addKeyFrame(keyFrame);
 	}
 }

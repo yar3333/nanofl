@@ -7002,8 +7002,9 @@ class nanofl_engine_libraryitems_MovieClipItem extends nanofl_engine_libraryitem
 		}
 		let n = index;
 		let _g2 = 0;
-		while(_g2 < layersToAdd.length) {
-			let layer = layersToAdd[_g2];
+		let _g3 = layersToAdd;
+		while(_g2 < _g3.length) {
+			let layer = _g3[_g2];
 			++_g2;
 			layer.layersContainer = this;
 			if(layer.parentIndex != null) {

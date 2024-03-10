@@ -2,7 +2,7 @@ package nanofl.ide.timeline;
 
 import htmlparser.XmlDocument;
 
-interface IEditorTimeline
+interface ITimelineView
 {
 	function insertFrame() : Void;
 	function convertToKeyFrame() : Void;

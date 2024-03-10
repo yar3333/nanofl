@@ -1,9 +1,9 @@
-package components.nanofl.movie.timeline;
+package nanofl.ide.timeline;
 
-extern class TimelineAdapterToEditor implements components.nanofl.movie.timeline.ITimelineAdapter {
+extern class EditorTimeline {
 	function new(editor:nanofl.ide.editor.Editor, undoQueue:nanofl.ide.undo.document.UndoQueue, library:nanofl.ide.library.IdeLibrary, preferences:nanofl.ide.preferences.Preferences, pathItem:nanofl.ide.navigator.PathItem, navigator:nanofl.ide.navigator.Navigator, properties:nanofl.ide.DocumentProperties):Void;
-	var layers(get, never) : Array<TLLayer>;
-	private function get_layers():Array<TLLayer>;
+	var layers(get, never) : Array<nanofl.engine.movieclip.Layer>;
+	private function get_layers():Array<nanofl.engine.movieclip.Layer>;
 	var editable(get, never) : Bool;
 	private function get_editable():Bool;
 	var frameIndex(get, set) : Int;
@@ -20,9 +20,9 @@ extern class TimelineAdapterToEditor implements components.nanofl.movie.timeline
 	function getLayerContextMenu():Array<nanofl.ide.ui.menu.MenuItem>;
 	function getFrameContextMenu():Array<nanofl.ide.ui.menu.MenuItem>;
 	function getLibraryItems(namePaths:Array<String>):Array<nanofl.ide.libraryitems.IIdeLibraryItem>;
-	function addNewKeyFrameToLayer(layer:TLLayer):Void;
-	function newLayer(name:String, ?type:nanofl.engine.LayerType):TLLayer;
-	function parseLayer(layerNode:htmlparser.HtmlNodeElement, version:String):TLLayer;
+	function addNewKeyFrameToLayer(layer:nanofl.engine.movieclip.Layer):Void;
+	function newLayer(name:String, ?type:nanofl.engine.LayerType):nanofl.engine.movieclip.Layer;
+	function parseLayer(layerNode:htmlparser.HtmlNodeElement, version:String):nanofl.engine.movieclip.Layer;
 	function onLayerAdded():Void;
 	function onLayerRemoved():Void;
 	function onLayerVisibleChange():Void;
@@ -33,12 +33,12 @@ extern class TimelineAdapterToEditor implements components.nanofl.movie.timeline
 	function onFrameRemoved():Void;
 	function onLayersSelectionChange(indexes:Array<Int>):Void;
 	function getTotalFrames():Int;
-	function addLayersBlock(layersToAdd:Array<TLLayer>, ?index:Int):Void;
+	function addLayersBlock(layersToAdd:Array<nanofl.engine.movieclip.Layer>, ?index:Int):Void;
 	function removeLayer(index:Int):Void;
-	function addLayer(layer:TLLayer):Void;
-	function getNamePaths(keyFrame:TLKeyFrame):Array<String>;
-	function getLayerNestLevel(layer:TLLayer):Int;
-	function duplicateLayerWoFrames(layer:TLLayer):TLLayer;
-	function getLayerKeyFrames(layer:TLLayer):Array<TLKeyFrame>;
-	function addKeyFrame(layer:TLLayer, keyFrame:TLKeyFrame):Void;
+	function addLayer(layer:nanofl.engine.movieclip.Layer):Void;
+	function getNamePaths(keyFrame:nanofl.engine.movieclip.KeyFrame):Array<String>;
+	function getLayerNestLevel(layer:nanofl.engine.movieclip.Layer):Int;
+	function duplicateLayerWoFrames(layer:nanofl.engine.movieclip.Layer):nanofl.engine.movieclip.Layer;
+	function getLayerKeyFrames(layer:nanofl.engine.movieclip.Layer):Array<nanofl.engine.movieclip.KeyFrame>;
+	function addKeyFrame(layer:nanofl.engine.movieclip.Layer, keyFrame:nanofl.engine.movieclip.KeyFrame):Void;
 }

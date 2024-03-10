@@ -1,8 +1,8 @@
 package components.nanofl.movie.timeline;
 
-extern class Code extends wquery.Component implements nanofl.ide.timeline.IEditorTimeline {
+extern class Code extends wquery.Component implements nanofl.ide.timeline.ITimelineView {
 	function new(parent:wquery.Component, parentNode:haxe.extern.EitherType<String, haxe.extern.EitherType<js.html.Element, js.JQuery>>, ?params:Dynamic, ?attachMode:wquery.AttachMode):Void;
-	function bind(adapter:components.nanofl.movie.timeline.ITimelineAdapter):Void;
+	function bind(adapter:nanofl.ide.timeline.EditorTimeline):Void;
 	function init():Void;
 	function update():Void;
 	function insertFrame():Void;
@@ -17,7 +17,7 @@ extern class Code extends wquery.Component implements nanofl.ide.timeline.IEdito
 	function updateActiveFrame():Void;
 	function updateFrames(?isUpdateHeader:Bool):Void;
 	function selectLayerFrames(layerIndexes:Array<Int>):Void;
-	function getAciveFrame():components.nanofl.movie.timeline.TLKeyFrame;
+	function getAciveFrame():nanofl.engine.movieclip.KeyFrame;
 	function on(event:String, callb:js.JQuery.JqEvent -> Void):Void;
 	function createTween():Void;
 	function removeTween():Void;
@@ -32,5 +32,5 @@ extern class Code extends wquery.Component implements nanofl.ide.timeline.IEdito
 	function play():Void;
 	function stop():Void;
 	function renameSelectedLayerByUser():Void;
-	function getActiveKeyFrame():components.nanofl.movie.timeline.TLKeyFrame;
+	function getActiveKeyFrame():nanofl.engine.movieclip.KeyFrame;
 }

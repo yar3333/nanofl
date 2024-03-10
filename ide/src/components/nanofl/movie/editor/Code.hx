@@ -69,16 +69,19 @@ class Code extends wquery.Component
 	
 	@:allow(nanofl.ide.editor.Editor)
 	var viewX(get, set) : Float;
-	function get_viewX() return root.x;
-	function set_viewX(value:Float) return root.x = value;
+	@:noCompletion function get_viewX() return root.x;
+	@:noCompletion function set_viewX(value:Float) return root.x = value;
 	
 	@:allow(nanofl.ide.editor.Editor)
 	var viewY(get, set) : Float;
-	function get_viewY() return root.y;
-	function set_viewY(value:Float) return root.y = value;
+	@:noCompletion function get_viewY() return root.y;
+	@:noCompletion function set_viewY(value:Float) return root.y = value;
 	
-	var editPath(get, never) : Array<PathItem>; @:noCompletion function get_editPath() return app.document.navigator.editPath;
-	var pathItem(get, never) : PathItem; @:noCompletion function get_pathItem() return editPath[editPath.length - 1];
+	var editPath(get, never) : Array<PathItem>;
+    @:noCompletion function get_editPath() return app.document.navigator.editPath;
+	
+    var pathItem(get, never) : PathItem;
+    @:noCompletion function get_pathItem() return editPath[editPath.length - 1];
 	
 	function init()
 	{
