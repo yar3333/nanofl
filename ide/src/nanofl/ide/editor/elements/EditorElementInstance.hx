@@ -1,5 +1,6 @@
 package nanofl.ide.editor.elements;
 
+import nanofl.engine.LibraryItemType;
 import nanofl.engine.elements.Instance;
 import nanofl.ide.editor.EditorMouseEvent;
 import nanofl.ide.editor.NewObjectParams;
@@ -16,7 +17,7 @@ class EditorElementInstance extends EditorElementSelectBox
 	
 	override function onDoubleClickInner(e:EditorMouseEvent)
 	{
-		if (element.layers != null && element.layers.length > 0)
+		if (element.symbol.type == LibraryItemType.movieclip)
 		{
 			navigator.navigateDown(element);
 		}

@@ -10,24 +10,24 @@ using nanofl.engine.LayersTools;
 
 class PathItem
 {
-	public final element : Instance;
+	public final instance : Instance;
     public final mcItem : MovieClipItem;
 	
 	public var layerIndex(default, null) : Int;
 	public var frameIndex(default, null) : Int;
 	
 	public var layer(get, never) : Layer;
-	function get_layer() : Layer return element.layers[layerIndex];
+	function get_layer() : Layer return mcItem.layers[layerIndex];
 	
 	public var frame(get, never) : Frame;
-	function get_frame() : Frame return layerIndex < element.layers.length ? element.layers[layerIndex].getFrame(frameIndex) : null;
-	
-    public function new(element:Instance, layerIndex=0, frameIndex=0)
-	{
-        Debug.assert(Std.isOfType(element.symbol, MovieClipItem));
+	function get_frame() : Frame return layerIndex < mcItem.layers.length ? mcItem.layers[layerIndex].getFrame(frameIndex) : null;
 
-		this.element = element;
-        this.mcItem = cast element.symbol;
+    public function new(instance:Instance, layerIndex=0, frameIndex=0)
+	{
+        Debug.assert(Std.isOfType(instance.symbol, MovieClipItem));
+
+		this.instance = instance;
+        this.mcItem = cast instance.symbol;
 		this.layerIndex = layerIndex;
 		this.frameIndex = frameIndex;
 	}
@@ -36,7 +36,7 @@ class PathItem
     {
         Debug.assert(n != null);
         Debug.assert(n >= 0);
-        Debug.assert(n < element.layers.length);
+        Debug.assert(n < mcItem.layers.length);
         
         layerIndex = n;
     }
@@ -46,26 +46,26 @@ class PathItem
     {
         Debug.assert(n != null);
         Debug.assert(n >= 0);
-        Debug.assert(n < element.getTotalFrames());
+        Debug.assert(n < getTotalFrames());
         
         frameIndex = n;
     }
     
-    public function getNavigatorIcon() return element.getNavigatorIcon();
-    public function getNavigatorName() return element.getNavigatorName();
-    public function isScene() return element.namePath == Library.SCENE_NAME_PATH;
+	public function getNavigatorIcon() return mcItem.getIcon();    
+	public function getNavigatorName() return mcItem.namePath;
+    public function isScene() return instance.namePath == Library.SCENE_NAME_PATH;
     
     public function equ(p:PathItem) : Bool
     {
-        return p.element == element
+        return p.instance == instance
             && p.layerIndex == layerIndex
             && p.frameIndex == frameIndex;
     }
     
-    public function getTimeline() : MovieClipItem return cast element.getTimeline();
+    public function getTotalFrames() return mcItem.getTotalFrames();
 	
 	public function clone() : PathItem
 	{
-		return new PathItem(element, layerIndex, frameIndex);
+		return new PathItem(instance, layerIndex, frameIndex);
 	}
 }

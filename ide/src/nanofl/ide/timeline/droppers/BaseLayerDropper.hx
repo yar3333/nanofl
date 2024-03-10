@@ -1,12 +1,12 @@
 package nanofl.ide.timeline.droppers;
 
-import nanofl.ide.navigator.PathItem;
-import nanofl.engine.movieclip.Layer;
-import datatools.ArrayRO;
 import haxe.Timer;
+import datatools.ArrayRO;
 import htmlparser.HtmlNodeElement;
+import nanofl.engine.movieclip.Layer;
 import nanofl.engine.LayerType;
 import nanofl.ide.Application;
+import nanofl.ide.navigator.PathItem;
 import nanofl.ide.draganddrop.DragImageType;
 import nanofl.ide.ui.View;
 
@@ -23,7 +23,7 @@ class BaseLayerDropper extends InjectContainer
         return cast app.document.navigator.pathItem;
 	}
 	
-	var layers(get, never) : ArrayRO<Layer>; function get_layers() : ArrayRO<Layer> return pathItem.element.layers;
+	var layers(get, never) : ArrayRO<Layer>; function get_layers() : ArrayRO<Layer> return pathItem.mcItem.layers;
 	
 	public function getDragImageType(data:HtmlNodeElement)
 	{
@@ -41,13 +41,13 @@ class BaseLayerDropper extends InjectContainer
 		app.document.undoQueue.beginTransaction({ timeline:true });
 		
 		var srcLayer = layers[srcLayerIndex];
-		var srcLayers = pathItem.element.getTimeline().removeLayerWithChildren(srcLayerIndex);
+		var srcLayers = pathItem.mcItem.removeLayerWithChildren(srcLayerIndex);
 		
 		if (destLayerIndex > srcLayerIndex) destLayerIndex -= srcLayers.length;
 		
 		if (destLayerIndex == layers.length)
 		{
-			pathItem.element.getTimeline().addLayersBlock(srcLayers, destLayerIndex);
+			pathItem.mcItem.addLayersBlock(srcLayers, destLayerIndex);
 		}
 		else
 		{
@@ -59,18 +59,18 @@ class BaseLayerDropper extends InjectContainer
 					,[ LayerType.normal, LayerType.mask ]
 					,[ LayerType.normal, LayerType.guide ]:
 					
-				pathItem.element.getTimeline().addLayersBlock(srcLayers, destLayerIndex + 1);
+				pathItem.mcItem.addLayersBlock(srcLayers, destLayerIndex + 1);
 				srcLayer.parentIndex = destLayerIndex;
 					
 				case _:
 				if (srcLayerIndex != destLayerIndex + 1)
 				{
-					pathItem.element.getTimeline().addLayersBlock(srcLayers, destLayerIndex + 1);
+					pathItem.mcItem.addLayersBlock(srcLayers, destLayerIndex + 1);
 					srcLayer.parentIndex = destLayer.parentIndex;
 				}
 				else
 				{
-					pathItem.element.getTimeline().addLayersBlock(srcLayers, destLayerIndex);
+					pathItem.mcItem.addLayersBlock(srcLayers, destLayerIndex);
 				}
 			}
 		}

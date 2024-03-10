@@ -44,7 +44,7 @@ class Transaction extends undoqueue.Transaction<Operation>
 				
 			case Operation.TIMELINE(navigatorState, oldTimelineState, newTimelineState):
 				document.navigator.setState(navigatorState);
-				document.navigator.pathItem.getTimeline().setTimelineState(newTimelineState);
+				document.navigator.pathItem.mcItem.setTimelineState(newTimelineState);
 				view.movie.timeline.update();
 				
 			case Operation.LIBRARY_ADD_ITEMS(oldLibraryState, newLibraryState):

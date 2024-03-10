@@ -161,12 +161,6 @@ class Instance extends Element
 	
 	///////////////////////////////////////////////////////////////////
 	
-	public var layers(get, never) : ArrayRO<Layer>;
-	@:noCompletion public function get_layers()
-	{
-		return Std.isOfType(symbol, MovieClipItem) ? (cast symbol:MovieClipItem).layers : null;
-	}
-	
 	public function createDisplayObject() : easeljs.display.DisplayObject
 	{
 		var dispObj = symbol.createDisplayObject();
@@ -202,28 +196,6 @@ class Instance extends Element
 		elementUpdateDisplayObjectBaseProperties(dispObj);
 		elementUpdateDisplayObjectInstanceProperties(dispObj);
     }
-	
-	public function getNavigatorName() return namePath;
-	
-	public function getNavigatorIcon() return symbol.getIcon();
-	
-	public function getChildren() : Array<Element>
-	{
-		var r = [];
-		for (layer in layers)
-		{
-			if (layer.keyFrames.length > 0)
-			{
-				r = layer.keyFrames[0].elements.concat(r);
-			}
-		}
-		return r;
-	}
-	
-	public function getTimeline() : MovieClipItem
-	{
-		return Std.isOfType(symbol, MovieClipItem) ? cast symbol : null;
-	}
 	
 	override function getNearestPointsLocal(pos:Point) : Array<Point>
 	{

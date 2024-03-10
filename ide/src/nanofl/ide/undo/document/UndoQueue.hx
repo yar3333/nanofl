@@ -113,7 +113,7 @@ class UndoQueue extends undoqueue.UndoQueue<Changes, Operation>
 		{
             Debug.assert(oldTimelineState == null, "Transaction with timeline already started.");
             log("\tsave TIMELINE");
-            oldTimelineState = document.navigator.pathItem.getTimeline().getTimelineState();
+            oldTimelineState = document.navigator.pathItem.mcItem.getTimelineState();
 		}
 		
 		if (changes.element != null && !oldElementStates.exists(e -> e.element == changes.element))
@@ -176,7 +176,7 @@ class UndoQueue extends undoqueue.UndoQueue<Changes, Operation>
 		if (oldTimelineState != null)
 		{
 			log("revert timeline");
-			document.navigator.pathItem.getTimeline().setTimelineState(oldTimelineState);
+			document.navigator.pathItem.mcItem.setTimelineState(oldTimelineState);
 		}
 		
 		if (oldElementStates.length > 0)
@@ -262,7 +262,7 @@ class UndoQueue extends undoqueue.UndoQueue<Changes, Operation>
 		
 		if (oldTimelineState != null)
 		{
-			var newTimelineState = document.navigator.pathItem.getTimeline().getTimelineState();
+			var newTimelineState = document.navigator.pathItem.mcItem.getTimelineState();
 			addOperation(Operation.TIMELINE(document.navigator.getState(), oldTimelineState, newTimelineState));
 		}
 		

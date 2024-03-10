@@ -32,9 +32,7 @@ class EditorMilk extends Container
 		uncache();
 		removeAllChildren();
 		
-		editPath[editPath.length - 1].element.visible = false;
-        final milkChild = editPath[0].element.createDisplayObject();
-		editPath[editPath.length - 1].element.visible = true;
+        final milkChild = editPath[0].instance.createDisplayObject();
 
         var obj : MovieClip = cast milkChild;
         for (i in 0...editPath.length)
@@ -44,7 +42,7 @@ class EditorMilk extends Container
             if (i < editPath.length - 1)
             {
                 obj.advanceTo(editPath[i].frameIndex);
-                obj = cast obj.getChildByElement(editPath[i + 1].element);
+                obj = cast obj.getChildByElement(editPath[i + 1].instance);
             }
             else
             {

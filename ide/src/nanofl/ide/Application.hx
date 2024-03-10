@@ -173,19 +173,12 @@ class Application extends js.injecting.InjectContainer
 	{
 		if (document != null)
 		{
-			var instance = document.editor.getSingleSelectedInstance();
-			
-			if (instance == null)
-			{
-				if (Std.isOfType(document.navigator.pathItem.element, Instance))
-				{
-					instance = cast document.navigator.pathItem.element;
-				}
-			}
+			var instance = document.editor.getSingleSelectedInstance()
+                        ?? document.navigator.pathItem.instance;
 			
 			if (instance != null)
 			{
-				return cast(instance.symbol, IIdeInstancableItem);
+				return (cast instance.symbol:IIdeInstancableItem);
 			}
 		}
 		return null;

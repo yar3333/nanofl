@@ -33,10 +33,10 @@ class TimelineAdapterToEditor
 	var properties : DocumentProperties;
 	
 	public var layers(get, never) : ArrayRO<TLLayer>;
-	function get_layers() : ArrayRO<TLLayer> return pathItem.element.layers;
+	function get_layers() : ArrayRO<TLLayer> return pathItem.mcItem.layers;
 	
 	public var editable(get, never) : Bool;
-	function get_editable() : Bool return pathItem.element.getTimeline() != null;
+	function get_editable() : Bool return pathItem.mcItem != null; // TODO: group
 	
 	public var frameIndex(get, set) : Int;
 	function get_frameIndex() : Int return pathItem.frameIndex;
@@ -49,7 +49,7 @@ class TimelineAdapterToEditor
 	public var framerate(get, never) : Float;
 	function get_framerate() : Float return properties.framerate;
 	
-	public var xmlLayersTag(default, null) : String = "layers";
+	public final xmlLayersTag = "layers";
 	
 	public function new(editor:Editor, undoQueue:UndoQueue, library:IdeLibrary, preferences:Preferences, pathItem:PathItem, navigator:Navigator, properties:DocumentProperties)
 	{
@@ -62,8 +62,8 @@ class TimelineAdapterToEditor
 		this.properties = properties;
 	}
 	
-	function getLayerCount() : Int return pathItem.element.layers.length;
-	function getLayer(n:Int) : Layer return pathItem.element.layers[n];
+	function getLayerCount() : Int return pathItem.mcItem.layers.length;
+	function getLayer(n:Int) : Layer return pathItem.mcItem.layers[n];
 	
 	public function beginTransaction() undoQueue.beginTransaction({ timeline:true });
 	public function commitTransaction() undoQueue.commitTransaction();
@@ -92,45 +92,45 @@ class TimelineAdapterToEditor
 	public function onFrameRemoved() : Void editor.rebind();
 	public function onLayersSelectionChange(indexes:Array<Int>) : Void editor.selectLayers(indexes);
 	
-	public function getTotalFrames() : Int return pathItem.element.getTotalFrames();
+	public function getTotalFrames() : Int return pathItem.getTotalFrames();
 	
 	public function addLayersBlock(layersToAdd:ArrayRO<TLLayer>, ?index:Int) : Void 
 	{
-		pathItem.element.getTimeline().addLayersBlock((cast layersToAdd : Array<Layer>), index);
+		pathItem.mcItem.addLayersBlock((cast layersToAdd : Array<Layer>), index);
 	}
 	
 	public function removeLayer(index:Int) : Void 
 	{
-		pathItem.element.getTimeline().removeLayer(index);
+		pathItem.mcItem.removeLayer(index);
 	}
 	
 	public function addLayer(layer:TLLayer) : Void 
 	{
-		pathItem.element.getTimeline().addLayer(cast(layer, Layer));
+		pathItem.mcItem.addLayer((cast layer:Layer));
 	}
 	
 	public function getNamePaths(keyFrame:TLKeyFrame) : Array<String> 
 	{
-		return Elements.getUsedSymbolNamePaths(cast(keyFrame, KeyFrame).elements);
+		return Elements.getUsedSymbolNamePaths((cast keyFrame:KeyFrame).elements);
 	}
 	
 	public function getLayerNestLevel(layer:TLLayer) : Int
 	{
-		return cast(layer, Layer).getNestLevel(pathItem.element.layers);
+		return (cast layer:Layer).getNestLevel(pathItem.mcItem.layers);
 	}
 	
 	public function duplicateLayerWoFrames(layer:TLLayer) : TLLayer
 	{
-		return cast(layer, Layer).duplicate([], null);
+		return (cast layer:Layer).duplicate([], null);
 	}
 	
 	public function getLayerKeyFrames(layer:TLLayer) : ArrayRO<TLKeyFrame>
 	{
-		return cast(layer, Layer).keyFrames;
+		return (cast layer:Layer).keyFrames;
 	}
 	
 	public function addKeyFrame(layer:TLLayer, keyFrame:TLKeyFrame) : Void
 	{
-		cast(layer, Layer).addKeyFrame(cast(keyFrame, KeyFrame));
+		(cast layer:Layer).addKeyFrame((cast keyFrame:KeyFrame));
 	}
 }

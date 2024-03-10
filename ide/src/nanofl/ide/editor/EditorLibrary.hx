@@ -83,14 +83,10 @@ class EditorLibrary extends InjectContainer
 	{
 		document.undoQueue.beginTransaction({ libraryRemoveItems:namePaths });
 		
-		var n = document.navigator.editPath.findIndex(x -> Std.isOfType(x.element, Instance) && namePaths.indexOf((cast x.element:Instance).symbol.namePath) >= 0);
+		var n = document.navigator.editPath.findIndex(x -> namePaths.contains(x.mcItem.namePath));
 		if (n >= 0)
 		{
-			document.navigator.navigateTo(document.navigator.editPath.slice(0, n));
-		}
-		else
-		{
-			document.navigator.navigateTo(document.navigator.editPath);
+			document.navigator.navigateTo(document.navigator.editPath.slice(0, n), true, false);
 		}
 		
 		for (namePath in namePaths) library.removeItem(namePath);

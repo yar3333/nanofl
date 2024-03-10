@@ -1,5 +1,9 @@
 package nanofl.ide.editor;
 
+import datatools.ArrayRO;
+import nanofl.engine.LibraryItemType;
+import nanofl.engine.ElementType;
+import nanofl.ide.libraryitems.MovieClipItem;
 import nanofl.ide.ElementLifeTracker.ElementLifeTrack;
 import nanofl.engine.elements.Instance;
 import nanofl.engine.MaskTools;
@@ -68,7 +72,7 @@ class EditorLayer
 		{
 			frame.keyFrame.getShape(true).deselectAll();
 			
-            elementLifeTracker = ElementLifeTracker.createForLayer(navigator.pathItem.getTimeline(), layer.getIndex(), false);
+            elementLifeTracker = ElementLifeTracker.createForLayer(navigator.pathItem.mcItem, layer.getIndex(), false);
 			for (tweenedElement in frame.keyFrame.getTweenedElements(frame.subIndex))
 			{
 				addDisplayObject(tweenedElement);
@@ -80,21 +84,14 @@ class EditorLayer
 		update();
 	}
 	
-	public function addElements(elements:Array<Element>, ?index:Int) : Array<EditorElement>
+	public function addElements(elements:ArrayRO<Element>, ?index:Int) : Array<EditorElement>
     {
-        var elements = elements.copy();
-        
-        var r = [];
-        while (elements.length > 0)
+        final r = [];
+        final elems = elements.copy();
+        while (elems.length > 0)
         {
-            if (index != null)
-            {
-                r.unshift(addElement(elements.pop(), index));
-            }
-            else
-            {
-                r.push(addElement(elements.shift()));
-            }
+            if (index != null) r.unshift(addElement(elems.pop(), index));
+            else               r.push(addElement(elems.shift()));
         }
         return r;
     }
@@ -198,7 +195,7 @@ class EditorLayer
 	public function addElement(element:Element, ?index:Int) : EditorElement
 	{
 		frame.keyFrame.addElement(element, index);
-        elementLifeTracker = ElementLifeTracker.createForLayer(navigator.pathItem.getTimeline(), layer.getIndex(), false);
+        elementLifeTracker = ElementLifeTracker.createForLayer(navigator.pathItem.mcItem, layer.getIndex(), false);
 		return addDisplayObject(new TweenedElement(element, element), index);
 	}
 	
@@ -283,11 +280,11 @@ class EditorLayer
 			var item = items[i];
 			if (item.selected)
 			{
-				if (Std.isOfType(item.originalElement, Instance))
+				if (item.originalElement.type == ElementType.instance && (cast item.originalElement:Instance).symbol.type == LibraryItemType.movieclip)
 				{
 					removeItemAt(i);
-					var containerElement : Instance = cast item.originalElement;
-					for (child in containerElement.getChildren())
+					var instance : Instance = cast item.originalElement;
+					for (child in MovieClipItemTools.getElements((cast instance.symbol:MovieClipItem)))
 					{
 						if (Std.isOfType(child, ShapeElement))
 						{

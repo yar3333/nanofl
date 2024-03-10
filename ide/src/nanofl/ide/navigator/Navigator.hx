@@ -44,9 +44,9 @@ class Navigator extends InjectContainer
 		update(false);
 	}
 	
-	public function navigateTo(editPath:Array<PathItem>, isCenterView=true)
+	public function navigateTo(editPath:Array<PathItem>, isCenterView=true, commitBeforeChange=true)
 	{
-        document.undoQueue.commitTransaction();
+        if (commitBeforeChange) document.undoQueue.commitTransaction();
 		this.editPath = editPath;
 		update(isCenterView);
 	}
@@ -60,7 +60,7 @@ class Navigator extends InjectContainer
 	@:profile
 	public function setFrameIndex(index:Int, ?invalidater:Invalidater, commitBeforeChange=true)
 	{
-		var totalFrames = pathItem.element.getTotalFrames();
+		var totalFrames = pathItem.getTotalFrames();
 		
 		if (totalFrames > 0)
 		{
@@ -95,7 +95,7 @@ class Navigator extends InjectContainer
 	{
 		var first =
 		{
-			namePath: (cast editPath[0].element : Instance).namePath,
+			namePath: editPath[0].instance.namePath,
 			layerIndex: editPath[0].layerIndex,
 			frameIndex: editPath[0].frameIndex
 		};
@@ -105,7 +105,7 @@ class Navigator extends InjectContainer
 		{
 			nexts.push
 			({
-				elementIndex: editPath[i - 1].frame.keyFrame.elements.indexOf((cast editPath[i].element : Element)),
+				elementIndex: editPath[i - 1].frame.keyFrame.elements.indexOf(editPath[i].instance), // TODO: group
 				layerIndex: editPath[i].layerIndex,
 				frameIndex: editPath[i].frameIndex
 			});
@@ -167,8 +167,10 @@ class Navigator extends InjectContainer
 		{
 			editPath.push(new PathItem(document.library.getSceneInstance()));
 		}
+
+        final timeline = new TimelineAdapterToEditor(document.editor, document.undoQueue, document.library.getRawLibrary(), preferences, pathItem, this, document.properties);
 		
-		view.movie.timeline.bind(new TimelineAdapterToEditor(document.editor, document.undoQueue, document.library.getRawLibrary(), preferences, pathItem, this, document.properties));
+		view.movie.timeline.bind(timeline);
 		view.movie.navigator.update();
 		view.movie.timeline.update();
 		
@@ -179,14 +181,6 @@ class Navigator extends InjectContainer
 	
 	public function getInstanceNamePaths() : Array<String>
 	{
-		var r = [];
-		for (item in editPath)
-		{
-			if (Std.isOfType(item.element, Instance))
-			{
-				r.push(cast(item.element, Instance).namePath);
-			}
-		}
-		return r;
+		return editPath.map(x -> x.instance.namePath);
 	}
 }

@@ -306,9 +306,9 @@ class Code extends wquery.Component
 		milk.update();
 		
 		var mat = new Matrix();
-		for (pi in editPath)
+		for (pathItem in editPath)
 		{
-			mat.appendMatrix(pi.element.matrix);
+			mat.appendMatrix(pathItem.instance.matrix);
 		}
 		field.set(mat.decompose());
 		
@@ -458,8 +458,7 @@ class Code extends wquery.Component
 	
 	function isPathItemIsMovieClip()
 	{
-		return Std.isOfType(pathItem.element, Instance)
-		    && Std.isOfType((cast pathItem.element:Instance).symbol, MovieClipItem);
+		return true; // TODO: group
 	}
 	
 	static function log(v:Dynamic, ?infos:haxe.PosInfos)

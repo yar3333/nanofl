@@ -63,7 +63,7 @@ class LibraryItemToEditorDropper
 	{
 		log("editor.dropLibraryItem");
 		
-		if (app.document.navigator.pathItem.element.getTotalFrames() == 0) { view.alerter.error("There is no frame to drop into."); return; }
+		if (app.document.navigator.pathItem.getTotalFrames() == 0) { view.alerter.error("There is no frame to drop into."); return; }
 		
 		if (Std.isOfType(item, InstancableItem))
 		{

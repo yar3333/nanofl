@@ -546,7 +546,8 @@ class Editor extends InjectContainer
 
 		layers = [];
 		container.removeAllChildren();
-		for (layer in pathItem.element.layers)
+
+		for (layer in pathItem.mcItem.layers)
 		{
 			var editorLayer = new EditorLayer(this, document.navigator, view, layer, pathItem.frameIndex);
 			layers.push(editorLayer);
@@ -631,7 +632,7 @@ class Editor extends InjectContainer
 	@:allow(nanofl.ide.undo)
 	function setElementsState(state:ElementsState<Element>)
 	{
-		var layers = pathItem.element.layers;
+		var layers = pathItem.mcItem.layers;
 		for (i in 0...state.layerElements.length)
 		{
 			var frame = layers[i].getFrame(pathItem.frameIndex);

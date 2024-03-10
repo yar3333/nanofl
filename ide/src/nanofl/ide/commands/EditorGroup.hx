@@ -64,9 +64,9 @@ class EditorGroup extends BaseGroup
 	public function properties()
 	{
 		var pathItem = app.document.navigator.pathItem;
-        if (Std.isOfType(pathItem.element, Instance))
+        //if (Std.isOfType(pathItem.element, Instance)) // TODO: group
         {
-            popups.symbolProperties.show(cast((cast pathItem.element:Instance).symbol, IIdeInstancableItem));
+            popups.symbolProperties.show(pathItem.mcItem);
         }
 	}
 	
