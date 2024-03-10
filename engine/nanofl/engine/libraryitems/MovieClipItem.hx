@@ -97,48 +97,6 @@ class MovieClipItem	extends InstancableItem
 			n++;
 		}
 	}
-
-	public function removeLayer(index:Int) : Void
-	{
-		_layers.splice(index, 1);
-		for (layer in _layers)
-		{
-			if (layer.parentIndex != null)
-			{
-				if      (layer.parentIndex == index) layer.parentIndex = null;
-				else if (layer.parentIndex > index)  layer.parentIndex--;
-			}
-		}		
-	}    
-	
-	public function removeLayerWithChildren(index:Int) : Array<Layer>
-	{
-		var n = index + 1; while (n < _layers.length && isLayerChildOf(n, index)) n++;
-
-        final layerToRemoveCount = n - index;
-		
-		for (layer in _layers.slice(n))
-		{
-			if (layer.parentIndex != null && layer.parentIndex > index)
-			{
-				layer.parentIndex -= layerToRemoveCount;
-			}
-		}
-		
-		final removedLayers = _layers.splice(index, layerToRemoveCount);
-		for (layer in removedLayers) layer.parentIndex -= index;
-		removedLayers[0].parentIndex = null;
-		
-		return removedLayers;
-	}
-
-	function isLayerChildOf(childIndex:Int, parentIndex:Int)
-	{
-		var pi = _layers[childIndex].parentIndex;
-		if (pi == null) return false;
-		if (pi == parentIndex) return true;
-		return isLayerChildOf(pi, parentIndex);
-	}    
 	
 	public function getTotalFrames() : Int
     {

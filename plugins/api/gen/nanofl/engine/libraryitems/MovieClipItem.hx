@@ -26,8 +26,6 @@ extern class MovieClipItem extends nanofl.engine.libraryitems.InstancableItem im
 			 
 	**/
 	function addLayersBlock(layersToAdd:Array<nanofl.engine.movieclip.Layer>, ?index:Int):Void;
-	function removeLayer(index:Int):Void;
-	function removeLayerWithChildren(index:Int):Array<nanofl.engine.movieclip.Layer>;
 	function getTotalFrames():Int;
 	override function clone():nanofl.engine.libraryitems.MovieClipItem;
 	override function getIcon():String;

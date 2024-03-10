@@ -397,21 +397,21 @@ class Code extends wquery.Component implements IEditorTimeline
 			
 			title.editable
 			({
-				enabled: function(jq:JQuery)
+				enabled: (jq:JQuery) ->
 				{
 					return jq.parent().hasClass("selected");
 				},
-				beginEdit: function(jq:JQuery, input:JQuery)
+				beginEdit: (jq:JQuery, input:JQuery) ->
 				{
 					input.width(jq.width());
 					jq.hide();
 					input.insertAfter(jq);
 				},
-				endEdit: function(jq:JQuery)
+				endEdit: (jq:JQuery) ->
 				{
 					jq.css("display", "");
 				},
-				setData: function(jq:JQuery, value:String)
+				setData: (jq:JQuery, value:String) ->
 				{
 					value = StringTools.trim(value);
 					adapter.beginTransaction();
@@ -422,9 +422,9 @@ class Code extends wquery.Component implements IEditorTimeline
 				cssClass: "inPlaceEdit"
 			});
 			
-			dragAndDrop.ready.then(function(api:IDragAndDrop)
+			dragAndDrop.ready.then((api:IDragAndDrop) ->
 			{
-				api.draggable(title, null, "layer", function(out:XmlBuilder, e:JqEvent)
+				api.draggable(title, null, "layer", (out:XmlBuilder, e:JqEvent) ->
 				{
 					out.attr("text", layer.name);
 					out.attr("icon", layer.getIcon());
@@ -461,7 +461,7 @@ class Code extends wquery.Component implements IEditorTimeline
 		
 		update();
 		
-		freezed(function()
+		freezed(() ->
 		{
 			adapter.onLayerAdded();
 		});
@@ -511,7 +511,7 @@ class Code extends wquery.Component implements IEditorTimeline
 		
 		update();
 		
-		freezed(function()
+		freezed(() ->
 		{
 			adapter.onLayerRemoved();
 		});
@@ -593,7 +593,7 @@ class Code extends wquery.Component implements IEditorTimeline
 			}
 		}
 		
-		freezed(function()
+		freezed(() ->
 		{
 			adapter.onLayersSelectionChange(getSelectedLayerIndexes());
 		});
@@ -944,7 +944,7 @@ class Code extends wquery.Component implements IEditorTimeline
 	
 	public function removeTween() 
 	{
-		iterateSelectedKeyFrames(function(keyFrame)
+		iterateSelectedKeyFrames(keyFrame ->
 		{
 			keyFrame.removeMotionTween();
 		});
@@ -1213,7 +1213,7 @@ class Code extends wquery.Component implements IEditorTimeline
 		var totalFrames = adapter.getTotalFrames();
 		
 		playTimer = new Timer(Math.round(1000 / adapter.framerate));
-		playTimer.run = function()
+		playTimer.run = () ->
 		{
 			adapter.frameIndex = adapter.frameIndex < totalFrames - 1 ? adapter.frameIndex + 1 : 0;
 			if (adapter.frameIndex == totalFrames - 1) stop();
@@ -1299,7 +1299,7 @@ class Code extends wquery.Component implements IEditorTimeline
 	
 	function setActiveLayerAndFrameThenUpdate(layerIndex:Int, frameIndex:Int)
 	{
-		freezed(function()
+		freezed(() ->
 		{
 			adapter.layerIndex = layerIndex;
 			adapter.frameIndex = frameIndex;
