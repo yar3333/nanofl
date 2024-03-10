@@ -7,7 +7,6 @@ extern class Application extends js.injecting.InjectContainer {
 	var pid : String;
 	function createNewEmptyDocument(?callb:nanofl.ide.Document -> Void):Void;
 	function openDocument(?path:String):js.lib.Promise<nanofl.ide.Document>;
-	function getAciveSymbol():nanofl.ide.ISymbol;
 	function importDocument(?path:String, ?plugin:nanofl.ide.plugins.IImporterPlugin):js.lib.Promise<nanofl.ide.Document>;
 	function quit(?force:Bool, ?exitCode:Int):Void;
 }

@@ -32,7 +32,7 @@ class EditorMilk extends Container
 		uncache();
 		removeAllChildren();
 		
-        final milkChild = editPath[0].instance.createDisplayObject();
+        final milkChild = editPath[0].mcItem.createDisplayObject();
 
         var obj : MovieClip = cast milkChild;
         for (i in 0...editPath.length)

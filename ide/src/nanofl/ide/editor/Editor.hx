@@ -390,7 +390,7 @@ class Editor extends InjectContainer
 	public function isItemCanBeAdded(item:IIdeLibraryItem) : Bool
 	{
 		if (!Std.isOfType(item, InstancableItem)) return false;
-		return document.navigator.getInstanceNamePaths().foreach(namePath ->
+		return document.navigator.getNamePaths().foreach(namePath ->
 		{
 			if (item.namePath == namePath) return false;
 			if (Std.isOfType(item, MovieClipItem) && MovieClipItemTools.getUsedNamePaths((cast item:MovieClipItem), true, false).contains(namePath)) return false;

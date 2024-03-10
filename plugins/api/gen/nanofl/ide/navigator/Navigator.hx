@@ -13,5 +13,5 @@ extern class Navigator extends nanofl.ide.InjectContainer {
 	function setState(state:nanofl.ide.undo.states.NavigatorState):Void;
 	function navigateUp():Void;
 	function update(isCenterView:Bool):Void;
-	function getInstanceNamePaths():Array<String>;
+	function getNamePaths():Array<String>;
 }

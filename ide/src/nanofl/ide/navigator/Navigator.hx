@@ -93,7 +93,7 @@ class Navigator extends InjectContainer
 	{
 		var first =
 		{
-			namePath: editPath[0].instance.namePath,
+			namePath: editPath[0].mcItem.namePath,
 			layerIndex: editPath[0].layerIndex,
 			frameIndex: editPath[0].frameIndex
 		};
@@ -177,8 +177,8 @@ class Navigator extends InjectContainer
         view.movie.editor.show();
 	}
 	
-	public function getInstanceNamePaths() : Array<String>
+	public function getNamePaths() : Array<String>
 	{
-		return editPath.map(x -> x.instance.namePath);
+		return editPath.map(x -> x.mcItem.namePath);
 	}
 }

@@ -1184,7 +1184,6 @@ class Code extends wquery.Component implements IEditorTimeline
 				j--;
 			}
 		}
-		
 	}
 	
 	function preserveLayerSelection(callb:Void->Void)
@@ -1322,9 +1321,8 @@ class Code extends wquery.Component implements IEditorTimeline
 	
 	function updateInvalidated(changes:Changes)
 	{
-		if (changes.frames) updateFrames();
-		else
-		if (changes.header) updateHeader();
+		if      (changes.frames) updateFrames();
+		else if (changes.header) updateHeader();
 		
 		if (changes.activeFrame) updateActiveFrame();
 	}

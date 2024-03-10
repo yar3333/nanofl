@@ -169,21 +169,6 @@ class Application extends js.injecting.InjectContainer
 		}
 	}
 	
-	public function getAciveSymbol() : ISymbol
-	{
-		if (document != null)
-		{
-			var instance = document.editor.getSingleSelectedInstance()
-                        ?? document.navigator.pathItem.instance;
-			
-			if (instance != null)
-			{
-				return (cast instance.symbol:IIdeInstancableItem);
-			}
-		}
-		return null;
-	}
-	
 	public function importDocument(?path:String, ?plugin:IImporterPlugin) : Promise<Document>
 	{
 		if (path == null)

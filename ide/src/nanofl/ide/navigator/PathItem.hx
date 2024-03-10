@@ -52,7 +52,7 @@ class PathItem
     
 	public function getNavigatorIcon() return mcItem.getIcon();    
 	public function getNavigatorName() return mcItem.namePath;
-    public function isScene() return instance.namePath == Library.SCENE_NAME_PATH;
+    public function isScene() return mcItem.namePath == Library.SCENE_NAME_PATH;
     
     public function equ(p:PathItem) : Bool
     {
