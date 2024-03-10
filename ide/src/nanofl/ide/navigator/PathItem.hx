@@ -40,7 +40,6 @@ class PathItem
         layerIndex = n;
     }
     
-    @:allow(nanofl.ide.navigator.Navigator2D.setFrameIndex)
     public function setFrameIndex(n:Int)
     {
         Debug.assert(n != null);

@@ -1,18 +1,17 @@
 package components.nanofl.movie.editor;
 
+import js.html.CanvasElement;
+import js.html.File;
+import datatools.ArrayRO;
 import nanofl.ide.editor.EditorMilk;
 import easeljs.display.Container;
 import easeljs.events.MouseEvent;
 import easeljs.geom.Rectangle;
 import easeljs.display.Shape;
-import js.html.CanvasElement;
-import js.html.File;
 import nanofl.DisplayObjectTools;
 import easeljs.display.Stage; // use native Stage to manual mask control
-import nanofl.engine.elements.Instance;
 import nanofl.engine.geom.Matrix;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
-import nanofl.engine.libraryitems.MovieClipItem;
 import nanofl.ide.Application;
 import nanofl.ide.Globals;
 import nanofl.ide.draganddrop.DragAndDrop;
@@ -77,7 +76,7 @@ class Code extends wquery.Component
 	@:noCompletion function get_viewY() return root.y;
 	@:noCompletion function set_viewY(value:Float) return root.y = value;
 	
-	var editPath(get, never) : Array<PathItem>;
+	var editPath(get, never) : ArrayRO<PathItem>;
     @:noCompletion function get_editPath() return app.document.navigator.editPath;
 	
     var pathItem(get, never) : PathItem;

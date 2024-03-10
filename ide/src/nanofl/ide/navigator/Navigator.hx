@@ -2,6 +2,7 @@ package nanofl.ide.navigator;
 
 import stdlib.Std;
 import stdlib.Debug;
+import datatools.ArrayRO;
 import nanofl.engine.elements.Instance;
 import nanofl.engine.libraryitems.InstancableItem;
 import nanofl.ide.navigator.PathItem;
@@ -21,42 +22,43 @@ class Navigator extends InjectContainer
 	
 	var document : Document;
 	
-	public var editPath(default, null) : Array<PathItem>;
+	public var editPath(get, never) : ArrayRO<PathItem>; function get_editPath() return _editPath;
+	var _editPath(default, null) : Array<PathItem>;
 	
 	public var pathItem(get, never) : PathItem;
 	@:noCompletion function get_pathItem() : PathItem return editPath[editPath.length - 1];
 	
 	@:noapi
-	public function new(document:Document)
+	public function new(document:Document) : Void
 	{
 		super();
 		
 		this.document = document;
-		this.editPath = [];
+		this._editPath = [];
 	}
 	
-	public function navigateDown(container:Instance)
+	public function navigateDown(instance:Instance) : Void
 	{
         document.undoQueue.commitTransaction();
-		editPath.push(new PathItem(container));
+		_editPath.push(new PathItem(instance));
 		update(false);
 	}
 	
-	public function navigateTo(editPath:Array<PathItem>, isCenterView=true, commitBeforeChange=true)
+	public function navigateTo(editPath:Array<PathItem>, isCenterView=true, commitBeforeChange=true) : Void
 	{
         if (commitBeforeChange) document.undoQueue.commitTransaction();
-		this.editPath = editPath;
+		this._editPath = editPath;
 		update(isCenterView);
 	}
 	
-	public function setLayerIndex(index:Int)
+	public function setLayerIndex(index:Int) : Void
 	{
 		pathItem.setLayerIndex(index);
         view.movie.timeline.fixActiveLayer();
 	}
 	
 	@:profile
-	public function setFrameIndex(index:Int, ?invalidater:Invalidater, commitBeforeChange=true)
+	public function setFrameIndex(index:Int, ?invalidater:Invalidater, commitBeforeChange=true) : Void
 	{
 		var totalFrames = pathItem.getTotalFrames();
 		
@@ -113,7 +115,7 @@ class Navigator extends InjectContainer
 	}
 	
 	//@:allow(nanofl.ide.undo)
-	public function setState(state:NavigatorState)
+	public function setState(state:NavigatorState) : Void
 	{
 		var editPath = new Array<PathItem>();
 		
@@ -140,30 +142,33 @@ class Navigator extends InjectContainer
 	}
 	
 	@:profile
-	public function navigateUp()
+	public function navigateUp(newEditPathLength:Int = null) : Void
 	{
 		Debug.assert(editPath.length >= 1);
-		
-		if (editPath.length > 1)
-		{
-			editPath.pop();
+        
+        if (newEditPathLength == null) newEditPathLength = editPath.length - 1;
+        Debug.assert(newEditPathLength >= 0);
+        Debug.assert(newEditPathLength < editPath.length);
+
+		_editPath = _editPath.splice(0, newEditPathLength);
+
+        if (_editPath.length > 0)
+        {
 			update(false);
-		}
-		else
-		if (!editPath[0].isScene())
-		{
-			editPath.pop();
-			editPath.push(new PathItem(document.library.getSceneInstance()));
-			update(true);
-		}
+        }
+        else
+        {
+            _editPath.push(new PathItem(document.library.getSceneInstance()));
+            update(true);
+        }
 	}
 	
 	@:profile
 	public function update(isCenterView:Bool)
 	{
-		if (editPath.length == 0)
+		if (_editPath.length == 0)
 		{
-			editPath.push(new PathItem(document.library.getSceneInstance()));
+			_editPath.push(new PathItem(document.library.getSceneInstance()));
 		}
 
         final timeline = new EditorTimeline
