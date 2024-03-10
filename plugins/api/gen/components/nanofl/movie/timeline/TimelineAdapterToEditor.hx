@@ -14,7 +14,7 @@ extern class TimelineAdapterToEditor implements components.nanofl.movie.timeline
 	private function set_layerIndex(n:Int):Int;
 	var framerate(get, never) : Float;
 	private function get_framerate():Float;
-	var xmlLayersTag(default, null) : String;
+	var xmlLayersTag : String;
 	function beginTransaction():Void;
 	function commitTransaction():Void;
 	function getLayerContextMenu():Array<nanofl.ide.ui.menu.MenuItem>;

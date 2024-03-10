@@ -13,7 +13,6 @@ import nanofl.ide.draganddrop.DragImageType;
 import nanofl.ide.draganddrop.DropEffect;
 import nanofl.ide.draganddrop.IDropArea;
 import nanofl.ide.ui.View;
-using nanofl.engine.LayersTools;
 
 @:rtti
 class LibraryItemToEditorDropper

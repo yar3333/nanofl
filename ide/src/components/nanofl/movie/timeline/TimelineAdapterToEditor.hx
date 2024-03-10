@@ -15,7 +15,6 @@ import nanofl.ide.navigator.PathItem;
 import nanofl.ide.preferences.Preferences;
 import nanofl.ide.ui.menu.MenuItem;
 import nanofl.ide.undo.document.UndoQueue;
-using nanofl.engine.LayersTools;
 
 private typedef TLFrame = components.nanofl.movie.timeline.TLFrame;
 private typedef TLLayer = components.nanofl.movie.timeline.TLLayer;

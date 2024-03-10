@@ -6,7 +6,7 @@ extern class Navigator extends nanofl.ide.InjectContainer {
 	@:noCompletion
 	private function get_pathItem():nanofl.ide.navigator.PathItem;
 	function navigateDown(container:nanofl.engine.elements.Instance):Void;
-	function navigateTo(editPath:Array<nanofl.ide.navigator.PathItem>, ?isCenterView:Bool):Void;
+	function navigateTo(editPath:Array<nanofl.ide.navigator.PathItem>, ?isCenterView:Bool, ?commitBeforeChange:Bool):Void;
 	function setLayerIndex(index:Int):Void;
 	function setFrameIndex(index:Int, ?invalidater:nanofl.ide.Invalidater, ?commitBeforeChange:Bool):Void;
 	function getState():nanofl.ide.undo.states.NavigatorState;

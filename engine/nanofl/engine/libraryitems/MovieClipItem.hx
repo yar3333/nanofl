@@ -17,6 +17,7 @@ import nanofl.engine.movieclip.Frame;
 import nanofl.engine.movieclip.KeyFrame;
 import nanofl.engine.movieclip.Layer;
 import stdlib.Std;
+using stdlib.Lambda;
 
 #if ide
 import htmlparser.HtmlNodeElement;
@@ -65,17 +66,84 @@ class MovieClipItem	extends InstancableItem
 		super(namePath);
 	}
 	
-	public function addLayer(layer:Layer) LayersTools.addLayer(this, layer);
+	public function addLayer(layer:Layer)
+    {
+  		layer.layersContainer = this;
+		_layers.push(layer);
+    }
 	
-	public function addLayersBlock(layersToAdd:Array<Layer>, ?index:Int) LayersTools.addLayersBlock(this, layersToAdd, index);
+	/**
+	 * Add block of layers into timeline.
+	 * Assume that layers' parentIndex referenced inside block.
+	 */
+	public function addLayersBlock(layersToAdd:Array<Layer>, ?index:Int)
+	{
+		if (index == null || index < 0 || index > _layers.length) index = _layers.length;
+		
+		for (layer in _layers)
+		{
+			if (layer.parentIndex != null && layer.parentIndex >= index)
+			{
+				layer.parentIndex += layersToAdd.length;
+			}
+		}
+		
+		var n = index;
+		for (layer in layersToAdd)
+		{
+			layer.layersContainer = this;
+			if (layer.parentIndex != null) layer.parentIndex += index;
+			_layers.insert(n, layer);
+			n++;
+		}
+	}
+
+	public function removeLayer(index:Int) : Void
+	{
+		_layers.splice(index, 1);
+		for (layer in _layers)
+		{
+			if (layer.parentIndex != null)
+			{
+				if      (layer.parentIndex == index) layer.parentIndex = null;
+				else if (layer.parentIndex > index)  layer.parentIndex--;
+			}
+		}		
+	}    
 	
-	public function removeLayer(index:Int) LayersTools.removeLayer(this, index);
+	public function removeLayerWithChildren(index:Int) : Array<Layer>
+	{
+		var n = index + 1; while (n < _layers.length && isLayerChildOf(n, index)) n++;
+
+        final layerToRemoveCount = n - index;
+		
+		for (layer in _layers.slice(n))
+		{
+			if (layer.parentIndex != null && layer.parentIndex > index)
+			{
+				layer.parentIndex -= layerToRemoveCount;
+			}
+		}
+		
+		final removedLayers = _layers.splice(index, layerToRemoveCount);
+		for (layer in removedLayers) layer.parentIndex -= index;
+		removedLayers[0].parentIndex = null;
+		
+		return removedLayers;
+	}
+
+	function isLayerChildOf(childIndex:Int, parentIndex:Int)
+	{
+		var pi = _layers[childIndex].parentIndex;
+		if (pi == null) return false;
+		if (pi == parentIndex) return true;
+		return isLayerChildOf(pi, parentIndex);
+	}    
 	
-	public function removeLayerWithChildren(index:Int) return LayersTools.removeLayerWithChildren(this, index);
-	
-	public function getFramesAt(frameIndex:Int) : Array<Frame> return LayersTools.getFramesAt(this, frameIndex);
-	
-	public function getTotalFrames() : Int return LayersTools.getTotalFrames(this);
+	public function getTotalFrames() : Int
+    {
+        return layers.fold((layer, r) -> Std.max(layer.getTotalFrames(), r), 0);
+    }
 	
 	public function clone() : MovieClipItem
 	{

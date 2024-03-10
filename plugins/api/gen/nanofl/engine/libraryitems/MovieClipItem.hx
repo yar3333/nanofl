@@ -1,6 +1,6 @@
 package nanofl.engine.libraryitems;
 
-extern class MovieClipItem extends nanofl.engine.libraryitems.InstancableItem implements nanofl.engine.libraryitems.IPlayableItem implements nanofl.engine.libraryitems.ISpritableItem implements nanofl.engine.ITextureItem implements nanofl.engine.ILayersContainer {
+extern class MovieClipItem extends nanofl.engine.libraryitems.InstancableItem implements nanofl.engine.libraryitems.IPlayableItem implements nanofl.engine.libraryitems.ISpritableItem implements nanofl.engine.ITextureItem {
 	function new(namePath:String):Void;
 	var _layers : Array<nanofl.engine.movieclip.Layer>;
 	var layers(get, never) : Array<nanofl.engine.movieclip.Layer>;
@@ -19,10 +19,15 @@ extern class MovieClipItem extends nanofl.engine.libraryitems.InstancableItem im
 	var exportAsSprite : Bool;
 	var spriteSheet(get, never) : easeljs.display.SpriteSheet;
 	function addLayer(layer:nanofl.engine.movieclip.Layer):Void;
+	/**
+		
+			 * Add block of layers into timeline.
+			 * Assume that layers' parentIndex referenced inside block.
+			 
+	**/
 	function addLayersBlock(layersToAdd:Array<nanofl.engine.movieclip.Layer>, ?index:Int):Void;
 	function removeLayer(index:Int):Void;
 	function removeLayerWithChildren(index:Int):Array<nanofl.engine.movieclip.Layer>;
-	function getFramesAt(frameIndex:Int):Array<nanofl.engine.movieclip.Frame>;
 	function getTotalFrames():Int;
 	override function clone():nanofl.engine.libraryitems.MovieClipItem;
 	override function getIcon():String;

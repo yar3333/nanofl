@@ -1,7 +1,7 @@
 package nanofl.engine.elements;
 
 extern class Element {
-	var parent : nanofl.engine.IElementsContainer;
+	var parent : nanofl.engine.movieclip.KeyFrame;
 	var type(get, never) : nanofl.engine.ElementType;
 	private function get_type():nanofl.engine.ElementType;
 	var visible : Bool;

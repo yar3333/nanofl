@@ -1,6 +1,6 @@
 package nanofl.engine.movieclip;
 
-extern class KeyFrame implements nanofl.engine.IElementsContainer {
+extern class KeyFrame {
 	function new(?label:String, ?duration:Int, ?motionTween:nanofl.engine.movieclip.MotionTween, ?elements:Array<nanofl.engine.elements.Element>):Void;
 	var layer : nanofl.engine.movieclip.Layer;
 	var label : String;

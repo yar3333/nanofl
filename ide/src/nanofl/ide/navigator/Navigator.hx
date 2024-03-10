@@ -3,7 +3,6 @@ package nanofl.ide.navigator;
 import stdlib.Std;
 import stdlib.Debug;
 import components.nanofl.movie.timeline.TimelineAdapterToEditor;
-import nanofl.engine.elements.Element;
 import nanofl.engine.elements.Instance;
 import nanofl.engine.libraryitems.InstancableItem;
 import nanofl.ide.navigator.PathItem;
@@ -12,7 +11,6 @@ import nanofl.ide.preferences.Preferences;
 import nanofl.ide.ui.View;
 import nanofl.ide.undo.states.NavigatorState;
 using stdlib.Lambda;
-using nanofl.engine.LayersTools;
 
 #if profiler @:build(Profiler.buildMarked()) #end
 @:rtti

@@ -469,18 +469,6 @@ nanofl_engine_AdvancableDisplayObject.__isInterface__ = true;
 nanofl_engine_AdvancableDisplayObject.prototype = {
 	__class__: nanofl_engine_AdvancableDisplayObject
 };
-var nanofl_engine_IElementsContainer = function() { };
-nanofl_engine_IElementsContainer.__name__ = true;
-nanofl_engine_IElementsContainer.__isInterface__ = true;
-nanofl_engine_IElementsContainer.prototype = {
-	__class__: nanofl_engine_IElementsContainer
-};
-var nanofl_engine_ILayersContainer = function() { };
-nanofl_engine_ILayersContainer.__name__ = true;
-nanofl_engine_ILayersContainer.__isInterface__ = true;
-nanofl_engine_ILayersContainer.prototype = {
-	__class__: nanofl_engine_ILayersContainer
-};
 var nanofl_engine_ILibraryItem = function() { };
 nanofl_engine_ILibraryItem.__name__ = true;
 nanofl_engine_ILibraryItem.__isInterface__ = true;

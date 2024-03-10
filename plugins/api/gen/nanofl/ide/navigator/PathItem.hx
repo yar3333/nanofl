@@ -1,8 +1,9 @@
 package nanofl.ide.navigator;
 
 extern class PathItem {
-	function new(element:nanofl.engine.elements.Instance, ?layerIndex:Int, ?frameIndex:Int):Void;
-	var element : nanofl.engine.elements.Instance;
+	function new(instance:nanofl.engine.elements.Instance, ?layerIndex:Int, ?frameIndex:Int):Void;
+	var instance : nanofl.engine.elements.Instance;
+	var mcItem : nanofl.ide.libraryitems.MovieClipItem;
 	var layerIndex(default, null) : Int;
 	var frameIndex(default, null) : Int;
 	var layer(get, never) : nanofl.engine.movieclip.Layer;
@@ -15,6 +16,6 @@ extern class PathItem {
 	function getNavigatorName():String;
 	function isScene():Bool;
 	function equ(p:nanofl.ide.navigator.PathItem):Bool;
-	function getTimeline():nanofl.ide.libraryitems.MovieClipItem;
+	function getTotalFrames():Int;
 	function clone():nanofl.ide.navigator.PathItem;
 }

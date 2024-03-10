@@ -1,12 +1,11 @@
 package nanofl.ide.navigator;
 
+import stdlib.Debug;
 import nanofl.engine.Library;
 import nanofl.engine.elements.Instance;
 import nanofl.engine.movieclip.Frame;
 import nanofl.engine.movieclip.Layer;
 import nanofl.ide.libraryitems.MovieClipItem;
-import stdlib.Debug;
-using nanofl.engine.LayersTools;
 
 class PathItem
 {

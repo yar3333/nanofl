@@ -13,19 +13,11 @@ extern class Instance extends nanofl.engine.elements.Element {
 	private function get_symbol():nanofl.engine.libraryitems.InstancableItem;
 	override function saveProperties(out:htmlparser.XmlBuilder):Void;
 	override function clone():nanofl.engine.elements.Instance;
-	function isScene():Bool;
 	override function getState():nanofl.ide.undo.states.ElementState;
 	override function setState(state:nanofl.ide.undo.states.ElementState):Void;
 	override function toString():String;
-	var layers(get, never) : Array<nanofl.engine.movieclip.Layer>;
-	@:noCompletion
-	function get_layers():Array<nanofl.engine.movieclip.Layer>;
 	override function createDisplayObject():easeljs.display.DisplayObject;
 	function updateDisplayObjectTweenedProperties(dispObj:easeljs.display.DisplayObject):Void;
-	function getNavigatorName():String;
-	function getNavigatorIcon():String;
-	function getChildren():Array<nanofl.engine.elements.Element>;
-	function getTimeline():nanofl.engine.libraryitems.MovieClipItem;
 	override function setLibrary(library:nanofl.engine.Library):Void;
 	override function equ(element:nanofl.engine.elements.Element):Bool;
 	function getFilters():Array<nanofl.engine.FilterDef>;

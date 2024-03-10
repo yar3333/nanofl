@@ -127,6 +127,14 @@ class Lambda {
 		}
 		return true;
 	}
+	static fold(it,f,first) {
+		let x = $getIterator(it);
+		while(x.hasNext()) {
+			let x1 = x.next();
+			first = f(x1,first);
+		}
+		return first;
+	}
 }
 Lambda.__name__ = "Lambda";
 Math.__name__ = "Math";
@@ -3594,17 +3602,6 @@ nanofl_engine_FontVariant.__name__ = "nanofl.engine.FontVariant";
 Object.assign(nanofl_engine_FontVariant.prototype, {
 	__class__: nanofl_engine_FontVariant
 });
-class nanofl_engine_IElementsContainer {
-}
-nanofl_engine_IElementsContainer.__name__ = "nanofl.engine.IElementsContainer";
-nanofl_engine_IElementsContainer.__isInterface__ = true;
-class nanofl_engine_ILayersContainer {
-}
-nanofl_engine_ILayersContainer.__name__ = "nanofl.engine.ILayersContainer";
-nanofl_engine_ILayersContainer.__isInterface__ = true;
-Object.assign(nanofl_engine_ILayersContainer.prototype, {
-	__class__: nanofl_engine_ILayersContainer
-});
 class nanofl_engine_ILibraryItem {
 }
 nanofl_engine_ILibraryItem.__name__ = "nanofl.engine.ILibraryItem";
@@ -3637,53 +3634,6 @@ var nanofl_engine_LayerType = $hxEnums["nanofl.engine.LayerType"] = { __ename__:
 	,guide: {_hx_name:"guide",_hx_index:3,__enum__:"nanofl.engine.LayerType",toString:$estr}
 };
 nanofl_engine_LayerType.__constructs__ = [nanofl_engine_LayerType.normal,nanofl_engine_LayerType.mask,nanofl_engine_LayerType.folder,nanofl_engine_LayerType.guide];
-class nanofl_engine_LayersTools {
-	static addLayer(obj,layer) {
-		layer.layersContainer = obj;
-		obj._layers.push(layer);
-	}
-	static addLayersBlock(obj,layersToAdd,index) {
-		if(index == null || index < 0 || index > obj._layers.length) {
-			index = obj._layers.length;
-		}
-		let _g = 0;
-		let _g1 = obj._layers;
-		while(_g < _g1.length) {
-			let layer = _g1[_g];
-			++_g;
-			if(layer.parentIndex != null && layer.parentIndex >= index) {
-				layer.parentIndex += layersToAdd.length;
-			}
-		}
-		let n = index;
-		let _g2 = 0;
-		while(_g2 < layersToAdd.length) {
-			let layer = layersToAdd[_g2];
-			++_g2;
-			layer.layersContainer = obj;
-			if(layer.parentIndex != null) {
-				layer.parentIndex += index;
-			}
-			obj._layers.splice(n,0,layer);
-			++n;
-		}
-	}
-	static getTotalFrames(obj) {
-		let r = 0;
-		let _g = 0;
-		let _g1 = obj.get_layers();
-		while(_g < _g1.length) {
-			let layer = _g1[_g];
-			++_g;
-			let b = layer.getTotalFrames();
-			if(r <= b) {
-				r = b;
-			}
-		}
-		return r;
-	}
-}
-nanofl_engine_LayersTools.__name__ = "nanofl.engine.LayersTools";
 class nanofl_engine_Library {
 	constructor(libraryDir,items) {
 		this.items = new haxe_ds_StringMap();
@@ -7034,13 +6984,44 @@ class nanofl_engine_libraryitems_MovieClipItem extends nanofl_engine_libraryitem
 		return this._layers;
 	}
 	addLayer(layer) {
-		nanofl_engine_LayersTools.addLayer(this,layer);
+		layer.layersContainer = this;
+		this._layers.push(layer);
 	}
 	addLayersBlock(layersToAdd,index) {
-		nanofl_engine_LayersTools.addLayersBlock(this,layersToAdd,index);
+		if(index == null || index < 0 || index > this._layers.length) {
+			index = this._layers.length;
+		}
+		let _g = 0;
+		let _g1 = this._layers;
+		while(_g < _g1.length) {
+			let layer = _g1[_g];
+			++_g;
+			if(layer.parentIndex != null && layer.parentIndex >= index) {
+				layer.parentIndex += layersToAdd.length;
+			}
+		}
+		let n = index;
+		let _g2 = 0;
+		while(_g2 < layersToAdd.length) {
+			let layer = layersToAdd[_g2];
+			++_g2;
+			layer.layersContainer = this;
+			if(layer.parentIndex != null) {
+				layer.parentIndex += index;
+			}
+			this._layers.splice(n,0,layer);
+			++n;
+		}
 	}
 	getTotalFrames() {
-		return nanofl_engine_LayersTools.getTotalFrames(this);
+		return Lambda.fold(this.get_layers(),function(layer,r) {
+			let a = layer.getTotalFrames();
+			if(a > r) {
+				return a;
+			} else {
+				return r;
+			}
+		},0);
 	}
 	clone() {
 		let obj = new nanofl_engine_libraryitems_MovieClipItem(this.namePath);
@@ -7197,7 +7178,7 @@ class nanofl_engine_libraryitems_MovieClipItem extends nanofl_engine_libraryitem
 	}
 }
 nanofl_engine_libraryitems_MovieClipItem.__name__ = "nanofl.engine.libraryitems.MovieClipItem";
-nanofl_engine_libraryitems_MovieClipItem.__interfaces__ = [nanofl_engine_libraryitems_IPlayableItem,nanofl_engine_libraryitems_ISpritableItem,nanofl_engine_ITextureItem,nanofl_engine_ILayersContainer];
+nanofl_engine_libraryitems_MovieClipItem.__interfaces__ = [nanofl_engine_libraryitems_IPlayableItem,nanofl_engine_libraryitems_ISpritableItem,nanofl_engine_ITextureItem];
 nanofl_engine_libraryitems_MovieClipItem.__super__ = nanofl_engine_libraryitems_InstancableItem;
 Object.assign(nanofl_engine_libraryitems_MovieClipItem.prototype, {
 	__class__: nanofl_engine_libraryitems_MovieClipItem
@@ -7692,7 +7673,6 @@ class nanofl_engine_movieclip_KeyFrame {
 	}
 }
 nanofl_engine_movieclip_KeyFrame.__name__ = "nanofl.engine.movieclip.KeyFrame";
-nanofl_engine_movieclip_KeyFrame.__interfaces__ = [nanofl_engine_IElementsContainer];
 Object.assign(nanofl_engine_movieclip_KeyFrame.prototype, {
 	__class__: nanofl_engine_movieclip_KeyFrame
 });

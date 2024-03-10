@@ -2,7 +2,7 @@ package nanofl.engine.movieclip;
 
 extern class Layer {
 	function new(name:String, ?type:nanofl.engine.LayerType, ?visible:Bool, ?locked:Bool, ?parentIndex:Int):Void;
-	var layersContainer : nanofl.engine.ILayersContainer;
+	var layersContainer : nanofl.engine.libraryitems.MovieClipItem;
 	var name : String;
 	var type : nanofl.engine.LayerType;
 	var visible : Bool;
