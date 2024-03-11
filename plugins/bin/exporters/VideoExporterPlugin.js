@@ -53,48 +53,59 @@ AudioHelper.getFFmpegArgsForMixTracks = function(tracks,startInputIndex) {
 	return args;
 };
 AudioHelper.getSceneTracks = function(framerate,library) {
-	return AudioHelper.getMovieClipTracksInner(framerate,library.getSceneItem(),library,[],0,AudioHelper.MAX_DURATION);
-};
-AudioHelper.getMovieClipTracksInner = function(framerate,item,library,r,addDelayMs,mcLivingMs) {
-	if(item.relatedSound != null && item.relatedSound != "") {
-		var mcSound = library.getItem(item.relatedSound);
-		r.push({ delayBeforeStartMs : addDelayMs, filePath : library.libraryDir + "/" + mcSound.namePath + "." + mcSound.ext, loop : mcSound.loop, durationMs : mcSound.loop ? Math.round(item.getTotalFrames() / framerate) : null});
-	}
-	nanofl.ide.MovieClipItemTools.iterateInstances(item,function(instance,data) {
-		if(((instance.get_symbol()) instanceof nanofl.ide.libraryitems.MovieClipItem) || ((instance.get_symbol()) instanceof nanofl.ide.libraryitems.VideoItem)) {
-			var layer = item.get_layers()[data.layerIndex];
-			var delayMs = Math.round(AudioHelper.getFrameCoundBeforeKeyFrame(layer,data.keyFrameIndex) / framerate);
-			var maxInnerLivingFrames = AudioHelper.getItemsMaxLivingFrames(item,layer,data.keyFrameIndex);
-			var maxInnerLivingMs = maxInnerLivingFrames < AudioHelper.MAX_DURATION ? Math.round(Math.min(mcLivingMs - delayMs,maxInnerLivingFrames / framerate)) : AudioHelper.MAX_DURATION;
-			if(((instance.get_symbol()) instanceof nanofl.ide.libraryitems.MovieClipItem)) {
-				AudioHelper.getMovieClipTracksInner(framerate,instance.get_symbol(),library,r,addDelayMs + delayMs,maxInnerLivingMs);
-			} else if(((instance.get_symbol()) instanceof nanofl.ide.libraryitems.VideoItem)) {
-				var mcVideo = library.getItem(item.relatedSound);
-				r.push({ delayBeforeStartMs : addDelayMs + delayMs, filePath : library.libraryDir + "/" + mcVideo.namePath + "." + mcVideo.ext, loop : mcVideo.loop, durationMs : maxInnerLivingMs});
-			}
+	var tracker = nanofl.ide.ElementLifeTracker.createForMovieClip(library.getSceneItem(),true);
+	var r = [];
+	var _g = [];
+	var _g1 = 0;
+	var _g2 = tracker.tracks;
+	while(_g1 < _g2.length) {
+		var v = _g2[_g1];
+		++_g1;
+		if(v.sameElementSequence[0].get_type()._hx_index == 2 && v.sameElementSequence[0].get_symbol().get_type()._hx_index == 2 && AudioHelper.getMovieClipItemFromTrack(v).relatedSound != null && AudioHelper.getMovieClipItemFromTrack(v).relatedSound != "") {
+			_g.push(v);
 		}
-	});
-	return r;
-};
-AudioHelper.getFrameCoundBeforeKeyFrame = function(layer,keyFrameIndex) {
-	var r = 0;
+	}
+	var trackMovieClips = _g;
 	var _g = 0;
-	var _g1 = keyFrameIndex;
-	while(_g < _g1) {
-		var i = _g++;
-		r += layer.get_keyFrames()[i].duration;
+	while(_g < trackMovieClips.length) {
+		var track = trackMovieClips[_g];
+		++_g;
+		var item = AudioHelper.getMovieClipItemFromTrack(track);
+		var mcSound = library.getItem(item.relatedSound);
+		r.push(AudioHelper.createAudioTrack(mcSound,track,framerate,library));
+	}
+	var _g = [];
+	var _g1 = 0;
+	var _g2 = tracker.tracks;
+	while(_g1 < _g2.length) {
+		var v = _g2[_g1];
+		++_g1;
+		if(v.sameElementSequence[0].get_type()._hx_index == 2 && v.sameElementSequence[0].get_symbol().get_type()._hx_index == 0) {
+			_g.push(v);
+		}
+	}
+	var trackVideos = _g;
+	var _g = 0;
+	while(_g < trackVideos.length) {
+		var track = trackVideos[_g];
+		++_g;
+		var mcVideo = AudioHelper.getVideoItemFromTrack(track);
+		r.push(AudioHelper.createAudioTrack(mcVideo,track,framerate,library));
 	}
 	return r;
 };
-AudioHelper.getItemsMaxLivingFrames = function(item,layer,keyFrameIndex) {
-	var keyFrame = layer.get_keyFrames()[keyFrameIndex];
-	if(keyFrameIndex < layer.get_keyFrames().length - 1) {
-		return keyFrame.duration;
-	}
-	if(AudioHelper.getFrameCoundBeforeKeyFrame(layer,keyFrameIndex) + keyFrame.duration < item.getTotalFrames()) {
-		return keyFrame.duration;
-	}
-	return AudioHelper.MAX_DURATION;
+AudioHelper.createAudioTrack = function(item,track,framerate,library) {
+	return { delayBeforeStartMs : Math.floor(track.startFrameIndex / framerate), filePath : library.libraryDir + "/" + item.namePath + "." + item.ext, loop : item.loop, durationMs : item.loop ? Math.round(track.lifetimeFrames / framerate) : null};
+};
+AudioHelper.getMovieClipItemFromTrack = function(track) {
+	var element = track.sameElementSequence[0];
+	var instance = element;
+	return instance.get_symbol();
+};
+AudioHelper.getVideoItemFromTrack = function(track) {
+	var element = track.sameElementSequence[0];
+	var instance = element;
+	return instance.get_symbol();
 };
 var Main = function() { };
 Main.__name__ = true;

@@ -167,7 +167,8 @@ class MovieClip extends Container
 		return null;
 	}
 	
-	public function advance(?time:Float) : Void
+    
+	public function advanceToNextFrame(#if ide framerate:Float #end) : Void
 	{
         final totalFrames = getTotalFrames();
     	
@@ -178,7 +179,7 @@ class MovieClip extends Container
                 : (currentFrame + 1) % totalFrames
         );
         
-        for (child in helper.keepedAdvancableChildren) child.advance();
+        for (child in helper.keepedAdvancableChildren) child.advanceToNextFrame(#if ide framerate #end);
         
         for (obj in helper.createdDisplayObjects) DisplayObjectTools.callMethod(obj, "init");
 	}

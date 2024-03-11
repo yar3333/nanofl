@@ -60,7 +60,7 @@ class Player
 
             return library.preload().then(_ ->
             {
-                stage = new nanofl.Stage(canvas, args.framerate);
+                stage = new nanofl.Stage(canvas);
                 
                 if (args.scaleMode != ScaleMode.custom)
                 {
@@ -76,7 +76,7 @@ class Player
                 Ticker.addTickEventListener(e ->
                 {
                     if (e.paused) return;
-                    scene.advance();
+                    scene.advanceToNextFrame();
                     DisplayObjectTools.callMethod(scene, "onEnterFrame");
                     stage.update();
                 });

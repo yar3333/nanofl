@@ -35,7 +35,7 @@ class Code extends wquery.Component
 		Globals.injector.injectInto(this);
 		
 		canvas = cast template().canvas[0];
-		stage = new Stage(canvas, 0);
+		stage = new Stage(canvas);
 	}
 	
 	public function resize(maxWidth:Int, maxHeight:Int)

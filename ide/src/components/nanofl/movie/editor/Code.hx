@@ -1,9 +1,9 @@
 package components.nanofl.movie.editor;
 
+import js.JQuery;
 import js.html.CanvasElement;
 import js.html.File;
 import datatools.ArrayRO;
-import nanofl.ide.editor.EditorMilk;
 import easeljs.display.Container;
 import easeljs.events.MouseEvent;
 import easeljs.geom.Rectangle;
@@ -11,6 +11,7 @@ import easeljs.display.Shape;
 import nanofl.DisplayObjectTools;
 import easeljs.display.Stage; // use native Stage to manual mask control
 import nanofl.engine.geom.Matrix;
+import nanofl.ide.editor.EditorMilk;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.Application;
 import nanofl.ide.Globals;
@@ -21,7 +22,6 @@ import nanofl.ide.library.droppers.LibraryItemToEditorDropper;
 import nanofl.ide.navigator.PathItem;
 import nanofl.ide.preferences.Preferences;
 import nanofl.ide.ui.View;
-import js.JQuery;
 using js.jquery.MouseWheel;
 using nanofl.engine.geom.PointTools;
 using stdlib.Lambda;
@@ -80,7 +80,7 @@ class Code extends wquery.Component
     @:noCompletion function get_editPath() return app.document.navigator.editPath;
 	
     var pathItem(get, never) : PathItem;
-    @:noCompletion function get_pathItem() return editPath[editPath.length - 1];
+    @:noCompletion function get_pathItem() return app.document.navigator.pathItem;
 	
 	function init()
 	{

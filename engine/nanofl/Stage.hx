@@ -1,20 +1,11 @@
 package nanofl;
 
-import nanofl.engine.LayerType;
-import js.lib.Map;
-import easeljs.display.Container;
-import easeljs.display.DisplayObject;
-
 @:expose
 class Stage extends easeljs.display.Stage
 {
-    public var framerate(default, null) : Float;
-
-	public function new(canvas:Dynamic, framerate:Float) 
+	public function new(canvas:Dynamic) 
 	{
 		super(canvas);
-        
-        this.framerate = framerate;
 
 		tickOnUpdate = false;
 		

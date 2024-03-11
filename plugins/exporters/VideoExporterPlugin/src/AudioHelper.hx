@@ -1,4 +1,8 @@
+import nanofl.engine.ElementType;
+import nanofl.engine.LibraryItemType;
+import nanofl.engine.elements.Instance;
 import nanofl.engine.movieclip.Layer;
+import nanofl.ide.ElementLifeTracker;
 import nanofl.ide.library.IdeLibrary;
 import nanofl.ide.libraryitems.MovieClipItem;
 import nanofl.ide.libraryitems.SoundItem;
@@ -61,70 +65,55 @@ class AudioHelper
 
     public static function getSceneTracks(framerate:Float, library:IdeLibrary) : Array<AudioTrack>
     {
-        return getMovieClipTracksInner(framerate, library.getSceneItem(), library, new Array<AudioTrack>(), 0, MAX_DURATION);
-    }
-
-    static function getMovieClipTracksInner(framerate:Float, item:MovieClipItem, library:IdeLibrary, r:Array<AudioTrack>, addDelayMs:Int, mcLivingMs:Int) : Array<AudioTrack>
-    {
-        if (item.relatedSound != null && item.relatedSound != "")
-        {
-            final mcSound : SoundItem = cast library.getItem(item.relatedSound);
-            r.push
-            ({
-                delayBeforeStartMs: addDelayMs, 
-                filePath: library.libraryDir + "/" + mcSound.namePath + "." + mcSound.ext,
-                loop: mcSound.loop,
-                durationMs: mcSound.loop ? Math.round(item.getTotalFrames() / framerate) : null, // TODO: improve loop duration, kill sound on mc remove, detect between-keyframes mc keeping
-            });
-        }
+        final tracker = ElementLifeTracker.createForMovieClip(library.getSceneItem(), true);
         
-        item.iterateInstances((instance, data) ->
+        final r = new Array<AudioTrack>();
+        
+        final trackMovieClips = tracker.tracks.filter(x -> x.sameElementSequence[0].type.match(ElementType.instance)
+                                                  && (cast x.sameElementSequence[0] : Instance).symbol.type.match(LibraryItemType.movieclip)
+                                                  && getMovieClipItemFromTrack(x).relatedSound != null
+                                                  && getMovieClipItemFromTrack(x).relatedSound != "");
+        for (track in trackMovieClips)
         {
-            if (Std.isOfType(instance.symbol, MovieClipItem) || Std.isOfType(instance.symbol, VideoItem))
-            {
-                final layer = item.layers[data.layerIndex];
-                final delayMs = Math.round(getFrameCoundBeforeKeyFrame(layer, data.keyFrameIndex) / framerate);
-                final maxInnerLivingFrames = getItemsMaxLivingFrames(item, layer, data.keyFrameIndex);
-                final maxInnerLivingMs = maxInnerLivingFrames < MAX_DURATION 
-                            ? Math.round(Math.min(mcLivingMs - delayMs, maxInnerLivingFrames / framerate))
-                            : MAX_DURATION;
-                
-                if (Std.isOfType(instance.symbol, MovieClipItem))
-                {
-                    getMovieClipTracksInner(framerate, (cast instance.symbol : MovieClipItem), library, r, addDelayMs + delayMs, maxInnerLivingMs);
-                }
-                else if (Std.isOfType(instance.symbol, VideoItem))
-                {
-                    final mcVideo : VideoItem = cast library.getItem(item.relatedSound);
-                    r.push
-                    ({
-                        delayBeforeStartMs: addDelayMs + delayMs, 
-                        filePath: library.libraryDir + "/" + mcVideo.namePath + "." + mcVideo.ext,
-                        loop: mcVideo.loop,
-                        durationMs: maxInnerLivingMs, // TODO: improve loop duration, kill sound on mc remove, detect between-keyframes mc keeping
-                    });
-                }
-            }
-        });
-
-        return r;
-    }
-
-    static function getFrameCoundBeforeKeyFrame(layer:Layer, keyFrameIndex:Int) : Int
-    {
-        var r = 0; 
-        for (i in 0...keyFrameIndex)
-        {
-            r += layer.keyFrames[i].duration;
+            final item = getMovieClipItemFromTrack(track);
+            final mcSound : SoundItem = cast library.getItem(item.relatedSound);
+            r.push(createAudioTrack(mcSound, track, framerate, library));
         }
+
+        final trackVideos = tracker.tracks.filter(x -> x.sameElementSequence[0].type.match(ElementType.instance)
+                                              && (cast x.sameElementSequence[0] : Instance).symbol.type.match(LibraryItemType.video)
+                                              // && getVideoItemFromTrack(x) // TODO: check video has audio
+        );
+        for (track in trackVideos)
+        {
+            final mcVideo = getVideoItemFromTrack(track);
+            r.push(createAudioTrack(mcVideo, track, framerate, library));
+        }
+
         return r;
     }
 
-    static function getItemsMaxLivingFrames(item:MovieClipItem, layer:Layer, keyFrameIndex:Int) : Int
+    static function createAudioTrack(item:{ namePath:String, ext:String, loop:Bool }, track:ElementLifeTrack, framerate:Float, library:IdeLibrary) : AudioTrack
     {
-        final keyFrame = layer.keyFrames[keyFrameIndex];
-        if (keyFrameIndex < layer.keyFrames.length - 1) return keyFrame.duration;
-        if (getFrameCoundBeforeKeyFrame(layer, keyFrameIndex) + keyFrame.duration < item.getTotalFrames()) return keyFrame.duration;
-        return MAX_DURATION; // keyframe's items live at end of timeline => don't limited duration
+        return {
+            delayBeforeStartMs: Math.floor(track.startFrameIndex / framerate),
+            filePath: library.libraryDir + "/" + item.namePath + "." + item.ext,
+            loop: item.loop,
+            durationMs: item.loop ? Math.round(track.lifetimeFrames / framerate) : null,
+        };
+    }
+
+    static function getMovieClipItemFromTrack(track:ElementLifeTrack) : MovieClipItem
+    {
+        final element = track.sameElementSequence[0];
+        final instance : Instance = cast element;
+        return (cast instance.symbol : MovieClipItem);
+    }
+
+    static function getVideoItemFromTrack(track:ElementLifeTrack) : VideoItem
+    {
+        final element = track.sameElementSequence[0];
+        final instance : Instance = cast element;
+        return (cast instance.symbol : VideoItem);
     }
 }

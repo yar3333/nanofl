@@ -1649,7 +1649,7 @@ class nanofl_MovieClip extends createjs.Container {
 		}
 		return null;
 	}
-	advance(time) {
+	advanceToNextFrame() {
 		let totalFrames = this.getTotalFrames();
 		let helper = this.gotoFrame(this.paused || totalFrames <= 1 || !this.loop && this.currentFrame == totalFrames - 1 ? this.currentFrame : (this.currentFrame + 1) % totalFrames);
 		let _g = 0;
@@ -1657,7 +1657,7 @@ class nanofl_MovieClip extends createjs.Container {
 		while(_g < _g1.length) {
 			let child = _g1[_g];
 			++_g;
-			child.advance();
+			child.advanceToNextFrame();
 		}
 		let _g2 = 0;
 		let _g3 = helper.createdDisplayObjects;
@@ -2145,7 +2145,7 @@ class nanofl_Player {
 				}
 			}
 			return nanofl_Player.library.preload().then(function(_) {
-				nanofl_Player.stage = new nanofl_Stage(canvas,args.framerate);
+				nanofl_Player.stage = new nanofl_Stage(canvas);
 				if(args.scaleMode != nanofl_engine_ScaleMode.custom) {
 					let originalWidth = args.container.offsetWidth;
 					let originalHeight = args.container.offsetHeight;
@@ -2161,7 +2161,7 @@ class nanofl_Player {
 					if(e.paused) {
 						return;
 					}
-					nanofl_Player.scene.advance();
+					nanofl_Player.scene.advanceToNextFrame();
 					nanofl_DisplayObjectTools.callMethod(nanofl_Player.scene,"onEnterFrame");
 					nanofl_Player.stage.update();
 				},null);
@@ -2244,7 +2244,7 @@ class nanofl_Sprite extends createjs.Sprite {
 		this.symbol = symbol;
 		this.paused = !js_Boot.__implements(symbol,nanofl_engine_libraryitems_IPlayableItem) || !symbol.autoPlay;
 	}
-	advance(time) {
+	advanceToNextFrame() {
 		if(this.paused || js_Boot.__implements(this.symbol,nanofl_engine_libraryitems_IPlayableItem) && !this.symbol.loop && this.currentFrame >= this.spriteSheet.getNumFrames() - 1) {
 			return;
 		}
@@ -2291,9 +2291,8 @@ Object.assign(nanofl_SpriteButton.prototype, {
 	__class__: nanofl_SpriteButton
 });
 class nanofl_Stage extends createjs.Stage {
-	constructor(canvas,framerate) {
+	constructor(canvas) {
 		super(canvas);
-		this.framerate = framerate;
 		this.tickOnUpdate = false;
 		this.enableMouseOver(10);
 		let _gthis = this;
@@ -3026,7 +3025,7 @@ Object.assign(nanofl_TextRun.prototype, {
 class nanofl_Video extends nanofl_SolidContainer {
 	constructor(symbol) {
 		super();
-		stdlib_Debug.assert(((symbol) instanceof nanofl_engine_libraryitems_VideoItem),null,{ fileName : "engine/nanofl/Video.hx", lineNumber : 30, className : "nanofl.Video", methodName : "new"});
+		stdlib_Debug.assert(((symbol) instanceof nanofl_engine_libraryitems_VideoItem),null,{ fileName : "engine/nanofl/Video.hx", lineNumber : 26, className : "nanofl.Video", methodName : "new"});
 		this.symbol = symbol;
 		this.video = window.document.createElement("video");
 		this.video.src = symbol.library.realUrl(symbol.namePath + "." + symbol.ext);
@@ -3034,18 +3033,7 @@ class nanofl_Video extends nanofl_SolidContainer {
 		this.video.autoplay = symbol.autoPlay;
 		this.duration = symbol.duration;
 		this.setBounds(0,0,symbol.width,symbol.height);
-		this.currentFrame = 0;
-		let _gthis = this;
-		if(this.video.readyState >= 2) {
-			this.addChild(new createjs.Bitmap(new createjs.VideoBuffer(this.video)));
-		} else {
-			this.addChild(new createjs.Bitmap(symbol.poster));
-			this.video.addEventListener("loadeddata",function() {
-				_gthis.removeAllChildren();
-				return _gthis.addChild(new createjs.Bitmap(new createjs.VideoBuffer(_gthis.video)));
-			},{ once : true});
-			this.video.currentTime = 0.0001;
-		}
+		this.addChild(new createjs.Bitmap(new createjs.VideoBuffer(this.video)));
 	}
 	clone(recursive) {
 		return this._cloneProps(new nanofl_Video(this.symbol));
@@ -3061,24 +3049,10 @@ class nanofl_Video extends nanofl_SolidContainer {
 	}
 	onMouseUp(e) {
 	}
-	advance(time) {
-		stdlib_Debug.assert(this.stage != null,null,{ fileName : "engine/nanofl/Video.hx", lineNumber : 87, className : "nanofl.Video", methodName : "advance"});
-		let framerate = this.stage.framerate;
-		stdlib_Debug.assert(framerate != null,null,{ fileName : "engine/nanofl/Video.hx", lineNumber : 90, className : "nanofl.Video", methodName : "advance"});
-		stdlib_Debug.assert(framerate > 0,null,{ fileName : "engine/nanofl/Video.hx", lineNumber : 91, className : "nanofl.Video", methodName : "advance"});
-		let totalFrames = this.video.duration * framerate | 0;
-		if(!this.video.loop && this.currentFrame >= totalFrames - 1) {
-			return;
-		}
-		this.currentFrame++;
-		if(this.currentFrame >= totalFrames) {
-			this.currentFrame -= totalFrames;
-		}
-	}
 }
 $hx_exports["nanofl"]["Video"] = nanofl_Video;
 nanofl_Video.__name__ = "nanofl.Video";
-nanofl_Video.__interfaces__ = [nanofl_IEventHandlers,nanofl_engine_AdvancableDisplayObject,nanofl_engine_InstanceDisplayObject];
+nanofl_Video.__interfaces__ = [nanofl_IEventHandlers,nanofl_engine_InstanceDisplayObject];
 nanofl_Video.__super__ = nanofl_SolidContainer;
 Object.assign(nanofl_Video.prototype, {
 	__class__: nanofl_Video
@@ -7311,7 +7285,7 @@ class nanofl_engine_libraryitems_VideoItem extends nanofl_engine_libraryitems_In
 		return obj;
 	}
 	preload() {
-		stdlib_Debug.assert(this.library != null,"You need to add item '" + this.namePath + "' to the library before preload call.",{ fileName : "engine/nanofl/engine/libraryitems/VideoItem.hx", lineNumber : 61, className : "nanofl.engine.libraryitems.VideoItem", methodName : "preload"});
+		stdlib_Debug.assert(this.library != null,"You need to add item '" + this.namePath + "' to the library before preload call.",{ fileName : "engine/nanofl/engine/libraryitems/VideoItem.hx", lineNumber : 60, className : "nanofl.engine.libraryitems.VideoItem", methodName : "preload"});
 		let _gthis = this;
 		return nanofl_engine_Loader.video(this.library.realUrl(this.namePath + "." + this.ext)).then(function(video) {
 			_gthis.width = video.videoWidth;

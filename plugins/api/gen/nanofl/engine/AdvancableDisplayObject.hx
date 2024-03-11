@@ -1,11 +1,6 @@
 package nanofl.engine;
 
 interface AdvancableDisplayObject {
-	/**
-		
-		        `time` is ignored.
-		    
-	**/
-	function advance(?time:Float):Void;
+	function advanceToNextFrame(framerate:Float):Void;
 	function advanceTo(advanceFrames:Int):Void;
 }

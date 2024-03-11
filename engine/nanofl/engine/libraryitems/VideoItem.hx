@@ -4,10 +4,9 @@ import js.Browser;
 import js.html.CanvasElement;
 import js.lib.Error;
 import js.lib.Promise;
+import stdlib.Debug;
 import nanofl.engine.ILibraryItem;
 import nanofl.engine.geom.Point;
-import js.html.VideoElement;
-import stdlib.Debug;
 using nanofl.engine.geom.BoundsTools;
 
 #if ide

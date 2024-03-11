@@ -2,28 +2,32 @@ package nanofl.ide.library;
 
 import js.lib.Error;
 import js.lib.Promise;
+import js.html.CanvasElement;
+import js.html.CanvasRenderingContext2D;
 import easeljs.display.Shape;
 import easeljs.display.Graphics;
-import js.html.CanvasRenderingContext2D;
 import nanofl.ide.library.IdeLibrary;
-import js.html.CanvasElement;
 
 class SceneFramesIterator
 {
-    var stage : nanofl.Stage;
-    var scene : nanofl.MovieClip;
-    var ctx : CanvasRenderingContext2D;
+    final framerate : Float;
+    
+    final stage : nanofl.Stage;
+    final scene : nanofl.MovieClip;
+    final ctx : CanvasRenderingContext2D;
 
     var curFrame = 0;
 
     @:noapi
     public function new(documentProperties:DocumentProperties, library:IdeLibrary, applyBackgroundColor:Bool)
     {
+        framerate = documentProperties.framerate;
+        
         var canvas : CanvasElement = cast js.Browser.document.createElement("canvas");
         canvas.width = documentProperties.width;
         canvas.height = documentProperties.height;
         
-        stage = new nanofl.Stage(canvas, documentProperties.framerate);
+        stage = new nanofl.Stage(canvas);
         scene = cast library.getSceneInstance().createDisplayObject();
         
         if (applyBackgroundColor)
@@ -50,7 +54,7 @@ class SceneFramesIterator
 
         if (scene.currentFrame >= scene.getTotalFrames() - 1) return Promise.resolve(ctx);
         
-        scene.advance();
+        scene.advanceToNextFrame(framerate);
         
         final videoPromises = new Array<Promise<{}>>();
         DisplayObjectTools.iterateTreeFromBottomToTop(scene, obj ->

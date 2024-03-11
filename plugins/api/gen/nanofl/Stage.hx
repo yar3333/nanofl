@@ -1,7 +1,6 @@
 package nanofl;
 
 extern class Stage extends easeljs.display.Stage {
-	function new(canvas:Dynamic, framerate:Float):Void;
-	var framerate(default, null) : Float;
+	function new(canvas:Dynamic):Void;
 	override function update(?params:Dynamic):Void;
 }

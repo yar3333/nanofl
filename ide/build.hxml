@@ -19,3 +19,4 @@
 --library nanofl-ide-keyboard
 --macro stdlib.Macro.expose('nanofl')
 nanofl.ide.libraryitems.VideoItem
+nanofl.engine.ElementType

@@ -1,8 +1,8 @@
 package nanofl.ide.libraryitems;
 
 import js.lib.Set;
-import easeljs.display.DisplayObject;
 import htmlparser.HtmlNodeElement;
+import nanofl.ide.displayobjects.IdeVideo;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
 
 class VideoItem extends nanofl.engine.libraryitems.VideoItem
@@ -70,7 +70,7 @@ class VideoItem extends nanofl.engine.libraryitems.VideoItem
 
     override function createDisplayObject()
     {
-        return new nanofl.Video(this);
+        return new IdeVideo(this);
     }
 
 	static function log(v:Dynamic, ?infos:haxe.PosInfos)
