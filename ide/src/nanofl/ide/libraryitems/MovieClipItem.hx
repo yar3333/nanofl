@@ -1,5 +1,6 @@
 package nanofl.ide.libraryitems;
 
+import nanofl.engine.Library;
 import js.lib.Set;
 import datatools.ArrayTools;
 import htmlparser.HtmlNodeElement;
@@ -32,24 +33,25 @@ class MovieClipItem extends nanofl.engine.libraryitems.MovieClipItem
 		return obj;
 	}
 	
-	public static function parse(namePath:String, itemNode:HtmlNodeElement) : MovieClipItem
+	public static function parse(namePath:String, itemNode:HtmlNodeElement) : Array<IIdeLibraryItem>
 	{
-		switch (itemNode.name)
-		{
-            case "movieclip":
-                final r = new MovieClipItem(namePath);
-                r.loadProperties(itemNode);
-                return r;
-            
-            case "group":
-                final r = MovieClipItem.createWithFrame(namePath, Elements.parse(itemNode, itemNode.getAttribute("version")));
-                r.loop = false;
-                r.autoPlay = false;
-                return r;
+        if (itemNode.name != "movieclip") return null;
 
-            case _:
-                return null;
+		final r = new Array<IIdeLibraryItem>();
+        
+        final item = new MovieClipItem(namePath);
+        item.loadProperties(itemNode);
+        r.push(item);
+
+        for (groupNode in itemNode.find(">groups>group"))
+        {
+            final groupNamePath = Library.GROUPS_NAME_PATH + "/" +  groupNode.getAttribute("name");
+            final group = new MovieClipItem(groupNamePath);
+            group.loadProperties(groupNode);
+            r.push(group);
         }
+
+        return r;
 	}
 	
 	public static function parseJson(namePath:String, obj:Dynamic) : MovieClipItem

@@ -80,7 +80,7 @@ class LibraryItems
 	public static function saveToXml(items:Array<IIdeLibraryItem>, out:XmlBuilder)
 	{
 		out.begin("libraryitems");
-		for (item in items)
+		for (item in items.filter(x -> !x.namePath.startsWith(IdeLibrary.GROUPS_NAME_PATH + "/")))
 		{
 			out.begin("item").attr("namePath", item.namePath);
 			item.saveToXml(out);
@@ -93,32 +93,33 @@ class LibraryItems
 	{
 		return xml.find(">libraryitems>item")
 			.map(node -> parseItem(node.getAttribute("namePath"), node.children[0]))
-			.filter(item ->
+			.filter(items ->
 			{
-				if (item == null) log("Error parsing library item xml:\n\t" + xml.toString().replace("\n", "\n\t"));
-				return item != null;
-			});
+				if (items == null) log("Error parsing library item xml:\n\t" + xml.toString().replace("\n", "\n\t"));
+				return items != null;
+			})
+            .flatten();
 	}
 
-    static function parseItem(namePath:String, itemNode:HtmlNodeElement) : IIdeLibraryItem
+    static function parseItem(namePath:String, itemNode:HtmlNodeElement) : Array<IIdeLibraryItem>
     {
-        var movieClipItem = MovieClipItem.parse(namePath, itemNode);
-        if (movieClipItem != null) return movieClipItem;
+        var movieClipItems = MovieClipItem.parse(namePath, itemNode);
+        if (movieClipItems != null) return movieClipItems;
         
         var bitmapItem = BitmapItem.parse(namePath, itemNode);
-        if (bitmapItem != null) return bitmapItem;
+        if (bitmapItem != null) return [ bitmapItem ];
 		
 		var meshItem = MeshItem.parse(namePath, itemNode);
-		if (meshItem != null) return meshItem;
+		if (meshItem != null) return [ meshItem ];
         
         var fontItem = FontItem.parse(namePath, itemNode);
-        if (fontItem != null) return fontItem;
+        if (fontItem != null) return [ fontItem ];
         
         var soundItem = SoundItem.parse(namePath, itemNode);
-        if (soundItem != null) return soundItem;
+        if (soundItem != null) return [ soundItem ];
         
         var folderItem = FolderItem.parse(namePath, itemNode);
-        if (folderItem != null) return folderItem;
+        if (folderItem != null) return [ folderItem ];
         
         return null;
     }    

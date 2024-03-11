@@ -1,11 +1,13 @@
 package nanofl.engine;
 
+import js.lib.Set;
 import nanofl.engine.LayerType;
 import nanofl.engine.elements.Element;
 import nanofl.engine.elements.Instance;
 import nanofl.engine.libraryitems.MovieClipItem;
 import nanofl.engine.geom.Matrix;
 import nanofl.engine.elements.ShapeElement;
+using stdlib.Lambda;
 
 class MovieClipItemTools
 {
@@ -55,9 +57,9 @@ class MovieClipItemTools
 
     public static function getInstances(item:MovieClipItem) : Array<Instance>
     {
-        var r = new Array<Instance>();
-        iterateInstances(item, true, (instance, _) -> r.push(instance));
-        return r;
+        var r = new Set<Instance>();
+        iterateInstances(item, true, (instance, _) -> r.add(instance));
+        return r.iterator().array();
     }
     
     static function iterateInstances(item:MovieClipItem, allFrames:Bool, insideMask=false, callb:Instance->{ layerIndex:Int, keyFrameIndex:Int, insideMask:Bool }->Void)

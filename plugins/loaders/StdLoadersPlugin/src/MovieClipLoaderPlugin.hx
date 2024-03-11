@@ -34,10 +34,10 @@ class MovieClipLoaderPlugin implements ILoaderPlugin
                 var namePath = Path.withoutExtension(file.relativePath);
                 if (!r.exists(item -> item.namePath == namePath))
                 {
-                    var mc = file.xml != null ? MovieClipItem.parse(namePath, file.xml) : null;
-                    if (mc != null)
+                    var mcItems = file.xml != null ? MovieClipItem.parse(namePath, file.xml) : null;
+                    if (mcItems != null)
                     {
-                        r.push(mc);
+                        for (mcItem in mcItems) r.push(mcItem);
                         files.remove(file.relativePath);
                     }
                 }

@@ -204,9 +204,14 @@ MovieClipLoaderPlugin.prototype = {
 						return item.namePath == namePath[0];
 					};
 				})(namePath))) {
-					var mc = file.get_xml() != null ? nanofl.ide.libraryitems.MovieClipItem.parse(namePath[0],file.get_xml()) : null;
-					if(mc != null) {
-						r.push(mc);
+					var mcItems = file.get_xml() != null ? nanofl.ide.libraryitems.MovieClipItem.parse(namePath[0],file.get_xml()) : null;
+					if(mcItems != null) {
+						var _g = 0;
+						while(_g < mcItems.length) {
+							var mcItem = mcItems[_g];
+							++_g;
+							r.push(mcItem);
+						}
 						var key = file.relativePath;
 						if(Object.prototype.hasOwnProperty.call(files.h,key)) {
 							delete(files.h[key]);

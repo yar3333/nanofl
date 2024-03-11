@@ -4646,7 +4646,7 @@ class nanofl_engine_elements_ShapeElement extends nanofl_engine_elements_Element
 			default:
 				nanofl_engine_elements_ShapeElement.log(function() {
 					return "Unknow fill type '" + Std.string(fillObj.type) + "'.";
-				},{ fileName : "engine/nanofl/engine/elements/ShapeElement.hx", lineNumber : 109, className : "nanofl.engine.elements.ShapeElement", methodName : "loadPropertiesJson"});
+				},{ fileName : "engine/nanofl/engine/elements/ShapeElement.hx", lineNumber : 110, className : "nanofl.engine.elements.ShapeElement", methodName : "loadPropertiesJson"});
 			}
 		}
 		let _g2 = 0;
@@ -7137,8 +7137,8 @@ class nanofl_engine_libraryitems_MovieClipItem extends nanofl_engine_libraryitem
 			throw new Error("Type of item must be '" + Std.string(this.get_type()) + "', but '" + Std.string(obj.type) + "' found.");
 		}
 		if(this.isGroup()) {
-			stdlib_Debug.assert(this.loop == false,null,{ fileName : "engine/nanofl/engine/libraryitems/MovieClipItem.hx", lineNumber : 373, className : "nanofl.engine.libraryitems.MovieClipItem", methodName : "loadPropertiesJson"});
-			stdlib_Debug.assert(this.autoPlay == false,null,{ fileName : "engine/nanofl/engine/libraryitems/MovieClipItem.hx", lineNumber : 374, className : "nanofl.engine.libraryitems.MovieClipItem", methodName : "loadPropertiesJson"});
+			stdlib_Debug.assert(this.loop == false,null,{ fileName : "engine/nanofl/engine/libraryitems/MovieClipItem.hx", lineNumber : 389, className : "nanofl.engine.libraryitems.MovieClipItem", methodName : "loadPropertiesJson"});
+			stdlib_Debug.assert(this.autoPlay == false,null,{ fileName : "engine/nanofl/engine/libraryitems/MovieClipItem.hx", lineNumber : 390, className : "nanofl.engine.libraryitems.MovieClipItem", methodName : "loadPropertiesJson"});
 			let _this = obj.elements;
 			let result = new Array(_this.length);
 			let _g = 0;
@@ -7148,7 +7148,7 @@ class nanofl_engine_libraryitems_MovieClipItem extends nanofl_engine_libraryitem
 				result[i] = nanofl_engine_elements_Element.parseJson(_this[i],obj.version);
 			}
 			let elements = result;
-			stdlib_Debug.assert(this.get_layers().length == 0,null,{ fileName : "engine/nanofl/engine/libraryitems/MovieClipItem.hx", lineNumber : 378, className : "nanofl.engine.libraryitems.MovieClipItem", methodName : "loadPropertiesJson"});
+			stdlib_Debug.assert(this.get_layers().length == 0,null,{ fileName : "engine/nanofl/engine/libraryitems/MovieClipItem.hx", lineNumber : 394, className : "nanofl.engine.libraryitems.MovieClipItem", methodName : "loadPropertiesJson"});
 			this.addLayer(nanofl_engine_movieclip_Layer.createWithOneFrame(elements));
 		} else {
 			super.loadPropertiesJson(obj);

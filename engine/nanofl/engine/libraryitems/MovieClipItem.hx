@@ -1,5 +1,6 @@
 package nanofl.engine.libraryitems;
 
+import js.lib.Set;
 import haxe.Json;
 import js.lib.Error;
 import datatools.ArrayRO;
@@ -285,6 +286,21 @@ class MovieClipItem	extends InstancableItem
                 {
                     element.save(xml);
                 }
+        }
+
+        final groups = MovieClipItemTools.getInstances(this).filter(x -> x.namePath.startsWith(Library.GROUPS_NAME_PATH)).map(x -> (cast x.symbol:MovieClipItem));
+        if (groups.length > 0)
+        {
+            xml.begin("groups");
+            for (group in groups)
+            {
+                stdlib.Debug.assert(Std.isOfType(group, MovieClipItem));
+
+                xml.begin("group", [ { name:"name", value:group.namePath.substr(Library.GROUPS_NAME_PATH.length + 1) } ]);
+                group.saveProperties(xml);
+                xml.end();
+            }
+            xml.end();
         }
     }
 

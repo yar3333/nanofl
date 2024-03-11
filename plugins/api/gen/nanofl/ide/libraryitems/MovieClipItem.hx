@@ -14,6 +14,6 @@ extern class MovieClipItem extends nanofl.engine.libraryitems.MovieClipItem impl
 	function removeLayer(index:Int):Void;
 	function removeLayerWithChildren(index:Int):Array<nanofl.engine.movieclip.Layer>;
 	static function createWithFrame(namePath:String, ?elements:Array<nanofl.engine.elements.Element>, ?layerName:String):nanofl.ide.libraryitems.MovieClipItem;
-	static function parse(namePath:String, itemNode:htmlparser.HtmlNodeElement):nanofl.ide.libraryitems.MovieClipItem;
+	static function parse(namePath:String, itemNode:htmlparser.HtmlNodeElement):Array<nanofl.ide.libraryitems.IIdeLibraryItem>;
 	static function parseJson(namePath:String, obj:Dynamic):nanofl.ide.libraryitems.MovieClipItem;
 }
