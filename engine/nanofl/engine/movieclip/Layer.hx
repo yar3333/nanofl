@@ -3,9 +3,10 @@ package nanofl.engine.movieclip;
 import datatools.ArrayRO;
 import datatools.ArrayTools;
 import nanofl.engine.Library;
-import nanofl.engine.movieclip.KeyFrame;
 import nanofl.engine.LayerType;
+import nanofl.engine.elements.Element;
 import nanofl.engine.libraryitems.MovieClipItem;
+import nanofl.engine.movieclip.KeyFrame;
 using stdlib.Lambda;
 
 #if ide
@@ -221,7 +222,14 @@ class Layer
     }
     
     #if ide
-    public function loadProperties(node:HtmlNodeElement, version:String) : Void
+    public static function load(xml:HtmlNodeElement, version:String) : Layer
+    {
+        final r = new Layer("");
+        r.loadProperties(xml, version);
+        return r;
+    }
+
+    function loadProperties(node:HtmlNodeElement, version:String) : Void
     {
         name = node.getAttr("name", "");
         type = Type.createEnum(LayerType, node.getAttr("type", "normal"));
@@ -238,8 +246,15 @@ class Layer
         }
     }
     #end
+
+    public static function loadJson(obj:Dynamic, version:String) : Layer
+    {
+        final r = new Layer("");
+        r.loadPropertiesJson(obj, version);
+        return r;
+    }
     
-    public function loadPropertiesJson(obj:Dynamic, version:String) : Void
+    function loadPropertiesJson(obj:Dynamic, version:String) : Void
     {
         name = obj.name ?? "";
         type = LayerType.createByName(obj.type ?? "normal");
@@ -311,6 +326,13 @@ class Layer
         if (layer.locked != locked) return false;
         if (!ArrayTools.equ(layer._keyFrames, _keyFrames)) return false;
         return true;
+    }
+
+    public static function createWithOneFrame(elements:Array<Element>) : Layer
+    {
+        final r = new Layer("");
+        r.addKeyFrame(new KeyFrame("", 1, null, elements));
+        return r;
     }
     
     public function toString() return (layersContainer != null ? layersContainer.toString() + " / " : "") + "layer";

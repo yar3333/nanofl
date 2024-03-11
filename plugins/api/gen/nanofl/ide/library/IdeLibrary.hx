@@ -23,5 +23,7 @@ extern class IdeLibrary extends nanofl.engine.Library {
 	function removeUnusedItems():Void;
 	function optimize():Void;
 	function getSceneFramesIterator(documentProperties:nanofl.ide.DocumentProperties, applyBackgroundColor:Bool):nanofl.ide.library.SceneFramesIterator;
+	function getNextGroupNamePath():String;
 	static var SCENE_NAME_PATH(default, never) : String;
+	static var GROUPS_NAME_PATH(default, never) : String;
 }

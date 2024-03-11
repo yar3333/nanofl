@@ -1,5 +1,6 @@
 package nanofl.ide.library;
 
+import stdlib.Uuid;
 import haxe.Json;
 import datatools.ArrayRO;
 import nanofl.engine.elements.TextElement;
@@ -24,7 +25,8 @@ using stdlib.Lambda;
 @:rtti
 class IdeLibrary extends nanofl.engine.Library
 {
-	public static var SCENE_NAME_PATH(default, never) = nanofl.engine.Library.SCENE_NAME_PATH;
+	public static final SCENE_NAME_PATH = nanofl.engine.Library.SCENE_NAME_PATH;
+	public static final GROUPS_NAME_PATH = nanofl.engine.Library.GROUPS_NAME_PATH;
 	
 	@inject var fileSystem : FileSystem;
 	@inject var preferences : Preferences;
@@ -101,11 +103,11 @@ class IdeLibrary extends nanofl.engine.Library
 	
     public function addSceneWithFrame(?elements:Array<Element>, ?layerName:String) : MovieClipItem
 	{
-		var scene = MovieClipItem.createWithFrame(IdeLibrary.SCENE_NAME_PATH, elements, layerName);
+		final scene = MovieClipItem.createWithFrame(IdeLibrary.SCENE_NAME_PATH, elements, layerName);
 		addItem(scene);
 		return scene;
 	}
-	
+    
 	override public function clone() : IdeLibrary
 	{
 		return new IdeLibrary(libraryDir, ArrayTools.clone(getItemsAsIde(true)));
@@ -277,5 +279,10 @@ class IdeLibrary extends nanofl.engine.Library
     public function getSceneFramesIterator(documentProperties:DocumentProperties, applyBackgroundColor:Bool) : SceneFramesIterator
     {
         return new SceneFramesIterator(documentProperties, this, applyBackgroundColor);
+    }
+
+    public function getNextGroupNamePath() : String
+    {
+        return GROUPS_NAME_PATH + "/" + Uuid.newUuid();
     }
 }

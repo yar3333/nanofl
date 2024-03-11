@@ -419,24 +419,9 @@ class Editor extends InjectContainer
 	{
 		if (hasSelected())
 		{
-			popups.symbolAdd.show("Convert to Symbol", document.library.getNextItemName(), function(e)
+			popups.symbolAdd.show("Convert to Symbol", document.library.getNextItemName(), e ->
 			{
-				document.undoQueue.beginTransaction({ figure:true, elements:true, libraryAddItems:true });
-				var instance = convertToSymbolInner(e.name, e.regX, e.regY);
-				if (instance != null)
-				{
-					var editedElement = activeLayer.addElement(instance);
-					editedElement.selected = true;
-					document.undoQueue.commitTransaction();
-					tool.selectionChange();
-					document.library.update();
-					update();
-				}
-				else
-				{
-					document.undoQueue.forgetTransaction();
-				}
-				tool.selectionChange();
+                convertSelectionToInstance(e.name, e.regX, e.regY);
 			});
 		}
 		else
@@ -444,8 +429,28 @@ class Editor extends InjectContainer
 			view.alerter.warning("Select something first.");
 		}
 	}
+
+    function convertSelectionToInstance(namePath:String, regX:Int, regY:Int)
+    {
+        document.undoQueue.beginTransaction({ figure:true, elements:true, libraryAddItems:true });
+        var instance = convertSelectionToInstanceInner(namePath, regX, regY);
+        if (instance != null)
+        {
+            var editedElement = activeLayer.addElement(instance);
+            editedElement.selected = true;
+            document.undoQueue.commitTransaction();
+            tool.selectionChange();
+            document.library.update();
+            update();
+        }
+        else
+        {
+            document.undoQueue.forgetTransaction();
+        }
+        tool.selectionChange();
+    }
 	
-	function convertToSymbolInner(namePath:String, regX:Int, regY:Int) : Instance
+	function convertSelectionToInstanceInner(namePath:String, regX:Int, regY:Int) : Instance
 	{
 		var elements = new Array<Element>();
 		
@@ -494,35 +499,7 @@ class Editor extends InjectContainer
 	
 	public function groupSelected()
 	{
-		var elements = new Array<Element>();
-		
-		if (figure.hasSelected())
-		{
-			var shape = figure.extractSelected();
-			shape.deselectAll();
-			elements.push(shape);
-		}
-		
-		for (item in getSelectedItems())
-		{
-			elements.push(item.originalElement);
-		}
-		
-		if (elements.length > 1)
-		{
-			document.undoQueue.beginTransaction({ figure:true, elements:true });
-			
-			removeSelectedInner();
-            final groupId = Uuid.newUuid();
-            for (elem in elements)
-            {
-                elem.groups.push(groupId);
-            }
-			
-			document.undoQueue.commitTransaction();
-			tool.selectionChange();
-			update();
-		}
+        convertSelectionToInstance(document.library.getRawLibrary().getNextGroupNamePath(), 0, 0);
 	}
 	
 	public function translateVertex(point:Point, dx:Float, dy:Float, addUndoTransaction=true)

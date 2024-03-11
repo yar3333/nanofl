@@ -9,31 +9,13 @@ class Elements
     #if ide
 	public static function parse(base:htmlparser.HtmlNodeElement, version:String) : Array<Element>
 	{
-		var elements = new Array<Element>();
-		
-		for (node in base.children)
-		{
-    		elements.addRange(Element.parse(node, version) ?? []);
-		}
-		
-		return elements;
+		return base.children.map(x -> Element.parse(x, version)).filter(x -> x != null);
 	}
     #end
 
 	public static function parseJson(obj:Array<Dynamic>, version:String) : Array<Element>
 	{
-		var elements = new Array<Element>();
-		
-		for (itemObj in obj)
-		{
-			var element = Element.parseJson(itemObj, version);
-			if (element != null)
-			{
-				elements.push(element);
-			}
-		}
-		
-		return elements;
+		return obj.map(x -> Element.parseJson(x, version)).filter(x -> x != null);
 	}
 	
 	#if ide

@@ -22,7 +22,6 @@ extern class EditorTimeline {
 	function getLibraryItems(namePaths:Array<String>):Array<nanofl.ide.libraryitems.IIdeLibraryItem>;
 	function addNewKeyFrameToLayer(layer:nanofl.engine.movieclip.Layer):Void;
 	function newLayer(name:String, ?type:nanofl.engine.LayerType):nanofl.engine.movieclip.Layer;
-	function parseLayer(layerNode:htmlparser.HtmlNodeElement, version:String):nanofl.engine.movieclip.Layer;
 	function onLayerAdded():Void;
 	function onLayerRemoved():Void;
 	function onLayerVisibleChange():Void;

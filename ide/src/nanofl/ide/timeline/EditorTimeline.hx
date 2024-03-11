@@ -30,7 +30,7 @@ class EditorTimeline
 	function get_layers() : ArrayRO<Layer> return pathItem.mcItem.layers;
 	
 	public var editable(get, never) : Bool;
-	function get_editable() : Bool return pathItem.mcItem != null; // TODO: group
+	function get_editable() : Bool return !pathItem.mcItem.isGroup();
 	
 	public var frameIndex(get, set) : Int;
 	function get_frameIndex() : Int return pathItem.frameIndex;
@@ -68,13 +68,6 @@ class EditorTimeline
 	public function getLibraryItems(namePaths:Array<String>) : Array<IIdeLibraryItem> return namePaths.map(library.getItem);
 	public function addNewKeyFrameToLayer(layer:Layer) : Void cast(layer, Layer).addKeyFrame(new KeyFrame());
 	public function newLayer(name:String, ?type:LayerType) : Layer return new Layer(name, type);
-    
-    public function parseLayer(layerNode:HtmlNodeElement, version:String) : Layer
-    {
-        var layer = new Layer("");
-        layer.loadProperties(layerNode, version);
-        return layer;
-    }
 	
 	public function onLayerAdded() : Void editor.rebind();
 	public function onLayerRemoved() : Void editor.rebind();

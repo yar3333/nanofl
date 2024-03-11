@@ -8,8 +8,6 @@ import nanofl.engine.coloreffects.ColorEffect;
 import nanofl.engine.elements.Element;
 import nanofl.engine.geom.Point;
 import nanofl.engine.libraryitems.InstancableItem;
-import nanofl.engine.libraryitems.MovieClipItem;
-import nanofl.engine.movieclip.Layer;
 import stdlib.Debug;
 using stdlib.Lambda;
 

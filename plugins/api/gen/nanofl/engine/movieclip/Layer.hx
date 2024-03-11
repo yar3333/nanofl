@@ -23,8 +23,6 @@ extern class Layer {
 	function getNestLevel(layers:Array<nanofl.engine.movieclip.Layer>):Int;
 	function getChildLayers():Array<nanofl.engine.movieclip.Layer>;
 	function getTweenedElements(frameIndex:Int):Array<nanofl.engine.movieclip.TweenedElement>;
-	function loadProperties(node:htmlparser.HtmlNodeElement, version:String):Void;
-	function loadPropertiesJson(obj:Dynamic, version:String):Void;
 	function save(out:htmlparser.XmlBuilder):Void;
 	function saveJson():Dynamic;
 	function clone():nanofl.engine.movieclip.Layer;
@@ -33,4 +31,7 @@ extern class Layer {
 	function setLibrary(library:nanofl.engine.Library):Void;
 	function equ(layer:nanofl.engine.movieclip.Layer):Bool;
 	function toString():String;
+	static function load(xml:htmlparser.HtmlNodeElement, version:String):nanofl.engine.movieclip.Layer;
+	static function loadJson(obj:Dynamic, version:String):nanofl.engine.movieclip.Layer;
+	static function createWithOneFrame(elements:Array<nanofl.engine.elements.Element>):nanofl.engine.movieclip.Layer;
 }

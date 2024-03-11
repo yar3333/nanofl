@@ -1007,7 +1007,7 @@ class Code extends wquery.Component
 				var layerIndex = adapter.layerIndex;
 				for (layerNode in layersNode.find(">layer"))
 				{
-					var layer = adapter.parseLayer(layerNode, Version.document);
+					var layer = Layer.load(layerNode, Version.document);
 					
 					if (layerIndex == adapter.layers.length)
 					{

@@ -21,4 +21,5 @@ extern class Library {
 	function getFonts():Array<nanofl.engine.Font>;
 	function equ(library:nanofl.engine.Library):Bool;
 	static var SCENE_NAME_PATH(default, never) : String;
+	static var GROUPS_NAME_PATH(default, never) : String;
 }

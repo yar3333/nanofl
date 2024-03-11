@@ -1,13 +1,15 @@
 package nanofl.ide.libraryitems;
 
-import nanofl.engine.MovieClipItemTools;
 import datatools.ArrayTools;
 import htmlparser.HtmlNodeElement;
+import nanofl.engine.MovieClipItemTools;
 import nanofl.engine.elements.Element;
 import nanofl.engine.movieclip.KeyFrame;
 import nanofl.engine.movieclip.Layer;
+import nanofl.engine.elements.Elements;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
 using stdlib.Lambda;
+using stdlib.StringTools;
 
 class MovieClipItem extends nanofl.engine.libraryitems.MovieClipItem
 	implements IIdeInstancableItem
@@ -31,11 +33,22 @@ class MovieClipItem extends nanofl.engine.libraryitems.MovieClipItem
 	
 	public static function parse(namePath:String, itemNode:HtmlNodeElement) : MovieClipItem
 	{
-		if (itemNode.name != "movieclip") return null;
-		
-        var r = new MovieClipItem(namePath);
-        r.loadProperties(itemNode);
-		return r;
+		switch (itemNode.name)
+		{
+            case "movieclip":
+                final r = new MovieClipItem(namePath);
+                r.loadProperties(itemNode);
+                return r;
+            
+            case "group":
+                final r = MovieClipItem.createWithFrame(namePath, Elements.parse(itemNode, itemNode.getAttribute("version")));
+                r.loop = false;
+                r.autoPlay = false;
+                return r;
+
+            case _:
+                return null;
+        }
 	}
 	
 	public static function parseJson(namePath:String, obj:Dynamic) : MovieClipItem
@@ -127,5 +140,5 @@ class MovieClipItem extends nanofl.engine.libraryitems.MovieClipItem
 		if (pi == null) return false;
 		if (pi == parentIndex) return true;
 		return isLayerChildOf(pi, parentIndex);
-	}    
+	}
 }

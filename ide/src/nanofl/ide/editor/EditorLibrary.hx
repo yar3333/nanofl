@@ -359,7 +359,6 @@ class EditorLibrary extends InjectContainer
 			{
 				scene.addLayer(new Layer("Layer 0"));
 			}
-			
 			if (scene.getTotalFrames() == 0)
 			{
 				scene.layers[0].addKeyFrame(new KeyFrame());

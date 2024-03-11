@@ -18,7 +18,8 @@ using stdlib.Lambda;
 #if ide @:rtti #end
 class Library
 {
-	public static var SCENE_NAME_PATH(default, never) = "scene";
+	public static final SCENE_NAME_PATH = "scene";
+    public static final GROUPS_NAME_PATH = "$groups";
 	
 	@:allow(nanofl.ide.editor.EditorLibrary.changeDir)
 	public var libraryDir(default, null) : String;

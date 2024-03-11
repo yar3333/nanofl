@@ -3654,8 +3654,8 @@ class nanofl_engine_Library {
 		this.ensureFolderOfItemExists(item.namePath);
 	}
 	getItem(namePath) {
-		stdlib_Debug.assert(namePath != null,null,{ fileName : "engine/nanofl/engine/Library.hx", lineNumber : 74, className : "nanofl.engine.Library", methodName : "getItem"});
-		stdlib_Debug.assert(namePath != "",null,{ fileName : "engine/nanofl/engine/Library.hx", lineNumber : 75, className : "nanofl.engine.Library", methodName : "getItem"});
+		stdlib_Debug.assert(namePath != null,null,{ fileName : "engine/nanofl/engine/Library.hx", lineNumber : 75, className : "nanofl.engine.Library", methodName : "getItem"});
+		stdlib_Debug.assert(namePath != "",null,{ fileName : "engine/nanofl/engine/Library.hx", lineNumber : 76, className : "nanofl.engine.Library", methodName : "getItem"});
 		let r = this.items.h[namePath];
 		if(r != null) {
 			return r;
@@ -4375,7 +4375,6 @@ Object.assign(nanofl_engine_coloreffects_ColorEffectTint.prototype, {
 });
 class nanofl_engine_elements_Element {
 	constructor() {
-		this.groups = [];
 		this.regY = 0.0;
 		this.regX = 0.0;
 		this.matrix = new nanofl_engine_geom_Matrix();
@@ -4389,8 +4388,6 @@ class nanofl_engine_elements_Element {
 		this.regX = tmp != null ? tmp : 0.0;
 		let tmp1 = obj.regY;
 		this.regY = tmp1 != null ? tmp1 : 0.0;
-		let tmp2 = obj.groups;
-		this.groups = tmp2 != null ? tmp2 : [];
 		return true;
 	}
 	copyBaseProperties(obj) {
@@ -4424,8 +4421,15 @@ class nanofl_engine_elements_Element {
 		return true;
 	}
 	static parseJson(obj,version) {
+		let type;
+		try {
+			type = Type.createEnum(nanofl_engine_ElementType,obj.type,null);
+		} catch( _g ) {
+			$global.console.warn("Unexpected element: " + Std.string(obj.type));
+			return null;
+		}
 		let element;
-		switch(Type.createEnum(nanofl_engine_ElementType,obj.type,null)._hx_index) {
+		switch(type._hx_index) {
 		case 0:
 			element = new nanofl_engine_elements_ShapeElement();
 			break;
@@ -4436,12 +4440,13 @@ class nanofl_engine_elements_Element {
 			element = new nanofl_engine_elements_TextElement(null,null,null,null,null,null);
 			break;
 		}
-		if(element != null) {
-			element.visible = true;
-			if(!element.loadPropertiesJson(obj,version)) {
-				return null;
-			}
-			stdlib_Debug.assert(element.matrix != null,null,{ fileName : "engine/nanofl/engine/elements/Element.hx", lineNumber : 110, className : "nanofl.engine.elements.Element", methodName : "parseJson"});
+		if(!element.loadPropertiesJson(obj,version)) {
+			$global.console.warn("Error loading properties for: " + Std.string(obj.type));
+			return null;
+		}
+		if(element.matrix == null) {
+			$global.console.warn("Error loading matrix for: " + Std.string(obj.type));
+			return null;
 		}
 		return element;
 	}
@@ -4452,17 +4457,24 @@ Object.assign(nanofl_engine_elements_Element.prototype, {
 });
 class nanofl_engine_elements_Elements {
 	static parseJson(obj,version) {
-		let elements = [];
+		let result = new Array(obj.length);
 		let _g = 0;
-		while(_g < obj.length) {
-			let itemObj = obj[_g];
-			++_g;
-			let element = nanofl_engine_elements_Element.parseJson(itemObj,version);
-			if(element != null) {
-				elements.push(element);
+		let _g1 = obj.length;
+		while(_g < _g1) {
+			let i = _g++;
+			result[i] = nanofl_engine_elements_Element.parseJson(obj[i],version);
+		}
+		let _g2 = [];
+		let _g3 = 0;
+		let _g4 = result;
+		while(_g3 < _g4.length) {
+			let v = _g4[_g3];
+			++_g3;
+			if(v != null) {
+				_g2.push(v);
 			}
 		}
-		return elements;
+		return _g2;
 	}
 }
 nanofl_engine_elements_Elements.__name__ = "nanofl.engine.elements.Elements";
@@ -4490,8 +4502,8 @@ class nanofl_engine_elements_Instance extends nanofl_engine_elements_Element {
 			return false;
 		}
 		this.namePath = obj.libraryItem;
-		stdlib_Debug.assert(this.namePath != null,null,{ fileName : "engine/nanofl/engine/elements/Instance.hx", lineNumber : 73, className : "nanofl.engine.elements.Instance", methodName : "loadPropertiesJson"});
-		stdlib_Debug.assert(this.namePath != "",null,{ fileName : "engine/nanofl/engine/elements/Instance.hx", lineNumber : 74, className : "nanofl.engine.elements.Instance", methodName : "loadPropertiesJson"});
+		stdlib_Debug.assert(this.namePath != null,null,{ fileName : "engine/nanofl/engine/elements/Instance.hx", lineNumber : 71, className : "nanofl.engine.elements.Instance", methodName : "loadPropertiesJson"});
+		stdlib_Debug.assert(this.namePath != "",null,{ fileName : "engine/nanofl/engine/elements/Instance.hx", lineNumber : 72, className : "nanofl.engine.elements.Instance", methodName : "loadPropertiesJson"});
 		let tmp = obj.name;
 		this.name = tmp != null ? tmp : "";
 		this.colorEffect = nanofl_engine_coloreffects_ColorEffect.loadJson(obj.colorEffect);
@@ -6976,6 +6988,10 @@ class nanofl_engine_libraryitems_MovieClipItem extends nanofl_engine_libraryitem
 		this.autoPlay = true;
 		this._layers = [];
 		super._hx_constructor(namePath);
+		if(this.isGroup()) {
+			this.autoPlay = false;
+			this.loop = false;
+		}
 	}
 	get_type() {
 		return nanofl_engine_LibraryItemType.movieclip;
@@ -7137,25 +7153,42 @@ class nanofl_engine_libraryitems_MovieClipItem extends nanofl_engine_libraryitem
 		if(obj.type != this.get_type()) {
 			throw new Error("Type of item must be '" + Std.string(this.get_type()) + "', but '" + Std.string(obj.type) + "' found.");
 		}
-		super.loadPropertiesJson(obj);
-		this.autoPlay = obj.autoPlay;
-		this.loop = obj.loop;
-		this.likeButton = obj.likeButton;
-		this.exportAsSprite = obj.exportAsSprite;
-		this.textureAtlas = obj.textureAtlas;
-		let tmp = obj.relatedSound;
-		this.relatedSound = tmp != null ? tmp : "";
-		let _this = obj.layers;
-		let result = new Array(_this.length);
-		let _g = 0;
-		let _g1 = _this.length;
-		while(_g < _g1) {
-			let i = _g++;
-			let layer = new nanofl_engine_movieclip_Layer("");
-			layer.loadPropertiesJson(_this[i],obj.version);
-			result[i] = layer;
+		if(this.isGroup()) {
+			stdlib_Debug.assert(this.loop == false,null,{ fileName : "engine/nanofl/engine/libraryitems/MovieClipItem.hx", lineNumber : 373, className : "nanofl.engine.libraryitems.MovieClipItem", methodName : "loadPropertiesJson"});
+			stdlib_Debug.assert(this.autoPlay == false,null,{ fileName : "engine/nanofl/engine/libraryitems/MovieClipItem.hx", lineNumber : 374, className : "nanofl.engine.libraryitems.MovieClipItem", methodName : "loadPropertiesJson"});
+			let _this = obj.elements;
+			let result = new Array(_this.length);
+			let _g = 0;
+			let _g1 = _this.length;
+			while(_g < _g1) {
+				let i = _g++;
+				result[i] = nanofl_engine_elements_Element.parseJson(_this[i],obj.version);
+			}
+			let elements = result;
+			stdlib_Debug.assert(this.get_layers().length == 0,null,{ fileName : "engine/nanofl/engine/libraryitems/MovieClipItem.hx", lineNumber : 378, className : "nanofl.engine.libraryitems.MovieClipItem", methodName : "loadPropertiesJson"});
+			this.addLayer(nanofl_engine_movieclip_Layer.createWithOneFrame(elements));
+		} else {
+			super.loadPropertiesJson(obj);
+			this.autoPlay = obj.autoPlay;
+			this.loop = obj.loop;
+			this.likeButton = obj.likeButton;
+			this.exportAsSprite = obj.exportAsSprite;
+			this.textureAtlas = obj.textureAtlas;
+			let tmp = obj.relatedSound;
+			this.relatedSound = tmp != null ? tmp : "";
+			let _this = obj.layers;
+			let result = new Array(_this.length);
+			let _g = 0;
+			let _g1 = _this.length;
+			while(_g < _g1) {
+				let i = _g++;
+				result[i] = nanofl_engine_movieclip_Layer.loadJson(_this[i],obj.version);
+			}
+			this.addLayersBlock(result);
 		}
-		this.addLayersBlock(result);
+	}
+	isGroup() {
+		return this.namePath.startsWith(nanofl_engine_Library.GROUPS_NAME_PATH + "/");
 	}
 	toString() {
 		return "MovieClipItem(" + this.namePath + ")";
@@ -7803,6 +7836,16 @@ class nanofl_engine_movieclip_Layer {
 			return false;
 		}
 		return true;
+	}
+	static loadJson(obj,version) {
+		let r = new nanofl_engine_movieclip_Layer("");
+		r.loadPropertiesJson(obj,version);
+		return r;
+	}
+	static createWithOneFrame(elements) {
+		let r = new nanofl_engine_movieclip_Layer("");
+		r.addKeyFrame(new nanofl_engine_movieclip_KeyFrame("",1,null,elements));
+		return r;
 	}
 }
 nanofl_engine_movieclip_Layer.__name__ = "nanofl.engine.movieclip.Layer";
@@ -8640,6 +8683,7 @@ nanofl_TextField.selectionEnd = 0;
 nanofl_engine_ColorTools.colors = { "aliceblue" : "#f0f8ff", "antiquewhite" : "#faebd7", "aqua" : "#00ffff", "aquamarine" : "#7fffd4", "azure" : "#f0ffff", "beige" : "#f5f5dc", "bisque" : "#ffe4c4", "black" : "#000000", "blanchedalmond" : "#ffebcd", "blue" : "#0000ff", "blueviolet" : "#8a2be2", "brown" : "#a52a2a", "burlywood" : "#deb887", "cadetblue" : "#5f9ea0", "chartreuse" : "#7fff00", "chocolate" : "#d2691e", "coral" : "#ff7f50", "cornflowerblue" : "#6495ed", "cornsilk" : "#fff8dc", "crimson" : "#dc143c", "cyan" : "#00ffff", "darkblue" : "#00008b", "darkcyan" : "#008b8b", "darkgoldenrod" : "#b8860b", "darkgray" : "#a9a9a9", "darkgreen" : "#006400", "darkkhaki" : "#bdb76b", "darkmagenta" : "#8b008b", "darkolivegreen" : "#556b2f", "darkorange" : "#ff8c00", "darkorchid" : "#9932cc", "darkred" : "#8b0000", "darksalmon" : "#e9967a", "darkseagreen" : "#8fbc8f", "darkslateblue" : "#483d8b", "darkslategray" : "#2f4f4f", "darkturquoise" : "#00ced1", "darkviolet" : "#9400d3", "deeppink" : "#ff1493", "deepskyblue" : "#00bfff", "dimgray" : "#696969", "dodgerblue" : "#1e90ff", "firebrick" : "#b22222", "floralwhite" : "#fffaf0", "forestgreen" : "#228b22", "fuchsia" : "#ff00ff", "gainsboro" : "#dcdcdc", "ghostwhite" : "#f8f8ff", "gold" : "#ffd700", "goldenrod" : "#daa520", "gray" : "#808080", "grey" : "#808080", "green" : "#008000", "greenyellow" : "#adff2f", "honeydew" : "#f0fff0", "hotpink" : "#ff69b4", "indianred " : "#cd5c5c", "indigo" : "#4b0082", "ivory" : "#fffff0", "khaki" : "#f0e68c", "lavender" : "#e6e6fa", "lavenderblush" : "#fff0f5", "lawngreen" : "#7cfc00", "lemonchiffon" : "#fffacd", "lightblue" : "#add8e6", "lightcoral" : "#f08080", "lightcyan" : "#e0ffff", "lightgoldenrodyellow" : "#fafad2", "lightgrey" : "#d3d3d3", "lightgreen" : "#90ee90", "lightpink" : "#ffb6c1", "lightsalmon" : "#ffa07a", "lightseagreen" : "#20b2aa", "lightskyblue" : "#87cefa", "lightslategray" : "#778899", "lightsteelblue" : "#b0c4de", "lightyellow" : "#ffffe0", "lime" : "#00ff00", "limegreen" : "#32cd32", "linen" : "#faf0e6", "magenta" : "#ff00ff", "maroon" : "#800000", "mediumaquamarine" : "#66cdaa", "mediumblue" : "#0000cd", "mediumorchid" : "#ba55d3", "mediumpurple" : "#9370d8", "mediumseagreen" : "#3cb371", "mediumslateblue" : "#7b68ee", "mediumspringgreen" : "#00fa9a", "mediumturquoise" : "#48d1cc", "mediumvioletred" : "#c71585", "midnightblue" : "#191970", "mintcream" : "#f5fffa", "mistyrose" : "#ffe4e1", "moccasin" : "#ffe4b5", "navajowhite" : "#ffdead", "navy" : "#000080", "oldlace" : "#fdf5e6", "olive" : "#808000", "olivedrab" : "#6b8e23", "orange" : "#ffa500", "orangered" : "#ff4500", "orchid" : "#da70d6", "palegoldenrod" : "#eee8aa", "palegreen" : "#98fb98", "paleturquoise" : "#afeeee", "palevioletred" : "#d87093", "papayawhip" : "#ffefd5", "peachpuff" : "#ffdab9", "peru" : "#cd853f", "pink" : "#ffc0cb", "plum" : "#dda0dd", "powderblue" : "#b0e0e6", "purple" : "#800080", "red" : "#ff0000", "rosybrown" : "#bc8f8f", "royalblue" : "#4169e1", "saddlebrown" : "#8b4513", "salmon" : "#fa8072", "sandybrown" : "#f4a460", "seagreen" : "#2e8b57", "seashell" : "#fff5ee", "sienna" : "#a0522d", "silver" : "#c0c0c0", "skyblue" : "#87ceeb", "slateblue" : "#6a5acd", "slategray" : "#708090", "snow" : "#fffafa", "springgreen" : "#00ff7f", "steelblue" : "#4682b4", "tan" : "#d2b48c", "teal" : "#008080", "thistle" : "#d8bfd8", "tomato" : "#ff6347", "turquoise" : "#40e0d0", "violet" : "#ee82ee", "wheat" : "#f5deb3", "white" : "#ffffff", "whitesmoke" : "#f5f5f5", "yellow" : "#ffff00", "yellowgreen" : "#9acd32", "transparent" : "rgba(0,0,0,0)"};
 nanofl_engine_Debug.console = new nanofl_engine_Console();
 nanofl_engine_Library.SCENE_NAME_PATH = "scene";
+nanofl_engine_Library.GROUPS_NAME_PATH = "$groups";
 nanofl_engine_ScaleMode.fit = "fit";
 nanofl_engine_ScaleMode.fill = "fill";
 nanofl_engine_ScaleMode.stretch = "stretch";

@@ -38,6 +38,7 @@ extern class MovieClipItem extends nanofl.engine.libraryitems.InstancableItem im
 	override function setLibrary(library:nanofl.engine.Library):Void;
 	function transform(m:nanofl.engine.geom.Matrix):Void;
 	override function loadPropertiesJson(obj:Dynamic):Void;
+	function isGroup():Bool;
 	override function toString():String;
 	static function createWithFrame(namePath:String, ?elements:Array<nanofl.engine.elements.Element>, ?layerName:String):nanofl.engine.libraryitems.MovieClipItem;
 	static function loadFromJson(namePath:String, baseLibraryUrl:String):js.lib.Promise<nanofl.engine.libraryitems.MovieClipItem>;

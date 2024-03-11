@@ -13,11 +13,11 @@ import nanofl.engine.elements.Element;
 import nanofl.engine.geom.Matrix;
 import nanofl.engine.geom.Point;
 import nanofl.engine.geom.PointTools;
-import nanofl.engine.movieclip.Frame;
 import nanofl.engine.movieclip.KeyFrame;
 import nanofl.engine.movieclip.Layer;
 import stdlib.Std;
 using stdlib.Lambda;
+using stdlib.StringTools;
 
 #if ide
 import htmlparser.HtmlNodeElement;
@@ -64,6 +64,12 @@ class MovieClipItem	extends InstancableItem
 	public function new(namePath:String)
 	{
 		super(namePath);
+
+        if (isGroup())
+        {
+            autoPlay = false;
+            loop = false;
+        }
 	}
 	
 	public function addLayer(layer:Layer)
@@ -257,58 +263,87 @@ class MovieClipItem	extends InstancableItem
     
     override function saveProperties(xml:XmlBuilder) : Void
     {
-        super.saveProperties(xml);
+        switch (isGroup())
+        {
+            case false:
+                super.saveProperties(xml);
 
-		xml.attr("autoPlay", autoPlay, true);
-		xml.attr("loop", loop, true);
-		
-		xml.attr("likeButton", likeButton, false);
-		xml.attr("exportAsSprite", exportAsSprite, false);
-		xml.attr("textureAtlas", textureAtlas, null);
-		xml.attr("relatedSound", relatedSound, "");
-		
-		for (layer in layers) layer.save(xml);
+                xml.attr("autoPlay", autoPlay, true);
+                xml.attr("loop", loop, true);
+                
+                xml.attr("likeButton", likeButton, false);
+                xml.attr("exportAsSprite", exportAsSprite, false);
+                xml.attr("textureAtlas", textureAtlas, null);
+                xml.attr("relatedSound", relatedSound, "");
+                
+                for (layer in layers) layer.save(xml);
+
+            case true:
+                stdlib.Debug.assert(layers.length == 1);
+                stdlib.Debug.assert(getTotalFrames() == 1);
+                for (element in layers[0].keyFrames[0].elements)
+                {
+                    element.save(xml);
+                }
+        }
     }
 
     override function savePropertiesJson(obj:Dynamic) : Void
     {
-        super.savePropertiesJson(obj);
+        switch (isGroup())
+        {
+            case false:
+                super.savePropertiesJson(obj);
 
-        obj.autoPlay = autoPlay ?? true;
-		obj.loop = loop ?? true;
-		
-		obj.likeButton = likeButton ?? false;
-		obj.exportAsSprite = exportAsSprite ?? false;
-		obj.textureAtlas = textureAtlas ?? null;
-		obj.relatedSound = relatedSound ?? "";
-		
-		obj.layers = layers.map(x -> x.saveJson());
+                obj.autoPlay = autoPlay ?? true;
+                obj.loop = loop ?? true;
+                
+                obj.likeButton = likeButton ?? false;
+                obj.exportAsSprite = exportAsSprite ?? false;
+                obj.textureAtlas = textureAtlas ?? null;
+                obj.relatedSound = relatedSound ?? "";
+                
+                obj.layers = layers.map(x -> x.saveJson());
+
+            case true:
+                stdlib.Debug.assert(layers.length == 1);
+                stdlib.Debug.assert(getTotalFrames() == 1);
+                obj.elements = layers[0].keyFrames[0].elements.map(x -> x.saveJson());
+        }
     }
     
     override function loadProperties(xml:HtmlNodeElement) : Void
     {
-        super.loadProperties(xml);
+        var version = xml.getAttribute("version");
+        if (version == null || version == "") version = "1.0.0";
 
-		var version = xml.getAttribute("version");
-		if (version == null || version == "") version = "1.0.0";
-		
-        autoPlay = xml.getAttr("autoPlay", true);
-		loop = xml.getAttr("loop", true);
-		
-		likeButton = xml.getAttr("likeButton", false);
-		exportAsSprite = xml.getAttr("exportAsSprite", false);
-		textureAtlas = xml.getAttr("textureAtlas", null);
-		relatedSound = xml.getAttr("relatedSound", "");
+        switch (isGroup())
+        {
+            case false:
+                super.loadProperties(xml);
+                
+                autoPlay = xml.getAttr("autoPlay", true);
+                loop = xml.getAttr("loop", true);
+                
+                likeButton = xml.getAttr("likeButton", false);
+                exportAsSprite = xml.getAttr("exportAsSprite", false);
+                textureAtlas = xml.getAttr("textureAtlas", null);
+                relatedSound = xml.getAttr("relatedSound", "");
 
-		addLayersBlock
-        (
-            xml.children.filter(x -> x.name == "layer").map(x -> 
-            {
-                var layer = new Layer("");
-                layer.loadProperties(x, version);
-                return layer;
-            })
-        );
+                addLayersBlock
+                (
+                    xml.children.filter(x -> x.name == "layer").map(x -> Layer.load(x, version))
+                );
+
+            case true:
+                stdlib.Debug.assert(loop == false);
+                stdlib.Debug.assert(autoPlay == false);
+                
+                final elements = xml.children.map(x -> Element.parse(x, version));
+                
+                stdlib.Debug.assert(layers.length == 0);
+                addLayer(Layer.createWithOneFrame(elements));
+        }
     }
     #end
     
@@ -316,26 +351,36 @@ class MovieClipItem	extends InstancableItem
     {
         if (obj.type != type) throw new Error("Type of item must be '" + type + "', but '" + obj.type + "' found.");
         
-        super.loadPropertiesJson(obj);
+        switch (isGroup())
+        {
+            case false:
+                super.loadPropertiesJson(obj);
 
-        autoPlay = obj.autoPlay;
-        loop = obj.loop;
-        
-        likeButton = obj.likeButton;
-        exportAsSprite = obj.exportAsSprite;
-        textureAtlas = obj.textureAtlas;
-        relatedSound = obj.relatedSound ?? "";
+                autoPlay = obj.autoPlay;
+                loop = obj.loop;
+                
+                likeButton = obj.likeButton;
+                exportAsSprite = obj.exportAsSprite;
+                textureAtlas = obj.textureAtlas;
+                relatedSound = obj.relatedSound ?? "";
 
-		addLayersBlock
-        (
-            (cast obj.layers : Array<Dynamic>).map(x -> 
-            {
-                var layer = new Layer("");
-                layer.loadPropertiesJson(x, obj.version);
-                return layer;
-            })
-        );
+                addLayersBlock
+                (
+                    (cast obj.layers : Array<Dynamic>).map(x -> Layer.loadJson(x, obj.version))
+                );
+
+            case true:
+                stdlib.Debug.assert(loop == false);
+                stdlib.Debug.assert(autoPlay == false);
+                
+                final elements = (cast obj.elements : Array<Dynamic>).map(x -> Element.parseJson(x, obj.version));
+                
+                stdlib.Debug.assert(layers.length == 0);
+                addLayer(Layer.createWithOneFrame(elements));
+        }
     }
+
+    public function isGroup() return namePath.startsWith(Library.GROUPS_NAME_PATH + "/");
 	
 	public function toString() return "MovieClipItem(" + namePath + ")";
 }

@@ -5,7 +5,6 @@ import nanofl.engine.geom.Matrix;
 import nanofl.engine.geom.Point;
 import nanofl.engine.geom.PointTools;
 import nanofl.engine.movieclip.KeyFrame;
-import stdlib.Debug;
 using StringTools;
 
 #if ide
@@ -27,8 +26,6 @@ abstract class Element
 	public var matrix = new Matrix();
 	public var regX = 0.0;
 	public var regY = 0.0;
-
-    public var groups = new Array<String>();
 	
     function new() {}
 	
@@ -60,54 +57,56 @@ abstract class Element
 	}
 	
 	#if ide
-    public static function parse(node:HtmlNodeElement, version:String, ?groups:Array<String>) : Array<Element>
+    public static function parse(node:HtmlNodeElement, version:String) : Element
 	{
-		if (groups == null) groups = [];
-        
-        if (node.name == "group") // obsolete
+        final type = try ElementType.createByName(node.name)
+        catch (e) { js.Browser.console.warn("Unexpected element: " + node.name); return null; }
+
+        var element : Element = switch (type)
 		{
-            final group = stdlib.Uuid.newUuid();
-            final r = new Array<Element>();
-            for (child in node.children) r.addRange(parse(child, version, groups.concat([group])));
-            return r;
-        }
-        
-        var element : Element = switch (node.name)
-		{
-			case "instance": new Instance(null);
-			case "text": new TextElement(null, null, null, null, null, null);
-			case "shape": new ShapeElement();
-            case _: null;
+			case ElementType.instance: new Instance(null);
+			case ElementType.text: new TextElement(null, null, null, null, null, null);
+			case ElementType.shape: new ShapeElement();
 		};
-		
-		if (element == null)
+
+        if (!element.loadProperties(node, version))
         {
-            js.Browser.console.warn("Unexpected element: " + node.name);
-            return [];
+            js.Browser.console.warn("Error loading properties for: " + node.name);
+            return null;
         }
 
-        element.visible = true;
-        if (!element.loadProperties(node, version)) return [];
-        Debug.assert(element.matrix != null);
+        if (element.matrix == null)
+        {
+            js.Browser.console.warn("Error loading matrix for: " + node.name);
+            return null;
+        }
 		
-		return [ element ];
+		return element;
 	}
     #end
 
     public static function parseJson(obj:Dynamic, version:String) : Element
     {
-        var element : Element = switch (ElementType.createByName(obj.type))
+        final type = try ElementType.createByName(obj.type)
+        catch (e) { js.Browser.console.warn("Unexpected element: " + obj.type); return null; }
+        
+        var element : Element = switch (type)
         {
             case ElementType.instance: new Instance(null);
             case ElementType.text: new TextElement(null, null, null, null, null, null);
             case ElementType.shape: new ShapeElement();
         };
 
-        if (element != null)
+        if (!element.loadPropertiesJson(obj, version))
         {
-            element.visible = true;
-            if (!element.loadPropertiesJson(obj, version)) return null;
-            Debug.assert(element.matrix != null);
+            js.Browser.console.warn("Error loading properties for: " + obj.type);
+            return null;
+        }
+
+        if (element.matrix == null)
+        {
+            js.Browser.console.warn("Error loading matrix for: " + obj.type);
+            return null;
         }
         
         return element;
@@ -119,7 +118,6 @@ abstract class Element
 		matrix = Matrix.load(node);
 		regX = node.getAttr("regX", 0.0);
 		regY = node.getAttr("regY", 0.0);
-        groups = node.getAttr("groups", "").split(",").map(x -> x.trim()).filter(x -> x != "");
 		return true;
 	}
     #end
@@ -129,7 +127,6 @@ abstract class Element
 		matrix = Matrix.loadJson(obj);
 		regX = obj.regX ?? 0.0;
 		regY = obj.regY ?? 0.0;
-        groups = obj.groups ?? new Array<String>();
 		return true;
 	}
 	
@@ -155,7 +152,6 @@ abstract class Element
 		matrix.save(out);
 		out.attr("regX", regX, 0.0);
 		out.attr("regY", regY, 0.0);
-		if (groups.length > 0) out.attr("groups", groups.join(","));
 	}
 
 	function savePropertiesJson(obj:Dynamic) : Void
@@ -163,7 +159,6 @@ abstract class Element
         matrix.saveJson(obj);
         obj.regX = regX ?? 0.0;
         obj.regY = regY ?? 0.0;
-        if (groups.length > 0) obj.groups = groups;
 	}
     #end
 	
