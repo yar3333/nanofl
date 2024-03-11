@@ -1,6 +1,5 @@
 package nanofl.ide.editor;
 
-import stdlib.Uuid;
 import easeljs.display.Container;
 import easeljs.geom.Rectangle;
 import htmlparser.XmlBuilder;
@@ -726,7 +725,7 @@ class Editor extends InjectContainer
 		var elements = extractSelected();
 		for (element in elements) element.save(out);
 		out.end();
-		return Elements.getUsedSymbolNamePaths(elements).map(document.library.getItem);
+		return Elements.getUsedSymbolNamePaths(elements).iterator().map(document.library.getItem);
 	}
 	
 	public function pasteFromXml(xml:XmlNodeElement, selectPasted=true)

@@ -1,5 +1,6 @@
 package nanofl.ide.libraryitems;
 
+import js.lib.Set;
 import js.lib.Error;
 import nanofl.engine.SerializationAsJsTools;
 import haxe.crypto.Base64;
@@ -132,7 +133,7 @@ class BitmapItem extends nanofl.engine.libraryitems.BitmapItem
         }
     }
 
-	public function getUsedSymbolNamePaths() : Array<String> return [ namePath ];
+	public function getUsedSymbolNamePaths() : Set<String> return new Set([ namePath ]);
 
 	static function isImageHasAlpha(image:js.html.ImageElement)
     {

@@ -1,5 +1,6 @@
 package nanofl.engine.elements;
 
+import js.lib.Set;
 import nanofl.engine.Debug.console;
 import nanofl.engine.fills.*;
 import datatools.ArrayTools;
@@ -1183,28 +1184,23 @@ class ShapeElement extends Element
 	#end
 	
 	#if ide
-	override public function getUsedSymbolNamePaths() : Array<String>
+	override public function getUsedSymbolNamePaths() : Set<String>
 	{
-		var r = [];
+		var r = new Set<String>();
 		
 		for (edge in edges)
 		{
 			if (Std.isOfType(edge.stroke, BitmapStroke))
 			{
-				if (r.indexOf((cast edge.stroke:BitmapStroke).bitmapPath) < 0)
-				{
-					r.push((cast edge.stroke:BitmapStroke).bitmapPath);
-				}
+				r.add((cast edge.stroke:BitmapStroke).bitmapPath);
 			}
 		}
+        
 		for (polygon in polygons)
 		{
 			if (Std.isOfType(polygon.fill, BitmapFill))
 			{
-				if (r.indexOf((cast polygon.fill:BitmapFill).bitmapPath) < 0)
-				{
-					r.push((cast polygon.fill:BitmapFill).bitmapPath);
-				}
+                r.add((cast polygon.fill:BitmapFill).bitmapPath);
 			}
 		}
 		

@@ -35,7 +35,7 @@ extern class EditorTimeline {
 	function addLayersBlock(layersToAdd:Array<nanofl.engine.movieclip.Layer>, ?index:Int):Void;
 	function removeLayer(index:Int):Void;
 	function addLayer(layer:nanofl.engine.movieclip.Layer):Void;
-	function getNamePaths(keyFrame:nanofl.engine.movieclip.KeyFrame):Array<String>;
+	function getNamePaths(keyFrame:nanofl.engine.movieclip.KeyFrame):js.lib.Set<String>;
 	function getLayerNestLevel(layer:nanofl.engine.movieclip.Layer):Int;
 	function duplicateLayerWoFrames(layer:nanofl.engine.movieclip.Layer):nanofl.engine.movieclip.Layer;
 	function getLayerKeyFrames(layer:nanofl.engine.movieclip.Layer):Array<nanofl.engine.movieclip.KeyFrame>;

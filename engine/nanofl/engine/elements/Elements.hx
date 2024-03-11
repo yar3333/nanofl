@@ -1,5 +1,6 @@
 package nanofl.engine.elements;
 
+import js.lib.Set;
 import datatools.ArrayRO;
 import datatools.ArrayTools;
 using stdlib.Lambda;
@@ -19,13 +20,13 @@ class Elements
 	}
 	
 	#if ide
-	public static function getUsedSymbolNamePaths<Element:{ function getUsedSymbolNamePaths() : Array<String>; }>(elements:ArrayRO<Element>) : Array<String>
+	public static function getUsedSymbolNamePaths(elements:ArrayRO<Element>) : Set<String>
 	{
-		var r = [];
+		var r = new Set<String>();
 		
 		for (element in elements)
 		{
-			ArrayTools.appendUniqueFast(r, element.getUsedSymbolNamePaths());
+			for (namePath in element.getUsedSymbolNamePaths()) r.add(namePath);
 		}
 		
 		return r;

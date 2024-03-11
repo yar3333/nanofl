@@ -1,5 +1,6 @@
 package nanofl.engine.elements;
 
+import js.lib.Set;
 import nanofl.engine.Library;
 import nanofl.engine.geom.Matrix;
 import nanofl.engine.geom.Point;
@@ -42,7 +43,7 @@ abstract class Element
 	#end
 	
 	#if ide
-	public function getUsedSymbolNamePaths() : Array<String> return [];
+	public function getUsedSymbolNamePaths() : Set<String> return new Set<String>();
 	#end
 	
 	public abstract function clone() : Element;

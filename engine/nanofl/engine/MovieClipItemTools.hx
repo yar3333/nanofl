@@ -2,7 +2,6 @@ package nanofl.engine;
 
 import nanofl.engine.LayerType;
 import nanofl.engine.elements.Element;
-import nanofl.engine.elements.Elements;
 import nanofl.engine.elements.Instance;
 import nanofl.engine.libraryitems.MovieClipItem;
 import nanofl.engine.geom.Matrix;
@@ -20,7 +19,7 @@ class MovieClipItemTools
         
     static function findShapesInner(item:MovieClipItem, allFrames:Bool, matrix:Matrix, insideMask:Bool, callb:ShapeElement->{ item:MovieClipItem, layerIndex:Int, keyFrameIndex:Int, matrix:Matrix, insideMask:Bool }->Void) : Void
     {
-        iterateElements(item, allFrames, insideMask, (element:Element, e) ->
+        iterateElementsInner(item, allFrames, insideMask, (element:Element, e) ->
         {
             if (Std.isOfType(element, ShapeElement))
             {
@@ -63,7 +62,7 @@ class MovieClipItemTools
     
     static function iterateInstances(item:MovieClipItem, allFrames:Bool, insideMask=false, callb:Instance->{ layerIndex:Int, keyFrameIndex:Int, insideMask:Bool }->Void)
     {
-        iterateElements(item, allFrames, insideMask, (element:Element, e) ->
+        iterateElementsInner(item, allFrames, insideMask, (element:Element, e) ->
         {
             if (Std.isOfType(element, Instance))
             {
@@ -72,7 +71,12 @@ class MovieClipItemTools
         });
     }
     
-    public static function iterateElements(item:MovieClipItem, allFrames:Bool, insideMask=false, callb:Element->{ layerIndex:Int, keyFrameIndex:Int, insideMask:Bool }->Void)
+    public static function iterateElements(item:MovieClipItem, allFrames:Bool, callb:Element->{ layerIndex:Int, keyFrameIndex:Int, insideMask:Bool }->Void)
+    {
+        return iterateElementsInner(item, allFrames, false, callb);
+    }
+
+    static function iterateElementsInner(item:MovieClipItem, allFrames:Bool, insideMask=false, callb:Element->{ layerIndex:Int, keyFrameIndex:Int, insideMask:Bool }->Void)
     {
         for (layerIndex in 0...item.layers.length)
         {

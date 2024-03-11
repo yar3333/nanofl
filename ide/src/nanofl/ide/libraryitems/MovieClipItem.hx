@@ -1,5 +1,6 @@
 package nanofl.ide.libraryitems;
 
+import js.lib.Set;
 import datatools.ArrayTools;
 import htmlparser.HtmlNodeElement;
 import nanofl.engine.MovieClipItemTools;
@@ -63,13 +64,13 @@ class MovieClipItem extends nanofl.engine.libraryitems.MovieClipItem
 		return new nanofl.MovieClip(this);
 	}
 	
-	public function getUsedSymbolNamePaths() : Array<String>
+	public function getUsedSymbolNamePaths() : Set<String>
 	{
-		var r = [ namePath ];
+		var r = new Set([ namePath ]);
 		
-		MovieClipItemTools.iterateElements(this, true, function(element, _)
+		MovieClipItemTools.iterateElements(this, true, (element, _) ->
 		{
-			ArrayTools.appendUniqueFast(r, element.getUsedSymbolNamePaths());
+			for (namePath in element.getUsedSymbolNamePaths()) r.add(namePath);
 		});
 		
 		return r;

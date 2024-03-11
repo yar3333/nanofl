@@ -1,5 +1,6 @@
 package nanofl.ide.libraryitems;
 
+import js.lib.Set;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.engine.elements.Instance;
 
@@ -9,7 +10,7 @@ interface IIdeInstancableItem
 {
 	function newInstance() : Instance;
 	
-	function getUsedSymbolNamePaths() : Array<String>;
+	function getUsedSymbolNamePaths() : Set<String>;
 	function getDisplayObjectClassName() : String;
 	
 	function createDisplayObject() : easeljs.display.DisplayObject;

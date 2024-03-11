@@ -1,5 +1,6 @@
 package nanofl.ide.libraryitems;
 
+import js.lib.Set;
 import haxe.Json;
 import nanofl.engine.SerializationAsJsTools;
 import nanofl.ide.sys.FileSystem;
@@ -75,7 +76,7 @@ class MeshItem extends nanofl.engine.libraryitems.MeshItem
         return clone();
     }
     
-	public function getUsedSymbolNamePaths() : Array<String> return [ namePath ];
+	public function getUsedSymbolNamePaths() : Set<String> return new Set([ namePath ]);
 
 	static function log(v:Dynamic, ?infos:haxe.PosInfos)
 	{

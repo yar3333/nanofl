@@ -76,7 +76,7 @@ extern class ShapeElement extends nanofl.engine.elements.Element {
 	override function setLibrary(library:nanofl.engine.Library):Void;
 	override function equ(element:nanofl.engine.elements.Element):Bool;
 	override function fixErrors():Bool;
-	override function getUsedSymbolNamePaths():Array<String>;
+	override function getUsedSymbolNamePaths():js.lib.Set<String>;
 	override function toString():String;
 	static function createRectangle(x:Float, y:Float, width:Float, height:Float, rTopLeft:Float, rTopRight:Float, rBottomRight:Float, rBottomLeft:Float, stroke:nanofl.engine.strokes.IStroke, fill:nanofl.engine.fills.IFill):nanofl.engine.elements.ShapeElement;
 	static function createOval(cx:Float, cy:Float, rx:Float, ry:Float, startAngle:Float, endAngle:Float, innerRadius:Float, closePath:Bool, stroke:nanofl.engine.strokes.IStroke, fill:nanofl.engine.fills.IFill):nanofl.engine.elements.ShapeElement;

@@ -9,6 +9,6 @@ extern class MeshItem extends nanofl.engine.libraryitems.MeshItem implements nan
 	function getLibraryFilePaths():Array<String>;
 	function getDataToSaveBeforeCleanDestDirectoryAndPublish(fileSystem:nanofl.ide.sys.FileSystem, destLibraryDir:String):Dynamic;
 	function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String, savedData:Dynamic):nanofl.ide.libraryitems.IIdeLibraryItem;
-	function getUsedSymbolNamePaths():Array<String>;
+	function getUsedSymbolNamePaths():js.lib.Set<String>;
 	static function parse(namePath:String, itemNode:htmlparser.HtmlNodeElement):nanofl.ide.libraryitems.MeshItem;
 }

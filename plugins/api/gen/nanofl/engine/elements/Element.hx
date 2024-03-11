@@ -12,7 +12,7 @@ extern class Element {
 	function getState():nanofl.ide.undo.states.ElementState;
 	function setState(state:nanofl.ide.undo.states.ElementState):Void;
 	function fixErrors():Bool;
-	function getUsedSymbolNamePaths():Array<String>;
+	function getUsedSymbolNamePaths():js.lib.Set<String>;
 	function clone():nanofl.engine.elements.Element;
 	function toString():String;
 	function save(out:htmlparser.XmlBuilder):Void;

@@ -1,5 +1,6 @@
 package nanofl.ide.timeline;
 
+import js.lib.Set;
 import htmlparser.HtmlNodeElement;
 import datatools.ArrayRO;
 import nanofl.engine.elements.Elements;
@@ -96,7 +97,7 @@ class EditorTimeline
 		pathItem.mcItem.addLayer(layer);
 	}
 	
-	public function getNamePaths(keyFrame:KeyFrame) : Array<String> 
+	public function getNamePaths(keyFrame:KeyFrame) : Set<String> 
 	{
 		return Elements.getUsedSymbolNamePaths(keyFrame.elements);
 	}

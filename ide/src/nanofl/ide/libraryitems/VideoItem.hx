@@ -1,5 +1,6 @@
 package nanofl.ide.libraryitems;
 
+import js.lib.Set;
 import easeljs.display.DisplayObject;
 import htmlparser.HtmlNodeElement;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
@@ -65,7 +66,7 @@ class VideoItem extends nanofl.engine.libraryitems.VideoItem
         return clone();
 	}
 
-	public function getUsedSymbolNamePaths() : Array<String> return [ namePath ];
+	public function getUsedSymbolNamePaths() : Set<String> return new Set([ namePath ]);
 
     override function createDisplayObject()
     {
