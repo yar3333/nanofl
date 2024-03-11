@@ -9,6 +9,7 @@ import js.html.ImageElement;
 import js.html.XMLHttpRequest;
 import nanofl.engine.Debug.console;
 using stdlib.Lambda;
+using StringTools;
 
 class Loader
 {
@@ -23,9 +24,9 @@ class Loader
 			};
 			image.onerror = _ ->
 			{
-				console.error("Failed to load '" + url + "'.");
+				console.error("Failed to load '" + (url.startsWith("data:") ? "<DataUrl>" : url) + "'.");
 				image.src = "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=";
-				reject(new Error("Failed to load '" + url + "'."));
+				reject(new Error("Failed to load '" + (url.startsWith("data:") ? "<DataUrl>" : url) + "'."));
 			};
 			image.src = url;
 		});

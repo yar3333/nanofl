@@ -45,14 +45,14 @@ class LibraryItems
 		
 		var p = Promise.resolve(new Array<IIdeLibraryItem>());
 		
-        var pluginApi = new PluginApi();
+        final pluginApi = new PluginApi();
 		
         for (loader in loaders)
 		{
 			p = p.then(function(r:Array<IIdeLibraryItem>) : Promise<Array<IIdeLibraryItem>>
 			{
 				log("Loader " + loader.name);
-				var params = loader.getParams(preferences.storage);
+				final params = loader.getParams(preferences.storage);
 				return loader.load(pluginApi, params, libraryDir, cachedFiles).then((items:Array<IIdeLibraryItem>) ->
 				{
 					for (item in items)

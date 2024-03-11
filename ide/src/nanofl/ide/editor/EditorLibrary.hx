@@ -11,7 +11,6 @@ import nanofl.engine.FontVariant;
 import nanofl.ide.MovieClipItemTools;
 import nanofl.ide.plugins.LoaderPlugins;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
-import nanofl.engine.elements.Instance;
 import nanofl.ide.libraryitems.*;
 import nanofl.engine.movieclip.KeyFrame;
 import nanofl.engine.movieclip.Layer;

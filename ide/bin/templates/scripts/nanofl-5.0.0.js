@@ -3744,9 +3744,9 @@ class nanofl_engine_Loader {
 				resolve(image);
 			};
 			image.onerror = function(_) {
-				nanofl_engine_Debug.console.error("Failed to load '" + url + "'.");
+				nanofl_engine_Debug.console.error("Failed to load '" + (url.startsWith("data:") ? "<DataUrl>" : url) + "'.");
 				image.src = "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=";
-				reject(new Error("Failed to load '" + url + "'."));
+				reject(new Error("Failed to load '" + (url.startsWith("data:") ? "<DataUrl>" : url) + "'."));
 			};
 			image.src = url;
 		});
@@ -6609,30 +6609,13 @@ class nanofl_engine_libraryitems_BitmapItem extends nanofl_engine_libraryitems_I
 		if(this.textureAtlas != null && this.textureAtlas != "") {
 			return Promise.resolve(null);
 		}
+		let imagePromise = this.ext == "js" ? nanofl_engine_SerializationAsJsTools.load(this.library,this.namePath,true).then(function(dataUri) {
+			return nanofl_engine_Loader.image(dataUri);
+		}) : nanofl_engine_Loader.image(this.library.realUrl(this.namePath + "." + this.ext));
 		let _gthis = this;
-		if(this.ext == "js") {
-			return nanofl_engine_SerializationAsJsTools.load(this.library,this.namePath,true).then(function(dataUri) {
-				return _gthis.loadImageFromDataUri(dataUri);
-			});
-		} else {
-			return nanofl_engine_Loader.image(this.library.realUrl(this.namePath + "." + this.ext)).then(function(img) {
-				_gthis.image = img;
-				return null;
-			});
-		}
-	}
-	loadImageFromDataUri(dataUri) {
-		let _gthis = this;
-		return new Promise(function(resolve,reject) {
-			let tmp = window.document.createElement("img");
-			_gthis.image = tmp;
-			_gthis.image.onload = function() {
-				resolve(null);
-			};
-			_gthis.image.onerror = function(e) {
-				reject(e);
-			};
-			_gthis.image.src = dataUri;
+		return imagePromise.then(function(img) {
+			_gthis.image = img;
+			return null;
 		});
 	}
 	createDisplayObject() {

@@ -65,21 +65,11 @@ class BitmapItem extends InstancableItem
         return Loader.image(library.realUrl(namePath + "." + ext)).then(img -> { image = img; return null; });
         #else
         if (textureAtlas != null && textureAtlas != "") return Promise.resolve(null);
-        return ext == "js"
-                ? SerializationAsJsTools.load(library, namePath, true).then((dataUri:String) -> loadImageFromDataUri(dataUri))
-                : Loader.image(library.realUrl(namePath + "." + ext)).then(img -> { image = img; return null; });
+        final imagePromise = ext == "js"
+                    ? SerializationAsJsTools.load(library, namePath, true).then((dataUri:String) -> Loader.image(dataUri))
+                    : Loader.image(library.realUrl(namePath + "." + ext));
+        return imagePromise.then(img -> { image = img; return null; });
         #end
-    }
-
-    function loadImageFromDataUri(dataUri:String) : Promise<{}>
-    {
-        return new Promise((resolve, reject) ->
-        {
-            image = Browser.document.createImageElement();
-            image.onload = () -> resolve(null);
-            image.onerror = e -> reject(e);
-            image.src = dataUri;
-        });
     }
 	
 	override public function createDisplayObject() : easeljs.display.DisplayObject
