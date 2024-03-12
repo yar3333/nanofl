@@ -68,9 +68,9 @@ class VideoItem extends nanofl.engine.libraryitems.VideoItem
 
 	public function getUsedSymbolNamePaths() : Set<String> return new Set([ namePath ]);
 
-    override function createDisplayObject()
+    override function createDisplayObject(params:Dynamic)
     {
-        return new IdeVideo(this);
+        return new IdeVideo(this, params);
     }
 
 	static function log(v:Dynamic, ?infos:haxe.PosInfos)

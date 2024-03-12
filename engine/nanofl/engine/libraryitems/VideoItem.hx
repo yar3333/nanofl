@@ -71,10 +71,10 @@ class VideoItem extends InstancableItem
         });
     }
 
-	override public function createDisplayObject() : easeljs.display.DisplayObject
+	override public function createDisplayObject(params:Dynamic) : easeljs.display.DisplayObject
 	{
-		var r = super.createDisplayObject();
-    	return r ?? new nanofl.Video(this);
+		var r = super.createDisplayObject(params);
+    	return r ?? new nanofl.Video(this, params);
 	}
 	
 	public function getDisplayObjectClassName() return "nanofl.Video";

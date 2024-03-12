@@ -1,19 +1,29 @@
 package nanofl.engine;
 
-extern class MeshParams {
-	function new():Void;
-	var rotationX : Float;
-	var rotationY : Float;
-	var cameraFov : Int;
+typedef MeshParams = {
+	@:optional
 	var ambientLightColor : String;
+	@:optional
+	var cameraFov : Float;
+	@:optional
 	var directionalLightColor : String;
+	@:optional
 	var directionalLightRotationX : Float;
+	@:optional
 	var directionalLightRotationY : Float;
-	function save(out:htmlparser.XmlBuilder):Void;
-	function saveJson():Dynamic;
-	function equ(obj:nanofl.engine.MeshParams):Bool;
-	function clone():nanofl.engine.MeshParams;
-	function applyToMesh(mesh:nanofl.Mesh):Void;
+	@:optional
+	var rotationX : Float;
+	@:optional
+	var rotationY : Float;
+};
+
+extern class MeshParamsTools {
+	static function createDefault():nanofl.engine.MeshParams;
 	static function load(node:htmlparser.HtmlNodeElement):nanofl.engine.MeshParams;
 	static function loadJson(obj:Dynamic):nanofl.engine.MeshParams;
+	static function save(params:nanofl.engine.MeshParams, out:htmlparser.XmlBuilder):Void;
+	static function saveJson(params:nanofl.engine.MeshParams):Dynamic;
+	static function equ(a:nanofl.engine.MeshParams, b:nanofl.engine.MeshParams):Bool;
+	static function clone(params:nanofl.engine.MeshParams):nanofl.engine.MeshParams;
+	static function applyToMesh(params:nanofl.engine.MeshParams, mesh:nanofl.Mesh):Void;
 }

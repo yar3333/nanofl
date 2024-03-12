@@ -8,7 +8,7 @@ class SpriteButton extends Sprite
 {
 	public function new(symbol:MovieClipItem)
 	{
-		super(symbol);
+		super(symbol, null);
 		
 		stop();
 		

@@ -36,13 +36,13 @@ abstract class InstancableItem extends LibraryItem
 	
 	public abstract function getDisplayObjectClassName() : String;
 	
-	public function createDisplayObject() : easeljs.display.DisplayObject
+	public function createDisplayObject(params:Dynamic) : easeljs.display.DisplayObject
 	{
 		#if !ide
 		if (linkedClass != "")
 		{
 			var klass = untyped window[linkedClass];
-			if (klass != null) return js.Syntax.code("new klass(this)");
+			if (klass != null) return js.Syntax.code("new klass(this, params)");
 			trace("Linkage class '" + linkedClass + "' is not found.");
 		}
 		#end

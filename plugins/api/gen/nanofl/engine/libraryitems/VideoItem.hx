@@ -12,7 +12,7 @@ extern class VideoItem extends nanofl.engine.libraryitems.InstancableItem {
 	override function clone():nanofl.engine.libraryitems.VideoItem;
 	override function getIcon():String;
 	override function preload():js.lib.Promise<{ }>;
-	override function createDisplayObject():easeljs.display.DisplayObject;
+	override function createDisplayObject(params:Dynamic):easeljs.display.DisplayObject;
 	override function getDisplayObjectClassName():String;
 	override function equ(item:nanofl.engine.ILibraryItem):Bool;
 	override function getNearestPoint(pos:nanofl.engine.geom.Point):nanofl.engine.geom.Point;

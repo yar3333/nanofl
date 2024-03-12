@@ -1,5 +1,6 @@
 package nanofl.ide.displayobjects;
 
+import nanofl.Video.VideoParams;
 import js.html.MediaElement;
 import nanofl.ide.libraryitems.VideoItem;
 import nanofl.engine.AdvancableDisplayObject;
@@ -9,14 +10,14 @@ class IdeVideo extends nanofl.Video
 {
     var currentFrame : Int;
     
-    public function new(symbol:VideoItem)
+    public function new(symbol:VideoItem, params:VideoParams)
     {
-        super(symbol);
+        super(symbol, params);
 
         video.autoplay = false;
         
         currentFrame = 0;
-        video.currentTime = 0.0001;
+        video.currentTime = (params?.currentTime ?? 0.0) + 0.0001;
 
         if (video.readyState < MediaElement.HAVE_CURRENT_DATA)
         {

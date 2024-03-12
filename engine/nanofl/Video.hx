@@ -8,6 +8,11 @@ import stdlib.Debug;
 using stdlib.StringTools;
 using stdlib.Lambda;
 
+typedef VideoParams =
+{
+    @:optional var currentTime : Float;
+}
+
 @:expose
 class Video extends SolidContainer
     implements InstanceDisplayObject
@@ -19,7 +24,7 @@ class Video extends SolidContainer
 
     public var duration(default, null) : Float;
 	
-	public function new(symbol:VideoItem)
+	public function new(symbol:VideoItem, params:VideoParams)
 	{
 		super();
 		
@@ -35,15 +40,16 @@ class Video extends SolidContainer
         duration = symbol.duration;
 		setBounds(0, 0, symbol.width, symbol.height);
 
+        video.currentTime = params?.currentTime ?? 0.0;
+
         addChild(new easeljs.display.Bitmap(new easeljs.utils.VideoBuffer(video)));
 	}
 
-	override public function clone(?recursive:Bool) : MovieClip 
+	override public function clone(?recursive:Bool) : Video 
 	{
-		return (cast this)._cloneProps
-		(
-			new Video(symbol)
-		);
+		final r : Video = (cast this)._cloneProps(new Video(symbol, null));
+        r.video.currentTime = video.currentTime;
+        return r;
 	}
 	
 	override public function toString() : String 

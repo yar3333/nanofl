@@ -1,6 +1,5 @@
 package nanofl.engine.libraryitems;
 
-import js.lib.Set;
 import haxe.Json;
 import js.lib.Error;
 import datatools.ArrayRO;
@@ -136,15 +135,15 @@ class MovieClipItem	extends InstancableItem
 		return "custom-icon-film";
 	}
 	
-	override public function createDisplayObject()
+	override public function createDisplayObject(params:Dynamic)
 	{
-		var r = super.createDisplayObject();
+		var r = super.createDisplayObject(params);
 		if (r != null) return r;
 		
         return switch(spriteSheet == null)
 		{
-            case true:  !likeButton ? new nanofl.MovieClip(this) : new nanofl.Button(this);
-            case false: !likeButton ? new nanofl.Sprite(this)    : new nanofl.SpriteButton(this);
+            case true:  !likeButton ? new nanofl.MovieClip(this, params) : new nanofl.Button(this);
+            case false: !likeButton ? new nanofl.Sprite(this, params)    : new nanofl.SpriteButton(this);
 		}
 	}
 
@@ -162,7 +161,7 @@ class MovieClipItem	extends InstancableItem
                 exportAsSprite = false;
                 for (i in 0...getTotalFrames())
                 {
-                    var mc = new MovieClip(this, i);
+                    var mc = new MovieClip(this, { currentFrame:i });
                     builder.addFrame(mc);
                 }
                 exportAsSprite = t;

@@ -8,7 +8,6 @@ import nanofl.engine.MovieClipItemTools;
 import nanofl.engine.elements.Element;
 import nanofl.engine.movieclip.KeyFrame;
 import nanofl.engine.movieclip.Layer;
-import nanofl.engine.elements.Elements;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
 using stdlib.Lambda;
 using stdlib.StringTools;
@@ -61,9 +60,9 @@ class MovieClipItem extends nanofl.engine.libraryitems.MovieClipItem
 		return r;
 	}
 	
-	override public function createDisplayObject()
+	override public function createDisplayObject(params:Dynamic)
 	{
-		return new nanofl.MovieClip(this);
+		return new nanofl.MovieClip(this, params);
 	}
 	
 	public function getUsedSymbolNamePaths() : Set<String>

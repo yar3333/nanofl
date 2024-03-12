@@ -13,5 +13,5 @@ interface IIdeInstancableItem
 	function getUsedSymbolNamePaths() : Set<String>;
 	function getDisplayObjectClassName() : String;
 	
-	function createDisplayObject() : easeljs.display.DisplayObject;
+	function createDisplayObject(params:Dynamic) : easeljs.display.DisplayObject;
 }

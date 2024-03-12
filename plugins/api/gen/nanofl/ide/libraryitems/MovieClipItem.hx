@@ -3,7 +3,7 @@ package nanofl.ide.libraryitems;
 extern class MovieClipItem extends nanofl.engine.libraryitems.MovieClipItem implements nanofl.ide.libraryitems.IIdeInstancableItem {
 	function new(namePath:String):Void;
 	override function clone():nanofl.ide.libraryitems.MovieClipItem;
-	override function createDisplayObject():nanofl.MovieClip;
+	override function createDisplayObject(params:Dynamic):nanofl.MovieClip;
 	function getUsedSymbolNamePaths():js.lib.Set<String>;
 	function getDataToSaveBeforeCleanDestDirectoryAndPublish(fileSystem:nanofl.ide.sys.FileSystem, destLibraryDir:String):Dynamic;
 	function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String, savedData:Dynamic):nanofl.ide.libraryitems.IIdeLibraryItem;

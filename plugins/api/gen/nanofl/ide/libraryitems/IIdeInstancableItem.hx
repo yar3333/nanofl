@@ -4,5 +4,5 @@ interface IIdeInstancableItem extends nanofl.ide.ISymbol extends nanofl.ide.libr
 	function newInstance():nanofl.engine.elements.Instance;
 	function getUsedSymbolNamePaths():js.lib.Set<String>;
 	function getDisplayObjectClassName():String;
-	function createDisplayObject():easeljs.display.DisplayObject;
+	function createDisplayObject(params:Dynamic):easeljs.display.DisplayObject;
 }

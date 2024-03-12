@@ -1,7 +1,7 @@
 package nanofl;
 
 extern class MovieClip extends easeljs.display.Container implements nanofl.engine.AdvancableDisplayObject implements nanofl.engine.InstanceDisplayObject {
-	function new(symbol:nanofl.engine.libraryitems.MovieClipItem, ?initFrame:Int):Void;
+	function new(symbol:nanofl.engine.libraryitems.MovieClipItem, params:nanofl.MovieClip.MovieClipParams):Void;
 	var symbol(default, null) : nanofl.engine.libraryitems.MovieClipItem;
 	var currentFrame(default, null) : Int;
 	var paused : Bool;
@@ -24,3 +24,8 @@ extern class MovieClip extends easeljs.display.Container implements nanofl.engin
 	override function clone(?recursive:Bool):nanofl.MovieClip;
 	override function toString():String;
 }
+
+typedef MovieClipParams = {
+	@:optional
+	var currentFrame : Int;
+};

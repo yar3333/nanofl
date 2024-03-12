@@ -12,7 +12,7 @@ extern class MeshItem extends nanofl.engine.libraryitems.InstancableItem impleme
 	override function clone():nanofl.engine.libraryitems.MeshItem;
 	override function getIcon():String;
 	override function preload():js.lib.Promise<{ }>;
-	override function createDisplayObject():easeljs.display.DisplayObject;
+	override function createDisplayObject(params:Dynamic):easeljs.display.DisplayObject;
 	private function get_spriteSheet():easeljs.display.SpriteSheet;
 	private function get_renderer():js.three.renderers.Renderer;
 	override function getDisplayObjectClassName():String;

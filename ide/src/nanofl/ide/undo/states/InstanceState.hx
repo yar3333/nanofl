@@ -32,6 +32,6 @@ class InstanceState extends ElementState
 			&& NullTools.equ(state.colorEffect, colorEffect)
 			&& ArrayTools.equ(state.filters, filters)
 			&& state.blendMode == blendMode
-			&& NullTools.equ(state.meshParams, meshParams);
+			&& MeshParamsTools.equ(state.meshParams, meshParams);
 	}
 }

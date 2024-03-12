@@ -1518,14 +1518,12 @@ Object.assign(nanofl_engine_AdvancableDisplayObject.prototype, {
 	__class__: nanofl_engine_AdvancableDisplayObject
 });
 class nanofl_MovieClip extends createjs.Container {
-	constructor(symbol,initFrame) {
-		if(initFrame == null) {
-			initFrame = 0;
-		}
+	constructor(symbol,params) {
 		super();
-		stdlib_Debug.assert(((symbol) instanceof nanofl_engine_libraryitems_MovieClipItem),null,{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 39, className : "nanofl.MovieClip", methodName : "new"});
+		stdlib_Debug.assert(((symbol) instanceof nanofl_engine_libraryitems_MovieClipItem),null,{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 41, className : "nanofl.MovieClip", methodName : "new"});
 		this.symbol = symbol;
-		this.currentFrame = initFrame;
+		let tmp = params != null ? params.currentFrame : null;
+		this.currentFrame = tmp != null ? tmp : 0;
 		this.paused = !symbol.autoPlay;
 		this.loop = symbol.loop;
 		this.layerOfChild = new Map();
@@ -1624,8 +1622,8 @@ class nanofl_MovieClip extends createjs.Container {
 	}
 	gotoFrame(labelOrIndex) {
 		let newFrameIndex = this.getFrameIndexByLabel(labelOrIndex);
-		stdlib_Debug.assert(newFrameIndex >= 0,"Frame index must not be negative.",{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 150, className : "nanofl.MovieClip", methodName : "gotoFrame"});
-		stdlib_Debug.assert(newFrameIndex < this.getTotalFrames(),"Frame index must be less than total frames count.",{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 151, className : "nanofl.MovieClip", methodName : "gotoFrame"});
+		stdlib_Debug.assert(newFrameIndex >= 0,"Frame index must not be negative.",{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 152, className : "nanofl.MovieClip", methodName : "gotoFrame"});
+		stdlib_Debug.assert(newFrameIndex < this.getTotalFrames(),"Frame index must be less than total frames count.",{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 153, className : "nanofl.MovieClip", methodName : "gotoFrame"});
 		return new nanofl_engine_MovieClipGotoHelper(this,newFrameIndex);
 	}
 	getFrameIndexByLabel(labelOrIndex) {
@@ -1668,7 +1666,7 @@ class nanofl_MovieClip extends createjs.Container {
 		}
 	}
 	clone(recursive) {
-		return this._cloneProps(new nanofl_MovieClip(this.symbol,this.currentFrame));
+		return this._cloneProps(new nanofl_MovieClip(this.symbol,{ currentFrame : this.currentFrame}));
 	}
 	toString() {
 		return this.symbol.toString();
@@ -1691,10 +1689,10 @@ Object.assign(nanofl_MovieClip.prototype, {
 });
 class nanofl_Button extends nanofl_MovieClip {
 	constructor(symbol) {
-		super(symbol);
+		super(symbol,null);
 		this.stop();
 		if(this.getTotalFrames() >= 4) {
-			this.hitArea = new nanofl_MovieClip(symbol,3);
+			this.hitArea = new nanofl_MovieClip(symbol,{ currentFrame : 3});
 		}
 		this.cursor = "pointer";
 	}
@@ -1987,7 +1985,7 @@ Object.assign(nanofl_SolidContainer.prototype, {
 	__class__: nanofl_SolidContainer
 });
 class nanofl_Mesh extends nanofl_SolidContainer {
-	constructor(symbol) {
+	constructor(symbol,params) {
 		super();
 		this.rotationX = 0.0;
 		this.rotationY = 0.0;
@@ -2020,10 +2018,22 @@ class nanofl_Mesh extends nanofl_SolidContainer {
 				this.group.add(object.clone());
 			}
 		}
+		if(params != null) {
+			nanofl_engine_MeshParamsTools.applyToMesh(params,this);
+		}
 		this.update();
 	}
 	clone(recursive) {
-		return this._cloneProps(new nanofl_Mesh(this.symbol));
+		let r = this._cloneProps(new nanofl_Mesh(this.symbol,null));
+		r.rotationX = this.rotationX;
+		r.rotationY = this.rotationY;
+		r.rotationZ = this.rotationZ;
+		let tmp = this.camera;
+		r.camera = tmp != null ? tmp.clone() : null;
+		r.autoCamera = this.autoCamera;
+		r.ambientLight = this.ambientLight.clone();
+		r.directionalLight = this.directionalLight.clone();
+		return r;
 	}
 	toString() {
 		return this.symbol.toString();
@@ -2239,10 +2249,12 @@ class nanofl_Player {
 $hx_exports["nanofl"]["Player"] = nanofl_Player;
 nanofl_Player.__name__ = "nanofl.Player";
 class nanofl_Sprite extends createjs.Sprite {
-	constructor(symbol) {
+	constructor(symbol,params) {
 		super(symbol.get_spriteSheet());
 		this.symbol = symbol;
 		this.paused = !js_Boot.__implements(symbol,nanofl_engine_libraryitems_IPlayableItem) || !symbol.autoPlay;
+		let tmp = params != null ? params.currentFrame : null;
+		this.currentFrame = tmp != null ? tmp : 0;
 	}
 	advanceToNextFrame() {
 		if(this.paused || js_Boot.__implements(this.symbol,nanofl_engine_libraryitems_IPlayableItem) && !this.symbol.loop && this.currentFrame >= this.spriteSheet.getNumFrames() - 1) {
@@ -2259,7 +2271,7 @@ Object.assign(nanofl_Sprite.prototype, {
 });
 class nanofl_SpriteButton extends nanofl_Sprite {
 	constructor(symbol) {
-		super(symbol);
+		super(symbol,null);
 		this.stop();
 		if(symbol.get_spriteSheet().getNumFrames() >= 4) {
 			this.hitArea = this.spriteSheet.getFrame(3);
@@ -3023,9 +3035,9 @@ Object.assign(nanofl_TextRun.prototype, {
 	__class__: nanofl_TextRun
 });
 class nanofl_Video extends nanofl_SolidContainer {
-	constructor(symbol) {
+	constructor(symbol,params) {
 		super();
-		stdlib_Debug.assert(((symbol) instanceof nanofl_engine_libraryitems_VideoItem),null,{ fileName : "engine/nanofl/Video.hx", lineNumber : 26, className : "nanofl.Video", methodName : "new"});
+		stdlib_Debug.assert(((symbol) instanceof nanofl_engine_libraryitems_VideoItem),null,{ fileName : "engine/nanofl/Video.hx", lineNumber : 31, className : "nanofl.Video", methodName : "new"});
 		this.symbol = symbol;
 		this.video = window.document.createElement("video");
 		this.video.src = symbol.library.realUrl(symbol.namePath + "." + symbol.ext);
@@ -3033,10 +3045,14 @@ class nanofl_Video extends nanofl_SolidContainer {
 		this.video.autoplay = symbol.autoPlay;
 		this.duration = symbol.duration;
 		this.setBounds(0,0,symbol.width,symbol.height);
+		let tmp = params != null ? params.currentTime : null;
+		this.video.currentTime = tmp != null ? tmp : 0.0;
 		this.addChild(new createjs.Bitmap(new createjs.VideoBuffer(this.video)));
 	}
 	clone(recursive) {
-		return this._cloneProps(new nanofl_Video(this.symbol));
+		let r = this._cloneProps(new nanofl_Video(this.symbol,null));
+		r.video.currentTime = this.video.currentTime;
+		return r;
 	}
 	toString() {
 		return this.symbol.toString();
@@ -3818,46 +3834,15 @@ class nanofl_engine_MaskTools {
 	}
 }
 nanofl_engine_MaskTools.__name__ = "nanofl.engine.MaskTools";
-class nanofl_engine_MeshParams {
-	constructor() {
-		this.directionalLightRotationY = 0.0;
-		this.directionalLightRotationX = 0.0;
-		this.directionalLightColor = "#808080";
-		this.ambientLightColor = "#E0E0E0";
-		this.cameraFov = 70;
-		this.rotationY = 0.0;
-		this.rotationX = 0.0;
-	}
-	equ(obj) {
-		if(obj.rotationX == this.rotationX && obj.rotationY == this.rotationY && obj.cameraFov == this.cameraFov && obj.ambientLightColor == this.ambientLightColor && obj.directionalLightColor == this.directionalLightColor && obj.directionalLightRotationX == this.directionalLightRotationX) {
-			return obj.directionalLightRotationY == this.directionalLightRotationY;
-		} else {
-			return false;
-		}
-	}
-	clone() {
-		let r = new nanofl_engine_MeshParams();
-		r.rotationX = this.rotationX;
-		r.rotationY = this.rotationY;
-		r.cameraFov = this.cameraFov;
-		r.ambientLightColor = this.ambientLightColor;
-		r.directionalLightColor = this.directionalLightColor;
-		r.directionalLightRotationX = this.directionalLightRotationX;
-		r.directionalLightRotationY = this.directionalLightRotationY;
-		return r;
-	}
-	applyToMesh(mesh) {
-		mesh.rotationX = this.rotationX;
-		mesh.rotationY = this.rotationY;
-		mesh.camera.fov = this.cameraFov;
-		let tmp = nanofl_engine_ColorTools.stringToNumber(this.ambientLightColor);
-		mesh.ambientLight.color = new THREE_Color(tmp);
-		let tmp1 = nanofl_engine_ColorTools.stringToNumber(this.directionalLightColor);
-		mesh.directionalLight.color = new THREE_Color(tmp1);
-		mesh.directionalLight.setRotationFromEuler(new THREE_Euler(this.directionalLightRotationX * Math.PI / 180,this.directionalLightRotationY * Math.PI / 180));
+class nanofl_engine_MeshParamsTools {
+	static createDefault() {
+		return { rotationX : 0.0, rotationY : 0.0, cameraFov : 70.0, ambientLightColor : "#E0E0E0", directionalLightColor : "#808080", directionalLightRotationX : 0.0, directionalLightRotationY : 0.0};
 	}
 	static loadJson(obj) {
-		let r = new nanofl_engine_MeshParams();
+		let r = nanofl_engine_MeshParamsTools.createDefault();
+		if(obj == null) {
+			return r;
+		}
 		let tmp = obj.rotationX;
 		r.rotationX = tmp != null ? tmp : r.rotationX;
 		let tmp1 = obj.rotationY;
@@ -3874,11 +3859,48 @@ class nanofl_engine_MeshParams {
 		r.directionalLightRotationY = tmp6 != null ? tmp6 : r.directionalLightRotationY;
 		return r;
 	}
+	static equ(a,b) {
+		if(a == b) {
+			return true;
+		}
+		if(a == null) {
+			a = nanofl_engine_MeshParamsTools.createDefault();
+		}
+		if(b == null) {
+			b = nanofl_engine_MeshParamsTools.createDefault();
+		}
+		if(a.rotationX == b.rotationX && a.rotationY == b.rotationY && a.cameraFov == b.cameraFov && a.ambientLightColor == b.ambientLightColor && a.directionalLightColor == b.directionalLightColor && a.directionalLightRotationX == b.directionalLightRotationX) {
+			return a.directionalLightRotationY == b.directionalLightRotationY;
+		} else {
+			return false;
+		}
+	}
+	static clone(params) {
+		if(params == null) {
+			return null;
+		}
+		let r = nanofl_engine_MeshParamsTools.createDefault();
+		r.rotationX = params.rotationX;
+		r.rotationY = params.rotationY;
+		r.cameraFov = params.cameraFov;
+		r.ambientLightColor = params.ambientLightColor;
+		r.directionalLightColor = params.directionalLightColor;
+		r.directionalLightRotationX = params.directionalLightRotationX;
+		r.directionalLightRotationY = params.directionalLightRotationY;
+		return r;
+	}
+	static applyToMesh(params,mesh) {
+		mesh.rotationX = params.rotationX;
+		mesh.rotationY = params.rotationY;
+		mesh.camera.fov = params.cameraFov;
+		let tmp = nanofl_engine_ColorTools.stringToNumber(params.ambientLightColor);
+		mesh.ambientLight.color = new THREE_Color(tmp);
+		let tmp1 = nanofl_engine_ColorTools.stringToNumber(params.directionalLightColor);
+		mesh.directionalLight.color = new THREE_Color(tmp1);
+		mesh.directionalLight.setRotationFromEuler(new THREE_Euler(params.directionalLightRotationX * Math.PI / 180,params.directionalLightRotationY * Math.PI / 180));
+	}
 }
-nanofl_engine_MeshParams.__name__ = "nanofl.engine.MeshParams";
-Object.assign(nanofl_engine_MeshParams.prototype, {
-	__class__: nanofl_engine_MeshParams
-});
+nanofl_engine_MeshParamsTools.__name__ = "nanofl.engine.MeshParamsTools";
 class nanofl_engine_MovieClipGotoHelper {
 	constructor(mc,newFrameIndex) {
 		this.createdDisplayObjects = [];
@@ -4463,7 +4485,7 @@ class nanofl_engine_elements_Instance extends nanofl_engine_elements_Element {
 		let tmp1 = blendMode;
 		this.blendMode = tmp1 != null ? tmp1 : "normal";
 		let tmp2 = meshParams;
-		this.meshParams = tmp2 != null ? tmp2 : new nanofl_engine_MeshParams();
+		this.meshParams = tmp2 != null ? tmp2 : nanofl_engine_MeshParamsTools.createDefault();
 	}
 	get_type() {
 		return nanofl_engine_ElementType.instance;
@@ -4476,8 +4498,8 @@ class nanofl_engine_elements_Instance extends nanofl_engine_elements_Element {
 			return false;
 		}
 		this.namePath = obj.libraryItem;
-		stdlib_Debug.assert(this.namePath != null,null,{ fileName : "engine/nanofl/engine/elements/Instance.hx", lineNumber : 71, className : "nanofl.engine.elements.Instance", methodName : "loadPropertiesJson"});
-		stdlib_Debug.assert(this.namePath != "",null,{ fileName : "engine/nanofl/engine/elements/Instance.hx", lineNumber : 72, className : "nanofl.engine.elements.Instance", methodName : "loadPropertiesJson"});
+		stdlib_Debug.assert(this.namePath != null,null,{ fileName : "engine/nanofl/engine/elements/Instance.hx", lineNumber : 73, className : "nanofl.engine.elements.Instance", methodName : "loadPropertiesJson"});
+		stdlib_Debug.assert(this.namePath != "",null,{ fileName : "engine/nanofl/engine/elements/Instance.hx", lineNumber : 74, className : "nanofl.engine.elements.Instance", methodName : "loadPropertiesJson"});
 		let tmp = obj.name;
 		this.name = tmp != null ? tmp : "";
 		this.colorEffect = nanofl_engine_coloreffects_ColorEffect.loadJson(obj.colorEffect);
@@ -4493,17 +4515,37 @@ class nanofl_engine_elements_Instance extends nanofl_engine_elements_Element {
 		this.filters = result;
 		let tmp2 = obj.blendMode;
 		this.blendMode = tmp2 != null ? tmp2 : "normal";
-		this.meshParams = obj.meshParams != null ? nanofl_engine_MeshParams.loadJson(obj.meshParams) : null;
+		this.meshParams = obj.meshParams != null ? nanofl_engine_MeshParamsTools.loadJson(obj.meshParams) : null;
 		return true;
 	}
 	clone() {
-		let obj = new nanofl_engine_elements_Instance(this.namePath,this.name,datatools_NullTools.clone(this.colorEffect),datatools_ArrayTools.clone(this.filters),this.blendMode,datatools_NullTools.clone(this.meshParams));
+		let obj = new nanofl_engine_elements_Instance(this.namePath,this.name,datatools_NullTools.clone(this.colorEffect),datatools_ArrayTools.clone(this.filters),this.blendMode,nanofl_engine_MeshParamsTools.clone(this.meshParams));
 		obj.library = this.library;
 		this.copyBaseProperties(obj);
 		return obj;
 	}
 	createDisplayObject() {
-		let dispObj = this.get_symbol().createDisplayObject();
+		let dispObj;
+		switch(this.get_symbol().get_type()._hx_index) {
+		case 0:
+			dispObj = this.get_symbol().createDisplayObject(null);
+			break;
+		case 1:
+			throw new Error("Unexpected `folder` as DisplayObject creating.");
+		case 2:
+			throw new Error("Unexpected `font` as DisplayObject creating.");
+		case 3:
+			dispObj = this.get_symbol().createDisplayObject(this.meshParams);
+			break;
+		case 4:
+			dispObj = this.get_symbol().createDisplayObject(null);
+			break;
+		case 5:
+			throw new Error("Unexpected `sound` as DisplayObject creating.");
+		case 6:
+			dispObj = this.get_symbol().createDisplayObject(null);
+			break;
+		}
 		this.elementUpdateDisplayObjectBaseProperties(dispObj);
 		this.elementUpdateDisplayObjectInstanceProperties(dispObj);
 		return dispObj;
@@ -4530,7 +4572,7 @@ class nanofl_engine_elements_Instance extends nanofl_engine_elements_Element {
 		}
 		dispObj.compositeOperation = this.blendMode;
 		if(this.meshParams != null && ((dispObj) instanceof nanofl_Mesh)) {
-			this.meshParams.applyToMesh(dispObj);
+			nanofl_engine_MeshParamsTools.applyToMesh(this.meshParams,dispObj);
 		}
 	}
 	updateDisplayObjectTweenedProperties(dispObj) {
@@ -4559,7 +4601,7 @@ class nanofl_engine_elements_Instance extends nanofl_engine_elements_Element {
 		if(element.blendMode != this.blendMode) {
 			return false;
 		}
-		if(!datatools_NullTools.equ(element.meshParams,this.meshParams)) {
+		if(!nanofl_engine_MeshParamsTools.equ(element.meshParams,this.meshParams)) {
 			return false;
 		}
 		return true;
@@ -6519,11 +6561,11 @@ class nanofl_engine_libraryitems_InstancableItem extends nanofl_engine_libraryit
 		r.setLibrary(this.library);
 		return r;
 	}
-	createDisplayObject() {
+	createDisplayObject(params) {
 		if(this.linkedClass != "") {
 			let klass = window[this.linkedClass];
 			if(klass != null) {
-				return new klass(this);
+				return new klass(this, params);
 			}
 			console.log("engine/nanofl/engine/libraryitems/InstancableItem.hx:46:","Linkage class '" + this.linkedClass + "' is not found.");
 		}
@@ -6592,10 +6634,10 @@ class nanofl_engine_libraryitems_BitmapItem extends nanofl_engine_libraryitems_I
 			return null;
 		});
 	}
-	createDisplayObject() {
-		let r = super.createDisplayObject();
+	createDisplayObject(params) {
+		let r = super.createDisplayObject(params);
 		if(r == null) {
-			r = this.get_spriteSheet() == null ? new nanofl_Bitmap(this) : new nanofl_Sprite(this);
+			r = this.get_spriteSheet() == null ? new nanofl_Bitmap(this) : new nanofl_Sprite(this,null);
 		}
 		r.setBounds(0,0,this.image.width,this.image.height);
 		return r;
@@ -6648,6 +6690,9 @@ class nanofl_engine_libraryitems_FolderItem extends nanofl_engine_libraryitems_L
 	_hx_constructor(namePath) {
 		this.opened = false;
 		super._hx_constructor(namePath);
+	}
+	get_type() {
+		return nanofl_engine_LibraryItemType.folder;
 	}
 	clone() {
 		let obj = new nanofl_engine_libraryitems_FolderItem(this.namePath);
@@ -6856,15 +6901,15 @@ class nanofl_engine_libraryitems_MeshItem extends nanofl_engine_libraryitems_Ins
 		this.boundingRadius = Math.sqrt(this.boundingRadius);
 		nanofl_engine_libraryitems_MeshItem.log("MeshItem.updateBoundingRadius boundingRadius = " + this.boundingRadius,{ fileName : "engine/nanofl/engine/libraryitems/MeshItem.hx", lineNumber : 137, className : "nanofl.engine.libraryitems.MeshItem", methodName : "updateBoundingRadius"});
 	}
-	createDisplayObject() {
-		let r = super.createDisplayObject();
+	createDisplayObject(params) {
+		let r = super.createDisplayObject(params);
 		if(r != null) {
 			return r;
 		}
 		if(this.get_spriteSheet() == null) {
-			return new nanofl_Mesh(this);
+			return new nanofl_Mesh(this,params);
 		} else {
-			return new nanofl_Sprite(this);
+			return new nanofl_Sprite(this,null);
 		}
 	}
 	get_spriteSheet() {
@@ -7019,19 +7064,19 @@ class nanofl_engine_libraryitems_MovieClipItem extends nanofl_engine_libraryitem
 		obj.textureAtlas = this.textureAtlas;
 		obj.relatedSound = this.relatedSound;
 	}
-	createDisplayObject() {
-		let r = super.createDisplayObject();
+	createDisplayObject(params) {
+		let r = super.createDisplayObject(params);
 		if(r != null) {
 			return r;
 		}
 		if(this.get_spriteSheet() == null) {
 			if(!this.likeButton) {
-				return new nanofl_MovieClip(this);
+				return new nanofl_MovieClip(this,params);
 			} else {
 				return new nanofl_Button(this);
 			}
 		} else if(!this.likeButton) {
-			return new nanofl_Sprite(this);
+			return new nanofl_Sprite(this,params);
 		} else {
 			return new nanofl_SpriteButton(this);
 		}
@@ -7047,7 +7092,7 @@ class nanofl_engine_libraryitems_MovieClipItem extends nanofl_engine_libraryitem
 				let _g1 = this.getTotalFrames();
 				while(_g < _g1) {
 					let i = _g++;
-					let mc = new nanofl_MovieClip(this,i);
+					let mc = new nanofl_MovieClip(this,{ currentFrame : i});
 					builder.addFrame(mc);
 				}
 				this.exportAsSprite = t;
@@ -7111,8 +7156,8 @@ class nanofl_engine_libraryitems_MovieClipItem extends nanofl_engine_libraryitem
 			throw new Error("Type of item must be '" + Std.string(this.get_type()) + "', but '" + Std.string(obj.type) + "' found.");
 		}
 		if(this.isGroup()) {
-			stdlib_Debug.assert(this.loop == false,null,{ fileName : "engine/nanofl/engine/libraryitems/MovieClipItem.hx", lineNumber : 389, className : "nanofl.engine.libraryitems.MovieClipItem", methodName : "loadPropertiesJson"});
-			stdlib_Debug.assert(this.autoPlay == false,null,{ fileName : "engine/nanofl/engine/libraryitems/MovieClipItem.hx", lineNumber : 390, className : "nanofl.engine.libraryitems.MovieClipItem", methodName : "loadPropertiesJson"});
+			stdlib_Debug.assert(this.loop == false,null,{ fileName : "engine/nanofl/engine/libraryitems/MovieClipItem.hx", lineNumber : 390, className : "nanofl.engine.libraryitems.MovieClipItem", methodName : "loadPropertiesJson"});
+			stdlib_Debug.assert(this.autoPlay == false,null,{ fileName : "engine/nanofl/engine/libraryitems/MovieClipItem.hx", lineNumber : 391, className : "nanofl.engine.libraryitems.MovieClipItem", methodName : "loadPropertiesJson"});
 			let _this = obj.elements;
 			let result = new Array(_this.length);
 			let _g = 0;
@@ -7122,7 +7167,7 @@ class nanofl_engine_libraryitems_MovieClipItem extends nanofl_engine_libraryitem
 				result[i] = nanofl_engine_elements_Element.parseJson(_this[i],obj.version);
 			}
 			let elements = result;
-			stdlib_Debug.assert(this.get_layers().length == 0,null,{ fileName : "engine/nanofl/engine/libraryitems/MovieClipItem.hx", lineNumber : 394, className : "nanofl.engine.libraryitems.MovieClipItem", methodName : "loadPropertiesJson"});
+			stdlib_Debug.assert(this.get_layers().length == 0,null,{ fileName : "engine/nanofl/engine/libraryitems/MovieClipItem.hx", lineNumber : 395, className : "nanofl.engine.libraryitems.MovieClipItem", methodName : "loadPropertiesJson"});
 			this.addLayer(nanofl_engine_movieclip_Layer.createWithOneFrame(elements));
 		} else {
 			super.loadPropertiesJson(obj);
@@ -7186,6 +7231,9 @@ class nanofl_engine_libraryitems_SoundItem extends nanofl_engine_libraryitems_Li
 		this.loop = false;
 		super._hx_constructor(namePath);
 		this.ext = ext;
+	}
+	get_type() {
+		return nanofl_engine_LibraryItemType.sound;
 	}
 	clone() {
 		let obj = new nanofl_engine_libraryitems_SoundItem(this.namePath,this.ext);
@@ -7299,13 +7347,13 @@ class nanofl_engine_libraryitems_VideoItem extends nanofl_engine_libraryitems_In
 			return null;
 		});
 	}
-	createDisplayObject() {
-		let r = super.createDisplayObject();
+	createDisplayObject(params) {
+		let r = super.createDisplayObject(params);
 		let tmp = r;
 		if(tmp != null) {
 			return tmp;
 		} else {
-			return new nanofl_Video(this);
+			return new nanofl_Video(this,params);
 		}
 	}
 	equ(item) {

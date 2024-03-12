@@ -1,7 +1,7 @@
 package nanofl;
 
 extern class Mesh extends nanofl.SolidContainer implements nanofl.engine.InstanceDisplayObject {
-	function new(symbol:nanofl.engine.libraryitems.MeshItem):Void;
+	function new(symbol:nanofl.engine.libraryitems.MeshItem, params:nanofl.engine.MeshParams):Void;
 	var symbol(default, null) : nanofl.engine.libraryitems.MeshItem;
 	var rotationX : Float;
 	var rotationY : Float;

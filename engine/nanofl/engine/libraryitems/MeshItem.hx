@@ -137,14 +137,14 @@ class MeshItem extends InstancableItem
 		log("MeshItem.updateBoundingRadius boundingRadius = " + boundingRadius);
 	}
 	
-	override public function createDisplayObject() : easeljs.display.DisplayObject
+	override public function createDisplayObject(params:Dynamic) : easeljs.display.DisplayObject
 	{
-		var r = super.createDisplayObject();
+		var r = super.createDisplayObject(params);
         if (r != null) return r;
 
         return spriteSheet == null
-            ? new nanofl.Mesh(this)
-            : new nanofl.Sprite(this);
+            ? new nanofl.Mesh(this, params)
+            : new nanofl.Sprite(this, null);
 	}
 
     function get_spriteSheet() : easeljs.display.SpriteSheet

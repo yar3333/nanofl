@@ -7,13 +7,13 @@ class Button extends MovieClip
 {
 	public function new(symbol:MovieClipItem)
 	{
-		super(symbol);
+		super(symbol, null);
 		
 		stop();
 		
 		if (getTotalFrames() >= 4)
 		{
-			hitArea = new MovieClip(symbol, 3);
+			hitArea = new MovieClip(symbol, { currentFrame:3 });
 		}
 		
 		cursor = "pointer";

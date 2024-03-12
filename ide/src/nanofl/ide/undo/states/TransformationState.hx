@@ -19,7 +19,7 @@ class TransformationState
 	
 	public function equ(state:TransformationState) : Bool
 	{
-		return state.matrix.equ(matrix) && NullTools.equ(state.meshParams, meshParams);
+		return state.matrix.equ(matrix) && MeshParamsTools.equ(state.meshParams, meshParams);
 	}
 	
 	public static function fromElement(element:Element) : TransformationState
@@ -27,7 +27,7 @@ class TransformationState
 		return new TransformationState
         (
             element.matrix.clone(),
-            Std.isOfType(element, Instance) ? NullTools.clone((cast element:Instance).meshParams) : null
+            Std.isOfType(element, Instance) ? MeshParamsTools.clone((cast element:Instance).meshParams) : null
         );
 	}
 	
@@ -36,7 +36,7 @@ class TransformationState
 		element.matrix = matrix.clone();
 		if (Std.is(element, Instance))
         {
-            (cast element:Instance).meshParams = NullTools.clone(meshParams);
+            (cast element:Instance).meshParams = MeshParamsTools.clone(meshParams);
         }
     }
 }

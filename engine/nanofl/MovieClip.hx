@@ -5,17 +5,19 @@ import stdlib.Std;
 import js.lib.Map;
 import easeljs.display.Container;
 import easeljs.display.DisplayObject;
-import easeljs.display.Shape;
 import nanofl.engine.LayerType;
 import nanofl.engine.InstanceDisplayObject;
 import nanofl.engine.AdvancableDisplayObject;
 import nanofl.engine.libraryitems.MovieClipItem;
-import nanofl.engine.ElementType;
 import nanofl.engine.elements.Element;
-import nanofl.engine.elements.Instance;
 import stdlib.Debug;
 using stdlib.StringTools;
 using stdlib.Lambda;
+
+typedef MovieClipParams =
+{
+    @:optional var currentFrame : Int;
+}
 
 @:expose
 class MovieClip extends Container 
@@ -32,14 +34,14 @@ class MovieClip extends Container
 	public var paused : Bool;
 	public var loop : Bool;
 	
-	public function new(symbol:MovieClipItem, initFrame = 0)
+	public function new(symbol:MovieClipItem, params:MovieClipParams)
 	{
 		super();
 		
         Debug.assert(Std.isOfType(symbol, MovieClipItem));
 		
 		this.symbol = symbol;
-		currentFrame = initFrame;
+		currentFrame = params?.currentFrame ?? 0;
 		paused = !symbol.autoPlay;
 		loop = symbol.loop;
 		
@@ -237,7 +239,7 @@ class MovieClip extends Container
 	{
 		return (cast this)._cloneProps
 		(
-			new MovieClip(symbol, currentFrame)
+			new MovieClip(symbol, { currentFrame:currentFrame })
 		);
 	}
 	

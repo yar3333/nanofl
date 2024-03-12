@@ -9,7 +9,7 @@ extern class BitmapItem extends nanofl.engine.libraryitems.InstancableItem imple
 	override function clone():nanofl.engine.libraryitems.BitmapItem;
 	override function getIcon():String;
 	override function preload():js.lib.Promise<{ }>;
-	override function createDisplayObject():easeljs.display.DisplayObject;
+	override function createDisplayObject(params:Dynamic):easeljs.display.DisplayObject;
 	private function get_spriteSheet():easeljs.display.SpriteSheet;
 	override function getDisplayObjectClassName():String;
 	override function equ(item:nanofl.engine.ILibraryItem):Bool;

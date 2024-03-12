@@ -72,15 +72,15 @@ class BitmapItem extends InstancableItem
         #end
     }
 	
-	override public function createDisplayObject() : easeljs.display.DisplayObject
+	override public function createDisplayObject(params:Dynamic) : easeljs.display.DisplayObject
 	{
-		var r = super.createDisplayObject();
+		var r = super.createDisplayObject(params);
 		
 		if (r == null)
 		{
 			r = spriteSheet == null
 				? new nanofl.Bitmap(this)
-				: new nanofl.Sprite(this);
+				: new nanofl.Sprite(this, null);
 		}
 		
 		r.setBounds(0, 0, image.width, image.height);

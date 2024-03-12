@@ -29,7 +29,7 @@ extern class MovieClipItem extends nanofl.engine.libraryitems.InstancableItem im
 	function getTotalFrames():Int;
 	override function clone():nanofl.engine.libraryitems.MovieClipItem;
 	override function getIcon():String;
-	override function createDisplayObject():easeljs.display.DisplayObject;
+	override function createDisplayObject(params:Dynamic):easeljs.display.DisplayObject;
 	private function get_spriteSheet():easeljs.display.SpriteSheet;
 	override function getDisplayObjectClassName():String;
 	override function preload():js.lib.Promise<{ }>;

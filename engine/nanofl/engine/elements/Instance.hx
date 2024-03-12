@@ -1,5 +1,6 @@
 package nanofl.engine.elements;
 
+import js.lib.Error;
 import datatools.ArrayRO;
 import datatools.ArrayTools;
 import datatools.NullTools;
@@ -8,6 +9,7 @@ import nanofl.engine.coloreffects.ColorEffect;
 import nanofl.engine.elements.Element;
 import nanofl.engine.geom.Point;
 import nanofl.engine.libraryitems.InstancableItem;
+import nanofl.engine.MeshParams.MeshParamsTools;
 import stdlib.Debug;
 using stdlib.Lambda;
 
@@ -42,7 +44,7 @@ class Instance extends Element
 		this.colorEffect = colorEffect;
 		this.filters = filters ?? [];
 		this.blendMode = blendMode ?? BlendModes.normal;
-		this.meshParams = meshParams ?? new MeshParams();
+		this.meshParams = meshParams ?? MeshParamsTools.createDefault();
 	}
 	
 	#if ide
@@ -57,7 +59,7 @@ class Instance extends Element
 		colorEffect = ColorEffect.load(node.findOne(">color"));
 		filters = node.find(">filters>*").map(node -> FilterDef.load(node, version));
 		blendMode = node.getAttr("blendMode", BlendModes.normal);
-		meshParams = MeshParams.load(node);
+		meshParams = MeshParamsTools.load(node);
 		
 		return true;
 	}
@@ -74,7 +76,7 @@ class Instance extends Element
 		colorEffect = ColorEffect.loadJson(obj.colorEffect);
 		filters = (obj.filters ?? []).map(x -> FilterDef.loadJson(x, version));
 		blendMode = obj.blendMode ?? BlendModes.normal;
-		meshParams = obj.meshParams != null ? MeshParams.loadJson(obj.meshParams) : null;
+		meshParams = obj.meshParams != null ? MeshParamsTools.loadJson(obj.meshParams) : null;
 		
 		return true;
     }
@@ -86,7 +88,7 @@ class Instance extends Element
 		out.attr("name", name, "");
 		out.attr("blendMode", blendMode, BlendModes.normal);
 			
-        if (meshParams != null) meshParams.save(out);
+        if (meshParams != null) MeshParamsTools.save(meshParams, out);
         if (colorEffect != null) colorEffect.save(out);
 		if (filters.length > 0)
 		{
@@ -107,7 +109,7 @@ class Instance extends Element
 		
 		obj.blendMode = blendMode ?? BlendModes.normal;
 			
-        if (meshParams != null) obj.meshParams = meshParams.saveJson();
+        if (meshParams != null) obj.meshParams = MeshParamsTools.saveJson(meshParams);
         if (colorEffect != null) obj.colorEffect = colorEffect.saveJson();
 		if (filters.length > 0)
 		{
@@ -125,7 +127,7 @@ class Instance extends Element
 			NullTools.clone(colorEffect),
 			ArrayTools.clone(filters),
 			blendMode,
-            NullTools.clone(meshParams)
+            MeshParamsTools.clone(meshParams)
 		);
 		obj.library = library;
 		copyBaseProperties(obj);
@@ -141,7 +143,7 @@ class Instance extends Element
 			NullTools.clone(colorEffect),
 			ArrayTools.clone(filters),
 			blendMode,
-            NullTools.clone(meshParams)
+            MeshParamsTools.clone(meshParams)
 		);
 	}
 	
@@ -151,7 +153,7 @@ class Instance extends Element
 		colorEffect = NullTools.clone((cast state:nanofl.ide.undo.states.InstanceState).colorEffect);
 		filters = ArrayTools.clone((cast state:nanofl.ide.undo.states.InstanceState).filters);
 		blendMode = (cast state:nanofl.ide.undo.states.InstanceState).blendMode;
-        meshParams = NullTools.clone((cast state:nanofl.ide.undo.states.InstanceState).meshParams);
+        meshParams = MeshParamsTools.clone((cast state:nanofl.ide.undo.states.InstanceState).meshParams);
 	}
 	#end
 	
@@ -161,7 +163,17 @@ class Instance extends Element
 	
 	public function createDisplayObject() : easeljs.display.DisplayObject
 	{
-		var dispObj = symbol.createDisplayObject();
+		var dispObj = switch (symbol.type)
+		{
+            case LibraryItemType.movieclip: symbol.createDisplayObject(null); // TODO: currentFrame
+            case LibraryItemType.bitmap: symbol.createDisplayObject(null);
+            case LibraryItemType.mesh: symbol.createDisplayObject(meshParams);
+            case LibraryItemType.video: symbol.createDisplayObject(null); // TODO: currentFrame
+            case LibraryItemType.sound: throw new Error("Unexpected `sound` as DisplayObject creating.");
+            case LibraryItemType.font: throw new Error("Unexpected `font` as DisplayObject creating.");
+            case LibraryItemType.folder: throw new Error("Unexpected `folder` as DisplayObject creating.");
+        }
+        
 		elementUpdateDisplayObjectBaseProperties(dispObj);
 		elementUpdateDisplayObjectInstanceProperties(dispObj);
 		return dispObj;
@@ -185,7 +197,7 @@ class Instance extends Element
 
 		if (meshParams != null && Std.is(dispObj, nanofl.Mesh))
         {
-            meshParams.applyToMesh((cast dispObj:nanofl.Mesh));
+            MeshParamsTools.applyToMesh(meshParams, (cast dispObj:nanofl.Mesh));
         }
     }
 
@@ -213,7 +225,7 @@ class Instance extends Element
 		if (!NullTools.equ((cast element:Instance).colorEffect, colorEffect)) return false;
 		if (!ArrayTools.equ((cast element:Instance).filters, filters)) return false;
 		if ((cast element:Instance).blendMode != blendMode) return false;
-        if (!NullTools.equ((cast element:Instance).meshParams, meshParams)) return false;
+        if (!MeshParamsTools.equ((cast element:Instance).meshParams, meshParams)) return false;
 		return true;
 	}
 	

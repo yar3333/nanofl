@@ -9,6 +9,7 @@ import js.three.objects.Group;
 import js.three.cameras.PerspectiveCamera;
 import js.three.scenes.Scene;
 import js.three.math.Vector3;
+import nanofl.engine.MeshParams;
 import nanofl.engine.InstanceDisplayObject;
 import nanofl.engine.libraryitems.MeshItem;
 
@@ -36,7 +37,7 @@ class Mesh extends SolidContainer
 	public var ambientLight(default, null) : AmbientLight;
 	public var directionalLight(default, null) : DirectionalLight;
 	
-	public function new(symbol:MeshItem)
+	public function new(symbol:MeshItem, params:MeshParams)
 	{
 		super();
         
@@ -77,6 +78,8 @@ class Mesh extends SolidContainer
 					group.add(object.clone());
 			}
 		}
+
+        if (params != null) MeshParamsTools.applyToMesh(params, this);
 		
 		update();
 		
@@ -85,10 +88,17 @@ class Mesh extends SolidContainer
 	
 	override public function clone(?recursive:Bool) : Mesh
 	{
-		return (cast this)._cloneProps
-		(
-			new Mesh(symbol)
-		);
+		final r : Mesh = (cast this)._cloneProps(new Mesh(symbol, null));
+
+        r.rotationX = rotationX;
+        r.rotationY = rotationY;
+        r.rotationZ = rotationZ;
+        r.camera = cast camera?.clone();
+        r.autoCamera = autoCamera;
+        r.ambientLight = cast ambientLight.clone();
+        r.directionalLight = cast directionalLight.clone();
+
+        return r;
 	}
 	
 	override public function toString() : String 

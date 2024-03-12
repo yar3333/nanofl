@@ -42,7 +42,7 @@ class BitmapItem extends nanofl.engine.libraryitems.BitmapItem
 		return preloadInner();
 	}
 	
-	override public function createDisplayObject() : easeljs.display.DisplayObject
+	override public function createDisplayObject(params:Dynamic) : easeljs.display.DisplayObject
 	{
 		var r = new nanofl.Bitmap(this);
 		
