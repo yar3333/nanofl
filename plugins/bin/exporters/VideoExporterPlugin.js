@@ -126,12 +126,12 @@ var Mp4VideoExporterPlugin = function() {
 Mp4VideoExporterPlugin.__name__ = true;
 Mp4VideoExporterPlugin.prototype = {
 	exportDocument: function(api,args) {
-		return VideoExporter.run(api.fileSystem,api.processManager,api.folders,args.destFilePath,args.documentProperties,args.library);
+		return VideoExporter.run(api.fileSystem,api.processManager,api.folders,args.destFilePath,args.documentProperties,args.library,["-crf","10"]);
 	}
 };
 var VideoExporter = function() { };
 VideoExporter.__name__ = true;
-VideoExporter.run = function(fileSystem,processManager,folders,destFilePath,documentProperties,library) {
+VideoExporter.run = function(fileSystem,processManager,folders,destFilePath,documentProperties,library,ffmpegQualityOptions) {
 	if(fileSystem.exists(destFilePath)) {
 		fileSystem.deleteFile(destFilePath);
 	}
@@ -140,7 +140,7 @@ VideoExporter.run = function(fileSystem,processManager,folders,destFilePath,docu
 	var audioArgs = AudioHelper.getFFmpegArgsForMixTracks(audioTracks,1);
 	var dataOut = new Uint8Array(documentProperties.width * documentProperties.height * 3);
 	var sceneFramesIterator = library.getSceneFramesIterator(documentProperties,true);
-	var args = videoArgs.concat(audioArgs).concat(["-map","0:v",destFilePath]);
+	var args = videoArgs.concat(audioArgs).concat(["-map","0:v"]).concat(ffmpegQualityOptions).concat([destFilePath]);
 	$global.console.log("FFmpeg: ",args);
 	try {
 		return processManager.runPipedStdIn(folders.get_tools() + "/ffmpeg.exe",args,null,null,function() {
@@ -186,7 +186,7 @@ var WebmVideoExporterPlugin = function() {
 WebmVideoExporterPlugin.__name__ = true;
 WebmVideoExporterPlugin.prototype = {
 	exportDocument: function(api,args) {
-		return VideoExporter.run(api.fileSystem,api.processManager,api.folders,args.destFilePath,args.documentProperties,args.library);
+		return VideoExporter.run(api.fileSystem,api.processManager,api.folders,args.destFilePath,args.documentProperties,args.library,[]);
 	}
 };
 var haxe_Exception = function(message,previous,native) {

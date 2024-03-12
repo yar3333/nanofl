@@ -15,7 +15,7 @@ using StringTools;
 
 class VideoExporter
 {
-	public static function run(fileSystem:FileSystem, processManager:ProcessManager, folders:Folders, destFilePath:String, documentProperties:DocumentProperties, library:IdeLibrary) : Promise<Bool>
+	public static function run(fileSystem:FileSystem, processManager:ProcessManager, folders:Folders, destFilePath:String, documentProperties:DocumentProperties, library:IdeLibrary, ffmpegQualityOptions:Array<String>) : Promise<Bool>
 	{
         if (fileSystem.exists(destFilePath)) fileSystem.deleteFile(destFilePath);
 
@@ -35,7 +35,11 @@ class VideoExporter
 
         var sceneFramesIterator = library.getSceneFramesIterator(documentProperties, true);
 
-        final args = videoArgs.concat(audioArgs).concat(["-map", "0:v", destFilePath]);
+        final args = videoArgs
+                    .concat(audioArgs)
+                    .concat([ "-map", "0:v" ])
+                    .concat(ffmpegQualityOptions)
+                    .concat([ destFilePath ]);
 
         Browser.console.log("FFmpeg: ", args);
 
