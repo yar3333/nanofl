@@ -24,7 +24,7 @@ class IdeVideo extends nanofl.Video
 
             video.addEventListener
             (
-                "loadeddata",
+                "canplay",
                 () -> {
                     removeAllChildren();
                     addChild(new easeljs.display.Bitmap(new easeljs.utils.VideoBuffer(video)));

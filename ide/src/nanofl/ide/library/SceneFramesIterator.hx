@@ -4,6 +4,7 @@ import js.lib.Error;
 import js.lib.Promise;
 import js.html.CanvasElement;
 import js.html.CanvasRenderingContext2D;
+import js.html.MediaElement;
 import easeljs.display.Shape;
 import easeljs.display.Graphics;
 import nanofl.ide.library.IdeLibrary;
@@ -62,11 +63,11 @@ class SceneFramesIterator
             if (Std.isOfType(obj, nanofl.Video))
             {
                 final videoObj : nanofl.Video = cast obj;
-                if (videoObj.video.seeking)
+                if (videoObj.video.readyState < MediaElement.HAVE_CURRENT_DATA)
                 {
                     videoPromises.push(new Promise((resolve, reject) ->
                     {
-                        videoObj.video.addEventListener("loadeddata", () -> resolve(null), { once:true });
+                        videoObj.video.addEventListener("canplay", () -> resolve(null), { once:true });
                         videoObj.video.addEventListener("error", () -> reject(new Error("Unable to load video: " + videoObj.video.src)), { once:true });
                     }));
                 }
