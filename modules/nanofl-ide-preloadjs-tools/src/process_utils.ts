@@ -25,14 +25,14 @@ export namespace process_utils
             if (!process.stdout) { reject("process.stdout is null"); return; }
             if (!process.stderr) { reject("process.stderr is null"); return; }
     
-            process.stdout.on('data', data =>
+            process.stdout.on('data', (data:Buffer) =>
             {
-                outStr += data;
+                outStr += data.toString();
             });
                 
-            process.stderr.on('data', data =>
+            process.stderr.on('data', (data:Buffer) =>
             {
-                errStr += data;
+                errStr += data.toString();
             });
                 
             process.on('close', code =>
@@ -53,12 +53,15 @@ export namespace process_utils
                     
                     if (data == null) { process.stdin.end(); return; }
                     
-                    if (!process.stdin.write(Buffer.from(data)))
-                        process.stdin.once("drain", () => sendNextChunk());
-                    else
+                    if (process.stdin.write(Buffer.from(data)))
+                    {
                         setTimeout(() => sendNextChunk(), 1);
+                    }
                 });
             }
+            
+            if (!process.stdin) { reject("process.stdin is null"); return; }
+            process.stdin.on("drain", () => sendNextChunk());
 
             sendNextChunk();
         });
