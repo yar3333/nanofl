@@ -16,22 +16,23 @@ class IdeVideo extends nanofl.Video
         video.autoplay = false;
         
         currentFrame = 0;
+        video.currentTime = 0.0001;
 
-        // if (video.readyState < MediaElement.HAVE_CURRENT_DATA)
-        // {
+        if (video.readyState < MediaElement.HAVE_CURRENT_DATA)
+        {
             removeAllChildren();
             addChild(new easeljs.display.Bitmap(symbol.poster));
 
-        //     video.addEventListener
-        //     (
-        //         "canplay",
-        //         () -> {
-        //             removeAllChildren();
-        //             addChild(new easeljs.display.Bitmap(new easeljs.utils.VideoBuffer(video)));
-        //         },
-        //         { once:true }
-        //     );
-        // }
+            video.addEventListener
+            (
+                "canplay",
+                () -> {
+                    removeAllChildren();
+                    addChild(new easeljs.display.Bitmap(new easeljs.utils.VideoBuffer(video)));
+                },
+                { once:true }
+            );
+        }
     }
 
 	public function advanceToNextFrame(framerate:Float) : Void
