@@ -594,7 +594,7 @@ class Document extends OpenedFile
             if (properties.publishSettings.useTextureAtlases && properties.publishSettings.textureAtlases.iterator().hasNext())
             {
                 log("Publish texture atlases");
-                TextureAtlasPublisher.publish(fileSystem, library.getRawLibrary(), properties.publishSettings.textureAtlases, destDir);
+                TextureAtlasPublisher.publish(fileSystem, library.getRawLibrary(), properties.publishSettings.textureAtlases, destDir, properties.publishSettings.supportLocalFileOpen);
             }
             else
             {

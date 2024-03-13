@@ -2,16 +2,17 @@ package nanofl.ide.textureatlas;
 
 import haxe.Json;
 import haxe.DynamicAccess;
+import haxe.crypto.Base64;
 import nanofl.ide.library.IdeLibrary;
 import nanofl.engine.ITextureItem;
 import nanofl.ide.sys.FileSystem;
 import easeljs.display.SpriteSheetData;
-import stdlib.StringTools;
+using stdlib.StringTools;
 using stdlib.Lambda;
 
 class TextureAtlasPublisher
 {
-    public static function publish(fileSystem:FileSystem, library:IdeLibrary, textureAtlasesParams:Map<String, TextureAtlasParams>, destDir:String)
+    public static function publish(fileSystem:FileSystem, library:IdeLibrary, textureAtlasesParams:Map<String, TextureAtlasParams>, destDir:String, supportLocalFileOpen:Bool)
     {
         var names = library.getItemsAsIde(true).filterByType(ITextureItem).map(x -> x.textureAtlas).filter(x -> !StringTools.isNullOrEmpty(x)).distinct();
         names.sort(Reflect.compare);
@@ -25,11 +26,11 @@ class TextureAtlasPublisher
             var params = textureAtlasesParams.get(name);
             var textureAtlas = new TextureAtlasGenerator(params.width, params.height, params.padding).generate
             (
-                library.getItemsAsIde(true).filter(x -> Std.isOfType(x, ITextureItem) && (cast x : ITextureItem).textureAtlas == name)
+                library.getItemsAsIde(true).filter(x -> Std.isOfType(x, ITextureItem) && (cast x:ITextureItem).textureAtlas == name)
             );
 
-            var imageUrl = saveTextureAtlasImageAndGetUrl(fileSystem, name, textureAtlas, destDir);
-            textureAtlasesData.push(getTextureAtlasDataPerNamePath(fileSystem, imageUrl, textureAtlas, ));
+            var imageUrl = saveTextureAtlasImageAndGetUrl(fileSystem, name, textureAtlas, destDir, supportLocalFileOpen);
+            textureAtlasesData.push(getTextureAtlasDataPerNamePath(fileSystem, imageUrl, textureAtlas));
         }
 
         log("Save 'texture-atlases.js'");
@@ -42,13 +43,26 @@ class TextureAtlasPublisher
         fileSystem.deleteDirectoryRecursively(destDir + "/texture-atlases");
     }
     
-    static function saveTextureAtlasImageAndGetUrl(fileSystem:FileSystem, textureAtlasName:String, textureAtlas:TextureAtlas, destDir:String) : String
+    static function saveTextureAtlasImageAndGetUrl(fileSystem:FileSystem, textureAtlasName:String, textureAtlas:TextureAtlas, destDir:String, supportLocalFileOpen:Bool) : String
     {
         log("Save image of texture atlas '" + textureAtlasName + "' / " + textureAtlas.imagePngAsBase64.length);
-        var imageAsJsUrl = "texture-atlases/" + textureAtlasName + ".js";
-        fileSystem.saveContent(destDir + "/" + imageAsJsUrl, 
-            'nanofl.textureAtlasImageFiles ||= {};\n'
-          + 'nanofl.textureAtlasImageFiles["' + textureAtlasName + '.png"] = "' + textureAtlas.imagePngAsBase64 + '";');
+
+        final imageAsJsUrl = "texture-atlases/" + textureAtlasName + (supportLocalFileOpen ? ".js" : ".png");
+
+        if (supportLocalFileOpen)
+        {
+            fileSystem.saveContent
+            (
+                destDir + "/" + imageAsJsUrl, 
+                'nanofl.textureAtlasImageFiles ||= {};\n'
+              + 'nanofl.textureAtlasImageFiles["' + textureAtlasName + '.png"] = "' + textureAtlas.imagePngAsBase64 + '";'
+            );
+        }
+        else
+        {
+            fileSystem.saveBinary(destDir + "/" + imageAsJsUrl, Base64.decode(textureAtlas.imagePngAsBase64));
+        }
+
         return imageAsJsUrl;
     }
         
@@ -57,8 +71,7 @@ class TextureAtlasPublisher
         var r : DynamicAccess<SpriteSheetData> = {};
 
         var namePaths = Reflect.fields(textureAtlas.itemFrames);
-        namePaths.sort(Reflect.compare);
-        for (namePath in namePaths)
+        for (namePath in namePaths.sorted())
         {
             r.set(namePath,
             {
@@ -73,7 +86,9 @@ class TextureAtlasPublisher
     static function getSpriteSheetFrames(textureAtlas:TextureAtlas, namePath:String) : Array<Array<Float>>
     {
         var r = new Array<Array<Float>>();
+        
         var frameIndexes : Array<Int> = Reflect.field(textureAtlas.itemFrames, namePath);
+        
         for (frameIndex in frameIndexes)
         {
             if (frameIndex != null)
@@ -86,6 +101,7 @@ class TextureAtlasPublisher
                 r.push([]);
             }
         }
+        
         return r;
     }
 

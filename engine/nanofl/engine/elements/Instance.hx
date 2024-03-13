@@ -33,7 +33,7 @@ class Instance extends Element
     public var meshParams : MeshParams;
 	
 	public var symbol(get, never) : InstancableItem;
-	@:noCompletion function get_symbol() return cast(library.getItem(namePath), InstancableItem);
+	@:noCompletion function get_symbol() return (cast library.getItem(namePath) : InstancableItem);
 	
 	public function new(namePath:String, ?name:String, ?colorEffect:ColorEffect, ?filters:Array<FilterDef>, ?blendMode:BlendModes, ?meshParams:MeshParams)
 	{
@@ -87,10 +87,10 @@ class Instance extends Element
 		out.attr("libraryItem", namePath);
 		out.attr("name", name, "");
 		out.attr("blendMode", blendMode, BlendModes.normal);
-			
-        if (meshParams != null) MeshParamsTools.save(meshParams, out);
+        if (meshParams != null && library.hasItem(namePath) && symbol.type == mesh) MeshParamsTools.save(meshParams, out);
         if (colorEffect != null) colorEffect.save(out);
-		if (filters.length > 0)
+		
+        if (filters.length > 0)
 		{
 			out.begin("filters");
 			for (filter in filters) filter.save(out);
@@ -107,11 +107,11 @@ class Instance extends Element
 		
         super.savePropertiesJson(obj);
 		
-		obj.blendMode = blendMode ?? BlendModes.normal;
-			
-        if (meshParams != null) obj.meshParams = MeshParamsTools.saveJson(meshParams);
+		if (blendMode != BlendModes.normal) obj.blendMode = blendMode ?? BlendModes.normal;
+        if (meshParams != null && library.hasItem(namePath) && symbol.type == mesh) obj.meshParams = MeshParamsTools.saveJson(meshParams);
         if (colorEffect != null) obj.colorEffect = colorEffect.saveJson();
-		if (filters.length > 0)
+		
+        if (filters.length > 0)
 		{
 			obj.filters = filters.map(x -> x.saveJson());
 		}

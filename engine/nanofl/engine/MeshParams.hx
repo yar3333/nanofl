@@ -38,9 +38,11 @@ class MeshParamsTools
     }
 	
     #if ide
-    public static function load(node:HtmlNodeElement) : MeshParams
+    public static function load(base:HtmlNodeElement) : MeshParams
 	{
-		var r = createDefault();
+		final node = base.findOne(">mesh-params");
+        var r = createDefault();
+        if (node == null) return r;
 		
 		r.rotationX = node.getAttrFloat("rotationX", r.rotationX);
 		r.rotationY = node.getAttrFloat("rotationY", r.rotationY);
@@ -74,7 +76,7 @@ class MeshParamsTools
 	public static function save(params:MeshParams, out:XmlBuilder)
 	{
 		var def = createDefault();
-		
+        out.begin("mesh-params");
 		out.attr("rotationX", params.rotationX, def.rotationX);
 		out.attr("rotationY", params.rotationY, def.rotationY);
 		out.attr("cameraFov", params.cameraFov, def.cameraFov);
@@ -82,6 +84,7 @@ class MeshParamsTools
 		out.attr("directionalLightColor", params.directionalLightColor, def.directionalLightColor);
 		out.attr("directionalLightRotationX", params.directionalLightRotationX, def.directionalLightRotationX);
 		out.attr("directionalLightRotationY", params.directionalLightRotationY, def.directionalLightRotationY);
+        out.end();
 	}
 
     public static function saveJson(params:MeshParams) : Dynamic

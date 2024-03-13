@@ -10,4 +10,5 @@ extern class DisplayObjectTools {
 	static function smartHitTest(obj:easeljs.display.DisplayObject, x:Float, y:Float, ?minAlpha:Int):Bool;
 	static function dump(obj:easeljs.display.DisplayObject, ?level:Int):Void;
 	static function recache(dispObj:easeljs.display.DisplayObject, ?force:Bool):Bool;
+	static function cache(dispObj:easeljs.display.DisplayObject, ?bounds:easeljs.geom.Rectangle):Void;
 }

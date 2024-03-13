@@ -1,14 +1,15 @@
 package nanofl.ide.textureatlas;
 
+import js.Browser;
+import js.html.CanvasElement;
+import stdlib.Debug;
+import stdlib.Std;
+import nanofl.MovieClip;
 import easeljs.display.DisplayObject;
-import haxe.crypto.Base64;
 import nanofl.ide.libraryitems.IIdeInstancableItem;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.libraryitems.MovieClipItem;
 import nanofl.ide.textureatlas.TextureAtlas;
-import nanofl.MovieClip;
-import stdlib.Debug;
-import stdlib.Std;
 
 class TextureAtlasGenerator
 {
@@ -137,7 +138,7 @@ class TextureAtlasGenerator
 				var instance = item.newInstance();
 				var dispObj = instance.createDisplayObject();
 				
-				if (Std.isOfType(dispObj, MovieClip))
+                if (Std.isOfType(dispObj, MovieClip))
 				{
 					var mc : MovieClip = cast dispObj;
 					
@@ -145,32 +146,30 @@ class TextureAtlasGenerator
 					for (frameIndex in 0...totalFrames)
 					{
 						mc.gotoFrame(frameIndex);
+
+                        DisplayObjectTools.recache(mc, true);
+                        final canvas = getCanvasWithoutEmptyEdges(mc.cacheCanvas);
+						if (canvas == null) continue;
 						
-						cacheDisplayObject(mc);
-						
-						if (mc.cacheCanvas != null)
-						{
-							var newImageData = mc.cacheCanvas.toDataURL("image/bmp");
-							if (datas.indexOf(newImageData) < 0)
-							{
-								images.push({ canvas:mc.cacheCanvas, refs:[ newImageRef(item, frameIndex, mc) ] });
-								//trace("add " + item.namePath + ":" + frameIndex + " / " + mc.cacheCanvas.width + " x " + mc.cacheCanvas.height);
-								datas.push(newImageData);
-							}
-							else
-							{
-								images[images.length - 1].refs.push(newImageRef(item, frameIndex, mc));
-							}
-						}
+                        var newImageData = canvas.toDataURL("image/bmp");
+                        if (datas.indexOf(newImageData) < 0)
+                        {
+                            images.push({ canvas:canvas, refs:[ newImageRef(item, frameIndex, mc) ] });
+                            datas.push(newImageData);
+                        }
+                        else
+                        {
+                            images[images.length - 1].refs.push(newImageRef(item, frameIndex, mc));
+                        }
 					}
 				}
 				else
 				{
-					cacheDisplayObject(dispObj);
-					if (dispObj.cacheCanvas != null)
-					{
-						images.push({ canvas:dispObj.cacheCanvas, refs:[ newImageRef(item, null, dispObj) ] });
-					}
+                    DisplayObjectTools.recache(dispObj, true);
+                    final canvas = getCanvasWithoutEmptyEdges(dispObj.cacheCanvas);
+					if (canvas == null) continue;
+					
+                    images.push({ canvas:canvas, refs:[ newImageRef(item, null, dispObj) ] });
 				}
 			}
 			else
@@ -183,8 +182,66 @@ class TextureAtlasGenerator
 		
 		return images;
 	}
+
+    static function getCanvasWithoutEmptyEdges(canvas:CanvasElement) : CanvasElement
+    {
+        if (canvas == null) return null;
+
+        var minX = 0; while (minX < canvas.width)
+        {
+            final data = canvas.getContext2d().getImageData(minX, 0, 1, canvas.height);
+            if (!isImageDataEmpty(data)) break;
+            minX++;
+        }
+        if (minX >= canvas.width) return null; // if whole cacheCanvas is empty
+
+        var minY = 0; while (minY < canvas.height)
+        {
+            final data = canvas.getContext2d().getImageData(0, minY, canvas.width, 1);
+            if (!isImageDataEmpty(data)) break;
+            minY++;
+        }
+
+        var maxX = canvas.width - 1; while (maxX > minX)
+        {
+            final data = canvas.getContext2d().getImageData(maxX, 0, 1, canvas.height);
+            if (!isImageDataEmpty(data)) break;
+            maxX--;
+        }
+
+        var maxY = canvas.height - 1; while (maxY > minY)
+        {
+            final data = canvas.getContext2d().getImageData(0, maxY, canvas.width, 1);
+            if (!isImageDataEmpty(data)) break;
+            maxY--;
+        }
+
+        if (minX == 0 
+         && minY == 0 
+         && maxX == canvas.width - 1 
+         && maxY == canvas.height - 1
+        ) return canvas;
+
+        final r = Browser.document.createCanvasElement();
+        r.width  = maxX - minX + 1;
+        r.height = maxY - minY + 1;
+        r.getContext2d().drawImage(canvas, minX, minY, r.width, r.height, 0, 0, r.width, r.height);
+
+        return r;
+    }
+
+    static function isImageDataEmpty(imageData:js.html.ImageData) : Bool
+    {
+        final size = imageData.width * imageData.height * 4;
+        var i = 0; while (i < size)
+        {
+            if (imageData.data[i + 3] > 0) return false;
+            i += 4;
+        }
+        return true;        
+    }
 	
-	function parseSorter(sortingMethods:Array<SortingMethod>) : Array<ImageData->ImageData->Int>
+	static function parseSorter(sortingMethods:Array<SortingMethod>) : Array<ImageData->ImageData->Int>
 	{
 		var r = [];
 		for (sortingMethod in sortingMethods)
@@ -201,7 +258,7 @@ class TextureAtlasGenerator
 		return r;
 	}
 	
-	function newImageRef(item:IIdeLibraryItem, frameIndex:Int,  dispObj:DisplayObject)
+	static function newImageRef(item:IIdeLibraryItem, frameIndex:Int,  dispObj:DisplayObject)
 	{
 		return
 		{
@@ -210,52 +267,6 @@ class TextureAtlasGenerator
 			regX: -dispObj.bitmapCache.offX,
 			regY: -dispObj.bitmapCache.offY,
 		};
-	}
-	
-	function cacheDisplayObject(obj:DisplayObject)
-	{
-        DisplayObjectTools.recache(obj, true);
-
-		if (obj.cacheCanvas != null) return;
-		
-		var bounds = DisplayObjectTools.getOuterBounds(obj);
-		if (bounds != null && bounds.width > 0 && bounds.height > 0)
-		{
-			bounds.x = Math.floor(bounds.x) - 1;
-			bounds.y = Math.floor(bounds.y) - 1;
-			bounds.width = Math.ceil(bounds.width) + 2;
-			bounds.height = Math.ceil(bounds.height) + 2;
-			obj.cache(bounds.x, bounds.y, bounds.width, bounds.height);
-			
-			var minX = 0;
-			var minY = 0;
-			var maxX = obj.cacheCanvas.width - 1;
-			var maxY = obj.cacheCanvas.height- 1;
-			while (minY < maxY && isCacheRectEmpty(obj, 0, minY, cast bounds.width, 1)) minY++;
-			while (minY < maxY && isCacheRectEmpty(obj, 0, maxY, cast bounds.width, 1)) maxY--;
-			while (minX < maxX && isCacheRectEmpty(obj, minX, 0, 1, cast bounds.height)) minX++;
-			while (minX < maxX && isCacheRectEmpty(obj, maxX, 0, 1, cast bounds.height)) maxX--;
-			if (minX != 0 || minY != 0 || maxX != obj.cacheCanvas.width - 1 || maxY != obj.cacheCanvas.height - 1)
-			{
-				obj.uncache();
-				if (maxX - minX >= 0 && maxY - minY >= 0)
-				{
-					obj.cache(bounds.x + minX, bounds.y + minY, maxX - minX + 1, maxY - minY + 1);
-				}
-			}
-		}
-	}
-	
-	function isCacheRectEmpty(obj:DisplayObject, x:Int, y:Int, w:Int, h:Int) : Bool
-	{
-		var imageData = obj.cacheCanvas.getContext2d({ willReadFrequently:true }).getImageData(x, y, w, h);
-		var size = imageData.width * imageData.height * 4;
-		var i = 0; while (i < size)
-		{
-			if (imageData.data[i + 3] != 0) return false;
-			i += 4;
-		}
-		return true;
 	}
 	
 	public function toString()

@@ -4,7 +4,6 @@ import stdlib.Debug;
 import easeljs.geom.Matrix2D;
 import easeljs.display.Shape;
 import nanofl.engine.geom.Matrix;
-import htmlparser.HtmlNodeElement;
 import htmlparser.XmlBuilder;
 using htmlparser.HtmlParserTools;
 using Lambda;

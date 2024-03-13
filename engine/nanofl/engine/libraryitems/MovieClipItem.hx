@@ -313,10 +313,10 @@ class MovieClipItem	extends InstancableItem
                 obj.autoPlay = autoPlay ?? true;
                 obj.loop = loop ?? true;
                 
-                obj.likeButton = likeButton ?? false;
-                obj.exportAsSprite = exportAsSprite ?? false;
-                obj.textureAtlas = textureAtlas ?? null;
-                obj.relatedSound = relatedSound ?? "";
+                if (likeButton) obj.likeButton = likeButton;
+                if (exportAsSprite) obj.exportAsSprite = exportAsSprite;
+                if (textureAtlas != null) obj.textureAtlas = textureAtlas;
+                if (relatedSound != null && relatedSound != "") obj.relatedSound = relatedSound;
                 
                 obj.layers = layers.map(x -> x.saveJson());
 

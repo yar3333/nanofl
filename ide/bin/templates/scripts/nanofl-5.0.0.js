@@ -1460,6 +1460,24 @@ class js_Boot {
 	}
 }
 js_Boot.__name__ = "js.Boot";
+class js_lib_HaxeIterator {
+	constructor(jsIterator) {
+		this.jsIterator = jsIterator;
+		this.lastStep = jsIterator.next();
+	}
+	hasNext() {
+		return !this.lastStep.done;
+	}
+	next() {
+		let v = this.lastStep.value;
+		this.lastStep = this.jsIterator.next();
+		return v;
+	}
+}
+js_lib_HaxeIterator.__name__ = "js.lib.HaxeIterator";
+Object.assign(js_lib_HaxeIterator.prototype, {
+	__class__: js_lib_HaxeIterator
+});
 var GLTFLoader = (__webpack_require__(676).GLTFLoader);
 var THREE_Color = (__webpack_require__(800).Color);
 var THREE_PerspectiveCamera = (__webpack_require__(800).PerspectiveCamera);
@@ -1957,10 +1975,16 @@ class nanofl_DisplayObjectTools {
 		}
 		return true;
 	}
-	static cache(dispObj) {
-		let bounds = nanofl_DisplayObjectTools.getInnerBounds(dispObj);
+	static cache(dispObj,bounds) {
+		if(bounds == null) {
+			bounds = nanofl_DisplayObjectTools.getInnerBounds(dispObj);
+		}
 		if(bounds != null && bounds.width > 0 && bounds.height > 0) {
-			dispObj.cache(bounds.x,bounds.y,bounds.width,bounds.height);
+			let fixedX = Math.floor(bounds.x) - 1;
+			let fixedY = Math.floor(bounds.y) - 1;
+			let fixedW = Math.ceil(bounds.x - fixedX + bounds.width) + 2;
+			let fixedH = Math.ceil(bounds.y - fixedY + bounds.height) + 2;
+			dispObj.cache(fixedX,fixedY,fixedW,fixedH);
 		}
 	}
 	static isNeedCache(dispObj) {
@@ -3834,10 +3858,10 @@ class nanofl_engine_MaskTools {
 		}
 		obj.visible = true;
 		let union = objBounds.union(intersection);
-		maskContainer.cache(union.x,union.y,union.width,union.height);
+		nanofl_DisplayObjectTools.cache(maskContainer,union);
 		let objBounds2 = nanofl_DisplayObjectTools.getOuterBounds(obj,true);
-		obj.cache(objBounds2.x,objBounds2.y,objBounds2.width,objBounds2.height);
-		new createjs.AlphaMaskFilter(maskContainer.cacheCanvas).applyFilter(obj.cacheCanvas.getContext("2d",null),0,0,objBounds.width | 0,objBounds.height | 0);
+		nanofl_DisplayObjectTools.cache(obj,objBounds2);
+		new createjs.AlphaMaskFilter(maskContainer.cacheCanvas).applyFilter(obj.cacheCanvas.getContext("2d",null),0,0,Math.ceil(objBounds.width),Math.ceil(objBounds.height));
 	}
 }
 nanofl_engine_MaskTools.__name__ = "nanofl.engine.MaskTools";
@@ -4086,7 +4110,7 @@ class nanofl_engine_TextureAtlasTools {
 		if(textureAtlasesData == null) {
 			return Promise.resolve(null);
 		}
-		let urlToImageStruct = new haxe_ds_StringMap();
+		let urlToImageStruct = new Map();
 		let _g = 0;
 		while(_g < textureAtlasesData.length) {
 			let textureAtlasData = textureAtlasesData[_g];
@@ -4102,14 +4126,13 @@ class nanofl_engine_TextureAtlasTools {
 				while(_g < _g3.length) {
 					let url = _g3[_g];
 					++_g;
-					if(typeof(url) == "string" && !Object.prototype.hasOwnProperty.call(urlToImageStruct.h,url)) {
-						let value = nanofl_engine_TextureAtlasTools.resolveImage(url);
-						urlToImageStruct.h[url] = value;
+					if(typeof(url) == "string" && !urlToImageStruct.has(url)) {
+						urlToImageStruct.set(url,nanofl_engine_TextureAtlasTools.resolveImage(url));
 					}
 				}
 			}
 		}
-		return Promise.all(Lambda.array(urlToImageStruct)).then(function(data) {
+		return Promise.all(stdlib_LambdaIterator.array(new js_lib_HaxeIterator(urlToImageStruct.values()))).then(function(data) {
 			let urlToImage = stdlib_LambdaArray.toMapOneInner(data,function(x) {
 				return x.url;
 			},function(x) {
@@ -4142,14 +4165,20 @@ class nanofl_engine_TextureAtlasTools {
 		});
 	}
 	static resolveImage(url) {
-		return nanofl_engine_Loader.javaScript(url).then(function(_) {
-			let name = haxe_io_Path.withoutDirectory(haxe_io_Path.withoutExtension(url));
-			let pngDataAsBase64 = window.nanofl.textureAtlasImageFiles[name + ".png"];
-			window.nanofl.textureAtlasImageFiles[name + ".png"] = null;
-			return nanofl_engine_Loader.image("data:image/png;base64," + pngDataAsBase64).then(function(image) {
+		if(url.endsWith(".js")) {
+			return nanofl_engine_Loader.javaScript(url).then(function(_) {
+				let name = haxe_io_Path.withoutDirectory(haxe_io_Path.withoutExtension(url));
+				let pngDataAsBase64 = window.nanofl.textureAtlasImageFiles[name + ".png"];
+				window.nanofl.textureAtlasImageFiles[name + ".png"] = null;
+				return nanofl_engine_Loader.image("data:image/png;base64," + pngDataAsBase64).then(function(image) {
+					return { url : url, image : image};
+				});
+			});
+		} else {
+			return nanofl_engine_Loader.image(url).then(function(image) {
 				return { url : url, image : image};
 			});
-		});
+		}
 	}
 }
 nanofl_engine_TextureAtlasTools.__name__ = "nanofl.engine.TextureAtlasTools";
@@ -4498,7 +4527,7 @@ class nanofl_engine_elements_Instance extends nanofl_engine_elements_Element {
 		return nanofl_engine_ElementType.instance;
 	}
 	get_symbol() {
-		return js_Boot.__cast(this.library.getItem(this.namePath) , nanofl_engine_libraryitems_InstancableItem);
+		return this.library.getItem(this.namePath);
 	}
 	loadPropertiesJson(obj,version) {
 		if(!super.loadPropertiesJson(obj,version)) {
@@ -8602,6 +8631,18 @@ class stdlib_LambdaIterable {
 	}
 }
 stdlib_LambdaIterable.__name__ = "stdlib.LambdaIterable";
+class stdlib_LambdaIterator {
+	static array(it) {
+		let r = [];
+		let e = it;
+		while(e.hasNext()) {
+			let e1 = e.next();
+			r.push(e1);
+		}
+		return r;
+	}
+}
+stdlib_LambdaIterator.__name__ = "stdlib.LambdaIterator";
 class stdlib_Std {
 	static parseInt(x,defaultValue) {
 		if(x != null) {

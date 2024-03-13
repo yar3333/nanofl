@@ -19,7 +19,7 @@ typedef MeshParams = {
 
 extern class MeshParamsTools {
 	static function createDefault():nanofl.engine.MeshParams;
-	static function load(node:htmlparser.HtmlNodeElement):nanofl.engine.MeshParams;
+	static function load(base:htmlparser.HtmlNodeElement):nanofl.engine.MeshParams;
 	static function loadJson(obj:Dynamic):nanofl.engine.MeshParams;
 	static function save(params:nanofl.engine.MeshParams, out:htmlparser.XmlBuilder):Void;
 	static function saveJson(params:nanofl.engine.MeshParams):Dynamic;

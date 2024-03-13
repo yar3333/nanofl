@@ -271,7 +271,7 @@ package easeljs.display;
 			 * For more information on the options object, see the BitmapCache {{#crossLink "BitmapCache/define"}}{{/crossLink}}.
 			 
 	**/
-	function cache(x:Float, y:Float, width:Float, height:Float, ?scale:Float, ?options:Dynamic):Void;
+	function cache(x:Int, y:Int, width:Int, height:Int, ?scale:Float, ?options:Dynamic):Void;
 	/**
 		
 			 * Redraws the display object to its cache. Calling updateCache without an active cache will throw an error.

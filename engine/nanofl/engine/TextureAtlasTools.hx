@@ -1,5 +1,6 @@
 package nanofl.engine;
 
+import js.lib.Map;
 import haxe.io.Path;
 import js.Browser;
 import js.Syntax;
@@ -7,6 +8,7 @@ import js.lib.Promise;
 import js.html.ImageElement;
 import easeljs.display.SpriteSheetData;
 using stdlib.Lambda;
+using stdlib.StringTools;
 
 class TextureAtlasTools
 {
@@ -36,7 +38,7 @@ class TextureAtlasTools
                 final spriteSheetData : SpriteSheetData = Reflect.field(textureAtlasData, namePath);
                 for (url in spriteSheetData.images)
                 {
-                    if (Syntax.typeof(url) == "string" && !urlToImageStruct.exists(url))
+                    if (Syntax.typeof(url) == "string" && !urlToImageStruct.has(url))
                     {
                         urlToImageStruct.set(url, resolveImage(url));
                     }
@@ -44,7 +46,7 @@ class TextureAtlasTools
             }
         }
 
-        return Promise.all(urlToImageStruct.array()).then((data:Array<{ url:String, image:ImageElement }>) ->
+        return Promise.all(urlToImageStruct.iterator().array()).then((data:Array<{ url:String, image:ImageElement }>) ->
         {
             final urlToImage = data.toMapOne(x -> x.url, x -> x.image);
 
@@ -63,12 +65,19 @@ class TextureAtlasTools
 
     static function resolveImage(url:String) : Promise<{ url:String, image:ImageElement }>
     {
-        return Loader.javaScript(url).then(_ ->
+        return switch (url.endsWith(".js"))
         {
-            final name = Path.withoutDirectory(Path.withoutExtension(url));
-            final pngDataAsBase64 = (cast Browser.window).nanofl.textureAtlasImageFiles[cast name + ".png"];
-            (cast Browser.window).nanofl.textureAtlasImageFiles[cast name + ".png"] = null;
-            return Loader.image("data:image/png;base64," + pngDataAsBase64).then(image -> ({ url:url, image:image }));
-        });
+            case true:
+                Loader.javaScript(url).then(_ ->
+                {
+                    final name = Path.withoutDirectory(Path.withoutExtension(url));
+                    final pngDataAsBase64 = (cast Browser.window).nanofl.textureAtlasImageFiles[cast name + ".png"];
+                    (cast Browser.window).nanofl.textureAtlasImageFiles[cast name + ".png"] = null;
+                    return Loader.image("data:image/png;base64," + pngDataAsBase64).then(image -> ({ url:url, image:image }));
+                });
+            
+            case false:
+                Loader.image(url).then(image -> ({ url:url, image:image }));
+        }
     }
 }

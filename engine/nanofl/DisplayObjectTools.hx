@@ -267,12 +267,17 @@ class DisplayObjectTools
         return true;
     } 
 
-    static function cache(dispObj:DisplayObject)
+    public static function cache(dispObj:DisplayObject, ?bounds:Rectangle)
     {
-        var bounds = DisplayObjectTools.getInnerBounds(dispObj);
+        if (bounds == null) bounds = DisplayObjectTools.getInnerBounds(dispObj);
+        
         if (bounds != null && bounds.width > 0 && bounds.height > 0)
         {
-            dispObj.cache(bounds.x, bounds.y, bounds.width, bounds.height);
+            final fixedX = Math.floor(bounds.x) - 1;
+            final fixedY = Math.floor(bounds.y) - 1;
+            final fixedW = Math.ceil(bounds.x - fixedX + bounds.width)  + 2;
+            final fixedH = Math.ceil(bounds.y - fixedY + bounds.height) + 2;
+            dispObj.cache(fixedX, fixedY, fixedW, fixedH);
         }
     }
 
