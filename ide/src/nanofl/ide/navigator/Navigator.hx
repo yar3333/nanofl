@@ -1,5 +1,6 @@
 package nanofl.ide.navigator;
 
+import js.lib.Promise;
 import stdlib.Std;
 import stdlib.Debug;
 import datatools.ArrayRO;
@@ -58,7 +59,7 @@ class Navigator extends InjectContainer
 	}
 	
 	@:profile
-	public function setFrameIndex(index:Int, ?invalidater:Invalidater, commitBeforeChange=true) : Void
+	public function setFrameIndex(index:Int, ?invalidater:Invalidater, commitBeforeChange=true) : Promise<{}>
 	{
 		var totalFrames = pathItem.getTotalFrames();
 		
@@ -72,11 +73,13 @@ class Navigator extends InjectContainer
 			index = 0;
 		}
 		
-		if (pathItem.frameIndex == index) return;
+		if (pathItem.frameIndex == index) return Promise.resolve(null);
 		
 		if (commitBeforeChange) document.undoQueue.commitTransaction();
 		
 		pathItem.setFrameIndex(index);
+
+        var r = Promise.resolve(null);
 		
 		if (invalidater != null)
 		{
@@ -85,9 +88,11 @@ class Navigator extends InjectContainer
 		}
 		else
 		{
-            document.editor.rebind();
+            r = document.editor.rebind();
             view.movie.timeline.fixActiveFrame();
 		}
+
+        return r;
 	}
 	
 	//@:allow(nanofl.ide.undo)

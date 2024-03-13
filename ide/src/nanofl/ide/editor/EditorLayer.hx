@@ -57,9 +57,11 @@ class EditorLayer
 	public final container = new Container();
 
     var elementLifeTracker : ElementLifeTracker;
+    
+    final framerate : Float;
 	
 	@:noapi 
-	public function new(editor:Editor, navigator:Navigator, view:View, layer:Layer, frameIndex:Int)
+	public function new(editor:Editor, navigator:Navigator, view:View, layer:Layer, frameIndex:Int, framerate:Float)
 	{
 		this.editor = editor;
 		this.navigator = navigator;
@@ -67,6 +69,7 @@ class EditorLayer
 		
 		this.layer = layer;
 		this.frame = layer.getFrame(frameIndex);
+		this.framerate = framerate;
         
 		if (frame != null)
 		{
@@ -184,7 +187,7 @@ class EditorLayer
 	@:noprofile
 	function addDisplayObject(tweenedElement:TweenedElement, ?index:Int) : EditorElement
 	{
-		var item = EditorElement.create(this, editor, navigator, view, frame, tweenedElement, elementLifeTracker.getTrackOne(tweenedElement.original));
+		var item = EditorElement.create(this, editor, navigator, view, frame, tweenedElement, elementLifeTracker.getTrackOne(tweenedElement.original), framerate);
 		
 		container.addChildAt(item.metaDispObj, index != null ? index : container.numChildren);
 		items.insert(index != null ? index : items.length, item);

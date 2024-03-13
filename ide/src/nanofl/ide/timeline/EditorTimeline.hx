@@ -1,5 +1,6 @@
 package nanofl.ide.timeline;
 
+import js.lib.Promise;
 import js.lib.Set;
 import htmlparser.HtmlNodeElement;
 import datatools.ArrayRO;
@@ -36,6 +37,8 @@ class EditorTimeline
 	public var frameIndex(get, set) : Int;
 	function get_frameIndex() : Int return pathItem.frameIndex;
 	function set_frameIndex(n:Int) : Int { navigator.setFrameIndex(n); return n; }
+    
+    public function setFrameIndexAndWaitStageUpdating(n:Int) : Promise<{}> return navigator.setFrameIndex(n);
 	
 	public var layerIndex(get, set) : Int;
 	function get_layerIndex() : Int return pathItem.layerIndex;

@@ -60,12 +60,12 @@ class Player
 
             return library.preload().then(_ ->
             {
-                stage = new nanofl.Stage(canvas);
+                stage = new nanofl.Stage(canvas, args.framerate);
                 
                 if (args.scaleMode != ScaleMode.custom)
                 {
-                    var originalWidth = args.container.offsetWidth;
-                    var originalHeight = args.container.offsetHeight;
+                    final originalWidth = args.container.offsetWidth;
+                    final originalHeight = args.container.offsetHeight;
                     Browser.window.addEventListener("resize", () -> resize(args.scaleMode, originalWidth, originalHeight));
                     resize(args.scaleMode, originalWidth, originalHeight);
                 }
@@ -146,8 +146,8 @@ class Player
 				kx = ky = 1;
 		};
 		
-		var w = Math.round(originalWidth  * kx);
-		var h = Math.round(originalHeight * ky);
+		final w = Math.round(originalWidth  * kx);
+		final h = Math.round(originalHeight * ky);
 		
 		container.style.width = w + "px";
 		container.style.height = h + "px";

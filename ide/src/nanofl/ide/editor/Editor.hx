@@ -1,5 +1,6 @@
 package nanofl.ide.editor;
 
+import js.lib.Promise;
 import easeljs.display.Container;
 import easeljs.geom.Rectangle;
 import htmlparser.XmlBuilder;
@@ -514,18 +515,19 @@ class Editor extends InjectContainer
 	}
 	
 	@:profile
-	public function rebind(isCenterView=false)
+	public function rebind(isCenterView=false) : Promise<{}>
 	{
-		if (tool != null) tool.endEditing();
+        if (tool != null) tool.endEditing();
 		
 		view.movie.timeline.updateActiveLayerFrames();
 
 		layers = [];
+        DisplayObjectTools.callMethod(container, "dispose");
 		container.removeAllChildren();
 
 		for (layer in pathItem.mcItem.layers)
 		{
-			var editorLayer = new EditorLayer(this, document.navigator, view, layer, pathItem.frameIndex);
+			var editorLayer = new EditorLayer(this, document.navigator, view, layer, pathItem.frameIndex, document.properties.framerate);
 			layers.push(editorLayer);
 			container.addChildAt(editorLayer.container, 0);
 		}
@@ -535,9 +537,11 @@ class Editor extends InjectContainer
 		tool = EditorTool.create(view.movie.toolbar.toolType, this, document.library, document.navigator, view, newObjectParams, document.undoQueue);
 		
 		view.movie.editor.updateToolControls();
-		view.movie.editor.rebind(isCenterView);
+		final r = view.movie.editor.rebind(isCenterView);
 		view.properties.update();
 		view.movie.zoomer.update();
+
+        return r;
 	}
 	
 	@:profile

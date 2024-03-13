@@ -85,18 +85,23 @@ class DisplayObjectTools
 		return r;
 	}
 
-    public static function iterateTreeFromBottomToTop(parent:DisplayObject, callb:DisplayObject->Void) : Void
+    public static function iterateTreeFromBottomToTop(parent:DisplayObject, visibleOnly:Bool, callb:DisplayObject->Void) : Void
     {
-		if (Std.isOfType(parent, Container) && !Std.isOfType(parent, SolidContainer))
+		if (visibleOnly && !parent.visible) return;
+        
+        if (Std.isOfType(parent, Container) && !Std.isOfType(parent, SolidContainer))
 		{
-			for (child in (cast parent:Container).children) callb(child);
+			for (child in (cast parent:Container).children)
+            {
+                iterateTreeFromBottomToTop(child, visibleOnly, callb);
+            }
 		}
         callb(parent);
     }
 	
 	public static function callMethod(parent:DisplayObject, name:String)
 	{
-        iterateTreeFromBottomToTop(parent, obj ->
+        iterateTreeFromBottomToTop(parent, false, obj ->
         {
             var method = Reflect.field(obj, name);
             if (Reflect.isFunction(method))

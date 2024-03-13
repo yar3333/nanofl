@@ -40,7 +40,7 @@ class Video extends SolidContainer
         duration = symbol.duration;
 		setBounds(0, 0, symbol.width, symbol.height);
 
-        video.currentTime = params?.currentTime ?? 0.0;
+        video.currentTime = params?.currentTime ?? 0.0001;
 
         addChild(new easeljs.display.Bitmap(new easeljs.utils.VideoBuffer(video)));
 	}

@@ -68,24 +68,25 @@ abstract class EditorElement implements ISelectable
 	public var height(get, set) : Float;
 
     final track : ElementLifeTrack;
+    final framerate : Float;
 	
-	public static function create(layer:EditorLayer, editor:Editor, navigator:Navigator, view:View, frame:Frame, tweenedElement:TweenedElement, track:ElementLifeTrack) : EditorElement
+	public static function create(layer:EditorLayer, editor:Editor, navigator:Navigator, view:View, frame:Frame, tweenedElement:TweenedElement, track:ElementLifeTrack, framerate:Float) : EditorElement
 	{
         Debug.assert(track != null);
         
 		if (Std.isOfType(tweenedElement.original, Instance))
 		{
-			return new EditorElementInstance(layer, editor, navigator, view, frame, tweenedElement, track);
+			return new EditorElementInstance(layer, editor, navigator, view, frame, tweenedElement, track, framerate);
 		}
 		else
 		if (Std.isOfType(tweenedElement.original, ShapeElement))
 		{
-			return new EditorElementShape(layer, editor, navigator, view, frame, tweenedElement, track);
+			return new EditorElementShape(layer, editor, navigator, view, frame, tweenedElement, track, framerate);
 		}
 		else
 		if (Std.isOfType(tweenedElement.original, TextElement))
 		{
-			return new EditorElementText(layer, editor, navigator, view, frame, tweenedElement, track);
+			return new EditorElementText(layer, editor, navigator, view, frame, tweenedElement, track, framerate);
 		}
 		else
 		{
@@ -93,7 +94,7 @@ abstract class EditorElement implements ISelectable
 		}
 	}
 	
-	function new(layer:EditorLayer, editor:Editor, navigator:Navigator, view:View, frame:Frame, tweenedElement:TweenedElement, track:ElementLifeTrack)
+	function new(layer:EditorLayer, editor:Editor, navigator:Navigator, view:View, frame:Frame, tweenedElement:TweenedElement, track:ElementLifeTrack, framerate:Float)
 	{
 		preparePatterns();
 		
@@ -103,6 +104,7 @@ abstract class EditorElement implements ISelectable
 		this.view = view;
 		this.frame = frame;
         this.track = track;
+        this.framerate = framerate;
 		
 		originalElement = tweenedElement.original;
 		currentElement = tweenedElement.current;
@@ -132,7 +134,7 @@ abstract class EditorElement implements ISelectable
 
         if (Std.isOfType(dispObj, AdvancableDisplayObject))
         {
-            (cast dispObj:AdvancableDisplayObject).advanceTo(navigator.pathItem.frameIndex - track.startFrameIndex);
+            (cast dispObj:AdvancableDisplayObject).advanceTo(navigator.pathItem.frameIndex - track.startFrameIndex, framerate);
         }
 
         return dispObj;

@@ -1,7 +1,7 @@
 package nanofl.ide.displayobjects;
 
+import stdlib.Std;
 import nanofl.Video.VideoParams;
-import js.html.MediaElement;
 import nanofl.ide.libraryitems.VideoItem;
 import nanofl.engine.AdvancableDisplayObject;
 
@@ -9,46 +9,37 @@ class IdeVideo extends nanofl.Video
     implements AdvancableDisplayObject
 {
     var currentFrame : Int;
+
+    inline function getFramerate() return (cast stage : nanofl.Stage).framerate;
     
     public function new(symbol:VideoItem, params:VideoParams)
     {
-        super(symbol, params);
-
+        super(symbol, { currentTime: params?.currentTime ?? 0.0 });
+        
         video.autoplay = false;
         
-        currentFrame = 0;
-        video.currentTime = (params?.currentTime ?? 0.0) + 0.0001;
-
-        if (video.readyState < MediaElement.HAVE_CURRENT_DATA)
-        {
-            removeAllChildren();
-            addChild(new easeljs.display.Bitmap(symbol.poster));
-
-            video.addEventListener
-            (
-                "canplay",
-                () -> {
-                    removeAllChildren();
-                    addChild(new easeljs.display.Bitmap(new easeljs.utils.VideoBuffer(video)));
-                },
-                { once:true }
-            );
-        }
+        this.currentFrame = 0;
     }
 
-	public function advanceToNextFrame(framerate:Float) : Void
+	public function advanceToNextFrame() : Void
     {
-        final totalFrames = Std.int(video.duration * framerate);
+        final totalFrames = Std.int(duration * getFramerate());
         if (!video.loop && currentFrame >= totalFrames - 1) return;
 
         currentFrame++;
         if (currentFrame >= totalFrames) currentFrame -= totalFrames;
 
-        video.currentTime = Math.min(Math.max(0, duration - 0.0001), currentFrame / framerate + 0.0001);
+        video.currentTime = Math.min(Math.max(0, duration - 0.0001), currentFrame / getFramerate() + 0.0001);
     }
 
-    public function advanceTo(advanceFrames:Int)
+    public function advanceTo(advanceFrames:Int, framerate:Float)
     {
-        // TODO: is this method need?
+        if (!symbol.autoPlay) return;
+
+        final totalFrames = Std.int(duration * framerate);
+
+        currentFrame = symbol.loop ? advanceFrames % totalFrames : Std.min(totalFrames - 1, advanceFrames);
+
+        video.currentTime = Math.min(Math.max(0, duration - 0.0001), currentFrame / framerate + 0.0001);
     }
 }

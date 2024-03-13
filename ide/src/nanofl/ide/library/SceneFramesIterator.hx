@@ -11,8 +11,6 @@ import nanofl.ide.library.IdeLibrary;
 
 class SceneFramesIterator
 {
-    final framerate : Float;
-    
     final stage : nanofl.Stage;
     final scene : nanofl.MovieClip;
     final ctx : CanvasRenderingContext2D;
@@ -22,13 +20,11 @@ class SceneFramesIterator
     @:noapi
     public function new(documentProperties:DocumentProperties, library:IdeLibrary, applyBackgroundColor:Bool)
     {
-        framerate = documentProperties.framerate;
-        
         var canvas : CanvasElement = cast js.Browser.document.createElement("canvas");
         canvas.width = documentProperties.width;
         canvas.height = documentProperties.height;
         
-        stage = new nanofl.Stage(canvas);
+        stage = new nanofl.Stage(canvas, documentProperties.framerate);
         scene = cast library.getSceneInstance().createDisplayObject();
         
         if (applyBackgroundColor)
@@ -55,25 +51,8 @@ class SceneFramesIterator
 
         if (scene.currentFrame >= scene.getTotalFrames() - 1) return Promise.resolve(ctx);
         
-        scene.advanceToNextFrame(framerate);
-        
-        final videoPromises = new Array<Promise<{}>>();
-        DisplayObjectTools.iterateTreeFromBottomToTop(scene, obj ->
-        {
-            if (Std.isOfType(obj, nanofl.Video))
-            {
-                final videoObj : nanofl.Video = cast obj;
-                if (videoObj.video.readyState < MediaElement.HAVE_CURRENT_DATA)
-                {
-                    videoPromises.push(new Promise((resolve, reject) ->
-                    {
-                        videoObj.video.addEventListener("canplay", () -> resolve(null), { once:true });
-                        videoObj.video.addEventListener("error", () -> reject(new Error("Unable to load video: " + videoObj.video.src)), { once:true });
-                    }));
-                }
-            }
-        });
+        scene.advanceToNextFrame();
 
-        return Promise.all(videoPromises).then(_ -> ctx);
+        return stage.waitLoading().then(_ -> ctx);
     }
 }

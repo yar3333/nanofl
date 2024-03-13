@@ -9,6 +9,7 @@ extern class EditorTimeline {
 	var frameIndex(get, set) : Int;
 	private function get_frameIndex():Int;
 	private function set_frameIndex(n:Int):Int;
+	function setFrameIndexAndWaitStageUpdating(n:Int):js.lib.Promise<{ }>;
 	var layerIndex(get, set) : Int;
 	private function get_layerIndex():Int;
 	private function set_layerIndex(n:Int):Int;

@@ -1,6 +1,5 @@
 package components.nanofl.movie.timeline;
 
-import haxe.Timer;
 import js.JQuery;
 import js.Browser;
 import stdlib.ExceptionTools;
@@ -12,6 +11,7 @@ import nanofl.engine.Version;
 import nanofl.engine.movieclip.Layer;
 import nanofl.engine.movieclip.KeyFrame;
 import nanofl.ide.Globals;
+import nanofl.ide.AsyncTicker;
 import nanofl.ide.draganddrop.DragAndDrop;
 import nanofl.ide.draganddrop.IDragAndDrop;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
@@ -64,7 +64,7 @@ class Code extends wquery.Component
 	var mouseDownOnHeader : Bool;
 	var mouseDownOnFrame : JQuery;
 	
-	var playTimer : Timer;
+	var playTimer : AsyncTicker;
 	var playStartFrameIndex : Int;
 	
 	var freeze = false;
@@ -94,11 +94,15 @@ class Code extends wquery.Component
 			}
 		});
 		
-		q(js.Browser.document).on("mousedown keydown", function(_)
+		q(js.Browser.document).on("mousedown", _ ->
 		{
-			if (adapter == null) return;
-			
-			if (adapter.frameIndex != playStartFrameIndex) stop();
+			if (adapter != null && adapter.frameIndex != playStartFrameIndex) stop();
+		});
+
+		q(js.Browser.document).on("keydown", (e:JqEvent) ->
+		{
+            if (!e.ctrlKey && !e.shiftKey && !e.altKey && e.key == "Enter") return;
+			if (adapter != null && adapter.frameIndex != playStartFrameIndex) stop();
 		});
 		
 		template().framesHeader.on("mousedown", ">*", function(e) if (e.which == 1) onFrameHeaderMouseDown(e));
@@ -1213,16 +1217,21 @@ class Code extends wquery.Component
 	{
 		if (playTimer != null) { stop(); return; }
 		
-		var totalFrames = adapter.getTotalFrames();
-		
-		playTimer = new Timer(Math.round(1000 / adapter.framerate));
-		playTimer.run = () ->
-		{
-			adapter.frameIndex = adapter.frameIndex < totalFrames - 1 ? adapter.frameIndex + 1 : 0;
-			if (adapter.frameIndex == totalFrames - 1) stop();
-			ensureActiveFrameVisible();
-		};
 		playStartFrameIndex = adapter.frameIndex;
+		
+        var totalFrames = adapter.getTotalFrames();
+		
+		playTimer = new AsyncTicker(adapter.framerate, () ->
+		{
+            final nextFrameIndex = (adapter.frameIndex + 1) % totalFrames;
+
+            return adapter.setFrameIndexAndWaitStageUpdating(nextFrameIndex).then(_ ->
+			{
+                if (adapter.frameIndex == totalFrames - 1) stop();
+                ensureActiveFrameVisible();
+                return null;
+            });
+		});
 		
 		ensureActiveFrameVisible();
 	}

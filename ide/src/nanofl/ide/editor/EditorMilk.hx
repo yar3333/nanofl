@@ -25,7 +25,9 @@ class EditorMilk extends Container
     public function update()
     {
         final editPath = app.document.navigator.editPath;
-		if (lastMilkEditPath != null && ArrayTools.equ(editPath, lastMilkEditPath)) return;
+		if (lastMilkEditPath != null 
+            && ArrayTools.equ(editPath.slice(0, editPath.length - 1), lastMilkEditPath.slice(0, lastMilkEditPath.length - 1)) 
+            && editPath[editPath.length - 1].instance == lastMilkEditPath[lastMilkEditPath.length - 1].instance) return;
 		
 		lastMilkEditPath = editPath.map(x -> x.clone());
 		
@@ -41,7 +43,7 @@ class EditorMilk extends Container
             
             if (i < editPath.length - 1)
             {
-                obj.advanceTo(editPath[i].frameIndex);
+                obj.advanceTo(editPath[i].frameIndex, app.document.properties.framerate);
                 obj = cast obj.getChildByElement(editPath[i + 1].instance);
             }
             else

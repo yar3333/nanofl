@@ -8,4 +8,5 @@ extern class Code extends wquery.Component {
 	function getMousePosOnDisplayObject(e:js.JQuery.JqEvent):nanofl.engine.geom.Point;
 	function show():Void;
 	function hide():Void;
+	static var update_counter : Int;
 }

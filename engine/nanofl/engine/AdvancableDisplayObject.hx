@@ -2,9 +2,9 @@ package nanofl.engine;
 
 interface AdvancableDisplayObject
 {
-    function advanceToNextFrame(#if ide framerate:Float #end) : Void;
+    function advanceToNextFrame() : Void;
 
     #if ide
-    function advanceTo(advanceFrames:Int) : Void;
+    function advanceTo(advanceFrames:Int, framerate:Float) : Void;
     #end
 }

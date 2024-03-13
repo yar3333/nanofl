@@ -168,9 +168,8 @@ class MovieClip extends Container
 		
 		return null;
 	}
-	
     
-	public function advanceToNextFrame(#if ide framerate:Float #end) : Void
+	public function advanceToNextFrame() : Void
 	{
         final totalFrames = getTotalFrames();
     	
@@ -181,13 +180,13 @@ class MovieClip extends Container
                 : (currentFrame + 1) % totalFrames
         );
         
-        for (child in helper.keepedAdvancableChildren) child.advanceToNextFrame(#if ide framerate #end);
+        for (child in helper.keepedAdvancableChildren) child.advanceToNextFrame();
         
         for (obj in helper.createdDisplayObjects) DisplayObjectTools.callMethod(obj, "init");
 	}
     
     #if ide
-    public function advanceTo(lifetimeOnParent:Int)
+    public function advanceTo(lifetimeOnParent:Int, framerate:Float)
     {
         Debug.assert(currentFrame == 0);
         if (lifetimeOnParent == 0) return;
@@ -218,7 +217,7 @@ class MovieClip extends Container
                 if (!Std.isOfType(dispObj, AdvancableDisplayObject)) continue;
                 final track = tracker.getTrackOne(elements[j]);
                 Debug.assert(track != null);
-                (cast dispObj:AdvancableDisplayObject).advanceTo(!paused ? currentFrame - track.startFrameIndex : lifetimeOnParent);
+                (cast dispObj:AdvancableDisplayObject).advanceTo(!paused ? currentFrame - track.startFrameIndex : lifetimeOnParent, framerate);
             }
         }
     }

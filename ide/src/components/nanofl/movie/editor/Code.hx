@@ -1,5 +1,7 @@
 package components.nanofl.movie.editor;
 
+import js.lib.Promise;
+import stdlib.Timer;
 import js.JQuery;
 import js.html.CanvasElement;
 import js.html.File;
@@ -9,7 +11,7 @@ import easeljs.events.MouseEvent;
 import easeljs.geom.Rectangle;
 import easeljs.display.Shape;
 import nanofl.DisplayObjectTools;
-import easeljs.display.Stage; // use native Stage to manual mask control
+import nanofl.Stage;
 import nanofl.engine.geom.Matrix;
 import nanofl.ide.editor.EditorMilk;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
@@ -88,7 +90,8 @@ class Code extends wquery.Component
 		
 		canvas = cast template().content[0];
 		
-		stage = new Stage(canvas);
+		stage = new Stage(canvas, app.document?.properties.framerate ?? 0);
+        stage.recacheOnUpdate = false;
 		
 		stage.addChild(background = new Shape());
 		stage.addChild(sceneBox = new Shape());
@@ -301,8 +304,10 @@ class Code extends wquery.Component
 	
 	@:allow(nanofl.ide.editor.Editor.rebind)
 	@:profile
-	function rebind(isCenterView=false)
+	function rebind(isCenterView=false) : Promise<{}>
 	{
+        stage.framerate = app.document.properties.framerate;
+
 		updateBackground();
 		
 		milk.update();
@@ -334,7 +339,7 @@ class Code extends wquery.Component
 			}
 		}
 		
-		update();
+		return update();
 	}
 	
 	public function updateToolControls()
@@ -345,7 +350,7 @@ class Code extends wquery.Component
 	
 	@:allow(nanofl.ide.editor.Editor)
 	@:profile
-	function update()
+	function update() : Promise<{}>
 	{
 		#if profiler Profiler.measure("editor.Client", "updateMinors", function() { #end
 			template().content.css("cursor", app.document.editor.tool.getCursor());
@@ -382,9 +387,13 @@ class Code extends wquery.Component
 			app.document.editor.tool.draw(shapeSelections, itemSelections);
 		#if profiler }); #end
 		
-		#if profiler Profiler.measure("editor.Client", "stage.update", function() { #end
-			stage.update();
-		#if profiler }); #end
+        static var counter = 0;
+        final activeCounter = ++counter;
+        return stage.waitLoading().then(_ -> 
+        {
+            if (counter == activeCounter) stage.update();
+            return null;
+        });
 	}
 	
 	@:profile

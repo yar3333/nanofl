@@ -60,7 +60,7 @@ extern class Editor extends nanofl.ide.InjectContainer {
 	function convertToSymbol():Void;
 	function groupSelected():Void;
 	function translateVertex(point:nanofl.engine.geom.Point, dx:Float, dy:Float, ?addUndoTransaction:Bool):Void;
-	function rebind(?isCenterView:Bool):Void;
+	function rebind(?isCenterView:Bool):js.lib.Promise<{ }>;
 	function update():Void;
 	function showAllLayers():Void;
 	function hideAllLayers():Void;

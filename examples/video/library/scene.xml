@@ -1,6 +1,6 @@
 <movieclip version="2.3.0">
 	<layer name="Layer 1">
-		<frame duration="51">
+		<frame duration="127">
 			<instance libraryItem="test" x="116.46153846153857" y="73.69230769230774" />
 		</frame>
 	</layer>
