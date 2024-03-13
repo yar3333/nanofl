@@ -155,6 +155,8 @@ abstract class EditorElement implements ISelectable
 		var regPos = dispObj.localToLocal(currentElement.regX, currentElement.regY, metaDispObj);
 		regPointMark.x = regPos.x;
 		regPointMark.y = regPos.y;
+
+        DisplayObjectTools.recache(dispObj);
 	}
 	
 	public function update()
