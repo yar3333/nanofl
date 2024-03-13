@@ -1,10 +1,8 @@
 package nanofl.ide.library;
 
-import js.lib.Error;
 import js.lib.Promise;
 import js.html.CanvasElement;
 import js.html.CanvasRenderingContext2D;
-import js.html.MediaElement;
 import easeljs.display.Shape;
 import easeljs.display.Graphics;
 import nanofl.ide.library.IdeLibrary;
