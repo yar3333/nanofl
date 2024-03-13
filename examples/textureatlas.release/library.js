@@ -6,9 +6,6 @@ libraryData =
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
     "layers": [
       {
         "name": "Label",
@@ -37,9 +34,7 @@ libraryData =
                   0.544444444444447
                 ],
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               },
               {
                 "type": "instance",
@@ -48,9 +43,7 @@ libraryData =
                 "x": 334,
                 "y": 149.5,
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               }
             ]
           }
@@ -64,8 +57,6 @@ libraryData =
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
     "textureAtlas": "atlas_0",
     "layers": [
       {
@@ -101,9 +92,7 @@ libraryData =
                   0.469964664310954
                 ],
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               }
             ]
           },
@@ -125,9 +114,7 @@ libraryData =
                   0.713780918727916
                 ],
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               }
             ]
           }
@@ -141,8 +128,6 @@ libraryData =
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
     "textureAtlas": "atlas_0",
     "layers": [
       {
@@ -172,9 +157,7 @@ libraryData =
                 "x": -220.525,
                 "y": 166.5,
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               }
             ]
           },
@@ -190,9 +173,7 @@ libraryData =
                 "x": 52.475,
                 "y": -68.5,
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               }
             ]
           }
