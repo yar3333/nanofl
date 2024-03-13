@@ -1,8 +1,8 @@
 package nanofl.ide.textureatlas;
 
-@:flatEnum extern enum PackingMethod {
+extern enum PackingMethod {
 	TopLeftPacking;
+	BestAreaPacking;
 	BestShortSidePacking;
 	BestLongSidePacking;
-	BestAreaPacking;
 }

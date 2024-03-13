@@ -28,7 +28,7 @@ class VideoItem extends InstancableItem
     public var width(default, null) : Int;
     public var height(default, null) : Int;
     public var duration(default, null) : Float;
-    public var poster(default, null) : CanvasElement;
+    public var hasAudio(default, null) : Bool;
 	
 	public function new(namePath:String, ext:String)
 	{
@@ -46,7 +46,7 @@ class VideoItem extends InstancableItem
         obj.width = width;
         obj.height = height;
         obj.duration = duration;
-        obj.poster = poster;
+        obj.hasAudio = hasAudio;
 		
 		copyBaseProperties(obj);
 		
@@ -63,10 +63,7 @@ class VideoItem extends InstancableItem
             width = video.videoWidth;
             height = video.videoHeight;
             duration = video.duration;
-            poster = Browser.document.createCanvasElement();
-            poster.width = width;
-            poster.height = height;
-            poster.getContext2d().drawImage(video, 0, 0, width, height);
+            hasAudio = video.audioTracks.length > 0;
             return null; 
         });
     }

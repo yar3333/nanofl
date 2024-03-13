@@ -1,10 +1,10 @@
 package nanofl.ide.editor.transformationshapes;
 
-@:flatEnum extern enum DotType {
-	RHOMBUS_V;
-	RHOMBUS_H;
-	HALFBOX_2;
+extern enum DotType {
 	HALFBOX_1;
-	CIRCLE;
+	HALFBOX_2;
 	BOX;
+	CIRCLE;
+	RHOMBUS_H;
+	RHOMBUS_V;
 }

@@ -7335,7 +7335,7 @@ class nanofl_engine_libraryitems_VideoItem extends nanofl_engine_libraryitems_In
 		obj.width = this.width;
 		obj.height = this.height;
 		obj.duration = this.duration;
-		obj.poster = this.poster;
+		obj.hasAudio = this.hasAudio;
 		this.copyBaseProperties(obj);
 		return obj;
 	}
@@ -7346,11 +7346,7 @@ class nanofl_engine_libraryitems_VideoItem extends nanofl_engine_libraryitems_In
 			_gthis.width = video.videoWidth;
 			_gthis.height = video.videoHeight;
 			_gthis.duration = video.duration;
-			let tmp = window.document.createElement("canvas");
-			_gthis.poster = tmp;
-			_gthis.poster.width = _gthis.width;
-			_gthis.poster.height = _gthis.height;
-			_gthis.poster.getContext("2d",null).drawImage(video,0,0,_gthis.width,_gthis.height);
+			_gthis.hasAudio = video.audioTracks.length > 0;
 			return null;
 		});
 	}

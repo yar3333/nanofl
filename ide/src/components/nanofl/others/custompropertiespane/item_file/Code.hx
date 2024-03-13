@@ -32,7 +32,7 @@ class Code extends wquery.Component
 		)
         .then(r -> 
         {
-            if (r.filePaths != null && r.filePaths.length > 0)
+            if (!r.canceled && r.filePaths != null && r.filePaths.length > 0)
             {
                 template().value.val(r.filePaths[0]);
                 value_change(null);

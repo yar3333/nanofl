@@ -18,15 +18,15 @@ AudioHelper.getFFmpegArgsForMixTracks = function(tracks,startInputIndex) {
 	while(_g < tracks.length) {
 		var tracks1 = tracks[_g];
 		++_g;
-		if(tracks1.durationMs != null) {
+		if(tracks1.duration != null) {
 			if(tracks1.loop) {
 				args.push("-stream_loop");
 			}
 			args.push("-1");
-			if(tracks1.durationMs != null) {
+			if(tracks1.duration != null) {
 				args.push("-t");
 			}
-			args.push(tracks1.durationMs + "ms");
+			args.push(tracks1.duration + "");
 		}
 		args.push("-i");
 		args.push(tracks1.filePath);
@@ -36,7 +36,7 @@ AudioHelper.getFFmpegArgsForMixTracks = function(tracks,startInputIndex) {
 	var _g1 = tracks.length;
 	while(_g < _g1) {
 		var i = _g++;
-		filters.push("[" + (i + startInputIndex) + ":a]adelay=" + tracks[i].delayBeforeStartMs + ":all=1[a" + i + "]");
+		filters.push("[" + (i + startInputIndex) + ":a]adelay=" + tracks[i].delayBeforeStart + "s:all=1[a" + i + "]");
 	}
 	var _g = [];
 	var _g1 = 0;
@@ -61,7 +61,7 @@ AudioHelper.getSceneTracks = function(framerate,library) {
 	while(_g1 < _g2.length) {
 		var v = _g2[_g1];
 		++_g1;
-		if(v.sameElementSequence[0].get_type()._hx_index == 2 && v.sameElementSequence[0].get_symbol().get_type()._hx_index == 2 && AudioHelper.getMovieClipItemFromTrack(v).relatedSound != null && AudioHelper.getMovieClipItemFromTrack(v).relatedSound != "") {
+		if(v.sameElementSequence[0].get_type()._hx_index == 1 && v.sameElementSequence[0].get_symbol().get_type()._hx_index == 4 && AudioHelper.getMovieClipItemFromTrack(v).relatedSound != null && AudioHelper.getMovieClipItemFromTrack(v).relatedSound != "") {
 			_g.push(v);
 		}
 	}
@@ -80,7 +80,7 @@ AudioHelper.getSceneTracks = function(framerate,library) {
 	while(_g1 < _g2.length) {
 		var v = _g2[_g1];
 		++_g1;
-		if(v.sameElementSequence[0].get_type()._hx_index == 2 && v.sameElementSequence[0].get_symbol().get_type()._hx_index == 0) {
+		if(v.sameElementSequence[0].get_type()._hx_index == 1 && v.sameElementSequence[0].get_symbol().get_type()._hx_index == 6 && AudioHelper.getVideoItemFromTrack(v).hasAudio) {
 			_g.push(v);
 		}
 	}
@@ -95,7 +95,7 @@ AudioHelper.getSceneTracks = function(framerate,library) {
 	return r;
 };
 AudioHelper.createAudioTrack = function(item,track,framerate,library) {
-	return { delayBeforeStartMs : Math.floor(track.startFrameIndex / framerate), filePath : library.libraryDir + "/" + item.namePath + "." + item.ext, loop : item.loop, durationMs : item.loop ? Math.round(track.lifetimeFrames / framerate) : null};
+	return { delayBeforeStart : track.startFrameIndex / framerate, filePath : library.libraryDir + "/" + item.namePath + "." + item.ext, loop : item.loop, duration : item.loop ? track.lifetimeFrames / framerate : null};
 };
 AudioHelper.getMovieClipItemFromTrack = function(track) {
 	var element = track.sameElementSequence[0];

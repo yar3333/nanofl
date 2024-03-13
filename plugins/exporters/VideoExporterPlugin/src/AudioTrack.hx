@@ -1,7 +1,7 @@
 typedef AudioTrack =
 {
-    var delayBeforeStartMs : Int;
+    var delayBeforeStart : Float;
     var filePath : String;
     var loop : Bool;
-    var durationMs : Int;
+    var duration : Float;
 }

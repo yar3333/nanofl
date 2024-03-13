@@ -18,7 +18,7 @@ class VideoItem extends nanofl.engine.libraryitems.VideoItem
         obj.width = width;
         obj.height = height;
         obj.duration = duration;
-        obj.poster = poster;
+        obj.hasAudio = hasAudio;
 		
         copyBaseProperties(obj);
 		

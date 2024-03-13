@@ -138,7 +138,7 @@ class Application extends js.injecting.InjectContainer
 			
 			return popups.showOpenFile("Select NanoFL document to open", filters).then(r ->
             {
-                return r.filePaths != null && r.filePaths.length > 0 ? openDocument(r.filePaths[0]) : null;
+                return !r.canceled && r.filePaths != null && r.filePaths.length > 0 ? openDocument(r.filePaths[0]) : null;
             });
 		}
 		else
@@ -181,7 +181,7 @@ class Application extends js.injecting.InjectContainer
             .then(r ->
             {
                 // TODO: check return null
-                return r.filePaths.length > 0 ? importDocument(r.filePaths[0], plugin) : null;
+                return !r.canceled && r.filePaths != null && r.filePaths.length > 0 ? importDocument(r.filePaths[0], plugin) : null;
             });
 		}
 		else

@@ -213,10 +213,8 @@ class EditorLibrary extends InjectContainer
         return popups.showOpenFile("Select files to import into library", filters, true)
                 .then(r -> 
                 {
-                    if (r.filePaths != null)
-                    {
-                        importFilesInner(r.filePaths, folderPath);
-                    }
+                    if (r.canceled || r.filePaths == null || r.filePaths.length == 0) return null;
+                    importFilesInner(r.filePaths, folderPath);
                     return null;
                 });
     }

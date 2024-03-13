@@ -40,10 +40,10 @@ class AudioHelper
         
         for (tracks in tracks)
         {
-            if (tracks.durationMs != null)
+            if (tracks.duration != null)
             {
                 if (tracks.loop) args.push("-stream_loop"); args.push("-1");
-                if (tracks.durationMs != null) args.push("-t"); args.push(tracks.durationMs + "ms");
+                if (tracks.duration != null) args.push("-t"); args.push(tracks.duration + "");
             }
             args.push("-i"); args.push(tracks.filePath);
         }
@@ -51,7 +51,7 @@ class AudioHelper
         var filters = new Array<String>();
         for (i in 0...tracks.length)
         {
-            filters.push("[" + (i + startInputIndex) + ":a]adelay=" + tracks[i].delayBeforeStartMs + ":all=1[a" + i + "]");
+            filters.push("[" + (i + startInputIndex) + ":a]adelay=" + tracks[i].delayBeforeStart + "s:all=1[a" + i + "]");
         }
         filters.push([ for (i in 0...tracks.length) "[a" + i + "]" ].join("") + "amix=inputs=" + tracks.length + "[a]");
 
@@ -81,8 +81,7 @@ class AudioHelper
 
         final trackVideos = tracker.tracks.filter(x -> x.sameElementSequence[0].type.match(ElementType.instance)
                                               && (cast x.sameElementSequence[0] : Instance).symbol.type.match(LibraryItemType.video)
-                                              // && getVideoItemFromTrack(x) // TODO: check video has audio
-        );
+                                              && getVideoItemFromTrack(x).hasAudio);
         for (track in trackVideos)
         {
             final mcVideo = getVideoItemFromTrack(track);
@@ -95,10 +94,10 @@ class AudioHelper
     static function createAudioTrack(item:{ namePath:String, ext:String, loop:Bool }, track:ElementLifeTrack, framerate:Float, library:IdeLibrary) : AudioTrack
     {
         return {
-            delayBeforeStartMs: Math.floor(track.startFrameIndex / framerate),
+            delayBeforeStart: track.startFrameIndex / framerate,
             filePath: library.libraryDir + "/" + item.namePath + "." + item.ext,
             loop: item.loop,
-            durationMs: item.loop ? Math.round(track.lifetimeFrames / framerate) : null,
+            duration: item.loop ? track.lifetimeFrames / framerate : null,
         };
     }
 

@@ -1,6 +1,6 @@
 package nanofl.ide;
 
-@:flatEnum extern enum OpenedFileType {
+extern enum OpenedFileType {
 	DOCUMENT;
 	CODE;
 }

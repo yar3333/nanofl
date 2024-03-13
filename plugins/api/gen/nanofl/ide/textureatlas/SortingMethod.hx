@@ -1,9 +1,9 @@
 package nanofl.ide.textureatlas;
 
-@:flatEnum extern enum SortingMethod {
+extern enum SortingMethod {
 	SortByWidthDesc;
-	SortByMinSizeDesc;
-	SortByMaxSizeDesc;
 	SortByHeightDesc;
 	SortByAreaDesc;
+	SortByMinSizeDesc;
+	SortByMaxSizeDesc;
 }

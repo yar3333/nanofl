@@ -284,7 +284,7 @@ class Document extends OpenedFile
 			
             return popups.showSaveFile("Select document file name to save", filters).then(r ->
             {
-                if (StringTools.isNullOrEmpty(r.filePath)) return null;
+                if (r.canceled || StringTools.isNullOrEmpty(r.filePath)) return null;
                 
                 var path = r.filePath;
                 var ext = Path.extension(path);
@@ -428,7 +428,7 @@ class Document extends OpenedFile
             {
                 popups.showSaveFile("Select destination file name to export", fileFilters).then(r ->
                 {
-                    if (r.filePath != null)
+                    if (!r.canceled && !StringTools.isNullOrEmpty(r.filePath))
                     {
                         export(r.filePath, plugin).then((success:Bool) ->
                         {

@@ -1,8 +1,8 @@
 package nanofl.ide;
 
-@:flatEnum extern enum ActiveView {
-	TIMELINE;
-	OUTPUT;
+extern enum ActiveView {
 	LIBRARY;
 	EDITOR;
+	TIMELINE;
+	OUTPUT;
 }

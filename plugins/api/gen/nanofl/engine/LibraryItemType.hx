@@ -1,11 +1,11 @@
 package nanofl.engine;
 
-@:flatEnum extern enum LibraryItemType {
-	video;
-	sound;
-	movieclip;
-	mesh;
-	font;
-	folder;
+extern enum LibraryItemType {
 	bitmap;
+	folder;
+	font;
+	mesh;
+	movieclip;
+	sound;
+	video;
 }

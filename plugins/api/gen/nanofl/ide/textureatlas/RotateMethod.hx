@@ -1,7 +1,7 @@
 package nanofl.ide.textureatlas;
 
-@:flatEnum extern enum RotateMethod {
-	NormalRotate;
+extern enum RotateMethod {
 	NoRotation;
+	NormalRotate;
 	AggressiveRotate;
 }

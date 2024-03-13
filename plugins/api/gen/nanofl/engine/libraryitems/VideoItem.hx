@@ -8,7 +8,7 @@ extern class VideoItem extends nanofl.engine.libraryitems.InstancableItem {
 	var width(default, null) : Int;
 	var height(default, null) : Int;
 	var duration(default, null) : Float;
-	var poster(default, null) : js.html.CanvasElement;
+	var hasAudio(default, null) : Bool;
 	override function clone():nanofl.engine.libraryitems.VideoItem;
 	override function getIcon():String;
 	override function preload():js.lib.Promise<{ }>;
