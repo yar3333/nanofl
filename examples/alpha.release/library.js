@@ -6,9 +6,6 @@ libraryData =
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
     "layers": [
       {
         "name": "Layer 1",
@@ -459,14 +456,11 @@ libraryData =
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
     "layers": [
       {
         "name": "bottle",
         "type": "normal",
-        "visible": false,
+        "visible": true,
         "locked": true,
         "keyFrames": [
           {
@@ -491,8 +485,6 @@ libraryData =
                 ],
                 "regX": 55.6,
                 "regY": 117.45,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "colorEffect": {
                   "type": "alpha",
                   "value": 0.80078125
@@ -578,9 +570,7 @@ libraryData =
                 "x": 238.5,
                 "y": 194.65,
                 "regX": 18.5,
-                "regY": 15.9,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 15.9
               }
             ]
           },
@@ -599,15 +589,16 @@ libraryData =
             },
             "elements": [
               {
+                "type": "shape"
+              },
+              {
                 "type": "instance",
                 "libraryItem": "water",
                 "name": "",
                 "x": 241.5,
                 "y": 151.2,
                 "regX": 18.5,
-                "regY": 15.9,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 15.9
               }
             ]
           }
@@ -621,9 +612,6 @@ libraryData =
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
     "layers": [
       {
         "name": "Layer 1",
