@@ -7392,7 +7392,7 @@ class nanofl_engine_libraryitems_VideoItem extends nanofl_engine_libraryitems_In
 			_gthis.width = video.videoWidth;
 			_gthis.height = video.videoHeight;
 			_gthis.duration = video.duration;
-			_gthis.hasAudio = video.audioTracks.length > 0;
+			_gthis.hasAudio = video.audioTracks != null && video.audioTracks.length > 0;
 			return null;
 		});
 	}
