@@ -1,22 +1,19 @@
 package nanofl.engine.libraryitems;
 
-import js.three.renderers.WebGLRenderer;
-import js.three.objects.Group;
-import stdlib.Std;
-import js.three.addons.loaders.GLTFLoader;
-import js.three.ObjectType;
-import js.three.core.Object3D;
-import js.three.renderers.Renderer;
-import js.three.scenes.Scene;
 import js.lib.Error;
 import js.lib.Promise;
-import datatools.NullTools;
+import stdlib.Debug;
+import stdlib.Std;
+import js.three.ObjectType;
+import js.three.core.Object3D;
+import js.three.renderers.WebGLRenderer;
+import js.three.addons.loaders.GLTFLoader;
+import js.three.renderers.Renderer;
+import js.three.scenes.Scene;
 import nanofl.engine.geom.Point;
 import nanofl.engine.ITextureItem;
-import stdlib.Debug;
 using stdlib.Lambda;
 using stdlib.StringTools;
-import js.Browser.console;
 using nanofl.engine.geom.BoundsTools;
 
 #if ide

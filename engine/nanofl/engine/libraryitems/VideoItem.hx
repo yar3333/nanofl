@@ -1,7 +1,5 @@
 package nanofl.engine.libraryitems;
 
-import js.Browser;
-import js.html.CanvasElement;
 import js.lib.Error;
 import js.lib.Promise;
 import stdlib.Debug;

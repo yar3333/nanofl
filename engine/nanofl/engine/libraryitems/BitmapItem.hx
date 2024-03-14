@@ -1,13 +1,12 @@
 package nanofl.engine.libraryitems;
 
-import js.Browser;
 import js.lib.Error;
 import js.lib.Promise;
 import js.html.ImageElement;
+import stdlib.Debug;
 import nanofl.engine.ITextureItem;
 import nanofl.engine.ILibraryItem;
 import nanofl.engine.geom.Point;
-import stdlib.Debug;
 using nanofl.engine.geom.BoundsTools;
 
 #if ide
