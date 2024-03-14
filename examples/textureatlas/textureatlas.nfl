@@ -4,7 +4,7 @@
 		<param name="width" value="520" />
 		<param name="height" value="390" />
 		<param name="backgroundColor" value="#999999" />
-		<param name="framerate" value="24" />
+		<param name="framerate" value="30" />
 		<param name="scaleMode" value="noScale" />
 		<param name="clickToStart" value="false" />
 	</general>

@@ -67,7 +67,7 @@ libraryData =
         "keyFrames": [
           {
             "label": "",
-            "duration": 43,
+            "duration": 57,
             "motionTween": {
               "tweenType": "motion",
               "motionTweenEasing": 0,
@@ -79,6 +79,9 @@ libraryData =
               "motionTweenDirectionalLightRotateCountY": 0
             },
             "elements": [
+              {
+                "type": "shape"
+              },
               {
                 "type": "instance",
                 "libraryItem": "bottle",
@@ -101,6 +104,9 @@ libraryData =
             "duration": 1,
             "motionTween": null,
             "elements": [
+              {
+                "type": "shape"
+              },
               {
                 "type": "instance",
                 "libraryItem": "bottle",
@@ -138,7 +144,7 @@ libraryData =
         "keyFrames": [
           {
             "label": "",
-            "duration": 49,
+            "duration": 63,
             "motionTween": {
               "tweenType": "motion",
               "motionTweenEasing": 0,
@@ -150,6 +156,9 @@ libraryData =
               "motionTweenDirectionalLightRotateCountY": 0
             },
             "elements": [
+              {
+                "type": "shape"
+              },
               {
                 "type": "instance",
                 "libraryItem": "letter",

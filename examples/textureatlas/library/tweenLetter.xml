@@ -1,6 +1,6 @@
 <movieclip version="2.3.0" textureAtlas="atlas_0">
 	<layer name="Layer 0">
-		<frame duration="49" tweenType="motion">
+		<frame duration="63" tweenType="motion">
 			<instance libraryItem="letter" x="-220.525" y="166.5" />
 		</frame>
 		<frame>
