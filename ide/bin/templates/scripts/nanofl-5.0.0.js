@@ -1908,7 +1908,7 @@ class nanofl_DisplayObjectTools {
 		if(((obj) instanceof nanofl_TextField)) {
 			s += " '" + StringTools.replace(StringTools.replace(obj.text,"\r"," "),"\n"," ") + "'";
 		}
-		console.log("engine/nanofl/DisplayObjectTools.hx:209:",s);
+		console.log("engine/nanofl/DisplayObjectTools.hx:215:",s);
 		if(((obj) instanceof createjs.Container) && !((obj) instanceof nanofl_SolidContainer)) {
 			let _g = 0;
 			let _g1 = obj.children;
@@ -1975,17 +1975,26 @@ class nanofl_DisplayObjectTools {
 		}
 		return true;
 	}
-	static cache(dispObj,bounds) {
-		if(bounds == null) {
-			bounds = nanofl_DisplayObjectTools.getInnerBounds(dispObj);
+	static cache(dispObj) {
+		let bounds = nanofl_DisplayObjectTools.getInnerBounds(dispObj);
+		if(bounds == null || bounds.width <= 0 || bounds.height <= 0) {
+			return;
 		}
-		if(bounds != null && bounds.width > 0 && bounds.height > 0) {
-			let fixedX = Math.floor(bounds.x) - 1;
-			let fixedY = Math.floor(bounds.y) - 1;
-			let fixedW = Math.ceil(bounds.x - fixedX + bounds.width) + 2;
-			let fixedH = Math.ceil(bounds.y - fixedY + bounds.height) + 2;
-			dispObj.cache(fixedX,fixedY,fixedW,fixedH);
+		let fixedX = Math.floor(bounds.x) - 1;
+		let fixedY = Math.floor(bounds.y) - 1;
+		let fixedW = Math.ceil(bounds.x - fixedX + bounds.width) + 2;
+		let fixedH = Math.ceil(bounds.y - fixedY + bounds.height) + 2;
+		dispObj.cache(fixedX,fixedY,fixedW,fixedH);
+	}
+	static getRectangleForCaching(bounds) {
+		if(bounds == null || bounds.width <= 0 || bounds.height <= 0) {
+			return null;
 		}
+		let fixedX = Math.floor(bounds.x) - 1;
+		let fixedY = Math.floor(bounds.y) - 1;
+		let fixedW = Math.ceil(bounds.x - fixedX + bounds.width) + 2;
+		let fixedH = Math.ceil(bounds.y - fixedY + bounds.height) + 2;
+		return new createjs.Rectangle(fixedX,fixedY,fixedW,fixedH);
 	}
 	static isNeedCache(dispObj) {
 		if(dispObj.alpha == 1) {
@@ -3825,6 +3834,14 @@ class nanofl_engine_Loader {
 }
 nanofl_engine_Loader.__name__ = "nanofl.engine.Loader";
 class nanofl_engine_MaskTools {
+	static getOnePixTransarentCanvas() {
+		if(nanofl_engine_MaskTools.onePixTransarentCanvas == null) {
+			nanofl_engine_MaskTools.onePixTransarentCanvas = window.document.createElement("canvas");
+			nanofl_engine_MaskTools.onePixTransarentCanvas.width = 1;
+			nanofl_engine_MaskTools.onePixTransarentCanvas.height = 1;
+		}
+		return nanofl_engine_MaskTools.onePixTransarentCanvas;
+	}
 	static createMaskFromMovieClipLayer(mc,layerIndex) {
 		let mask = new createjs.Container();
 		let _g = 0;
@@ -3848,20 +3865,20 @@ class nanofl_engine_MaskTools {
 		maskContainer.addChild(mask);
 		let maskContainerBounds = nanofl_DisplayObjectTools.getOuterBounds(maskContainer);
 		if(maskContainerBounds == null || maskContainerBounds.width == 0 || maskContainerBounds.height == 0) {
-			obj.visible = false;
+			obj.cache(0,0,1,1);
+			obj.cacheCanvas = nanofl_engine_MaskTools.getOnePixTransarentCanvas();
 			return;
 		}
 		let intersection = maskContainerBounds.intersection(objBounds);
 		if(intersection == null || intersection.width == 0 || intersection.height == 0) {
-			obj.visible = false;
+			obj.cache(0,0,1,1);
+			obj.cacheCanvas = nanofl_engine_MaskTools.getOnePixTransarentCanvas();
 			return;
 		}
-		obj.visible = true;
-		let union = objBounds.union(intersection);
-		nanofl_DisplayObjectTools.cache(maskContainer,union);
-		let objBounds2 = nanofl_DisplayObjectTools.getOuterBounds(obj,true);
-		nanofl_DisplayObjectTools.cache(obj,objBounds2);
-		new createjs.AlphaMaskFilter(maskContainer.cacheCanvas).applyFilter(obj.cacheCanvas.getContext("2d",null),0,0,Math.ceil(objBounds.width),Math.ceil(objBounds.height));
+		let cacheBounds = nanofl_DisplayObjectTools.getRectangleForCaching(intersection);
+		maskContainer.cache(cacheBounds.x,cacheBounds.y,cacheBounds.width,cacheBounds.height,2);
+		obj.cache(cacheBounds.x,cacheBounds.y,cacheBounds.width,cacheBounds.height,2);
+		new createjs.AlphaMaskFilter(maskContainer.cacheCanvas).applyFilter(obj.cacheCanvas.getContext("2d",null),0,0,maskContainer.cacheCanvas.width,maskContainer.cacheCanvas.height);
 	}
 }
 nanofl_engine_MaskTools.__name__ = "nanofl.engine.MaskTools";

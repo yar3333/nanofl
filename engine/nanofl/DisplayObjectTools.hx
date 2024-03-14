@@ -14,6 +14,9 @@ class DisplayObjectTools
 {
 	public static var autoHitArea = #if ide true #else false #end;
 	
+    /**
+        Detect bounds include filters.
+    **/
 	public static function getOuterBounds(obj:DisplayObject, ignoreSelf=false) : Rectangle
 	{
 		var r : Rectangle = null;
@@ -48,6 +51,9 @@ class DisplayObjectTools
 		return r;
 	}
 	
+    /**
+        Detect bounds not include filters.
+    **/
 	public static function getInnerBounds(obj:DisplayObject) : Rectangle
 	{
 		var r : Rectangle = null;
@@ -267,18 +273,29 @@ class DisplayObjectTools
         return true;
     } 
 
-    public static function cache(dispObj:DisplayObject, ?bounds:Rectangle)
+    public static function cache(dispObj:DisplayObject)
     {
-        if (bounds == null) bounds = DisplayObjectTools.getInnerBounds(dispObj);
+        final bounds = DisplayObjectTools.getInnerBounds(dispObj);
+        if (bounds == null || bounds.width <= 0 || bounds.height <= 0) return;
         
-        if (bounds != null && bounds.width > 0 && bounds.height > 0)
-        {
-            final fixedX = Math.floor(bounds.x) - 1;
-            final fixedY = Math.floor(bounds.y) - 1;
-            final fixedW = Math.ceil(bounds.x - fixedX + bounds.width)  + 2;
-            final fixedH = Math.ceil(bounds.y - fixedY + bounds.height) + 2;
-            dispObj.cache(fixedX, fixedY, fixedW, fixedH);
-        }
+        final fixedX = Math.floor(bounds.x) - 1;
+        final fixedY = Math.floor(bounds.y) - 1;
+        final fixedW = Math.ceil(bounds.x - fixedX + bounds.width)  + 2;
+        final fixedH = Math.ceil(bounds.y - fixedY + bounds.height) + 2;
+        
+        dispObj.cache(fixedX, fixedY, fixedW, fixedH);
+    }
+
+    public static function getRectangleForCaching(bounds:Rectangle) : Rectangle
+    {
+        if (bounds == null || bounds.width <= 0 || bounds.height <= 0) return null;
+        
+        final fixedX = Math.floor(bounds.x) - 1;
+        final fixedY = Math.floor(bounds.y) - 1;
+        final fixedW = Math.ceil(bounds.x - fixedX + bounds.width)  + 2;
+        final fixedH = Math.ceil(bounds.y - fixedY + bounds.height) + 2;
+
+        return new Rectangle(fixedX, fixedY, fixedW, fixedH);
     }
 
     static function isNeedCache(dispObj:DisplayObject) : Bool
