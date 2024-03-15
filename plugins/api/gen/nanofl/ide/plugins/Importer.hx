@@ -5,5 +5,5 @@ extern class Importer {
 	var pluginName(default, null) : String;
 	var params(default, null) : Dynamic;
 	function run(srcFilePath:String, destFilePath:String, documentProperties:nanofl.ide.DocumentProperties, library:nanofl.ide.library.IdeLibrary):js.lib.Promise<Bool>;
-	function getPublishPath(originalPath:String):String;
+	function getPublishDirectoryBasePath(originalPath:String):String;
 }

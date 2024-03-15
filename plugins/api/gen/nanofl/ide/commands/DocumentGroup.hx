@@ -2,7 +2,7 @@ package nanofl.ide.commands;
 
 extern class DocumentGroup extends nanofl.ide.commands.BaseGroup {
 	function new():Void;
-	function createNewEmpty():Void;
+	function createNewEmpty(?width:Int, ?height:Int, ?framerate:Float):Void;
 	function open(path:String):Void;
 	function save():Void;
 	function saveAs():Void;

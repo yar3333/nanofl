@@ -494,7 +494,7 @@ SvgImporterPlugin.prototype = {
 		}
 		return Promise.resolve(true);
 	}
-	,getPublishPath: function(originalPath) {
+	,getPublishDirectoryBasePath: function(originalPath) {
 		return haxe_io_Path.withoutExtension(originalPath);
 	}
 	,__class__: SvgImporterPlugin

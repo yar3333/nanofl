@@ -2545,13 +2545,82 @@ nanofl_ide_sys_node_NodeProcessManager.prototype = {
 			var i = _g++;
 			result[i] = "\n\t" + args[i];
 		}
-		nanofl_ide_sys_node_NodeProcessManager.log(tmp + result.join(""),{ fileName : "src/nanofl/ide/sys/node/NodeProcessManager.hx", lineNumber : 43, className : "nanofl.ide.sys.node.NodeProcessManager", methodName : "runCaptured"});
+		nanofl_ide_sys_node_NodeProcessManager.log(tmp + result.join(""),{ fileName : "src/nanofl/ide/sys/node/NodeProcessManager.hx", lineNumber : 47, className : "nanofl.ide.sys.node.NodeProcessManager", methodName : "runCaptured"});
 		var result = window.electronApi.child_process.spawnSync(filePath,args,options);
-		nanofl_ide_sys_node_NodeProcessManager.log(result,{ fileName : "src/nanofl/ide/sys/node/NodeProcessManager.hx", lineNumber : 46, className : "nanofl.ide.sys.node.NodeProcessManager", methodName : "runCaptured"});
-		return { exitCode : result.status, output : result.stdout.toString(), error : result.stderr.toString()};
+		nanofl_ide_sys_node_NodeProcessManager.log(result,{ fileName : "src/nanofl/ide/sys/node/NodeProcessManager.hx", lineNumber : 50, className : "nanofl.ide.sys.node.NodeProcessManager", methodName : "runCaptured"});
+		return { code : result.status, out : result.stdout.toString(), err : result.stderr.toString()};
 	}
 	,runPipedStdIn: function(filePath,args,directory,env,getDataForStdIn) {
 		return window.electronApi.process_utils.runPipedStdIn(filePath,args,directory,env,getDataForStdIn);
+	}
+	,runPipedStdOut: function(filePath,args,directory,env,input,chunkSize,processChunk) {
+		var options = { };
+		if(directory != null) {
+			options.cwd = directory;
+		}
+		if(env != null) {
+			options.env = env;
+		}
+		var tmp = "ChildProcess.spawn " + filePath + (directory != null ? " in dir '" + directory + "'" : "");
+		var result = new Array(args.length);
+		var _g = 0;
+		var _g1 = args.length;
+		while(_g < _g1) {
+			var i = _g++;
+			result[i] = "\n\t" + args[i];
+		}
+		nanofl_ide_sys_node_NodeProcessManager.log(tmp + result.join(""),{ fileName : "src/nanofl/ide/sys/node/NodeProcessManager.hx", lineNumber : 71, className : "nanofl.ide.sys.node.NodeProcessManager", methodName : "runPipedStdOut"});
+		var $process = window.electronApi.child_process.spawn(filePath,args,options);
+		var buffer = chunkSize >= 0 ? new Uint8Array(chunkSize) : null;
+		var pBuffer = 0;
+		return new Promise(function(resolve,reject) {
+			var errStr = "";
+			if($process.stdout == null) {
+				reject("process.stdout is null");
+				return;
+			}
+			if($process.stderr == null) {
+				reject("process.stderr is null");
+				return;
+			}
+			$process.stdout.on("data",function(data) {
+				if(buffer == null) {
+					processChunk(data);
+					return;
+				}
+				stdlib_Debug.assert(data.byteOffset == 0,null,{ fileName : "src/nanofl/ide/sys/node/NodeProcessManager.hx", lineNumber : 88, className : "nanofl.ide.sys.node.NodeProcessManager", methodName : "runPipedStdOut"});
+				var pData = 0;
+				while(pData < data.byteLength) {
+					var a = data.byteLength - pData;
+					var b = buffer.byteLength - pBuffer;
+					var bytesToCopy = a < b ? a : b;
+					data.copy(buffer,pBuffer,pData,pData + bytesToCopy);
+					pBuffer += bytesToCopy;
+					pData += bytesToCopy;
+					if(pBuffer == buffer.byteLength) {
+						processChunk(buffer);
+						pBuffer = 0;
+					}
+				}
+			});
+			$process.stderr.on("data",function(data) {
+				errStr += data.toString();
+				return errStr;
+			});
+			$process.on("close",function(code) {
+				resolve({ code : code, out : "", err : errStr});
+			});
+			$process.on("error",function(code) {
+				reject({ code : code, out : "", err : errStr});
+			});
+			if($process.stdin == null) {
+				reject("process.stdin is null");
+				return;
+			}
+			if(input != null) {
+				$process.stdin.write(input);
+			}
+		});
 	}
 	,__class__: nanofl_ide_sys_node_NodeProcessManager
 };
@@ -2622,10 +2691,10 @@ nanofl_ide_sys_node_NodeVideoUtils.__name__ = "nanofl.ide.sys.node.NodeVideoUtil
 nanofl_ide_sys_node_NodeVideoUtils.prototype = {
 	getFileInfo: function(filePath) {
 		var r = this.processManager.runCaptured(this.folders.get_tools() + "/ffprobe.exe",["-v","quiet","-print_format","json","-show_format","-show_streams",filePath]);
-		if(r.exitCode != 0) {
+		if(r.code != 0) {
 			return null;
 		}
-		var info = JSON.parse(r.output);
+		var info = JSON.parse(r.out);
 		var tmp = parseFloat(info.format.duration) * 1000;
 		var _this = info.streams;
 		var result = new Array(_this.length);
@@ -3035,7 +3104,7 @@ nanofl_ide_sys_Folders.__rtti = "<class path=\"nanofl.ide.sys.Folders\" params=\
 nanofl_ide_sys_Fonts.__rtti = "<class path=\"nanofl.ide.sys.Fonts\" params=\"\" interface=\"1\">\n\t<getFontNames public=\"1\" set=\"method\"><f a=\"\"><c path=\"Array\"><c path=\"String\"/></c></f></getFontNames>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":expose\"><e>\"Fonts\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
 nanofl_ide_sys_HttpUtils.__rtti = "<class path=\"nanofl.ide.sys.HttpUtils\" params=\"\" interface=\"1\">\n\t<requestGet public=\"1\" set=\"method\"><f a=\"url:?headers\">\n\t<c path=\"String\"/>\n\t<c path=\"Array\"><a>\n\t<value><c path=\"String\"/></value>\n\t<name><c path=\"String\"/></name>\n</a></c>\n\t<c path=\"js.lib.Promise\"><t path=\"nanofl.ide.sys.HttpRequestResult\"/></c>\n</f></requestGet>\n\t<requestPost public=\"1\" set=\"method\"><f a=\"url:?headers:?fields:?files\">\n\t<c path=\"String\"/>\n\t<c path=\"Array\"><a>\n\t<value><c path=\"String\"/></value>\n\t<name><c path=\"String\"/></name>\n</a></c>\n\t<c path=\"Array\"><a>\n\t<value><c path=\"String\"/></value>\n\t<name><c path=\"String\"/></name>\n</a></c>\n\t<c path=\"Array\"><a>\n\t<path><c path=\"String\"/></path>\n\t<name><c path=\"String\"/></name>\n</a></c>\n\t<c path=\"js.lib.Promise\"><t path=\"nanofl.ide.sys.HttpRequestResult\"/></c>\n</f></requestPost>\n\t<downloadFile public=\"1\" set=\"method\"><f a=\"url:destFilePath:?progress\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n\t<f a=\"\">\n\t\t<x path=\"Float\"/>\n\t\t<x path=\"Void\"/>\n\t</f>\n\t<c path=\"js.lib.Promise\"><x path=\"Bool\"/></c>\n</f></downloadFile>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":expose\"><e>\"HttpUtils\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
 nanofl_ide_sys_MainProcess.__rtti = "<class path=\"nanofl.ide.sys.MainProcess\" params=\"\" interface=\"1\">\n\t<getCommandLineArgs public=\"1\" set=\"method\"><f a=\"\"><c path=\"Array\"><c path=\"String\"/></c></f></getCommandLineArgs>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":expose\"><e>\"MainProcess\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
-nanofl_ide_sys_ProcessManager.__rtti = "<class path=\"nanofl.ide.sys.ProcessManager\" params=\"\" interface=\"1\">\n\t<run public=\"1\" set=\"method\"><f a=\"filePath:args:blocking:?directory:?env\">\n\t<c path=\"String\"/>\n\t<c path=\"Array\"><c path=\"String\"/></c>\n\t<x path=\"Bool\"/>\n\t<c path=\"String\"/>\n\t<d><c path=\"String\"/></d>\n\t<x path=\"Int\"/>\n</f></run>\n\t<runCaptured public=\"1\" set=\"method\"><f a=\"filePath:args:?directory:?env:?input\">\n\t<c path=\"String\"/>\n\t<c path=\"Array\"><c path=\"String\"/></c>\n\t<c path=\"String\"/>\n\t<d><c path=\"String\"/></d>\n\t<c path=\"String\"/>\n\t<a>\n\t\t<output><c path=\"String\"/></output>\n\t\t<exitCode><x path=\"Int\"/></exitCode>\n\t\t<error><c path=\"String\"/></error>\n\t</a>\n</f></runCaptured>\n\t<runPipedStdIn public=\"1\" set=\"method\"><f a=\"filePath:args:directory:env:getDataForStdIn\">\n\t<c path=\"String\"/>\n\t<c path=\"Array\"><c path=\"String\"/></c>\n\t<c path=\"String\"/>\n\t<d><c path=\"String\"/></d>\n\t<f a=\"\"><c path=\"js.lib.Promise\"><c path=\"js.lib.ArrayBuffer\"/></c></f>\n\t<c path=\"js.lib.Promise\"><t path=\"nanofl.ide.sys.ProcessResult\"/></c>\n</f></runPipedStdIn>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":expose\"><e>\"ProcessManager\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
+nanofl_ide_sys_ProcessManager.__rtti = "<class path=\"nanofl.ide.sys.ProcessManager\" params=\"\" interface=\"1\">\n\t<run public=\"1\" set=\"method\"><f a=\"filePath:args:blocking:?directory:?env\">\n\t<c path=\"String\"/>\n\t<c path=\"Array\"><c path=\"String\"/></c>\n\t<x path=\"Bool\"/>\n\t<c path=\"String\"/>\n\t<d><c path=\"String\"/></d>\n\t<x path=\"Int\"/>\n</f></run>\n\t<runCaptured public=\"1\" set=\"method\"><f a=\"filePath:args:?directory:?env:?input\">\n\t<c path=\"String\"/>\n\t<c path=\"Array\"><c path=\"String\"/></c>\n\t<c path=\"String\"/>\n\t<d><c path=\"String\"/></d>\n\t<c path=\"String\"/>\n\t<t path=\"nanofl.ide.sys.ProcessResult\"/>\n</f></runCaptured>\n\t<runPipedStdIn public=\"1\" set=\"method\"><f a=\"filePath:args:directory:env:getDataForStdIn\">\n\t<c path=\"String\"/>\n\t<c path=\"Array\"><c path=\"String\"/></c>\n\t<c path=\"String\"/>\n\t<d><c path=\"String\"/></d>\n\t<f a=\"\"><c path=\"js.lib.Promise\"><c path=\"js.lib.ArrayBuffer\"/></c></f>\n\t<c path=\"js.lib.Promise\"><t path=\"nanofl.ide.sys.ProcessResult\"/></c>\n</f></runPipedStdIn>\n\t<runPipedStdOut public=\"1\" set=\"method\"><f a=\"filePath:args:directory:env:input:chunkSize:processChunk\">\n\t<c path=\"String\"/>\n\t<c path=\"Array\"><c path=\"String\"/></c>\n\t<c path=\"String\"/>\n\t<d><c path=\"String\"/></d>\n\t<c path=\"String\"/>\n\t<x path=\"Int\"/>\n\t<f a=\"\">\n\t\t<c path=\"js.lib.Uint8Array\"/>\n\t\t<x path=\"Void\"/>\n\t</f>\n\t<c path=\"js.lib.Promise\"><t path=\"nanofl.ide.sys.ProcessResult\"/></c>\n</f></runPipedStdOut>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":expose\"><e>\"ProcessManager\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
 nanofl_ide_sys_Shell.__rtti = "<class path=\"nanofl.ide.sys.Shell\" params=\"\" interface=\"1\">\n\t<openInExternalBrowser public=\"1\" set=\"method\"><f a=\"url\">\n\t<c path=\"String\"/>\n\t<x path=\"Void\"/>\n</f></openInExternalBrowser>\n\t<runWithEditor public=\"1\" set=\"method\"><f a=\"document\">\n\t<c path=\"String\"/>\n\t<x path=\"Bool\"/>\n</f></runWithEditor>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":expose\"><e>\"Shell\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
 nanofl_ide_sys_Uploader.__rtti = "<class path=\"nanofl.ide.sys.Uploader\" params=\"\">\n\t<log set=\"method\" line=\"52\" static=\"1\"><f a=\"v:?infos\">\n\t<d/>\n\t<x path=\"Null\"><t path=\"haxe.PosInfos\"/></x>\n\t<x path=\"Void\"/>\n</f></log>\n\t<fileSystem><c path=\"nanofl.ide.sys.FileSystem\"/></fileSystem>\n\t<saveUploadedFiles public=\"1\" set=\"method\" line=\"19\"><f a=\"files:destDir\">\n\t<c path=\"Array\"><c path=\"js.html.File\"/></c>\n\t<c path=\"String\"/>\n\t<c path=\"js.lib.Promise\"><a/></c>\n</f></saveUploadedFiles>\n\t<new public=\"1\" set=\"method\" line=\"14\"><f a=\"fileSystem\">\n\t<c path=\"nanofl.ide.sys.FileSystem\"/>\n\t<x path=\"Void\"/>\n</f></new>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":expose\"><e>\"Uploader\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
 nanofl_ide_sys_VideoUtils.__rtti = "<class path=\"nanofl.ide.sys.VideoUtils\" params=\"\" interface=\"1\">\n\t<getFileInfo public=\"1\" set=\"method\"><f a=\"filePath\">\n\t<c path=\"String\"/>\n\t<t path=\"nanofl.ide.sys.VideoFileInfo\"/>\n</f></getFileInfo>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":expose\"><e>\"VideoUtils\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";

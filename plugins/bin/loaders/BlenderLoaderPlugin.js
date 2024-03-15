@@ -50,11 +50,11 @@ BlenderLoaderPlugin.prototype = {
 		if(!this.api.fileSystem.exists(destFilePath) || this.api.fileSystem.getLastModified(destFilePath).getTime() < this.api.fileSystem.getLastModified(blendFilePath).getTime()) {
 			var script = "import bpy; bpy.ops.export_scene.gltf(filepath='" + destFilePath + "', export_format='GLTF_EMBEDDED')";
 			var result = this.api.processManager.runCaptured(this.blenderExePath,["-b",blendFilePath,"--python-expr",script]);
-			if(result.exitCode == 0 && this.api.fileSystem.exists(destFilePath)) {
+			if(result.code == 0 && this.api.fileSystem.exists(destFilePath)) {
 				var value = new nanofl.ide.filesystem.CachedFile(baseDir,relDestFilePath);
 				files.h[relDestFilePath] = value;
 			} else {
-				nanofl.engine.Debug.console.error("Error [" + result.exitCode + "] while conversion '" + file.relativePath + "' to '" + relDestFilePath + "':\n" + StringTools.replace(result.output,"\r\n","\n") + (result.output != "" ? "\n" : "") + StringTools.replace(result.error,"\r\n","\n"));
+				nanofl.engine.Debug.console.error("Error [" + result.code + "] while conversion '" + file.relativePath + "' to '" + relDestFilePath + "':\n" + StringTools.replace(result.out,"\r\n","\n") + StringTools.replace(result.err,"\r\n","\n"));
 			}
 		}
 		var key = file.relativePath;

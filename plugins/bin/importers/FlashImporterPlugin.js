@@ -138,7 +138,7 @@ FlashImporterPlugin.prototype = {
 			return flashimport_DocumentImporter.process(api,FlashImporterPlugin.IMPORT_MEDIA_SCRIPT_TEMPLATE,args.srcFilePath,args.destFilePath,args.documentProperties,args.library,args.params.importMedia);
 		}
 	}
-	,getPublishPath: function(originalPath) {
+	,getPublishDirectoryBasePath: function(originalPath) {
 		switch(haxe_io_Path.extension(originalPath)) {
 		case "fla":
 			return haxe_io_Path.join([haxe_io_Path.directory(originalPath),haxe_io_Path.withoutDirectory(haxe_io_Path.withoutExtension(originalPath))]);

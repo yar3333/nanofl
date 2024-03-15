@@ -43,5 +43,11 @@ interface IImporterPlugin {
 			 
 	**/
 	function importDocument(api:nanofl.ide.plugins.PluginApi, args:nanofl.ide.plugins.ImporterArgs):js.lib.Promise<Bool>;
-	function getPublishPath(originalPath:String):String;
+	/**
+		
+		        Used to detect output path on document publish.
+		        Must return path to destination directory without ".release" suffix.
+		    
+	**/
+	function getPublishDirectoryBasePath(originalPath:String):String;
 }

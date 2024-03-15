@@ -1,5 +1,6 @@
 package nanofl.ide.sys.node;
 
+import stdlib.Std;
 import stdlib.Debug;
 import js.lib.Uint8Array;
 import js.node.Buffer;
@@ -71,11 +72,10 @@ class NodeProcessManager implements nanofl.ide.sys.ProcessManager
 		final process = ElectronApi.child_process.spawn(filePath, args, options);
 
         final buffer = chunkSize >= 0 ? new Uint8Array(chunkSize) : null;
-        var bufferFilled = 0;
+        var pBuffer = 0;
 		
         return new Promise<ProcessResult>((resolve, reject) ->
         {
-            var outStr = "";
             var errStr = "";
 
             if (process.stdout == null) { reject("process.stdout is null"); return; }
@@ -85,21 +85,21 @@ class NodeProcessManager implements nanofl.ide.sys.ProcessManager
             {
                 if (buffer == null) { processChunk(data); return; }
 
-                if (data.byteLength >= chunkSize - bufferFilled)
-                {
-                    Debug.assert(data.byteOffset == 0);
+                Debug.assert(data.byteOffset == 0);
 
-                    final bytesToCopy = chunkSize - bufferFilled;
-                    data.copy(buffer, bufferFilled, 0, bytesToCopy);
-                    processChunk(buffer);
-                    data.copy(buffer, 0, bytesToCopy, data.byteLength); // TODO: (data.byteLength - bytesToCopy) can be greater than buffer.size
-                    bufferFilled = data.byteLength - bytesToCopy;
-                }
-                else
+                var pData = 0;
+                while (pData < data.byteLength)
                 {
+                    final bytesToCopy = Std.min(data.byteLength - pData, buffer.byteLength - pBuffer);
+                    data.copy(buffer, pBuffer, pData, pData + bytesToCopy);
+                    pBuffer += bytesToCopy;
+                    pData += bytesToCopy;
+                    if (pBuffer == buffer.byteLength)
+                    {
+                        processChunk(buffer);
+                        pBuffer = 0;
+                    }
                 }
-
-                outStr += data.toString();
             });
                 
             process.stderr.on('data', (data:Buffer) ->
@@ -109,12 +109,12 @@ class NodeProcessManager implements nanofl.ide.sys.ProcessManager
                 
             process.on('close', code ->
             {
-                resolve({ code:code, out:outStr, err:errStr });
+                resolve({ code:code, out:"", err:errStr });
             });         
             
             process.on('error', code ->
             {
-                reject({ code:code, out:outStr, err:errStr });
+                reject({ code:code, out:"", err:errStr });
             });
 
             if (process.stdin == null) { reject("process.stdin is null"); return; }
