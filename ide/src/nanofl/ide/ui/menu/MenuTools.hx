@@ -1,19 +1,17 @@
 package nanofl.ide.ui.menu;
 
-import haxe.Serializer;
-import haxe.Unserializer;
+import haxe.Json;
 import htmlparser.XmlBuilder;
 import js.JQuery;
-import nanofl.engine.libraryitems.FolderItem;
 import nanofl.ide.Application;
 import nanofl.ide.Clipboard;
-import nanofl.ide.Document;
 import nanofl.ide.OpenedFiles;
 import nanofl.ide.commands.Commands;
 import nanofl.ide.keyboard.Keyboard;
 import nanofl.ide.preferences.Preferences;
 import stdlib.Std;
 using stdlib.Lambda;
+using StringTools;
 
 class MenuTools
 {
@@ -81,7 +79,7 @@ class MenuTools
 							else
 							{
 								if (item.command != null) out.attr("data-command", item.command);
-								if (item.params != null) out.attr("data-params", Serializer.run(item.params));
+								if (item.params != null) out.attr("data-params", StringTools.htmlEscape(Json.stringify(item.params), true));
 							}
 							IconTools.write(item.icon, out);
 							out.content(item.name);
@@ -181,8 +179,7 @@ class MenuTools
 		var command = a.attr("data-command");
 		if (command != null && command != "")
 		{
-			var rawParams = a.attr("data-params");
-			commands.run(command, rawParams != null && rawParams != "" ? Unserializer.run(rawParams) : []);
+			commands.run(command, parseParams(a.attr("data-params")));
 		}
 	}
 	
@@ -209,4 +206,19 @@ class MenuTools
 		
 		return r;
 	}
+
+    static function parseParams(rawParams:String) : Array<Dynamic>
+    {
+        if (rawParams == null) return [];
+        rawParams = rawParams.trim();
+        if (rawParams == "") return [];
+        rawParams = StringTools.htmlUnescape(rawParams);
+        final r = Json.parse(rawParams);
+        if (!Std.isOfType(r, Array))
+        {
+            js.Browser.console.warn("MenuTools: menu item params must be array in json format (found: " + rawParams + ").");
+            return [];
+        }
+        return r;
+    }
 }

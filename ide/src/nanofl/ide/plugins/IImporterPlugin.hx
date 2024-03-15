@@ -44,5 +44,9 @@ interface IImporterPlugin
 	 */
 	function importDocument(api:PluginApi, args:ImporterArgs) : Promise<Bool>;
 	
-	function getPublishPath(originalPath:String) : String;
+    /**
+        Used to detect output path on document publish.
+        Must return path to destination directory without ".release" suffix.
+    **/
+	function getPublishDirectoryBasePath(originalPath:String) : String;
 }

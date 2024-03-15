@@ -1,5 +1,8 @@
 package nanofl.ide.sys.node;
 
+import stdlib.Debug;
+import js.lib.Uint8Array;
+import js.node.Buffer;
 import js.lib.ArrayBuffer;
 import js.lib.Promise;
 import js.node.ChildProcess;
@@ -33,7 +36,7 @@ class NodeProcessManager implements nanofl.ide.sys.ProcessManager
 		}
 	}
 	
-	public function runCaptured(filePath:String, args:Array<String>, ?directory:String, ?env:Dynamic<String>, ?input:String) : { exitCode:Int, output:String, error:String }
+	public function runCaptured(filePath:String, args:Array<String>, ?directory:String, ?env:Dynamic<String>, ?input:String) : ProcessResult
 	{
 		var options : ChildProcessSpawnSyncOptions = {};
 		if (directory != null) options.cwd = directory;
@@ -47,15 +50,77 @@ class NodeProcessManager implements nanofl.ide.sys.ProcessManager
 		
 		return
 		{
-			exitCode: result.status, 
-			output: (cast result.stdout : NodeBuffer).toString(),
-			error: (cast result.stderr : NodeBuffer).toString()
+			code: result.status, 
+			out: (cast result.stdout : NodeBuffer).toString(),
+			err: (cast result.stderr : NodeBuffer).toString()
 		};
 	}
 
     public function runPipedStdIn(filePath:String, args:Array<String>, directory:String, env:Dynamic<String>, getDataForStdIn:()->Promise<ArrayBuffer>) : Promise<ProcessResult>
     {
         return ElectronApi.process_utils.runPipedStdIn(filePath, args, directory, env, getDataForStdIn);
+    }
+
+    public function runPipedStdOut(filePath:String, args:Array<String>, directory:String, env:Dynamic<String>, input:String, chunkSize:Int, processChunk:Uint8Array->Void) : Promise<ProcessResult>
+    {
+		var options : ChildProcessSpawnOptions = {};
+		if (directory != null) options.cwd = directory;
+		if (env != null) options.env = env;
+		
+		log("ChildProcess.spawn " + filePath + (directory != null ? " in dir '" + directory + "'" : "")  + args.map(s -> "\n\t" + s).join(""));
+		final process = ElectronApi.child_process.spawn(filePath, args, options);
+
+        final buffer = chunkSize >= 0 ? new Uint8Array(chunkSize) : null;
+        var bufferFilled = 0;
+		
+        return new Promise<ProcessResult>((resolve, reject) ->
+        {
+            var outStr = "";
+            var errStr = "";
+
+            if (process.stdout == null) { reject("process.stdout is null"); return; }
+            if (process.stderr == null) { reject("process.stderr is null"); return; }
+    
+            process.stdout.on('data', (data:Buffer) ->
+            {
+                if (buffer == null) { processChunk(data); return; }
+
+                if (data.byteLength >= chunkSize - bufferFilled)
+                {
+                    Debug.assert(data.byteOffset == 0);
+
+                    final bytesToCopy = chunkSize - bufferFilled;
+                    data.copy(buffer, bufferFilled, 0, bytesToCopy);
+                    processChunk(buffer);
+                    data.copy(buffer, 0, bytesToCopy, data.byteLength); // TODO: (data.byteLength - bytesToCopy) can be greater than buffer.size
+                    bufferFilled = data.byteLength - bytesToCopy;
+                }
+                else
+                {
+                }
+
+                outStr += data.toString();
+            });
+                
+            process.stderr.on('data', (data:Buffer) ->
+            {
+                errStr += data.toString();
+            });
+                
+            process.on('close', code ->
+            {
+                resolve({ code:code, out:outStr, err:errStr });
+            });         
+            
+            process.on('error', code ->
+            {
+                reject({ code:code, out:outStr, err:errStr });
+            });
+
+            if (process.stdin == null) { reject("process.stdin is null"); return; }
+
+       		if (input != null) process.stdin.write(input);
+        });
     }
 	
 	static function log(v:Dynamic, ?infos:haxe.PosInfos)

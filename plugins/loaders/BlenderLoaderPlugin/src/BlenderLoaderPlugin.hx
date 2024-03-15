@@ -70,13 +70,13 @@ class BlenderLoaderPlugin implements ILoaderPlugin
             var script = "import bpy; bpy.ops.export_scene.gltf(filepath='" + destFilePath + "', export_format='GLTF_EMBEDDED')";
             var result = api.processManager.runCaptured(blenderExePath, [ "-b", blendFilePath, "--python-expr", script ]);
             
-            if (result.exitCode == 0 && api.fileSystem.exists(destFilePath))
+            if (result.code == 0 && api.fileSystem.exists(destFilePath))
             {
                 files.set(relDestFilePath, new CachedFile(baseDir, relDestFilePath));
             }
             else
             {
-                console.error("Error [" + result.exitCode + "] while conversion '" + file.relativePath + "' to '" + relDestFilePath + "':\n" + result.output.replace("\r\n", "\n") + (result.output != "" ? "\n" : "") + result.error.replace("\r\n", "\n"));
+                console.error("Error [" + result.code + "] while conversion '" + file.relativePath + "' to '" + relDestFilePath + "':\n" + result.out.replace("\r\n", "\n") + result.err.replace("\r\n", "\n"));
             }
         }
 

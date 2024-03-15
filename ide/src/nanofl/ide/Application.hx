@@ -110,14 +110,14 @@ class Application extends js.injecting.InjectContainer
             .then(_ -> ExternalChangesDetector.start());
 	}
 	
-	public function createNewEmptyDocument(?callb:Document->Void) : Void
+	public function createNewEmptyDocument(?width:Int, ?height:Int, ?framerate:Float) : Document
 	{
-		var properties = new DocumentProperties();
+		var properties = new DocumentProperties("", width, height, "#FFFFFF", framerate);
 		
 		var document = Document.createTemporary(openedFiles, folders, properties);
 		document.library.getRawLibrary().addSceneWithFrame();
 		document.activate(true);
-		if (callb != null) callb(document);
+		return document;
 	}
 	
 	public function openDocument(?path:String) : Promise<Document>

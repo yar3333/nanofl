@@ -26,7 +26,7 @@ class DocumentProperties extends InjectContainer
 	public var clickToStart : Bool;
 	public var publishSettings : PublishSettings;
 	
-	public function new(title="", width=800, height=600, backgroundColor="#FFFFFF", framerate=24.0, scaleMode="noScale", clickToStart=false, ?publishSettings:PublishSettings)
+	public function new(title="", width=1280, height=720, backgroundColor="#FFFFFF", framerate=30.0, scaleMode="fit", clickToStart=false, ?publishSettings:PublishSettings)
 	{
 		super();
 		

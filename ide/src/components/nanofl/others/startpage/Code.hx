@@ -4,7 +4,6 @@ import js.JQuery;
 import nanofl.ide.Globals;
 import nanofl.ide.Recents;
 import nanofl.ide.commands.Commands;
-import nanofl.ide.Application;
 import nanofl.ide.ui.menu.MenuTools;
 
 @:rtti
@@ -17,12 +16,12 @@ class Code extends wquery.Component
     {
 		Globals.injector.injectInto(this);
 		
-		template().recents.on("click", ">li>a", function(e:JqEvent)
+		template().recents.on("click", ">li>a", (e:JqEvent) ->
 		{
 			MenuTools.onItemClick(q(e.target), commands);
 		});
 		
-		template().creates.on("click", ">li>a", function(e:JqEvent)
+		template().creates.on("click", ">li>a", (e:JqEvent) ->
 		{
 			MenuTools.onItemClick(q(e.target), commands);
 		});

@@ -86,7 +86,7 @@ class SvgImporterPlugin implements IImporterPlugin
 		return Promise.resolve(true);
 	}
 	
-	public function getPublishPath(originalPath:String) : String
+	public function getPublishDirectoryBasePath(originalPath:String) : String
 	{
 		return Path.withoutExtension(originalPath);
 	}

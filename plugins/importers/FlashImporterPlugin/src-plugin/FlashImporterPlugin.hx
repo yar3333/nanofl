@@ -75,7 +75,7 @@ class FlashImporterPlugin implements IImporterPlugin
 		}
 	}
 	
-	public function getPublishPath(originalPath:String) : String
+	public function getPublishDirectoryBasePath(originalPath:String) : String
 	{
 		return switch (Path.extension(originalPath))
 		{

@@ -21,7 +21,7 @@ class EraserEditorTool extends DrawEditorTool
 		   "Hold Shift key to draw a line wih beauty angle."
 		+ " Hold Ctrl key to magnet on.";
 	
-	override public function getCursor() return "url(images/circle.cur), auto";
+	override public function getCursor() return "url(circle.cur), auto";
 	
 	override function init() 
 	{

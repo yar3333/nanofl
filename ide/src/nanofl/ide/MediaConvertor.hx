@@ -23,9 +23,9 @@ class MediaConvertor extends InjectContainer
 		
 		var result = processManager.runCaptured(convertToolPath, args);
 		
-		if (result.exitCode != 0)
+		if (result.code != 0)
 		{
-			trace("ERROR: convert " + args.join(" ") + ": " + result.exitCode + "\n" + result.output + "\n" + result.error);
+			trace("ERROR: convert " + args.join(" ") + ": " + result.code + "\n" + result.out + "\n" + result.err);
 			return false;
 		}
 		
@@ -133,9 +133,9 @@ class MediaConvertor extends InjectContainer
 		}
 		
 		var result = processManager.runCaptured(ffmpegToolPath, args);
-		if (result.exitCode != 0)
+		if (result.code != 0)
 		{
-			trace("ERROR: ffmpeg " + args.join(" ") + ": " + result.exitCode + "\n" + result.output + "\n" + result.error);
+			trace("ERROR: ffmpeg " + args.join(" ") + ": " + result.code + "\n" + result.out + "\n" + result.err);
 			return false;
 		}
 		

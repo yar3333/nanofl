@@ -1,0 +1,8 @@
+--js ..\..\bin\importers\GifImporterPlugin.js
+--class-path ..\..\api\gen
+--class-path src
+--library stdlib
+--main GifImporterPlugin
+-w -WExternWithExpr
+--cmd IF EXIST support IF NOT EXIST ..\..\bin\importers\GifImporterPlugin mkdir  ..\..\bin\importers\GifImporterPlugin
+--cmd IF EXIST support xcopy /E /Q /Y support ..\..\bin\importers\GifImporterPlugin

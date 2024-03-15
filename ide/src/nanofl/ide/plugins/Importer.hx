@@ -40,9 +40,9 @@ class Importer
 		}
 	}
 	
-	public function getPublishPath(originalPath:String) : String
+	public function getPublishDirectoryBasePath(originalPath:String) : String
 	{
 		var plugin = ImporterPlugins.plugins.get(pluginName);
-		return plugin.getPublishPath(originalPath);
+		return plugin.getPublishDirectoryBasePath(originalPath);
 	}
 }

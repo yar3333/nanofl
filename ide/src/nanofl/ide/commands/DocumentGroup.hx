@@ -1,6 +1,6 @@
 package nanofl.ide.commands;
 
-import haxe.Timer;
+import stdlib.Timer;
 import nanofl.ide.Clipboard;
 import nanofl.ide.plugins.ExporterPlugins;
 import nanofl.ide.plugins.ImporterPlugins;
@@ -12,9 +12,9 @@ class DocumentGroup extends BaseGroup
 	@inject var popups : Popups;
 	@inject var clipboard : Clipboard;
 	
-	public function createNewEmpty()			Timer.delay(function() app.createNewEmptyDocument(), 0);
+	public function createNewEmpty(?width:Int, ?height:Int, ?framerate:Float) Timer.delayAsync(1).then(_ -> app.createNewEmptyDocument(width, height, framerate));
 	
-	public function open(path:String)			Timer.delay(function() app.openDocument(path), 0);
+	public function open(path:String)			Timer.delayAsync(1).then(_ -> app.openDocument(path));
 	public function save()						app.document.save();
 	public function saveAs()					app.document.saveAs();
 	public function import_(pluginName:String)	app.importDocument(ImporterPlugins.plugins.get(pluginName));

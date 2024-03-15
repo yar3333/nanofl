@@ -16,8 +16,8 @@ class Code extends wquery.Component
 		
 		q("body").append(template().container.detach());
 		
-		template().menu.on("click", ">li>a[data-command]", function(e:JqEvent) MenuTools.onItemClick(q(e.target), commands));
-		template().container.click(function(_) template().container.hide());
+		template().menu.on("click", ">li>a[data-command]", (e:JqEvent) -> MenuTools.onItemClick(q(e.target), commands));
+		template().container.click(_ -> template().container.hide());
     }
 	
 	public function show(button:JQuery, itemsHtml:String)

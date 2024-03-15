@@ -4,7 +4,6 @@ import htmlparser.XmlBuilder;
 import js.Browser;
 import js.bootstrap.ContextMenu;
 import js.JQuery;
-import js.html.DocumentFragment;
 import nanofl.ide.Application;
 import nanofl.ide.Clipboard;
 import nanofl.ide.Globals;

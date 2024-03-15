@@ -639,7 +639,7 @@ class Document extends OpenedFile
 	function getPublishDirectory()
 	{
 		var r = originalPath != null
-			  ? detectImporter(preferences, originalPath).getPublishPath(originalPath)
+			  ? detectImporter(preferences, originalPath).getPublishDirectoryBasePath(originalPath)
 			  : Path.directory(path);
 		return r + ".release";
 	}

@@ -17,9 +17,9 @@ class NodeVideoUtils implements VideoUtils
     public function getFileInfo(filePath:String) : VideoFileInfo
     {
         final r = processManager.runCaptured(folders.tools + "/ffprobe.exe", [ "-v", "quiet", "-print_format", "json", "-show_format", "-show_streams", filePath ]);
-        if (r.exitCode != 0) return null;
+        if (r.code != 0) return null;
         
-        final info : FFprobeVideoFileInfo = Json.parse(r.output);
+        final info : FFprobeVideoFileInfo = Json.parse(r.out);
         
         return
         {
