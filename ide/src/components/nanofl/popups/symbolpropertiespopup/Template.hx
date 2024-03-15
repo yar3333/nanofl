@@ -18,9 +18,6 @@ class Template extends components.nanofl.popups.basepopup.Template
 	public var meshItem(get, never) : js.JQuery;
 	inline function get_meshItem() return component.q('#meshItem');
     
-    public var renderAreaSize(get, never) : js.JQuery;
-    inline function get_renderAreaSize() return component.q('#renderAreaSize');
-
     public var loadLights(get, never) : js.JQuery;
     inline function get_loadLights() return component.q('#loadLights');
 	

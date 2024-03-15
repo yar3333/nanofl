@@ -73,7 +73,6 @@ class Code extends components.nanofl.popups.basepopup.Code
 		if (Std.isOfType(item, MeshItem))
         {
             template().meshItem.show();
-            template().renderAreaSize.val((cast item:MeshItem).renderAreaSize);
             template().loadLights.prop("checked", (cast item:MeshItem).loadLights);
         }
 		
@@ -99,7 +98,6 @@ class Code extends components.nanofl.popups.basepopup.Code
 		
 		if (Std.is(item, MeshItem))
         {
-            (cast item:MeshItem).renderAreaSize = Std.parseInt(template().renderAreaSize.val(), MeshItem.DEFAULT_RENDER_AREA_SIZE);
             (cast item:MeshItem).loadLights = template().loadLights.prop("checked");
         }
         

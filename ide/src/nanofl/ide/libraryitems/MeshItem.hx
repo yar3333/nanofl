@@ -17,7 +17,6 @@ class MeshItem extends nanofl.engine.libraryitems.MeshItem
         var obj = new MeshItem(namePath);
         
         obj.textureAtlas = textureAtlas;
-        obj.renderAreaSize = renderAreaSize;
         obj.loadLights = loadLights;
         
         obj.scene = scene != null ? cast scene.clone(true) : null;

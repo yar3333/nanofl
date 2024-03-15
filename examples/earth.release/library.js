@@ -5,7 +5,6 @@ libraryData =
     "version": "2.3.0",
     "linkedClass": "",
     "textureAtlas": null,
-    "renderAreaSize": 256,
     "loadLights": false
   },
   "scene": {

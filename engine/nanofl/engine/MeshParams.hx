@@ -75,31 +75,28 @@ class MeshParamsTools
     #if ide
 	public static function save(params:MeshParams, out:XmlBuilder)
 	{
-		var def = createDefault();
         out.begin("mesh-params");
-		out.attr("rotationX", params.rotationX, def.rotationX);
-		out.attr("rotationY", params.rotationY, def.rotationY);
-		out.attr("cameraFov", params.cameraFov, def.cameraFov);
-		out.attr("ambientLightColor", params.ambientLightColor, def.ambientLightColor);
-		out.attr("directionalLightColor", params.directionalLightColor, def.directionalLightColor);
-		out.attr("directionalLightRotationX", params.directionalLightRotationX, def.directionalLightRotationX);
-		out.attr("directionalLightRotationY", params.directionalLightRotationY, def.directionalLightRotationY);
+		out.attr("rotationX", params.rotationX);
+		out.attr("rotationY", params.rotationY);
+		out.attr("cameraFov", params.cameraFov);
+		out.attr("ambientLightColor", params.ambientLightColor);
+		out.attr("directionalLightColor", params.directionalLightColor);
+		out.attr("directionalLightRotationX", params.directionalLightRotationX);
+		out.attr("directionalLightRotationY", params.directionalLightRotationY);
         out.end();
 	}
 
     public static function saveJson(params:MeshParams) : Dynamic
     {
-		var def = createDefault();
-        
         return
         {
-            rotationX : params.rotationX ?? def.rotationX,
-            rotationY : params.rotationY ?? def.rotationY,
-            cameraFov : params.cameraFov ?? def.cameraFov,
-            ambientLightColor : params.ambientLightColor ?? def.ambientLightColor,
-            directionalLightColor : params.directionalLightColor ?? def.directionalLightColor,
-            directionalLightRotationX : params.directionalLightRotationX ?? def.directionalLightRotationX,
-            directionalLightRotationY : params.directionalLightRotationY ?? def.directionalLightRotationY,
+            rotationX : params.rotationX,
+            rotationY : params.rotationY,
+            cameraFov : params.cameraFov,
+            ambientLightColor : params.ambientLightColor,
+            directionalLightColor : params.directionalLightColor,
+            directionalLightRotationX : params.directionalLightRotationX,
+            directionalLightRotationY : params.directionalLightRotationY,
         };
     }
     #end

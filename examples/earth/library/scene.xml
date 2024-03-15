@@ -19,7 +19,9 @@
 	</layer>
 	<layer name="3D">
 		<frame>
-			<instance libraryItem="earth" name="myEarth" rotationX="-22.422680412371136" rotationY="-27.061855670103096" ambientLightColor="#FFFFFF" x="260" y="190" />
+			<instance libraryItem="earth" name="myEarth" x="260" y="190">
+				<mesh-params rotationX="0" rotationY="0" cameraFov="70" ambientLightColor="#E0E0E0" directionalLightColor="#808080" directionalLightRotationX="0" directionalLightRotationY="0" />
+			</instance>
 		</frame>
 	</layer>
 </movieclip>

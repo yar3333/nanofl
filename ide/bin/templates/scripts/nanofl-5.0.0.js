@@ -2031,16 +2031,17 @@ class nanofl_Mesh extends nanofl_SolidContainer {
 		this.ambientLight = new THREE_AmbientLight(14737632);
 		this.directionalLight = new THREE_DirectionalLight(8421504,1);
 		this.symbol = symbol;
-		let d = symbol.renderAreaSize >> 1;
-		if(symbol.renderAreaSize % 2 != 0) {
-			++d;
-		}
-		this.setBounds(-d,-d,d,d);
+		let d = nanofl_engine_libraryitems_MeshItem.DISPLAY_OBJECT_SIZE >> 1;
+		this.setBounds(-d,-d,nanofl_engine_libraryitems_MeshItem.DISPLAY_OBJECT_SIZE,nanofl_engine_libraryitems_MeshItem.DISPLAY_OBJECT_SIZE);
+		this.renderer = new THREE_WebGLRenderer({ alpha : true, antialias : true});
+		this.addChild(this.bitmap = new createjs.Bitmap(this.renderer.domElement));
+		this.bitmap.x = this.bitmap.y = -d;
+		this.setQuality(2);
 		this.scene = new THREE_Scene();
 		this.scene.fog = datatools_NullTools.clone(this.scene.fog);
 		this.scene.add(this.group = new THREE_Group());
 		let _g = 0;
-		let _g1 = this.scene.children;
+		let _g1 = symbol.scene.children;
 		while(_g < _g1.length) {
 			let object = _g1[_g];
 			++_g;
@@ -2057,7 +2058,11 @@ class nanofl_Mesh extends nanofl_SolidContainer {
 		if(params != null) {
 			nanofl_engine_MeshParamsTools.applyToMesh(params,this);
 		}
-		this.update();
+	}
+	setQuality(q) {
+		let sz = Math.round(nanofl_engine_libraryitems_MeshItem.DISPLAY_OBJECT_SIZE * q);
+		this.renderer.setSize(sz,sz);
+		this.bitmap.scaleX = this.bitmap.scaleY = 1 / q;
 	}
 	clone(recursive) {
 		let r = this._cloneProps(new nanofl_Mesh(this.symbol,null));
@@ -2075,14 +2080,6 @@ class nanofl_Mesh extends nanofl_SolidContainer {
 		return this.symbol.toString();
 	}
 	draw(ctx,ignoreCache) {
-		this.update();
-		return super.draw(ctx,ignoreCache);
-	}
-	update() {
-		this.removeAllChildren();
-		let bitmap = new createjs.Bitmap(this.symbol.get_renderer().domElement);
-		this.addChild(bitmap);
-		bitmap.x = bitmap.y = -this.symbol.renderAreaSize / 2;
 		this.group.setRotationFromEuler(new THREE_Euler(this.rotationX * nanofl_Mesh.DEG_TO_RAD,this.rotationY * nanofl_Mesh.DEG_TO_RAD,this.rotationZ * nanofl_Mesh.DEG_TO_RAD));
 		this.group.updateMatrix();
 		let posZ = this.symbol.boundingRadius / Math.sin(this.camera.fov / 2 * nanofl_Mesh.DEG_TO_RAD);
@@ -2106,7 +2103,8 @@ class nanofl_Mesh extends nanofl_SolidContainer {
 		if(this.directionalLight != null) {
 			this.scene.add(this.directionalLight);
 		}
-		this.symbol.get_renderer().render(this.scene,this.camera);
+		this.renderer.render(this.scene,this.camera);
+		return super.draw(ctx,ignoreCache);
 	}
 	onEnterFrame() {
 	}
@@ -6875,7 +6873,6 @@ class nanofl_engine_libraryitems_MeshItem extends nanofl_engine_libraryitems_Ins
 	}
 	_hx_constructor(namePath) {
 		this.loadLights = false;
-		this.renderAreaSize = 256;
 		super._hx_constructor(namePath);
 	}
 	get_type() {
@@ -6884,7 +6881,6 @@ class nanofl_engine_libraryitems_MeshItem extends nanofl_engine_libraryitems_Ins
 	clone() {
 		let obj = new nanofl_engine_libraryitems_MeshItem(this.namePath);
 		obj.textureAtlas = this.textureAtlas;
-		obj.renderAreaSize = this.renderAreaSize;
 		obj.loadLights = this.loadLights;
 		obj.scene = this.scene != null ? this.scene.clone(true) : null;
 		obj.boundingRadius = this.boundingRadius;
@@ -6892,7 +6888,7 @@ class nanofl_engine_libraryitems_MeshItem extends nanofl_engine_libraryitems_Ins
 		return obj;
 	}
 	preload() {
-		stdlib_Debug.assert(this.library != null,"You need to add item '" + this.namePath + "' to the library before preload call.",{ fileName : "engine/nanofl/engine/libraryitems/MeshItem.hx", lineNumber : 70, className : "nanofl.engine.libraryitems.MeshItem", methodName : "preload"});
+		stdlib_Debug.assert(this.library != null,"You need to add item '" + this.namePath + "' to the library before preload call.",{ fileName : "engine/nanofl/engine/libraryitems/MeshItem.hx", lineNumber : 64, className : "nanofl.engine.libraryitems.MeshItem", methodName : "preload"});
 		let spriteSheet = nanofl_engine_TextureAtlasTools.getSpriteSheet(this);
 		if(spriteSheet == null) {
 			return this.preloadInner();
@@ -6910,8 +6906,8 @@ class nanofl_engine_libraryitems_MeshItem extends nanofl_engine_libraryitems_Ins
 		});
 	}
 	processPreloadedJson(json) {
-		nanofl_engine_libraryitems_MeshItem.log("processPreloadedJson",{ fileName : "engine/nanofl/engine/libraryitems/MeshItem.hx", lineNumber : 92, className : "nanofl.engine.libraryitems.MeshItem", methodName : "processPreloadedJson"});
-		nanofl_engine_libraryitems_MeshItem.log(json,{ fileName : "engine/nanofl/engine/libraryitems/MeshItem.hx", lineNumber : 93, className : "nanofl.engine.libraryitems.MeshItem", methodName : "processPreloadedJson"});
+		nanofl_engine_libraryitems_MeshItem.log("processPreloadedJson",{ fileName : "engine/nanofl/engine/libraryitems/MeshItem.hx", lineNumber : 86, className : "nanofl.engine.libraryitems.MeshItem", methodName : "processPreloadedJson"});
+		nanofl_engine_libraryitems_MeshItem.log(json,{ fileName : "engine/nanofl/engine/libraryitems/MeshItem.hx", lineNumber : 87, className : "nanofl.engine.libraryitems.MeshItem", methodName : "processPreloadedJson"});
 		let loader = new GLTFLoader();
 		let _gthis = this;
 		return loader.parseAsync(json,this.library.realUrl("")).then(function(gltf) {
@@ -6929,7 +6925,7 @@ class nanofl_engine_libraryitems_MeshItem extends nanofl_engine_libraryitems_Ins
 		this.boundingRadius = 0.0;
 		let _gthis = this;
 		this.scene.traverse(function(object) {
-			nanofl_engine_libraryitems_MeshItem.log("MeshItem.updateBoundingRadius object " + object.type + " / " + object.name,{ fileName : "engine/nanofl/engine/libraryitems/MeshItem.hx", lineNumber : 121, className : "nanofl.engine.libraryitems.MeshItem", methodName : "updateBoundingRadius"});
+			nanofl_engine_libraryitems_MeshItem.log("MeshItem.updateBoundingRadius object " + object.type + " / " + object.name,{ fileName : "engine/nanofl/engine/libraryitems/MeshItem.hx", lineNumber : 115, className : "nanofl.engine.libraryitems.MeshItem", methodName : "updateBoundingRadius"});
 			if(object.type == "Mesh") {
 				let mesh = object;
 				mesh.updateMatrixWorld(true);
@@ -6938,7 +6934,7 @@ class nanofl_engine_libraryitems_MeshItem extends nanofl_engine_libraryitems_Ins
 			}
 		});
 		this.boundingRadius = Math.sqrt(this.boundingRadius);
-		nanofl_engine_libraryitems_MeshItem.log("MeshItem.updateBoundingRadius boundingRadius = " + this.boundingRadius,{ fileName : "engine/nanofl/engine/libraryitems/MeshItem.hx", lineNumber : 134, className : "nanofl.engine.libraryitems.MeshItem", methodName : "updateBoundingRadius"});
+		nanofl_engine_libraryitems_MeshItem.log("MeshItem.updateBoundingRadius boundingRadius = " + this.boundingRadius,{ fileName : "engine/nanofl/engine/libraryitems/MeshItem.hx", lineNumber : 128, className : "nanofl.engine.libraryitems.MeshItem", methodName : "updateBoundingRadius"});
 	}
 	createDisplayObject(params) {
 		let r = super.createDisplayObject(params);
@@ -6954,24 +6950,6 @@ class nanofl_engine_libraryitems_MeshItem extends nanofl_engine_libraryitems_Ins
 	get_spriteSheet() {
 		return nanofl_engine_TextureAtlasTools.getSpriteSheet(this);
 	}
-	get_renderer() {
-		if(this._rendererLoadLights != this.loadLights) {
-			this._renderer = null;
-		}
-		if(this._renderer != null) {
-			if(!((this._renderer) instanceof THREE_WebGLRenderer)) {
-				this._renderer = null;
-			}
-		}
-		if(this._renderer == null) {
-			let canvas = window.document.createElement("canvas");
-			canvas.width = canvas.height = this.renderAreaSize;
-			this._renderer = new THREE_WebGLRenderer({ canvas : canvas, alpha : true});
-			this._renderer.setSize(this.renderAreaSize,this.renderAreaSize);
-			this._rendererLoadLights = this.loadLights;
-		}
-		return this._renderer;
-	}
 	equ(item) {
 		if(!((item) instanceof nanofl_engine_libraryitems_MeshItem)) {
 			return false;
@@ -6980,9 +6958,6 @@ class nanofl_engine_libraryitems_MeshItem extends nanofl_engine_libraryitems_Ins
 			return false;
 		}
 		if(item.textureAtlas != this.textureAtlas) {
-			return false;
-		}
-		if(item.renderAreaSize != this.renderAreaSize) {
 			return false;
 		}
 		if(item.loadLights != this.loadLights) {
@@ -6997,10 +6972,8 @@ class nanofl_engine_libraryitems_MeshItem extends nanofl_engine_libraryitems_Ins
 		super.loadPropertiesJson(obj);
 		let tmp = obj.textureAtlas;
 		this.textureAtlas = tmp != null ? tmp : null;
-		let tmp1 = obj.renderAreaSize;
-		this.renderAreaSize = tmp1 != null ? tmp1 : 256;
-		let tmp2 = obj.loadLights;
-		this.loadLights = tmp2 != null && tmp2;
+		let tmp1 = obj.loadLights;
+		this.loadLights = tmp1 != null && tmp1;
 	}
 	toString() {
 		return "MeshItem(" + this.namePath + ")";
@@ -8748,6 +8721,7 @@ nanofl_engine_geom_Edges.reFloat2 = new EReg("([-+0-9.]+),([-+0-9.]+)","");
 nanofl_engine_geom_Edges.reFloat4 = new EReg("([-+0-9.]+),([-+0-9.]+),([-+0-9.]+),([-+0-9.]+)","");
 nanofl_engine_geom_Matrix.DEG_TO_RAD = Math.PI / 180;
 nanofl_engine_libraryitems_LibraryItem._hx_skip_constructor = false;
+nanofl_engine_libraryitems_MeshItem.DISPLAY_OBJECT_SIZE = 256;
 nanofl_engine_plugins_FilterPlugins.plugins = new haxe_ds_StringMap();
 })( true ? exports : 0, typeof window != "undefined" ? window : typeof __webpack_require__.g != "undefined" ? __webpack_require__.g : typeof self != "undefined" ? self : this);
 

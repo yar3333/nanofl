@@ -7,11 +7,12 @@ import js.three.lights.DirectionalLight;
 import js.three.math.Euler;
 import js.three.objects.Group;
 import js.three.cameras.PerspectiveCamera;
-import js.three.scenes.Scene;
 import js.three.math.Vector3;
 import nanofl.engine.MeshParams;
 import nanofl.engine.InstanceDisplayObject;
 import nanofl.engine.libraryitems.MeshItem;
+import js.three.renderers.WebGLRenderer;
+import js.three.scenes.Scene;
 
 @:expose
 #if profiler @:build(Profiler.buildMarked()) #end
@@ -28,7 +29,9 @@ class Mesh extends SolidContainer
 	public var rotationY : Float;
 	public var rotationZ : Float;
 	
-	public var scene : Scene;
+	public var renderer : WebGLRenderer;
+    public var bitmap : easeljs.display.Bitmap;
+    public var scene : Scene;
 	public var group : Group;
 	
 	public var camera(default, null) : PerspectiveCamera;
@@ -51,20 +54,22 @@ class Mesh extends SolidContainer
         ambientLight = new AmbientLight(0xE0E0E0);
         directionalLight = new DirectionalLight(0x808080, 1);
         
-        #if profiler Profiler.measure("Mesh.new", function() { #end
-		
 		this.symbol = symbol;
 		
-		var d = symbol.renderAreaSize >> 1;
-		if (symbol.renderAreaSize % 2 != 0) d++;
-		setBounds(-d, -d, d, d);
+		var d = MeshItem.DISPLAY_OBJECT_SIZE >> 1;
+		setBounds(-d, -d, MeshItem.DISPLAY_OBJECT_SIZE, MeshItem.DISPLAY_OBJECT_SIZE);
+
+        renderer = new WebGLRenderer({ alpha:true, antialias:true });
+        addChild(bitmap = new easeljs.display.Bitmap(renderer.domElement));
+        bitmap.x = bitmap.y = -d;
+        setQuality(2);
 		
 		scene = new Scene();
 		scene.fog = NullTools.clone(scene.fog);
 		
 		scene.add(group = new Group());
 		
-		for (object in scene.children)
+		for (object in symbol.scene.children)
 		{
 			switch (object.type)
 			{
@@ -80,11 +85,17 @@ class Mesh extends SolidContainer
 		}
 
         if (params != null) MeshParamsTools.applyToMesh(params, this);
-		
-		update();
-		
-		#if profiler }); #end
 	}
+
+    /**
+        Scale factor for rendering area (256x256). Default is 2.0.
+    **/
+    public function setQuality(q:Float)
+    {
+        final sz = Math.round(MeshItem.DISPLAY_OBJECT_SIZE * q);
+        renderer.setSize(sz, sz);
+        bitmap.scaleX = bitmap.scaleY = 1 / q;
+    }
 	
 	override public function clone(?recursive:Bool) : Mesh
 	{
@@ -108,24 +119,10 @@ class Mesh extends SolidContainer
 	
 	override public function draw(ctx:js.html.CanvasRenderingContext2D, ?ignoreCache:Bool) : Bool
 	{
-		update();
-		return super.draw(ctx, ignoreCache);
-	}
-	
-	@:profile
-	public function update()
-	{
-		#if profiler Profiler.measure("Mesh.update", "scene", function() { #end
-		
-		removeAllChildren();
-		var bitmap = new easeljs.display.Bitmap(symbol.renderer.domElement);
-		addChild(bitmap);
-		bitmap.x = bitmap.y = -symbol.renderAreaSize / 2;
-		
-		group.setRotationFromEuler(new Euler(rotationX * DEG_TO_RAD, rotationY * DEG_TO_RAD, rotationZ * DEG_TO_RAD));
+        group.setRotationFromEuler(new Euler(rotationX * DEG_TO_RAD, rotationY * DEG_TO_RAD, rotationZ * DEG_TO_RAD));
 		group.updateMatrix();
         
-		var posZ = symbol.boundingRadius / Math.sin(camera.fov / 2 * DEG_TO_RAD);
+		final posZ = symbol.boundingRadius / Math.sin(camera.fov / 2 * DEG_TO_RAD);
 		
 		if (directionalLight != null)
 		{
@@ -145,30 +142,12 @@ class Mesh extends SolidContainer
 			camera.updateMatrix();
 		}
 		
-		#if profiler }); #end
-		
 		if (ambientLight != null) scene.add(ambientLight);
 		if (directionalLight != null) scene.add(directionalLight);
-		
-		#if profiler Profiler.measure("Mesh.update", "render", function() { #end
-		
-		// #if ide
-		// var oldWarn = nanofl.engine.Console.filter("warn", function(vv)
-		// {
-		// 	return vv[0] != "THREE.WebGLProgram: gl.getProgramInfoLog()" || !vv[1] || vv[1].indexOf("fakepath(106,3-100): warning X3557:") < 0;
-		// });
-		// #end
-		
-		symbol.renderer.render(scene, camera);
-		
-		// #if ide
-		// if (oldWarn != null)
-		// {
-		// 	(cast js.Browser.console).warn = oldWarn;
-		// }
-		// #end
-		
-		#if profiler }); #end
+
+		renderer.render(scene, camera);
+
+		return super.draw(ctx, ignoreCache);
 	}
 	
 	#if !ide

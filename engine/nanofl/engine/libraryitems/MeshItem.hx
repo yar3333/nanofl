@@ -6,9 +6,7 @@ import stdlib.Debug;
 import stdlib.Std;
 import js.three.ObjectType;
 import js.three.core.Object3D;
-import js.three.renderers.WebGLRenderer;
 import js.three.addons.loaders.GLTFLoader;
-import js.three.renderers.Renderer;
 import js.three.scenes.Scene;
 import nanofl.engine.geom.Point;
 import nanofl.engine.ITextureItem;
@@ -28,16 +26,13 @@ class MeshItem extends InstancableItem
 {
 	function get_type() return LibraryItemType.mesh;
 	
-	public static inline var DEFAULT_RENDER_AREA_SIZE = 256;
+	public static final DISPLAY_OBJECT_SIZE = 256;
 	
 	public var textureAtlas : String;
-	public var renderAreaSize = DEFAULT_RENDER_AREA_SIZE;
 	public var loadLights = false;
 	
 	public var scene(default, null) : Scene;
 	public var boundingRadius : Float;
-	var _renderer : Renderer;
-	public var renderer(get, never) : Renderer;
 	var _rendererLoadLights : Bool;
 	
     public var spriteSheet(get, never) : easeljs.display.SpriteSheet;
@@ -52,7 +47,6 @@ class MeshItem extends InstancableItem
 		var obj = new MeshItem(namePath);
 		
 		obj.textureAtlas = textureAtlas;
-		obj.renderAreaSize = renderAreaSize;
 		obj.loadLights = loadLights;
 		
 		obj.scene = scene != null ? cast scene.clone(true) : null;
@@ -153,43 +147,6 @@ class MeshItem extends InstancableItem
         #end
     }
 	
-	function get_renderer() : Renderer
-	{
-		if (_rendererLoadLights != loadLights) _renderer = null;
-		
-		if (_renderer != null)
-		{
-			if (!Std.is(_renderer, WebGLRenderer)) _renderer = null;
-		}
-		
-		if (_renderer == null)
-		{
-			// #if ide
-			// var oldLog = Console.filter("log", vv ->
-			// {
-			// 	return vv[0] != "THREE.WebGLRenderer" || !vv[1] || !~/^\d+$/.match(vv[1]);
-			// });
-			// #end
-			
-			var canvas : js.html.CanvasElement = cast js.Browser.document.createElement("canvas");
-			canvas.width = canvas.height = renderAreaSize;
-			
-			_renderer = new WebGLRenderer({ canvas:canvas, alpha:true });
-
-			// #if ide
-			// if (oldLog != null)
-			// {
-			// 	(cast js.Browser.console).log = oldLog;
-			// }
-			// #end
-			
-			_renderer.setSize(renderAreaSize, renderAreaSize);
-			
-			_rendererLoadLights = loadLights;
-		}
-		return _renderer;
-	}
-	
 	public function getDisplayObjectClassName() return "nanofl.Mesh";
 	
 	override public function equ(item:ILibraryItem) : Bool
@@ -197,14 +154,13 @@ class MeshItem extends InstancableItem
 		if (!Std.is(item, MeshItem)) return false;
 		if (!super.equ(item)) return false;
 		if ((cast item:MeshItem).textureAtlas != textureAtlas) return false;
-		if ((cast item:MeshItem).renderAreaSize != renderAreaSize) return false;
 		if ((cast item:MeshItem).loadLights != loadLights) return false;
 		return true;
 	}
 	
 	override public function getNearestPoint(pos:Point) : Point
 	{
-		var d = renderAreaSize / 2;
+		var d = DISPLAY_OBJECT_SIZE / 2;
 		var bounds = { minX:-d, minY:-d, maxX:d, maxY:d };
 		return bounds.getNearestPoint(pos);
 	}
@@ -221,7 +177,6 @@ class MeshItem extends InstancableItem
         super.saveProperties(xml);
 
 		xml.attr("textureAtlas", textureAtlas, null);
-		xml.attr("renderAreaSize", renderAreaSize, DEFAULT_RENDER_AREA_SIZE);
 		xml.attr("loadLights", loadLights, false);
     }
 
@@ -230,7 +185,6 @@ class MeshItem extends InstancableItem
         super.savePropertiesJson(obj);
 		
 		obj.textureAtlas = textureAtlas ?? null;
-		obj.renderAreaSize = renderAreaSize ?? DEFAULT_RENDER_AREA_SIZE;
 		obj.loadLights = loadLights ?? false;
     }
     
@@ -239,7 +193,6 @@ class MeshItem extends InstancableItem
         super.loadProperties(xml);
 
 		textureAtlas = xml.getAttr("textureAtlas", null);
-		renderAreaSize = xml.getAttr("renderAreaSize", MeshItem.DEFAULT_RENDER_AREA_SIZE);
 		loadLights = xml.getAttr("loadLights", false);
     }
     #end
@@ -251,7 +204,6 @@ class MeshItem extends InstancableItem
         super.loadPropertiesJson(obj);
 
 		textureAtlas = obj.textureAtlas ?? null;
-		renderAreaSize = obj.renderAreaSize ?? DEFAULT_RENDER_AREA_SIZE;
 		loadLights = obj.loadLights ?? false;
     }      
 	
