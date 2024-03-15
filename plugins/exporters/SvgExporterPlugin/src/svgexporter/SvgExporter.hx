@@ -1,9 +1,8 @@
 package svgexporter;
 
+import js.Browser.console;
 import htmlparser.XmlBuilder;
-import nanofl.engine.Debug.console;
 import nanofl.engine.elements.Element;
-import nanofl.engine.elements.Elements;
 import nanofl.engine.elements.Instance;
 import nanofl.engine.elements.ShapeElement;
 import nanofl.engine.elements.TextElement;

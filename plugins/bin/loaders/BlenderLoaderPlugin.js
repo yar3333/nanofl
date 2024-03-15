@@ -54,7 +54,7 @@ BlenderLoaderPlugin.prototype = {
 				var value = new nanofl.ide.filesystem.CachedFile(baseDir,relDestFilePath);
 				files.h[relDestFilePath] = value;
 			} else {
-				nanofl.engine.Debug.console.error("Error [" + result.code + "] while conversion '" + file.relativePath + "' to '" + relDestFilePath + "':\n" + StringTools.replace(result.out,"\r\n","\n") + StringTools.replace(result.err,"\r\n","\n"));
+				$global.console.error("Error [" + result.code + "] while conversion '" + file.relativePath + "' to '" + relDestFilePath + "':\n" + StringTools.replace(result.out,"\r\n","\n") + StringTools.replace(result.err,"\r\n","\n"));
 			}
 		}
 		var key = file.relativePath;
@@ -67,7 +67,7 @@ BlenderLoaderPlugin.prototype = {
 		if(this.blenderExePath == null) {
 			this.blenderExePath = blenderloader_BlenderDetector.detectExePath(this.api.fileSystem,this.api.environment,params);
 			if(this.blenderExePath == null) {
-				nanofl.engine.Debug.console.error("Blender is not found. Ensure Blender installed and check the path to the blender.exe in Preferences.");
+				$global.console.warn("Blender is not found. Ensure Blender installed and check the path to the blender.exe in Preferences.");
 				return false;
 			}
 		}
@@ -365,4 +365,4 @@ Array.__name__ = true;
 Date.__name__ = "Date";
 js_Boot.__toStr = ({ }).toString;
 BlenderLoaderPlugin.main();
-})({});
+})(typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);

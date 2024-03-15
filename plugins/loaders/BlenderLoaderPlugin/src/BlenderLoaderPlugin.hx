@@ -1,7 +1,7 @@
 import haxe.io.Path;
 import js.lib.Promise;
+import js.Browser.console;
 import nanofl.engine.CustomProperty;
-import nanofl.engine.Debug.console;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.plugins.PluginApi;
 import nanofl.ide.filesystem.CachedFile;
@@ -92,7 +92,7 @@ class BlenderLoaderPlugin implements ILoaderPlugin
 			blenderExePath = BlenderDetector.detectExePath(api.fileSystem, api.environment, params);
 			if (blenderExePath == null)
 			{
-				console.error("Blender is not found. Ensure Blender installed and check the path to the blender.exe in Preferences.");
+				console.warn("Blender is not found. Ensure Blender installed and check the path to the blender.exe in Preferences.");
 				return false;
 			}
 		}

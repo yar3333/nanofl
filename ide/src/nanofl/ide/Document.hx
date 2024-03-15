@@ -375,7 +375,7 @@ class Document extends OpenedFile
 		
 		if (importer != null)
 		{
-			return DocumentImporterHelper.run(path, createTemporary(openedFiles, folders), importer).then((document:Document) ->
+			return DocumentImporterHelper.run(path, createTemporary(openedFiles, folders), importer).then(document ->
 			{
 				if (document != null)
 				{

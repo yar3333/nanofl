@@ -4,8 +4,6 @@ libraryData =
     "type": "mesh",
     "version": "2.3.0",
     "linkedClass": "",
-    "ext": "gltf",
-    "originalExt": "blend",
     "textureAtlas": null,
     "renderAreaSize": 256,
     "loadLights": false
@@ -16,9 +14,6 @@ libraryData =
     "linkedClass": "MySceneClass",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
     "layers": [
       {
         "name": "2D",
@@ -216,8 +211,15 @@ libraryData =
                 "y": 190,
                 "regX": 0,
                 "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "meshParams": {
+                  "rotationX": 0,
+                  "rotationY": 0,
+                  "cameraFov": 70,
+                  "ambientLightColor": "#E0E0E0",
+                  "directionalLightColor": "#808080",
+                  "directionalLightRotationX": 0,
+                  "directionalLightRotationY": 0
+                }
               }
             ]
           }

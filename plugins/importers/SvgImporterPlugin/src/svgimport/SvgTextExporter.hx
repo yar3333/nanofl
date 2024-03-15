@@ -1,7 +1,6 @@
 package svgimport;
 
 import nanofl.engine.ColorTools;
-import nanofl.engine.Debug.console;
 import nanofl.engine.elements.TextElement;
 import nanofl.engine.movieclip.Layer;
 import nanofl.ide.library.IdeLibrary;

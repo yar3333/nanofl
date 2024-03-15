@@ -1,7 +1,7 @@
 package nanofl.engine.elements;
 
 import js.lib.Set;
-import nanofl.engine.Debug.console;
+import js.Browser.console;
 import nanofl.engine.fills.*;
 import datatools.ArrayTools;
 import nanofl.engine.geom.Bounds;

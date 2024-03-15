@@ -1,13 +1,13 @@
 package nanofl.engine;
 
-import js.html.VideoElement;
 import js.Browser;
+import js.Browser.console;
 import js.lib.Error;
 import js.lib.Promise;
 import js.html.Image;
 import js.html.ImageElement;
+import js.html.VideoElement;
 import js.html.XMLHttpRequest;
-import nanofl.engine.Debug.console;
 using stdlib.Lambda;
 using StringTools;
 

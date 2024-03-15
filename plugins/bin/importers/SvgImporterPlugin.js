@@ -3075,7 +3075,7 @@ svgimport_SvgTextExporter.prototype = $extend(svgimport_BaseExporter.prototype,{
 			break;
 		case 2:
 			var gradType = _g.gradType;
-			haxe_Log.trace("Text gradients is not supported.",{ fileName : "src/svgimport/SvgTextExporter.hx", lineNumber : 30, className : "svgimport.SvgTextExporter", methodName : "exportAsElement"});
+			haxe_Log.trace("Text gradients is not supported.",{ fileName : "src/svgimport/SvgTextExporter.hx", lineNumber : 29, className : "svgimport.SvgTextExporter", methodName : "exportAsElement"});
 			fillColor = "#000000";
 			break;
 		}

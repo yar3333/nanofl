@@ -1,5 +1,6 @@
 package flashimport;
 
+import js.Browser.console;
 import haxe.ds.ObjectMap;
 import haxe.io.Path;
 import htmlparser.HtmlNodeElement;
@@ -10,7 +11,6 @@ import nanofl.engine.coloreffects.ColorEffectAlpha;
 import nanofl.engine.coloreffects.ColorEffectBrightness;
 import nanofl.engine.coloreffects.ColorEffectTint;
 import nanofl.engine.ColorTools;
-import nanofl.engine.Debug.console;
 import nanofl.engine.elements.Element;
 import nanofl.engine.elements.Instance;
 import nanofl.engine.elements.ShapeElement;
@@ -28,7 +28,6 @@ import nanofl.engine.geom.StrokeEdge;
 import nanofl.engine.movieclip.KeyFrame;
 import nanofl.engine.movieclip.Layer;
 import nanofl.ide.library.IdeLibrary;
-//import nanofl.engine.libraryitems.BitmapItem;
 import nanofl.engine.libraryitems.InstancableItem;
 import nanofl.ide.libraryitems.MovieClipItem;
 import nanofl.engine.movieclip.MotionTween;

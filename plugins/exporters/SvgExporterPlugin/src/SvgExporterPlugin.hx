@@ -1,9 +1,9 @@
+import js.Browser.console;
 import js.lib.Promise;
 import htmlparser.XmlBuilder;
 import nanofl.ide.plugins.ExporterArgs;
 import nanofl.ide.plugins.PluginApi;
 import nanofl.engine.CustomProperty;
-import nanofl.engine.Debug.console;
 import nanofl.ide.plugins.ExporterPlugins;
 import nanofl.ide.plugins.IExporterPlugin;
 import svgexporter.SvgExporter;

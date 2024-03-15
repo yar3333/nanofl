@@ -164,24 +164,24 @@ class MeshItem extends InstancableItem
 		
 		if (_renderer == null)
 		{
-			#if ide
-			var oldLog = Console.filter("log", vv ->
-			{
-				return vv[0] != "THREE.WebGLRenderer" || !vv[1] || !~/^\d+$/.match(vv[1]);
-			});
-			#end
+			// #if ide
+			// var oldLog = Console.filter("log", vv ->
+			// {
+			// 	return vv[0] != "THREE.WebGLRenderer" || !vv[1] || !~/^\d+$/.match(vv[1]);
+			// });
+			// #end
 			
 			var canvas : js.html.CanvasElement = cast js.Browser.document.createElement("canvas");
 			canvas.width = canvas.height = renderAreaSize;
 			
 			_renderer = new WebGLRenderer({ canvas:canvas, alpha:true });
 
-			#if ide
-			if (oldLog != null)
-			{
-				(cast js.Browser.console).log = oldLog;
-			}
-			#end
+			// #if ide
+			// if (oldLog != null)
+			// {
+			// 	(cast js.Browser.console).log = oldLog;
+			// }
+			// #end
 			
 			_renderer.setSize(renderAreaSize, renderAreaSize);
 			

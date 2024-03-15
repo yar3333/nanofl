@@ -2,6 +2,8 @@
 --library jsfl
 --class-path src-jsfl-helper
 --main FlashMediaImporter
+--cmd IF EXIST support IF NOT EXIST ..\..\bin\importers\FlashImporterPlugin mkdir  ..\..\bin\importers\FlashImporterPlugin
+--cmd IF EXIST support xcopy /E /Q /Y support ..\..\bin\importers\FlashImporterPlugin
 
 --next
 
@@ -12,5 +14,3 @@
 --library HtmlParser
 --main FlashImporterPlugin
 -w  -WDeprecated
---cmd IF EXIST support IF NOT EXIST ..\..\bin\importers\FlashImporterPlugin mkdir  ..\..\bin\importers\FlashImporterPlugin
---cmd IF EXIST support xcopy /E /Q /Y support ..\..\bin\importers\FlashImporterPlugin

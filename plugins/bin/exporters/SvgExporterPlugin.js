@@ -127,7 +127,7 @@ SvgExporterPlugin.main = function() {
 };
 SvgExporterPlugin.prototype = {
 	exportDocument: function(api,args) {
-		nanofl.engine.Debug.console.log("Plugin.exportDocument " + args.srcFilePath + " => " + args.destFilePath);
+		$global.console.log("Plugin.exportDocument " + args.srcFilePath + " => " + args.destFilePath);
 		var xml = new htmlparser.XmlBuilder();
 		xml.begin("svg").attr("xmlns","http://www.w3.org/2000/svg").attr("width",args.documentProperties.width).attr("height",args.documentProperties.height).attr("xmlns:xlink","http://www.w3.org/1999/xlink");
 		new svgexporter_SvgExporter(args.library).export(xml);
@@ -1020,7 +1020,7 @@ svgexporter_Gradient.fromStroke = function(stroke) {
 		var data = stroke;
 		return svgexporter_Gradient.createRadial(data.colors,data.ratios,data.cx,data.cy,data.r,data.fx,data.fy);
 	} else if(((stroke) instanceof nanofl.engine.strokes.BitmapStroke)) {
-		nanofl.engine.Debug.console.warn("BitmapStroke is not supported.");
+		$global.console.warn("BitmapStroke is not supported.");
 	}
 	return null;
 };
@@ -1032,7 +1032,7 @@ svgexporter_Gradient.fromFill = function(fill) {
 		var data = fill;
 		return svgexporter_Gradient.createRadial(data.colors,data.ratios,data.cx,data.cy,data.r,data.fx,data.fy);
 	} else if(((fill) instanceof nanofl.engine.fills.BitmapFill)) {
-		nanofl.engine.Debug.console.warn("BitmapFill is not supported.");
+		$global.console.warn("BitmapFill is not supported.");
 	}
 	return null;
 };
@@ -1417,7 +1417,7 @@ svgexporter_SvgExporter.prototype = {
 		} else if(((element) instanceof nanofl.engine.elements.TextElement)) {
 			this.exportTextElement(element,xml);
 		} else {
-			nanofl.engine.Debug.console.warn("Unsupported element: " + element.toString());
+			$global.console.warn("Unsupported element: " + element.toString());
 		}
 	}
 	,exportTextElement: function(text,xml) {
