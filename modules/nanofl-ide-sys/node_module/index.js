@@ -552,8 +552,68 @@ haxe_io_Bytes.ofData = function(b) {
 	return new haxe_io_Bytes(b);
 };
 haxe_io_Bytes.prototype = {
-	__class__: haxe_io_Bytes
+	getString: function(pos,len,encoding) {
+		if(pos < 0 || len < 0 || pos + len > this.length) {
+			throw haxe_Exception.thrown(haxe_io_Error.OutsideBounds);
+		}
+		if(encoding == null) {
+			encoding = haxe_io_Encoding.UTF8;
+		}
+		var s = "";
+		var b = this.b;
+		var i = pos;
+		var max = pos + len;
+		switch(encoding._hx_index) {
+		case 0:
+			var debug = pos > 0;
+			while(i < max) {
+				var c = b[i++];
+				if(c < 128) {
+					if(c == 0) {
+						break;
+					}
+					s += String.fromCodePoint(c);
+				} else if(c < 224) {
+					var code = (c & 63) << 6 | b[i++] & 127;
+					s += String.fromCodePoint(code);
+				} else if(c < 240) {
+					var c2 = b[i++];
+					var code1 = (c & 31) << 12 | (c2 & 127) << 6 | b[i++] & 127;
+					s += String.fromCodePoint(code1);
+				} else {
+					var c21 = b[i++];
+					var c3 = b[i++];
+					var u = (c & 15) << 18 | (c21 & 127) << 12 | (c3 & 127) << 6 | b[i++] & 127;
+					s += String.fromCodePoint(u);
+				}
+			}
+			break;
+		case 1:
+			while(i < max) {
+				var c = b[i++] | b[i++] << 8;
+				s += String.fromCodePoint(c);
+			}
+			break;
+		}
+		return s;
+	}
+	,toString: function() {
+		return this.getString(0,this.length);
+	}
+	,__class__: haxe_io_Bytes
 };
+var haxe_io_Encoding = $hxEnums["haxe.io.Encoding"] = { __ename__:true,__constructs__:null
+	,UTF8: {_hx_name:"UTF8",_hx_index:0,__enum__:"haxe.io.Encoding",toString:$estr}
+	,RawNative: {_hx_name:"RawNative",_hx_index:1,__enum__:"haxe.io.Encoding",toString:$estr}
+};
+haxe_io_Encoding.__constructs__ = [haxe_io_Encoding.UTF8,haxe_io_Encoding.RawNative];
+var haxe_io_Error = $hxEnums["haxe.io.Error"] = { __ename__:true,__constructs__:null
+	,Blocked: {_hx_name:"Blocked",_hx_index:0,__enum__:"haxe.io.Error",toString:$estr}
+	,Overflow: {_hx_name:"Overflow",_hx_index:1,__enum__:"haxe.io.Error",toString:$estr}
+	,OutsideBounds: {_hx_name:"OutsideBounds",_hx_index:2,__enum__:"haxe.io.Error",toString:$estr}
+	,Custom: ($_=function(e) { return {_hx_index:3,e:e,__enum__:"haxe.io.Error",toString:$estr}; },$_._hx_name="Custom",$_.__params__ = ["e"],$_)
+};
+haxe_io_Error.__constructs__ = [haxe_io_Error.Blocked,haxe_io_Error.Overflow,haxe_io_Error.OutsideBounds,haxe_io_Error.Custom];
 var haxe_io_Path = function(path) {
 	switch(path) {
 	case ".":case "..":
@@ -2548,79 +2608,13 @@ nanofl_ide_sys_node_NodeProcessManager.prototype = {
 		nanofl_ide_sys_node_NodeProcessManager.log(tmp + result.join(""),{ fileName : "src/nanofl/ide/sys/node/NodeProcessManager.hx", lineNumber : 47, className : "nanofl.ide.sys.node.NodeProcessManager", methodName : "runCaptured"});
 		var result = window.electronApi.child_process.spawnSync(filePath,args,options);
 		nanofl_ide_sys_node_NodeProcessManager.log(result,{ fileName : "src/nanofl/ide/sys/node/NodeProcessManager.hx", lineNumber : 50, className : "nanofl.ide.sys.node.NodeProcessManager", methodName : "runCaptured"});
-		return { code : result.status, out : result.stdout.toString(), err : result.stderr.toString()};
+		return { code : result.status, out : haxe_io_Bytes.ofData(result.stdout.buffer).toString(), err : haxe_io_Bytes.ofData(result.stderr.buffer).toString()};
 	}
 	,runPipedStdIn: function(filePath,args,directory,env,getDataForStdIn) {
 		return window.electronApi.process_utils.runPipedStdIn(filePath,args,directory,env,getDataForStdIn);
 	}
 	,runPipedStdOut: function(filePath,args,directory,env,input,chunkSize,processChunk) {
-		var options = { };
-		if(directory != null) {
-			options.cwd = directory;
-		}
-		if(env != null) {
-			options.env = env;
-		}
-		var tmp = "ChildProcess.spawn " + filePath + (directory != null ? " in dir '" + directory + "'" : "");
-		var result = new Array(args.length);
-		var _g = 0;
-		var _g1 = args.length;
-		while(_g < _g1) {
-			var i = _g++;
-			result[i] = "\n\t" + args[i];
-		}
-		nanofl_ide_sys_node_NodeProcessManager.log(tmp + result.join(""),{ fileName : "src/nanofl/ide/sys/node/NodeProcessManager.hx", lineNumber : 71, className : "nanofl.ide.sys.node.NodeProcessManager", methodName : "runPipedStdOut"});
-		var $process = window.electronApi.child_process.spawn(filePath,args,options);
-		var buffer = chunkSize >= 0 ? new Uint8Array(chunkSize) : null;
-		var pBuffer = 0;
-		return new Promise(function(resolve,reject) {
-			var errStr = "";
-			if($process.stdout == null) {
-				reject("process.stdout is null");
-				return;
-			}
-			if($process.stderr == null) {
-				reject("process.stderr is null");
-				return;
-			}
-			$process.stdout.on("data",function(data) {
-				if(buffer == null) {
-					processChunk(data);
-					return;
-				}
-				stdlib_Debug.assert(data.byteOffset == 0,null,{ fileName : "src/nanofl/ide/sys/node/NodeProcessManager.hx", lineNumber : 88, className : "nanofl.ide.sys.node.NodeProcessManager", methodName : "runPipedStdOut"});
-				var pData = 0;
-				while(pData < data.byteLength) {
-					var a = data.byteLength - pData;
-					var b = buffer.byteLength - pBuffer;
-					var bytesToCopy = a < b ? a : b;
-					data.copy(buffer,pBuffer,pData,pData + bytesToCopy);
-					pBuffer += bytesToCopy;
-					pData += bytesToCopy;
-					if(pBuffer == buffer.byteLength) {
-						processChunk(buffer);
-						pBuffer = 0;
-					}
-				}
-			});
-			$process.stderr.on("data",function(data) {
-				errStr += data.toString();
-				return errStr;
-			});
-			$process.on("close",function(code) {
-				resolve({ code : code, out : "", err : errStr});
-			});
-			$process.on("error",function(code) {
-				reject({ code : code, out : "", err : errStr});
-			});
-			if($process.stdin == null) {
-				reject("process.stdin is null");
-				return;
-			}
-			if(input != null) {
-				$process.stdin.write(input);
-			}
-		});
+		return window.electronApi.process_utils.runPipedStdOut(filePath,args,directory,env,input,chunkSize,processChunk);
 	}
 	,__class__: nanofl_ide_sys_node_NodeProcessManager
 };

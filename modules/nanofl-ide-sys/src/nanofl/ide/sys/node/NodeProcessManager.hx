@@ -1,5 +1,6 @@
 package nanofl.ide.sys.node;
 
+import haxe.io.Bytes;
 import stdlib.Std;
 import stdlib.Debug;
 import js.lib.Uint8Array;
@@ -7,7 +8,6 @@ import js.node.Buffer;
 import js.lib.ArrayBuffer;
 import js.lib.Promise;
 import js.node.ChildProcess;
-import nanofl.ide.sys.node.core.NodeBuffer;
 import nanofl.ide.sys.node.core.ElectronApi;
 
 class NodeProcessManager implements nanofl.ide.sys.ProcessManager
@@ -52,8 +52,8 @@ class NodeProcessManager implements nanofl.ide.sys.ProcessManager
 		return
 		{
 			code: result.status, 
-			out: (cast result.stdout : NodeBuffer).toString(),
-			err: (cast result.stderr : NodeBuffer).toString()
+			out: Bytes.ofData((cast result.stdout : Uint8Array).buffer).toString(),
+			err: Bytes.ofData((cast result.stderr : Uint8Array).buffer).toString(),
 		};
 	}
 
@@ -64,63 +64,7 @@ class NodeProcessManager implements nanofl.ide.sys.ProcessManager
 
     public function runPipedStdOut(filePath:String, args:Array<String>, directory:String, env:Dynamic<String>, input:String, chunkSize:Int, processChunk:Uint8Array->Void) : Promise<ProcessResult>
     {
-		var options : ChildProcessSpawnOptions = {};
-		if (directory != null) options.cwd = directory;
-		if (env != null) options.env = env;
-		
-		log("ChildProcess.spawn " + filePath + (directory != null ? " in dir '" + directory + "'" : "")  + args.map(s -> "\n\t" + s).join(""));
-		final process = ElectronApi.child_process.spawn(filePath, args, options);
-
-        final buffer = chunkSize >= 0 ? new Uint8Array(chunkSize) : null;
-        var pBuffer = 0;
-		
-        return new Promise<ProcessResult>((resolve, reject) ->
-        {
-            var errStr = "";
-
-            if (process.stdout == null) { reject("process.stdout is null"); return; }
-            if (process.stderr == null) { reject("process.stderr is null"); return; }
-    
-            process.stdout.on('data', (data:Buffer) ->
-            {
-                if (buffer == null) { processChunk(data); return; }
-
-                Debug.assert(data.byteOffset == 0);
-
-                var pData = 0;
-                while (pData < data.byteLength)
-                {
-                    final bytesToCopy = Std.min(data.byteLength - pData, buffer.byteLength - pBuffer);
-                    data.copy(buffer, pBuffer, pData, pData + bytesToCopy);
-                    pBuffer += bytesToCopy;
-                    pData += bytesToCopy;
-                    if (pBuffer == buffer.byteLength)
-                    {
-                        processChunk(buffer);
-                        pBuffer = 0;
-                    }
-                }
-            });
-                
-            process.stderr.on('data', (data:Buffer) ->
-            {
-                errStr += data.toString();
-            });
-                
-            process.on('close', code ->
-            {
-                resolve({ code:code, out:"", err:errStr });
-            });         
-            
-            process.on('error', code ->
-            {
-                reject({ code:code, out:"", err:errStr });
-            });
-
-            if (process.stdin == null) { reject("process.stdin is null"); return; }
-
-       		if (input != null) process.stdin.write(input);
-        });
+        return ElectronApi.process_utils.runPipedStdOut(filePath, args, directory, env, input, chunkSize, processChunk);
     }
 	
 	static function log(v:Dynamic, ?infos:haxe.PosInfos)

@@ -78,12 +78,14 @@ class Layer
     {
         _keyFrames.push(keyFrame);
         keyFrame.layer = (cast this:Layer);
+        if (layersContainer?.library != null) keyFrame.setLibrary(layersContainer.library);
     }
     
     function insertKeyFrame(keyIndex:Int, keyFrame:KeyFrame)
     {
         _keyFrames.insert(keyIndex, keyFrame);
         keyFrame.layer = (cast this:Layer);
+        if (layersContainer?.library != null) keyFrame.setLibrary(layersContainer.library);
     }
     
     public function insertFrame(frameIndex:Int)

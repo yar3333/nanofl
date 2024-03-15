@@ -105,17 +105,17 @@ class Code extends wquery.Component
 			if (adapter != null && adapter.frameIndex != playStartFrameIndex) stop();
 		});
 		
-		template().framesHeader.on("mousedown", ">*", function(e) if (e.which == 1) onFrameHeaderMouseDown(e));
-		template().framesBorder.on("mousedown", ">*", function(e) if (e.which == 1) onFrameHeaderMouseDown(e));
+		template().framesHeader.on("mousedown", ">*", e -> if (e.which == 1) onFrameHeaderMouseDown(e));
+		template().framesBorder.on("mousedown", ">*", e -> if (e.which == 1) onFrameHeaderMouseDown(e));
 		template().framesHeader.on("mousemove", ">*", onFrameHeaderMouseMove);
 		template().framesBorder.on("mousemove", ">*", onFrameHeaderMouseMove);
 		
-		template().content.on("mousedown", ">*>.frames-content>*>*", function(e) if (e.which == 1) onFrameMouseDown(e));
+		template().content.on("mousedown", ">*>.frames-content>*>*", e -> if (e.which == 1) onFrameMouseDown(e));
 		template().content.on("mousemove", ">*>.frames-content>*>*", onFrameMouseMove);
 		template().content.on("dblclick",  ">*>.frames-content>*>*", onDoubleClickOnFrame);
-		template().content.on("click",     ">*>.frames-content>*>*", function(e) if (e.altKey) onDoubleClickOnFrame(e));
+		template().content.on("click",     ">*>.frames-content>*>*", e -> if (e.altKey) onDoubleClickOnFrame(e));
 		
-		dragAndDrop.ready.then(function(api:IDragAndDrop)
+		dragAndDrop.ready.then(api ->
 		{
 			api.droppable
 			(
@@ -198,7 +198,7 @@ class Code extends wquery.Component
 		if (!frameNode.hasClass("selected"))
 		{
 			var layerNode = getLayerNodeByFrameNode(frameNode);
-			freezed(function()
+			freezed(() ->
 			{
 				adapter.layerIndex = layerNode.index();
 				adapter.frameIndex = frameNode.index();

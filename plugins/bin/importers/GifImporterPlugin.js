@@ -25,16 +25,22 @@ GifImporterPlugin.prototype = {
 		var layer = scene.get_layers()[0];
 		layer.get_keyFrames().splice(0,layer.get_keyFrames().length);
 		var n = 0;
-		var destLibraryDir = args.library.libraryDir;
-		console.log("src/GifImporterPlugin.hx:36:","destLibraryDir = " + destLibraryDir);
 		return VideoImporter.run(api.videoUtils,api.processManager,api.folders,args.srcFilePath,function(canvas) {
 			if(n == 0) {
 				args.documentProperties.width = canvas.width;
 				args.documentProperties.height = canvas.height;
 			}
-			api.fileSystem.saveBinary(destLibraryDir + "/Frame " + n + ".png",haxe_crypto_Base64.decode(canvas.toDataURL("image/png").split(",")[1]));
+			api.fileSystem.saveBinary(args.library.libraryDir + "/Frame " + n + ".png",haxe_crypto_Base64.decode(canvas.toDataURL("image/png").split(",")[1]));
 			layer.addKeyFrame(new nanofl.engine.movieclip.KeyFrame(null,1,null,[new nanofl.engine.elements.Instance("Frame " + n)]));
 			n += 1;
+		}).then(function(success) {
+			if(success) {
+				return args.library.loadItems().then(function(_) {
+					return true;
+				});
+			} else {
+				return Promise.resolve(false);
+			}
 		});
 	}
 	,getPublishDirectoryBasePath: function(originalPath) {
@@ -90,29 +96,32 @@ VideoImporter.run = function(videoUtils,processManager,folders,srcFilePath,proce
 		$global.console.warn("VideoImporter.run: video stream not found.");
 		return Promise.resolve(false);
 	}
-	var args = ["-i",srcFilePath,"-f","rawvideo","-pixel_format","rgb24","pipe:1"];
+	var args = ["-i",srcFilePath,"-f","rawvideo","-pix_fmt","rgb24","pipe:1"];
 	$global.console.log("FFmpeg: ",args);
 	var width = videoInfo.videoWidth;
 	var height = videoInfo.videoHeight;
 	var chunkSize = width * height * 3;
+	var canvas = window.document.createElement("canvas");
+	canvas.width = width;
+	canvas.height = height;
+	var imageData = canvas.getContext("2d",null).getImageData(0,0,width,height);
+	var data = imageData.data;
+	var ctx = canvas.getContext("2d",null);
 	try {
 		return processManager.runPipedStdOut(folders.get_tools() + "/ffmpeg.exe",args,null,null,null,chunkSize,function(buffer) {
 			var view = new Uint8Array(buffer);
-			var canvas = window.document.createElement("canvas");
-			canvas.width = width;
-			canvas.height = height;
-			var imageData = canvas.getContext("2d",null).getImageData(0,0,width,height).data;
 			var pView = 0;
 			var pImg = 0;
 			var _g = 0;
 			var _g1 = width * height;
 			while(_g < _g1) {
 				var i = _g++;
-				imageData[pImg++] = view[pView++];
-				imageData[pImg++] = view[pView++];
-				imageData[pImg++] = view[pView++];
-				imageData[pImg++] = 255;
+				data[pImg++] = view[pView++];
+				data[pImg++] = view[pView++];
+				data[pImg++] = view[pView++];
+				data[pImg++] = 255;
 			}
+			ctx.putImageData(imageData,0,0);
 			processFrame(canvas);
 		}).then(function(r) {
 			return r.code == 0;

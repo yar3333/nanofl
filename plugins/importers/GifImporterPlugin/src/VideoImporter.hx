@@ -4,11 +4,8 @@ import js.html.ImageData;
 import js.lib.Uint8Array;
 import js.lib.Promise;
 import nanofl.ide.sys.VideoUtils;
-import nanofl.ide.sys.FileSystem;
 import nanofl.ide.sys.Folders;
 import nanofl.ide.sys.ProcessManager;
-import nanofl.ide.library.IdeLibrary;
-import nanofl.ide.DocumentProperties;
 using StringTools;
 using Lambda;
 
@@ -34,7 +31,7 @@ class VideoImporter
         [
             "-i", srcFilePath,
             "-f", "rawvideo",
-            "-pixel_format", "rgb24",
+            "-pix_fmt", "rgb24",
             "pipe:1",
         ];
 
@@ -44,26 +41,33 @@ class VideoImporter
         final height = videoInfo.videoHeight;
         final chunkSize = width * height * 3;
 
+        final canvas = Browser.document.createCanvasElement();
+        canvas.width = width;
+        canvas.height = height;
+
+        //final imageData = new ImageData(width, height);
+        final imageData = canvas.getContext2d().getImageData(0,0,width, height);
+        final data = imageData.data;
+
+        final ctx = canvas.getContext2d();
+
         try
         {
             return processManager.runPipedStdOut(folders.tools + "/ffmpeg.exe", args, null, null, null, chunkSize, buffer ->
             {
                 final view = new Uint8Array(buffer);
                 
-                final canvas = Browser.document.createCanvasElement();
-                canvas.width = width;
-                canvas.height = height;
-                final imageData = canvas.getContext2d().getImageData(0,0,width, height).data;
-
                 var pView = 0;
                 var pImg = 0;
                 for (i in 0...(width * height))
                 {
-                    imageData[pImg++] = view[pView++]; // R
-                    imageData[pImg++] = view[pView++]; // G
-                    imageData[pImg++] = view[pView++]; // B
-                    imageData[pImg++] = 255; // A
+                    data[pImg++] = view[pView++]; // R
+                    data[pImg++] = view[pView++]; // G
+                    data[pImg++] = view[pView++]; // B
+                    data[pImg++] = 255; // A
                 }
+
+                ctx.putImageData(imageData, 0, 0);
 
                 processFrame(canvas);
             })

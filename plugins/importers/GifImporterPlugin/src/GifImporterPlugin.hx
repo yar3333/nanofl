@@ -1,3 +1,4 @@
+import nanofl.ide.library.IdeLibraryTools;
 import nanofl.engine.elements.Instance;
 import haxe.crypto.Base64;
 import nanofl.engine.movieclip.KeyFrame;
@@ -31,10 +32,6 @@ class GifImporterPlugin implements IImporterPlugin
         layer.keyFrames.splice(0, layer.keyFrames.length);
 
         var n = 0;
-        //final destLibraryDir = Path.directory(args.destFilePath) + "/l7u";
-        final destLibraryDir = args.library.libraryDir;
-        trace("destLibraryDir = " + destLibraryDir);
-
         return VideoImporter.run(api.videoUtils, api.processManager, api.folders, args.srcFilePath, canvas ->
         {
 		    if (n == 0)
@@ -43,9 +40,13 @@ class GifImporterPlugin implements IImporterPlugin
 		        args.documentProperties.height = canvas.height;
             }
             
-            api.fileSystem.saveBinary(destLibraryDir + "/Frame " + n + ".png", Base64.decode(canvas.toDataURL("image/png").split(",")[1]));
+            api.fileSystem.saveBinary(args.library.libraryDir + "/Frame " + n + ".png", Base64.decode(canvas.toDataURL("image/png").split(",")[1]));
             layer.addKeyFrame(new KeyFrame(null, 1, null, [ new Instance("Frame " + n) ]));
             n++;
+        })
+        .then(success ->
+        {
+            return success ? args.library.loadItems().then(_ -> true) : Promise.resolve(false);
         });
 	}
 

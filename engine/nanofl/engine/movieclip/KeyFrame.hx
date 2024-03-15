@@ -106,7 +106,6 @@ class KeyFrame
         }
     }
     
-    //@:allow(nanofl.engine.Layer.setLibrary)
     public function setLibrary(library:Library)
     {
         for (element in elements) element.setLibrary(library);
