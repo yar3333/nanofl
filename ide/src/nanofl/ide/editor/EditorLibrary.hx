@@ -7,6 +7,7 @@ import js.html.File;
 import stdlib.ExceptionTools;
 import stdlib.Std;
 import htmlparser.HtmlNodeElement;
+import nanofl.engine.Log.console;
 import nanofl.engine.FontVariant;
 import nanofl.ide.MovieClipItemTools;
 import nanofl.ide.plugins.LoaderPlugins;
@@ -330,14 +331,14 @@ class EditorLibrary extends InjectContainer
                 {
                     if (element.fixErrors())
                     {
-                        //Browser.console.log("Fix errors in the element \"" + element.toString() + "\".");
+                        //console.log("Fix errors in the element \"" + element.toString() + "\".");
                         wasFixed = true;
                     }
                 }
                 catch (e:Dynamic)
                 {
-                    Browser.console.log("Exception while fixing element in " + item.namePath + ":");
-                    Browser.console.log(ExceptionTools.wrap(e).toString());
+                    console.log("Exception while fixing element in " + item.namePath + ":");
+                    console.log(ExceptionTools.wrap(e).toString());
                     log(original);
                 }
 			}

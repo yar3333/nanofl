@@ -3,6 +3,7 @@ package nanofl.ide.ui.menu;
 import haxe.Json;
 import htmlparser.XmlBuilder;
 import js.JQuery;
+import nanofl.engine.Log.console;
 import nanofl.ide.Application;
 import nanofl.ide.Clipboard;
 import nanofl.ide.OpenedFiles;
@@ -216,7 +217,7 @@ class MenuTools
         final r = Json.parse(rawParams);
         if (!Std.isOfType(r, Array))
         {
-            js.Browser.console.warn("MenuTools: menu item params must be array in json format (found: " + rawParams + ").");
+            console.warn("MenuTools: menu item params must be array in json format (found: " + rawParams + ").");
             return [];
         }
         return r;

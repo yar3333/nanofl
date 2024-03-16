@@ -1,7 +1,7 @@
 package nanofl.engine;
 
 import js.Browser;
-import js.Browser.console;
+import nanofl.engine.Log.console;
 import js.lib.Error;
 import js.lib.Promise;
 import js.html.Image;

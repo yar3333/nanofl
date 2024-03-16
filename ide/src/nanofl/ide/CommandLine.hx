@@ -3,6 +3,8 @@ package nanofl.ide;
 import js.Lib;
 import js.lib.Error;
 import js.lib.Promise;
+import nanofl.engine.Log;
+import nanofl.engine.Log.console;
 import nanofl.ide.SafeCode;
 import nanofl.ide.sys.FileSystem;
 import nanofl.ide.sys.Folders;
@@ -32,7 +34,7 @@ class CommandLine extends InjectContainer
 	function processInner() : Promise<{}>
 	{
         var args = mainProcess.getCommandLineArgs();
-        //Browser.console.log(args);
+        //console.log(args);
         return processNextArg(args);
 	}
 	
@@ -181,7 +183,7 @@ class CommandLine extends InjectContainer
 	
 	function error(message:String) : Promise<{}>
 	{
-		js.Browser.window.console.error("ERROR: " + message);
+		console.error("ERROR: " + message);
 		view.alerter.error(message);
         return Promise.reject(new Error(message));
     }

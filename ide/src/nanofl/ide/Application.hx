@@ -9,7 +9,7 @@ import js.Browser;
 import js.JQuery;
 import nanofl.ide.sys.FileSystem;
 import nanofl.engine.Version;
-import nanofl.engine.elements.Instance;
+import nanofl.engine.Log;
 import nanofl.ide.commands.Commands;
 import nanofl.ide.editor.NewObjectParams;
 import nanofl.ide.filesystem.ExternalChangesDetector;
@@ -82,7 +82,7 @@ class Application extends js.injecting.InjectContainer
 		
 		injector.map(Plugins, plugins = new Plugins());
 		
-		nanofl.ide.Log.init(fileSystem, view.alerter);
+		Log.init(fileSystem, view.alerter);
 		
 		new JQuery(Browser.window).resize();
 		new JQuery(Browser.document.body).focus();

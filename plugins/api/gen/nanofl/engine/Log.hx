@@ -1,4 +1,4 @@
-package nanofl.ide;
+package nanofl.engine;
 
 extern class Log {
 	static var fileSystem : nanofl.ide.sys.FileSystem;
@@ -7,4 +7,5 @@ extern class Log {
 	static function init(fileSystem:nanofl.ide.sys.FileSystem, alerter:components.nanofl.others.alerter.Code):Void;
 	static function sendBugReport(err:Dynamic, ?data:String):Void;
 	static function toError(v:Dynamic):js.lib.Error;
+	static var console(default, never) : Console;
 }

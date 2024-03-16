@@ -1,8 +1,8 @@
 package nanofl.engine.libraryitems;
 
 import js.html.Audio;
-import js.Browser;
 import js.lib.Promise;
+import nanofl.engine.Log.console;
 import nanofl.engine.ILibraryItem;
 
 #if ide
@@ -70,7 +70,7 @@ class SoundItem extends LibraryItem
             audio.addEventListener("canplay", () -> resolve(null));
             audio.addEventListener("error", e ->
             {
-                Browser.console.warn("Error loading sound " + namePath, e);
+                console.warn("Error loading sound " + namePath, e);
                 resolve(null);
             });
             audio.src = uri;

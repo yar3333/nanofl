@@ -1,5 +1,9 @@
 package nanofl.ide;
 
+import js.lib.Error;
+import nanofl.engine.Log;
+import nanofl.engine.Log.console;
+
 class SafeCode
 {
 	public static function run(getErrorMessage:haxe.extern.EitherType<String, Void->String>, f:Void->Void, ?onError:{ message:String, stack:String }->Void, ?p:haxe.PosInfos) : Bool
@@ -33,7 +37,7 @@ class SafeCode
 				err.stack = stackPrefix + StringTools.replace(err.stack, "\n", "\n" + stackPrefix);
 			}
 			
-			js.Browser.window.console.error(err);
+			console.error(err);
 			
 			if (onError != null) onError(err);
 			
@@ -51,7 +55,7 @@ class SafeCode
 		}
 		catch (_:Dynamic)
 		{
-			var r = new js.lib.Error(message);
+			var r = new Error(message);
 			(cast r).stack = err.stack;
 			return cast r;
 		}

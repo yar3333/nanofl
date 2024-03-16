@@ -1,14 +1,14 @@
 package nanofl.ide;
 
 import stdlib.Timer;
-import js.Browser.console;
 import js.lib.Promise;
 import haxe.io.Path;
 import stdlib.Debug;
 import stdlib.Uuid;
 import stdlib.ExceptionTools;
-import nanofl.ide.libraryitems.IIdeLibraryItem;
+import nanofl.engine.Log.console;
 import nanofl.engine.geom.Matrix;
+import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.DocumentProperties;
 import nanofl.ide.CodeGenerator;
 import nanofl.ide.CodePublisher;

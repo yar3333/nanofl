@@ -6,6 +6,7 @@ import nanofl.engine.geom.Matrix;
 import nanofl.engine.geom.Point;
 import nanofl.engine.geom.PointTools;
 import nanofl.engine.movieclip.KeyFrame;
+import nanofl.engine.Log.console;
 using StringTools;
 
 #if ide
@@ -61,7 +62,7 @@ abstract class Element
     public static function parse(node:HtmlNodeElement, version:String) : Element
 	{
         final type = try ElementType.createByName(node.name)
-        catch (e) { js.Browser.console.warn("Unexpected element: " + node.name); return null; }
+        catch (e) { console.warn("Unexpected element: " + node.name); return null; }
 
         var element : Element = switch (type)
 		{
@@ -72,13 +73,13 @@ abstract class Element
 
         if (!element.loadProperties(node, version))
         {
-            js.Browser.console.warn("Error loading properties for: " + node.name);
+            console.warn("Error loading properties for: " + node.name);
             return null;
         }
 
         if (element.matrix == null)
         {
-            js.Browser.console.warn("Error loading matrix for: " + node.name);
+            console.warn("Error loading matrix for: " + node.name);
             return null;
         }
 		
@@ -89,7 +90,7 @@ abstract class Element
     public static function parseJson(obj:Dynamic, version:String) : Element
     {
         final type = try ElementType.createByName(obj.type)
-        catch (e) { js.Browser.console.warn("Unexpected element: " + obj.type); return null; }
+        catch (e) { console.warn("Unexpected element: " + obj.type); return null; }
         
         var element : Element = switch (type)
         {
@@ -100,13 +101,13 @@ abstract class Element
 
         if (!element.loadPropertiesJson(obj, version))
         {
-            js.Browser.console.warn("Error loading properties for: " + obj.type);
+            console.warn("Error loading properties for: " + obj.type);
             return null;
         }
 
         if (element.matrix == null)
         {
-            js.Browser.console.warn("Error loading matrix for: " + obj.type);
+            console.warn("Error loading matrix for: " + obj.type);
             return null;
         }
         

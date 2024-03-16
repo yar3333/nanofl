@@ -1,7 +1,6 @@
 package components.nanofl.movie.editor;
 
 import js.lib.Promise;
-import stdlib.Timer;
 import js.JQuery;
 import js.html.CanvasElement;
 import js.html.File;
@@ -13,6 +12,7 @@ import easeljs.display.Shape;
 import nanofl.DisplayObjectTools;
 import nanofl.Stage;
 import nanofl.engine.geom.Matrix;
+import nanofl.engine.Log.console;
 import nanofl.ide.editor.EditorMilk;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.Application;

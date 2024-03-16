@@ -1,8 +1,8 @@
 package nanofl.engine.elements;
 
 import js.lib.Set;
-import js.Browser.console;
-import nanofl.engine.fills.*;
+import stdlib.Debug;
+import stdlib.ExceptionTools;
 import datatools.ArrayTools;
 import nanofl.engine.geom.Bounds;
 import nanofl.engine.geom.Contour;
@@ -15,10 +15,10 @@ import nanofl.engine.geom.Polygon;
 import nanofl.engine.geom.Polygons;
 import nanofl.engine.geom.StrokeEdge;
 import nanofl.engine.geom.StrokeEdges;
+import nanofl.engine.Log.console;
 import nanofl.engine.Library;
+import nanofl.engine.fills.*;
 import nanofl.engine.strokes.*;
-import stdlib.Debug;
-import stdlib.ExceptionTools;
 using nanofl.engine.geom.PointTools;
 using nanofl.engine.geom.BoundsTools;
 using stdlib.Lambda;
@@ -886,7 +886,7 @@ class ShapeElement extends Element
 			catch (e:Dynamic)
 			{
 				console.error(ExceptionTools.wrap(e).message);
-				nanofl.ide.Log.sendBugReport(e, "combine\nthisState=\n" + thisState + "\nshapeState=\n" + shapeState);
+				nanofl.engine.Log.sendBugReport(e, "combine\nthisState=\n" + thisState + "\nshapeState=\n" + shapeState);
 				setState(thisState);
 				
 				#if test
@@ -981,7 +981,7 @@ class ShapeElement extends Element
 		catch (e:Dynamic)
 		{
 			console.error(ExceptionTools.wrap(e).message);
-			nanofl.ide.Log.sendBugReport(e, "combineSelf\nthisState=\n" + thisState.toString());
+			nanofl.engine.Log.sendBugReport(e, "combineSelf\nthisState=\n" + thisState.toString());
 			setState(thisState);
 			
 			#if test

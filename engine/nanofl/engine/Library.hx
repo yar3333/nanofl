@@ -1,13 +1,13 @@
 package nanofl.engine;
 
-import js.Browser;
 import datatools.MapTools;
 import js.lib.Promise;
 import datatools.ArrayRO;
-import nanofl.engine.elements.Instance;
-import nanofl.engine.Font;
 import datatools.ArrayTools;
+import nanofl.engine.Log.console;
+import nanofl.engine.Font;
 import nanofl.engine.ILibraryItem;
+import nanofl.engine.elements.Instance;
 import nanofl.engine.elements.TextElement;
 import nanofl.engine.libraryitems.*;
 import stdlib.Debug;
@@ -76,7 +76,7 @@ class Library
         Debug.assert(namePath != "");
         var r = items.get(namePath);
         if (r != null) return r;
-        Browser.console.warn("Symbol '" + namePath + "' is not found.");
+        console.warn("Symbol '" + namePath + "' is not found.");
         return createItemOnItemNotFound(namePath);
     }
 
