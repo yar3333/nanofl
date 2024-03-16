@@ -112,7 +112,7 @@ abstract class EditorElement implements ISelectable
 		metaDispObj = new Container();
 		metaDispObj.mouseEnabled = !frame.keyFrame.layer.locked;
 		
-		metaDispObj.addChild(dispObj = createDisplayObjectForElement());
+		metaDispObj.addChild(dispObj = new easeljs.display.Container()); // temporary, real object created in `update()` below
 		metaDispObj.addChild(selectionBoxShape = new Shape());
 		metaDispObj.addChild(emptyClipMark = emptyClipMarkPattern.clone());
 		metaDispObj.addChild(emptyClipMarkSelected = emptyClipMarkSelectedPattern.clone());
@@ -124,8 +124,8 @@ abstract class EditorElement implements ISelectable
 		regPointMark.visible = false;
 		
 		attachEventHandlers();
-		
-		updateTransformations();
+
+        update();
 	}
 
     function createDisplayObjectForElement() : DisplayObject
@@ -275,7 +275,7 @@ abstract class EditorElement implements ISelectable
 		}
 	}
 	
-	function attachEventHandlers()
+	final function attachEventHandlers()
 	{
 		var pressed = false;
 		

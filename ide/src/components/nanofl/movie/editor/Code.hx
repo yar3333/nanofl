@@ -18,7 +18,6 @@ import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.Application;
 import nanofl.ide.Globals;
 import nanofl.ide.draganddrop.DragAndDrop;
-import nanofl.ide.draganddrop.IDragAndDrop;
 import nanofl.ide.editor.EditorMouseEvent;
 import nanofl.ide.library.droppers.LibraryItemToEditorDropper;
 import nanofl.ide.navigator.PathItem;
@@ -113,7 +112,7 @@ class Code extends wquery.Component
 			.moveTo(0, -5).lineTo(0, 5)
 			.endStroke();
 		
-		dragAndDrop.ready.then(function(api:IDragAndDrop)
+		dragAndDrop.ready.then(api ->
 		{
 			api.droppable
 			(
@@ -171,13 +170,13 @@ class Code extends wquery.Component
 			menu.toggleItem("editor.copy", isForSelected);
 			//menu.toggleItem("editor.paste", true);
 			
-			menu.toggleItem("document.properties", !isForSelected && isPathItemIsMovieClip() && pathItem.isScene());
-			menu.toggleItem("editor.properties", !isForSelected && isPathItemIsMovieClip() && !pathItem.isScene());
+			menu.toggleItem("document.properties", !isForSelected && !pathItem.mcItem.isGroup() && pathItem.isScene());
+			menu.toggleItem("editor.properties", !isForSelected && !pathItem.mcItem.isGroup() && !pathItem.isScene());
 			
 			return true;
 		});
 		
-		template().content.mousewheel(function(e:JqEvent, d:Int, dx:Int, dy:Int)
+		template().content.mousewheel((e:JqEvent, d:Int, dx:Int, dy:Int) ->
 		{
 			var mpos = getMousePos(e);
 			
@@ -190,7 +189,7 @@ class Code extends wquery.Component
 		var rootMoving = false;
 		var rootMove1 = { x:0.0, y:0.0 };
 		
-		template().content.on("mousedown", function(e:JqEvent)
+		template().content.on("mousedown", (e:JqEvent) ->
 		{
 			if (e.which == 2)
 			{
@@ -201,7 +200,7 @@ class Code extends wquery.Component
 			}
 		});
 		
-		template().content.on("mousemove", function(e:JqEvent)
+		template().content.on("mousemove", (e:JqEvent) ->
 		{
 			if (rootMoving)
 			{
@@ -218,7 +217,7 @@ class Code extends wquery.Component
 			}
 		});
 		
-		template().content.on("mouseup", function(e:JqEvent)
+		template().content.on("mouseup", (e:JqEvent) ->
 		{
 			if (e.which == 2)
 			{
@@ -227,7 +226,7 @@ class Code extends wquery.Component
 			}
 		});
 		
-		stage.addMouseDownEventListener(function(e:MouseEvent)
+		stage.addMouseDownEventListener((e:MouseEvent) ->
 		{
 			if (e.nativeEvent.which == 1 || e.nativeEvent.which == 3)
 			{
@@ -242,7 +241,7 @@ class Code extends wquery.Component
 			}
 		});
 		
-		stage.addStageMouseMoveEventListener(function(e:MouseEvent)
+		stage.addStageMouseMoveEventListener((e:MouseEvent) ->
 		{
 			if (app == null || app.document == null || app.document.editor.tool == null) return;
 			
@@ -253,7 +252,7 @@ class Code extends wquery.Component
 			//#if profiler }); #end
 		});
 		
-		stage.addStageMouseUpEventListener(function(e:MouseEvent)
+		stage.addStageMouseUpEventListener((e:MouseEvent) ->
 		{
 			if (e.nativeEvent.which == 1 || e.nativeEvent.which == 3) 
 			{
@@ -268,7 +267,7 @@ class Code extends wquery.Component
 			}
 		});
 		
-		stage.addClickEventListener(function(e:MouseEvent)
+		stage.addClickEventListener((e:MouseEvent) ->
 		{
 			if (e.nativeEvent.which == 1)
 			{
@@ -282,7 +281,7 @@ class Code extends wquery.Component
 			}
 		});
 		
-		stage.addDblClickEventListener(function(e:MouseEvent)
+		stage.addDblClickEventListener((e:MouseEvent) ->
 		{
 			log("editor/stage doubleclick e.nativeEvent.which = " + e.nativeEvent.which);
 			
@@ -466,11 +465,6 @@ class Code extends wquery.Component
 	
 	public function show() template().container.show();
 	public function hide() template().container.hide();
-	
-	function isPathItemIsMovieClip()
-	{
-		return true; // TODO: group
-	}
 	
 	static function log(v:Dynamic, ?infos:haxe.PosInfos)
 	{

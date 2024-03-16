@@ -19,22 +19,11 @@ class EditorElementText extends EditorElementSelectBox
 	
 	override public function update()
 	{
-		super.update();
+		super.update(); // tf recreated
 		
 		tf.dashedBorder = !selected && layer.isShowSelection();
-	}
-	
-	public function getPropertiesObject(newObjectParams:NewObjectParams) : PropertiesObject
-	{
-		return PropertiesObject.TEXT(this, newObjectParams);
-	}
-	
-	override function attachEventHandlers()
-	{
-		super.attachEventHandlers();
-		
-		tf.resize.unbindAll();
-		tf.resize.bind(function(_, e)
+
+		tf.resize.bind((_, e) ->
 		{
 			element.width = PointTools.roundGap(e.width);
 			element.height = PointTools.roundGap(e.height);
@@ -42,12 +31,16 @@ class EditorElementText extends EditorElementSelectBox
 			update();
 		});
 		
-		tf.change.unbindAll();
-		tf.change.bind(function(_, e)
+		tf.change.bind((_, e) ->
 		{
 			editor.tool.itemChanged(this);
 			update();
 		});
+	}
+	
+	public function getPropertiesObject(newObjectParams:NewObjectParams) : PropertiesObject
+	{
+		return PropertiesObject.TEXT(this, newObjectParams);
 	}
 	
 	override function onDoubleClickInner(e:EditorMouseEvent)
