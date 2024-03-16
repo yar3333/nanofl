@@ -87,13 +87,13 @@ class Application extends js.injecting.InjectContainer
 		new JQuery(Browser.window).resize();
 		new JQuery(Browser.document.body).focus();
 		
-		new JQuery(Browser.window).on("close", function(e) { e.preventDefault(); quit(); });
+		new JQuery(Browser.window).on("close", e -> { e.preventDefault(); quit(); });
 		
-		view.movie.editor  .on("mousedown", function(e) { activeView = ActiveView.EDITOR;   clipboard.restoreFocus(e.originalEvent); });
-		view.movie.timeline.on("mousedown", function(e) { activeView = ActiveView.TIMELINE; clipboard.restoreFocus(e.originalEvent); });
-		view.movie.timeline.on("mousedown", function(e) { activeView = ActiveView.TIMELINE; clipboard.restoreFocus(e.originalEvent); });
-		view.library       .on("mousedown", function(e) { activeView = ActiveView.LIBRARY;  clipboard.restoreFocus(e.originalEvent); });
-		view.output        .on("mousedown", function(e) { activeView = ActiveView.OUTPUT; });
+		view.movie.editor  .on("mousedown", e -> { activeView = ActiveView.EDITOR;   clipboard.restoreFocus(e.originalEvent); });
+		view.movie.timeline.on("mousedown", e -> { activeView = ActiveView.TIMELINE; clipboard.restoreFocus(e.originalEvent); });
+		view.movie.timeline.on("mousedown", e -> { activeView = ActiveView.TIMELINE; clipboard.restoreFocus(e.originalEvent); });
+		view.library       .on("mousedown", e -> { activeView = ActiveView.LIBRARY;  clipboard.restoreFocus(e.originalEvent); });
+		view.output        .on("mousedown", e -> { activeView = ActiveView.OUTPUT; });
 		
 		preferences.storage.applyToIDE(true);
 		
