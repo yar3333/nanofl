@@ -2034,12 +2034,12 @@ class nanofl_Mesh extends nanofl_SolidContainer {
 		let d = nanofl_engine_libraryitems_MeshItem.DISPLAY_OBJECT_SIZE >> 1;
 		this.setBounds(-d,-d,nanofl_engine_libraryitems_MeshItem.DISPLAY_OBJECT_SIZE,nanofl_engine_libraryitems_MeshItem.DISPLAY_OBJECT_SIZE);
 		this.renderer = new THREE_WebGLRenderer({ alpha : true, antialias : true});
-		this.addChild(this.bitmap = new createjs.Bitmap(this.renderer.domElement));
+		this.bitmap = new createjs.Bitmap(this.renderer.domElement);
 		this.bitmap.x = this.bitmap.y = -d;
+		this.addChild(this.bitmap);
 		this.setQuality(2);
 		this.scene = new THREE_Scene();
-		this.scene.fog = datatools_NullTools.clone(this.scene.fog);
-		this.scene.add(this.group = new THREE_Group());
+		this.group = new THREE_Group();
 		let _g = 0;
 		let _g1 = symbol.scene.children;
 		while(_g < _g1.length) {
@@ -2055,6 +2055,9 @@ class nanofl_Mesh extends nanofl_SolidContainer {
 				this.group.add(object.clone());
 			}
 		}
+		this.scene.add(this.group);
+		this.scene.add(this.ambientLight);
+		this.scene.add(this.directionalLight);
 		if(params != null) {
 			nanofl_engine_MeshParamsTools.applyToMesh(params,this);
 		}
@@ -2096,12 +2099,6 @@ class nanofl_Mesh extends nanofl_SolidContainer {
 			this.camera.far = posZ + this.symbol.boundingRadius;
 			this.camera.updateProjectionMatrix();
 			this.camera.updateMatrix();
-		}
-		if(this.ambientLight != null) {
-			this.scene.add(this.ambientLight);
-		}
-		if(this.directionalLight != null) {
-			this.scene.add(this.directionalLight);
 		}
 		this.renderer.render(this.scene,this.camera);
 		return super.draw(ctx,ignoreCache);

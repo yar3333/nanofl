@@ -1,18 +1,18 @@
 package nanofl;
 
-import datatools.NullTools;
 import js.html.CanvasRenderingContext2D;
+import easeljs.display.Bitmap;
 import js.three.lights.AmbientLight;
 import js.three.lights.DirectionalLight;
 import js.three.math.Euler;
 import js.three.objects.Group;
 import js.three.cameras.PerspectiveCamera;
 import js.three.math.Vector3;
+import js.three.renderers.WebGLRenderer;
+import js.three.scenes.Scene;
 import nanofl.engine.MeshParams;
 import nanofl.engine.InstanceDisplayObject;
 import nanofl.engine.libraryitems.MeshItem;
-import js.three.renderers.WebGLRenderer;
-import js.three.scenes.Scene;
 
 @:expose
 #if profiler @:build(Profiler.buildMarked()) #end
@@ -29,12 +29,12 @@ class Mesh extends SolidContainer
 	public var rotationY : Float;
 	public var rotationZ : Float;
 	
-	public var renderer : WebGLRenderer;
-    public var bitmap : easeljs.display.Bitmap;
-    public var scene : Scene;
-	public var group : Group;
+	public var renderer(default, null) : WebGLRenderer;
+    public var bitmap(default, null) : Bitmap;
+    public var scene(default, null) : Scene;
+	public var group(default, null) : Group;
 	
-	public var camera(default, null) : PerspectiveCamera;
+	public var camera : PerspectiveCamera;
 	public var autoCamera : Bool;
 	
 	public var ambientLight(default, null) : AmbientLight;
@@ -60,15 +60,16 @@ class Mesh extends SolidContainer
 		setBounds(-d, -d, MeshItem.DISPLAY_OBJECT_SIZE, MeshItem.DISPLAY_OBJECT_SIZE);
 
         renderer = new WebGLRenderer({ alpha:true, antialias:true });
-        addChild(bitmap = new easeljs.display.Bitmap(renderer.domElement));
+        
+        bitmap = new Bitmap(renderer.domElement);
         bitmap.x = bitmap.y = -d;
+        addChild(bitmap);
+        
         setQuality(2);
 		
 		scene = new Scene();
-		scene.fog = NullTools.clone(scene.fog);
 		
-		scene.add(group = new Group());
-		
+		group = new Group();
 		for (object in symbol.scene.children)
 		{
 			switch (object.type)
@@ -83,6 +84,10 @@ class Mesh extends SolidContainer
 					group.add(object.clone());
 			}
 		}
+        scene.add(group);
+
+        scene.add(ambientLight);
+		scene.add(directionalLight);
 
         if (params != null) MeshParamsTools.applyToMesh(params, this);
 	}
@@ -142,8 +147,7 @@ class Mesh extends SolidContainer
 			camera.updateMatrix();
 		}
 		
-		if (ambientLight != null) scene.add(ambientLight);
-		if (directionalLight != null) scene.add(directionalLight);
+
 
 		renderer.render(scene, camera);
 
