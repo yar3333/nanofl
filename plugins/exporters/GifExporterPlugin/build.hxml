@@ -1,0 +1,4 @@
+--js ..\..\bin\exporters\GifExporterPlugin.js
+--class-path ..\..\api\gen
+--class-path src
+--main GifExporterPlugin

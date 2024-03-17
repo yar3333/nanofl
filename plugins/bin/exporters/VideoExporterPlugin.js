@@ -107,27 +107,11 @@ AudioHelper.getVideoItemFromTrack = function(track) {
 	var instance = element;
 	return instance.get_symbol();
 };
-var GifVideoExporterPlugin = function() {
-	this.properties = null;
-	this.fileDefaultExtension = "gif";
-	this.fileFilterExtensions = ["gif"];
-	this.fileFilterDescription = "GIF image (*.gif)";
-	this.menuItemIcon = "custom-icon-film";
-	this.menuItemName = "GIF image (*.gif)";
-	this.name = "GifVideoExporter";
-};
-GifVideoExporterPlugin.__name__ = true;
-GifVideoExporterPlugin.prototype = {
-	exportDocument: function(api,args) {
-		return VideoExporter.run(api.fileSystem,api.processManager,api.folders,args.destFilePath,args.documentProperties,args.library,[]);
-	}
-};
 var Main = function() { };
 Main.__name__ = true;
 Main.main = function() {
 	nanofl.ide.plugins.ExporterPlugins.register(new Mp4VideoExporterPlugin());
 	nanofl.ide.plugins.ExporterPlugins.register(new WebmVideoExporterPlugin());
-	nanofl.ide.plugins.ExporterPlugins.register(new GifVideoExporterPlugin());
 };
 Math.__name__ = true;
 var Mp4VideoExporterPlugin = function() {

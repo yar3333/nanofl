@@ -1,5 +1,8 @@
 package components.nanofl.others.custompropertiespane;
 
+import js.html.Element;
+import js.Browser;
+import js.html.TemplateElement;
 import wquery.Event;
 import haxe.Serializer;
 import nanofl.engine.CustomPropertiesTools;
@@ -55,7 +58,7 @@ class Code extends wquery.Component
 			var data: Dynamic =
 			{
 				name: p.name,
-				label: p.label != null ? p.label : p.name,
+				label: p.label != null ? processLabel(p.label) : p.name,
 				title: p.description != null ? p.description : "",
 				value: Reflect.field(params, p.name),
 				units: p.units != null ? p.units : "",
@@ -68,18 +71,15 @@ class Code extends wquery.Component
 			switch (p.type)
 			{
 				case "int":
-					data.label = data.label + ":";
-					if (p.minValue != null && p.maxValue != null)
-						sliders.create(data);//.bind(data);
-					else
-						ints.create(data);
+	    			data.label = data.label + ":";
+					ints.create(data);
 					
 				case "float":
 					data.label = data.label + ":";
-					if (p.minValue != null && p.maxValue != null)
-						sliders.create(data);//.bind(data);
-					else
-						floats.create(data);
+					floats.create(data);
+                
+                case "slider":
+    				sliders.create(data);
 					
 				case "color":
 					data.label = data.label + ":";
@@ -139,4 +139,24 @@ class Code extends wquery.Component
 		
 		event_change.emit({});
 	}
+
+    static function processLabel(html:String) : String
+    {
+        final r : TemplateElement = cast Browser.document.createElement("template");
+		try r.innerHTML = html
+		catch (e:Dynamic) return "[html parse error]";
+
+        function processLabelInner(node:Element)
+        {
+            if (node.tagName == "A")
+            {
+                node.setAttribute("target", "_blank");
+            }
+            for (child in node.children) processLabelInner(child);
+        }
+
+        processLabelInner(cast r.content);
+
+        return r.innerHTML;
+    }
 }
