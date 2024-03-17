@@ -1,10 +1,10 @@
 package components.nanofl.page;
 
-import nanofl.ide.OpenedFiles;
-import nanofl.ide.draganddrop.DragAndDrop;
 import js.Browser;
 import js.JQuery;
+import nanofl.ide.OpenedFiles;
 import nanofl.ide.ILayout;
+import nanofl.ide.draganddrop.DragAndDrop;
 import nanofl.ide.preferences.Preferences;
 import nanofl.ide.ui.View;
 import nanofl.ide.ui.Popups;
@@ -41,10 +41,9 @@ class Code extends wquery.Component implements ILayout
 	
 	var layoutInstance : LayoutInstance;
 	
-	public var view(default, null) : View;
-	public var popups(default, null) : Popups;
-	public var openedFiles(default, null) : OpenedFiles;
-	public var dragAndDrop(default, null) : DragAndDrop;
+	var view : View;
+	var openedFiles : OpenedFiles;
+	var dragAndDrop : DragAndDrop;
 	
 	public function getTemplate() return template();
 	
@@ -53,7 +52,7 @@ class Code extends wquery.Component implements ILayout
         injector.allowNoRttiForClass(wquery.Component);
 		injector.injectInto(this);
 		
-		injector.addSingleton(Popups, popups = new Popups(this));
+		injector.addSingleton(Popups, new Popups(this));
 		injector.addSingleton(DragAndDrop, dragAndDrop = new DragAndDrop());
 		injector.addSingleton(View, view = new View(this));
 		injector.addSingleton(ILayout, this);
@@ -78,16 +77,16 @@ class Code extends wquery.Component implements ILayout
 		template().mainMenu.offset(template().mainMenuContainer.offset());
 		
 		var window = q(Browser.window);
-		window.resize(function(e) resize(window.width(), window.height()));
+		window.resize(_ -> resize(window.width(), window.height()));
 		
-		window.blur(function(_) q(".dropdown-toggle").parent().removeClass('open')); // fix to close menu on click on iframe
+		window.blur(_ -> q(".dropdown-toggle").parent().removeClass('open')); // fix to close menu on click on iframe
 		
-		q(Browser.document).find(".nav>li").mousedown(function(e) e.preventDefault());
+		q(Browser.document).find(".nav>li").mousedown(e -> e.preventDefault());
 		
 		template().moviePage.hide();
 		template().startPage.show();
 		
-		q(Browser.document.body).on("contextmenu", function(e) e.preventDefault());
+		q(Browser.document.body).on("contextmenu", e -> e.preventDefault());
 		template().inputContextMenu.build(q(Browser.document.body), "input[type=text],textarea", preferences.storage.getMenu("inputContextMenu"), function(menu:nanofl.ide.ui.menu.ContextMenu, e:JqEvent, item:JQuery) : Bool
 		{
 			var input = new JQuery(e.currentTarget);

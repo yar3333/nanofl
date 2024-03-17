@@ -26,20 +26,16 @@ using stdlib.Lambda;
 using stdlib.StringTools;
 using nanofl.ide.plugins.CustomizablePluginTools;
 
-//@:rtti
 class Application extends js.injecting.InjectContainer
 {
 	@inject var fileSystem : FileSystem;
 	@inject var folders : Folders;
 	
-	//var layout : ILayout;
 	final view : View;
 	final popups : Popups;
-	//var clipboard : Clipboard;
-	//var plugins : Plugins;
-	//var keyboard : Keyboard;
-	final preferences : Preferences;
 	final openedFiles : OpenedFiles;
+    
+    final preferences : Preferences;
 	final recents : Recents;
     final documentTools : DocumentTools;
 	
@@ -66,19 +62,18 @@ class Application extends js.injecting.InjectContainer
         injector.addSingleton(DocumentTools);
 		
 		wquery.Template.baseURL = "../../";
-		var page = wquery.Application.run("page", components.nanofl.page.Code, { injector:injector });
+		wquery.Application.run("page", components.nanofl.page.Code, { injector:injector });
 		
-		//this.layout = page;
-		this.view = page.view;
-		this.popups = page.popups;
-		this.openedFiles = page.openedFiles;
+        this.view = injector.getService(View);
+		this.popups = injector.getService(Popups);
+		this.openedFiles = injector.getService(OpenedFiles);
         
 		injector.addSingleton(Plugins);
 	
 		Log.init(fileSystem, view.alerter);
 
         final clipboard = injector.getService(Clipboard);
-        clipboard.setView(page.view);
+        clipboard.setView(view);
 		
 		new JQuery(Browser.window).resize();
 		new JQuery(Browser.document.body).focus();
@@ -95,6 +90,7 @@ class Application extends js.injecting.InjectContainer
         preferences.storage.applyToIDE(true);
 
         this.recents = injector.getService(Recents);
+        
         this.documentTools = injector.getService(DocumentTools);
 		
 		Log.onMessage.bind((_, e) ->

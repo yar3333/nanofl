@@ -6,5 +6,6 @@ class Main
 	{
 		ExporterPlugins.register(new Mp4VideoExporterPlugin());
 		ExporterPlugins.register(new WebmVideoExporterPlugin());
+		ExporterPlugins.register(new GifVideoExporterPlugin());
 	}
 }
