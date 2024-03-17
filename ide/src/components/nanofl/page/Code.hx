@@ -50,15 +50,14 @@ class Code extends wquery.Component implements ILayout
 	
 	function preInit()
 	{
-		injector.allowNoRttiForClass(wquery.Component);
-		
+        injector.allowNoRttiForClass(wquery.Component);
 		injector.injectInto(this);
 		
-		injector.map(Popups, popups = new Popups(this));
-		injector.map(DragAndDrop, dragAndDrop = new DragAndDrop());
-		injector.map(View, view = new View(this));
-		injector.map(ILayout, this);
-		injector.map(OpenedFiles, openedFiles = new OpenedFiles(this));
+		injector.addSingleton(Popups, popups = new Popups(this));
+		injector.addSingleton(DragAndDrop, dragAndDrop = new DragAndDrop());
+		injector.addSingleton(View, view = new View(this));
+		injector.addSingleton(ILayout, this);
+		injector.addSingleton(OpenedFiles, openedFiles = new OpenedFiles(this));
 	}
 	
 	function init()

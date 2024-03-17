@@ -1,16 +1,15 @@
 package nanofl.ide.preferences;
 
 @:rtti
-class Preferences
+class Preferences extends InjectContainer 
 {
-	public var storage : PreferencesStorage;
+	@inject public var storage(default, null) : PreferencesStorage;
 	
-	public var application(default, null) : ApplicationPreferences;
+    public final application : ApplicationPreferences;
 	
-	public function new(storage:PreferencesStorage) 
+	public function new() 
 	{
-		this.storage = storage;
-		
-		application = new ApplicationPreferences(storage);
+        super();
+		this.application = new ApplicationPreferences(storage);
 	}
 }

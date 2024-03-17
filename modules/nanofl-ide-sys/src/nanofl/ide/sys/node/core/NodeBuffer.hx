@@ -1,7 +1,5 @@
 package nanofl.ide.sys.node.core;
 
-import haxe.io.Bytes;
-import js.lib.Object;
 import js.lib.Uint8Array;
 
 /**

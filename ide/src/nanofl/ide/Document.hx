@@ -4,7 +4,6 @@ import stdlib.Timer;
 import js.lib.Promise;
 import haxe.io.Path;
 import stdlib.Debug;
-import stdlib.Uuid;
 import stdlib.ExceptionTools;
 import nanofl.engine.Log.console;
 import nanofl.engine.geom.Matrix;
@@ -14,7 +13,6 @@ import nanofl.ide.CodeGenerator;
 import nanofl.ide.CodePublisher;
 import nanofl.ide.editor.Editor;
 import nanofl.ide.editor.EditorLibrary;
-import nanofl.ide.editor.NewObjectParams;
 import nanofl.ide.filesystem.FileAction;
 import nanofl.ide.filesystem.FileActions;
 import nanofl.ide.library.IdeLibrary;
@@ -40,11 +38,9 @@ using stdlib.StringTools;
 @:rtti
 class Document extends OpenedFile
 {
-	@inject var app : Application;
 	@inject var preferences : Preferences;
 	@inject var fileSystem : FileSystem;
 	@inject var view : View;
-	@inject var newObjectParams : NewObjectParams;
 	@inject var folders : Folders;
 	@inject var clipboard : Clipboard;
 	@inject var shell : Shell;
@@ -52,26 +48,26 @@ class Document extends OpenedFile
 	@inject var recents : Recents;
 	
 	function get_type() return OpenedFileType.DOCUMENT;
-	
-	var savedLibrary : IdeLibrary;
+
+    function isTemporary() return path.startsWith(folders.unsavedDocuments + "/");
 
     public var allowAutoReloading(default, null) = true;
 	
 	/**
-	 * Used when document was opened directly from none-NanoFL format. In other cases is null.
+	 * Used when document was opened from none-NanoFL format. In other cases is null.
 	 */
 	public var originalPath(default, null) : String;
+    
+    /**
+	 * Used when document was opened from none-NanoFL format. In other cases is null.
+	 */
+	public var originalLastModified(default, null) : Date;
 	
 	/**
 	 * Used to detect document modification.
 	 */
-	var originalProperties : DocumentProperties;
-	
-	/**
-	 * Used when document was opened directly from none-NanoFL format. In other cases is null.
-	 */
-	public var originalLastModified(default, null) : Date;
-	
+	var savedProperties : DocumentProperties;
+
 	/**
 	 * Path to NanoFL document file (*.nfl).
 	 */
@@ -85,9 +81,6 @@ class Document extends OpenedFile
 	public var editor(default, null) : Editor;
 	public var undoQueue(default, null) : UndoQueue;
 	
-	public var isTemporary(get, never) : Bool;
-	function get_isTemporary() return path.startsWith(getBaseTemporaryDir(folders) + "/");
-	
 	public function getTabTextColor() return "";
 	public function getTabBackgroundColor() return "";
 	
@@ -97,14 +90,12 @@ class Document extends OpenedFile
 		
 		super(this);
 		
-		this.originalProperties = properties.clone();
+		this.savedProperties = properties.clone();
 		
 		this.path = path;
 		this.properties = properties;
 		this.library = new EditorLibrary(library, this);
 		this.lastModified = lastModified;
-		
-		if (lastModified != null) savedLibrary = library.clone();
 		
 		navigator = new Navigator(this);
 		editor = new Editor(this);
@@ -139,11 +130,11 @@ class Document extends OpenedFile
 			return true;
 		}
 		
-		if (isTemporary)
+		if (isTemporary())
 		{
 			if (originalPath == null)
 			{
-				if (!properties.equ(originalProperties))
+				if (!properties.equ(savedProperties))
 				{
 					log("MODIFIED because document properties");
 					return  true;
@@ -175,85 +166,13 @@ class Document extends OpenedFile
 		return false;
 	}
 	
-	public static function createTemporary(openedFiles:OpenedFiles, folders:Folders, ?properties:DocumentProperties) : Document
-	{
-		if (properties == null) properties = new DocumentProperties();
-		var path = generateTempFilePath(folders);
-		var library = new IdeLibrary(Path.directory(path) + "/library");
-		var document = new Document(path, properties, library);
-		openedFiles.add(document);
-		return document;
-	}
-	
-	public static function load(fileSystem:FileSystem, openedFiles:OpenedFiles, preferences:Preferences, folders:Folders, view:View, path:String) : Promise<Document>
-	{
-		path = Path.normalize(path);
-		
-		if (Path.extension(path) == "nfl")
-		{
-			console.log("Loading " + path);
-			
-			return loadRaw(fileSystem, path, null).then(function(e:{ library:IdeLibrary, properties:DocumentProperties, lastModified:Date })
-			{
-				if (e != null)
-				{
-					var document = new Document(path, e.properties, e.library, e.lastModified);
-					document.library.fixErrors();
-					return e.library.preload().then(function(_)
-					{
-						openedFiles.add(document);
-						return document;
-					});
-				}
-				else
-				{
-					return null;
-				}
-			});
-		}
-		else
-		{
-			return import_(preferences, openedFiles, folders, view, path).then(function(document:Document) : Document
-			{
-				if (document != null)
-				{
-					document.originalPath = path;
-					document.originalLastModified = Date.now();
-				}
-				return document;
-			});
-		}
-	}
-	
-	public static function loadRaw(fileSystem:FileSystem, path:String, lastModified:Date) : Promise<{ library:IdeLibrary, properties:DocumentProperties, lastModified:Date }>
-	{
-		if (fileSystem.exists(path) && !fileSystem.isDirectory(path))
-		{
-			var realLastModified = fileSystem.getDocumentLastModified(path);
-			
-			if (lastModified == null || lastModified.getTime() < realLastModified.getTime())
-			{
-                var properties = DocumentProperties.load(path, fileSystem);
-				var library = new IdeLibrary(Path.join([ Path.directory(path), "library" ]));
-				return library.loadItems().then(_ ->
-                ({
-                    properties: properties,
-                    library: library,
-                    lastModified: realLastModified
-                }));
-			}
-		}
-		return Promise.resolve(null);
-	}
-	
-	
 	public function save(?force:Bool) : Promise<Bool>
 	{
 		return saveAs
 		(
 			originalPath != null 
 				? (detectExporter(originalPath) != null ? originalPath : null)
-				: (!isTemporary ? path : null),
+				: (!isTemporary() ? path : null),
             force
 		);
 	}
@@ -262,14 +181,14 @@ class Document extends OpenedFile
 	{
 		if (newPath == null)
 		{
-			var exporters = ExporterPlugins.plugins.array();
+			final exporters = ExporterPlugins.plugins.array();
 			exporters.sort((a, b) -> Reflect.compare(a.name, b.name));
 			
-			var filters = [];
+			final filters = [];
 			filters.push({ name:"NanoFL documents (*.nfl)", extensions:["nfl"] });
 			for (exporter in exporters) 
 			{
-				var extensions = exporter.fileFilterExtensions.filter((ext:String) ->
+				final extensions = exporter.fileFilterExtensions.filter((ext:String) ->
                 {
                     return ImporterPlugins.plugins.array().exists
                     (
@@ -282,23 +201,18 @@ class Document extends OpenedFile
 				}
 			}
 			
-            return popups.showSaveFile("Select document file name to save", filters).then(r ->
+            return popups.showSaveFile("Select document file name to save", filters).then(filePath ->
             {
-                if (r.canceled || StringTools.isNullOrEmpty(r.filePath)) return null;
+                if (filePath == null) return Promise.resolve(false);
                 
-                var path = r.filePath;
-                var ext = Path.extension(path);
+                final ext = Path.extension(filePath);
                 if ([ "nfl", "xfl" ].contains(ext))
                 {
-                    var name = Path.withoutDirectory(Path.withoutExtension(path));
-                    path = Path.join([ Path.directory(path), name, name + "." + ext ]);
+                    final name = Path.withoutDirectory(Path.withoutExtension(filePath));
+                    filePath = Path.join([ Path.directory(filePath), name, name + "." + ext ]);
                 }
                 
-                return path;
-            })
-            .then(path ->
-            {
-                return !StringTools.isNullOrEmpty(path) ? saveAs(path, force) : Promise.resolve(false);
+                return saveAs(filePath, force);
             });
 		}
 		else
@@ -309,7 +223,7 @@ class Document extends OpenedFile
 			{
                 if (!saveNative(force)) return Promise.resolve(false);
 
-                var success = saveNativeAs(newPath);
+                final success = saveNativeAs(newPath);
                 if (success)
                 {
                     originalPath = null;
@@ -368,44 +282,7 @@ class Document extends OpenedFile
             return success;
 		}
 	}
-	
-	public static function import_(preferences:Preferences, openedFiles:OpenedFiles, folders:Folders, view:View, path:String, ?importer:Importer) : Promise<Document>
-	{
-		if (importer == null) importer = detectImporter(preferences, path);
 		
-		if (importer != null)
-		{
-			return DocumentImporterHelper.run(path, createTemporary(openedFiles, folders), importer).then(document ->
-			{
-				if (document != null)
-				{
-					trace("Import success");
-					
-					document.library.fixErrors();
-					
-					return document.library.preload().then((_) ->
-					{
-						document.lastModified = Date.now();
-						openedFiles.add(document);
-						document.activate(true);
-						view.waiter.hide();
-						return document;
-					});
-				}
-				else
-				{
-					trace("Import fail");
-					view.waiter.hide();
-					return null;
-				}
-			});
-		}
-		else
-		{
-			return Promise.resolve(null);
-		}
-	}
-	
 	public function export(?destPath:String, ?plugin:IExporterPlugin) : Promise<Bool>
 	{
 		if (destPath == null)
@@ -419,33 +296,25 @@ class Document extends OpenedFile
 			{
 				for (exporterName in ExporterPlugins.plugins.keys().sorted())
 				{
-					var plugin = ExporterPlugins.plugins.get(exporterName);
+					final plugin = ExporterPlugins.plugins.get(exporterName);
 					fileFilters.push({ name:plugin.fileFilterDescription, extensions:plugin.fileFilterExtensions });
 				}
 			}
 
-            return new Promise<Bool>((resolve, reject) ->
+            return popups.showSaveFile("Select destination file name to export", fileFilters).then(filePath ->
             {
-                popups.showSaveFile("Select destination file name to export", fileFilters).then(r ->
+                if (filePath == null) return Promise.resolve(false);
+
+                return export(filePath, plugin).then(success ->
                 {
-                    if (!r.canceled && !StringTools.isNullOrEmpty(r.filePath))
-                    {
-                        export(r.filePath, plugin).then((success:Bool) ->
-                        {
-                            if (success) openedFiles.titleChanged(this);
-                            resolve(success);
-                        });
-                    }
-                    else
-                    {
-                        resolve(false);
-                    }
+                    if (success) openedFiles.titleChanged(this);
+                    return success;
                 });
             });
 		}
 		else
 		{
-			var exporter = plugin != null
+			final exporter = plugin != null
 				? new Exporter(plugin.name, plugin.getParams(preferences.storage))
 				: detectExporter(destPath);
 			
@@ -466,42 +335,56 @@ class Document extends OpenedFile
 		}
 	}
 
-	public function reload() : Promise<{ added:Array<IIdeLibraryItem>, removed:Array<IIdeLibraryItem> }>
+	public function syncLibraryItems(newLibrary:IdeLibrary, newLastModified:Date, addUndoTransaction:Bool) : Promise<{ added:Array<IIdeLibraryItem>, removed:Array<IIdeLibraryItem> }>
 	{
-		return reloadInner(true, false);
-	}
-	
-	public function reloadWoTransactionForced() : Promise<{ added:Array<IIdeLibraryItem>, removed:Array<IIdeLibraryItem> }>
-	{
-		return reloadInner(false, true);
-	}
-	
-	function reloadInner(addUndoTransaction:Bool, force:Bool) : Promise<{ added:Array<IIdeLibraryItem>, removed:Array<IIdeLibraryItem> }>
-	{
-        return loadRaw(fileSystem, path, !force ? lastModified : null).then((e:{ library:IdeLibrary, properties:DocumentProperties, lastModified:Date }) ->
+        final itemsToRemove = library.getItems().filter(x -> !newLibrary.hasItem(x.namePath));
+        final itemsToAdd = newLibrary.getItemsAsIde().filter(x -> !library.hasItem(x.namePath));
+        
+        if (addUndoTransaction) undoQueue.beginTransaction({ libraryRemoveItems:itemsToRemove.map(x -> x.namePath), libraryAddItems:true });
+        library.removeItems(itemsToRemove.map(x -> x.namePath));
+        library.addItems(itemsToAdd, false);
+        if (addUndoTransaction) undoQueue.commitTransaction();
+        
+        return library.preload().then(_ ->
         {
-            if (e == null) return Promise.resolve({ added:[], removed:[] });
-
-            var itemsToRemove = library.getItems().filter(x -> !e.library.hasItem(x.namePath));
-            var itemsToAdd = e.library.getItemsAsIde().filter(x -> !library.hasItem(x.namePath));
+            editor.rebind();
+            library.update();
             
-            if (addUndoTransaction) undoQueue.beginTransaction({ libraryRemoveItems:itemsToRemove.map(x -> x.namePath), libraryAddItems:true });
-            library.removeItems(itemsToRemove.map(x -> x.namePath));
-            library.addItems(itemsToAdd, false);
-            if (addUndoTransaction) undoQueue.commitTransaction();
+            lastModified = newLastModified;
+            
+            return { added:itemsToAdd, removed:itemsToRemove };
+        });
+	}
+
+    @:allow(nanofl.ide.DocumentTools.import_)
+    function import_(path:String, importer:Importer) : Promise<Bool>
+    {
+        if (importer == null) importer = detectImporter(preferences, path);
+        if (importer == null) return Promise.resolve(null);
+
+        view.waiter.show();
+
+        originalPath = path;
+        originalLastModified = fileSystem.getLastModified(path);
+
+        return DocumentImporterHelper.run(path, this, importer).then(success ->
+        {
+            if (!success) { view.waiter.hide(); view.alerter.error("Error during importing."); return Promise.resolve(false); }
+
+            view.alerter.info("Document successfully imported.");
+            
+            library.fixErrors();
             
             return library.preload().then(_ ->
             {
-                editor.rebind();
-                library.update();
+                saveNative(true);
+                activate(true);
                 
-                lastModified = e.lastModified;
-                savedLibrary = library.getRawLibrary().clone();
-                
-                return { added:itemsToAdd, removed:itemsToRemove };
+                view.waiter.hide();
+                return true;
             });
         });
-	}
+    }
 
     var webServer = { uid:null, address:null };
 	public function test() : Promise<Bool>
@@ -585,7 +468,7 @@ class Document extends OpenedFile
 		return promise.then(_ ->
 		{
 			log("prepare output directory");
-			var destDir = getPublishDirectory();
+			final destDir = getPublishDirectory();
 			
             log("destDir = " + destDir);
             fileSystem.createDirectory(destDir);
@@ -602,7 +485,7 @@ class Document extends OpenedFile
             }
 
     		log("Publish library items to " + Path.directory(path));
-			var publishedLibrary = library.publishItems(properties.publishSettings, destDir);
+			final publishedLibrary = library.publishItems(properties.publishSettings, destDir);
 
             log("Publish 'library.js'");
             publishedLibrary.publishLibraryJsFile(destDir);
@@ -638,7 +521,7 @@ class Document extends OpenedFile
 	
 	function getPublishDirectory()
 	{
-		var r = originalPath != null
+		final r = originalPath != null
 			  ? detectImporter(preferences, originalPath).getPublishDirectoryBasePath(originalPath)
 			  : Path.directory(path);
 		return r + ".release";
@@ -658,14 +541,14 @@ class Document extends OpenedFile
 	{
 		return originalPath != null
 			? (undoQueue.isDocumentModified() && detectExporter(originalPath) != null)
-			: (!isTemporary && lastModified != null && app.document.undoQueue.isDocumentModified());
+			: (!isTemporary() && lastModified != null && undoQueue.isDocumentModified());
 	}
 	
 	public function dispose()
 	{
         if (webServer.uid != null) webServerUtils.kill(webServer.uid);
 
-		if (isTemporary)
+		if (isTemporary())
 		{
 			stdlib.Debug.assert(path.startsWith(folders.temp));
 			try fileSystem.deleteAny(Path.directory(path)) catch (_:Dynamic) {}
@@ -678,7 +561,7 @@ class Document extends OpenedFile
 		
         undoQueue.commitTransaction();
         
-        var e = saveDocument
+        var e = saveNativeInner
         (
             path,
             properties,
@@ -687,7 +570,6 @@ class Document extends OpenedFile
         );
         
         lastModified = e.lastModified;
-        savedLibrary = library.getRawLibrary().clone();
         undoQueue.documentSaved();
         openedFiles.titleChanged(this);
         trace("Saved " + path);
@@ -696,7 +578,7 @@ class Document extends OpenedFile
         return true;
 	}
 	
-	function saveDocument(path:String, properties:DocumentProperties, library:IdeLibrary, fileActions:Array<FileAction>) : { lastModified:Date, errorMessage:String }
+	function saveNativeInner(path:String, properties:DocumentProperties, library:IdeLibrary, fileActions:Array<FileAction>) : { lastModified:Date, errorMessage:String }
 	{
 		Debug.assert(path != null);
 		Debug.assert(properties != null);
@@ -746,7 +628,7 @@ class Document extends OpenedFile
 	
 	public function getShortTitle() : String
 	{
-		return (isTemporary && originalPath == null ? "Untitled" : Path.withoutDirectory(originalPath != null ? originalPath : Path.withoutExtension(path)))
+		return (isTemporary() && originalPath == null ? "Untitled" : Path.withoutDirectory(originalPath != null ? originalPath : Path.withoutExtension(path)))
 			 + (isModified ? "*" : "");
 	}
 	
@@ -754,7 +636,7 @@ class Document extends OpenedFile
 	
 	public function getLongTitle() : String
 	{
-		return (isTemporary && originalPath == null ? "Untitled" : getPath())
+		return (isTemporary() && originalPath == null ? "Untitled" : getPath())
 			 + (isModified ? "*" : "");
 	}
 	
@@ -783,14 +665,6 @@ class Document extends OpenedFile
 	public function canCut() return clipboard.canCut();
 	public function canCopy() return clipboard.canCopy();
 	public function canPaste() return clipboard.canPaste();
-	
-	static function generateTempFilePath(folders:Folders) : String
-	{
-		var name = Uuid.newUuid();
-		return getBaseTemporaryDir(folders) + "/" + name + "/" + name + ".nfl";
-	}
-	
-	static function getBaseTemporaryDir(folders:Folders) return folders.temp + "/unsaved";
 	
 	static function detectImporter(preferences:Preferences, path:String) : Importer
 	{

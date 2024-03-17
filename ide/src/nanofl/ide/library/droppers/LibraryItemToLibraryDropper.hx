@@ -9,7 +9,7 @@ class LibraryItemToLibraryDropper extends BaseLibraryItemToLibraryDropper implem
 {
 	public function drop(dropEffect:DropEffect, data:HtmlNodeElement, e:JqEvent)
 	{
-		if (items.readOnly) return;
+		if (view.library.readOnly) return;
 		
 		dropToLibraryItemsFolder(dropEffect, data, "");
 	}

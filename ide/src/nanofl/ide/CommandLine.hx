@@ -1,11 +1,12 @@
 package nanofl.ide;
 
+import stdlib.ExceptionTools;
+import stdlib.Std;
 import js.Lib;
 import js.lib.Error;
 import js.lib.Promise;
 import nanofl.engine.Log;
 import nanofl.engine.Log.console;
-import nanofl.ide.SafeCode;
 import nanofl.ide.sys.FileSystem;
 import nanofl.ide.sys.Folders;
 import nanofl.ide.sys.MainProcess;
@@ -46,18 +47,20 @@ class CommandLine extends InjectContainer
 
 		if (arg.endsWith(".js") || arg.endsWith(".jsnf"))
 		{
-			var code = fileSystem.getContent(arg);
-			
-			var errorMessage = "Error loading script \"" + arg + "\".";
-			var r = SafeCode.run(errorMessage, () ->
+			try
 			{
+                final code = fileSystem.getContent(arg);
 				Lib.eval("(" + code + ")");
-			});
+			}
+            catch (e)
+            {
+                return error("Error loading script \"" + arg + "\".\n" + ExceptionTools.wrap(e).message);
+            }
 			
 			return Timer.delayAsync(50).then(_ ->
 			{
 				view.movie.timeline.update();
-                return r ? processNextArg(args) : error(errorMessage);
+                return processNextArg(args);
 			});
 		}
 		

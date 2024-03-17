@@ -25,19 +25,13 @@ class OpenedFiles
 	public function iterator() : Iterator<OpenedFile> return container.getTemplate().openedFiles.iterator();
 	public function closeAll(?force:Bool) : Promise<{}> return container.getTemplate().openedFiles.closeAll(force);
 	
-	@:allow(nanofl.ide.Document)
-	@:allow(nanofl.ide.coding.CodeFile)
-	private function add(doc:OpenedFile) : Void container.getTemplate().openedFiles.add(doc);
+	public function add(doc:OpenedFile) : Void container.getTemplate().openedFiles.add(doc);
 	
-	@:allow(nanofl.ide.OpenedFile.close)
-	private function close(doc:OpenedFile) : Void container.getTemplate().openedFiles.close(doc);
+	public function close(doc:OpenedFile) : Void container.getTemplate().openedFiles.close(doc);
 	
-	@:allow(nanofl.ide.Document.activate)
-	@:allow(nanofl.ide.coding.CodeFile.activate)
-	private function activate(id:String) : Void container.getTemplate().openedFiles.activate(id);
+	public function activate(id:String) : Void container.getTemplate().openedFiles.activate(id);
 	
-	@:allow(nanofl.ide.OpenedFile)
-	private function titleChanged(doc:OpenedFile) : Void container.getTemplate().openedFiles.titleChanged(doc);
+	public function titleChanged(doc:OpenedFile) : Void container.getTemplate().openedFiles.titleChanged(doc);
 	
 	@:noapi
 	public function new(container:Container)

@@ -180,7 +180,7 @@ class LibraryItems
 		return AllowedDropEffect.copyMove;
 	}
 	
-	public static function drop(dropEffect:DropEffect, data:HtmlNodeElement, document:Document, folder:String) : Promise<Array<IIdeLibraryItem>>
+	public static function drop(dropEffect:DropEffect, data:HtmlNodeElement, document:Document, folder:String, documentTools:DocumentTools) : Promise<Array<IIdeLibraryItem>>
 	{
 		Debug.assert(folder != null);
 		
@@ -196,7 +196,7 @@ class LibraryItems
 			
 			var namePaths = data.find(">libraryitems>item")
 				.map(x -> x.getAttribute("namePath"))
-				.filter(function(namePath)
+				.filter(namePath ->
 				{
 					if (!document.library.hasItem(namePath))
 					{
@@ -221,22 +221,22 @@ class LibraryItems
 		}
 		else
 		{
-			var items = LibraryItems.loadFromXml(data);
+			final items = LibraryItems.loadFromXml(data);
 			log("\titems: " + items.map(x -> x.namePath));
 			
 			document.undoQueue.beginTransaction({ libraryAddItems:true });
 			
 			document.library.addItems(items, false);
 			
-			var libraryFilesNodes = data.find(">libraryfiles");
+			final libraryFilesNodes = data.find(">libraryfiles");
 			if (libraryFilesNodes.length > 0)
 			{
-				var libraryDir = libraryFilesNodes[0].getAttribute("libraryDir");
-				var files = libraryFilesNodes[0].find(">file").map(x -> x.getAttribute("path"));
+				final libraryDir = libraryFilesNodes[0].getAttribute("libraryDir");
+				final files = libraryFilesNodes[0].find(">file").map(x -> x.getAttribute("path"));
 				document.library.copyFilesIntoLibrary(libraryDir, files);
                 log("\tfiles copied into library");
                 
-                return document.reloadWoTransactionForced().then((e:{ added:Array<IIdeLibraryItem>, removed:Array<IIdeLibraryItem> }) ->
+                return documentTools.reloadWoTransactionForced(document).then((e:{ added:Array<IIdeLibraryItem>, removed:Array<IIdeLibraryItem> }) ->
                 {
                     log("\tdocument reloaded\n\t" + e.added.map(x -> x.namePath).join("\n\t"));
                     document.undoQueue.commitTransaction();

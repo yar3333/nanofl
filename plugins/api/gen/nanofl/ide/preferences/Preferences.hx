@@ -1,7 +1,7 @@
 package nanofl.ide.preferences;
 
-extern class Preferences {
-	function new(storage:nanofl.ide.preferences.PreferencesStorage):Void;
-	var storage : nanofl.ide.preferences.PreferencesStorage;
-	var application(default, null) : nanofl.ide.preferences.ApplicationPreferences;
+extern class Preferences extends nanofl.ide.InjectContainer {
+	function new():Void;
+	var storage(default, null) : nanofl.ide.preferences.PreferencesStorage;
+	var application : nanofl.ide.preferences.ApplicationPreferences;
 }

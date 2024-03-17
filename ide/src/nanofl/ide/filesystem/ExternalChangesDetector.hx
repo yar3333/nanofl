@@ -13,6 +13,7 @@ class ExternalChangesDetector extends InjectContainer
 	
 	@inject var app : Application;
 	@inject var view : View;
+	@inject var documentTools : DocumentTools;
 	
 	var timer : Timer;
 
@@ -34,7 +35,7 @@ class ExternalChangesDetector extends InjectContainer
 	{
 		if (app.document == null || !app.document.allowAutoReloading) return;
 		
-		app.document.reload().then((e:{ added:Array<IIdeLibraryItem>, removed:Array<IIdeLibraryItem> }) ->
+		documentTools.reload(app.document).then((e:{ added:Array<IIdeLibraryItem>, removed:Array<IIdeLibraryItem> }) ->
 		{
 			if (e.added.length > 0 || e.removed.length > 0)
 			{

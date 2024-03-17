@@ -30,13 +30,12 @@ class Code extends wquery.Component
 			template().value.attr("title"),
 			Unserializer.run(template().browse.attr("data-file-filters"))
 		)
-        .then(r -> 
+        .then(filePath -> 
         {
-            if (!r.canceled && r.filePaths != null && r.filePaths.length > 0)
-            {
-                template().value.val(r.filePaths[0]);
-                value_change(null);
-            }
+            if (filePath == null) return;
+            
+            template().value.val(filePath);
+            value_change(null);
         });
 	}
 	

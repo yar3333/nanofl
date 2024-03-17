@@ -47,7 +47,7 @@ class Code extends wquery.Component
 	
 	var items : ComponentList<components.nanofl.library.libraryitem.Code>;
 	
-	@:allow(nanofl.ide.library.droppers.BaseLibraryItemToLibraryDropper.dropToLibraryItemsFolder)
+	@:allow(components.nanofl.library.libraryview.Code)
 	var activeNamePath = "";
 	
 	public var preview : components.nanofl.library.librarypreview.Code;
@@ -98,7 +98,7 @@ class Code extends wquery.Component
 			(
 				template().content, ">li",
 				[
-					"libraryItem" => new LibraryItemToLibraryItemDropper(app, this)
+					"libraryItem" => new LibraryItemToLibraryItemDropper()
 				],
 				(files:Array<File>, e:JqEvent) ->
 				{
@@ -225,7 +225,7 @@ class Code extends wquery.Component
 			
 			var elements = getElements(); 
 			
-			template().contextMenu.build(elements, preferences.storage.getMenu("libraryItemsContextMenu"), function(menu:ContextMenu, e:JqEvent, _:JQuery)
+			template().contextMenu.build(elements, preferences.storage.getMenu("libraryItemsContextMenu"), (menu:ContextMenu, e:JqEvent, _:JQuery) ->
 			{
 				if (readOnly) return false;
 				
@@ -281,7 +281,7 @@ class Code extends wquery.Component
 	{
 		for (element in getElements())
 		{
-			var namePath : String = element.attr("data-name-path");
+			var namePath = element.attr("data-name-path");
 			
 			if (isVisible(namePath))
 			{
@@ -390,27 +390,27 @@ class Code extends wquery.Component
 	{
 		return
 		{
-			enabled: function(jq:JQuery)
+			enabled: (jq:JQuery) ->
 			{
 				return !readOnly && jq.hasClass("selected");
 			},
-			beginEdit: function(jq:JQuery, input:JQuery)
+			beginEdit: (jq:JQuery, input:JQuery) ->
 			{
 				jq.attr("draggable", "false");
 				jq.children("span").hide();
 				input.width(jq.width() - jq.children(":visible").outerWidth());
 				jq.append(input);
 			},
-			endEdit: function(jq:JQuery)
+			endEdit: (jq:JQuery) ->
 			{
 				jq.attr("draggable", "true");
 				jq.children("span").css("display", "");
 			},
-			getData: function(jq:JQuery)
+			getData: (jq:JQuery) ->
 			{
 				return Path.withoutDirectory(namePath);
 			},
-			setData: function(jq:JQuery, value:String)
+			setData: (jq:JQuery, value:String) ->
 			{
 				if (value != "" && Path.withoutDirectory(namePath) != value)
 				{

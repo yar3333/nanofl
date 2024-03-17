@@ -1,10 +1,7 @@
 package nanofl.ide.sys.node;
 
 import haxe.io.Bytes;
-import stdlib.Std;
-import stdlib.Debug;
 import js.lib.Uint8Array;
-import js.node.Buffer;
 import js.lib.ArrayBuffer;
 import js.lib.Promise;
 import js.node.ChildProcess;

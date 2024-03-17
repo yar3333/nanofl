@@ -1,5 +1,6 @@
 package nanofl.ide.library.droppers;
 
+import nanofl.ide.ui.View;
 import htmlparser.HtmlNodeElement;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.Application;
@@ -9,20 +10,16 @@ import nanofl.ide.library.LibraryItems;
 import stdlib.Debug;
 using stdlib.Lambda;
 
-class BaseLibraryItemToLibraryDropper
+@:rtti
+class BaseLibraryItemToLibraryDropper extends InjectContainer
 {
-	var app : Application;
-	var items : components.nanofl.library.libraryitems.Code;
-	
-	public function new(app:Application, items:components.nanofl.library.libraryitems.Code)
-	{
-		this.app = app;
-		this.items = items;
-	}
+	@inject var app : Application;
+	@inject var documentTools : DocumentTools;
+	@inject var view : View;
 	
 	public function getDragImageType(data:HtmlNodeElement) : DragImageType
 	{
-		if (items.readOnly) return null;
+		if (view.library.readOnly) return null;
 		return DragImageType.ICON_TEXT(data.getAttribute("icon"), data.getAttribute("text")); // or namePath
 	}
 	
@@ -30,20 +27,20 @@ class BaseLibraryItemToLibraryDropper
 	{
 		Debug.assert(folder != null);
 		
-		var saveActiveNamePath = items.activeNamePath;
-		items.activeNamePath = "";
-		LibraryItems.drop(dropEffect, data, app.document, folder).then(function(droppedItems:Array<IIdeLibraryItem>)
+		var saveActiveItem = view.library.activeItem;
+		view.library.activeItem = null;
+		LibraryItems.drop(dropEffect, data, app.document, folder, documentTools).then((droppedItems:Array<IIdeLibraryItem>) ->
 		{
 			if (droppedItems.length > 0)
 			{
-				items.select(droppedItems.map(x -> x.namePath));
-				items.activeNamePath = data.getAttribute("namePath");
+				view.library.select(droppedItems.map(x -> x.namePath));
+				view.library.activeItem = app.document.library.getItem(data.getAttribute("namePath"));
 			}
 			else
 			{
-				items.activeNamePath = saveActiveNamePath;
+				view.library.activeItem = saveActiveItem;
 			}
-			app.document.library.update();
+			view.library.update();
 		});
 	}
 }

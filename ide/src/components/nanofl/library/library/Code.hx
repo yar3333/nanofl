@@ -1,7 +1,6 @@
 package components.nanofl.library.library;
 
 import js.html.File;
-import js.JQuery;
 import nanofl.ide.draganddrop.DragAndDrop;
 import nanofl.ide.draganddrop.IDragAndDrop;
 import nanofl.ide.library.droppers.LibraryItemToLibraryDropper;
@@ -27,7 +26,7 @@ class Code extends components.nanofl.library.libraryview.Code
 			(
 				template().container,
 				[
-					"libraryItem" => new LibraryItemToLibraryDropper(app, template().items)
+					"libraryItem" => new LibraryItemToLibraryDropper()
 				],
 				(files:Array<File>, _) ->
 				{

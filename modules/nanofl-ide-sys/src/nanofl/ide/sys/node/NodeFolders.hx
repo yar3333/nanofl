@@ -26,4 +26,7 @@ class NodeFolders implements Folders
 	
 	public var userDocuments(get, never) : String;
 	function get_userDocuments() return environment.get("USERPROFILE") + "/Documents";
+
+    public var unsavedDocuments(get, never) : String;
+    function get_unsavedDocuments() return temp + "/unsaved";
 }

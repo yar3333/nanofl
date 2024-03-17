@@ -30,14 +30,14 @@ class Code extends components.nanofl.popups.basepopup.Code
 		super.init();
 		
 		template().library.readOnly = true;
-		template().library.filterItems = function(item)
+		template().library.filterItems = item ->
 		{
 			return isItemNotUsed(item) 
 			    || Std.isOfType(item, FolderItem) && isFolderContains((cast item:FolderItem), isItemNotUsed);
 		};
 		
 		template().atlas.readOnly = true;
-		template().atlas.filterItems = function(item)
+		template().atlas.filterItems = item ->
 		{
 			return isItemUsed(template().atlases.val(), item)
 			    || Std.isOfType(item, FolderItem) && isFolderContains((cast item:FolderItem), isItemUsed.bind(template().atlases.val()));

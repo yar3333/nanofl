@@ -100,18 +100,18 @@ private class Console
 
     public function log(...args:Dynamic) : Void
     {
-        Browser.console.groupCollapsed(args);
+        Browser.console.groupCollapsed(...args);
         Browser.console.trace();
         Browser.console.groupEnd();
     }
 
     public function warn(...args:Dynamic) : Void
     {
-        Browser.console.warn(args);
+        Browser.console.warn(...args);
     }
 
     public function error(...args:Dynamic) : Void
     {
-        Browser.console.error(args);
+        Browser.console.error(...args);
     }
 }

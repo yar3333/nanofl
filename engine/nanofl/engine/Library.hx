@@ -83,8 +83,26 @@ class Library
 	public function getItems(?includeScene:Bool) : Array<ILibraryItem>
     {
         var namePaths = items.keys().array();
+        
         if (!includeScene) namePaths = namePaths.filter(namePath -> namePath != SCENE_NAME_PATH);
-        namePaths.sort((a, b) -> Reflect.compare(a.toLowerCase(), b.toLowerCase()));
+        
+        namePaths.sort((a, b) ->
+        {
+            a = a.toLowerCase();
+            b = b.toLowerCase();
+
+            final reA = ~/(\d+)$/;
+            final reB = ~/(\d+)$/;
+            if (reA.match(a) && reB.match(b))
+            {
+                final preA = a.substr(0, a.length - reA.matched(1).length);
+                final preB = b.substr(0, b.length - reB.matched(1).length);
+                if (preA == preB) return Reflect.compare(Std.parseInt(reA.matched(1)), Std.parseInt(reB.matched(1)));
+            }
+
+            Reflect.compare(a, b);
+        });
+        
         return namePaths.map(namePath -> items.get(namePath));
     }
         

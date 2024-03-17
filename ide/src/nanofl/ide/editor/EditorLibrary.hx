@@ -38,6 +38,7 @@ class EditorLibrary extends InjectContainer
 	@inject var clipboard : Clipboard;
 	@inject var uploader : Uploader;
 	@inject var preferences : Preferences;
+	@inject var documentTools : DocumentTools;
 	
 	var library : IdeLibrary;
 	var document : Document;
@@ -211,11 +212,10 @@ class EditorLibrary extends InjectContainer
         
         filters.unshift({ name:"All supported files", extensions:filters.flatMap(x -> x.extensions).distinct() });
         
-        return popups.showOpenFile("Select files to import into library", filters, true)
-                .then(r -> 
+        return popups.showOpenFiles("Select files to import into library", filters)
+                .then(filePaths -> 
                 {
-                    if (r.canceled || r.filePaths == null || r.filePaths.length == 0) return null;
-                    importFilesInner(r.filePaths, folderPath);
+                    if (filePaths != null) importFilesInner(filePaths, folderPath);
                     return null;
                 });
     }
@@ -242,13 +242,13 @@ class EditorLibrary extends InjectContainer
         {
             document.saveNative();
 			
-			return uploader.saveUploadedFiles(files, Path.join([ library.libraryDir, folderPath ])).then(_ ->
-			{
-                return document.reload().then((e:{ added:Array<IIdeLibraryItem> }) ->
+			return uploader.saveUploadedFiles(files, Path.join([ library.libraryDir, folderPath ]))
+                .then(_ -> documentTools.reload(document))
+                .then(e ->
                 {
                     if (folderPath != "")
                     {
-                        var folder : FolderItem = cast getItem(folderPath);
+                        final folder : FolderItem = cast getItem(folderPath);
                         folder.opened = true;
                         view.library.update();
                         view.library.select(e.added.map(x -> x.namePath));
@@ -256,7 +256,6 @@ class EditorLibrary extends InjectContainer
                     return e.added;
                 });
             });
-		});
 	}
 	
 	public function addFilesFromClipboard() : Bool
@@ -300,7 +299,7 @@ class EditorLibrary extends InjectContainer
 	
 	public function drop(dropEffect:DropEffect, data:HtmlNodeElement, folder:String) : Promise<Array<IIdeLibraryItem>>
 	{
-		return LibraryItems.drop(dropEffect, data, document, folder);
+		return LibraryItems.drop(dropEffect, data, document, folder, documentTools);
 	}
 	
 	public function getWithExandedFolders(items:Array<IIdeLibraryItem>) : Array<IIdeLibraryItem>

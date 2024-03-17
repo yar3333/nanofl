@@ -7,4 +7,8 @@ extern class OpenedFiles {
 	private function get_length():Int;
 	function iterator():Iterator<nanofl.ide.OpenedFile>;
 	function closeAll(?force:Bool):js.lib.Promise<{ }>;
+	function add(doc:nanofl.ide.OpenedFile):Void;
+	function close(doc:nanofl.ide.OpenedFile):Void;
+	function activate(id:String):Void;
+	function titleChanged(doc:nanofl.ide.OpenedFile):Void;
 }

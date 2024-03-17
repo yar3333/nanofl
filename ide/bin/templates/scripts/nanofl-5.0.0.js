@@ -3818,10 +3818,10 @@ class nanofl_engine__$Log_Console {
 	constructor() {
 	}
 	warn(...args) {
-		$global.console.warn(args);
+		$global.console.warn(...args);
 	}
 	error(...args) {
-		$global.console.error(args);
+		$global.console.error(...args);
 	}
 }
 nanofl_engine__$Log_Console.__name__ = "nanofl.engine._Log.Console";

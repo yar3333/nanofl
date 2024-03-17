@@ -1,6 +1,7 @@
 package components.nanofl.others.alerter;
 
 import js.JQuery;
+import nanofl.engine.Log.console;
 
 class Code extends wquery.Component
 {
@@ -14,6 +15,8 @@ class Code extends wquery.Component
 	function show(cssClass:String, text:String, duration:Int)
 	{
 		if (text == null || text == "") return;
+
+        console.log(text);
 		
 		template().container
 			.queue(function(next)

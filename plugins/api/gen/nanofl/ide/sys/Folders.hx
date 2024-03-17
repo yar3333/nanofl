@@ -6,4 +6,5 @@ interface Folders {
 	var temp(get, never) : String;
 	var plugins(get, never) : String;
 	var userDocuments(get, never) : String;
+	var unsavedDocuments(get, never) : String;
 }

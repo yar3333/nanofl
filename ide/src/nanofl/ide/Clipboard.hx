@@ -28,6 +28,7 @@ class Clipboard extends InjectContainer
 	@inject var keyboard : Keyboard;
 	@inject var app : Application;
 	@inject var clipboard : nanofl.ide.sys.Clipboard;
+	@inject var documentTools : DocumentTools;
 	
 	var view : View;
 	
@@ -191,7 +192,7 @@ class Clipboard extends InjectContainer
                     log("loadFilesFromClipboard " + success);
                     if (success)
                     {
-                        app.document.reloadWoTransactionForced().then(_ ->
+                        documentTools.reloadWoTransactionForced(app.document).then(_ ->
                         {
                             pasteStringInner(xml);
                         });

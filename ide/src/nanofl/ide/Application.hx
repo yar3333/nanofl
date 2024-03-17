@@ -2,11 +2,10 @@ package nanofl.ide;
 
 import js.lib.Promise;
 import js.injecting.Injector;
-import nanofl.ide.libraryitems.IIdeInstancableItem;
-import haxe.Timer;
 import haxe.io.Path;
 import js.Browser;
 import js.JQuery;
+import stdlib.Uuid;
 import nanofl.ide.sys.FileSystem;
 import nanofl.engine.Version;
 import nanofl.engine.Log;
@@ -23,27 +22,26 @@ import nanofl.ide.preferences.PreferencesStorage;
 import nanofl.ide.sys.Folders;
 import nanofl.ide.ui.Popups;
 import nanofl.ide.ui.View;
-import stdlib.Uuid;
 using stdlib.Lambda;
 using stdlib.StringTools;
 using nanofl.ide.plugins.CustomizablePluginTools;
 
-@:rtti
+//@:rtti
 class Application extends js.injecting.InjectContainer
 {
 	@inject var fileSystem : FileSystem;
 	@inject var folders : Folders;
 	
-	var layout : ILayout;
-	var view : View;
-	var popups : Popups;
-	var clipboard : Clipboard;
-	var commands : Commands;
-	var plugins : Plugins;
-	var keyboard : Keyboard;
-	var preferences : Preferences;
-	var openedFiles : OpenedFiles;
-	var recents : Recents;
+	//var layout : ILayout;
+	final view : View;
+	final popups : Popups;
+	//var clipboard : Clipboard;
+	//var plugins : Plugins;
+	//var keyboard : Keyboard;
+	final preferences : Preferences;
+	final openedFiles : OpenedFiles;
+	final recents : Recents;
+    final documentTools : DocumentTools;
 	
 	public var activeView = ActiveView.EDITOR;
 	
@@ -55,34 +53,32 @@ class Application extends js.injecting.InjectContainer
 	@:noapi
 	public function new(injector:Injector)
 	{
-		injector.allowNoRttiForClass(undoqueue.UndoQueue);
-		
 		super(injector);
 		
-		injector.map(Commands, commands = new Commands());
-		injector.map(Application, this);
-		injector.map(Keyboard, keyboard = createKeyboard());
-		injector.map(Preferences, preferences = new Preferences(new PreferencesStorage()));
-		injector.map(NewObjectParams, new NewObjectParams());
-		
-		var clipboard = new Clipboard();
-		injector.map(Clipboard, clipboard);
-		
-		injector.map(Recents, recents = new Recents());
+		injector.addSingleton(Commands);
+		injector.addSingleton(Application, this);
+		injector.addSingleton(Keyboard, createKeyboard(injector.getService(Commands)));
+		injector.addSingleton(PreferencesStorage);
+		injector.addSingleton(Preferences);
+		injector.addSingleton(NewObjectParams);
+		injector.addSingleton(Clipboard);
+		injector.addSingleton(Recents);
+        injector.addSingleton(DocumentTools);
 		
 		wquery.Template.baseURL = "../../";
 		var page = wquery.Application.run("page", components.nanofl.page.Code, { injector:injector });
 		
-		this.layout = page;
+		//this.layout = page;
 		this.view = page.view;
 		this.popups = page.popups;
 		this.openedFiles = page.openedFiles;
-		
-		clipboard.setView(page.view);
-		
-		injector.map(Plugins, plugins = new Plugins());
-		
+        
+		injector.addSingleton(Plugins);
+	
 		Log.init(fileSystem, view.alerter);
+
+        final clipboard = injector.getService(Clipboard);
+        clipboard.setView(page.view);
 		
 		new JQuery(Browser.window).resize();
 		new JQuery(Browser.document.body).focus();
@@ -95,7 +91,11 @@ class Application extends js.injecting.InjectContainer
 		view.library       .on("mousedown", e -> { activeView = ActiveView.LIBRARY;  clipboard.restoreFocus(e.originalEvent); });
 		view.output        .on("mousedown", e -> { activeView = ActiveView.OUTPUT; });
 		
-		preferences.storage.applyToIDE(true);
+		this.preferences = injector.getService(Preferences);
+        preferences.storage.applyToIDE(true);
+
+        this.recents = injector.getService(Recents);
+        this.documentTools = injector.getService(DocumentTools);
 		
 		Log.onMessage.bind((_, e) ->
 		{
@@ -104,7 +104,7 @@ class Application extends js.injecting.InjectContainer
 			else                        view.output.writeInfo(e.message);
 		});
 		
-        plugins.reload(false)
+        injector.getService(Plugins).reload(false)
             .then(_ -> CommandLine.process())
             //.then(_ -> checkForUpdates())
             .then(_ -> ExternalChangesDetector.start());
@@ -114,7 +114,7 @@ class Application extends js.injecting.InjectContainer
 	{
 		var properties = new DocumentProperties("", width, height, "#FFFFFF", framerate);
 		
-		var document = Document.createTemporary(openedFiles, folders, properties);
+		var document = documentTools.createTemporary(properties);
 		document.library.getRawLibrary().addSceneWithFrame();
 		document.activate(true);
 		return document;
@@ -136,36 +136,20 @@ class Application extends js.injecting.InjectContainer
 				filters.push({ name:importer.fileFilterDescription, extensions:importer.fileFilterExtensions });
 			}
 			
-			return popups.showOpenFile("Select NanoFL document to open", filters).then(r ->
+			return popups.showOpenFile("Select NanoFL document to open", filters).then(filePath ->
             {
-                return !r.canceled && r.filePaths != null && r.filePaths.length > 0 ? openDocument(r.filePaths[0]) : null;
+                return filePath != null ? openDocument(filePath) : null;
             });
 		}
 		else
 		{
 			path = Path.normalize(path);
 			recents.add(path, view);
-			view.waiter.show();
-			
-			return new Promise<Document>(function(resolve, reject)
-			{
-				Timer.delay(function() // time to browser to show waiter
-				{
-					Document.load(fileSystem, openedFiles, preferences, folders, view, path).then(function(document:Document)
-					{
-						view.waiter.hide();
-						if (document != null)
-						{
-							document.activate(true);
-						}
-						else
-						{
-							view.alerter.error("Can't open document '" + path + "'.");
-						}
-						resolve(document);
-					});
-				}, 50);
-			});
+            return documentTools.load(path).then(document ->
+            {
+                if (document != null) document.activate();
+                return document;
+            });
 		}
 	}
 	
@@ -178,22 +162,15 @@ class Application extends js.injecting.InjectContainer
 				"Select file to import",
 				[{ name:plugin.fileFilterDescription, extensions:plugin.fileFilterExtensions }]
 			)
-            .then(r ->
+            .then(filePath ->
             {
-                // TODO: check return null
-                return !r.canceled && r.filePaths != null && r.filePaths.length > 0 ? importDocument(r.filePaths[0], plugin) : null;
+                return filePath != null ? importDocument(filePath, plugin) : null;
             });
 		}
 		else
 		{
-			view.waiter.show();
-			var importer = plugin != null ? new Importer(plugin.name, plugin.getParams(preferences.storage)) : null;
-			return Document.import_(preferences, openedFiles, folders, view, path, importer).then(function(document:Document)
-			{
-				view.waiter.hide();
-				if (document == null) view.alerter.error("Error during importing.");
-				return document;
-			});
+			final importer = plugin != null ? new Importer(plugin.name, plugin.getParams(preferences.storage)) : null;
+			return documentTools.import_(path, importer);
 		}
 	}
 	
@@ -201,7 +178,7 @@ class Application extends js.injecting.InjectContainer
 	{
 		if (!force)
 		{
-			openedFiles.closeAll().then(function(_) exit(exitCode));
+			openedFiles.closeAll().then(_ -> exit(exitCode));
 		}
 		else
 		{
@@ -265,7 +242,7 @@ class Application extends js.injecting.InjectContainer
         });
 	}
 	
-	function createKeyboard() : Keyboard
+	function createKeyboard(commands:Commands) : Keyboard
 	{
 		var keyboard = new Keyboard(commands);
 		

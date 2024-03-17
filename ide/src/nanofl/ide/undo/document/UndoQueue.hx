@@ -36,6 +36,8 @@ class UndoQueue extends undoqueue.UndoQueue<Changes, Operation>
 	public function new(document:Document)
 	{
 		super();
+
+        Globals.injector.allowNoRttiForClass(undoqueue.UndoQueue);
 		Globals.injector.injectInto(this);
 		
 		this.document = document;

@@ -91,23 +91,48 @@ class Popups extends InjectContainer
 		});
 	}
 	
-	public function showOpenFile(title:String, filters:Array<{ name:String, extensions:Array<String> }>, multiple=false) : Promise<{ filePaths:Array<String>, canceled:Bool, bookmarks:Array<String> }>
+	public function showOpenFile(title:String, filters:Array<{ name:String, extensions:Array<String> }>) : Promise<String>
 	{
         return dialogs.showOpenDialog
 		({
             title: title,
             filters: filters,
-            properties: ["openFile"].concat(multiple ? ["multiSelections"] : [])
-		});
+            properties: ["openFile"]
+		})
+        .then(r ->
+        {
+            if (r == null || r.canceled || r.filePaths == null || r.filePaths.length == 0) return null;
+            return r.filePaths[0];
+        });
+	}	
+    
+    public function showOpenFiles(title:String, filters:Array<{ name:String, extensions:Array<String> }>) : Promise<Array<String>>
+	{
+        return dialogs.showOpenDialog
+		({
+            title: title,
+            filters: filters,
+            properties: ["openFile", "multiSelections"]
+		})        
+        .then(r ->
+        {
+            if (r == null || r.canceled || r.filePaths == null || r.filePaths.length == 0) return null;
+            return r.filePaths;
+        });
 	}
 	
-	public function showSaveFile(title:String, filters:Array<{ name:String, extensions:Array<String> }>) : Promise<{ filePath:String, canceled:Bool, bookmark:String }>
+	public function showSaveFile(title:String, filters:Array<{ name:String, extensions:Array<String> }>) : Promise<String>
 	{
 		return dialogs.showSaveDialog
         ({
             title: title,
             filters: filters
-		});
+		})
+        .then(r ->
+        {
+            if (r == null || r.canceled || r.filePath == null || r.filePath == "") return null;
+            return r.filePath;
+        });
 	}
 	
 	public function new(container:Container)

@@ -31,6 +31,7 @@ extern class Popups extends nanofl.ide.InjectContainer {
 	var publishSettings(get, never) : components.nanofl.popups.publishsettingspopup.Code;
 	private function get_publishSettings():components.nanofl.popups.publishsettingspopup.Code;
 	function showConfirm(title:String, text:String, but0:String, but1:String, but2:String):js.lib.Promise<{ public var response(default, default) : Float; public var checkboxChecked(default, default) : Bool; }>;
-	function showOpenFile(title:String, filters:Array<{ public var name(default, default) : String; public var extensions(default, default) : Array<String>; }>, ?multiple:Bool):js.lib.Promise<{ public var filePaths(default, default) : Array<String>; public var canceled(default, default) : Bool; public var bookmarks(default, default) : Array<String>; }>;
-	function showSaveFile(title:String, filters:Array<{ public var name(default, default) : String; public var extensions(default, default) : Array<String>; }>):js.lib.Promise<{ public var filePath(default, default) : String; public var canceled(default, default) : Bool; public var bookmark(default, default) : String; }>;
+	function showOpenFile(title:String, filters:Array<{ public var name(default, default) : String; public var extensions(default, default) : Array<String>; }>):js.lib.Promise<String>;
+	function showOpenFiles(title:String, filters:Array<{ public var name(default, default) : String; public var extensions(default, default) : Array<String>; }>):js.lib.Promise<Array<String>>;
+	function showSaveFile(title:String, filters:Array<{ public var name(default, default) : String; public var extensions(default, default) : Array<String>; }>):js.lib.Promise<String>;
 }

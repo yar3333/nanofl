@@ -26,7 +26,7 @@ class Code extends wquery.Component
 	public var activeItem(get, set) : IIdeLibraryItem;
 	function get_activeItem() return template().items.active;
 	function set_activeItem(v:IIdeLibraryItem) return template().items.active = v;
-	
+
 	public var readOnly(get, set) : Bool;
 	function get_readOnly() return template().items.readOnly;
 	function set_readOnly(v) return template().items.readOnly = v;
