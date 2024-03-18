@@ -2629,17 +2629,23 @@ nanofl_ide_sys_node_NodeShell.prototype = {
 		window.open(url,"_blank");
 	}
 	,runWithEditor: function(document) {
-		var winReg = new nanofl_ide_sys_node_core_NodeWindowsRegistry(($_=window.electronApi.child_process,$bind($_,$_.execSync)));
-		var docType = winReg.getKeyValue("HKCR:\\." + haxe_io_Path.extension(document));
+		var winReg = new nanofl_ide_sys_node_core_NodeWindowsRegistry(function(command,options) {
+			return window.electronApi.child_process.execSync(command,options);
+		});
+		var docType = winReg.getValue("HKCR:\\." + haxe_io_Path.extension(document));
 		nanofl_ide_sys_node_NodeShell.log("docType = " + docType,{ fileName : "src/nanofl/ide/sys/node/NodeShell.hx", lineNumber : 35, className : "nanofl.ide.sys.node.NodeShell", methodName : "runWithEditor"});
 		if(docType == null) {
 			return false;
 		}
-		var command = winReg.getKeyValue("HKCR:\\" + docType + "\\shell\\edit\\command");
+		var command = winReg.getValue("HKCR:\\" + docType + "\\shell\\edit\\command");
 		nanofl_ide_sys_node_NodeShell.log("command(1) = " + command,{ fileName : "src/nanofl/ide/sys/node/NodeShell.hx", lineNumber : 39, className : "nanofl.ide.sys.node.NodeShell", methodName : "runWithEditor"});
 		if(command == null) {
-			command = winReg.getKeyValue("HKCR:\\" + docType + "\\shell\\open\\command");
+			command = winReg.getValue("HKCR:\\" + docType + "\\shell\\open\\command");
 			nanofl_ide_sys_node_NodeShell.log("command(2) = " + command,{ fileName : "src/nanofl/ide/sys/node/NodeShell.hx", lineNumber : 44, className : "nanofl.ide.sys.node.NodeShell", methodName : "runWithEditor"});
+		}
+		if(command == null) {
+			var command1 = winReg.getValue("HKCR:\\" + docType + "\\shell\\open\\command");
+			nanofl_ide_sys_node_NodeShell.log("command(2) = " + command1,{ fileName : "src/nanofl/ide/sys/node/NodeShell.hx", lineNumber : 51, className : "nanofl.ide.sys.node.NodeShell", methodName : "runWithEditor"});
 		}
 		if(command == null) {
 			return false;
@@ -2653,7 +2659,7 @@ nanofl_ide_sys_node_NodeShell.prototype = {
 				exeAndArgs[i] = this.fileSystem.absolutePath(document);
 			}
 		}
-		nanofl_ide_sys_node_NodeShell.log("exeAndArgs = vvvvvvvvvvvv\n" + exeAndArgs.join("\n") + "\n^^^^^^^^^^^^",{ fileName : "src/nanofl/ide/sys/node/NodeShell.hx", lineNumber : 55, className : "nanofl.ide.sys.node.NodeShell", methodName : "runWithEditor"});
+		nanofl_ide_sys_node_NodeShell.log("exeAndArgs = vvvvvvvvvvvv\n" + exeAndArgs.join("\n") + "\n^^^^^^^^^^^^",{ fileName : "src/nanofl/ide/sys/node/NodeShell.hx", lineNumber : 62, className : "nanofl.ide.sys.node.NodeShell", methodName : "runWithEditor"});
 		return this.processManager.run(exeAndArgs[0],exeAndArgs.slice(1),false) == 0;
 	}
 	,parseCommand: function(command) {
@@ -2806,27 +2812,57 @@ var nanofl_ide_sys_node_core_NodeWindowsRegistry = function(execSync) {
 	this.execSync = execSync;
 };
 nanofl_ide_sys_node_core_NodeWindowsRegistry.__name__ = "nanofl.ide.sys.node.core.NodeWindowsRegistry";
-nanofl_ide_sys_node_core_NodeWindowsRegistry.prototype = {
-	getKeyValue: function(fullKey) {
-		fullKey = StringTools.replace(fullKey,"/","\\");
-		var n = fullKey.lastIndexOf("\\");
-		var keyPath = StringTools.replace(HxOverrides.substr(fullKey,0,n),"\\","\\\\");
-		var keyName = HxOverrides.substr(fullKey,n + 1,null);
-		var r = this.runPowerShell("\n            $ErrorActionPreference = 'Stop'\n            $keyPath = \"" + keyPath + "\"\n            $key = \"" + keyName + "\"\n    \n            try {\n                $value = Get-ItemProperty -Path $keyPath -Name $key\n                if ($value -ne $null) {\n                    Write-Output $value.$key\n                } else {\n                    Write-Output \"---NOT_FOUND\"\n                }\n            } catch {\n                Write-Output \"---ERROR: $_\"\n            }\n        ").toString();
-		return r;
+nanofl_ide_sys_node_core_NodeWindowsRegistry.prepareRegistryPath = function(keyPath) {
+	keyPath = StringTools.replace(keyPath,"/","\\");
+	if(StringTools.startsWith(keyPath,"HKCC:")) {
+		return "Registry::HKEY_CURRENT_CONFIG" + keyPath.substring("HKCC:".length);
+	} else if(StringTools.startsWith(keyPath,"HKCR:")) {
+		return "Registry::HKEY_CLASSES_ROOT" + keyPath.substring("HKCR:".length);
+	} else if(StringTools.startsWith(keyPath,"HKCU:")) {
+		return "Registry::HKEY_CURRENT_USER" + keyPath.substring("HKCU:".length);
+	} else if(StringTools.startsWith(keyPath,"HKLM:")) {
+		return "Registry::HKEY_LOCAL_MACHINE" + keyPath.substring("HKLM:".length);
+	} else if(StringTools.startsWith(keyPath,"HKU:")) {
+		return "Registry::HKEY_USERS" + keyPath.substring("HKU:".length);
 	}
-	,runPowerShell: function(script) {
-		var r = this.execSync(script,{ shell : "powershell.exe"});
-		if(typeof(r) != "string") {
-			r = r.toString();
+	return keyPath;
+};
+nanofl_ide_sys_node_core_NodeWindowsRegistry.bufferToString = function(buffer) {
+	if(typeof(buffer) == "string") {
+		return buffer;
+	}
+	return new TextDecoder().decode(buffer);
+};
+nanofl_ide_sys_node_core_NodeWindowsRegistry.prototype = {
+	isKeyExists: function(pathToKey) {
+		pathToKey = nanofl_ide_sys_node_core_NodeWindowsRegistry.prepareRegistryPath(pathToKey);
+		return StringTools.trim(this.runPowerShell("Test-Path -Path \"" + StringTools.replace(pathToKey,"\\","\\\\") + "\"")) == "True";
+	}
+	,getValue: function(path) {
+		if(this.isKeyExists(path)) {
+			return this.getValueInner(path + "/(default)");
 		}
+		if(!this.isKeyExists(haxe_io_Path.directory(path))) {
+			return null;
+		}
+		return this.getValueInner(path);
+	}
+	,getValueInner: function(pathToValue) {
+		pathToValue = nanofl_ide_sys_node_core_NodeWindowsRegistry.prepareRegistryPath(pathToValue);
+		var n = pathToValue.lastIndexOf("\\");
+		var keyPath = StringTools.replace(HxOverrides.substr(pathToValue,0,n),"\\","\\\\");
+		var keyName = HxOverrides.substr(pathToValue,n + 1,null);
+		var r = StringTools.trim(this.runPowerShell("\n            $ErrorActionPreference = 'Stop'\n            $keyPath = \"" + keyPath + "\"\n            $key = \"" + keyName + "\"\n    \n            try {\n                $value = Get-ItemProperty -Path $keyPath -Name $key\n                if ($value -ne $null) {\n                    Write-Output $value.$key\n                } else {\n                    Write-Output \"---NOT_FOUND\"\n                }\n            } catch {\n                Write-Output \"---ERROR: $_\"\n            }\n        "));
 		if(r == "---NOT_FOUND") {
 			return null;
 		}
 		if(StringTools.startsWith(r,"---ERROR:")) {
-			throw new Error(r);
+			throw new Error(StringTools.trim(r.substring("---ERROR:".length)));
 		}
 		return r;
+	}
+	,runPowerShell: function(script) {
+		return nanofl_ide_sys_node_core_NodeWindowsRegistry.bufferToString(this.execSync(script,{ shell : "powershell.exe"}));
 	}
 	,__class__: nanofl_ide_sys_node_core_NodeWindowsRegistry
 };
@@ -3057,8 +3093,6 @@ stdlib_Uuid.newUuid = function() {
 	return uuid;
 };
 function $getIterator(o) { if( o instanceof Array ) return new haxe_iterators_ArrayIterator(o); else return o.iterator(); }
-function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $global.$haxeUID++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = m.bind(o); o.hx__closures__[m.__id__] = f; } return f; }
-$global.$haxeUID |= 0;
 if(typeof(performance) != "undefined" ? typeof(performance.now) == "function" : false) {
 	HxOverrides.now = performance.now.bind(performance);
 }

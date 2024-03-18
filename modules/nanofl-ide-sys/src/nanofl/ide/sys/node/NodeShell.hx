@@ -29,18 +29,25 @@ class NodeShell implements Shell
 	
 	public function runWithEditor(document:String) : Bool
 	{
-		var winReg = new NodeWindowsRegistry(ElectronApi.child_process.execSync);
+		var winReg = new NodeWindowsRegistry((command, ?options) -> ElectronApi.child_process.execSync(command, options));
         
-        var docType = winReg.getKeyValue("HKCR:\\." + Path.extension(document));
+        var docType = winReg.getValue("HKCR:\\." + Path.extension(document));
 		log("docType = " + docType);
 		if (docType == null) return false;
 		
-		var command = winReg.getKeyValue("HKCR:\\" + docType + "\\shell\\edit\\command");
+		var command = winReg.getValue("HKCR:\\" + docType + "\\shell\\edit\\command");
 		log("command(1) = " + command);
 		
 		if (command == null)
 		{
-			command = winReg.getKeyValue("HKCR:\\" + docType + "\\shell\\open\\command");
+			command = winReg.getValue("HKCR:\\" + docType + "\\shell\\open\\command");
+			log("command(2) = " + command);
+		}
+        
+		if (command == null)
+		{
+			final 
+            command = winReg.getValue("HKCR:\\" + docType + "\\shell\\open\\command");
 			log("command(2) = " + command);
 		}
 		
