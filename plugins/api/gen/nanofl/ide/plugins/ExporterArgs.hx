@@ -3,22 +3,29 @@ package nanofl.ide.plugins;
 typedef ExporterArgs = {
 	/**
 		
-		        Path to destination file (one of the `fileFilterExtensions` of the plugin).
+		        Path to destination file.
 		    
 	**/
-	var destFilePath : String;
-	var documentProperties : nanofl.ide.DocumentProperties;
-	var library : nanofl.ide.library.IdeLibrary;
+	var destFilePath(default, null) : String;
+	var documentProperties(default, null) : nanofl.ide.DocumentProperties;
+	var library(default, null) : nanofl.ide.library.IdeLibrary;
+	/**
+		
+		        Path to originally opened file (if document imported or saved via plugin).
+		        If native `*.nfl` opened then `originalFilePath` is `null`.
+		    
+	**/
+	var originalFilePath(default, null) : String;
 	/**
 		
 		        Custom parameters specified by user (produced from `properties` of the plugin).
 		    
 	**/
-	var params : Dynamic;
+	var params(default, null) : Dynamic;
 	/**
 		
 		        Path to `*.nfl` file.
 		    
 	**/
-	var srcFilePath : String;
+	var srcFilePath(default, null) : String;
 };

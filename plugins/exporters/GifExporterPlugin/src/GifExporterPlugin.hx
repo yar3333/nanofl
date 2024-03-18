@@ -1,3 +1,4 @@
+import haxe.io.Path;
 import js.Browser;
 import js.lib.Uint8Array;
 import js.lib.Promise;
@@ -48,6 +49,10 @@ class GifExporterPlugin implements IExporterPlugin
 	{
         if (api.fileSystem.exists(args.destFilePath)) api.fileSystem.deleteFile(args.destFilePath);
         
+        final srcFramerate = args.documentProperties.framerate;
+        final destFramerate = args.params.framerate == 0 || Path.extension(args.originalFilePath ?? "").toLowerCase() == "gif" 
+                        ? args.documentProperties.framerate
+                        : args.params.framerate;
         final width = args.documentProperties.width;
         final height = args.documentProperties.height;
 
@@ -63,9 +68,9 @@ class GifExporterPlugin implements IExporterPlugin
             "-f", "rawvideo",
             "-pixel_format", "rgb24",
             "-video_size", width + "x" + height,
-            "-framerate", args.documentProperties.framerate + "",
+            "-framerate", srcFramerate + "",
             "-i", "pipe:0",
-            "-vf", (args.params.framerate != 0 ? "fps=" + args.params.framerate + "," : "") + "split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse=dither=" + args.params.dither,
+            "-vf", (destFramerate != srcFramerate ? "fps=" + destFramerate + "," : "") + "split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse=dither=" + args.params.dither,
             args.destFilePath
         ];
 

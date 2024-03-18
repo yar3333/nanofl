@@ -19,7 +19,8 @@ class DocumentExporterHelper
             document.path,
             path,
             document.properties,
-            document.library.getRawLibrary()
+            document.library.getRawLibrary(),
+            document.originalPath,
         );
 		
         Edges.showSelection = true;

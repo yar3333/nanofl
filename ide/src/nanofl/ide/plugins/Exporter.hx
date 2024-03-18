@@ -16,7 +16,7 @@ class Exporter
 		this.params = params;
 	}
 	
-	public function run(srcFilePath:String, destFilePath:String, documentProperties:DocumentProperties, library:IdeLibrary) : Promise<Bool>
+	public function run(srcFilePath:String, destFilePath:String, documentProperties:DocumentProperties, library:IdeLibrary, originalFilePath:String) : Promise<Bool>
 	{
 		var plugin = ExporterPlugins.plugins.get(pluginName);
 		if (plugin != null)
@@ -29,6 +29,7 @@ class Exporter
                 destFilePath: destFilePath,
                 documentProperties: documentProperties,
                 library: library,
+                originalFilePath: originalFilePath,
             });
 		}
 		else

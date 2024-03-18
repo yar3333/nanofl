@@ -39,11 +39,20 @@ GifExporterPlugin.prototype = {
 		if(api.fileSystem.exists(args.destFilePath)) {
 			api.fileSystem.deleteFile(args.destFilePath);
 		}
+		var srcFramerate = args.documentProperties.framerate;
+		var destFramerate;
+		if(args.params.framerate != 0) {
+			var tmp = args.originalFilePath;
+			destFramerate = haxe_io_Path.extension(tmp != null ? tmp : "").toLowerCase() == "gif";
+		} else {
+			destFramerate = true;
+		}
+		var destFramerate1 = destFramerate ? args.documentProperties.framerate : args.params.framerate;
 		var width = args.documentProperties.width;
 		var height = args.documentProperties.height;
 		var dataOut = new Uint8Array(width * height * 3);
 		var sceneFramesIterator = args.library.getSceneFramesIterator(args.documentProperties,true);
-		var ffmpegArgs = ["-f","rawvideo","-pixel_format","rgb24","-video_size",width + "x" + height,"-framerate",args.documentProperties.framerate + "","-i","pipe:0","-vf",(args.params.framerate != 0 ? "fps=" + Std.string(args.params.framerate) + "," : "") + "split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse=dither=" + Std.string(args.params.dither),args.destFilePath];
+		var ffmpegArgs = ["-f","rawvideo","-pixel_format","rgb24","-video_size",width + "x" + height,"-framerate",srcFramerate + "","-i","pipe:0","-vf",(destFramerate1 != srcFramerate ? "fps=" + destFramerate1 + "," : "") + "split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse=dither=" + Std.string(args.params.dither),args.destFilePath];
 		$global.console.log("FFmpeg: ",ffmpegArgs);
 		try {
 			return api.processManager.runPipedStdIn(api.folders.get_tools() + "/ffmpeg.exe",ffmpegArgs,null,null,function() {
@@ -63,6 +72,23 @@ GifExporterPlugin.prototype = {
 			return Promise.resolve(false);
 		}
 	}
+};
+var HxOverrides = function() { };
+HxOverrides.__name__ = true;
+HxOverrides.substr = function(s,pos,len) {
+	if(len == null) {
+		len = s.length;
+	} else if(len < 0) {
+		if(pos == 0) {
+			len = s.length + len;
+		} else {
+			return "";
+		}
+	}
+	return s.substr(pos,len);
+};
+HxOverrides.now = function() {
+	return Date.now();
 };
 Math.__name__ = true;
 var Std = function() { };
@@ -99,6 +125,42 @@ haxe_ValueException.prototype = $extend(haxe_Exception.prototype,{
 });
 var haxe_io_Bytes = function() { };
 haxe_io_Bytes.__name__ = true;
+var haxe_io_Path = function(path) {
+	switch(path) {
+	case ".":case "..":
+		this.dir = path;
+		this.file = "";
+		return;
+	}
+	var c1 = path.lastIndexOf("/");
+	var c2 = path.lastIndexOf("\\");
+	if(c1 < c2) {
+		this.dir = HxOverrides.substr(path,0,c2);
+		path = HxOverrides.substr(path,c2 + 1,null);
+		this.backslash = true;
+	} else if(c2 < c1) {
+		this.dir = HxOverrides.substr(path,0,c1);
+		path = HxOverrides.substr(path,c1 + 1,null);
+	} else {
+		this.dir = null;
+	}
+	var cp = path.lastIndexOf(".");
+	if(cp != -1) {
+		this.ext = HxOverrides.substr(path,cp + 1,null);
+		this.file = HxOverrides.substr(path,0,cp);
+	} else {
+		this.ext = null;
+		this.file = path;
+	}
+};
+haxe_io_Path.__name__ = true;
+haxe_io_Path.extension = function(path) {
+	var s = new haxe_io_Path(path);
+	if(s.ext == null) {
+		return "";
+	}
+	return s.ext;
+};
 var haxe_iterators_ArrayIterator = function(array) {
 	this.current = 0;
 	this.array = array;
@@ -206,6 +268,9 @@ js_Boot.__string_rec = function(o,s) {
 		return String(o);
 	}
 };
+if(typeof(performance) != "undefined" ? typeof(performance.now) == "function" : false) {
+	HxOverrides.now = performance.now.bind(performance);
+}
 String.__name__ = true;
 Array.__name__ = true;
 Date.__name__ = "Date";
