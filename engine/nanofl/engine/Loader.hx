@@ -1,5 +1,6 @@
 package nanofl.engine;
 
+import stdlib.Uuid;
 import js.Browser;
 import nanofl.engine.Log.console;
 import js.lib.Error;
@@ -28,7 +29,7 @@ class Loader
 				image.src = "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=";
 				reject(new Error("Failed to load '" + (url.startsWith("data:") ? "<DataUrl>" : url) + "'."));
 			};
-			image.src = url;
+			image.src = withAntiCacheSuffix(url);
 		});
 	}
 	
@@ -38,7 +39,7 @@ class Loader
 		{
 			var xmlhttp = new XMLHttpRequest();
 			xmlhttp.responseType = js.html.XMLHttpRequestResponseType.TEXT;
-			xmlhttp.onreadystatechange = function()
+			xmlhttp.onreadystatechange = () ->
 			{
 				if (xmlhttp.readyState == XMLHttpRequest.DONE)
 				{
@@ -53,7 +54,7 @@ class Loader
 					}
 				}
 			};
-			xmlhttp.open("GET", url, true);
+			xmlhttp.open("GET", withAntiCacheSuffix(url), true);
 			xmlhttp.send();
 		});
 	}
@@ -65,7 +66,7 @@ class Loader
             final elem = Browser.document.createScriptElement();
             elem.type = "text/javascript";
             elem.async = true;
-            elem.src = url;
+            elem.src = withAntiCacheSuffix(url);
             elem.addEventListener("load", _  ->
             {
                 elem.remove();
@@ -103,5 +104,11 @@ class Loader
 	public static function queued<T>(urls:Array<String>, load:String->Promise<T>) : Promise<Array<T>>
     {
         return Promise.all(urls.map(x -> load(x)));
+    }
+
+    static function withAntiCacheSuffix(url:String) : String
+    {
+        if (!url.startsWith("file://")) return url;
+        return url + (url.indexOf("?") < 0 ? "?" : "&") + Uuid.newUuid();
     }
 }

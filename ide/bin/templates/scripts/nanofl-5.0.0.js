@@ -208,6 +208,13 @@ class Std {
 		}
 		return v;
 	}
+	static random(x) {
+		if(x <= 0) {
+			return 0;
+		} else {
+			return Math.floor(Math.random() * x);
+		}
+	}
 }
 Std.__name__ = "Std";
 class StringBuf {
@@ -3759,7 +3766,7 @@ class nanofl_engine_Loader {
 				image.src = "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=";
 				reject(new Error("Failed to load '" + (url.startsWith("data:") ? "<DataUrl>" : url) + "'."));
 			};
-			image.src = url;
+			image.src = nanofl_engine_Loader.withAntiCacheSuffix(url);
 		});
 	}
 	static file(url) {
@@ -3776,7 +3783,7 @@ class nanofl_engine_Loader {
 					}
 				}
 			};
-			xmlhttp.open("GET",url,true);
+			xmlhttp.open("GET",nanofl_engine_Loader.withAntiCacheSuffix(url),true);
 			xmlhttp.send();
 		});
 	}
@@ -3785,7 +3792,7 @@ class nanofl_engine_Loader {
 			let elem = window.document.createElement("script");
 			elem.type = "text/javascript";
 			elem.async = true;
-			elem.src = url;
+			elem.src = nanofl_engine_Loader.withAntiCacheSuffix(url);
 			elem.addEventListener("load",function(_) {
 				elem.remove();
 				resolve(null);
@@ -3811,6 +3818,12 @@ class nanofl_engine_Loader {
 			});
 			video.src = url;
 		});
+	}
+	static withAntiCacheSuffix(url) {
+		if(!url.startsWith("file://")) {
+			return url;
+		}
+		return url + (url.indexOf("?") < 0 ? "?" : "&") + stdlib_Uuid.newUuid();
 	}
 }
 nanofl_engine_Loader.__name__ = "nanofl.engine.Loader";
@@ -8690,6 +8703,15 @@ class stdlib_StringTools {
 	}
 }
 stdlib_StringTools.__name__ = "stdlib.StringTools";
+class stdlib_Uuid {
+	static newUuid() {
+		let timeF = new Date().getTime();
+		let time = timeF - 268435455. * (timeF / 268435455 | 0) | 0;
+		let uuid = StringTools.hex(stdlib_Uuid.counter++,8) + "-" + StringTools.hex(timeF / 65536 | 0,8) + "-" + StringTools.hex(time % 65536,8) + "-" + StringTools.hex(Std.random(65536),4) + "-" + StringTools.hex(Std.random(65536),4);
+		return uuid;
+	}
+}
+stdlib_Uuid.__name__ = "stdlib.Uuid";
 function $getIterator(o) { if( o instanceof Array ) return new haxe_iterators_ArrayIterator(o); else return o.iterator(); }
 $global.$haxeUID |= 0;
 if(typeof(performance) != "undefined" ? typeof(performance.now) == "function" : false) {
@@ -8738,6 +8760,7 @@ nanofl_engine_geom_Matrix.DEG_TO_RAD = Math.PI / 180;
 nanofl_engine_libraryitems_LibraryItem._hx_skip_constructor = false;
 nanofl_engine_libraryitems_MeshItem.DISPLAY_OBJECT_SIZE = 256;
 nanofl_engine_plugins_FilterPlugins.plugins = new haxe_ds_StringMap();
+stdlib_Uuid.counter = 0;
 })( true ? exports : 0, typeof window != "undefined" ? window : typeof __webpack_require__.g != "undefined" ? __webpack_require__.g : typeof self != "undefined" ? self : this);
 
 
