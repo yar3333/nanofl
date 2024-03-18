@@ -26,7 +26,7 @@ class FileActions
 					
 				case FileAction.RENAME_LIBRARY_ITEM(oldNamePath, newNamePath):
 					log("\tRENAME_LIBRARY_ITEM " + oldNamePath + " => " + newNamePath);
-					fileSystem.rename(libraryDir + "/" + oldNamePath + ".*", libraryDir + "/" + newNamePath + ".*");
+					fileSystem.renameByPattern(libraryDir + "/" + oldNamePath + ".*", libraryDir + "/" + newNamePath + ".*");
 			}
 		}
 	}
