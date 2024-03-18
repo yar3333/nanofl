@@ -365,9 +365,10 @@ class Document extends OpenedFile
         view.waiter.show();
 
         originalPath = path;
-        originalLastModified = fileSystem.getLastModified(path);
 
-        return DocumentImporterHelper.run(path, this, importer).then(success ->
+        trace("Import document " + originalPath + " => " + this.path);
+        
+        return importer.run(originalPath, this.path, properties, library.getRawLibrary()).then(success ->
         {
             if (!success) { view.waiter.hide(); view.alerter.error("Error during importing."); return Promise.resolve(false); }
 
@@ -378,6 +379,8 @@ class Document extends OpenedFile
             return library.preload().then(_ ->
             {
                 saveNative(true);
+                originalLastModified = lastModified; // must be before activate() to update "modified" in title
+                
                 activate(true);
                 
                 view.waiter.hide();
