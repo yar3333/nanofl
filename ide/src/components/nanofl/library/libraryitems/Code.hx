@@ -1,8 +1,18 @@
 package components.nanofl.library.libraryitems;
 
-import js.Browser;
 import haxe.io.Path;
+import js.Browser;
+import js.JQuery;
+import js.html.File;
+import stdlib.Std;
 import htmlparser.XmlBuilder;
+import wquery.ComponentList;
+import nanofl.engine.Log.console;
+import nanofl.engine.libraryitems.FolderItem;
+import nanofl.engine.libraryitems.FontItem;
+import nanofl.engine.libraryitems.InstancableItem;
+import nanofl.engine.libraryitems.MovieClipItem;
+import nanofl.engine.libraryitems.SoundItem;
 import nanofl.ide.Globals;
 import nanofl.ide.draganddrop.DragAndDrop;
 import nanofl.ide.draganddrop.IDragAndDrop;
@@ -10,22 +20,13 @@ import nanofl.ide.preferences.Preferences;
 import nanofl.ide.sys.Shell;
 import nanofl.ide.ui.Popups;
 import nanofl.ide.ui.View;
-import wquery.ComponentList;
-import js.JQuery;
-import js.html.File;
-import nanofl.engine.libraryitems.FolderItem;
-import nanofl.engine.libraryitems.FontItem;
-import nanofl.engine.libraryitems.InstancableItem;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
-import nanofl.engine.libraryitems.MovieClipItem;
-import nanofl.engine.libraryitems.SoundItem;
 import nanofl.ide.Application;
 import nanofl.ide.ISymbol;
 import nanofl.ide.library.LibraryItems;
 import nanofl.ide.library.droppers.LibraryItemToLibraryItemDropper;
 import nanofl.ide.navigator.PathItem;
 import nanofl.ide.ui.menu.ContextMenu;
-import stdlib.Std;
 using stdlib.Lambda;
 using StringTools;
 using js.jquery.Editable;
@@ -174,7 +175,10 @@ class Code extends wquery.Component
 				{
 					filePath = Path.join([ app.document.library.libraryDir, filePath ]);
 					var success = shell.runWithEditor(filePath);
-					if (!success) view.alerter.error("Not found system association with '" + Path.extension(filePath) + "' files.");
+					if (!success) 
+					{
+                        shell.openInFileExplorer(filePath);
+                    }
 				}
 			}
 		});

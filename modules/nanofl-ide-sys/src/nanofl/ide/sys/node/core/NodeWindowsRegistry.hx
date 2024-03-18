@@ -2,7 +2,6 @@ package nanofl.ide.sys.node.core;
 
 import js.lib.Error;
 import haxe.io.Path;
-import js.Browser;
 import js.html.TextDecoder;
 import js.Syntax;
 import js.lib.Uint8Array;

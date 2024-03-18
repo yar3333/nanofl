@@ -65,12 +65,12 @@ class DocumentTools extends InjectContainer
     {
         if (fileSystem.exists(path) && !fileSystem.isDirectory(path))
         {
-            var realLastModified = fileSystem.getDocumentLastModified(path);
+            final realLastModified = fileSystem.getDocumentLastModified(path);
             
             if (lastModified == null || lastModified.getTime() < realLastModified.getTime())
             {
-                var properties = DocumentProperties.load(path, fileSystem);
-                var library = new IdeLibrary(Path.join([ Path.directory(path), "library" ]));
+                final properties = DocumentProperties.load(path, fileSystem);
+                final library = new IdeLibrary(Path.join([ Path.directory(path), "library" ]));
                 return library.loadItems().then(_ ->
                 ({
                     properties: properties,

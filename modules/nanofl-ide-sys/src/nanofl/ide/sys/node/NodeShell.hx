@@ -1,5 +1,6 @@
 package nanofl.ide.sys.node;
 
+import js.lib.Map;
 import haxe.io.Path;
 import nanofl.ide.sys.ProcessManager;
 import nanofl.ide.sys.FileSystem;
@@ -7,6 +8,8 @@ import nanofl.ide.sys.Shell;
 import nanofl.ide.sys.Environment;
 import nanofl.ide.sys.node.core.NodeWindowsRegistry;
 import nanofl.ide.sys.node.core.ElectronApi;
+using stdlib.StringTools;
+using stdlib.Lambda;
 
 class NodeShell implements Shell
 {
@@ -23,63 +26,73 @@ class NodeShell implements Shell
 
 	public function openInExternalBrowser(url:String) : Void
     {
-        log("URL = " + url);
+        log("openInExternalBrowser: url = " + url);
         js.Browser.window.open(url, "_blank");
     }
+    
+    public function openInFileExplorer(path:String) : Void
+    {
+        log("openInFileExplorer: path = " + path);
+        
+        // See https://ss64.com/nt/explorer.html
+        final arg = "/select," + path.replace("/", "\\");
+        log("explorer.exe " + arg);
+        ElectronApi.child_process.spawn("explorer.exe", [ arg ], { detached:true, shell:"cmd.exe" });
+    }
 	
-	public function runWithEditor(document:String) : Bool
+    public function runWithEditor(document:String) : Bool
+    {
+        return runShellVerb(document, "edit");
+    }
+	
+	/**
+        Run document with associated application (read from Windows Registry).
+        `verb`: "edit" or "open".
+    **/
+    function runShellVerb(document:String, verb:String) : Bool
 	{
-		var winReg = new NodeWindowsRegistry((command, ?options) -> ElectronApi.child_process.execSync(command, options));
-        
-        var docType = winReg.getValue("HKCR:\\." + Path.extension(document));
-		log("docType = " + docType);
-		if (docType == null) return false;
-		
-		var command = winReg.getValue("HKCR:\\" + docType + "\\shell\\edit\\command");
-		log("command(1) = " + command);
-		
-		if (command == null)
-		{
-			command = winReg.getValue("HKCR:\\" + docType + "\\shell\\open\\command");
-			log("command(2) = " + command);
-		}
-        
-		if (command == null)
-		{
-			final 
-            command = winReg.getValue("HKCR:\\" + docType + "\\shell\\open\\command");
-			log("command(2) = " + command);
-		}
-		
-		if (command == null) return false;
-		
-		var exeAndArgs = parseCommand(command);
-		for (i in 0...exeAndArgs.length)
-		{
-			if (exeAndArgs[i] == "%1") exeAndArgs[i] = fileSystem.absolutePath(document);
-		}
-		
-		log("exeAndArgs = vvvvvvvvvvvv\n" + exeAndArgs.join("\n") + "\n^^^^^^^^^^^^");
-		
-		return processManager.run(exeAndArgs[0], exeAndArgs.slice(1), false) == 0;
+		final association = getShellVerbAssociation(Path.extension(document), verb);
+        if (association == null) return false;
+
+        final args = association.args.map(x -> x == "%1" ? fileSystem.absolutePath(document) : x);
+		return processManager.run(association.program, args, false) == 0;
 	}
-	
-	@:noapi
-	function parseCommand(command:String) : Array<String>
-	{
-		command = ~/%([a-zA-Z0-9]+)%/g.map(command, function(re)
-		{
-			return environment.get(re.matched(1));
-		});
+    
+    function getShellVerbAssociation(ext:String, verb:String) : { program:String, args:Array<String> }
+    {
+        static final cache = new Map<String, { program:String, args:Array<String> }>();
+
+        final key = ext + "|" + verb;
+        if (!cache.has(key)) cache.set(key, getShellVerbAssociationInner(ext, verb));
+        return cache.get(key);
+    }
+
+    function getShellVerbAssociationInner(ext:String, verb:String) : { program:String, args:Array<String> }
+    {
+        if (ext == null || ext == "") return null;
+
+		final winReg = new NodeWindowsRegistry((command, ?options) -> ElectronApi.child_process.execSync(command, options));
+        
+        final docType = winReg.getValue("HKCR:\\." + ext);
+		log("docType = " + docType);
+		if (docType == null) return null;
 		
-		var r = [];
-		~/"([^"]+?)"|([^ \t]+)/g.map(command, function(re)
+		var command = winReg.getValue("HKCR:\\" + docType + "\\shell\\" + verb + "\\command");
+		log("command = " + command);
+        if (command == null || command == "") return null;
+		
+		command = ~/%([a-zA-Z0-9]+)%/g.map(command, re -> environment.get(re.matched(1)));
+		
+		final programAndArgs = [];
+		~/"([^"]+?)"|([^ \t]+)/g.map(command, re ->
 		{
-			if (re.matched(1) != null && re.matched(1) != "") r.push(re.matched(1));
-			else r.push(re.matched(2));
+			programAndArgs.push(!StringTools.isNullOrEmpty(re.matched(1)) ? re.matched(1) : re.matched(2));
 			return re.matched(0);
 		});
-		return r;
+
+        if (programAndArgs.length < 2) return null;
+		
+        return { program:programAndArgs[0], args:programAndArgs.slice(1) };
 	}
 	
 	static function log(v:Dynamic, ?infos:haxe.PosInfos)
