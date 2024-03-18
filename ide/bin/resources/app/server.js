@@ -20,7 +20,7 @@ const server =  http.createServer((request, response) =>
 
     if (request.method != "GET") { response.statusCode = 405; end("Only GET method is supported.");  return; }
 
-    const filePath = path.join(baseDir, request.url);
+    const filePath = path.join(baseDir, decodeURI(request.url));
     if (!request.url || request.url == "/" || !fs.existsSync(filePath)) { response.statusCode = 404; response.end("File not found.");  return; }
 
     const stat = fs.statSync(filePath)
