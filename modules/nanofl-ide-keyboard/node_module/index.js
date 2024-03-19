@@ -19,10 +19,88 @@ EReg.prototype = {
 		this.r.s = s;
 		return this.r.m != null;
 	}
+	,matched: function(n) {
+		if(this.r.m != null && n >= 0 && n < this.r.m.length) {
+			return this.r.m[n];
+		} else {
+			throw haxe_Exception.thrown("EReg::matched");
+		}
+	}
+	,matchedPos: function() {
+		if(this.r.m == null) {
+			throw haxe_Exception.thrown("No string matched");
+		}
+		return { pos : this.r.m.index, len : this.r.m[0].length};
+	}
+	,matchSub: function(s,pos,len) {
+		if(len == null) {
+			len = -1;
+		}
+		if(this.r.global) {
+			this.r.lastIndex = pos;
+			this.r.m = this.r.exec(len < 0 ? s : HxOverrides.substr(s,0,pos + len));
+			var b = this.r.m != null;
+			if(b) {
+				this.r.s = s;
+			}
+			return b;
+		} else {
+			var b = this.match(len < 0 ? HxOverrides.substr(s,pos,null) : HxOverrides.substr(s,pos,len));
+			if(b) {
+				this.r.s = s;
+				this.r.m.index += pos;
+			}
+			return b;
+		}
+	}
+	,map: function(s,f) {
+		var offset = 0;
+		var buf_b = "";
+		do {
+			if(offset >= s.length) {
+				break;
+			} else if(!this.matchSub(s,offset)) {
+				buf_b += Std.string(HxOverrides.substr(s,offset,null));
+				break;
+			}
+			var p = this.matchedPos();
+			buf_b += Std.string(HxOverrides.substr(s,offset,p.pos - offset));
+			buf_b += Std.string(f(this));
+			if(p.len == 0) {
+				buf_b += Std.string(HxOverrides.substr(s,p.pos,1));
+				offset = p.pos + 1;
+			} else {
+				offset = p.pos + p.len;
+			}
+		} while(this.r.global);
+		if(!this.r.global && offset > 0 && offset < s.length) {
+			buf_b += Std.string(HxOverrides.substr(s,offset,null));
+		}
+		return buf_b;
+	}
 	,__class__: EReg
 };
 var HxOverrides = function() { };
 HxOverrides.__name__ = true;
+HxOverrides.cca = function(s,index) {
+	var x = s.charCodeAt(index);
+	if(x != x) {
+		return undefined;
+	}
+	return x;
+};
+HxOverrides.substr = function(s,pos,len) {
+	if(len == null) {
+		len = s.length;
+	} else if(len < 0) {
+		if(pos == 0) {
+			len = s.length + len;
+		} else {
+			return "";
+		}
+	}
+	return s.substr(pos,len);
+};
 HxOverrides.remove = function(a,obj) {
 	var i = a.indexOf(obj);
 	if(i == -1) {
@@ -115,6 +193,223 @@ Std.random = function(x) {
 		return Math.floor(Math.random() * x);
 	}
 };
+var StringBuf = function() {
+	this.b = "";
+};
+StringBuf.__name__ = true;
+StringBuf.prototype = {
+	__class__: StringBuf
+};
+var haxe_SysTools = function() { };
+haxe_SysTools.__name__ = true;
+var StringTools = function() { };
+StringTools.__name__ = true;
+StringTools.htmlEscape = function(s,quotes) {
+	var buf_b = "";
+	var _g_offset = 0;
+	var _g_s = s;
+	while(_g_offset < _g_s.length) {
+		var s = _g_s;
+		var index = _g_offset++;
+		var c = s.charCodeAt(index);
+		if(c >= 55296 && c <= 56319) {
+			c = c - 55232 << 10 | s.charCodeAt(index + 1) & 1023;
+		}
+		var c1 = c;
+		if(c1 >= 65536) {
+			++_g_offset;
+		}
+		var code = c1;
+		switch(code) {
+		case 34:
+			if(quotes) {
+				buf_b += "&quot;";
+			} else {
+				buf_b += String.fromCodePoint(code);
+			}
+			break;
+		case 38:
+			buf_b += "&amp;";
+			break;
+		case 39:
+			if(quotes) {
+				buf_b += "&#039;";
+			} else {
+				buf_b += String.fromCodePoint(code);
+			}
+			break;
+		case 60:
+			buf_b += "&lt;";
+			break;
+		case 62:
+			buf_b += "&gt;";
+			break;
+		default:
+			buf_b += String.fromCodePoint(code);
+		}
+	}
+	return buf_b;
+};
+StringTools.htmlUnescape = function(s) {
+	return s.split("&gt;").join(">").split("&lt;").join("<").split("&quot;").join("\"").split("&#039;").join("'").split("&amp;").join("&");
+};
+StringTools.startsWith = function(s,start) {
+	if(s.length >= start.length) {
+		return s.lastIndexOf(start,0) == 0;
+	} else {
+		return false;
+	}
+};
+StringTools.endsWith = function(s,end) {
+	var elen = end.length;
+	var slen = s.length;
+	if(slen >= elen) {
+		return s.indexOf(end,slen - elen) == slen - elen;
+	} else {
+		return false;
+	}
+};
+StringTools.isSpace = function(s,pos) {
+	var c = HxOverrides.cca(s,pos);
+	if(!(c > 8 && c < 14)) {
+		return c == 32;
+	} else {
+		return true;
+	}
+};
+StringTools.ltrim = function(s) {
+	var l = s.length;
+	var r = 0;
+	while(r < l && StringTools.isSpace(s,r)) ++r;
+	if(r > 0) {
+		return HxOverrides.substr(s,r,l - r);
+	} else {
+		return s;
+	}
+};
+StringTools.rtrim = function(s) {
+	var l = s.length;
+	var r = 0;
+	while(r < l && StringTools.isSpace(s,l - r - 1)) ++r;
+	if(r > 0) {
+		return HxOverrides.substr(s,0,l - r);
+	} else {
+		return s;
+	}
+};
+StringTools.trim = function(s) {
+	return StringTools.ltrim(StringTools.rtrim(s));
+};
+StringTools.lpad = function(s,c,l) {
+	if(c.length <= 0) {
+		return s;
+	}
+	var buf_b = "";
+	l -= s.length;
+	while(buf_b.length < l) buf_b += c == null ? "null" : "" + c;
+	buf_b += s == null ? "null" : "" + s;
+	return buf_b;
+};
+StringTools.rpad = function(s,c,l) {
+	if(c.length <= 0) {
+		return s;
+	}
+	var buf_b = "";
+	buf_b += s == null ? "null" : "" + s;
+	while(buf_b.length < l) buf_b += c == null ? "null" : "" + c;
+	return buf_b;
+};
+StringTools.replace = function(s,sub,by) {
+	return s.split(sub).join(by);
+};
+StringTools.hex = function(n,digits) {
+	var s = "";
+	var hexChars = "0123456789ABCDEF";
+	do {
+		s = hexChars.charAt(n & 15) + s;
+		n >>>= 4;
+	} while(n > 0);
+	if(digits != null) {
+		while(s.length < digits) s = "0" + s;
+	}
+	return s;
+};
+StringTools.quoteUnixArg = function(argument) {
+	if(argument == "") {
+		return "''";
+	} else if(!new EReg("[^a-zA-Z0-9_@%+=:,./-]","").match(argument)) {
+		return argument;
+	} else {
+		return "'" + StringTools.replace(argument,"'","'\"'\"'") + "'";
+	}
+};
+StringTools.quoteWinArg = function(argument,escapeMetaCharacters) {
+	var argument1 = argument;
+	if(!new EReg("^(/)?[^ \t/\\\\\"]+$","").match(argument1)) {
+		var result_b = "";
+		var needquote = argument1.indexOf(" ") != -1 || argument1.indexOf("\t") != -1 || argument1 == "" || argument1.indexOf("/") > 0;
+		if(needquote) {
+			result_b += "\"";
+		}
+		var bs_buf = new StringBuf();
+		var _g = 0;
+		var _g1 = argument1.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var _g2 = HxOverrides.cca(argument1,i);
+			if(_g2 == null) {
+				var c = _g2;
+				if(bs_buf.b.length > 0) {
+					result_b += Std.string(bs_buf.b);
+					bs_buf = new StringBuf();
+				}
+				result_b += String.fromCodePoint(c);
+			} else {
+				switch(_g2) {
+				case 34:
+					var bs = bs_buf.b;
+					result_b += Std.string(bs);
+					result_b += Std.string(bs);
+					bs_buf = new StringBuf();
+					result_b += "\\\"";
+					break;
+				case 92:
+					bs_buf.b += "\\";
+					break;
+				default:
+					var c1 = _g2;
+					if(bs_buf.b.length > 0) {
+						result_b += Std.string(bs_buf.b);
+						bs_buf = new StringBuf();
+					}
+					result_b += String.fromCodePoint(c1);
+				}
+			}
+		}
+		result_b += Std.string(bs_buf.b);
+		if(needquote) {
+			result_b += Std.string(bs_buf.b);
+			result_b += "\"";
+		}
+		argument1 = result_b;
+	}
+	if(escapeMetaCharacters) {
+		var result_b = "";
+		var _g = 0;
+		var _g1 = argument1.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var c = HxOverrides.cca(argument1,i);
+			if(haxe_SysTools.winMetaCharacters.indexOf(c) >= 0) {
+				result_b += String.fromCodePoint(94);
+			}
+			result_b += String.fromCodePoint(c);
+		}
+		return result_b;
+	} else {
+		return argument1;
+	}
+};
 var haxe_IMap = function() { };
 haxe_IMap.__name__ = true;
 haxe_IMap.__isInterface__ = true;
@@ -172,6 +467,20 @@ haxe_iterators_ArrayIterator.prototype = {
 		return this.array[this.current++];
 	}
 	,__class__: haxe_iterators_ArrayIterator
+};
+var haxe_iterators_StringIterator = function(s) {
+	this.s = s;
+};
+haxe_iterators_StringIterator.__name__ = true;
+haxe_iterators_StringIterator.prototype = {
+	__class__: haxe_iterators_StringIterator
+};
+var haxe_iterators_StringKeyValueIterator = function(s) {
+	this.s = s;
+};
+haxe_iterators_StringKeyValueIterator.__name__ = true;
+haxe_iterators_StringKeyValueIterator.prototype = {
+	__class__: haxe_iterators_StringKeyValueIterator
 };
 var js_Boot = function() { };
 js_Boot.__name__ = true;
@@ -359,34 +668,16 @@ var nanofl_ide_keyboard_Keyboard = $hx_exports["Keyboard"] = function(commands) 
 	var _gthis = this;
 	this.onCtrlButtonChange = new stdlib_Event(this);
 	this.onShiftButtonChange = new stdlib_Event(this);
+	this.onAltButtonChange = new stdlib_Event(this);
 	this.onKeymapChange = new stdlib_Event(this);
 	this.onKeyDown = new stdlib_Event(this);
 	this.commands = commands;
 	jQuery(window.document).keydown(function(e) {
-		nanofl_ide_keyboard_Keyboard.log("key down",{ fileName : "src/nanofl/ide/keyboard/Keyboard.hx", lineNumber : 36, className : "nanofl.ide.keyboard.Keyboard", methodName : "new"});
-		if(!_gthis.isInputActive() && !nanofl_ide_keyboard_Shortcut.ctrl(nanofl_ide_keyboard_Keys.X).test(e) && !nanofl_ide_keyboard_Shortcut.ctrl(nanofl_ide_keyboard_Keys.C).test(e) && !nanofl_ide_keyboard_Shortcut.ctrl(nanofl_ide_keyboard_Keys.V).test(e)) {
-			nanofl_ide_keyboard_Keyboard.log("key down(1)",{ fileName : "src/nanofl/ide/keyboard/Keyboard.hx", lineNumber : 43, className : "nanofl.ide.keyboard.Keyboard", methodName : "new"});
+		nanofl_ide_keyboard_Keyboard.log("keydown");
+		if(!_gthis.isInputActive() && !nanofl_ide_keyboard_ShortcutTools.equ(nanofl_ide_keyboard_ShortcutTools.ctrl(nanofl_ide_keyboard_Keys.X),e) && !nanofl_ide_keyboard_ShortcutTools.equ(nanofl_ide_keyboard_ShortcutTools.ctrl(nanofl_ide_keyboard_Keys.C),e) && !nanofl_ide_keyboard_ShortcutTools.equ(nanofl_ide_keyboard_ShortcutTools.ctrl(nanofl_ide_keyboard_Keys.V),e)) {
+			nanofl_ide_keyboard_Keyboard.log("keydown: disabled = " + _gthis.disabled);
 			if(_gthis.disabled <= 0) {
-				nanofl_ide_keyboard_Keyboard.log("key down(2)",{ fileName : "src/nanofl/ide/keyboard/Keyboard.hx", lineNumber : 46, className : "nanofl.ide.keyboard.Keyboard", methodName : "new"});
-				if(e.keyCode == nanofl_ide_keyboard_Keys.CTRL) {
-					_gthis.onCtrlButtonChange.call({ pressed : true});
-				}
-				if(e.keyCode == nanofl_ide_keyboard_Keys.SHIFT) {
-					_gthis.onShiftButtonChange.call({ pressed : true});
-				}
-				var processed = false;
-				_gthis.onKeyDown.call({ altKey : e.altKey, ctrlKey : e.ctrlKey, shiftKey : e.shiftKey, processShortcut : function(filter) {
-					var r = _gthis.processShortcut(e,_gthis.keymap,filter);
-					if(r) {
-						processed = true;
-					}
-					return r;
-				}});
-				if(processed) {
-					e.preventDefault();
-					e.stopPropagation();
-				}
-				nanofl_ide_keyboard_Keyboard.log("key processed",{ fileName : "src/nanofl/ide/keyboard/Keyboard.hx", lineNumber : 77, className : "nanofl.ide.keyboard.Keyboard", methodName : "new"});
+				_gthis.processKeyDown(e);
 			}
 		}
 	}).keyup(function(e) {
@@ -402,10 +693,43 @@ var nanofl_ide_keyboard_Keyboard = $hx_exports["Keyboard"] = function(commands) 
 	});
 };
 nanofl_ide_keyboard_Keyboard.__name__ = true;
-nanofl_ide_keyboard_Keyboard.log = function(v,infos) {
+nanofl_ide_keyboard_Keyboard.log = function(v) {
 };
 nanofl_ide_keyboard_Keyboard.prototype = {
-	setKeymap: function(keymap) {
+	enable: function() {
+		this.disabled--;
+	}
+	,disable: function() {
+		this.disabled++;
+	}
+	,processKeyDown: function(e) {
+		var _gthis = this;
+		switch(e.keyCode) {
+		case nanofl_ide_keyboard_Keys.ALT:
+			this.onAltButtonChange.call({ pressed : true});
+			break;
+		case nanofl_ide_keyboard_Keys.CTRL:
+			this.onCtrlButtonChange.call({ pressed : true});
+			break;
+		case nanofl_ide_keyboard_Keys.SHIFT:
+			this.onShiftButtonChange.call({ pressed : true});
+			break;
+		default:
+			var processed = false;
+			this.onKeyDown.call({ altKey : e.altKey, ctrlKey : e.ctrlKey, shiftKey : e.shiftKey, processShortcut : function(filter,whenVars) {
+				var r = _gthis.processShortcut(e,_gthis.keymap,filter,whenVars);
+				if(r) {
+					processed = true;
+				}
+				return r;
+			}});
+			if(processed) {
+				e.preventDefault();
+				e.stopPropagation();
+			}
+		}
+	}
+	,setKeymap: function(keymap) {
 		this.keymap = keymap;
 		var _g = 0;
 		var result = new Array(keymap.length);
@@ -445,32 +769,6 @@ nanofl_ide_keyboard_Keyboard.prototype = {
 		}
 		return result;
 	}
-	,getGroupedKeymap: function() {
-		var keymap = this.getKeymap();
-		var r = [];
-		var i = 0;
-		while(i < keymap.length) {
-			var shortcuts = [keymap[i].shortcut];
-			var j = i + 1;
-			while(j < keymap.length) if(keymap[i].command == keymap[j].command) {
-				shortcuts.push(keymap[j].shortcut);
-				keymap.splice(j,1);
-			} else {
-				++j;
-			}
-			r.push({ shortcuts : shortcuts.join(", "), command : keymap[i].command});
-			++i;
-		}
-		return stdlib_LambdaIterable.sorted(r,function(a,b) {
-			return Reflect.compare(a.command,b.command);
-		});
-	}
-	,enable: function() {
-		this.disabled--;
-	}
-	,disable: function() {
-		this.disabled++;
-	}
 	,getKeymap: function() {
 		var r = this.keymap.slice();
 		r.push({ shortcut : "Ctrl+X", command : "document.cut"});
@@ -497,25 +795,15 @@ nanofl_ide_keyboard_Keyboard.prototype = {
 		}
 		return true;
 	}
-	,processShortcut: function(e,keymap,filter) {
-		var key = "";
-		if(e.ctrlKey) {
-			key += "Ctrl+";
-		}
-		if(e.shiftKey) {
-			key += "Shift+";
-		}
-		if(e.altKey) {
-			key += "Alt+";
-		}
-		key += nanofl_ide_keyboard_Keys.toString(e.keyCode);
+	,processShortcut: function(e,keymap,filter,whenVars) {
+		var _gthis = this;
+		var tmp = filter;
+		filter = tmp != null ? tmp : "";
+		var shortcut = nanofl_ide_keyboard_ShortcutTools.toString(e);
+		nanofl_ide_keyboard_Keyboard.log("shortcut = " + shortcut);
 		var km = Lambda.find(keymap,function(x) {
-			if(x.shortcut == key) {
-				if(!(filter == null || filter == "")) {
-					return filter == x.command.split(".")[0];
-				} else {
-					return true;
-				}
+			if(x.shortcut == shortcut && (filter == "" || filter == x.command.split(".")[0])) {
+				return _gthis.testWhen(x.when,whenVars);
 			} else {
 				return false;
 			}
@@ -524,6 +812,13 @@ nanofl_ide_keyboard_Keyboard.prototype = {
 			return false;
 		}
 		return this.commands.run(km.command);
+	}
+	,testWhen: function(when,vars) {
+		if(when == null || stdlib_StringTools.trim(when) == "") {
+			return true;
+		}
+		var editorHasSelected = vars.editorHasSelected;
+		return eval(when);
 	}
 	,__class__: nanofl_ide_keyboard_Keyboard
 };
@@ -534,7 +829,7 @@ nanofl_ide_keyboard_Keys.toString = function(code) {
 	case nanofl_ide_keyboard_Keys.A:
 		return "A";
 	case nanofl_ide_keyboard_Keys.ADD:
-		return "Num '+'";
+		return "NumPlus";
 	case nanofl_ide_keyboard_Keys.ALT:
 		return "Alt";
 	case nanofl_ide_keyboard_Keys.B:
@@ -542,15 +837,15 @@ nanofl_ide_keyboard_Keys.toString = function(code) {
 	case nanofl_ide_keyboard_Keys.BACKSPACE:
 		return "Backspace";
 	case nanofl_ide_keyboard_Keys.BACK_SLASH:
-		return "'\\'";
+		return "\\";
 	case nanofl_ide_keyboard_Keys.C:
 		return "C";
 	case nanofl_ide_keyboard_Keys.CAPS_LOCK:
-		return "Caps Lock";
+		return "CapsLock";
 	case nanofl_ide_keyboard_Keys.CLOSE_BRAKET:
-		return "']'";
+		return "]";
 	case nanofl_ide_keyboard_Keys.COMMA:
-		return "','";
+		return ",";
 	case nanofl_ide_keyboard_Keys.CTRL:
 		return "Ctrl";
 	case nanofl_ide_keyboard_Keys.D:
@@ -558,7 +853,7 @@ nanofl_ide_keyboard_Keys.toString = function(code) {
 	case nanofl_ide_keyboard_Keys.DASH:
 		return "-";
 	case nanofl_ide_keyboard_Keys.DECIMAL_POINT:
-		return "Num '.'";
+		return "Num.";
 	case nanofl_ide_keyboard_Keys.DELETE:
 		return "Delete";
 	case nanofl_ide_keyboard_Keys.DIGIT_0:
@@ -582,7 +877,7 @@ nanofl_ide_keyboard_Keys.toString = function(code) {
 	case nanofl_ide_keyboard_Keys.DIGIT_9:
 		return "9";
 	case nanofl_ide_keyboard_Keys.DIVIDE:
-		return "Num '/'";
+		return "Num/";
 	case nanofl_ide_keyboard_Keys.DOWN_ARROW:
 		return "Down";
 	case nanofl_ide_keyboard_Keys.E:
@@ -592,7 +887,7 @@ nanofl_ide_keyboard_Keys.toString = function(code) {
 	case nanofl_ide_keyboard_Keys.ENTER:
 		return "Enter";
 	case nanofl_ide_keyboard_Keys.EQUAL_SIGN:
-		return "'='";
+		return "=";
 	case nanofl_ide_keyboard_Keys.ESCAPE:
 		return "Escape";
 	case nanofl_ide_keyboard_Keys.F:
@@ -622,7 +917,7 @@ nanofl_ide_keyboard_Keys.toString = function(code) {
 	case nanofl_ide_keyboard_Keys.F9:
 		return "F9";
 	case nanofl_ide_keyboard_Keys.FORWARD_SLASH:
-		return "'/'";
+		return "/";
 	case nanofl_ide_keyboard_Keys.G:
 		return "G";
 	case nanofl_ide_keyboard_Keys.GRAVE_ACCENT:
@@ -644,45 +939,45 @@ nanofl_ide_keyboard_Keys.toString = function(code) {
 	case nanofl_ide_keyboard_Keys.LEFT_ARROW:
 		return "Left";
 	case nanofl_ide_keyboard_Keys.LEFT_WINDOW_KEY:
-		return "Left Win";
+		return "LeftWin";
 	case nanofl_ide_keyboard_Keys.M:
 		return "M";
 	case nanofl_ide_keyboard_Keys.MULTIPLY:
-		return "Num '*'";
+		return "Num*";
 	case nanofl_ide_keyboard_Keys.N:
 		return "N";
 	case nanofl_ide_keyboard_Keys.NUMPAD_0:
-		return "Num 0";
+		return "Num0";
 	case nanofl_ide_keyboard_Keys.NUMPAD_1:
-		return "Num 1";
+		return "Num1";
 	case nanofl_ide_keyboard_Keys.NUMPAD_2:
-		return "Num 2";
+		return "Num2";
 	case nanofl_ide_keyboard_Keys.NUMPAD_3:
-		return "Num 3";
+		return "Num3";
 	case nanofl_ide_keyboard_Keys.NUMPAD_4:
-		return "Num 4";
+		return "Num4";
 	case nanofl_ide_keyboard_Keys.NUMPAD_5:
-		return "Num 5";
+		return "Num5";
 	case nanofl_ide_keyboard_Keys.NUMPAD_6:
-		return "Num 6";
+		return "Num6";
 	case nanofl_ide_keyboard_Keys.NUMPAD_7:
-		return "Num 7";
+		return "Num7";
 	case nanofl_ide_keyboard_Keys.NUMPAD_8:
-		return "Num 8";
+		return "Num8";
 	case nanofl_ide_keyboard_Keys.NUMPAD_9:
-		return "Num 9";
+		return "Num9";
 	case nanofl_ide_keyboard_Keys.NUM_LOCK:
-		return "Num Lock";
+		return "NumLock";
 	case nanofl_ide_keyboard_Keys.O:
 		return "O";
 	case nanofl_ide_keyboard_Keys.OPEN_BRACKET:
-		return "'['";
+		return "[";
 	case nanofl_ide_keyboard_Keys.P:
 		return "P";
 	case nanofl_ide_keyboard_Keys.PAGE_DOWN:
-		return "Page Down";
+		return "PageDown";
 	case nanofl_ide_keyboard_Keys.PAGE_UP:
-		return "Page Up";
+		return "PageUp";
 	case nanofl_ide_keyboard_Keys.PAUSE:
 		return "Pause";
 	case nanofl_ide_keyboard_Keys.PERIOD:
@@ -694,23 +989,23 @@ nanofl_ide_keyboard_Keys.toString = function(code) {
 	case nanofl_ide_keyboard_Keys.RIGHT_ARROW:
 		return "Right";
 	case nanofl_ide_keyboard_Keys.RIGHT_WINDOW_KEY:
-		return "Right Win";
+		return "RightWin";
 	case nanofl_ide_keyboard_Keys.S:
 		return "S";
 	case nanofl_ide_keyboard_Keys.SCROLL_LOCK:
-		return "Scroll Lock";
+		return "ScrollLock";
 	case nanofl_ide_keyboard_Keys.SELECT_KEY:
 		return "Select";
 	case nanofl_ide_keyboard_Keys.SEMICOLON:
-		return "';'";
+		return ";";
 	case nanofl_ide_keyboard_Keys.SHIFT:
 		return "Shift";
 	case nanofl_ide_keyboard_Keys.SINGLE_QUOTE:
-		return "\"'\"";
+		return "'";
 	case nanofl_ide_keyboard_Keys.SPACEBAR:
 		return "Space";
 	case nanofl_ide_keyboard_Keys.SUBTRACT:
-		return "Num '-'";
+		return "Num-";
 	case nanofl_ide_keyboard_Keys.T:
 		return "T";
 	case nanofl_ide_keyboard_Keys.TAB:
@@ -732,46 +1027,32 @@ nanofl_ide_keyboard_Keys.toString = function(code) {
 	}
 	return null;
 };
-var nanofl_ide_keyboard_Shortcut = $hx_exports["Shortcut"] = function(keyCode,ctrlKey,shiftKey,altKey) {
-	if(altKey == null) {
-		altKey = false;
+var nanofl_ide_keyboard_ShortcutTools = $hx_exports["ShortcutTools"] = function() { };
+nanofl_ide_keyboard_ShortcutTools.__name__ = true;
+nanofl_ide_keyboard_ShortcutTools.equ = function(a,b) {
+	if(a.keyCode == b.keyCode && a.ctrlKey == b.ctrlKey && a.shiftKey == b.shiftKey) {
+		return a.altKey == b.altKey;
+	} else {
+		return false;
 	}
-	if(shiftKey == null) {
-		shiftKey = false;
-	}
-	if(ctrlKey == null) {
-		ctrlKey = false;
-	}
-	this.keyCode = keyCode;
-	this.ctrlKey = ctrlKey;
-	this.shiftKey = shiftKey;
-	this.altKey = altKey;
 };
-nanofl_ide_keyboard_Shortcut.__name__ = true;
-nanofl_ide_keyboard_Shortcut.key = function(keyCode) {
-	return new nanofl_ide_keyboard_Shortcut(keyCode);
+nanofl_ide_keyboard_ShortcutTools.key = function(keyCode) {
+	return { keyCode : keyCode};
 };
-nanofl_ide_keyboard_Shortcut.ctrl = function(keyCode) {
-	return new nanofl_ide_keyboard_Shortcut(keyCode,true);
+nanofl_ide_keyboard_ShortcutTools.ctrl = function(keyCode) {
+	return { keyCode : keyCode, ctrlKey : true};
 };
-nanofl_ide_keyboard_Shortcut.shift = function(keyCode) {
-	return new nanofl_ide_keyboard_Shortcut(keyCode,false,true);
+nanofl_ide_keyboard_ShortcutTools.shift = function(keyCode) {
+	return { keyCode : keyCode, shiftKey : true};
 };
-nanofl_ide_keyboard_Shortcut.alt = function(keyCode) {
-	return new nanofl_ide_keyboard_Shortcut(keyCode,false,false,true);
+nanofl_ide_keyboard_ShortcutTools.alt = function(keyCode) {
+	return { keyCode : keyCode, altKey : true};
 };
-nanofl_ide_keyboard_Shortcut.ctrlShift = function(keyCode) {
-	return new nanofl_ide_keyboard_Shortcut(keyCode,true,true);
+nanofl_ide_keyboard_ShortcutTools.ctrlShift = function(keyCode) {
+	return { keyCode : keyCode, ctrlKey : true, shiftKey : true};
 };
-nanofl_ide_keyboard_Shortcut.prototype = {
-	test: function(e) {
-		if(e.keyCode == this.keyCode && e.ctrlKey == this.ctrlKey && e.shiftKey == this.shiftKey) {
-			return e.altKey == this.altKey;
-		} else {
-			return false;
-		}
-	}
-	,__class__: nanofl_ide_keyboard_Shortcut
+nanofl_ide_keyboard_ShortcutTools.toString = function(e) {
+	return (e.ctrlKey ? "Ctrl+" : "") + (e.shiftKey ? "Shift+" : "") + (e.altKey ? "Alt+" : "") + nanofl_ide_keyboard_Keys.toString(e.keyCode);
 };
 var stdlib_Event = function(target) {
 	this.target = target;
@@ -1193,6 +1474,194 @@ stdlib_Std.sign = function(n) {
 		return 0;
 	}
 };
+var stdlib_StringTools = function() { };
+stdlib_StringTools.__name__ = true;
+stdlib_StringTools.ltrim = function(s,chars) {
+	if(chars == null) {
+		return StringTools.ltrim(s);
+	}
+	while(s.length > 0 && chars.indexOf(HxOverrides.substr(s,0,1)) >= 0) s = HxOverrides.substr(s,1,null);
+	return s;
+};
+stdlib_StringTools.rtrim = function(s,chars) {
+	if(chars == null) {
+		return StringTools.rtrim(s);
+	}
+	while(s.length > 0 && chars.indexOf(HxOverrides.substr(s,s.length - 1,1)) >= 0) s = HxOverrides.substr(s,0,s.length - 1);
+	return s;
+};
+stdlib_StringTools.trim = function(s,chars) {
+	if(chars == null) {
+		return StringTools.trim(s);
+	}
+	return stdlib_StringTools.rtrim(stdlib_StringTools.ltrim(s,chars),chars);
+};
+stdlib_StringTools.hexdec = function(s) {
+	return stdlib_Std.parseInt("0x" + s);
+};
+stdlib_StringTools.addcslashes = function(s) {
+	return new EReg("['\"\t\r\n\\\\]","g").map(s,function(re) {
+		return "\\" + re.matched(0);
+	});
+};
+stdlib_StringTools.stripTags = function(str,allowedTags) {
+	if(allowedTags == null) {
+		allowedTags = "";
+	}
+	var allowedTagsArray = [];
+	if(allowedTags != "") {
+		var re = new EReg("[a-zA-Z0-9]+","i");
+		var pos = 0;
+		while(re.matchSub(allowedTags,pos)) {
+			allowedTagsArray.push(re.matched(0));
+			pos = re.matchedPos().pos + re.matchedPos().len;
+		}
+	}
+	var re = new EReg("</?[\\S][^>]*>","g");
+	str = re.map(str,function(_) {
+		var html = re.matched(0);
+		var allowed = false;
+		if(allowedTagsArray.length > 0) {
+			var htmlLC = html.toLowerCase();
+			var _g = 0;
+			while(_g < allowedTagsArray.length) {
+				var allowedTag = allowedTagsArray[_g];
+				++_g;
+				if(StringTools.startsWith(htmlLC,"<" + allowedTag + ">") || StringTools.startsWith(htmlLC,"<" + allowedTag + " ") || StringTools.startsWith(htmlLC,"</" + allowedTag)) {
+					allowed = true;
+					break;
+				}
+			}
+		}
+		if(allowed) {
+			return html;
+		} else {
+			return "";
+		}
+	});
+	return str;
+};
+stdlib_StringTools.regexEscape = function(s) {
+	var _this_r = new RegExp("([\\-\\[\\]/\\{\\}\\(\\)\\*\\+\\?\\.\\\\\\^\\$\\|])","g".split("u").join(""));
+	return s.replace(_this_r,"\\$1");
+};
+stdlib_StringTools.jsonEscape = function(s) {
+	if(s == null) {
+		return "null";
+	}
+	var r = "\"";
+	var _g_offset = 0;
+	var _g_s = s;
+	while(_g_offset < _g_s.length) {
+		var s = _g_s;
+		var index = _g_offset++;
+		var c = s.charCodeAt(index);
+		if(c >= 55296 && c <= 56319) {
+			c = c - 55232 << 10 | s.charCodeAt(index + 1) & 1023;
+		}
+		var c1 = c;
+		if(c1 >= 65536) {
+			++_g_offset;
+		}
+		var c2 = c1;
+		switch(c2) {
+		case 9:
+			r += "\\t";
+			break;
+		case 10:
+			r += "\\n";
+			break;
+		case 13:
+			r += "\\r";
+			break;
+		case 34:
+			r += "\\\"";
+			break;
+		case 92:
+			r += "\\\\";
+			break;
+		default:
+			if(c2 < 32) {
+				r += "\\u" + StringTools.hex(c2,4);
+			} else {
+				r += String.fromCodePoint(c2);
+			}
+		}
+	}
+	r += "\"";
+	return r;
+};
+stdlib_StringTools.isNullOrEmpty = function(s) {
+	if(s != null) {
+		return s == "";
+	} else {
+		return true;
+	}
+};
+stdlib_StringTools.capitalize = function(s) {
+	if(s == "") {
+		return s;
+	} else {
+		return HxOverrides.substr(s,0,1).toUpperCase() + HxOverrides.substr(s,1,null);
+	}
+};
+stdlib_StringTools.urlEncode = function(s) {
+	return encodeURIComponent(s);
+};
+stdlib_StringTools.urlDecode = function(s) {
+	return decodeURIComponent(s.split("+").join(" "));
+};
+stdlib_StringTools.htmlEscape = function(s,quotes) {
+	return StringTools.htmlEscape(s,quotes);
+};
+stdlib_StringTools.htmlUnescape = function(s) {
+	return StringTools.htmlUnescape(s);
+};
+stdlib_StringTools.contains = function(s,value) {
+	return s.indexOf(value) != -1;
+};
+stdlib_StringTools.startsWith = function(s,start) {
+	return StringTools.startsWith(s,start);
+};
+stdlib_StringTools.endsWith = function(s,end) {
+	return StringTools.endsWith(s,end);
+};
+stdlib_StringTools.isSpace = function(s,pos) {
+	return StringTools.isSpace(s,pos);
+};
+stdlib_StringTools.lpad = function(s,c,l) {
+	return StringTools.lpad(s,c,l);
+};
+stdlib_StringTools.rpad = function(s,c,l) {
+	return StringTools.rpad(s,c,l);
+};
+stdlib_StringTools.replace = function(s,sub,by) {
+	return StringTools.replace(s,sub,by);
+};
+stdlib_StringTools.hex = function(n,digits) {
+	return StringTools.hex(n,digits);
+};
+stdlib_StringTools.fastCodeAt = function(s,index) {
+	return s.charCodeAt(index);
+};
+stdlib_StringTools.unsafeCodeAt = function(s,index) {
+	return s.charCodeAt(index);
+};
+stdlib_StringTools.iterator = function(s) {
+	return new haxe_iterators_StringIterator(s);
+};
+stdlib_StringTools.keyValueIterator = function(s) {
+	return new haxe_iterators_StringKeyValueIterator(s);
+};
+stdlib_StringTools.isEof = function(c) {
+	return c != c;
+};
+stdlib_StringTools.quoteUnixArg = function(argument) {
+	return StringTools.quoteUnixArg(argument);
+};
+stdlib_StringTools.quoteWinArg = function(argument,escapeMetaCharacters) {
+	return StringTools.quoteWinArg(argument,escapeMetaCharacters);
+};
 function $iterator(o) { if( o instanceof Array ) return function() { return new haxe_iterators_ArrayIterator(o); }; return typeof(o.iterator) == 'function' ? $bind(o,o.iterator) : o.iterator; }
 function $getIterator(o) { if( o instanceof Array ) return new haxe_iterators_ArrayIterator(o); else return o.iterator(); }
 var $_;
@@ -1201,6 +1670,7 @@ $global.$haxeUID |= 0;
 if(typeof(performance) != "undefined" ? typeof(performance.now) == "function" : false) {
 	HxOverrides.now = performance.now.bind(performance);
 }
+if( String.fromCodePoint == null ) String.fromCodePoint = function(c) { return c < 0x10000 ? String.fromCharCode(c) : String.fromCharCode((c>>10)+0xD7C0)+String.fromCharCode((c&0x3FF)+0xDC00); }
 Object.defineProperty(String.prototype,"__class__",{ value : String, enumerable : false, writable : true});
 String.__name__ = true;
 Array.__name__ = true;
@@ -1212,7 +1682,8 @@ var Class = { };
 var Enum = { };
 js_Boot.__toStr = ({ }).toString;
 var q = window.jQuery;
-nanofl_ide_keyboard_Keyboard.__rtti = "<class path=\"nanofl.ide.keyboard.Keyboard\" params=\"\">\n\t<log set=\"method\" line=\"199\" static=\"1\"><f a=\"v:?infos\">\n\t<d/>\n\t<x path=\"Null\"><t path=\"haxe.PosInfos\"/></x>\n\t<x path=\"Void\"/>\n</f></log>\n\t<commands><t path=\"nanofl.ide.keyboard.Commands\"/></commands>\n\t<keymap public=\"1\" set=\"null\" expr=\"new Array&lt;{ var shortcut : String; var command : String}&gt;()\" line=\"13\">\n\t\t<c path=\"Array\"><a>\n\t<shortcut><c path=\"String\"/></shortcut>\n\t<command><c path=\"String\"/></command>\n</a></c>\n\t\t<meta><m n=\":value\"><e><![CDATA[new Array<{ var shortcut : String; var command : String}>()]]></e></m></meta>\n\t</keymap>\n\t<disabled expr=\"0\" line=\"15\">\n\t\t<x path=\"Int\"/>\n\t\t<meta><m n=\":value\"><e>0</e></m></meta>\n\t</disabled>\n\t<onCtrlButtonChange public=\"1\"><c path=\"stdlib.Event\"><a><pressed><x path=\"Bool\"/></pressed></a></c></onCtrlButtonChange>\n\t<onShiftButtonChange public=\"1\"><c path=\"stdlib.Event\"><a><pressed><x path=\"Bool\"/></pressed></a></c></onShiftButtonChange>\n\t<onKeymapChange public=\"1\"><c path=\"stdlib.Event\"><a/></c></onKeymapChange>\n\t<onKeyDown public=\"1\"><c path=\"stdlib.Event\"><t path=\"nanofl.ide.keyboard.KeyDownEvent\"/></c></onKeyDown>\n\t<setKeymap public=\"1\" set=\"method\" line=\"97\"><f a=\"keymap\">\n\t<c path=\"Array\"><a>\n\t<shortcut><c path=\"String\"/></shortcut>\n\t<command><c path=\"String\"/></command>\n</a></c>\n\t<x path=\"Void\"/>\n</f></setKeymap>\n\t<getShortcutsForCommand public=\"1\" set=\"method\" line=\"109\"><f a=\"command\">\n\t<c path=\"String\"/>\n\t<c path=\"Array\"><c path=\"String\"/></c>\n</f></getShortcutsForCommand>\n\t<getGroupedKeymap public=\"1\" set=\"method\" line=\"115\"><f a=\"\"><c path=\"Array\"><a>\n\t<shortcuts><c path=\"String\"/></shortcuts>\n\t<command><c path=\"String\"/></command>\n</a></c></f></getGroupedKeymap>\n\t<enable public=\"1\" set=\"method\" line=\"142\"><f a=\"\"><x path=\"Void\"/></f></enable>\n\t<disable public=\"1\" set=\"method\" line=\"143\"><f a=\"\"><x path=\"Void\"/></f></disable>\n\t<getKeymap set=\"method\" line=\"146\"><f a=\"\"><c path=\"Array\"><a>\n\t<shortcut><c path=\"String\"/></shortcut>\n\t<command><c path=\"String\"/></command>\n</a></c></f></getKeymap>\n\t<isInputActive set=\"method\" line=\"169\"><f a=\"\"><x path=\"Bool\"/></f></isInputActive>\n\t<processShortcut set=\"method\" line=\"179\"><f a=\"e:keymap:filter\">\n\t<a>\n\t\t<shiftKey><x path=\"Bool\"/></shiftKey>\n\t\t<keyCode><x path=\"Int\"/></keyCode>\n\t\t<ctrlKey><x path=\"Bool\"/></ctrlKey>\n\t\t<altKey><x path=\"Bool\"/></altKey>\n\t</a>\n\t<c path=\"Array\"><a>\n\t<shortcut><c path=\"String\"/></shortcut>\n\t<command><c path=\"String\"/></command>\n</a></c>\n\t<c path=\"String\"/>\n\t<x path=\"Bool\"/>\n</f></processShortcut>\n\t<new public=\"1\" set=\"method\" line=\"24\"><f a=\"commands\">\n\t<t path=\"nanofl.ide.keyboard.Commands\"/>\n\t<x path=\"Void\"/>\n</f></new>\n\t<meta>\n\t\t<m n=\":expose\"><e>\"Keyboard\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
+haxe_SysTools.winMetaCharacters = [32,40,41,37,33,94,34,60,62,38,124,10,13,44,59];
+nanofl_ide_keyboard_Keyboard.__rtti = "<class path=\"nanofl.ide.keyboard.Keyboard\" params=\"\">\n\t<log set=\"method\" line=\"179\" static=\"1\"><f a=\"v\">\n\t<d/>\n\t<x path=\"Void\"/>\n</f></log>\n\t<commands final=\"1\"><t path=\"nanofl.ide.keyboard.Commands\"/></commands>\n\t<keymap public=\"1\" expr=\"new Array&lt;KeymapItem&gt;()\" line=\"15\">\n\t\t<c path=\"Array\"><t path=\"nanofl.ide.keyboard.KeymapItem\"/></c>\n\t\t<meta><m n=\":value\"><e><![CDATA[new Array<KeymapItem>()]]></e></m></meta>\n\t</keymap>\n\t<onCtrlButtonChange final=\"1\" public=\"1\"><c path=\"stdlib.Event\"><a><pressed><x path=\"Bool\"/></pressed></a></c></onCtrlButtonChange>\n\t<onShiftButtonChange final=\"1\" public=\"1\"><c path=\"stdlib.Event\"><a><pressed><x path=\"Bool\"/></pressed></a></c></onShiftButtonChange>\n\t<onAltButtonChange final=\"1\" public=\"1\"><c path=\"stdlib.Event\"><a><pressed><x path=\"Bool\"/></pressed></a></c></onAltButtonChange>\n\t<onKeymapChange final=\"1\" public=\"1\"><c path=\"stdlib.Event\"><a/></c></onKeymapChange>\n\t<onKeyDown final=\"1\" public=\"1\"><c path=\"stdlib.Event\"><t path=\"nanofl.ide.keyboard.KeyDownEvent\"/></c></onKeyDown>\n\t<disabled expr=\"0\" line=\"24\">\n\t\t<x path=\"Int\"/>\n\t\t<meta><m n=\":value\"><e>0</e></m></meta>\n\t</disabled>\n\t<enable public=\"1\" set=\"method\" line=\"25\"><f a=\"\"><x path=\"Void\"/></f></enable>\n\t<disable public=\"1\" set=\"method\" line=\"26\"><f a=\"\"><x path=\"Void\"/></f></disable>\n\t<processKeyDown set=\"method\" line=\"72\"><f a=\"e\">\n\t<t path=\"js.JqEvent\"/>\n\t<x path=\"Void\"/>\n</f></processKeyDown>\n\t<setKeymap public=\"1\" set=\"method\" line=\"109\"><f a=\"keymap\">\n\t<c path=\"Array\"><t path=\"nanofl.ide.keyboard.KeymapItem\"/></c>\n\t<x path=\"Void\"/>\n</f></setKeymap>\n\t<getShortcutsForCommand public=\"1\" set=\"method\" line=\"121\"><f a=\"command\">\n\t<c path=\"String\"/>\n\t<c path=\"Array\"><c path=\"String\"/></c>\n</f></getShortcutsForCommand>\n\t<getKeymap set=\"method\" line=\"127\"><f a=\"\"><c path=\"Array\"><t path=\"nanofl.ide.keyboard.KeymapItem\"/></c></f></getKeymap>\n\t<isInputActive set=\"method\" line=\"150\"><f a=\"\"><x path=\"Bool\"/></f></isInputActive>\n\t<processShortcut set=\"method\" line=\"158\"><f a=\"e:keymap:filter:whenVars\">\n\t<t path=\"nanofl.ide.keyboard.Shortcut\"/>\n\t<c path=\"Array\"><t path=\"nanofl.ide.keyboard.KeymapItem\"/></c>\n\t<c path=\"String\"/>\n\t<t path=\"nanofl.ide.keyboard.WhenVars\"/>\n\t<x path=\"Bool\"/>\n</f></processShortcut>\n\t<testWhen set=\"method\" line=\"171\"><f a=\"when:vars\">\n\t<c path=\"String\"/>\n\t<t path=\"nanofl.ide.keyboard.WhenVars\"/>\n\t<x path=\"Bool\"/>\n</f></testWhen>\n\t<new public=\"1\" set=\"method\" line=\"29\"><f a=\"commands\">\n\t<t path=\"nanofl.ide.keyboard.Commands\"/>\n\t<x path=\"Void\"/>\n</f></new>\n\t<meta>\n\t\t<m n=\":expose\"><e>\"Keyboard\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
 nanofl_ide_keyboard_Keys.BACKSPACE = 8;
 nanofl_ide_keyboard_Keys.TAB = 9;
 nanofl_ide_keyboard_Keys.ENTER = 13;

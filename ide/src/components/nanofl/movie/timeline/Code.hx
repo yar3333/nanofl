@@ -12,6 +12,8 @@ import nanofl.engine.movieclip.Layer;
 import nanofl.engine.movieclip.KeyFrame;
 import nanofl.ide.Globals;
 import nanofl.ide.AsyncTicker;
+import nanofl.ide.keyboard.Keyboard;
+import nanofl.ide.keyboard.ShortcutTools;
 import nanofl.ide.draganddrop.DragAndDrop;
 import nanofl.ide.draganddrop.IDragAndDrop;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
@@ -45,6 +47,7 @@ class Code extends wquery.Component
 	static var SCROLLBAR_SIZE(null, never) = 20;
 	
 	@inject var dragAndDrop : DragAndDrop;
+	@inject var keyboard : Keyboard;
 	
 	var layers : ComponentList<components.nanofl.movie.timelinelayer.Code>;
 	
@@ -101,8 +104,10 @@ class Code extends wquery.Component
 
 		q(js.Browser.document).on("keydown", (e:JqEvent) ->
 		{
-            if (!e.ctrlKey && !e.shiftKey && !e.altKey && e.key == "Enter") return;
-			if (adapter != null && adapter.frameIndex != playStartFrameIndex) stop();
+            final playShortcut = keyboard.keymap.find(x -> x.command == "timeline.play")?.shortcut;
+            if (ShortcutTools.toString(e) == playShortcut) return;
+			
+            if (adapter != null && adapter.frameIndex != playStartFrameIndex) stop();
 		});
 		
 		template().framesHeader.on("mousedown", ">*", e -> if (e.which == 1) onFrameHeaderMouseDown(e));

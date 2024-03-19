@@ -4,26 +4,32 @@ import js.Browser;
 import js.JQuery;
 import stdlib.Event;
 using stdlib.Lambda;
+using stdlib.StringTools;
+using nanofl.ide.keyboard.ShortcutTools;
 
 @:rtti
 class Keyboard
 {
-	var commands : Commands;
+	final commands : Commands;
 	
-	public var keymap(default, null) = new Array<{ shortcut:String, command:String }>();
+	public var keymap = new Array<KeymapItem>();
+	
+	public final onCtrlButtonChange : Event<{ pressed:Bool }>;
+	public final onShiftButtonChange : Event<{ pressed:Bool }>;
+	public final onAltButtonChange : Event<{ pressed:Bool }>;
+	
+	public final onKeymapChange : Event<{}>;
+	public final onKeyDown : Event<KeyDownEvent>;
 	
 	var disabled = 0;
-	
-	public var onCtrlButtonChange : Event<{ pressed:Bool }>;
-	public var onShiftButtonChange : Event<{ pressed:Bool }>;
-	
-	public var onKeymapChange : Event<{}>;
-	public var onKeyDown : Event<KeyDownEvent>;
+	public function enable()  disabled--;
+	public function disable() disabled++;
 	
 	public function new(commands:Commands)
 	{
 		onCtrlButtonChange = new Event<{ pressed:Bool }>(this);
 		onShiftButtonChange = new Event<{ pressed:Bool }>(this);
+		onAltButtonChange = new Event<{ pressed:Bool }>(this);
 	
 		onKeymapChange = new Event<{}>(this);
 		onKeyDown = new Event<KeyDownEvent>(this);
@@ -31,54 +37,23 @@ class Keyboard
 		this.commands = commands;
 		
 		new JQuery(Browser.document)
-			.keydown(function(e:JqEvent)
+			.keydown(e ->
 			{
-				log("key down");
+				log("keydown");
 				
 				if (!isInputActive() 
-				 && !Shortcut.ctrl(Keys.X).test(e)
-				 && !Shortcut.ctrl(Keys.C).test(e)
-				 && !Shortcut.ctrl(Keys.V).test(e))
+				 && !ShortcutTools.ctrl(Keys.X).equ(e)
+				 && !ShortcutTools.ctrl(Keys.C).equ(e)
+				 && !ShortcutTools.ctrl(Keys.V).equ(e))
 				{
-					log("key down(1)");
-					if (disabled <= 0)
-					{
-						log("key down(2)");
-						if (e.keyCode == Keys.CTRL)
-						{
-							onCtrlButtonChange.call({ pressed:true });
-						}
-						if (e.keyCode == Keys.SHIFT)
-						{
-							onShiftButtonChange.call({ pressed:true });
-						}
-						
-						var processed = false;
-						
-						onKeyDown.call
-						({
-							altKey : e.altKey,
-							ctrlKey : e.ctrlKey,
-							shiftKey : e.shiftKey,
-							processShortcut : function(filter:String)
-							{
-								var r = processShortcut(e, keymap, filter);
-								if (r) processed = true;
-								return r;
-							}
-						});
-						
-						if (processed)
-						{
-							e.preventDefault();
-							e.stopPropagation();
-						}
-						
-						log("key processed");
-					}
+                    log("keydown: disabled = " + disabled);
+                    if (disabled <= 0)
+                    {
+                        processKeyDown(e);
+                    }
 				}
 			})
-			.keyup(function(e)
+			.keyup(e ->
 			{
 				if (disabled > 0) return;
 				
@@ -92,8 +67,45 @@ class Keyboard
 				}
 			});
 	}
+
+    function processKeyDown(e:JqEvent)
+    {
+        switch (e.keyCode)
+        {
+            case Keys.CTRL:
+                onCtrlButtonChange.call({ pressed:true });
+                
+            case Keys.SHIFT:
+                onShiftButtonChange.call({ pressed:true });
+
+            case Keys.ALT: 
+                onAltButtonChange.call({ pressed:true });
+
+            case _:
+                var processed = false;
+
+                onKeyDown.call
+                ({
+                    altKey : e.altKey,
+                    ctrlKey : e.ctrlKey,
+                    shiftKey : e.shiftKey,
+                    processShortcut : (filter, whenVars) ->
+                    {
+                        var r = processShortcut(e, keymap, filter, whenVars);
+                        if (r) processed = true;
+                        return r;
+                    }
+                });
+                
+                if (processed)
+                {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+        }
+    }
 	
-	public function setKeymap(keymap:Array<{ shortcut:String, command:String }>)
+	public function setKeymap(keymap:Array<KeymapItem>)
 	{
 		this.keymap = keymap;
 		
@@ -111,38 +123,7 @@ class Keyboard
 		return getKeymap().filter((x) -> x.command == command).map((x) -> x.shortcut);
 	}
 	
-	public function getGroupedKeymap() : Array<{ shortcuts:String, command:String }>
-	{
-		var keymap = getKeymap();
-		
-		var r = [];
-		var i = 0; while (i < keymap.length)
-		{
-			var shortcuts = [ keymap[i].shortcut ];
-			var j = i + 1; while (j < keymap.length)
-			{
-				if (keymap[i].command == keymap[j].command)
-				{
-					shortcuts.push(keymap[j].shortcut);
-					keymap.splice(j, 1);
-				}
-				else
-				{
-					j++;
-				}
-			}
-			r.push({ shortcuts:shortcuts.join(", "), command:keymap[i].command });
-			
-			i++;
-		}
-		
-		return r.sorted((a, b) -> Reflect.compare(a.command, b.command));
-	}
-	
-	public function enable()  disabled--;
-	public function disable() disabled++;
-	
-	function getKeymap() : Array<{ shortcut:String, command:String }>
+	function getKeymap() : Array<KeymapItem>
 	{
 		var r = keymap.copy();
 		
@@ -171,32 +152,31 @@ class Keyboard
         if (activeElement == null) return false;
         if (!["textarea", "input", "select"].contains(activeElement.nodeName.toLowerCase())) return false;
         return true;
-        //var style = Browser.window.getComputedStyle(activeElement);
-		//return style.display != "none";
 	}
 	
-	function processShortcut(e:{ keyCode:Int, ctrlKey:Bool, shiftKey:Bool, altKey:Bool }, keymap:Array<{ shortcut:String, command:String }>, filter:String) : Bool
+	function processShortcut(e:Shortcut, keymap:Array<KeymapItem>, filter:String, whenVars:WhenVars) : Bool
 	{
-		var key = "";
+        filter = filter ?? "";
+
+		final shortcut = e.toString();
+        log("shortcut = " + shortcut);
 		
-		if (e.ctrlKey) key += "Ctrl+";
-		if (e.shiftKey) key += "Shift+";
-		if (e.altKey) key += "Alt+";
-		
-		key += Keys.toString(e.keyCode);
-		
-		var km = keymap.find((x) ->
-			x.shortcut == key &&
-			(filter == null || filter == "" || filter == x.command.split(".")[0])
-		);
-		
+		final km = keymap.find(x -> x.shortcut == shortcut && (filter == "" || filter == x.command.split(".")[0]) && testWhen(x.when, whenVars));
 		if (km == null) return false;
 		
 		return commands.run(km.command);
 	}
+
+    function testWhen(when:String, vars:WhenVars) : Bool
+    {
+        if (when == null || when.trim() == "") return true;
+        
+        var editorHasSelected = vars.editorHasSelected;
+        return js.Lib.eval(when);
+    }
 	
-	static function log(v:Dynamic, ?infos:haxe.PosInfos)
+	static function log(v:Dynamic)
 	{
-		//trace(Reflect.isFunction(v) ? v() : v, infos);
+		//trace(Reflect.isFunction(v) ? v() : v);
 	}
 }

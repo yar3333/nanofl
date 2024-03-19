@@ -2,7 +2,6 @@ package nanofl.ide.undo.document;
 
 import datatools.ArrayTools;
 import nanofl.engine.elements.Element;
-import nanofl.engine.movieclip.Layer;
 import nanofl.ide.Document;
 import nanofl.ide.library.IdeLibraryTools;
 import nanofl.ide.ui.View;
@@ -23,7 +22,7 @@ class UndoQueue extends undoqueue.UndoQueue<Changes, Operation>
 	var oldFigureState : FigureState;
 	
 	var oldTransformationStates : Array<TransformationState>;
-	var oldElementsState : ElementsState<Element>;
+	var oldElementsState : ElementsState;
 	var oldTimelineState : TimelineState;
 	var oldElementStates = new Array<{ element:Element, state:ElementState }>();
 	

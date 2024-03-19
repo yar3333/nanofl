@@ -6,5 +6,5 @@ typedef KeyDownEvent =
 	var ctrlKey(default, null) : Bool;
 	var shiftKey(default, null) : Bool;
 	
-	function processShortcut(prefix:String):Bool;
+	function processShortcut(prefix:String, whenVars:WhenVars):Bool;
 }

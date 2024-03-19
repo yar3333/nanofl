@@ -1,6 +1,8 @@
 package nanofl.ide.undo.states;
 
-class ElementsState<Element>
+import nanofl.engine.elements.Element;
+
+class ElementsState
 {
 	public var layerElements(default, null) : Array<{ elements:Array<Element>}>;
 	

@@ -18,9 +18,8 @@ class Code extends components.nanofl.popups.basepopup.Code
 		
 		hotkey.clear();
 		
-		for (hk in keyboard.getGroupedKeymap())
+		for (hk in keyboard.keymap)
 		{
-			// TODO: check params
 			hotkey.create(hk);
 		}
 		

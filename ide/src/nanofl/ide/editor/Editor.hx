@@ -273,22 +273,22 @@ class Editor extends InjectContainer
 	
 	public function breakApartSelected()
 	{
-		document.undoQueue.beginTransaction({ figure:true, elements:true });
+        if (!hasSelected()) return;
 		
+        document.undoQueue.beginTransaction({ figure:true, elements:true });
 		for (layer in layers)
 		{
 			layer.breakApartSelectedItems();
 		}
-		
 		document.undoQueue.commitTransaction();
-		
 		tool.selectionChange();
-		
 		update();
 	}
 	
 	public function removeSelected()
 	{
+        if (!hasSelected()) return;
+
 		document.undoQueue.beginTransaction({ figure:true, elements:true });
 		removeSelectedInner();
 		tool.selectionChange();
@@ -307,6 +307,8 @@ class Editor extends InjectContainer
 	
 	public function translateSelected(dx:Float, dy:Float, ?lowLevel:Bool)
 	{
+        if (!hasSelected()) return;
+
 		if (!lowLevel)
 		{
 			document.undoQueue.beginTransaction({ figure:true, elements:true });
@@ -603,14 +605,14 @@ class Editor extends InjectContainer
 	}
 	
 	@:allow(nanofl.ide.undo)
-	function getElementsState() : ElementsState<Element>
+	function getElementsState() : ElementsState
 	{
 		return new ElementsState(layers.map(layer -> layer.getElementsState()));
 	}
 	
 	@:profile
 	@:allow(nanofl.ide.undo)
-	function setElementsState(state:ElementsState<Element>)
+	function setElementsState(state:ElementsState)
 	{
 		var layers = pathItem.mcItem.layers;
 		for (i in 0...state.layerElements.length)

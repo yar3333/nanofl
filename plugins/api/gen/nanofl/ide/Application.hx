@@ -1,7 +1,11 @@
 package nanofl.ide;
 
 extern class Application extends js.injecting.InjectContainer {
-	var activeView : nanofl.ide.ActiveView;
+	var activeView(get, set) : nanofl.ide.ActiveView;
+	@:noCompletion
+	private function get_activeView():nanofl.ide.ActiveView;
+	@:noCompletion
+	private function set_activeView(v:nanofl.ide.ActiveView):nanofl.ide.ActiveView;
 	var document(get, never) : nanofl.ide.Document;
 	private function get_document():nanofl.ide.Document;
 	var pid : String;

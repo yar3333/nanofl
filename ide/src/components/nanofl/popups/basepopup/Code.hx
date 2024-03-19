@@ -5,6 +5,7 @@ import nanofl.ide.keyboard.Keyboard;
 import nanofl.ide.keyboard.Keys;
 import nanofl.ide.keyboard.Shortcut;
 using js.bootstrap.Modal;
+using nanofl.ide.keyboard.ShortcutTools;
 
 @:rtti
 class Code extends wquery.Component
@@ -23,12 +24,12 @@ class Code extends wquery.Component
 		
 		popup.keypress(e ->
 		{
-			if (Shortcut.key(Keys.ENTER).test(e))
+			if (ShortcutTools.key(Keys.ENTER).equ(e))
 			{
 				popup.find(".btn-primary").click();
 			}
 			else
-			if (Shortcut.key(Keys.ESCAPE).test(e))
+			if (ShortcutTools.key(Keys.ESCAPE).equ(e))
 			{
 				cancel_click(null);
 			}

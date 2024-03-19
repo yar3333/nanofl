@@ -9,7 +9,6 @@ import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.editor.Editor;
 import nanofl.ide.keyboard.Keyboard;
 import nanofl.ide.keyboard.Keys;
-import nanofl.ide.keyboard.Shortcut;
 import nanofl.ide.library.LibraryItems;
 import nanofl.ide.preferences.Preferences;
 import nanofl.ide.sys.FileSystem;
@@ -18,6 +17,7 @@ import nanofl.ide.timeline.ITimelineView;
 import nanofl.ide.ui.View;
 using StringTools;
 using stdlib.Lambda;
+using nanofl.ide.keyboard.ShortcutTools;
 
 @:rtti
 class Clipboard extends InjectContainer
@@ -45,9 +45,9 @@ class Clipboard extends InjectContainer
 		{
 			if (!isInputActive())
 			{
-				if (Shortcut.ctrl(Keys.X).test(e)) { e.preventDefault(); cut(); }
-				if (Shortcut.ctrl(Keys.C).test(e)) { e.preventDefault(); copy(); }
-				if (Shortcut.ctrl(Keys.V).test(e)) { e.preventDefault(); paste(); }
+				if (ShortcutTools.ctrl(Keys.X).equ(e)) { e.preventDefault(); cut(); }
+				if (ShortcutTools.ctrl(Keys.C).equ(e)) { e.preventDefault(); copy(); }
+				if (ShortcutTools.ctrl(Keys.V).equ(e)) { e.preventDefault(); paste(); }
 			}
 		});
 	}

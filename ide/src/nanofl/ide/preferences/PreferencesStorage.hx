@@ -1,5 +1,6 @@
 package nanofl.ide.preferences;
 
+import nanofl.ide.keyboard.KeymapItem;
 import haxe.Json;
 import js.Browser;
 import stdlib.Serializer;
@@ -91,7 +92,7 @@ class PreferencesStorage extends InjectContainer
 		}
 	}
 	
-	function getKeymap(pathID:String) : Array<{ shortcut:String, command:String }> return getFromFile(pathID);
+	function getKeymap(pathID:String) : Array<KeymapItem> return getFromFile(pathID);
 	
 	public function getMenu(pathID:String) : Array<MenuItem> return getFromFile(pathID);
 	

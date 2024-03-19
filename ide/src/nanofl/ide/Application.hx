@@ -1,5 +1,6 @@
 package nanofl.ide;
 
+import nanofl.ide.keyboard.WhenVars;
 import js.lib.Promise;
 import js.injecting.Injector;
 import haxe.io.Path;
@@ -9,6 +10,7 @@ import stdlib.Uuid;
 import nanofl.ide.sys.FileSystem;
 import nanofl.engine.Version;
 import nanofl.engine.Log;
+import nanofl.engine.Log.console;
 import nanofl.ide.commands.Commands;
 import nanofl.ide.editor.NewObjectParams;
 import nanofl.ide.filesystem.ExternalChangesDetector;
@@ -39,7 +41,14 @@ class Application extends js.injecting.InjectContainer
 	final recents : Recents;
     final documentTools : DocumentTools;
 	
-	public var activeView = ActiveView.EDITOR;
+	@:noCompletion var _activeView = ActiveView.EDITOR;
+    public var activeView(get, set) : ActiveView;
+    @:noCompletion function get_activeView() return _activeView;
+    @:noCompletion function set_activeView(v)
+    {
+        console.log("activeView: " + _activeView + " -> " + v);
+        return _activeView = v;
+    }
 	
 	public var document(get, never) : Document;
 	function get_document() return openedFiles != null && openedFiles.active != null ? openedFiles.active.relatedDocument : null;
@@ -242,7 +251,7 @@ class Application extends js.injecting.InjectContainer
 	{
 		var keyboard = new Keyboard(commands);
 		
-		keyboard.onCtrlButtonChange.bind(function(_, e)
+		keyboard.onCtrlButtonChange.bind((_, e) ->
 		{
 			if (document != null)
 			{
@@ -250,7 +259,7 @@ class Application extends js.injecting.InjectContainer
 			}
 		});
 		
-		keyboard.onShiftButtonChange.bind(function(_, e)
+		keyboard.onShiftButtonChange.bind((_, e) ->
 		{
 			if (document != null)
 			{
@@ -258,50 +267,41 @@ class Application extends js.injecting.InjectContainer
 			}
 		});
 		
-		keyboard.onKeymapChange.bind(function(_, _)
+		keyboard.onKeymapChange.bind((_, _) ->
 		{
 			view.mainMenu.update();
 		});
 		
-		keyboard.onKeyDown.bind(function(_, e)
+		keyboard.onKeyDown.bind((_, e) ->
 		{
-			if (activeView != null)
-			{
-				var processed = false;
-				
-				switch (activeView)
-				{
-					case ActiveView.LIBRARY:
-						//log("key down(3a)");
-						processed = processed || e.processShortcut("library");
-						processed = processed || e.processShortcut("");
-						//log("key down(3a) " + processed);
-						
-					case ActiveView.TIMELINE:
-						//log("key down(3b)");
-						processed = processed || e.processShortcut("timeline");
-						processed = processed || e.processShortcut("");
-						//log("key down(3b) " + processed);
-						
-					case ActiveView.OUTPUT:
-						//log("key down(3c)");
-						processed = processed || e.processShortcut("output");
-						processed = processed || e.processShortcut("");
-						//log("key down(3c) " + processed);
-						
-					case ActiveView.EDITOR:
-						//log("key down(3e)");
-						processed = processed || e.processShortcut("");
-						//log("key down(3e) " + processed);
-				}
-			}
+			if (activeView == null) return;
+
+            final whenVars : WhenVars =
+            {
+                editorHasSelected: document?.editor.hasSelected(),
+            };
+			
+            switch (activeView)
+            {
+                case ActiveView.LIBRARY:
+                    e.processShortcut("library", whenVars) || e.processShortcut("", whenVars);
+                    
+                case ActiveView.TIMELINE:
+                    e.processShortcut("timeline", whenVars) || e.processShortcut("", whenVars);
+                    
+                case ActiveView.OUTPUT:
+                    e.processShortcut("output", whenVars) || e.processShortcut("", whenVars);
+                    
+                case ActiveView.EDITOR:
+                    e.processShortcut("", whenVars);
+            }
 		});
 		
 		return keyboard;
 	}
 	
-	static function log(v:Dynamic, ?infos:haxe.PosInfos)
+	static function log(v:Dynamic)
 	{
-		//trace(Reflect.isFunction(v) ? v() : v, infos);
+		//trace(Reflect.isFunction(v) ? v() : v);
 	}
 }

@@ -63,6 +63,8 @@ class Commands
 	public function run(command:String, ?params:Array<Dynamic>) : Bool
 	{
 		validateCommand(command);
+
+        log("Commands.run: " + command);
 		
 		var groupAndMethod = command.split(".");
 		
@@ -76,5 +78,10 @@ class Commands
 		Reflect.callMethod(group, method, params);
 		
 		return true;
+	}
+
+	static function log(v:Dynamic)
+	{
+		//trace(Reflect.isFunction(v) ? v() : v);
 	}
 }
