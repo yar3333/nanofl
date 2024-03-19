@@ -73,8 +73,8 @@
 	{ "shortcut":"Shift+F5"				, "command":"timeline.removeFrame" },
 	{ "shortcut":"Ctrl+,"				, "command":"timeline.gotoPrevFrame" },
 	{ "shortcut":"Ctrl+."				, "command":"timeline.gotoNextFrame" },
-	{ "shortcut":"Left"					, "command":"timeline.gotoPrevFrame", "when":"!editorHasSelected" },
-	{ "shortcut":"Right"				, "command":"timeline.gotoNextFrame", "when":"!editorHasSelected" },
+	{ "shortcut":"Left"					, "command":"timeline.gotoPrevFrame", "when":"!editor.hasSelected" },
+	{ "shortcut":"Right"				, "command":"timeline.gotoNextFrame", "when":"!editor.hasSelected" },
 	{ "shortcut":"Enter"				, "command":"timeline.play" },
 	
 	{ "shortcut":"F8"					, "command":"code.compile" },

@@ -10,6 +10,7 @@ import nanofl.ide.commands.Commands;
 import nanofl.ide.keyboard.Keyboard;
 import nanofl.ide.preferences.Preferences;
 import nanofl.ide.Application;
+import nanofl.ide.ui.View;
 import nanofl.ide.ui.menu.MenuTools;
 import nanofl.ide.plugins.ExporterPlugins;
 import nanofl.ide.plugins.ImporterPlugins;
@@ -28,6 +29,7 @@ class Code extends wquery.Component implements IMainMenuView
 	@inject var keyboard : Keyboard;
 	@inject var openedFiles : OpenedFiles;
 	@inject var clipboard : Clipboard;
+	@inject var view : View;
 	
 	function init()
 	{
@@ -54,9 +56,9 @@ class Code extends wquery.Component implements IMainMenuView
 	
 	public function update()
 	{
-		var items = preferences.storage.getMenu("mainMenu");
+		final items = preferences.storage.getMenu("mainMenu");
 		
-		var importMenuItem = MenuTools.findItem(items, "import");
+		final importMenuItem = MenuTools.findItem(items, "import");
 		for (importer in ImporterPlugins.plugins)
 		{
 			importMenuItem.items.push
@@ -68,7 +70,7 @@ class Code extends wquery.Component implements IMainMenuView
 			});
 		}
 		
-		var exportMenuItem = MenuTools.findItem(items, "export");
+		final exportMenuItem = MenuTools.findItem(items, "export");
 		for (exporter in ExporterPlugins.plugins)
 		{
 			exportMenuItem.items.push
@@ -80,7 +82,7 @@ class Code extends wquery.Component implements IMainMenuView
 			});
 		}
 		
-		var out = new XmlBuilder();
+		final out = new XmlBuilder();
 		for (item in items)
 		{
 			MenuTools.writeItem(item, keyboard, prefixID, out);
@@ -88,15 +90,15 @@ class Code extends wquery.Component implements IMainMenuView
 		template().content.html(out.toString());
 		
 		q("<input type='file' id='file' class='file' title='' />")
-			.on("mouseover", function(_) q("#fileUpload>a").focus())
-			.on("mouseout",  function(_) q("#fileUpload>a").blur())
+			.on("mouseover", _ -> q("#fileUpload>a").focus())
+			.on("mouseout",  _ -> q("#fileUpload>a").blur())
 			.prependTo(q("#fileUpload"));
 		
 		template().container.find(".shortcut").css("position", "absolute");
 		
-		var mainItems = template().container.find(".nav>li");
-		var aa = mainItems.find(">a");
-		aa.mouseover(function(e)
+		final mainItems = template().container.find(".nav>li");
+		final aa = mainItems.find(">a");
+		aa.mouseover(e ->
 		{
 			if (mainItems.is(".open"))
 			{
@@ -104,16 +106,16 @@ class Code extends wquery.Component implements IMainMenuView
 				var li = q(e.currentTarget).parent();
 				li.addClass("open");
 				MenuTools.fixWidth(li);
-				MenuTools.updateItemStates(li, app, openedFiles, clipboard, preferences);
+				MenuTools.updateItemStates(li, app, openedFiles, clipboard, preferences, view.movie.timeline);
 			}
 		});
-		aa.on("mouseout", function(e) q(e.currentTarget).blur());
+		aa.on("mouseout", e -> q(e.currentTarget).blur());
 		
-		mainItems.click(function(e)
+		mainItems.click(e ->
 		{
 			if (!q(e.currentTarget).hasClass("open"))
 			{
-				MenuTools.updateItemStates(q(e.currentTarget), app, openedFiles, clipboard, preferences);
+				MenuTools.updateItemStates(q(e.currentTarget), app, openedFiles, clipboard, preferences, view.movie.timeline);
 				q(e.currentTarget).addClass("open");
 				MenuTools.fixWidth(q(e.currentTarget));
 				q(e.currentTarget).removeClass("open");
@@ -122,7 +124,7 @@ class Code extends wquery.Component implements IMainMenuView
 		
 		updateRecents();
 		
-		var type = openedFiles.active != null ? openedFiles.active.type : null;
+		final type = openedFiles.active != null ? openedFiles.active.type : null;
 		
 		enableMenuItem("timeline",	type == OpenedFileType.DOCUMENT);
 		enableMenuItem("editor",	type == OpenedFileType.DOCUMENT);

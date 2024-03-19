@@ -1,5 +1,14 @@
 package nanofl.ide.keyboard;
 
-typedef WhenVars = {
-	var editorHasSelected(default, never) : Bool;
+typedef WhenVars =
+{
+	final editor :
+    {
+        final hasSelected : Bool;
+    };
+    
+    final library :
+    {
+        final selectedCount : Int;
+    };
 };

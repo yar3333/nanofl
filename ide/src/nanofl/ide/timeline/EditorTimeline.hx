@@ -2,7 +2,6 @@ package nanofl.ide.timeline;
 
 import js.lib.Promise;
 import js.lib.Set;
-import htmlparser.HtmlNodeElement;
 import datatools.ArrayRO;
 import nanofl.engine.elements.Elements;
 import nanofl.engine.LayerType;

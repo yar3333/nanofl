@@ -1,9 +1,9 @@
 package components.nanofl.common.contextmenu;
 
-import htmlparser.XmlBuilder;
 import js.Browser;
-import js.bootstrap.ContextMenu;
 import js.JQuery;
+import js.bootstrap.ContextMenu;
+import htmlparser.XmlBuilder;
 import nanofl.ide.Application;
 import nanofl.ide.Clipboard;
 import nanofl.ide.Globals;
@@ -11,6 +11,7 @@ import nanofl.ide.OpenedFiles;
 import nanofl.ide.commands.Commands;
 import nanofl.ide.keyboard.Keyboard;
 import nanofl.ide.preferences.Preferences;
+import nanofl.ide.ui.View;
 import nanofl.ide.ui.menu.MenuItem;
 import nanofl.ide.ui.menu.MenuTools;
 import wquery.AttachMode;
@@ -25,6 +26,7 @@ class Code extends wquery.Component
 	@inject var openedFiles : OpenedFiles;
 	@inject var clipboard : Clipboard;
 	@inject var preferences : Preferences;
+	@inject var view : View;
 	
 	function init()
 	{
@@ -37,7 +39,7 @@ class Code extends wquery.Component
 		Browser.document.body.appendChild(node);
 	}
 	
-	public function build(target:JQuery, ?selector:String, items:Array<MenuItem>, ?toggleItems:Code->JqEvent->JQuery->Bool)
+	public function build(target:JQuery, ?selector:String, items:Array<MenuItem>, ?beforeShow:nanofl.ide.ui.menu.ContextMenu->JqEvent->JQuery->Bool)
 	{
 		var out = new XmlBuilder();
 		for (item in items)
@@ -54,20 +56,20 @@ class Code extends wquery.Component
 			
 			target: "#" + template().container.attr("id"),
 			
-			before: function(_, e:JqEvent, t:JQuery)
+			before: (_, e:JqEvent, t:JQuery) ->
 			{
 				e.preventDefault();
 				
-				if (toggleItems != null)
+				if (beforeShow != null)
 				{
-					if (!toggleItems(this, e, t)) return false;
+					if (!beforeShow(this, e, t)) return false;
 				}
 				else
 				{
 					getAllItems().show();
 				}
 				
-				MenuTools.updateItemStates(template().container, app, openedFiles, clipboard, preferences);
+				MenuTools.updateItemStates(template().container, app, openedFiles, clipboard, preferences, view.movie.timeline);
 				
 				template().container.find(">ul>li.divider").show();
 				var items = template().container.find(">ul>li").toArray().filter(item -> item.style.display != "none");
@@ -95,13 +97,13 @@ class Code extends wquery.Component
 				return true;
 			},
 			
-			onItem: function(_, e:JqEvent, menuItem:js.JQuery)
+			onItem: (_, e:JqEvent, menuItem:js.JQuery) ->
 			{
 				if (savedActiveElement != null) q(savedActiveElement).focus();
 				MenuTools.onItemClick(menuItem, commands);
 			},
 			
-			onShow: function(_)
+			onShow: _ ->
 			{
 				MenuTools.fixWidth(template().container);
 			}

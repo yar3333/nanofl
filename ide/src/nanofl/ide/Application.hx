@@ -46,7 +46,7 @@ class Application extends js.injecting.InjectContainer
     @:noCompletion function get_activeView() return _activeView;
     @:noCompletion function set_activeView(v)
     {
-        console.log("activeView: " + _activeView + " -> " + v);
+        log("activeView: " + _activeView + " -> " + v);
         return _activeView = v;
     }
 	
@@ -278,7 +278,15 @@ class Application extends js.injecting.InjectContainer
 
             final whenVars : WhenVars =
             {
-                editorHasSelected: document?.editor.hasSelected(),
+                editor:
+                {
+                    hasSelected: document?.editor.hasSelected() 
+                },
+                
+                library:
+                {
+                    selectedCount: document.library.getSelectedItems().length
+                },
             };
 			
             switch (activeView)

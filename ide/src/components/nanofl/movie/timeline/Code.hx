@@ -78,8 +78,8 @@ class Code extends wquery.Component
 		
 		if (adapter == null) return;
 		
-		template().layerContextMenu.build(template().container,	"#" + template().content[0].id + ">*",	adapter.getLayerContextMenu(), toggleLayerContextMenuItems);
-		template().frameContextMenu.build(template().content,	">*>.frames-content>*>*",				adapter.getFrameContextMenu(), toggleFrameContextMenuItems);
+		template().layerContextMenu.build(template().container,	"#" + template().content[0].id + ">*",	adapter.getLayerContextMenu(), beforeShowLayerContextMenu);
+		template().frameContextMenu.build(template().content,	">*>.frames-content>*>*",				adapter.getFrameContextMenu(), beforeShowFrameContextMenu);
 	}
 	
 	public function init()
@@ -159,7 +159,7 @@ class Code extends wquery.Component
 		}
 	}
 	
-	function toggleLayerContextMenuItems(menu:nanofl.ide.ui.menu.ContextMenu, e:JqEvent, layerElem:JQuery)
+	function beforeShowLayerContextMenu(menu:nanofl.ide.ui.menu.ContextMenu, e:JqEvent, layerElem:JQuery)
 	{
 		if (!adapter.editable) return false;
 		
@@ -179,7 +179,7 @@ class Code extends wquery.Component
 			return false;
 		}
 		
-		freezed(function() adapter.layerIndex = index);
+		freezed(() -> adapter.layerIndex = index);
 		
 		var parentIndex = getPotentialParentLayerIndex(index);
 		var parentLayerType = parentIndex != null ? adapter.layers[parentIndex].type : null;
@@ -196,7 +196,7 @@ class Code extends wquery.Component
 		return true;
 	}
 	
-	function toggleFrameContextMenuItems(menu:nanofl.ide.ui.menu.ContextMenu, e:JqEvent, frameNode:JQuery)
+	function beforeShowFrameContextMenu(menu:nanofl.ide.ui.menu.ContextMenu, e:JqEvent, frameNode:JQuery)
 	{
 		if (!adapter.editable) return false;
 		
@@ -214,21 +214,27 @@ class Code extends wquery.Component
 			layerNode.addClass("selected");
 			fixActiveFrame();
 		}
-		
-		var hasFrameWiTween = false;
-		var hasFrameWoTween = false;
-		for (frameNode in getFrameNodes(".selected"))
-		{
-			hasFrameWiTween = hasFrameWiTween ||  (frameNode.hasClass("tween") || frameNode.hasClass("tween-bad"));
-			hasFrameWoTween = hasFrameWoTween || !(frameNode.hasClass("tween") || frameNode.hasClass("tween-bad"));
-			if (hasFrameWiTween && hasFrameWoTween) break;
-		}
-		
-		menu.enableItem("timeline.createTween", hasFrameWoTween);
-		menu.enableItem("timeline.removeTween", hasFrameWiTween);
-		
+	
 		return true;
 	}
+
+    public function hasSelectedFramesWithTween()
+    {
+		for (frameNode in getFrameNodes(".selected"))
+		{
+			if  (frameNode.hasClass("tween") || frameNode.hasClass("tween-bad")) return true;
+        }
+        return false;
+    }
+
+    public function hasSelectedFramesWithoutTween()
+    {
+		for (frameNode in getFrameNodes(".selected"))
+		{
+			if  (!frameNode.hasClass("tween") && !frameNode.hasClass("tween-bad")) return true;
+        }
+        return false;
+    }
 	
 	@:profile
 	public function update()

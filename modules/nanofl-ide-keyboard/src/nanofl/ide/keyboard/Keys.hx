@@ -142,7 +142,7 @@ class Keys
 			case Keys.NUMPAD_8:			return "Num8";
 			case Keys.NUMPAD_9:			return "Num9";
 			case Keys.MULTIPLY:			return "Num*";
-			case Keys.ADD:				return "NumPlus";
+			case Keys.ADD:				return "Num+";
 			case Keys.SUBTRACT:			return "Num-";
 			case Keys.DECIMAL_POINT:	return "Num.";
 			case Keys.DIVIDE:			return "Num/";

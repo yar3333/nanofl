@@ -829,7 +829,7 @@ nanofl_ide_keyboard_Keys.toString = function(code) {
 	case nanofl_ide_keyboard_Keys.A:
 		return "A";
 	case nanofl_ide_keyboard_Keys.ADD:
-		return "NumPlus";
+		return "Num+";
 	case nanofl_ide_keyboard_Keys.ALT:
 		return "Alt";
 	case nanofl_ide_keyboard_Keys.B:
