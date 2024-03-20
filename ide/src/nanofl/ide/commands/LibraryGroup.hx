@@ -26,6 +26,7 @@ class LibraryGroup extends BaseGroup
 	public function importFont()			app.document.library.importFont();
 	public function properties()			app.document.library.showPropertiesPopup();
 	public function createFolder()			app.document.library.createFolder();
+	public function duplicate()			    app.document.library.duplicate();
 	
 	public function cut()					tempActiveView(ActiveView.LIBRARY, clipboard.cut);
 	public function copy()					tempActiveView(ActiveView.LIBRARY, clipboard.copy);

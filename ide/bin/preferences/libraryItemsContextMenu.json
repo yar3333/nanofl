@@ -1,10 +1,11 @@
 [
-	{ "name":"Cut",				"command":"library.cut",			"icon":"custom-icon-cut" },
-	{ "name":"Copy",			"command":"library.copy",			"icon":"custom-icon-copy" },
-	{ "name":"Paste",			"command":"library.paste",			"icon":"custom-icon-paste" },
+	{ "name":"Cut",				    "command":"library.cut",			    "icon":"custom-icon-cut" },
+	{ "name":"Copy",			    "command":"library.copy",			    "icon":"custom-icon-copy" },
+	{ "name":"Paste",			    "command":"library.paste",			    "icon":"custom-icon-paste" },
 	{ "name":"------------------" },
-	{ "name":"Rename...",		"command":"library.rename",			"icon":"custom-icon-rename" },
-	{ "name":"Remove",			"command":"library.remove",			"icon":"custom-icon-remove" },
+	{ "name":"Rename...",		    "command":"library.rename",			    "icon":"custom-icon-rename" },
+	{ "name":"Remove",			    "command":"library.remove",			    "icon":"custom-icon-remove" },
+	{ "name":"Duplicate",		    "command":"library.duplicate",		    "icon":"custom-icon-copy" },
 	{ "name":"------------------" },
-	{ "name":"Properties...",	"command":"library.properties",		"icon":"custom-icon-properties" }
+	{ "name":"Properties...",	    "command":"library.properties",		    "icon":"custom-icon-properties" }
 ]

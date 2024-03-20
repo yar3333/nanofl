@@ -125,7 +125,8 @@ class MenuTools
 		enableItemLazy(container, "openedFile.deselectAll",     () -> openedFiles.active != null);
 		enableItemLazy(container, "openedFile.undo",		    () -> openedFiles.active != null && openedFiles.active.canUndo());
 		enableItemLazy(container, "openedFile.redo",		    () -> openedFiles.active != null && openedFiles.active.canRedo());
-		enableItemLazy(container, "openedFile.cut",			    () -> openedFiles.active != null && clipboard.canCut());
+		
+        enableItemLazy(container, "openedFile.cut",			    () -> openedFiles.active != null && clipboard.canCut());
 		enableItemLazy(container, "openedFile.copy",		    () -> openedFiles.active != null && clipboard.canCopy());
 		enableItemLazy(container, "openedFile.paste",		    () -> openedFiles.active != null && clipboard.canPaste());
 		
@@ -137,20 +138,24 @@ class MenuTools
 		enableItemLazy(container, "document.saveAs",		    () -> openedFiles.active != null && openedFiles.active.type == OpenedFileType.DOCUMENT);
 		enableItemLazy(container, "document.undo",			    () -> document != null && document.undoQueue.canUndo());
 		enableItemLazy(container, "document.redo",			    () -> document != null && document.undoQueue.canRedo());
-		enableItemLazy(container, "document.cut",			    () -> document != null && clipboard.canCut());
+		
+        enableItemLazy(container, "document.cut",			    () -> document != null && clipboard.canCut());
 		enableItemLazy(container, "document.copy",			    () -> document != null && clipboard.canCopy());
 		enableItemLazy(container, "document.paste",			    () -> document != null && clipboard.canPaste());
 		
 		enableItemLazy(container, "library.importFiles", 	    () -> document != null);
 		enableItemLazy(container, "library.rename", 	        () -> library != null && library.getSelectedItems().length == 1);
 		enableItemLazy(container, "library.properties", 	    () -> library != null && library.getSelectedItems().length == 1);
-		enableItemLazy(container, "library.cut",			    () -> tempActiveView(app, ActiveView.LIBRARY,	() -> app.document != null && clipboard.canCut()));
+		enableItemLazy(container, "library.duplicate", 	        () -> library != null && library.getSelectedItems().length > 0);
+		
+        enableItemLazy(container, "library.cut",			    () -> tempActiveView(app, ActiveView.LIBRARY,	() -> app.document != null && clipboard.canCut()));
 		enableItemLazy(container, "library.copy",			    () -> tempActiveView(app, ActiveView.LIBRARY,	() -> app.document != null && clipboard.canCopy()));
 		enableItemLazy(container, "library.paste",			    () -> tempActiveView(app, ActiveView.LIBRARY,	() -> app.document != null && clipboard.canPaste()));
 
         enableItemLazy(container, "timeline.createTween",       () -> timelineView.hasSelectedFramesWithoutTween());
 		enableItemLazy(container, "timeline.removeTween",       () -> timelineView.hasSelectedFramesWithTween());
-		enableItemLazy(container, "timeline.cut",			    () -> tempActiveView(app, ActiveView.TIMELINE,	() -> app.document != null && clipboard.canCut()));
+		
+        enableItemLazy(container, "timeline.cut",			    () -> tempActiveView(app, ActiveView.TIMELINE,	() -> app.document != null && clipboard.canCut()));
 		enableItemLazy(container, "timeline.copy",			    () -> tempActiveView(app, ActiveView.TIMELINE,	() -> app.document != null && clipboard.canCopy()));
 		enableItemLazy(container, "timeline.paste",			    () -> tempActiveView(app, ActiveView.TIMELINE,	() -> app.document != null && clipboard.canPaste()));
 		

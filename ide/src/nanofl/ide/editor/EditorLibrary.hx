@@ -1,5 +1,6 @@
 package nanofl.ide.editor;
 
+import stdlib.Debug;
 import haxe.io.Path;
 import js.lib.Promise;
 import js.Browser;
@@ -7,6 +8,7 @@ import js.html.File;
 import stdlib.ExceptionTools;
 import stdlib.Std;
 import htmlparser.HtmlNodeElement;
+import nanofl.engine.LibraryItemType;
 import nanofl.engine.Log.console;
 import nanofl.engine.FontVariant;
 import nanofl.ide.MovieClipItemTools;
@@ -116,6 +118,20 @@ class EditorLibrary extends InjectContainer
 			i++;
 		}
 	}
+
+    function getNextItemNamePathForDuplication(baseNamePath:String)
+    {
+        final re = ~/(.+) Copy(?: (\d+))?$/;
+        final baseName = re.match(baseNamePath) ? re.matched(1) : baseNamePath;
+        
+        final namePaths = library.getItemsAsIde().filter(x -> x.namePath.startsWith(baseName)).map(x -> x.namePath);
+        var maxN = -1; for (namePath in namePaths) if (re.match(namePath)) maxN = Std.max(maxN, re.matched(2) != null ? Std.parseInt(re.matched(2)) : 0);
+        maxN++;
+
+        final r = baseName + " Copy" + (maxN > 0 ? " " + maxN : "");
+        Debug.assert(!library.hasItem(r));
+        return r;
+    }
 	
 	public function hasItem(namePath:String) return library.hasItem(namePath);
 	public function addFont(family:String, variants:Array<FontVariant>) library.addFont(family, variants);
@@ -387,6 +403,44 @@ class EditorLibrary extends InjectContainer
 		
         return new IdeLibrary(destLibraryDir, publishedItems);
 	}
+
+    public function duplicate()
+    {
+ 		final selectedItems = getSelectedItems().filter(x -> !x.type.match(LibraryItemType.folder));
+        if (selectedItems.length == 0) return;
+
+        externalChangesDetector.runPreventingAutoReloadAsync(() ->
+        {
+            document.saveNative();
+            
+            document.undoQueue.beginTransaction({ libraryAddItems:true });
+        
+            final newNamePaths = [];
+            for (item in selectedItems)
+            {
+                final newNamePath = getNextItemNamePathForDuplication(item.namePath);
+                newNamePaths.push(newNamePath);
+                
+                library.addItem(item.duplicate(newNamePath));
+                fileSystem.copyByPattern(library.libraryDir + "/" + item.namePath + ".*", library.libraryDir + "/" + newNamePath + ".*");
+            }
+
+            return document.reloadWoTransactionForced().then(_ ->
+            {
+                view.library.select(newNamePaths);
+                document.undoQueue.commitTransaction();
+            });
+        });
+    }
+
+    public function openInAssociated()
+    {
+        for (item in getSelectedItems())
+        {
+            
+            shell.runWithEditor();
+        }
+    }
 
 	static function log(v:Dynamic, ?infos:haxe.PosInfos)
 	{
