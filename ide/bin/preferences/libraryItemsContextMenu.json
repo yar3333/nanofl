@@ -5,7 +5,10 @@
 	{ "name":"------------------" },
 	{ "name":"Rename...",		    "command":"library.rename",			    "icon":"custom-icon-rename" },
 	{ "name":"Remove",			    "command":"library.remove",			    "icon":"custom-icon-remove" },
-	{ "name":"Duplicate",		    "command":"library.duplicate",		    "icon":"custom-icon-copy" },
+	{ "name":"Duplicate",		    "command":"library.duplicate",		    "icon":"" },
 	{ "name":"------------------" },
+	{ "name":"Open in Associated",  "command":"library.openInAssociated",   "icon":"" },
+	{ "name":"Show in Explorer",    "command":"library.showInExplorer",	    "icon":"" },
+    { "name":"------------------" },
 	{ "name":"Properties...",	    "command":"library.properties",		    "icon":"custom-icon-properties" }
 ]

@@ -40,6 +40,4 @@ class FolderItem extends nanofl.engine.libraryitems.FolderItem
 	{
 		return null;
 	}
-	
-	public function getFilePathToRunWithEditor() : String return null;
 }

@@ -14,6 +14,8 @@ import nanofl.engine.libraryitems.InstancableItem;
 import nanofl.engine.libraryitems.MovieClipItem;
 import nanofl.engine.libraryitems.SoundItem;
 import nanofl.ide.Globals;
+import nanofl.ide.sys.FileSystem;
+import nanofl.ide.libraryitems.LibraryItemTools;
 import nanofl.ide.draganddrop.DragAndDrop;
 import nanofl.ide.draganddrop.IDragAndDrop;
 import nanofl.ide.preferences.Preferences;
@@ -45,6 +47,7 @@ class Code extends wquery.Component
 	@inject var app : Application;
 	@inject var shell : Shell;
 	@inject var dragAndDrop : DragAndDrop;
+	@inject var fileSystem : FileSystem;
 	
 	var items : ComponentList<components.nanofl.library.libraryitem.Code>;
 	
@@ -170,16 +173,8 @@ class Code extends wquery.Component
 			}
 			else
 			{
-				var filePath = item.getFilePathToRunWithEditor();
-				if (filePath != null)
-				{
-					filePath = Path.join([ app.document.library.libraryDir, filePath ]);
-					var success = shell.runWithEditor(filePath);
-					if (!success) 
-					{
-                        shell.openInFileExplorer(filePath);
-                    }
-				}
+                var filePath = LibraryItemTools.getFilePathToRunInExternalEditor(fileSystem, app.document.library.libraryDir, item.namePath);
+                if (filePath != null) shell.openInAssociatedApplication(filePath);
 			}
 		});
 	}

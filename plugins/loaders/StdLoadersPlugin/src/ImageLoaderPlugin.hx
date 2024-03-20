@@ -17,7 +17,7 @@ class ImageLoaderPlugin implements ILoaderPlugin
 	public var menuItemIcon = "";
 	public var properties : Array<CustomProperty> = null;
 	
-	public var extensions = [ "svg", "png", "jpg" ];
+	public var extensions = [ "svg", "png", "jpg", "webp" ];
 	
     public function new() {}
 	

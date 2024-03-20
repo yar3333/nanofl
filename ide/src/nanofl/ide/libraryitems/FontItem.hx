@@ -40,7 +40,5 @@ class FontItem extends nanofl.engine.libraryitems.FontItem
 		return clone();
 	}
 	
-	public function getFilePathToRunWithEditor() : String return null;
-	
 	public function getLibraryFilePaths() : Array<String> return [];
 }

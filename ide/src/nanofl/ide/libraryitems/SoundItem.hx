@@ -52,7 +52,5 @@ class SoundItem extends nanofl.engine.libraryitems.SoundItem
         return r;
 	}
 	
-	public function getFilePathToRunWithEditor() : String return null;
-	
 	public function getLibraryFilePaths() : Array<String> return [];
 }

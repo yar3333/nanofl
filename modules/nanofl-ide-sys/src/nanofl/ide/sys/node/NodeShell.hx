@@ -30,9 +30,9 @@ class NodeShell implements Shell
         js.Browser.window.open(url, "_blank");
     }
     
-    public function openInFileExplorer(path:String) : Void
+    public function showInFileExplorer(path:String) : Void
     {
-        log("openInFileExplorer: path = " + path);
+        log("showInFileExplorer: path = " + path);
         
         // See https://ss64.com/nt/explorer.html
         final arg = "/select," + path.replace("/", "\\");
@@ -40,21 +40,25 @@ class NodeShell implements Shell
         ElectronApi.child_process.spawn("explorer.exe", [ arg ], { detached:true, shell:"cmd.exe" });
     }
 	
-    public function runWithEditor(document:String) : Bool
+    public function openInAssociatedApplication(path:String) : Void
     {
-        return runShellVerb(document, "edit");
+        //return runShellVerb(path, "edit") || runShellVerb(path, "open");
+        
+        log("openInAssociatedApplication " + path);
+        final arg = path.replace("/", "\\");
+        ElectronApi.child_process.spawn("start", [ '""', '"' + arg + '"' ], { detached:true, shell:"cmd.exe" });
     }
 	
 	/**
-        Run document with associated application (read from Windows Registry).
+        Run file with associated application (read from Windows Registry).
         `verb`: "edit" or "open".
     **/
-    function runShellVerb(document:String, verb:String) : Bool
+    function runShellVerb(path:String, verb:String) : Bool
 	{
-		final association = getShellVerbAssociation(Path.extension(document), verb);
+		final association = getShellVerbAssociation(Path.extension(path), verb);
         if (association == null) return false;
 
-        final args = association.args.map(x -> x == "%1" ? fileSystem.absolutePath(document) : x);
+        final args = association.args.map(x -> x == "%1" ? fileSystem.absolutePath(path) : x);
 		return processManager.run(association.program, args, false) == 0;
 	}
     

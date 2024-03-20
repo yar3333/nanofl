@@ -7,6 +7,5 @@ extern class FolderItem extends nanofl.engine.libraryitems.FolderItem implements
 	function getLibraryFilePaths():Array<String>;
 	function getDataToSaveBeforeCleanDestDirectoryAndPublish(fileSystem:nanofl.ide.sys.FileSystem, destLibraryDir:String):Dynamic;
 	function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String, savedData:Dynamic):nanofl.ide.libraryitems.IIdeLibraryItem;
-	function getFilePathToRunWithEditor():String;
 	static function parse(namePath:String, itemNode:htmlparser.HtmlNodeElement):nanofl.ide.libraryitems.FolderItem;
 }

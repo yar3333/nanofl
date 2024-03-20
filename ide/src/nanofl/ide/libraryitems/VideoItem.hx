@@ -37,11 +37,6 @@ class VideoItem extends nanofl.engine.libraryitems.VideoItem
 		return item;
 	}
 	
-	public function getFilePathToRunWithEditor() : String 
-	{
-		return namePath + "." + ext;
-	}
-	
 	public function getLibraryFilePaths() : Array<String>
 	{
 		return [ namePath + ".*" ];

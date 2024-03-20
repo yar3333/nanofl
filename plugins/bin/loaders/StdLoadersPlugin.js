@@ -57,7 +57,7 @@ HxOverrides.now = function() {
 	return Date.now();
 };
 var ImageLoaderPlugin = function() {
-	this.extensions = ["svg","png","jpg"];
+	this.extensions = ["svg","png","jpg","webp"];
 	this.properties = null;
 	this.menuItemIcon = "";
 	this.menuItemName = "Image";

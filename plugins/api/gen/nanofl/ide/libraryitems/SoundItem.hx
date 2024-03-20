@@ -5,7 +5,6 @@ extern class SoundItem extends nanofl.engine.libraryitems.SoundItem implements n
 	override function clone():nanofl.ide.libraryitems.SoundItem;
 	function getDataToSaveBeforeCleanDestDirectoryAndPublish(fileSystem:nanofl.ide.sys.FileSystem, destLibraryDir:String):Dynamic;
 	function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String, savedData:Dynamic):nanofl.ide.libraryitems.IIdeLibraryItem;
-	function getFilePathToRunWithEditor():String;
 	function getLibraryFilePaths():Array<String>;
 	static function parse(namePath:String, itemNode:htmlparser.HtmlNodeElement):nanofl.ide.libraryitems.SoundItem;
 }

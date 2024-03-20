@@ -51,16 +51,6 @@ class BitmapItem extends nanofl.engine.libraryitems.BitmapItem
 		return r;
 	}
 	
-	/*override public function equ(item:ILibraryItem) : Bool
-	{
-		return super.equ(item);
-	}*/
-	
-	public function getFilePathToRunWithEditor() : String 
-	{
-		return namePath + "." + ext;
-	}
-	
 	public function getLibraryFilePaths() : Array<String>
 	{
 		return [ namePath + ".*" ];

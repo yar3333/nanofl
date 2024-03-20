@@ -12,6 +12,7 @@ import nanofl.engine.LibraryItemType;
 import nanofl.engine.Log.console;
 import nanofl.engine.FontVariant;
 import nanofl.ide.MovieClipItemTools;
+import nanofl.ide.sys.Shell;
 import nanofl.ide.filesystem.ExternalChangesDetector;
 import nanofl.ide.plugins.LoaderPlugins;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
@@ -42,6 +43,7 @@ class EditorLibrary extends InjectContainer
 	@inject var uploader : Uploader;
 	@inject var preferences : Preferences;
 	@inject var externalChangesDetector : ExternalChangesDetector;
+	@inject var shell(default, never) : Shell;
 	
 	var library : IdeLibrary;
 	var document : Document;
@@ -437,8 +439,17 @@ class EditorLibrary extends InjectContainer
     {
         for (item in getSelectedItems())
         {
-            
-            shell.runWithEditor();
+            final filePath = LibraryItemTools.getFilePathToRunInExternalEditor(fileSystem, library.libraryDir, item.namePath);
+            if (filePath != null) shell.openInAssociatedApplication(filePath);
+        }
+    }
+    
+    public function showInExplorer()
+    {
+        for (item in getSelectedItems())
+        {
+            final filePath = LibraryItemTools.getFilePathToRunInExternalEditor(fileSystem, library.libraryDir, item.namePath);
+            if (filePath != null) shell.showInFileExplorer(filePath);
         }
     }
 

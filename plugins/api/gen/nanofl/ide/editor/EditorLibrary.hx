@@ -46,4 +46,6 @@ extern class EditorLibrary extends nanofl.ide.InjectContainer {
 	function fixErrors():Void;
 	function publishItems(settings:nanofl.ide.PublishSettings, destDir:String):nanofl.ide.library.IdeLibrary;
 	function duplicate():Void;
+	function openInAssociated():Void;
+	function showInExplorer():Void;
 }

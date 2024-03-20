@@ -98,8 +98,6 @@ class MovieClipItem extends nanofl.engine.libraryitems.MovieClipItem
 		for (layer in layers) layer.layersContainer = this;
 	}
 	
-	public function getFilePathToRunWithEditor() : String return null;
-	
 	public function getLibraryFilePaths() : Array<String> return [];
 
 	public function removeLayer(index:Int) : Void // TODO: check calls & parent layers

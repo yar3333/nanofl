@@ -50,12 +50,6 @@ class MeshItem extends nanofl.engine.libraryitems.MeshItem
         return new nanofl.Mesh(this, params);
     }
 	
-	public function getFilePathToRunWithEditor() : String 
-    {
-        // TODO: blend if exists
-        return namePath + ".gltf";
-    }
-        
 	public function getLibraryFilePaths() : Array<String>
     {
         return [ namePath + ".*" ];
