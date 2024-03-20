@@ -1,5 +1,6 @@
 package nanofl.engine;
 
+import stdlib.Std;
 import datatools.MapTools;
 import js.lib.Promise;
 import datatools.ArrayRO;
@@ -91,16 +92,23 @@ class Library
             a = a.toLowerCase();
             b = b.toLowerCase();
 
-            final reA = ~/(\d+)$/;
-            final reB = ~/(\d+)$/;
-            if (reA.match(a) && reB.match(b))
+            final arrA = []; ~/(\D+)|(\d+)/g.map(a, re -> { arrA.push(re.matched(0)); return ""; });
+            final arrB = []; ~/(\D+)|(\d+)/g.map(b, re -> { arrB.push(re.matched(0)); return ""; });
+            
+            for (i in 0...Std.min(arrA.length, arrB.length))
             {
-                final preA = a.substr(0, a.length - reA.matched(1).length);
-                final preB = b.substr(0, b.length - reB.matched(1).length);
-                if (preA == preB) return Reflect.compare(Std.parseInt(reA.matched(1)), Std.parseInt(reB.matched(1)));
+                if ("0123456789".contains(arrA[i].charAt(0)) && "0123456789".contains(arrB[i].charAt(0)))
+                {
+                    final r = Reflect.compare(Std.parseInt(arrA[i]), Std.parseInt(arrB[i]));
+                    if (r != 0) return r;
+                }
+                else
+                {
+                    final r = Reflect.compare(arrA[i], arrB[i]);
+                    if (r != 0) return r;
+                }
             }
-
-            Reflect.compare(a, b);
+            return Reflect.compare(arrA.length, arrB.length);
         });
         
         return namePaths.map(namePath -> items.get(namePath));
