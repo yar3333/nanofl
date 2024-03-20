@@ -2096,9 +2096,16 @@ var js_injecting_Injector = function() {
 };
 js_injecting_Injector.__name__ = "js.injecting.Injector";
 js_injecting_Injector.prototype = {
-	addSingleton: function(type,object) {
-		var name = haxe_rtti_Rtti.getRtti(type).path;
-		this.singletons.set(name,object);
+	addSingletonMappedToValue: function(type,value) {
+		if(type == null) {
+			throw new Error("Argument `type` must not be null.");
+		}
+		if(value == null) {
+			throw new Error("Argument `value` must not be null.");
+		}
+		var rtti = haxe_rtti_Rtti.getRtti(type);
+		this.singletons.set(rtti.path,{ mapTo : rtti.path, value : value});
+		return this;
 	}
 	,__class__: js_injecting_Injector
 };
@@ -2175,20 +2182,20 @@ nanofl_ide_sys_SysStuff.registerInInjector = function(injector) {
 	var processManager = new nanofl_ide_sys_node_NodeProcessManager();
 	var environment = new nanofl_ide_sys_node_NodeEnvironment();
 	var folders = new nanofl_ide_sys_node_NodeFolders(environment);
-	injector.addSingleton(nanofl_ide_sys_FileSystem,fileSystem);
-	injector.addSingleton(nanofl_ide_sys_ProcessManager,processManager);
-	injector.addSingleton(nanofl_ide_sys_Environment,environment);
-	injector.addSingleton(nanofl_ide_sys_Folders,folders);
-	injector.addSingleton(nanofl_ide_sys_HttpUtils,new nanofl_ide_sys_node_NodeHttpUtils());
-	injector.addSingleton(nanofl_ide_sys_Zip,new nanofl_ide_sys_node_NodeZip(fileSystem,processManager,folders));
-	injector.addSingleton(nanofl_ide_sys_Shell,new nanofl_ide_sys_node_NodeShell(fileSystem,processManager,environment));
-	injector.addSingleton(nanofl_ide_sys_WebServerUtils,new nanofl_ide_sys_node_NodeWebServerUtils());
-	injector.addSingleton(nanofl_ide_sys_Uploader,new nanofl_ide_sys_Uploader(fileSystem));
-	injector.addSingleton(nanofl_ide_sys_Fonts,new nanofl_ide_sys_node_NodeFonts());
-	injector.addSingleton(nanofl_ide_sys_MediaUtils,new nanofl_ide_sys_node_NodeMediaUtils(processManager,folders,fileSystem));
-	injector.addSingleton(nanofl_ide_sys_MainProcess,new nanofl_ide_sys_node_ElectronMainProcess());
-	injector.addSingleton(nanofl_ide_sys_Clipboard,new nanofl_ide_sys_node_ElectronClipboard());
-	injector.addSingleton(nanofl_ide_sys_Dialogs,new nanofl_ide_sys_node_ElectronDialogs());
+	injector.addSingletonMappedToValue(nanofl_ide_sys_FileSystem,fileSystem);
+	injector.addSingletonMappedToValue(nanofl_ide_sys_ProcessManager,processManager);
+	injector.addSingletonMappedToValue(nanofl_ide_sys_Environment,environment);
+	injector.addSingletonMappedToValue(nanofl_ide_sys_Folders,folders);
+	injector.addSingletonMappedToValue(nanofl_ide_sys_HttpUtils,new nanofl_ide_sys_node_NodeHttpUtils());
+	injector.addSingletonMappedToValue(nanofl_ide_sys_Zip,new nanofl_ide_sys_node_NodeZip(fileSystem,processManager,folders));
+	injector.addSingletonMappedToValue(nanofl_ide_sys_Shell,new nanofl_ide_sys_node_NodeShell(fileSystem,processManager,environment));
+	injector.addSingletonMappedToValue(nanofl_ide_sys_WebServerUtils,new nanofl_ide_sys_node_NodeWebServerUtils());
+	injector.addSingletonMappedToValue(nanofl_ide_sys_Uploader,new nanofl_ide_sys_Uploader(fileSystem));
+	injector.addSingletonMappedToValue(nanofl_ide_sys_Fonts,new nanofl_ide_sys_node_NodeFonts());
+	injector.addSingletonMappedToValue(nanofl_ide_sys_MediaUtils,new nanofl_ide_sys_node_NodeMediaUtils(processManager,folders,fileSystem));
+	injector.addSingletonMappedToValue(nanofl_ide_sys_MainProcess,new nanofl_ide_sys_node_ElectronMainProcess());
+	injector.addSingletonMappedToValue(nanofl_ide_sys_Clipboard,new nanofl_ide_sys_node_ElectronClipboard());
+	injector.addSingletonMappedToValue(nanofl_ide_sys_Dialogs,new nanofl_ide_sys_node_ElectronDialogs());
 };
 var nanofl_ide_sys_Uploader = $hx_exports["Uploader"] = function(fileSystem) {
 	this.fileSystem = fileSystem;

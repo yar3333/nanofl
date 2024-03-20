@@ -14,7 +14,6 @@ import nanofl.ide.ui.View;
 import nanofl.ide.ui.menu.MenuTools;
 import nanofl.ide.plugins.ExporterPlugins;
 import nanofl.ide.plugins.ImporterPlugins;
-import nanofl.ide.OpenedFileType;
 import nanofl.ide.ui.views.IMainMenuView;
 using stdlib.Lambda;
 using StringTools;
@@ -124,11 +123,9 @@ class Code extends wquery.Component implements IMainMenuView
 		
 		updateRecents();
 		
-		final type = openedFiles.active != null ? openedFiles.active.type : null;
-		
-		enableMenuItem("timeline",	type == OpenedFileType.DOCUMENT);
-		enableMenuItem("editor",	type == OpenedFileType.DOCUMENT);
-		enableMenuItem("library",	type == OpenedFileType.DOCUMENT);
+		enableMenuItem("timeline",	app.document != null);
+		enableMenuItem("editor",	app.document != null);
+		enableMenuItem("library",	app.document != null);
 		enableMenuItem("export", 	app.document != null);
 	}
 	

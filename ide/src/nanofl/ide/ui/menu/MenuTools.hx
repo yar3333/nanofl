@@ -120,22 +120,22 @@ class MenuTools
         final document = app.document;
         final library = document?.library;
 
-        enableItemLazy(container, "openedFile.save",		    () -> openedFiles.active != null && openedFiles.active.canBeSaved());
-		enableItemLazy(container, "openedFile.toggleSelection", () -> openedFiles.active != null);
-		enableItemLazy(container, "openedFile.deselectAll",     () -> openedFiles.active != null);
-		enableItemLazy(container, "openedFile.undo",		    () -> openedFiles.active != null && openedFiles.active.canUndo());
-		enableItemLazy(container, "openedFile.redo",		    () -> openedFiles.active != null && openedFiles.active.canRedo());
+        enableItemLazy(container, "openedFile.save",		    () -> document != null && document.canBeSaved());
+		enableItemLazy(container, "openedFile.toggleSelection", () -> document != null);
+		enableItemLazy(container, "openedFile.deselectAll",     () -> document != null);
+		enableItemLazy(container, "openedFile.undo",		    () -> document != null && document.canUndo());
+		enableItemLazy(container, "openedFile.redo",		    () -> document != null && document.canRedo());
 		
-        enableItemLazy(container, "openedFile.cut",			    () -> openedFiles.active != null && clipboard.canCut());
-		enableItemLazy(container, "openedFile.copy",		    () -> openedFiles.active != null && clipboard.canCopy());
-		enableItemLazy(container, "openedFile.paste",		    () -> openedFiles.active != null && clipboard.canPaste());
+        enableItemLazy(container, "openedFile.cut",			    () -> document != null && clipboard.canCut());
+		enableItemLazy(container, "openedFile.copy",		    () -> document != null && clipboard.canCopy());
+		enableItemLazy(container, "openedFile.paste",		    () -> document != null && clipboard.canPaste());
 		
 		enableItemLazy(container, "document.save",			    () -> document != null && document.canBeSaved());
 		enableItemLazy(container, "document.test",			    () -> document != null);
 		enableItemLazy(container, "document.publish",		    () -> document != null);
 		enableItemLazy(container, "document.properties",	    () -> document != null);
 		enableItemLazy(container, "document.publishSettings",   () -> document != null);
-		enableItemLazy(container, "document.saveAs",		    () -> openedFiles.active != null && openedFiles.active.type == OpenedFileType.DOCUMENT);
+		enableItemLazy(container, "document.saveAs",		    () -> document != null);
 		enableItemLazy(container, "document.undo",			    () -> document != null && document.undoQueue.canUndo());
 		enableItemLazy(container, "document.redo",			    () -> document != null && document.undoQueue.canRedo());
 		

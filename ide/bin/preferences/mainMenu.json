@@ -5,7 +5,7 @@
 			{ "name":"New...",				"command":"document.createNewEmpty",	"icon":"custom-icon-new" },
 			{ "name":"Open...",				"command":"document.open",				"icon":"custom-icon-open" },
 			{ "name":"Recents",				"id":"fileRecents", "items":[] },
-			{ "name":"Save",				"command":"openedFile.save",			"icon":"custom-icon-save" },
+			{ "name":"Save",				"command":"document.save",				"icon":"custom-icon-save" },
 			{ "name":"Save As...",			"command":"document.saveAs",			"icon":"custom-icon-empty" },
 			{ "name":"------------------" },
 			{ "name":"Test",				"command":"document.test",				"icon":"custom-icon-run" },
@@ -27,15 +27,15 @@
 	{
 		"name":"Edit", "id":"edit", "items":
 		[
-			{ "name":"Undo",				"command":"openedFile.undo",			"icon":"custom-icon-undo" },
-			{ "name":"Redo",				"command":"openedFile.redo",			"icon":"custom-icon-redo" },
+			{ "name":"Undo",				"command":"document.undo",				"icon":"custom-icon-undo" },
+			{ "name":"Redo",				"command":"document.redo",				"icon":"custom-icon-redo" },
 			{ "name":"------------------" },
-			{ "name":"Cut",					"command":"openedFile.cut",				"icon":"custom-icon-cut" },
-			{ "name":"Copy",				"command":"openedFile.copy",			"icon":"custom-icon-copy" },
-			{ "name":"Paste",				"command":"openedFile.paste",			"icon":"custom-icon-paste" },
+			{ "name":"Cut",					"command":"clipboard.cut",				"icon":"custom-icon-cut" },
+			{ "name":"Copy",				"command":"clipboard.copy",				"icon":"custom-icon-copy" },
+			{ "name":"Paste",				"command":"clipboard.paste",			"icon":"custom-icon-paste" },
 			{ "name":"------------------" },
-			{ "name":"Select All",			"command":"openedFile.toggleSelection" },
-			{ "name":"Deselect All",		"command":"openedFile.deselectAll" },
+			{ "name":"Select All",			"command":"document.toggleSelection" },
+			{ "name":"Deselect All",		"command":"document.deselectAll" },
 			{ "name":"------------------" },
 			{ "name":"Preferencies...",		"command":"application.preferences",	"icon":"custom-icon-preferencies" }
 		]

@@ -11,7 +11,6 @@ import wquery.ComponentList;
 import nanofl.engine.Log.console;
 import nanofl.ide.Globals;
 import nanofl.ide.Document;
-import nanofl.ide.OpenedFile;
 import nanofl.ide.keyboard.Keyboard;
 import nanofl.ide.ui.View;
 import nanofl.ide.ui.menu.MenuTools;
@@ -29,10 +28,10 @@ class Code extends wquery.Component
 	@inject var view : View;
 	@inject var keyboard : Keyboard;
 	
-	public var active(default, null) : OpenedFile;
+	public var active(default, null) : Document;
 	
 	var templateItems : ComponentList<components.nanofl.others.openedfiles.item.Code>;
-	var items : Array<OpenedFile> = new Array<OpenedFile>();
+	var items : Array<Document> = new Array<Document>();
 	
 	public var length(get, never) : Int;
 	function get_length() return items.length;
@@ -59,14 +58,14 @@ class Code extends wquery.Component
 		});
 	}
 	
-	public function add(doc:OpenedFile)
+	public function add(doc:Document)
 	{
 		items.push(doc);
 		addTab(doc, true);
 		normalizeTabCount();
 	}
 	
-	public function close(doc:OpenedFile)
+	public function close(doc:Document)
 	{
 		var n = items.indexOf(doc);
 		if (n >= 0)
@@ -168,7 +167,7 @@ class Code extends wquery.Component
 		});
 	}
 	
-	function addTab(doc:OpenedFile, append:Bool)
+	function addTab(doc:Document, append:Bool)
 	{
 		templateItems.create
 		(
@@ -196,7 +195,7 @@ class Code extends wquery.Component
 	
 	public function outerHeight() return template().tabs.outerHeight();
 	
-	public function titleChanged(doc:OpenedFile) : Void
+	public function titleChanged(doc:Document) : Void
 	{
 		if (doc == active)
 		{

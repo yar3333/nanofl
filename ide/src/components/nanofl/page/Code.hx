@@ -15,7 +15,9 @@ using stdlib.StringTools;
 
 #if profiler @:build(Profiler.buildMarked()) #end
 @:rtti
-class Code extends wquery.Component implements ILayout
+class Code extends wquery.Component 
+    implements ILayout
+    implements View
 {
 	static var imports =
 	{
@@ -42,8 +44,6 @@ class Code extends wquery.Component implements ILayout
 	var layoutInstance : LayoutInstance;
 	
 	var view : View;
-	var openedFiles : OpenedFiles;
-	var dragAndDrop : DragAndDrop;
 	
 	public function getTemplate() return template();
 	
@@ -53,15 +53,29 @@ class Code extends wquery.Component implements ILayout
 		injector.injectInto(this);
 		
 		injector.addSingleton(Popups, new Popups(this));
-		injector.addSingleton(DragAndDrop, dragAndDrop = new DragAndDrop());
-		injector.addSingleton(View, view = new View(this));
+		injector.addSingleton(DragAndDrop);
+		injector.addSingleton(View, this);
 		injector.addSingleton(ILayout, this);
-		injector.addSingleton(OpenedFiles, openedFiles = new OpenedFiles(this));
 	}
+
+    // View vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+	public var mainMenu(get, never)     : nanofl.ide.ui.views.IMainMenuView;    function get_mainMenu()     return template().mainMenu;
+	public var movie(get, never)        : nanofl.ide.ui.views.MovieView;        function get_movie()        return template().movie;
+	public var library(get, never)      : nanofl.ide.ui.views.LibraryView;      function get_library()      return template().library;
+	public var properties(get, never)   : nanofl.ide.ui.views.PropertiesView;	function get_properties()   return template().properties;
+	public var waiter(get, never)       : nanofl.ide.ui.views.Waiter;	        function get_waiter()       return template().waiter;
+	public var shadow(get, never)       : nanofl.ide.ui.views.Shadow;	        function get_shadow()       return template().shadow;
+	public var alerter(get, never)      : nanofl.ide.ui.views.Alerter;          function get_alerter()      return template().alerter;
+	public var fpsMeter(get, never)     : nanofl.ide.ui.views.FpsMeter;	        function get_fpsMeter()     return template().fpsMeter;
+	public var output(get, never)       : nanofl.ide.ui.views.IOutputView;      function get_output()       return template().output;
+	public var startPage(get, never)    : nanofl.ide.ui.views.StartPage;        function get_startPage()    return template().startPageComponent;
+	public var openedFiles(get, never)  : nanofl.ide.ui.views.OpenedFilesView;  function get_openedFiles()  return template().openedFiles;
+
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 	
 	function init()
 	{
-		dragAndDrop.init(template().dragAndDrop);
+		injector.getService(DragAndDrop).init(template().dragAndDrop);
 		
 		template().content.find(">*").hide();
 		template().moviePage.show();

@@ -1,6 +1,5 @@
 package nanofl.ide.commands;
 
-import nanofl.ide.OpenedFiles;
 import nanofl.ide.plugins.Plugins;
 import nanofl.ide.ui.Popups;
 using stdlib.StringTools;

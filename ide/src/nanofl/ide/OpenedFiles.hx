@@ -1,41 +1,27 @@
 package nanofl.ide;
 
 import js.lib.Promise;
+import nanofl.ide.ui.View;
 
-private typedef Container =
+class OpenedFiles extends InjectContainer
 {
-	function getTemplate() :
-	{
-		var openedFiles(get, never) : components.nanofl.others.openedfiles.Code;
-	};
-}
+    @inject var view : View;
 
-@:rtti
-class OpenedFiles
-{
-	@:noapi
-	var container : Container;
+    public var active(get, never) : Document;
+    function get_active() return view.openedFiles.active;
+    
+    public var length(get, never) : Int;
+    function get_length() : Int return view.openedFiles.length;    
+
+    public function iterator() : Iterator<Document> return view.openedFiles.iterator();
+    
+    public function closeAll(?force:Bool) : Promise<{}> return view.openedFiles.closeAll(force);
 	
-	public var active(get, never) : OpenedFile;
-	function get_active() return container.getTemplate().openedFiles.active;
+    public function add(doc:Document) : Void view.openedFiles.add(doc);
 	
-	public var length(get, never) : Int;
-	function get_length() : Int return container.getTemplate().openedFiles.length;
+    public function close(doc:Document) : Void view.openedFiles.close(doc);
 	
-	public function iterator() : Iterator<OpenedFile> return container.getTemplate().openedFiles.iterator();
-	public function closeAll(?force:Bool) : Promise<{}> return container.getTemplate().openedFiles.closeAll(force);
+    public function activate(id:String) : Void view.openedFiles.activate(id);
 	
-	public function add(doc:OpenedFile) : Void container.getTemplate().openedFiles.add(doc);
-	
-	public function close(doc:OpenedFile) : Void container.getTemplate().openedFiles.close(doc);
-	
-	public function activate(id:String) : Void container.getTemplate().openedFiles.activate(id);
-	
-	public function titleChanged(doc:OpenedFile) : Void container.getTemplate().openedFiles.titleChanged(doc);
-	
-	@:noapi
-	public function new(container:Container)
-	{
-		this.container = container;
-	}
+    public function titleChanged(doc:Document) : Void view.openedFiles.titleChanged(doc);
 }

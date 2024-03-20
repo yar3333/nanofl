@@ -1,7 +1,5 @@
 package nanofl.ide.commands;
 
-import nanofl.ide.libraryitems.IIdeInstancableItem;
-import nanofl.engine.elements.Instance;
 import nanofl.ide.Clipboard;
 import nanofl.ide.editor.tools.*;
 import nanofl.ide.editor.Editor;

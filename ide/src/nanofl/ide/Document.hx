@@ -1,5 +1,6 @@
 package nanofl.ide;
 
+import stdlib.Uuid;
 import stdlib.Timer;
 import js.lib.Promise;
 import haxe.io.Path;
@@ -28,6 +29,7 @@ import nanofl.ide.sys.Folders;
 import nanofl.ide.sys.Shell;
 import nanofl.ide.sys.WebServerUtils;
 import nanofl.ide.ui.View;
+import nanofl.ide.ui.Popups;
 import nanofl.ide.undo.document.UndoQueue;
 import nanofl.ide.textureatlas.TextureAtlasPublisher;
 using nanofl.ide.plugins.CustomizablePluginTools;
@@ -36,19 +38,24 @@ using stdlib.StringTools;
 
 #if profiler @:build(Profiler.buildAll()) #end
 @:rtti
-class Document extends OpenedFile
+class Document extends InjectContainer
 {
 	@inject var preferences : Preferences;
 	@inject var fileSystem : FileSystem;
 	@inject var view : View;
+    @inject var popups : Popups;
 	@inject var folders : Folders;
 	@inject var clipboard : Clipboard;
 	@inject var shell : Shell;
 	@inject var webServerUtils : WebServerUtils;
 	@inject var recents : Recents;
 	@inject var documentTools : DocumentTools;
+	@inject var openedFiles : OpenedFiles;
 	
-	function get_type() return OpenedFileType.DOCUMENT;
+	/**
+	 * Document UUID (generated on every document object create).
+	 */
+	public var id(default, null) : String;
 
     function isTemporary() return path.startsWith(folders.unsavedDocuments + "/");
 	
@@ -82,12 +89,18 @@ class Document extends OpenedFile
 	
 	public function getTabTextColor() return "";
 	public function getTabBackgroundColor() return "";
+
+    public var isModified(get, never) : Bool;    
 	
 	public function new(path:String, properties:DocumentProperties, library:IdeLibrary, ?lastModified:Date)
 	{
-		stdlib.Debug.assert(path != null);
+		super();
 		
-		super(this);
+        stdlib.Debug.assert(path != null);
+        stdlib.Debug.assert(properties != null);
+        stdlib.Debug.assert(library != null);
+
+        this.id = Uuid.newUuid();
 		
 		this.savedProperties = properties.clone();
 		
@@ -460,34 +473,10 @@ class Document extends OpenedFile
 	{
 		view.output.clear();
 		
-		var promise = Promise.resolve(saveNative()).then(success ->
-		{
-			log("saved " + success);
-			if (!success) throw new DocumentError("Can't save file " + getPath() + ".");
-			return true;
-		});
-		
-		for (openedFile in openedFiles)
-		{
-			if (openedFile != this && openedFile.relatedDocument == this)
-			{
-				if (openedFile.isModified)
-				{
-					promise = promise.then(_ ->
-					{
-						log("save " + openedFile.getPath());
-						return openedFile.save().then(success ->
-						{
-							if (success) return true;
-							throw new DocumentError("Can't save file " + openedFile.getPath() + ".");
-						});
-					});
-				}
-			}
-		}
-		
-		return promise.then(_ ->
-		{
+        if (!saveNative()) throw new DocumentError("Can't save file " + getPath() + ".");
+
+        try
+        {
 			log("prepare output directory");
 			final destDir = getPublishDirectory();
 			
@@ -522,22 +511,22 @@ class Document extends OpenedFile
 			view.alerter.info("Published successfully.");
 
             return Promise.resolve(true);
-		})
-		.catchError((e:Dynamic) ->
+        }
+		catch (e:Dynamic)
 		{
-			log("catchError = " + e);
+			log("catch error = " + e);
 			
 			if (Std.isOfType(e, DocumentError))
 			{
 				view.alerter.error((cast e:DocumentError).message);
-				return false;
+				return Promise.resolve(false);
 			}
 			else
 			{
 				ExceptionTools.rethrow(e);
-				return false;
+				return Promise.resolve(false);
 			}
-		});
+		}
 	}
 	
 	function getPublishDirectory()
@@ -663,6 +652,54 @@ class Document extends OpenedFile
 	public function canCut() return clipboard.canCut();
 	public function canCopy() return clipboard.canCopy();
 	public function canPaste() return clipboard.canPaste();
+
+	public function saveWithPrompt() : Promise<Bool>
+	{
+		if (isModified)
+		{
+			return new Promise<Bool>(function(resolve, reject)
+			{
+                popups.showConfirm("Confirmation", "Document was changed!", "Save", "Cancel", "Don't save").then(r ->
+                {
+                    switch (r.response)
+                    {
+                        case 0: save().then(r -> resolve(r));
+                        case 1: // do nothing
+                        case 2: resolve(true);
+                        case _: reject(new js.lib.Error());
+                    }
+                });
+			});
+		}
+		else
+		{
+			return Promise.resolve(true);
+		}
+	}
+	
+ 	public function close(?force:Bool) : Promise<{}>
+ 	{
+		if (force)
+		{
+			dispose();
+			openedFiles.close(this);
+			return Promise.resolve(null);
+		}
+		else
+		{
+			return saveWithPrompt().then(function(success:Bool)
+			{
+				dispose();
+				openedFiles.close(this);
+				return null;
+			});
+		}
+ 	}	
+	
+	public function undoStatusChanged() : Void
+	{
+		openedFiles.titleChanged(this);
+	}    
 	
 	static function detectImporter(preferences:Preferences, path:String) : Importer
 	{

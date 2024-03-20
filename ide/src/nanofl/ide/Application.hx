@@ -51,7 +51,7 @@ class Application extends js.injecting.InjectContainer
     }
 	
 	public var document(get, never) : Document;
-	function get_document() return openedFiles != null && openedFiles.active != null ? openedFiles.active.relatedDocument : null;
+	function get_document() return openedFiles?.active;
 	
 	public var pid : String;
 	
@@ -68,6 +68,7 @@ class Application extends js.injecting.InjectContainer
 		injector.addSingleton(NewObjectParams);
 		injector.addSingleton(Clipboard);
 		injector.addSingleton(Recents);
+		injector.addSingleton(OpenedFiles);
         injector.addSingleton(DocumentTools);
         injector.addSingleton(ExternalChangesDetector);
 		
