@@ -151,7 +151,7 @@ class Application extends js.injecting.InjectContainer
 			recents.add(path, view);
             return documentTools.load(path).then(document ->
             {
-                if (document != null) document.activate();
+                if (document != null) document.activate(true);
                 return document;
             });
 		}
