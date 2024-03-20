@@ -333,7 +333,7 @@ class Document extends InjectContainer
 			if (exporter != null)
 			{
 				if (!saveNative()) return Promise.resolve(false);
-                return DocumentExporterHelper.run(this, destPath, exporter);
+                return exporter.run(this, destPath, popups);
 			}
 			else
 			if (Path.extension(destPath) == "nfl")

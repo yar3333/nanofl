@@ -126,29 +126,33 @@ var Mp4VideoExporterPlugin = function() {
 Mp4VideoExporterPlugin.__name__ = true;
 Mp4VideoExporterPlugin.prototype = {
 	exportDocument: function(api,args) {
-		return VideoExporter.run(api.fileSystem,api.processManager,api.folders,args.destFilePath,args.documentProperties,args.library,["-crf","10"]);
+		return VideoExporter.run(api,args,["-crf","10"]);
 	}
 };
 var VideoExporter = function() { };
 VideoExporter.__name__ = true;
-VideoExporter.run = function(fileSystem,processManager,folders,destFilePath,documentProperties,library,ffmpegQualityOptions) {
-	if(fileSystem.exists(destFilePath)) {
-		fileSystem.deleteFile(destFilePath);
+VideoExporter.run = function(api,args,ffmpegQualityOptions) {
+	if(api.fileSystem.exists(args.destFilePath)) {
+		api.fileSystem.deleteFile(args.destFilePath);
 	}
-	var videoArgs = ["-f","rawvideo","-pixel_format","rgb24","-video_size",documentProperties.width + "x" + documentProperties.height,"-framerate",documentProperties.framerate + "","-i","pipe:0"];
-	var audioTracks = AudioHelper.getSceneTracks(documentProperties.framerate,library);
+	var videoArgs = ["-f","rawvideo","-pixel_format","rgb24","-video_size",args.documentProperties.width + "x" + args.documentProperties.height,"-framerate",args.documentProperties.framerate + "","-i","pipe:0"];
+	var audioTracks = AudioHelper.getSceneTracks(args.documentProperties.framerate,args.library);
 	var audioArgs = AudioHelper.getFFmpegArgsForMixTracks(audioTracks,1);
-	var dataOut = new Uint8Array(documentProperties.width * documentProperties.height * 3);
-	var sceneFramesIterator = library.getSceneFramesIterator(documentProperties,true);
-	var args = videoArgs.concat(audioArgs).concat(["-map","0:v"]).concat(ffmpegQualityOptions).concat([destFilePath]);
-	$global.console.log("FFmpeg: ",args);
+	var dataOut = new Uint8Array(args.documentProperties.width * args.documentProperties.height * 3);
+	var totalFrames = args.library.getSceneItem().getTotalFrames();
+	var sceneFramesIterator = args.library.getSceneFramesIterator(args.documentProperties,true);
+	var ffmpegArgs = videoArgs.concat(audioArgs).concat(["-map","0:v"]).concat(ffmpegQualityOptions).concat([args.destFilePath]);
+	$global.console.log("FFmpeg: ",ffmpegArgs);
+	var frameNum = 0;
 	try {
-		return processManager.runPipedStdIn(folders.get_tools() + "/ffmpeg.exe",args,null,null,function() {
+		return api.processManager.runPipedStdIn(api.folders.get_tools() + "/ffmpeg.exe",ffmpegArgs,null,null,function() {
 			if(!sceneFramesIterator.hasNext()) {
 				return Promise.resolve(null);
 			}
+			frameNum += 1;
+			args.setProgressPercent(Math.round(frameNum * 100 / totalFrames));
 			return sceneFramesIterator.next().then(function(ctx) {
-				VideoExporter.imageDataToRgbArray(ctx.getImageData(0,0,documentProperties.width,documentProperties.height),dataOut);
+				VideoExporter.imageDataToRgbArray(ctx.getImageData(0,0,args.documentProperties.width,args.documentProperties.height),dataOut);
 				return dataOut.buffer;
 			});
 		}).then(function(r) {
@@ -186,7 +190,7 @@ var WebmVideoExporterPlugin = function() {
 WebmVideoExporterPlugin.__name__ = true;
 WebmVideoExporterPlugin.prototype = {
 	exportDocument: function(api,args) {
-		return VideoExporter.run(api.fileSystem,api.processManager,api.folders,args.destFilePath,args.documentProperties,args.library,[]);
+		return VideoExporter.run(api,args,[]);
 	}
 };
 var haxe_Exception = function(message,previous,native) {

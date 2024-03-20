@@ -4,6 +4,11 @@ import js.lib.Promise;
 import nanofl.engine.CustomPropertiesTools;
 import nanofl.ide.library.IdeLibrary;
 import nanofl.ide.plugins.ExporterPlugins;
+import nanofl.engine.geom.Edges;
+import nanofl.engine.geom.Polygon;
+import nanofl.ide.Document;
+import nanofl.ide.ui.Popups;
+using stdlib.Lambda;
 
 class Exporter
 {
@@ -15,27 +20,46 @@ class Exporter
 		this.pluginName = pluginName;
 		this.params = params;
 	}
-	
-	public function run(srcFilePath:String, destFilePath:String, documentProperties:DocumentProperties, library:IdeLibrary, originalFilePath:String) : Promise<Bool>
+
+    public function run(document:Document, path:String, popups:Popups) : Promise<Bool>
 	{
-		var plugin = ExporterPlugins.plugins.get(pluginName);
-		if (plugin != null)
-		{
-            var pluginApi = new PluginApi();
-			return plugin.exportDocument(pluginApi,
-            {
-                params: CustomPropertiesTools.fix(params, plugin.properties),
-                srcFilePath: srcFilePath,
-                destFilePath: destFilePath,
-                documentProperties: documentProperties,
-                library: library,
-                originalFilePath: originalFilePath,
-            });
-		}
-		else
-		{
-			trace("ERROR: Save document '" + destFilePath + "' fail - plugin '" + pluginName + "' not found.");
-			return Promise.resolve(false);
-		}
+        final plugin = ExporterPlugins.plugins.get(pluginName);
+        if (plugin == null)
+        {
+            trace("ERROR: Save document '" + path + "' fail - plugin '" + pluginName + "' not found.");
+            return Promise.resolve(false);
+        }
+
+        Edges.showSelection = false;
+        Polygon.showSelection = false;
+
+        popups.exportProgress.show(path);
+
+        final pluginApi = new PluginApi();
+
+        return plugin.exportDocument(pluginApi,
+        {
+            params: CustomPropertiesTools.fix(params, plugin.properties),
+            srcFilePath: document.path,
+            destFilePath: path,
+            documentProperties: document.properties,
+            library: document.library.getRawLibrary(),
+            originalFilePath: document.originalPath,
+            setProgressPercent: percent -> popups.exportProgress.setPercent(percent),
+            setProgressInfo: text -> popups.exportProgress.setInfo(text),
+        })
+        .finally(() ->
+        {
+            popups.exportProgress.close();
+
+            Edges.showSelection = true;
+            Polygon.showSelection = true;
+
+        })
+        .catchError(e ->
+        {
+            trace(e);
+            return false;
+        });
 	}
 }

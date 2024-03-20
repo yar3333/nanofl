@@ -1,7 +1,5 @@
 package components.nanofl.others.allpopups;
 
-import nanofl.ide.ui.Popups;
-
 class Code extends wquery.Component
 {
 	static var imports =
@@ -20,6 +18,7 @@ class Code extends wquery.Component
 		"preferences-popup": components.nanofl.popups.preferencespopup.Code,
 		"hotkeys-help-popup": components.nanofl.popups.hotkeyshelppopup.Code,
 		"publish-settings-popup": components.nanofl.popups.publishsettingspopup.Code,
+		"export-progress-popup": components.nanofl.popups.exportprogresspopup.Code,
 	};
 	
 	public function getPopups() return template();

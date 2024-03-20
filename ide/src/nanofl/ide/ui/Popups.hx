@@ -18,6 +18,7 @@ private typedef ContainerInner =
 	var preferences(get, never): components.nanofl.popups.preferencespopup.Code;
 	var hotkeysHelp(get, never): components.nanofl.popups.hotkeyshelppopup.Code;
 	var publishSettings(get, never): components.nanofl.popups.publishsettingspopup.Code;
+	var exportProgress(get, never): components.nanofl.popups.exportprogresspopup.Code;
 }
 
 private typedef Container =
@@ -79,6 +80,9 @@ class Popups extends InjectContainer
 	
 	public var publishSettings(get, never) : components.nanofl.popups.publishsettingspopup.Code;
 	function get_publishSettings() return container.getTemplate().popupsContainer.getPopups().publishSettings;
+	
+	public var exportProgress(get, never) : components.nanofl.popups.exportprogresspopup.Code;
+	function get_exportProgress() return container.getTemplate().popupsContainer.getPopups().exportProgress;
 	
 	public function showConfirm(title:String, text:String, but0:String, but1:String, but2:String) : Promise<{ response:Float, checkboxChecked:Bool }>
 	{

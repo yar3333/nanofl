@@ -30,6 +30,8 @@ extern class Popups extends nanofl.ide.InjectContainer {
 	private function get_hotkeysHelp():components.nanofl.popups.hotkeyshelppopup.Code;
 	var publishSettings(get, never) : components.nanofl.popups.publishsettingspopup.Code;
 	private function get_publishSettings():components.nanofl.popups.publishsettingspopup.Code;
+	var exportProgress(get, never) : components.nanofl.popups.exportprogresspopup.Code;
+	private function get_exportProgress():components.nanofl.popups.exportprogresspopup.Code;
 	function showConfirm(title:String, text:String, but0:String, but1:String, but2:String):js.lib.Promise<{ public var response(default, default) : Float; public var checkboxChecked(default, default) : Bool; }>;
 	function showOpenFile(title:String, filters:Array<{ public var name(default, default) : String; public var extensions(default, default) : Array<String>; }>):js.lib.Promise<String>;
 	function showOpenFiles(title:String, filters:Array<{ public var name(default, default) : String; public var extensions(default, default) : Array<String>; }>):js.lib.Promise<Array<String>>;

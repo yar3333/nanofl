@@ -120,15 +120,9 @@ class MenuTools
         final document = app.document;
         final library = document?.library;
 
-        enableItemLazy(container, "openedFile.save",		    () -> document != null && document.canBeSaved());
-		enableItemLazy(container, "openedFile.toggleSelection", () -> document != null);
-		enableItemLazy(container, "openedFile.deselectAll",     () -> document != null);
-		enableItemLazy(container, "openedFile.undo",		    () -> document != null && document.canUndo());
-		enableItemLazy(container, "openedFile.redo",		    () -> document != null && document.canRedo());
-		
-        enableItemLazy(container, "openedFile.cut",			    () -> document != null && clipboard.canCut());
-		enableItemLazy(container, "openedFile.copy",		    () -> document != null && clipboard.canCopy());
-		enableItemLazy(container, "openedFile.paste",		    () -> document != null && clipboard.canPaste());
+        enableItemLazy(container, "clipboard.cut",			    () -> document != null && clipboard.canCut());
+		enableItemLazy(container, "clipboard.copy",		        () -> document != null && clipboard.canCopy());
+		enableItemLazy(container, "clipboard.paste",		    () -> document != null && clipboard.canPaste());
 		
 		enableItemLazy(container, "document.save",			    () -> document != null && document.canBeSaved());
 		enableItemLazy(container, "document.test",			    () -> document != null);

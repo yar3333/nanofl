@@ -3,7 +3,6 @@ package components.nanofl.popups.basepopup;
 import nanofl.ide.Globals;
 import nanofl.ide.keyboard.Keyboard;
 import nanofl.ide.keyboard.Keys;
-import nanofl.ide.keyboard.Shortcut;
 using js.bootstrap.Modal;
 using nanofl.ide.keyboard.ShortcutTools;
 

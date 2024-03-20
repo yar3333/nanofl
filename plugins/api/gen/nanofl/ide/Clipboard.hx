@@ -2,7 +2,6 @@ package nanofl.ide;
 
 extern class Clipboard extends nanofl.ide.InjectContainer {
 	function new():Void;
-	function setView(view:nanofl.ide.ui.View):Void;
 	function canCut():Bool;
 	function canCopy():Bool;
 	function canPaste():Bool;

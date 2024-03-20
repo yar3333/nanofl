@@ -1,12 +1,9 @@
+import nanofl.ide.plugins.ExporterArgs;
+import nanofl.ide.plugins.PluginApi;
 import js.html.ImageData;
 import js.Browser;
 import js.lib.Uint8Array;
 import js.lib.Promise;
-import nanofl.ide.sys.FileSystem;
-import nanofl.ide.sys.Folders;
-import nanofl.ide.sys.ProcessManager;
-import nanofl.ide.library.IdeLibrary;
-import nanofl.ide.DocumentProperties;
 using StringTools;
 
 // http://underpop.online.fr/f/ffmpeg/ffmpeg-all.html.gz
@@ -15,43 +12,50 @@ using StringTools;
 
 class VideoExporter
 {
-	public static function run(fileSystem:FileSystem, processManager:ProcessManager, folders:Folders, destFilePath:String, documentProperties:DocumentProperties, library:IdeLibrary, ffmpegQualityOptions:Array<String>) : Promise<Bool>
+	public static function run(api:PluginApi, args:ExporterArgs, ffmpegQualityOptions:Array<String>) : Promise<Bool>
 	{
-        if (fileSystem.exists(destFilePath)) fileSystem.deleteFile(destFilePath);
+        if (api.fileSystem.exists(args.destFilePath)) api.fileSystem.deleteFile(args.destFilePath);
 
         final videoArgs =
         [
             "-f", "rawvideo",
             "-pixel_format", "rgb24",
-            "-video_size", documentProperties.width + "x" + documentProperties.height,
-            "-framerate", documentProperties.framerate + "",
+            "-video_size", args.documentProperties.width + "x" + args.documentProperties.height,
+            "-framerate", args.documentProperties.framerate + "",
             "-i", "pipe:0",
         ];
 
-        final audioTracks = AudioHelper.getSceneTracks(documentProperties.framerate, library);
+        final audioTracks = AudioHelper.getSceneTracks(args.documentProperties.framerate, args.library);
         final audioArgs = AudioHelper.getFFmpegArgsForMixTracks(audioTracks, 1);
             
-        final dataOut = new Uint8Array(documentProperties.width * documentProperties.height * 3); // RGB
+        final dataOut = new Uint8Array(args.documentProperties.width * args.documentProperties.height * 3); // RGB
 
-        var sceneFramesIterator = library.getSceneFramesIterator(documentProperties, true);
+        final totalFrames = args.library.getSceneItem().getTotalFrames();
 
-        final args = videoArgs
+        final sceneFramesIterator = args.library.getSceneFramesIterator(args.documentProperties, true);
+
+        final ffmpegArgs = videoArgs
                     .concat(audioArgs)
                     .concat([ "-map", "0:v" ])
                     .concat(ffmpegQualityOptions)
-                    .concat([ destFilePath ]);
+                    .concat([ args.destFilePath ]);
 
-        Browser.console.log("FFmpeg: ", args);
+        Browser.console.log("FFmpeg: ", ffmpegArgs);
+
+        var frameNum = 0;
 
         try
         {
-            return processManager.runPipedStdIn(folders.tools + "/ffmpeg.exe", args, null, null, () ->
+            return api.processManager.runPipedStdIn(api.folders.tools + "/ffmpeg.exe", ffmpegArgs, null, null, () ->
             {
                 if (!sceneFramesIterator.hasNext()) return Promise.resolve(null);
+
+                frameNum++;
+                args.setProgressPercent(Math.round(frameNum * 100 / totalFrames));
                 
                 return sceneFramesIterator.next().then(ctx ->
                 {
-                    imageDataToRgbArray(ctx.getImageData(0, 0, documentProperties.width, documentProperties.height), dataOut);
+                    imageDataToRgbArray(ctx.getImageData(0, 0, args.documentProperties.width, args.documentProperties.height), dataOut);
                     return dataOut.buffer;
                 });
             })

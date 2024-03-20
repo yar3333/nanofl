@@ -3672,8 +3672,8 @@ class nanofl_engine_Library {
 		this.ensureFolderOfItemExists(item.namePath);
 	}
 	getItem(namePath) {
-		stdlib_Debug.assert(namePath != null,null,{ fileName : "engine/nanofl/engine/Library.hx", lineNumber : 75, className : "nanofl.engine.Library", methodName : "getItem"});
-		stdlib_Debug.assert(namePath != "",null,{ fileName : "engine/nanofl/engine/Library.hx", lineNumber : 76, className : "nanofl.engine.Library", methodName : "getItem"});
+		stdlib_Debug.assert(namePath != null,null,{ fileName : "engine/nanofl/engine/Library.hx", lineNumber : 76, className : "nanofl.engine.Library", methodName : "getItem"});
+		stdlib_Debug.assert(namePath != "",null,{ fileName : "engine/nanofl/engine/Library.hx", lineNumber : 77, className : "nanofl.engine.Library", methodName : "getItem"});
 		let r = this.items.h[namePath];
 		if(r != null) {
 			return r;

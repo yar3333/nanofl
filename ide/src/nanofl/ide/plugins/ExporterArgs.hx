@@ -26,4 +26,14 @@ typedef ExporterArgs =
         If native `*.nfl` opened then `originalFilePath` is `null`.
     **/
     var originalFilePath(default, null) : String;
+
+    /**
+        Call this from exporter plugin to show current percent on progress popup.
+    **/
+    function setProgressPercent(percent:Int) : Void;
+    
+    /**
+        Call this from exporter plugin to show current stage on progress popup.
+    **/
+    function setProgressInfo(text:String) : Void;
 }

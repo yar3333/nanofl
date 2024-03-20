@@ -23,15 +23,7 @@ class Mp4VideoExporterPlugin implements IExporterPlugin
 	
 	public function exportDocument(api:PluginApi, args:ExporterArgs) : Promise<Bool>
 	{
-		return VideoExporter.run
-        (
-            api.fileSystem,
-            api.processManager,
-            api.folders,
-            args.destFilePath,
-            args.documentProperties,
-            args.library, 
-            [ "-crf", "10" ] // 0..51 (0 - lossless, 51 - worse quality)
-        );
+        // crf: 0..51 (0 - lossless, 51 - worse quality)
+		return VideoExporter.run(api, args, [ "-crf", "10" ]);
 	}
 }

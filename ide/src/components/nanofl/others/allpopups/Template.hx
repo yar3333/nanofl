@@ -46,6 +46,9 @@ class Template
 	
 	public var publishSettings(get, never) : components.nanofl.popups.publishsettingspopup.Code;
 	inline function get_publishSettings() return cast component.children.publishSettings;
+    
+	public var exportProgress(get, never) : components.nanofl.popups.exportprogresspopup.Code;
+	inline function get_exportProgress() return cast component.children.exportProgress;
 
 	public function new(component:wquery.Component) this.component = component;
 }

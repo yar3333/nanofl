@@ -24,6 +24,18 @@ typedef ExporterArgs = {
 	var params(default, null) : Dynamic;
 	/**
 		
+		        Call this from exporter plugin to show current stage on progress popup.
+		    
+	**/
+	function setProgressInfo(text:String):Void;
+	/**
+		
+		        Call this from exporter plugin to show current percent on progress popup.
+		    
+	**/
+	function setProgressPercent(percent:Int):Void;
+	/**
+		
 		        Path to `*.nfl` file.
 		    
 	**/

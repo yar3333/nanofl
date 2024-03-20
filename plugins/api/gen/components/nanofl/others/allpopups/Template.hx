@@ -16,4 +16,5 @@ package components.nanofl.others.allpopups;
 	var preferences(get, never) : components.nanofl.popups.preferencespopup.Code;
 	var hotkeysHelp(get, never) : components.nanofl.popups.hotkeyshelppopup.Code;
 	var publishSettings(get, never) : components.nanofl.popups.publishsettingspopup.Code;
+	var exportProgress(get, never) : components.nanofl.popups.exportprogresspopup.Code;
 }

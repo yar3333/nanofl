@@ -2,7 +2,6 @@ package components.nanofl.page;
 
 import js.Browser;
 import js.JQuery;
-import nanofl.ide.OpenedFiles;
 import nanofl.ide.ILayout;
 import nanofl.ide.draganddrop.DragAndDrop;
 import nanofl.ide.preferences.Preferences;
@@ -42,8 +41,6 @@ class Code extends wquery.Component
 	var injector : js.injecting.Injector = null;
 	
 	var layoutInstance : LayoutInstance;
-	
-	var view : View;
 	
 	public function getTemplate() return template();
 	
@@ -118,7 +115,7 @@ class Code extends wquery.Component
 	public function showLibraryPanel()
 	{
 		switchPanel(template().libraryTab);
-		view.library.updateLayout();
+		library.updateLayout();
 	}
 	
 	public function showPropertiesPanel()
@@ -135,9 +132,9 @@ class Code extends wquery.Component
 	{
 		var elements : Array<{ tab:JQuery, pane:{ function show():Void; function hide():Void; } }> =
 		[
-			{ tab:template().libraryTab,	pane:view.library },
-			{ tab:template().propertiesTab,	pane:view.properties },
-			{ tab:template().outputTab,		pane:view.output }
+			{ tab:template().libraryTab,	pane:library },
+			{ tab:template().propertiesTab,	pane:properties },
+			{ tab:template().outputTab,		pane:output }
 		];
 		
 		var n = elements.findIndex(x -> x.tab.attr("id") == tab.attr("id"));
