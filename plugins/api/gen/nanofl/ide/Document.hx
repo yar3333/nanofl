@@ -2,7 +2,6 @@ package nanofl.ide;
 
 extern class Document extends nanofl.ide.OpenedFile {
 	function new(path:String, properties:nanofl.ide.DocumentProperties, library:nanofl.ide.library.IdeLibrary, ?lastModified:Date):Void;
-	var allowAutoReloading(default, null) : Bool;
 	/**
 		
 			 * Used when document was opened from none-NanoFL format. In other cases is null.
@@ -35,14 +34,14 @@ extern class Document extends nanofl.ide.OpenedFile {
 	override function save(?force:Bool):js.lib.Promise<Bool>;
 	function saveAs(?newPath:String, ?force:Bool):js.lib.Promise<Bool>;
 	function export(?destPath:String, ?plugin:nanofl.ide.plugins.IExporterPlugin):js.lib.Promise<Bool>;
-	function syncLibraryItems(newLibrary:nanofl.ide.library.IdeLibrary, newLastModified:Date, addUndoTransaction:Bool):js.lib.Promise<{ public var removed(default, default) : Array<nanofl.ide.libraryitems.IIdeLibraryItem>; public var added(default, default) : Array<nanofl.ide.libraryitems.IIdeLibraryItem>; }>;
+	function reload():js.lib.Promise<{ public var removed(default, default) : Array<nanofl.ide.libraryitems.IIdeLibraryItem>; public var added(default, default) : Array<nanofl.ide.libraryitems.IIdeLibraryItem>; }>;
+	function reloadWoTransactionForced():js.lib.Promise<{ public var removed(default, default) : Array<nanofl.ide.libraryitems.IIdeLibraryItem>; public var added(default, default) : Array<nanofl.ide.libraryitems.IIdeLibraryItem>; }>;
 	function test():js.lib.Promise<Bool>;
 	function publish():js.lib.Promise<Bool>;
 	function resize(width:Int, height:Int):Void;
 	override function canBeSaved():Bool;
 	override function dispose():Void;
 	function saveNative(?force:Bool):Bool;
-	function runPreventingAutoReload<T>(f:() -> js.lib.Promise<T>):js.lib.Promise<T>;
 	override function getShortTitle():String;
 	override function getPath():String;
 	override function getLongTitle():String;

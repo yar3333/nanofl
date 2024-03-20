@@ -4,6 +4,8 @@ extern class Code extends wquery.Component implements nanofl.ide.timeline.ITimel
 	function new(parent:wquery.Component, parentNode:haxe.extern.EitherType<String, haxe.extern.EitherType<js.html.Element, js.JQuery>>, ?params:Dynamic, ?attachMode:wquery.AttachMode):Void;
 	function bind(adapter:nanofl.ide.timeline.EditorTimeline):Void;
 	function init():Void;
+	function hasSelectedFramesWithTween():Bool;
+	function hasSelectedFramesWithoutTween():Bool;
 	function update():Void;
 	function insertFrame():Void;
 	function convertToKeyFrame():Void;

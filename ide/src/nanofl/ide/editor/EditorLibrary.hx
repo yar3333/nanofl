@@ -10,6 +10,7 @@ import htmlparser.HtmlNodeElement;
 import nanofl.engine.Log.console;
 import nanofl.engine.FontVariant;
 import nanofl.ide.MovieClipItemTools;
+import nanofl.ide.filesystem.ExternalChangesDetector;
 import nanofl.ide.plugins.LoaderPlugins;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.libraryitems.*;
@@ -38,7 +39,7 @@ class EditorLibrary extends InjectContainer
 	@inject var clipboard : Clipboard;
 	@inject var uploader : Uploader;
 	@inject var preferences : Preferences;
-	@inject var documentTools : DocumentTools;
+	@inject var externalChangesDetector : ExternalChangesDetector;
 	
 	var library : IdeLibrary;
 	var document : Document;
@@ -238,12 +239,12 @@ class EditorLibrary extends InjectContainer
 	
 	public function addUploadedFiles(files:Array<File>, folderPath="") : Promise<Array<IIdeLibraryItem>>
 	{
-        return document.runPreventingAutoReload(() ->
+        return externalChangesDetector.runPreventingAutoReloadAsync(() ->
         {
             document.saveNative();
 			
 			return uploader.saveUploadedFiles(files, Path.join([ library.libraryDir, folderPath ]))
-                .then(_ -> documentTools.reload(document))
+                .then(_ -> document.reload())
                 .then(e ->
                 {
                     if (folderPath != "")
@@ -299,7 +300,7 @@ class EditorLibrary extends InjectContainer
 	
 	public function drop(dropEffect:DropEffect, data:HtmlNodeElement, folder:String) : Promise<Array<IIdeLibraryItem>>
 	{
-		return LibraryItems.drop(dropEffect, data, document, folder, documentTools);
+		return LibraryItems.drop(dropEffect, data, document, folder);
 	}
 	
 	public function getWithExandedFolders(items:Array<IIdeLibraryItem>) : Array<IIdeLibraryItem>

@@ -180,7 +180,7 @@ class LibraryItems
 		return AllowedDropEffect.copyMove;
 	}
 	
-	public static function drop(dropEffect:DropEffect, data:HtmlNodeElement, document:Document, folder:String, documentTools:DocumentTools) : Promise<Array<IIdeLibraryItem>>
+	public static function drop(dropEffect:DropEffect, data:HtmlNodeElement, document:Document, folder:String) : Promise<Array<IIdeLibraryItem>>
 	{
 		Debug.assert(folder != null);
 		
@@ -236,7 +236,7 @@ class LibraryItems
 				document.library.copyFilesIntoLibrary(libraryDir, files);
                 log("\tfiles copied into library");
                 
-                return documentTools.reloadWoTransactionForced(document).then((e:{ added:Array<IIdeLibraryItem>, removed:Array<IIdeLibraryItem> }) ->
+                return document.reloadWoTransactionForced().then((e:{ added:Array<IIdeLibraryItem>, removed:Array<IIdeLibraryItem> }) ->
                 {
                     log("\tdocument reloaded\n\t" + e.added.map(x -> x.namePath).join("\n\t"));
                     document.undoQueue.commitTransaction();

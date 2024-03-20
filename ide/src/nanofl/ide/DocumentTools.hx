@@ -1,6 +1,5 @@
 package nanofl.ide;
 
-import nanofl.ide.libraryitems.IIdeLibraryItem;
 import js.lib.Promise;
 import haxe.io.Path;
 import stdlib.Uuid;
@@ -86,25 +85,6 @@ class DocumentTools extends InjectContainer
     {
         final document = createTemporary();
         return document.import_(path, importer).then(success -> success ? document : null);
-    }
-
-    public function reload(document:Document) : Promise<{ added:Array<IIdeLibraryItem>, removed:Array<IIdeLibraryItem> }>
-    {
-        return reloadInner(document, true, false);
-    }
-    
-    public function reloadWoTransactionForced(document:Document) : Promise<{ added:Array<IIdeLibraryItem>, removed:Array<IIdeLibraryItem> }>
-    {
-        return reloadInner(document, false, true);
-    }
-    
-    function reloadInner(document:Document, addUndoTransaction:Bool, force:Bool) : Promise<{ added:Array<IIdeLibraryItem>, removed:Array<IIdeLibraryItem> }>
-    {
-        return loadLibraryAndProperties(document.path, !force ? document.lastModified : null).then((e: { library:IdeLibrary, properties:DocumentProperties, lastModified:Date }) ->
-        {
-            if (e == null) return Promise.resolve({ added:[], removed:[] });
-            return document.syncLibraryItems(e.library, e.lastModified, addUndoTransaction);
-        });
     }
 
     function generateTempFilePath() : String

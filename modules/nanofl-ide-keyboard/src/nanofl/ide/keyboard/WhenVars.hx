@@ -2,5 +2,13 @@ package nanofl.ide.keyboard;
 
 typedef WhenVars =
 {
-    final editorHasSelected : Bool;
+    final editor :
+    {
+        final hasSelected : Bool;
+    };
+    
+    final library :
+    {
+        final selectedCount : Int;
+    };
 }

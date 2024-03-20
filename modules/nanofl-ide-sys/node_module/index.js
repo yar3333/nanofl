@@ -2931,7 +2931,9 @@ nanofl_ide_sys_tools_FileSystemTools.processFilePatternPair = function(fileSyste
 	stdlib_Debug.assert(newName != ".",null,{ fileName : "src/nanofl/ide/sys/tools/FileSystemTools.hx", lineNumber : 63, className : "nanofl.ide.sys.tools.FileSystemTools", methodName : "processFilePatternPair"});
 	stdlib_Debug.assert(!StringTools.endsWith(oldName,".*") && !StringTools.endsWith(newName,".*") || StringTools.endsWith(oldName,".*") && StringTools.endsWith(newName,".*"),null,{ fileName : "src/nanofl/ide/sys/tools/FileSystemTools.hx", lineNumber : 64, className : "nanofl.ide.sys.tools.FileSystemTools", methodName : "processFilePatternPair"});
 	if(StringTools.endsWith(oldName,".*")) {
-		callb(haxe_io_Path.withoutExtension(oldName),haxe_io_Path.withoutExtension(newName));
+		if(fileSystem.exists(haxe_io_Path.withoutExtension(oldName))) {
+			callb(haxe_io_Path.withoutExtension(oldName),haxe_io_Path.withoutExtension(newName));
+		}
 		var oldBase = haxe_io_Path.withoutDirectory(haxe_io_Path.withoutExtension(oldName));
 		var newBase = haxe_io_Path.withoutDirectory(haxe_io_Path.withoutExtension(newName));
 		var oldDir = haxe_io_Path.directory(oldName);
@@ -2952,9 +2954,9 @@ nanofl_ide_sys_tools_FileSystemTools.processFilePatternPair = function(fileSyste
 	}
 };
 nanofl_ide_sys_tools_FileSystemTools.processFilePattern = function(fileSystem,path,callb) {
-	stdlib_Debug.assert(path != null,null,{ fileName : "src/nanofl/ide/sys/tools/FileSystemTools.hx", lineNumber : 96, className : "nanofl.ide.sys.tools.FileSystemTools", methodName : "processFilePattern"});
-	stdlib_Debug.assert(path != "",null,{ fileName : "src/nanofl/ide/sys/tools/FileSystemTools.hx", lineNumber : 97, className : "nanofl.ide.sys.tools.FileSystemTools", methodName : "processFilePattern"});
-	stdlib_Debug.assert(path != ".",null,{ fileName : "src/nanofl/ide/sys/tools/FileSystemTools.hx", lineNumber : 98, className : "nanofl.ide.sys.tools.FileSystemTools", methodName : "processFilePattern"});
+	stdlib_Debug.assert(path != null,null,{ fileName : "src/nanofl/ide/sys/tools/FileSystemTools.hx", lineNumber : 99, className : "nanofl.ide.sys.tools.FileSystemTools", methodName : "processFilePattern"});
+	stdlib_Debug.assert(path != "",null,{ fileName : "src/nanofl/ide/sys/tools/FileSystemTools.hx", lineNumber : 100, className : "nanofl.ide.sys.tools.FileSystemTools", methodName : "processFilePattern"});
+	stdlib_Debug.assert(path != ".",null,{ fileName : "src/nanofl/ide/sys/tools/FileSystemTools.hx", lineNumber : 101, className : "nanofl.ide.sys.tools.FileSystemTools", methodName : "processFilePattern"});
 	if(StringTools.endsWith(path,".*")) {
 		callb(haxe_io_Path.withoutExtension(path));
 		var base = haxe_io_Path.withoutDirectory(haxe_io_Path.withoutExtension(path));
@@ -3019,13 +3021,13 @@ nanofl_ide_sys_tools_FileSystemTools.deleteAnyByPattern = function(fileSystem,pa
 nanofl_ide_sys_tools_FileSystemTools.renameByPattern = function(fileSystem,srcPath,destPath) {
 	nanofl_ide_sys_tools_FileSystemTools.processFilePatternPair(fileSystem,srcPath,destPath,function(srcPath,destPath) {
 		if(fileSystem.exists(srcPath)) {
-			nanofl_ide_sys_tools_FileSystemTools.log("rename " + srcPath + " => " + destPath,{ fileName : "src/nanofl/ide/sys/tools/FileSystemTools.hx", lineNumber : 181, className : "nanofl.ide.sys.tools.FileSystemTools", methodName : "renameByPattern"});
+			nanofl_ide_sys_tools_FileSystemTools.log("rename " + srcPath + " => " + destPath,{ fileName : "src/nanofl/ide/sys/tools/FileSystemTools.hx", lineNumber : 184, className : "nanofl.ide.sys.tools.FileSystemTools", methodName : "renameByPattern"});
 			fileSystem.rename(srcPath,destPath);
 		}
 	});
 };
 nanofl_ide_sys_tools_FileSystemTools.copyAny = function(fileSystem,srcPath,destPath) {
-	nanofl_ide_sys_tools_FileSystemTools.log("copyAny " + srcPath + " => " + destPath,{ fileName : "src/nanofl/ide/sys/tools/FileSystemTools.hx", lineNumber : 189, className : "nanofl.ide.sys.tools.FileSystemTools", methodName : "copyAny"});
+	nanofl_ide_sys_tools_FileSystemTools.log("copyAny " + srcPath + " => " + destPath,{ fileName : "src/nanofl/ide/sys/tools/FileSystemTools.hx", lineNumber : 192, className : "nanofl.ide.sys.tools.FileSystemTools", methodName : "copyAny"});
 	if(fileSystem.isDirectory(srcPath)) {
 		var files = fileSystem.readDirectory(srcPath);
 		var _g = 0;
@@ -3044,7 +3046,7 @@ nanofl_ide_sys_tools_FileSystemTools.copyByPattern = function(fileSystem,srcPath
 	});
 };
 nanofl_ide_sys_tools_FileSystemTools.syncDirectory = function(fileSystem,src,dest) {
-	nanofl_ide_sys_tools_FileSystemTools.log("syncDirectory " + src + " => " + dest,{ fileName : "src/nanofl/ide/sys/tools/FileSystemTools.hx", lineNumber : 215, className : "nanofl.ide.sys.tools.FileSystemTools", methodName : "syncDirectory"});
+	nanofl_ide_sys_tools_FileSystemTools.log("syncDirectory " + src + " => " + dest,{ fileName : "src/nanofl/ide/sys/tools/FileSystemTools.hx", lineNumber : 218, className : "nanofl.ide.sys.tools.FileSystemTools", methodName : "syncDirectory"});
 	nanofl_ide_sys_tools_FileSystemTools.deleteAny(fileSystem,dest);
 	nanofl_ide_sys_tools_FileSystemTools.copyAny(fileSystem,src,dest);
 };

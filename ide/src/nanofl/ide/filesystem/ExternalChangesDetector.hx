@@ -1,5 +1,6 @@
 package nanofl.ide.filesystem;
 
+import js.lib.Promise;
 import haxe.Timer;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.Application;
@@ -13,37 +14,74 @@ class ExternalChangesDetector extends InjectContainer
 	
 	@inject var app : Application;
 	@inject var view : View;
-	@inject var documentTools : DocumentTools;
 	
 	var timer : Timer;
 
+    var reloading : Promise<{}> = Promise.resolve(null);
+
     function new() super();
 
-    public static function start()
+    public function start()
     {
-        final detector = new ExternalChangesDetector();
-        detector.startInner();
-    }
-	
-	function startInner()
-	{
 		timer = new Timer(CHECKING_PERIOD);
 		timer.run = detectChanges;
+    }
+	
+	function stop() : Promise<{}>
+	{
+		timer.stop();
+        timer = null;
+        return reloading;
 	}
 	
 	function detectChanges()
 	{
-		if (app.document == null || !app.document.allowAutoReloading) return;
+		if (app.document == null) return;
 		
-		documentTools.reload(app.document).then((e:{ added:Array<IIdeLibraryItem>, removed:Array<IIdeLibraryItem> }) ->
+		reloading = app.document.reload().then((e:{ added:Array<IIdeLibraryItem>, removed:Array<IIdeLibraryItem> }) ->
 		{
-			if (e.added.length > 0 || e.removed.length > 0)
-			{
-				view.alerter.warning("Document was externally changed.");
-				if (e.added.length > 0) view.alerter.info("Added item" + (e.added.length > 1 ? "s" : "") + ": " + e.added.map(x -> x.namePath).join(", ") + ".");
-				if (e.removed.length > 0) view.alerter.info("Removed item" + (e.removed.length > 1 ? "s" : "") + ": " + e.removed.map(x -> x.namePath).join(", ") + ".");
-				view.alerter.info("Document was successfully reloaded.");
-			}
+			if (e.added.length == 0 && e.removed.length == 0) return null;
+			
+            view.alerter.warning("Document was externally changed.");
+            if (e.added.length > 0) view.alerter.info("Added item" + (e.added.length > 1 ? "s" : "") + ": " + e.added.map(x -> x.namePath).join(", ") + ".");
+            if (e.removed.length > 0) view.alerter.info("Removed item" + (e.removed.length > 1 ? "s" : "") + ": " + e.removed.map(x -> x.namePath).join(", ") + ".");
+            view.alerter.info("Document was successfully reloaded.");
+
+            return null;
 		});
 	}
+
+    public function runPreventingAutoReloadAsync<T>(f:Void->Promise<T>) : Promise<T>
+    {
+        return stop().then(_ ->
+        {
+            try
+            {
+                return f().finally(() -> start());
+            }
+            catch (e)
+            {
+                start();
+                throw e;
+            }
+        });
+    }
+
+    public function runPreventingAutoReloadSync(f:Void->Void) : Promise<{}>
+    {
+        return stop().then(_ ->
+        {
+            try
+            {
+                f();
+                start();
+                return null;
+            }
+            catch (e)
+            {
+                start();
+                throw e;
+            }
+        });
+    }    
 }

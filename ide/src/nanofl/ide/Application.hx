@@ -69,6 +69,7 @@ class Application extends js.injecting.InjectContainer
 		injector.addSingleton(Clipboard);
 		injector.addSingleton(Recents);
         injector.addSingleton(DocumentTools);
+        injector.addSingleton(ExternalChangesDetector);
 		
 		wquery.Template.baseURL = "../../";
 		wquery.Application.run("page", components.nanofl.page.Code, { injector:injector });
@@ -112,7 +113,7 @@ class Application extends js.injecting.InjectContainer
         injector.getService(Plugins).reload(false)
             .then(_ -> CommandLine.process())
             //.then(_ -> checkForUpdates())
-            .then(_ -> ExternalChangesDetector.start());
+            .then(_ -> injector.getService(ExternalChangesDetector).start());
 	}
 	
 	public function createNewEmptyDocument(?width:Int, ?height:Int, ?framerate:Float) : Document

@@ -171,7 +171,8 @@ class Keyboard
     {
         if (when == null || when.trim() == "") return true;
         
-        var editorHasSelected = vars.editorHasSelected;
+        var editor = vars.editor;
+        var library = vars.library;
         return js.Lib.eval(when);
     }
 	

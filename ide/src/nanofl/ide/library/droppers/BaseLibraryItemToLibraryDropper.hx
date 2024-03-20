@@ -14,7 +14,6 @@ using stdlib.Lambda;
 class BaseLibraryItemToLibraryDropper extends InjectContainer
 {
 	@inject var app : Application;
-	@inject var documentTools : DocumentTools;
 	@inject var view : View;
 	
 	public function getDragImageType(data:HtmlNodeElement) : DragImageType
@@ -29,7 +28,7 @@ class BaseLibraryItemToLibraryDropper extends InjectContainer
 		
 		var saveActiveItem = view.library.activeItem;
 		view.library.activeItem = null;
-		LibraryItems.drop(dropEffect, data, app.document, folder, documentTools).then((droppedItems:Array<IIdeLibraryItem>) ->
+		LibraryItems.drop(dropEffect, data, app.document, folder).then((droppedItems:Array<IIdeLibraryItem>) ->
 		{
 			if (droppedItems.length > 0)
 			{

@@ -46,12 +46,11 @@ class Document extends OpenedFile
 	@inject var shell : Shell;
 	@inject var webServerUtils : WebServerUtils;
 	@inject var recents : Recents;
+	@inject var documentTools : DocumentTools;
 	
 	function get_type() return OpenedFileType.DOCUMENT;
 
     function isTemporary() return path.startsWith(folders.unsavedDocuments + "/");
-
-    public var allowAutoReloading(default, null) = true;
 	
 	/**
 	 * Used when document was opened from none-NanoFL format. In other cases is null.
@@ -335,7 +334,26 @@ class Document extends OpenedFile
 		}
 	}
 
-	public function syncLibraryItems(newLibrary:IdeLibrary, newLastModified:Date, addUndoTransaction:Bool) : Promise<{ added:Array<IIdeLibraryItem>, removed:Array<IIdeLibraryItem> }>
+    public function reload() : Promise<{ added:Array<IIdeLibraryItem>, removed:Array<IIdeLibraryItem> }>
+    {
+        return reloadInner(true, false);
+    }
+    
+    public function reloadWoTransactionForced() : Promise<{ added:Array<IIdeLibraryItem>, removed:Array<IIdeLibraryItem> }>
+    {
+        return reloadInner(false, true);
+    }
+    
+    function reloadInner(addUndoTransaction:Bool, force:Bool) : Promise<{ added:Array<IIdeLibraryItem>, removed:Array<IIdeLibraryItem> }>
+    {
+        return documentTools.loadLibraryAndProperties(path, !force ? lastModified : null).then((e: { library:IdeLibrary, properties:DocumentProperties, lastModified:Date }) ->
+        {
+            if (e == null) return Promise.resolve({ added:[], removed:[] });
+            return syncLibraryItems(e.library, e.lastModified, addUndoTransaction);
+        });
+    }    
+
+	function syncLibraryItems(newLibrary:IdeLibrary, newLastModified:Date, addUndoTransaction:Bool) : Promise<{ added:Array<IIdeLibraryItem>, removed:Array<IIdeLibraryItem> }>
 	{
         final itemsToRemove = library.getItems().filter(x -> !newLibrary.hasItem(x.namePath));
         final itemsToAdd = newLibrary.getItemsAsIde().filter(x -> !library.hasItem(x.namePath));
@@ -605,30 +623,7 @@ class Document extends OpenedFile
 		
 		return { lastModified:Date.fromTime(Date.now().getTime() + 1), errorMessage:null };
 	}
-
-    public function runPreventingAutoReload<T>(f:Void->Promise<T>) : Promise<T>
-    {
-        allowAutoReloading = false;
-        
-        try
-        {
-            return f()  .catchError(e ->
-                        {
-                            allowAutoReloading = true;
-                            throw e;
-                        })
-                        .then(r -> {
-                            allowAutoReloading = true;
-                            return r;
-                        });
-        }
-        catch (e)
-        {
-            allowAutoReloading = true;
-            throw e;
-        }
-    }
-	
+    
 	public function getShortTitle() : String
 	{
 		return (isTemporary() && originalPath == null ? "Untitled" : Path.withoutDirectory(originalPath != null ? originalPath : Path.withoutExtension(path)))

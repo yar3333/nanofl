@@ -65,7 +65,10 @@ class FileSystemTools
 		
 		if (oldName.endsWith(".*"))
 		{
-			callb(Path.withoutExtension(oldName), Path.withoutExtension(newName));
+			if (fileSystem.exists(Path.withoutExtension(oldName)))
+            {
+                callb(Path.withoutExtension(oldName), Path.withoutExtension(newName));
+            }
 			
 			var oldBase = Path.withoutDirectory(Path.withoutExtension(oldName));
 			var newBase = Path.withoutDirectory(Path.withoutExtension(newName));
@@ -204,7 +207,7 @@ class FileSystemTools
 	
 	public static function copyByPattern(fileSystem:FileSystem, srcPath:String, destPath:String) : Void
 	{
-		processFilePatternPair(fileSystem, srcPath, destPath, function(srcPath, destPath)
+		processFilePatternPair(fileSystem, srcPath, destPath, (srcPath, destPath) ->
 		{
 			copyAny(fileSystem, srcPath, destPath);
 		});
