@@ -4,7 +4,7 @@ build: node_modules \
        bin/plugins \
        bin/resources/app/static
 	
-	make -C ../modules
+	make -s -C ../modules
 
 	haxe build.hxml --main Main -D long-asserts
 	

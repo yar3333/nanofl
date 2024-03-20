@@ -7,7 +7,7 @@ MODULES = \
 build: 
 	@for MODULE in $(MODULES) ;\
 	do \
-		make -C $$MODULE build ;\
+		make -s -C $$MODULE build ;\
 	done
 
 clean: 
