@@ -75,8 +75,5 @@
 	{ "shortcut":"Ctrl+."				, "command":"timeline.gotoNextFrame" },
 	{ "shortcut":"Left"					, "command":"timeline.gotoPrevFrame", "when":"!editor.hasSelected" },
 	{ "shortcut":"Right"				, "command":"timeline.gotoNextFrame", "when":"!editor.hasSelected" },
-	{ "shortcut":"Enter"				, "command":"timeline.play" },
-	
-	{ "shortcut":"F8"					, "command":"code.compile" },
-	{ "shortcut":"F5"					, "command":"code.run" }
+	{ "shortcut":"Enter"				, "command":"timeline.play" }
 ]

@@ -1,11 +1,10 @@
 package nanofl.ide;
 
-import nanofl.ide.keyboard.WhenVars;
-import js.lib.Promise;
-import js.injecting.Injector;
 import haxe.io.Path;
+import js.lib.Promise;
 import js.Browser;
 import js.JQuery;
+import js.injecting.Injector;
 import stdlib.Uuid;
 import nanofl.ide.sys.FileSystem;
 import nanofl.engine.Version;
@@ -15,6 +14,7 @@ import nanofl.ide.commands.Commands;
 import nanofl.ide.editor.NewObjectParams;
 import nanofl.ide.filesystem.ExternalChangesDetector;
 import nanofl.ide.keyboard.Keyboard;
+import nanofl.ide.keyboard.WhenVars;
 import nanofl.ide.plugins.IImporterPlugin;
 import nanofl.ide.plugins.Importer;
 import nanofl.ide.plugins.ImporterPlugins;
@@ -71,6 +71,7 @@ class Application extends js.injecting.InjectContainer
 		injector.addSingleton(OpenedFiles);
         injector.addSingleton(DocumentTools);
         injector.addSingleton(ExternalChangesDetector);
+		injector.addSingleton(Plugins);
 		
 		wquery.Template.baseURL = "../../";
 		wquery.Application.run("page", components.nanofl.page.Code, { injector:injector });
@@ -78,19 +79,15 @@ class Application extends js.injecting.InjectContainer
         this.view = injector.getService(View);
 		this.popups = injector.getService(Popups);
 		this.openedFiles = injector.getService(OpenedFiles);
-        
-		injector.addSingleton(Plugins);
 	
 		Log.init(fileSystem, view.alerter);
-
-        final clipboard = injector.getService(Clipboard);
-        clipboard.setView(view);
 		
 		new JQuery(Browser.window).resize();
 		new JQuery(Browser.document.body).focus();
 		
 		new JQuery(Browser.window).on("close", e -> { e.preventDefault(); quit(); });
 		
+        final clipboard = injector.getService(Clipboard);
 		view.movie.editor  .on("mousedown", e -> { activeView = ActiveView.EDITOR;   clipboard.restoreFocus(e.originalEvent); });
 		view.movie.timeline.on("mousedown", e -> { activeView = ActiveView.TIMELINE; clipboard.restoreFocus(e.originalEvent); });
 		view.movie.timeline.on("mousedown", e -> { activeView = ActiveView.TIMELINE; clipboard.restoreFocus(e.originalEvent); });

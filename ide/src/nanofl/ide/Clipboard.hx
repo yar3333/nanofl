@@ -28,14 +28,8 @@ class Clipboard extends InjectContainer
 	@inject var keyboard : Keyboard;
 	@inject var app : Application;
 	@inject var clipboard : nanofl.ide.sys.Clipboard;
+	@inject var view : View;
 	
-	var view : View;
-	
-	public function setView(view:View) : Void
-	{
-		this.view = view;
-	}
-
 	public function new()
 	{
 		super();
