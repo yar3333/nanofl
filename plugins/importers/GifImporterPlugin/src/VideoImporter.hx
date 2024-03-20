@@ -45,8 +45,7 @@ class VideoImporter
         canvas.width = width;
         canvas.height = height;
 
-        //final imageData = new ImageData(width, height);
-        final imageData = canvas.getContext2d().getImageData(0,0,width, height);
+        final imageData = new ImageData(width, height);
         final data = imageData.data;
 
         final ctx = canvas.getContext2d();

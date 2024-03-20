@@ -104,7 +104,7 @@ VideoImporter.run = function(mediaUtils,processManager,folders,srcFilePath,proce
 	var canvas = window.document.createElement("canvas");
 	canvas.width = width;
 	canvas.height = height;
-	var imageData = canvas.getContext("2d",null).getImageData(0,0,width,height);
+	var imageData = new ImageData(width,height);
 	var data = imageData.data;
 	var ctx = canvas.getContext("2d",null);
 	try {
