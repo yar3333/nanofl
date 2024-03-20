@@ -3,7 +3,7 @@ import js.html.CanvasElement;
 import js.html.ImageData;
 import js.lib.Uint8Array;
 import js.lib.Promise;
-import nanofl.ide.sys.VideoUtils;
+import nanofl.ide.sys.MediaUtils;
 import nanofl.ide.sys.Folders;
 import nanofl.ide.sys.ProcessManager;
 using StringTools;
@@ -15,9 +15,9 @@ using Lambda;
 
 class VideoImporter
 {
-	public static function run(videoUtils:VideoUtils, processManager:ProcessManager, folders:Folders, srcFilePath:String, processFrame:CanvasElement->Void) : Promise<Bool>
+	public static function run(mediaUtils:MediaUtils, processManager:ProcessManager, folders:Folders, srcFilePath:String, processFrame:CanvasElement->Void) : Promise<Bool>
 	{
-        final fileInfo = videoUtils.getFileInfo(srcFilePath);
+        final fileInfo = mediaUtils.getVideoFileInfo(srcFilePath);
         final videoInfo = fileInfo?.streams?.find(x -> x.type == "video");
 
         if (videoInfo == null)

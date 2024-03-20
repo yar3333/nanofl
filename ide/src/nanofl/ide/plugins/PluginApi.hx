@@ -9,7 +9,7 @@ class PluginApi extends InjectContainer
 	@inject public var zip : nanofl.ide.sys.Zip;
 	@inject public var fonts : nanofl.ide.sys.Fonts;
 	@inject public var httpUtils : nanofl.ide.sys.HttpUtils;
-	@inject public var videoUtils : nanofl.ide.sys.VideoUtils;
+	@inject public var mediaUtils : nanofl.ide.sys.MediaUtils;
 
     @:noapi public function new() super();
 }

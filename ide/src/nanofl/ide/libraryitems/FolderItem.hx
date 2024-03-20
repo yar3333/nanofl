@@ -1,7 +1,9 @@
 package nanofl.ide.libraryitems;
 
-import nanofl.ide.libraryitems.IIdeLibraryItem;
 import htmlparser.HtmlNodeElement;
+import nanofl.ide.libraryitems.IIdeLibraryItem;
+import nanofl.ide.sys.FileSystem;
+import nanofl.ide.sys.MediaUtils;
 
 class FolderItem extends nanofl.engine.libraryitems.FolderItem
 	implements IIdeLibraryItem
@@ -14,7 +16,7 @@ class FolderItem extends nanofl.engine.libraryitems.FolderItem
 		return obj;
 	}
 	
-	override public function save(fileSystem:nanofl.ide.sys.FileSystem) 
+	override public function save(fileSystem:FileSystem) 
 	{
 		fileSystem.createDirectory(library.libraryDir + "/" + namePath);
 	}
@@ -31,12 +33,12 @@ class FolderItem extends nanofl.engine.libraryitems.FolderItem
 		return [ namePath ];
 	}
 
-    public function getDataToSaveBeforeCleanDestDirectoryAndPublish(fileSystem:nanofl.ide.sys.FileSystem, destLibraryDir:String) : Dynamic
+    public function getDataToSaveBeforeCleanDestDirectoryAndPublish(fileSystem:FileSystem, destLibraryDir:String) : Dynamic
     {
         return null;
     }
         
-	public function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String, savedData:Dynamic) : IIdeLibraryItem
+	public function publish(fileSystem:FileSystem, mediaUtils:MediaUtils, settings:nanofl.ide.PublishSettings, destLibraryDir:String, savedData:Dynamic) : IIdeLibraryItem
 	{
 		return null;
 	}

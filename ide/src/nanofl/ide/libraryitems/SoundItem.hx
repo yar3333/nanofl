@@ -2,6 +2,8 @@ package nanofl.ide.libraryitems;
 
 import htmlparser.HtmlNodeElement;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
+import nanofl.ide.sys.FileSystem;
+import nanofl.ide.sys.MediaUtils;
 
 class SoundItem extends nanofl.engine.libraryitems.SoundItem
 	implements IIdeLibraryItem
@@ -26,18 +28,18 @@ class SoundItem extends nanofl.engine.libraryitems.SoundItem
         return r;
 	}
 	
-    public function getDataToSaveBeforeCleanDestDirectoryAndPublish(fileSystem:nanofl.ide.sys.FileSystem, destLibraryDir:String) : Dynamic
+    public function getDataToSaveBeforeCleanDestDirectoryAndPublish(fileSystem:FileSystem, destLibraryDir:String) : Dynamic
     {
         var destFile = destLibraryDir + "/" + namePath + ".ogg";
         if (!fileSystem.exists(destFile)) return null;
         return { size:fileSystem.getSize(destFile), mtime:fileSystem.getLastModified(destFile).getTime(), content:fileSystem.getBinary(destFile) };
     }
 
-	public function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String, savedData:Dynamic) : IIdeLibraryItem
+	public function publish(fileSystem:FileSystem, mediaUtils:MediaUtils, settings:nanofl.ide.PublishSettings, destLibraryDir:String, savedData:Dynamic) : IIdeLibraryItem
 	{
         var srcFile = library.libraryDir + "/" + namePath + "." + ext;
         var destFile = destLibraryDir + "/" + namePath + ".ogg";
-        new nanofl.ide.MediaConvertor().convertAudio(srcFile, destFile, settings.audioQuality);
+        mediaUtils.convertAudio(srcFile, destFile, settings.audioQuality);
 
         if (fileSystem.exists(destFile) && savedData != null)
         {

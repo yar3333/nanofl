@@ -2,7 +2,6 @@ package nanofl.ide;
 
 import nanofl.engine.fills.BitmapFill;
 import nanofl.engine.elements.Element;
-import nanofl.engine.elements.Elements;
 import nanofl.engine.elements.Instance;
 import nanofl.engine.elements.ShapeElement;
 import nanofl.ide.libraryitems.MovieClipItem;

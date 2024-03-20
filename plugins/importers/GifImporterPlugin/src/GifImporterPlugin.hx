@@ -31,7 +31,7 @@ class GifImporterPlugin implements IImporterPlugin
         layer.keyFrames.splice(0, layer.keyFrames.length);
 
         var n = 0;
-        return VideoImporter.run(api.videoUtils, api.processManager, api.folders, args.srcFilePath, canvas ->
+        return VideoImporter.run(api.mediaUtils, api.processManager, api.folders, args.srcFilePath, canvas ->
         {
 		    if (n == 0)
 		    {

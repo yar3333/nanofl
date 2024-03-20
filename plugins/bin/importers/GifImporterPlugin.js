@@ -25,7 +25,7 @@ GifImporterPlugin.prototype = {
 		var layer = scene.get_layers()[0];
 		layer.get_keyFrames().splice(0,layer.get_keyFrames().length);
 		var n = 0;
-		return VideoImporter.run(api.videoUtils,api.processManager,api.folders,args.srcFilePath,function(canvas) {
+		return VideoImporter.run(api.mediaUtils,api.processManager,api.folders,args.srcFilePath,function(canvas) {
 			if(n == 0) {
 				args.documentProperties.width = canvas.width;
 				args.documentProperties.height = canvas.height;
@@ -86,8 +86,8 @@ Lambda.find = function(it,f) {
 Math.__name__ = true;
 var VideoImporter = function() { };
 VideoImporter.__name__ = true;
-VideoImporter.run = function(videoUtils,processManager,folders,srcFilePath,processFrame) {
-	var fileInfo = videoUtils.getFileInfo(srcFilePath);
+VideoImporter.run = function(mediaUtils,processManager,folders,srcFilePath,processFrame) {
+	var fileInfo = mediaUtils.getVideoFileInfo(srcFilePath);
 	var tmp = fileInfo != null ? fileInfo.streams : null;
 	var videoInfo = tmp != null ? Lambda.find(tmp,function(x) {
 		return x.type == "video";

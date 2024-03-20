@@ -1,40 +1,4 @@
-package nanofl.ide.sys.node;
-
-import haxe.Json;
-import nanofl.ide.sys.VideoUtils;
-
-class NodeVideoUtils implements VideoUtils
-{
-    final processManager : ProcessManager;
-    final folders : Folders;
-
-    public function new(processManager:ProcessManager, folders:Folders)
-    {
-        this.processManager = processManager;
-        this.folders = folders;
-    }
-
-    public function getFileInfo(filePath:String) : VideoFileInfo
-    {
-        final r = processManager.runCaptured(folders.tools + "/ffprobe.exe", [ "-v", "quiet", "-print_format", "json", "-show_format", "-show_streams", filePath ]);
-        if (r.code != 0) return null;
-        
-        final info : FFprobeVideoFileInfo = Json.parse(r.out);
-        
-        return
-        {
-            durationMs: Std.parseFloat(info.format.duration) * 1000,
-            streams: info.streams.map(x ->
-            ({ 
-                index: x.index, 
-                type: x.codec_type, 
-                videoWidth: x.width, 
-                videoHeight: x.height, 
-                audioChannels: x.channels,
-            }))
-        };
-    }
-}
+package nanofl.ide.sys.node.core;
 
 typedef FFprobeVideoFileInfo =
 {

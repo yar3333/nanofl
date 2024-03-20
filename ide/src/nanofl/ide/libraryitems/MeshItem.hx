@@ -1,13 +1,14 @@
 package nanofl.ide.libraryitems;
 
-import js.lib.Set;
 import haxe.Json;
+import js.lib.Promise;
+import js.lib.Set;
+import stdlib.Debug;
+import htmlparser.HtmlNodeElement;
 import nanofl.engine.SerializationAsJsTools;
 import nanofl.ide.sys.FileSystem;
-import htmlparser.HtmlNodeElement;
-import js.lib.Promise;
+import nanofl.ide.sys.MediaUtils;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
-import stdlib.Debug;
 
 class MeshItem extends nanofl.engine.libraryitems.MeshItem
 	implements IIdeInstancableItem
@@ -55,12 +56,12 @@ class MeshItem extends nanofl.engine.libraryitems.MeshItem
         return [ namePath + ".*" ];
     }
         
-    public function getDataToSaveBeforeCleanDestDirectoryAndPublish(fileSystem:nanofl.ide.sys.FileSystem, destLibraryDir:String) : Dynamic
+    public function getDataToSaveBeforeCleanDestDirectoryAndPublish(fileSystem:FileSystem, destLibraryDir:String) : Dynamic
     {
         return null;
     }
     
-    public function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String, savedData:Dynamic) : IIdeLibraryItem
+    public function publish(fileSystem:FileSystem, mediaUtils:MediaUtils, settings:nanofl.ide.PublishSettings, destLibraryDir:String, savedData:Dynamic) : IIdeLibraryItem
     {
         log("MeshItem publish: " + namePath);
         

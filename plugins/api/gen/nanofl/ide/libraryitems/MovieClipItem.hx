@@ -6,7 +6,7 @@ extern class MovieClipItem extends nanofl.engine.libraryitems.MovieClipItem impl
 	override function createDisplayObject(params:Dynamic):nanofl.MovieClip;
 	function getUsedSymbolNamePaths():js.lib.Set<String>;
 	function getDataToSaveBeforeCleanDestDirectoryAndPublish(fileSystem:nanofl.ide.sys.FileSystem, destLibraryDir:String):Dynamic;
-	function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String, savedData:Dynamic):nanofl.ide.libraryitems.IIdeLibraryItem;
+	function publish(fileSystem:nanofl.ide.sys.FileSystem, mediaUtils:nanofl.ide.sys.MediaUtils, settings:nanofl.ide.PublishSettings, destLibraryDir:String, savedData:Dynamic):nanofl.ide.libraryitems.IIdeLibraryItem;
 	function getTimelineState():nanofl.ide.undo.states.TimelineState;
 	function setTimelineState(state:nanofl.ide.undo.states.TimelineState):Void;
 	function getLibraryFilePaths():Array<String>;

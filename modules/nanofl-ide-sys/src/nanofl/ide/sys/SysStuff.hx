@@ -22,7 +22,7 @@ class SysStuff
 		injector.addSingleton(WebServerUtils, new nanofl.ide.sys.node.NodeWebServerUtils());
 		injector.addSingleton(Uploader, new nanofl.ide.sys.Uploader(fileSystem));
 		injector.addSingleton(Fonts, new nanofl.ide.sys.node.NodeFonts());
-		injector.addSingleton(VideoUtils, new nanofl.ide.sys.node.NodeVideoUtils(processManager, folders));
+		injector.addSingleton(MediaUtils, new nanofl.ide.sys.node.NodeMediaUtils(processManager, folders, fileSystem));
 
         injector.addSingleton(MainProcess, new nanofl.ide.sys.node.ElectronMainProcess());
         injector.addSingleton(Clipboard, new nanofl.ide.sys.node.ElectronClipboard());

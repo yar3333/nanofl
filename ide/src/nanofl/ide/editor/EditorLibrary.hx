@@ -26,6 +26,7 @@ import nanofl.ide.library.LibraryItems;
 import nanofl.ide.library.IdeLibraryTools;
 import nanofl.ide.preferences.Preferences;
 import nanofl.ide.sys.FileSystem;
+import nanofl.ide.sys.MediaUtils;
 import nanofl.ide.sys.Uploader;
 import nanofl.ide.ui.Popups;
 import nanofl.ide.ui.View;
@@ -39,6 +40,7 @@ class EditorLibrary extends InjectContainer
 	@inject var popups : Popups;
 	@inject var view : View;
 	@inject var fileSystem : FileSystem;
+	@inject var mediaUtils : MediaUtils;
 	@inject var clipboard : Clipboard;
 	@inject var uploader : Uploader;
 	@inject var preferences : Preferences;
@@ -397,7 +399,7 @@ class EditorLibrary extends InjectContainer
 		for (item in usedItems)
 		{
 			log("Publish item " + item.namePath);
-			var publishedItem = item.publish(fileSystem, settings, destLibraryDir, savedData.get(item.namePath));
+			var publishedItem = item.publish(fileSystem, mediaUtils, settings, destLibraryDir, savedData.get(item.namePath));
 			if (publishedItem != null) publishedItems.push(publishedItem);
 		}
 

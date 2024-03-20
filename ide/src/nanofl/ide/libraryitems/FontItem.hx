@@ -2,6 +2,8 @@ package nanofl.ide.libraryitems;
 
 import htmlparser.HtmlNodeElement;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
+import nanofl.ide.sys.FileSystem;
+import nanofl.ide.sys.MediaUtils;
 using stdlib.StringTools;
 using stdlib.Lambda;
 
@@ -24,12 +26,12 @@ class FontItem extends nanofl.engine.libraryitems.FontItem
 		return obj;
 	}
 
-    public function getDataToSaveBeforeCleanDestDirectoryAndPublish(fileSystem:nanofl.ide.sys.FileSystem, destLibraryDir:String) : Dynamic
+    public function getDataToSaveBeforeCleanDestDirectoryAndPublish(fileSystem:FileSystem, destLibraryDir:String) : Dynamic
     {
         return null;
     }
         
-	public function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String, savedData:Dynamic) : IIdeLibraryItem
+	public function publish(fileSystem:FileSystem, mediaUtils:MediaUtils, settings:nanofl.ide.PublishSettings, destLibraryDir:String, savedData:Dynamic) : IIdeLibraryItem
 	{
 		var files = [];
 		for (variant in variants)

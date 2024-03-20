@@ -8,5 +8,5 @@ extern class PluginApi extends nanofl.ide.InjectContainer {
 	var zip : nanofl.ide.sys.Zip;
 	var fonts : nanofl.ide.sys.Fonts;
 	var httpUtils : nanofl.ide.sys.HttpUtils;
-	var videoUtils : nanofl.ide.sys.VideoUtils;
+	var mediaUtils : nanofl.ide.sys.MediaUtils;
 }

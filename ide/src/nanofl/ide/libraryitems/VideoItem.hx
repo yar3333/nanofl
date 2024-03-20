@@ -4,6 +4,8 @@ import js.lib.Set;
 import htmlparser.HtmlNodeElement;
 import nanofl.ide.displayobjects.IdeVideo;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
+import nanofl.ide.sys.FileSystem;
+import nanofl.ide.sys.MediaUtils;
 
 class VideoItem extends nanofl.engine.libraryitems.VideoItem
 	implements IIdeInstancableItem
@@ -49,7 +51,7 @@ class VideoItem extends nanofl.engine.libraryitems.VideoItem
         return null;
     }
         
-	public function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String, savedData:Dynamic) : IIdeLibraryItem
+	public function publish(fileSystem:FileSystem, mediaUtils:MediaUtils, settings:nanofl.ide.PublishSettings, destLibraryDir:String, savedData:Dynamic) : IIdeLibraryItem
 	{
 		log("VideoItem: publish " + namePath + "; ext = " + ext);
 

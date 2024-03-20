@@ -1,9 +1,11 @@
 package nanofl.ide.sys;
 
 @:rtti
-interface VideoUtils
+interface MediaUtils
 {
-    function getFileInfo(filePath:String) : VideoFileInfo;
+    function getVideoFileInfo(filePath:String) : VideoFileInfo;
+	function convertImage(srcFile:String, destFile:String, quality:Int) : Bool;
+	function convertAudio(srcFile:String, destFile:String, quality:Int) : Bool;
 }
 
 typedef VideoFileInfo =

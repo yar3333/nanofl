@@ -1,13 +1,15 @@
 package nanofl.ide.libraryitems;
 
-import nanofl.engine.Library;
 import js.lib.Set;
 import datatools.ArrayTools;
 import htmlparser.HtmlNodeElement;
+import nanofl.engine.Library;
 import nanofl.engine.MovieClipItemTools;
 import nanofl.engine.elements.Element;
 import nanofl.engine.movieclip.KeyFrame;
 import nanofl.engine.movieclip.Layer;
+import nanofl.ide.sys.FileSystem;
+import nanofl.ide.sys.MediaUtils;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
 using stdlib.Lambda;
 using stdlib.StringTools;
@@ -77,12 +79,12 @@ class MovieClipItem extends nanofl.engine.libraryitems.MovieClipItem
 		return r;
 	}
 	
-    public function getDataToSaveBeforeCleanDestDirectoryAndPublish(fileSystem:nanofl.ide.sys.FileSystem, destLibraryDir:String) : Dynamic
+    public function getDataToSaveBeforeCleanDestDirectoryAndPublish(fileSystem:FileSystem, destLibraryDir:String) : Dynamic
     {
         return null;
     }
 
-	public function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String, savedData:Dynamic) : IIdeLibraryItem
+	public function publish(fileSystem:FileSystem, mediaUtils:MediaUtils, settings:nanofl.ide.PublishSettings, destLibraryDir:String, savedData:Dynamic) : IIdeLibraryItem
 	{
 		return clone();
 	}

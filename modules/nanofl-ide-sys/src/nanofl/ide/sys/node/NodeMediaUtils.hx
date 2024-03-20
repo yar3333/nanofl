@@ -1,18 +1,45 @@
-package nanofl.ide;
+package nanofl.ide.sys.node;
 
+import haxe.Json;
 import haxe.io.Path;
-import nanofl.ide.sys.FileSystem;
-import nanofl.ide.sys.ProcessManager;
-import nanofl.ide.sys.Folders;
-using stdlib.Lambda;
+import nanofl.ide.sys.node.core.FFprobeVideoFileInfo;
+import nanofl.ide.sys.MediaUtils;
+using Lambda;
 
-@:rtti
-class MediaConvertor extends InjectContainer
+class NodeMediaUtils implements MediaUtils
 {
-	@inject var fileSystem : FileSystem;
-	@inject var processManager : ProcessManager;
-	@inject var folders : Folders;
-	
+    final processManager : ProcessManager;
+    final folders : Folders;
+    final fileSystem : FileSystem;
+
+    public function new(processManager:ProcessManager, folders:Folders, fileSystem:FileSystem)
+    {
+        this.processManager = processManager;
+        this.folders = folders;
+        this.fileSystem = fileSystem;
+    }
+
+    public function getVideoFileInfo(filePath:String) : VideoFileInfo
+    {
+        final r = processManager.runCaptured(folders.tools + "/ffprobe.exe", [ "-v", "quiet", "-print_format", "json", "-show_format", "-show_streams", filePath ]);
+        if (r.code != 0) return null;
+        
+        final info : FFprobeVideoFileInfo = Json.parse(r.out);
+        
+        return
+        {
+            durationMs: Std.parseFloat(info.format.duration) * 1000,
+            streams: info.streams.map(x ->
+            ({ 
+                index: x.index, 
+                type: x.codec_type, 
+                videoWidth: x.width, 
+                videoHeight: x.height, 
+                audioChannels: x.channels,
+            }))
+        };
+    }
+
 	public function convertImage(srcFile:String, destFile:String, quality:Int) : Bool
 	{
 		var convertToolPath = folders.tools + "/magic.exe";
@@ -140,5 +167,5 @@ class MediaConvertor extends InjectContainer
 		}
 		
 		return true;
-	}
+	}    
 }

@@ -2,12 +2,14 @@ package nanofl.ide.libraryitems;
 
 import js.lib.Set;
 import js.lib.Error;
-import nanofl.engine.SerializationAsJsTools;
+import js.lib.Promise;
+import stdlib.Debug;
 import haxe.crypto.Base64;
 import htmlparser.HtmlNodeElement;
-import js.lib.Promise;
+import nanofl.engine.SerializationAsJsTools;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
-import stdlib.Debug;
+import nanofl.ide.sys.FileSystem;
+import nanofl.ide.sys.MediaUtils;
 
 class BitmapItem extends nanofl.engine.libraryitems.BitmapItem
 	implements IIdeInstancableItem
@@ -58,12 +60,12 @@ class BitmapItem extends nanofl.engine.libraryitems.BitmapItem
 
 	public function getUrl() return library.realUrl(namePath + "." + ext);
 
-    public function getDataToSaveBeforeCleanDestDirectoryAndPublish(fileSystem:nanofl.ide.sys.FileSystem, destLibraryDir:String) : Dynamic
+    public function getDataToSaveBeforeCleanDestDirectoryAndPublish(fileSystem:FileSystem, destLibraryDir:String) : Dynamic
     {
         return null;
     }
         
-	public function publish(fileSystem:nanofl.ide.sys.FileSystem, settings:nanofl.ide.PublishSettings, destLibraryDir:String, savedData:Dynamic) : IIdeLibraryItem
+	public function publish(fileSystem:FileSystem, mediaUtils:MediaUtils, settings:nanofl.ide.PublishSettings, destLibraryDir:String, savedData:Dynamic) : IIdeLibraryItem
 	{
 		log("BitmapItem: publish " + namePath + "; ext = " + ext);
 
@@ -76,7 +78,7 @@ class BitmapItem extends nanofl.engine.libraryitems.BitmapItem
             if (settings.isConvertImagesIntoJpeg && !isImageHasAlpha(image))
             {
                 final destFilePath = destLibraryDir + "/" + namePath + ".jpg";
-                final success = new nanofl.ide.MediaConvertor().convertImage(srcFilePath, destFilePath, settings.jpegQuality);
+                final success = mediaUtils.convertImage(srcFilePath, destFilePath, settings.jpegQuality);
                 log("Convert '" + namePath + "." + ext + "' => '" + namePath + ".jpg': " + (success ? "OK" : "FAIL"));
                 if (success)
                 {
@@ -94,7 +96,7 @@ class BitmapItem extends nanofl.engine.libraryitems.BitmapItem
             if (settings.isConvertImagesIntoJpeg && !isImageHasAlpha(image))
             {
                 final destFilePath = fileSystem.getTempFilePath(".jpg");
-                final success = new nanofl.ide.MediaConvertor().convertImage(srcFilePath, destFilePath, settings.jpegQuality);
+                final success = mediaUtils.convertImage(srcFilePath, destFilePath, settings.jpegQuality);
                 log("Convert '" + namePath + "." + ext + "' => '" + namePath + ".jpg': " + (success ? "OK" : "FAIL"));
                 if (success)
                 {
