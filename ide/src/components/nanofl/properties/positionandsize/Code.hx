@@ -15,7 +15,6 @@ class Code extends components.nanofl.properties.base.Code
 		{
 			case PropertiesObject.INSTANCE(item):	    updateElement(item);
 			case PropertiesObject.TEXT(item, _):		updateElement(item);
-			case PropertiesObject.GROUP(items):			// TODO: updateElement(item);
 			case PropertiesObject.SHAPE(figure, _, _):	updateShape(figure);
 			case _:	hide();
 		};
@@ -85,7 +84,6 @@ class Code extends components.nanofl.properties.base.Code
 		switch (obj)
 		{
 			case PropertiesObject.INSTANCE(item):   changeItemPos(item, x, y);
-			case PropertiesObject.GROUP(items):		// TODO: changeItemPos(item, x, y);
 			case PropertiesObject.TEXT(item, _):	changeItemPos(item, x, y);
 			case PropertiesObject.SHAPE(figure, _, _):
 				undoQueue.beginTransaction({ figure:true });
@@ -107,7 +105,6 @@ class Code extends components.nanofl.properties.base.Code
 		switch (obj)
 		{
 			case PropertiesObject.INSTANCE(item):   changeItemSize(item, width, height);
-			case PropertiesObject.GROUP(items):		//TODO: changeItemSize(item, width, height);
 			case PropertiesObject.TEXT(item, _):	changeItemSize(item, width, height);
 			case PropertiesObject.SHAPE(figure, _, _):
 				undoQueue.beginTransaction({ figure:true });
@@ -133,7 +130,6 @@ class Code extends components.nanofl.properties.base.Code
 		switch (obj)
 		{
 			case PropertiesObject.INSTANCE(item):   changeItemRotation(item, rotation);
-			case PropertiesObject.GROUP(items):		// TODO: changeItemRotation(item, rotation);
 			case PropertiesObject.TEXT(item, _):	changeItemRotation(item, rotation);
 			case _:
 		}
