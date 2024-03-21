@@ -61,7 +61,9 @@ class VideoItem extends InstancableItem
             width = video.videoWidth;
             height = video.videoHeight;
             duration = video.duration;
-            hasAudio = video.audioTracks != null && video.audioTracks.length > 0;
+            hasAudio = (cast video).webkitAudioDecodedByteCount 
+                    || (cast video).mozHasAudio
+                    || video.audioTracks != null && video.audioTracks.length > 0;
             return null; 
         });
     }

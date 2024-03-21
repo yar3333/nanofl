@@ -40,4 +40,10 @@ typedef ExporterArgs = {
 		    
 	**/
 	var srcFilePath(default, null) : String;
+	/**
+		
+		        Check this during exporting.
+		    
+	**/
+	var wantToCancel : Bool;
 };

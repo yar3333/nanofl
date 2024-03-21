@@ -51,14 +51,18 @@ GifExporterPlugin.prototype = {
 		var width = args.documentProperties.width;
 		var height = args.documentProperties.height;
 		var dataOut = new Uint8Array(width * height * 3);
+		var totalFrames = args.library.getSceneItem().getTotalFrames();
 		var sceneFramesIterator = args.library.getSceneFramesIterator(args.documentProperties,true);
 		var ffmpegArgs = ["-f","rawvideo","-pixel_format","rgb24","-video_size",width + "x" + height,"-framerate",srcFramerate + "","-i","pipe:0","-vf",(destFramerate1 != srcFramerate ? "fps=" + destFramerate1 + "," : "") + "split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse=dither=" + Std.string(args.params.dither),args.destFilePath];
 		$global.console.log("FFmpeg: ",ffmpegArgs);
+		var frameNum = 0;
 		try {
-			return api.processManager.runPipedStdIn(api.folders.get_tools() + "/ffmpeg.exe",ffmpegArgs,null,null,function() {
-				if(!sceneFramesIterator.hasNext()) {
+			return api.processManager.runPipedStdIn(api.folders.get_tools() + "/ffmpeg.exe",ffmpegArgs,null,null,function(process) {
+				if(!sceneFramesIterator.hasNext() || args.wantToCancel) {
 					return Promise.resolve(null);
 				}
+				frameNum += 1;
+				args.setProgressPercent(Math.round(frameNum * 100 / totalFrames));
 				return sceneFramesIterator.next().then(function(ctx) {
 					GifExporterPlugin.imageDataToRgbArray(ctx.getImageData(0,0,width,height),dataOut);
 					return dataOut.buffer;

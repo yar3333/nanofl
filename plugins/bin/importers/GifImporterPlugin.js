@@ -108,7 +108,7 @@ VideoImporter.run = function(mediaUtils,processManager,folders,srcFilePath,proce
 	var data = imageData.data;
 	var ctx = canvas.getContext("2d",null);
 	try {
-		return processManager.runPipedStdOut(folders.get_tools() + "/ffmpeg.exe",args,null,null,null,chunkSize,function(buffer) {
+		return processManager.runPipedStdOut(folders.get_tools() + "/ffmpeg.exe",args,null,null,null,chunkSize,function(process,buffer) {
 			var view = new Uint8Array(buffer);
 			var pView = 0;
 			var pImg = 0;

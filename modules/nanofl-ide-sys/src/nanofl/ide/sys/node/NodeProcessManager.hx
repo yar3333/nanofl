@@ -54,12 +54,12 @@ class NodeProcessManager implements nanofl.ide.sys.ProcessManager
 		};
 	}
 
-    public function runPipedStdIn(filePath:String, args:Array<String>, directory:String, env:Dynamic<String>, getDataForStdIn:()->Promise<ArrayBuffer>) : Promise<ProcessResult>
+    public function runPipedStdIn(filePath:String, args:Array<String>, directory:String, env:Dynamic<String>, getDataForStdIn:(process:Process)->Promise<ArrayBuffer>) : Promise<ProcessResult>
     {
         return ElectronApi.process_utils.runPipedStdIn(filePath, args, directory, env, getDataForStdIn);
     }
 
-    public function runPipedStdOut(filePath:String, args:Array<String>, directory:String, env:Dynamic<String>, input:String, chunkSize:Int, processChunk:Uint8Array->Void) : Promise<ProcessResult>
+    public function runPipedStdOut(filePath:String, args:Array<String>, directory:String, env:Dynamic<String>, input:String, chunkSize:Int, processChunk:(process:Process, chunk:Uint8Array)->Void) : Promise<ProcessResult>
     {
         return ElectronApi.process_utils.runPipedStdOut(filePath, args, directory, env, input, chunkSize, processChunk);
     }

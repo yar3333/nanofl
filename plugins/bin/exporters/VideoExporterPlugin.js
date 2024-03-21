@@ -145,8 +145,8 @@ VideoExporter.run = function(api,args,ffmpegQualityOptions) {
 	$global.console.log("FFmpeg: ",ffmpegArgs);
 	var frameNum = 0;
 	try {
-		return api.processManager.runPipedStdIn(api.folders.get_tools() + "/ffmpeg.exe",ffmpegArgs,null,null,function() {
-			if(!sceneFramesIterator.hasNext()) {
+		return api.processManager.runPipedStdIn(api.folders.get_tools() + "/ffmpeg.exe",ffmpegArgs,null,null,function(process) {
+			if(!sceneFramesIterator.hasNext() || args.wantToCancel) {
 				return Promise.resolve(null);
 			}
 			frameNum += 1;

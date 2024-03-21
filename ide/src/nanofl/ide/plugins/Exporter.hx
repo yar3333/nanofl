@@ -2,7 +2,6 @@ package nanofl.ide.plugins;
 
 import js.lib.Promise;
 import nanofl.engine.CustomPropertiesTools;
-import nanofl.ide.library.IdeLibrary;
 import nanofl.ide.plugins.ExporterPlugins;
 import nanofl.engine.geom.Edges;
 import nanofl.engine.geom.Polygon;
@@ -33,11 +32,7 @@ class Exporter
         Edges.showSelection = false;
         Polygon.showSelection = false;
 
-        popups.exportProgress.show(path);
-
-        final pluginApi = new PluginApi();
-
-        return plugin.exportDocument(pluginApi,
+        final args : ExporterArgs = 
         {
             params: CustomPropertiesTools.fix(params, plugin.properties),
             srcFilePath: document.path,
@@ -47,19 +42,23 @@ class Exporter
             originalFilePath: document.originalPath,
             setProgressPercent: percent -> popups.exportProgress.setPercent(percent),
             setProgressInfo: text -> popups.exportProgress.setInfo(text),
-        })
-        .finally(() ->
-        {
-            popups.exportProgress.close();
+            wantToCancel: false,
+        };
+        
+        popups.exportProgress.show(path, () -> args.wantToCancel = true);
 
-            Edges.showSelection = true;
-            Polygon.showSelection = true;
+        return plugin.exportDocument(new PluginApi(), args)
+            .finally(() ->
+            {
+                popups.exportProgress.close();
 
-        })
-        .catchError(e ->
-        {
-            trace(e);
-            return false;
-        });
+                Edges.showSelection = true;
+                Polygon.showSelection = true;
+            })
+            .catchError(e ->
+            {
+                trace(e);
+                return false;
+            });
 	}
 }

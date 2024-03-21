@@ -52,7 +52,7 @@ class VideoImporter
 
         try
         {
-            return processManager.runPipedStdOut(folders.tools + "/ffmpeg.exe", args, null, null, null, chunkSize, buffer ->
+            return processManager.runPipedStdOut(folders.tools + "/ffmpeg.exe", args, null, null, null, chunkSize, (process, buffer) ->
             {
                 final view = new Uint8Array(buffer);
                 

@@ -31,7 +31,6 @@ class VideoExporter
         final dataOut = new Uint8Array(args.documentProperties.width * args.documentProperties.height * 3); // RGB
 
         final totalFrames = args.library.getSceneItem().getTotalFrames();
-
         final sceneFramesIterator = args.library.getSceneFramesIterator(args.documentProperties, true);
 
         final ffmpegArgs = videoArgs
@@ -43,12 +42,11 @@ class VideoExporter
         Browser.console.log("FFmpeg: ", ffmpegArgs);
 
         var frameNum = 0;
-
         try
         {
-            return api.processManager.runPipedStdIn(api.folders.tools + "/ffmpeg.exe", ffmpegArgs, null, null, () ->
+            return api.processManager.runPipedStdIn(api.folders.tools + "/ffmpeg.exe", ffmpegArgs, null, null, process ->
             {
-                if (!sceneFramesIterator.hasNext()) return Promise.resolve(null);
+                if (!sceneFramesIterator.hasNext() || args.wantToCancel) return Promise.resolve(null);
 
                 frameNum++;
                 args.setProgressPercent(Math.round(frameNum * 100 / totalFrames));
@@ -59,10 +57,7 @@ class VideoExporter
                     return dataOut.buffer;
                 });
             })
-            .then(r ->
-            {
-                return r.code == 0;
-            });
+            .then(r -> r.code == 0);
         }
         catch (e)
         {

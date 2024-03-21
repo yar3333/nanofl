@@ -1,4 +1,4 @@
-import { SpawnOptions, spawn  } from 'child_process';
+import { SpawnOptions, spawn, ChildProcess  } from 'child_process';
 
 type ProcessResult = 
 {
@@ -9,7 +9,7 @@ type ProcessResult =
 
 export namespace process_utils
 {
-    export function runPipedStdIn(filePath:string, args:Array<string>, directory:string, env:{[name:string]: string}, getDataForStdIn:()=>Promise<ArrayBuffer>) : Promise<ProcessResult>
+    export function runPipedStdIn(filePath:string, args:Array<string>, directory:string, env:{[name:string]: string}, getDataForStdIn:(process:ChildProcess)=>Promise<ArrayBuffer>) : Promise<ProcessResult>
     {
         var options : SpawnOptions = { stdio: "pipe" };
         if (directory != null) options.cwd = directory;
@@ -47,7 +47,7 @@ export namespace process_utils
 
             function sendNextChunk()
             {
-                getDataForStdIn().then(data =>
+                getDataForStdIn(process).then(data =>
                 {
                     if (!process.stdin) { reject("process.stdin is null"); return; }
                     
@@ -67,7 +67,7 @@ export namespace process_utils
         });
     }
 
-    export function runPipedStdOut(filePath:string, args:Array<string>, directory:string, env:{[name:string]: string}, input:string, chunkSize:number, processChunk:(chunk:Uint8Array)=>void) : Promise<ProcessResult>
+    export function runPipedStdOut(filePath:string, args:Array<string>, directory:string, env:{[name:string]: string}, input:string, chunkSize:number, processChunk:(process:ChildProcess, chunk:Uint8Array)=>void) : Promise<ProcessResult>
     {
 		var options : SpawnOptions = {};
 		if (directory != null) options.cwd = directory;
@@ -87,7 +87,7 @@ export namespace process_utils
     
             process.stdout.on('data', (data:Buffer) =>
             {
-                if (buffer == null) { processChunk(data); return; }
+                if (buffer == null) { processChunk(process, data); return; }
 
                 var pData = 0;
                 while (pData < data.byteLength)
@@ -98,7 +98,7 @@ export namespace process_utils
                     pData += bytesToCopy;
                     if (pBuffer == buffer.byteLength)
                     {
-                        processChunk(buffer);
+                        processChunk(process, buffer);
                         pBuffer = 0;
                     }
                 }

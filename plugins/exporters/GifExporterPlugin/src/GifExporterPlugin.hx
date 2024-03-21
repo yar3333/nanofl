@@ -58,7 +58,8 @@ class GifExporterPlugin implements IExporterPlugin
 
         final dataOut = new Uint8Array(width * height * 3); // RGB
 
-        var sceneFramesIterator = args.library.getSceneFramesIterator(args.documentProperties, true);
+        final totalFrames = args.library.getSceneItem().getTotalFrames();
+        final sceneFramesIterator = args.library.getSceneFramesIterator(args.documentProperties, true);
 
         // https://superuser.com/questions/556029/how-do-i-convert-a-video-to-gif-using-ffmpeg-with-reasonable-quality
         // ffmpeg -ss 30 -t 3s -i cat.mp4 -vf "fps=10,scale=320:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0 output.gif
@@ -76,11 +77,15 @@ class GifExporterPlugin implements IExporterPlugin
 
         Browser.console.log("FFmpeg: ", ffmpegArgs);
 
+        var frameNum = 0;
         try
         {
-            return api.processManager.runPipedStdIn(api.folders.tools + "/ffmpeg.exe", ffmpegArgs, null, null, () ->
+            return api.processManager.runPipedStdIn(api.folders.tools + "/ffmpeg.exe", ffmpegArgs, null, null, process ->
             {
-                if (!sceneFramesIterator.hasNext()) return Promise.resolve(null);
+                if (!sceneFramesIterator.hasNext() || args.wantToCancel) return Promise.resolve(null);
+                
+                frameNum++;
+                args.setProgressPercent(Math.round(frameNum * 100 / totalFrames));
                 
                 return sceneFramesIterator.next().then(ctx ->
                 {

@@ -36,4 +36,9 @@ typedef ExporterArgs =
         Call this from exporter plugin to show current stage on progress popup.
     **/
     function setProgressInfo(text:String) : Void;
+
+    /**
+        Check this during exporting.
+    **/
+    var wantToCancel : Bool;
 }
