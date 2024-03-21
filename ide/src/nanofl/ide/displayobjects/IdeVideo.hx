@@ -1,5 +1,6 @@
 package nanofl.ide.displayobjects;
 
+import stdlib.Debug;
 import js.lib.Promise;
 import stdlib.Std;
 import nanofl.Video.VideoParams;
@@ -10,6 +11,7 @@ class IdeVideo extends nanofl.Video
     implements AdvancableDisplayObject
 {
     var currentFrame : Int;
+    var currentTime : Float;
 
     inline function getFramerate() return (cast stage : nanofl.Stage).framerate;
     
@@ -17,31 +19,32 @@ class IdeVideo extends nanofl.Video
     {
         super(symbol, { currentTime: params?.currentTime ?? 0.0 });
         
-        video.autoplay = false;
-        
         this.currentFrame = 0;
+        this.currentTime = 0;
+        
+        video.autoplay = false;
+        Debug.assert(video.currentTime == 0);
     }
 
     public function waitLoading() : Promise<{}>
     {
-        if (video.readyState >= js.html.MediaElement.HAVE_CURRENT_DATA) return Promise.resolve(null);
-        
-        return new Promise<{}>((resolve, reject) ->
+        return VideoCache.getImageAsync(video.src, currentTime).then(canvas ->
         {
-            video.addEventListener("canplaythrough", () -> resolve(null), { once:true });
-            video.addEventListener("error", e -> reject(e), { once:true });
+            removeAllChildren();
+            addChild(new easeljs.display.Bitmap(canvas));
+            return null;
         });
     }
 
 	public function advanceToNextFrame() : Void
     {
         final totalFrames = Std.int(duration * getFramerate());
-        if (!video.loop && currentFrame >= totalFrames - 1) return;
+        if (!symbol.loop && currentFrame >= totalFrames - 1) return;
 
         currentFrame++;
         if (currentFrame >= totalFrames) currentFrame -= totalFrames;
 
-        video.currentTime = Math.min(Math.max(0, duration - 0.0001), currentFrame / getFramerate() + 0.0001);
+        currentTime = Math.min(Math.max(0, duration - 0.0001), currentFrame / getFramerate() + 0.0001);
     }
 
     public function advanceTo(advanceFrames:Int, framerate:Float)
@@ -52,6 +55,6 @@ class IdeVideo extends nanofl.Video
 
         currentFrame = symbol.loop ? advanceFrames % totalFrames : Std.min(totalFrames - 1, advanceFrames);
 
-        video.currentTime = Math.min(Math.max(0, duration - 0.0001), currentFrame / framerate + 0.0001);
+        currentTime = Math.min(Math.max(0, duration - 0.0001), currentFrame / framerate + 0.0001);
     }
 }

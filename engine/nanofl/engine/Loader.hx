@@ -18,7 +18,7 @@ class Loader
 	{
 		return new Promise<ImageElement>((resolve, reject) ->
 		{
-			var image = new Image();
+			final image = new Image();
 			image.onload = _ ->
 			{
 				resolve(image);
@@ -37,7 +37,7 @@ class Loader
 	{
 		return new Promise<String>((resolve, reject) ->
 		{
-			var xmlhttp = new XMLHttpRequest();
+			final xmlhttp = new XMLHttpRequest();
 			xmlhttp.responseType = js.html.XMLHttpRequestResponseType.TEXT;
 			xmlhttp.onreadystatechange = () ->
 			{
@@ -86,8 +86,8 @@ class Loader
 	{
 		return new Promise<VideoElement>((resolve, reject) ->
 		{
-			var video = Browser.document.createVideoElement();
-            video.currentTime = 0.001;
+			final video = Browser.document.createVideoElement();
+            video.currentTime = 0.0001;
 
 			video.addEventListener("loadeddata", () -> resolve(video), { once:true });
 
