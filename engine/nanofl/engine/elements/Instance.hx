@@ -1,9 +1,9 @@
 package nanofl.engine.elements;
 
 import js.lib.Error;
-import datatools.ArrayRO;
 import datatools.ArrayTools;
 import datatools.NullTools;
+import easeljs.display.DisplayObject;
 import nanofl.engine.Library;
 import nanofl.engine.coloreffects.ColorEffect;
 import nanofl.engine.elements.Element;
@@ -16,6 +16,8 @@ using stdlib.Lambda;
 #if ide
 import htmlparser.HtmlNodeElement;
 import htmlparser.XmlBuilder;
+import nanofl.ide.undo.states.ElementState;
+import nanofl.ide.undo.states.InstanceState;
 using htmlparser.HtmlParserTools;
 #end
 
@@ -87,7 +89,7 @@ class Instance extends Element
 		out.attr("libraryItem", namePath);
 		out.attr("name", name, "");
 		out.attr("blendMode", blendMode, BlendModes.normal);
-        if (meshParams != null && library.hasItem(namePath) && symbol.type == mesh) MeshParamsTools.save(meshParams, out);
+        if (meshParams != null && library.hasItem(namePath) && symbol.type == LibraryItemType.mesh) MeshParamsTools.save(meshParams, out);
         if (colorEffect != null) colorEffect.save(out);
 		
         if (filters.length > 0)
@@ -108,7 +110,7 @@ class Instance extends Element
         super.savePropertiesJson(obj);
 		
 		if (blendMode != BlendModes.normal) obj.blendMode = blendMode ?? BlendModes.normal;
-        if (meshParams != null && library.hasItem(namePath) && symbol.type == mesh) obj.meshParams = MeshParamsTools.saveJson(meshParams);
+        if (meshParams != null && library.hasItem(namePath) && symbol.type == LibraryItemType.mesh) obj.meshParams = MeshParamsTools.saveJson(meshParams);
         if (colorEffect != null) obj.colorEffect = colorEffect.saveJson();
 		
         if (filters.length > 0)
@@ -127,7 +129,7 @@ class Instance extends Element
 			NullTools.clone(colorEffect),
 			ArrayTools.clone(filters),
 			blendMode,
-            MeshParamsTools.clone(meshParams)
+            MeshParamsTools.clone(meshParams),
 		);
 		obj.library = library;
 		copyBaseProperties(obj);
@@ -135,7 +137,7 @@ class Instance extends Element
 	}
 	
 	#if ide
-	override public function getState() : nanofl.ide.undo.states.ElementState
+	override public function getState() : ElementState
 	{
 		return new nanofl.ide.undo.states.InstanceState
 		(
@@ -143,17 +145,17 @@ class Instance extends Element
 			NullTools.clone(colorEffect),
 			ArrayTools.clone(filters),
 			blendMode,
-            MeshParamsTools.clone(meshParams)
+            MeshParamsTools.clone(meshParams),
 		);
 	}
 	
-	override public function setState(state:nanofl.ide.undo.states.ElementState) : Void
+	override public function setState(state:ElementState) : Void
 	{
-		name = (cast state:nanofl.ide.undo.states.InstanceState).name;
-		colorEffect = NullTools.clone((cast state:nanofl.ide.undo.states.InstanceState).colorEffect);
-		filters = ArrayTools.clone((cast state:nanofl.ide.undo.states.InstanceState).filters);
-		blendMode = (cast state:nanofl.ide.undo.states.InstanceState).blendMode;
-        meshParams = MeshParamsTools.clone((cast state:nanofl.ide.undo.states.InstanceState).meshParams);
+		name = (cast state:InstanceState).name;
+		colorEffect = NullTools.clone((cast state:InstanceState).colorEffect);
+		filters = ArrayTools.clone((cast state:InstanceState).filters);
+		blendMode = (cast state:InstanceState).blendMode;
+        meshParams = MeshParamsTools.clone((cast state:InstanceState).meshParams);
 	}
 	#end
 	
@@ -165,7 +167,7 @@ class Instance extends Element
 	{
 		var dispObj = switch (symbol.type)
 		{
-            case LibraryItemType.movieclip: symbol.createDisplayObject(null); // TODO: currentFrame
+            case LibraryItemType.movieclip: symbol.createDisplayObject(null);
             case LibraryItemType.bitmap: symbol.createDisplayObject(null);
             case LibraryItemType.mesh: symbol.createDisplayObject(meshParams);
             case LibraryItemType.video: symbol.createDisplayObject(null); // TODO: currentFrame
@@ -201,7 +203,7 @@ class Instance extends Element
         }
     }
 
-    public function updateDisplayObjectTweenedProperties(dispObj:easeljs.display.DisplayObject) : Void
+    public function updateDisplayObjectTweenedProperties(dispObj:DisplayObject) : Void
     {
 		elementUpdateDisplayObjectBaseProperties(dispObj);
 		elementUpdateDisplayObjectInstanceProperties(dispObj);
@@ -229,6 +231,4 @@ class Instance extends Element
 		return true;
 	}
 	
-	public function getFilters() : ArrayRO<FilterDef> return filters;
-	public function setFilters(filters:Array<FilterDef>) : Void this.filters = filters;
 }

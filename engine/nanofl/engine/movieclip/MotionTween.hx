@@ -70,28 +70,28 @@ class MotionTween
         
         if (finishElements != null)
         {
-            var ease = Ease.get(easing / 100);
-            var k = ease(t);
-            var instancesMap = getInstancesMap(startElements, finishElements);
+            final ease = Ease.get(easing / 100);
+            final k = ease(t);
+            final instancesMap = getInstancesMap(startElements, finishElements);
             
             for (startElement in startElements)
             {
                 if (Std.isOfType(startElement, Instance) && instancesMap.exists((cast startElement:Instance)))
                 {
-                    var startInstance = (cast startElement:Instance);
-                    var finishInstance = instancesMap.get(startInstance);
+                    final startInstance = (cast startElement:Instance);
+                    final finishInstance = instancesMap.get(startInstance);
                     
-                    var targetInstance = getMovedInstance(startInstance, finishInstance, k, guide);
+                    final targetInstance = getMovedInstance(startInstance, finishInstance, k, guide);
                     
-                    var startFilters = startInstance.getFilters().filter(x -> FilterPlugins.plugins.exists(x.name));
-                    var finishFilters = finishInstance.getFilters().filter(x -> FilterPlugins.plugins.exists(x.name));
+                    final startFilters = startInstance.filters.filter(x -> FilterPlugins.plugins.exists(x.name));
+                    final finishFilters = finishInstance.filters.filter(x -> FilterPlugins.plugins.exists(x.name));
                     
                     fixFilterSequence(startFilters, finishFilters);
                     fixFilterSequence(finishFilters, startFilters);
                     
                     Debug.assert(startFilters.length == finishFilters.length, "startFilters.length = " + startFilters.length + " != finishFilters.length = " + finishFilters.length);
                     
-                    targetInstance.setFilters(startFilters.mapi((i, startFilter) -> startFilter.clone().tween(k, finishFilters[i])).array());
+                    targetInstance.filters = startFilters.mapi((i, startFilter) -> startFilter.clone().tween(k, finishFilters[i]));
                     
                     r.push(new TweenedElement(startElement, targetInstance));
                 }

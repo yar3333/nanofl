@@ -20,6 +20,4 @@ extern class Instance extends nanofl.engine.elements.Element {
 	function updateDisplayObjectTweenedProperties(dispObj:easeljs.display.DisplayObject):Void;
 	override function setLibrary(library:nanofl.engine.Library):Void;
 	override function equ(element:nanofl.engine.elements.Element):Bool;
-	function getFilters():Array<nanofl.engine.FilterDef>;
-	function setFilters(filters:Array<nanofl.engine.FilterDef>):Void;
 }

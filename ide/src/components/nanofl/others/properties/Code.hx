@@ -28,7 +28,7 @@ class Code extends wquery.Component
 		"shape-pane": components.nanofl.properties.shape.Code,
 		"frame-label-pane": components.nanofl.properties.framelabel.Code,
 		"motion-tween-pane": components.nanofl.properties.motiontween.Code,
-		"mesh-params-pane": components.nanofl.properties.meshparams.Code
+		"mesh-params-pane": components.nanofl.properties.meshparams.Code,
 	};
 
 	@inject var app : Application;

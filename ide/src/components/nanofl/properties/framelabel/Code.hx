@@ -17,7 +17,7 @@ class Code extends components.nanofl.properties.base.Code
 		};
 	}
 	
-	function label_change(e)
+	function label_change(_)
 	{
 		if (freeze) return;
 		

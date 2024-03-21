@@ -1,6 +1,5 @@
 package nanofl.ide.editor.elements;
 
-import js.Browser;
 import nanofl.ide.ElementLifeTracker.ElementLifeTrack;
 import js.lib.Error;
 import stdlib.Debug;
@@ -25,8 +24,6 @@ import nanofl.ide.editor.NewObjectParams;
 import nanofl.ide.PropertiesObject;
 import nanofl.ide.editor.EditorLayer;
 import nanofl.ide.ui.View;
-import nanofl.ide.libraryitems.MovieClipItem;
-import nanofl.ide.MovieClipItemTools;
 using nanofl.engine.geom.PointTools;
 using stdlib.Lambda;
 
