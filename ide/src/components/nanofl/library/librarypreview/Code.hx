@@ -1,7 +1,8 @@
 package components.nanofl.library.librarypreview;
 
-import js.html.CanvasElement;
 import js.html.Audio;
+import js.html.CanvasElement;
+import js.html.VideoElement;
 import nanofl.Stage;
 import nanofl.TextField;
 import nanofl.TextRun;
@@ -16,6 +17,7 @@ import nanofl.engine.libraryitems.InstancableItem;
 import nanofl.engine.libraryitems.SoundItem;
 import nanofl.ide.Application;
 import nanofl.ide.Globals;
+import nanofl.ide.libraryitems.VideoItem;
 using Lambda;
 
 @:rtti
@@ -56,6 +58,10 @@ class Code extends wquery.Component
 		template().sound
 			.width(maxWidth)
 			.height(maxHeight);
+
+		template().video
+			.width(maxWidth)
+			.height(maxHeight);
 		
 		update();
 	}
@@ -71,8 +77,10 @@ class Code extends wquery.Component
             case LibraryItemType.bitmap:
             case LibraryItemType.movieclip:
             case LibraryItemType.mesh:
-            case LibraryItemType.video:
                 showInstancableItem((cast item : InstancableItem));
+            
+            case LibraryItemType.video:
+                showVideoItem((cast item : VideoItem));
             
             case LibraryItemType.font:
                 showFontItem((cast item : FontItem));
@@ -83,7 +91,9 @@ class Code extends wquery.Component
             case LibraryItemType.folder:
             case null:
                 template().canvas.hide();
+                template().video.hide();
                 template().sound.hide();
+                stopPlaying();
         }
 
         updateStage();
@@ -91,9 +101,11 @@ class Code extends wquery.Component
 
     function showInstancableItem(item:InstancableItem)
     {
-        template().canvas.css("background-color", app.document?.properties.backgroundColor ?? "white");
         template().canvas.show();
+        template().video.hide();
         template().sound.hide();
+        
+        template().canvas.css("background-color", app.document?.properties.backgroundColor ?? "white");
         
         final instance = item.newInstance();
         if (instance != null)
@@ -114,11 +126,23 @@ class Code extends wquery.Component
         stage.waitLoading().then(_ -> updateStage());
     }
 
+    function showVideoItem(item:VideoItem)
+    {
+        template().canvas.hide();
+        template().video.show();
+        template().sound.hide();
+        
+        final elem : VideoElement = cast template().video[0];
+        elem.src = item.getUrl();
+    }    
+
     function showFontItem(item:FontItem)
     {
-        template().canvas.css("background-color", "white");
         template().canvas.show();
+        template().video.hide();
         template().sound.hide();
+        
+        template().canvas.css("background-color", "white");
         
         final font = item.toFont();
         
@@ -151,7 +175,9 @@ class Code extends wquery.Component
     function showSoundItem(item:SoundItem)
     {
         template().canvas.hide();
+        template().video.hide();
         template().sound.show();
+        
         template().sound.find(">i").attr("class", soundPlaying != item.namePath ? "icon-play" : "icon-pause");
     }
 	
@@ -159,7 +185,7 @@ class Code extends wquery.Component
 	{
 		if (!Std.isOfType(item, SoundItem)) return;
 		
-        if (soundPlaying == item.namePath) { stopSound(); return; }
+        if (soundPlaying == item.namePath) { stopPlaying(); return; }
         
         soundPlaying = item.namePath;
         final sound : SoundItem = cast item;
@@ -168,7 +194,7 @@ class Code extends wquery.Component
             if (soundPlaying == item.namePath)
             {
                 audioPlaying = sound.play();
-                audioPlaying.addEventListener("ended", () -> stopSound());     
+                audioPlaying.addEventListener("ended", () -> stopPlaying());     
             }
         });
 
@@ -186,10 +212,13 @@ class Code extends wquery.Component
 		Polygon.showSelection = true;
    }
 
-    function stopSound()
+    function stopPlaying()
     {
         if (audioPlaying != null) { audioPlaying.pause(); audioPlaying = null; }
         soundPlaying = null;
+        
+        (cast template().video[0] : VideoElement).pause();
+        
         update();
     }
 }

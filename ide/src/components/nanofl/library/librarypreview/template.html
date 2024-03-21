@@ -1,9 +1,20 @@
 <style>
 	.~container button.btn { padding:0; border:0; border-radius:0 }
 	.~canvas { background-color:white }
+
+    .~container video { background-color:white }
+    .~container video::-webkit-media-controls-fullscreen-button { display: none }
+    .~container video::-webkit-media-controls-play-button {}
+    .~container video::-webkit-media-controls-timeline {}
+    .~container video::-webkit-media-controls-current-time-display{}
+    .~container video::-webkit-media-controls-time-remaining-display {}
+    .~container video::-webkit-media-controls-mute-button {}
+    .~container video::-webkit-media-controls-toggle-closed-captions-button { display: none }
+    .~container video::-webkit-media-controls-volume-slider {}    
 </style>
 
 <div id="container" class="~container">
 	<canvas id="canvas" class="~canvas" style="display:none"></canvas>
 	<button id="sound" class="btn" style="display:none"><i class="icon-play"></i></button>
+    <video id="video" style="display:none" controls="controls"  disablePictureInPicture="disablePictureInPicture" controlslist="nodownload noplaybackrate"></video>
 </div>

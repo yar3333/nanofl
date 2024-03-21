@@ -13,6 +13,9 @@ class Template
 	
 	public var sound(get, never) : js.JQuery;
 	inline function get_sound() return component.q('#sound');
+	
+	public var video(get, never) : js.JQuery;
+	inline function get_video() return component.q('#video');
 
 	public function new(component:wquery.Component) this.component = component;
 }
