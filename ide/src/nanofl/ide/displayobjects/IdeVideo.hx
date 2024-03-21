@@ -1,5 +1,6 @@
 package nanofl.ide.displayobjects;
 
+import js.lib.Promise;
 import stdlib.Std;
 import nanofl.Video.VideoParams;
 import nanofl.ide.libraryitems.VideoItem;
@@ -19,6 +20,17 @@ class IdeVideo extends nanofl.Video
         video.autoplay = false;
         
         this.currentFrame = 0;
+    }
+
+    public function waitLoading() : Promise<{}>
+    {
+        if (video.readyState >= js.html.MediaElement.HAVE_CURRENT_DATA) return Promise.resolve(null);
+        
+        return new Promise<{}>((resolve, reject) ->
+        {
+            video.addEventListener("canplaythrough", () -> resolve(null), { once:true });
+            video.addEventListener("error", e -> reject(e), { once:true });
+        });
     }
 
 	public function advanceToNextFrame() : Void

@@ -56,17 +56,9 @@ class Stage extends easeljs.display.Stage
 
         DisplayObjectTools.iterateTreeFromBottomToTop(this, true, obj ->
         {
-            if (!Std.isOfType(obj, nanofl.ide.displayobjects.IdeVideo)) return;
-            
-            final videoObj : nanofl.ide.displayobjects.IdeVideo = cast obj;
-
-            if (videoObj.video.readyState < js.html.MediaElement.HAVE_CURRENT_DATA)
+            if (Std.isOfType(obj, nanofl.ide.displayobjects.IdeVideo))
             {
-                promises.push(new Promise<{}>((resolve, reject) ->
-                {
-                    videoObj.video.addEventListener("canplaythrough", () -> resolve(null), { once:true });
-                    videoObj.video.addEventListener("error", e -> reject(e), { once:true });
-                }));
+                promises.push((cast obj : nanofl.ide.displayobjects.IdeVideo).waitLoading());
             }
         });
 

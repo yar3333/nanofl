@@ -1,16 +1,16 @@
 package components.nanofl.library.librarypreview;
 
-import nanofl.engine.AdvancableDisplayObject;
 import js.html.CanvasElement;
 import js.html.Audio;
 import nanofl.Stage;
 import nanofl.TextField;
 import nanofl.TextRun;
 import nanofl.DisplayObjectTools;
-import nanofl.engine.geom.Edges;
-import nanofl.engine.geom.Polygon;
+import nanofl.engine.AdvancableDisplayObject;
 import nanofl.engine.ILibraryItem;
 import nanofl.engine.LibraryItemType;
+import nanofl.engine.geom.Edges;
+import nanofl.engine.geom.Polygon;
 import nanofl.engine.libraryitems.FontItem;
 import nanofl.engine.libraryitems.InstancableItem;
 import nanofl.engine.libraryitems.SoundItem;
@@ -91,7 +91,7 @@ class Code extends wquery.Component
 
     function showInstancableItem(item:InstancableItem)
     {
-        template().canvas.css("background-color", app.document != null ? app.document.properties.backgroundColor : "white");
+        template().canvas.css("background-color", app.document?.properties.backgroundColor ?? "white");
         template().canvas.show();
         template().sound.hide();
         
