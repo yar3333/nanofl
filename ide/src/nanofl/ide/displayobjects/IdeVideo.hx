@@ -1,6 +1,5 @@
 package nanofl.ide.displayobjects;
 
-import stdlib.Debug;
 import js.lib.Promise;
 import stdlib.Std;
 import nanofl.Video.VideoParams;
@@ -17,13 +16,12 @@ class IdeVideo extends nanofl.Video
     
     public function new(symbol:VideoItem, params:VideoParams)
     {
-        super(symbol, { currentTime: params?.currentTime ?? 0.0 });
+        super(symbol, { currentTime:0 });
         
         this.currentFrame = 0;
-        this.currentTime = 0;
+        this.currentTime = params?.currentTime ?? 0;
         
         video.autoplay = false;
-        Debug.assert(video.currentTime == 0);
     }
 
     public function waitLoading() : Promise<{}>
@@ -39,6 +37,12 @@ class IdeVideo extends nanofl.Video
 	public function advanceToNextFrame() : Void
     {
         final totalFrames = Std.int(duration * getFramerate());
+
+        if (currentFrame == 0 && currentTime > 0)
+        {
+            currentFrame = Math.floor(currentTime * getFramerate());
+        }
+
         if (!symbol.loop && currentFrame >= totalFrames - 1) return;
 
         currentFrame++;

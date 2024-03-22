@@ -179,11 +179,7 @@ class Instance extends Element
             case LibraryItemType.movieclip: symbol.createDisplayObject(null);
             case LibraryItemType.bitmap: symbol.createDisplayObject(null);
             case LibraryItemType.mesh: symbol.createDisplayObject(meshParams);
-            #if !ide
             case LibraryItemType.video: symbol.createDisplayObject({ currentTime:videoCurrentTime });
-            #else
-            case LibraryItemType.video: symbol.createDisplayObject(null);
-            #end
             case LibraryItemType.sound: throw new Error("Unexpected `sound` as DisplayObject creating.");
             case LibraryItemType.font: throw new Error("Unexpected `font` as DisplayObject creating.");
             case LibraryItemType.folder: throw new Error("Unexpected `folder` as DisplayObject creating.");
