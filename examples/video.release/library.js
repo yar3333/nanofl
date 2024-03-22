@@ -15,7 +15,7 @@ libraryData =
         "keyFrames": [
           {
             "label": "",
-            "duration": 1075,
+            "duration": 30,
             "motionTween": null,
             "elements": [
               {
@@ -25,11 +25,30 @@ libraryData =
                 "type": "instance",
                 "libraryItem": "test_with_sound",
                 "name": "",
-                "x": 143.1875000000001,
+                "x": 149.1875000000001,
                 "y": 89.56249999999994,
                 "regX": 0,
                 "regY": 0,
                 "videoCurrentTime": 10
+              }
+            ]
+          },
+          {
+            "label": "",
+            "duration": 1045,
+            "motionTween": null,
+            "elements": [
+              {
+                "type": "shape"
+              },
+              {
+                "type": "instance",
+                "libraryItem": "test_with_sound",
+                "name": "",
+                "x": 149.1875000000001,
+                "y": 89.56249999999994,
+                "regX": 0,
+                "regY": 0
               }
             ]
           }

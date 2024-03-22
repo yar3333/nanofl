@@ -1,7 +1,10 @@
 <movieclip version="2.3.0">
 	<layer name="Layer 1">
-		<frame duration="1075">
-			<instance libraryItem="test_with_sound" videoCurrentTime="10" x="143.1875000000001" y="89.56249999999994" />
+		<frame duration="30">
+			<instance libraryItem="test_with_sound" videoCurrentTime="10" x="149.1875000000001" y="89.56249999999994" />
+		</frame>
+		<frame duration="1045">
+			<instance libraryItem="test_with_sound" x="149.1875000000001" y="89.56249999999994" />
 		</frame>
 	</layer>
 </movieclip>

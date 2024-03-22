@@ -26,21 +26,23 @@ class Code extends components.nanofl.properties.base.Code
 
                 final isKeyFrame = app.document.navigator.pathItem.frame.subIndex == 0;
                 
-                template().currentTime.val
+                template().currentTime.val(roundFloat1000((cast item.dispObj : IdeVideo).currentTime));
+
+                template().seekTo.val
                 (
                     isKeyFrame && item.element.videoCurrentTime != null 
-                        ? item.element.videoCurrentTime 
-                        :  roundFloat1000((cast item.dispObj : IdeVideo).currentTime)
+                        ? roundFloat1000(item.element.videoCurrentTime) + ""
+                        : ""
                 );
 
-                (cast template().currentTime[0] : InputElement).readOnly = !isKeyFrame;
+                (cast template().seekTo[0] : InputElement).readOnly = !isKeyFrame;
                 
 			case _:
 				hide();
 		};
 	}
 	
-	function currentTime_change(_)
+	function seekTo_change(_)
 	{
 		if (freeze) return;
 		
@@ -48,7 +50,7 @@ class Code extends components.nanofl.properties.base.Code
 		{
 			case PropertiesObject.INSTANCE(item) if (Std.is(item.element.symbol, VideoItem)):
 				undoQueue.beginTransaction({ element:item.element });
-                final str = template().currentTime.val();
+                final str = template().seekTo.val();
                 item.element.videoCurrentTime = Std.parseFloat(str, -1) >= 0 ? Std.parseFloat(str) : null;
                 undoQueue.commitTransaction();
             case _:

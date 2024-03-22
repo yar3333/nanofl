@@ -12,6 +12,7 @@ using stdlib.Lambda;
 #if ide
 import htmlparser.HtmlNodeElement;
 import htmlparser.XmlBuilder;
+import nanofl.engine.elements.Instance;
 using htmlparser.HtmlParserTools;
 #end
 
@@ -108,48 +109,61 @@ class Layer
         }
     }
     
+    #if ide
     public function convertToKeyFrame(frameIndex:Int, blank=false) : Bool
     {
-        if (keyFrames.length > 0)
+        if (keyFrames.length == 0) { addKeyFrame(new KeyFrame(frameIndex + 1)); return true; }
+        
+        var curFrameIndex = 0;
+        for (i in 0...keyFrames.length)
         {
-            var curFrameIndex = 0;
-            for (i in 0...keyFrames.length)
+            var keyFrame = keyFrames[i];
+            
+            if (frameIndex >= curFrameIndex && frameIndex < curFrameIndex + keyFrame.duration)
             {
-                var keyFrame = keyFrames[i];
+                if (curFrameIndex == frameIndex) return false;
                 
-                if (frameIndex >= curFrameIndex && frameIndex < curFrameIndex + keyFrame.duration)
-                {
-                    if (curFrameIndex == frameIndex) return false;
-                    
-                    insertKeyFrame
+                insertKeyFrame
+                (
+                    i + 1,
+                    keyFrame.duplicate
                     (
-                        i + 1,
-                        keyFrame.duplicate
-                        (
-                            "",
-                            keyFrame.duration - (frameIndex - curFrameIndex),
-                            blank ? [] : keyFrame.getTweenedElements(frameIndex - curFrameIndex).map(x -> x.current)
-                        )
-                    );
-                    
-                    keyFrame.duration = frameIndex - curFrameIndex;
-                    return true;
-                }
+                        "",
+                        keyFrame.duration - (frameIndex - curFrameIndex),
+                        blank ? [] : getElementsForNewKeyFrame(keyFrame, frameIndex - curFrameIndex)
+                    )
+                );
                 
-                curFrameIndex += keyFrame.duration;
+                keyFrame.duration = frameIndex - curFrameIndex;
+                return true;
             }
             
-            var lastKeyFrame = keyFrames[keyFrames.length - 1];
-            lastKeyFrame.duration = frameIndex - curFrameIndex + lastKeyFrame.duration;
-            addKeyFrame(lastKeyFrame.duplicate("", 1));
-            return true;
+            curFrameIndex += keyFrame.duration;
         }
-        else
-        {
-            addKeyFrame(new KeyFrame(frameIndex + 1));
-            return true;
-        }
+        
+        var lastKeyFrame = keyFrames[keyFrames.length - 1];
+        lastKeyFrame.duration = frameIndex - curFrameIndex + lastKeyFrame.duration;
+        addKeyFrame(lastKeyFrame.duplicate("", 1));
+        return true;
     }
+
+    function getElementsForNewKeyFrame(keyFrame:KeyFrame, frameSubIndex:Int)
+    {
+        final elements = keyFrame.getTweenedElements(frameSubIndex).map(x -> x.current);
+
+        for (i in 0...elements.length) 
+        {
+            final element = elements[i];
+            if (element.type.match(ElementType.instance) && (cast element : Instance).symbol.type.match(LibraryItemType.video))
+            {
+                elements[i] = element.clone();
+                (cast elements[i] : Instance).videoCurrentTime = null;
+            }
+        }
+
+        return elements;
+    }
+    #end
     
     public function removeFrame(frameIndex:Int) : Bool
     {
@@ -188,6 +202,7 @@ class Layer
         };
     }
     
+    #if ide
     public function getNestLevel(layers:ArrayRO<Layer>) : Int
     {
         var r = 0;
@@ -199,6 +214,7 @@ class Layer
         }
         return r;
     }
+    #end
     
     public function getChildLayers() : Array<Layer>
     {
@@ -209,18 +225,11 @@ class Layer
     public function getTweenedElements(frameIndex:Int) : Array<TweenedElement>
     {
         #if ide
-        if (visible)
-        {
+        if (!visible) return [];
         #end
-            var frame = getFrame(frameIndex);
-            if (frame != null)
-            {
-                return frame.keyFrame.getTweenedElements(frame.subIndex);
-            }
-        #if ide
-        }
-        #end
-        return [];
+            
+        final frame = getFrame(frameIndex);
+        return frame?.keyFrame.getTweenedElements(frame.subIndex) ?? [];
     }
     
     #if ide
@@ -314,7 +323,6 @@ class Layer
     
     public function getIndex() : Int return layersContainer.layers.indexOf((cast this:Layer));
     
-    //@:allow(nanofl.engine.libraryitems.MovieClipItem.setLibrary)
     public function setLibrary(library:Library)
     {
         for (keyFrame in keyFrames) keyFrame.setLibrary(library);

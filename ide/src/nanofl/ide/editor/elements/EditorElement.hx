@@ -1,5 +1,6 @@
 package nanofl.ide.editor.elements;
 
+import nanofl.ide.displayobjects.IdeVideo;
 import nanofl.ide.ElementLifeTracker.ElementLifeTrack;
 import js.lib.Error;
 import stdlib.Debug;
@@ -133,7 +134,12 @@ abstract class EditorElement implements ISelectable
 
         if (Std.isOfType(dispObj, AdvancableDisplayObject))
         {
-            (cast dispObj:AdvancableDisplayObject).advanceTo(navigator.pathItem.frameIndex - track.startFrameIndex, framerate);
+            var frameAdvanceTo = navigator.pathItem.frameIndex - track.startFrameIndex;
+            if (currentElement != track.sameElementSequence[0] && Std.isOfType(dispObj, IdeVideo))
+            {
+                frameAdvanceTo += Math.floor((cast track.sameElementSequence[0] : Instance).videoCurrentTime * framerate);
+            }
+            (cast dispObj:AdvancableDisplayObject).advanceTo(frameAdvanceTo, framerate);
         }
 
         return dispObj;
