@@ -7936,7 +7936,7 @@ class nanofl_engine_movieclip_MotionTween {
 		let finishElements = nextKeyFrame != null ? nextKeyFrame.get_elements() : null;
 		let guideLine = this.getGuideLine(this.keyFrame,frameSubIndex);
 		let guide = guideLine != null ? new nanofl_engine_movieclip_Guide(guideLine) : null;
-		let t = frameSubIndex / this.keyFrame.duration;
+		let t = frameSubIndex / (this.keyFrame.duration + 1);
 		let r = [];
 		if(finishElements != null) {
 			let ease = nanofl_engine_Ease.get(this.easing / 100);

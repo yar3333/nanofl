@@ -65,7 +65,7 @@ class MotionTween
         var finishElements = nextKeyFrame != null ? nextKeyFrame.elements : null;
         var guideLine = getGuideLine(keyFrame, frameSubIndex);
         var guide = guideLine != null ? new Guide(guideLine) : null;
-        var t = frameSubIndex / keyFrame.duration;
+        var t = frameSubIndex / (keyFrame.duration + 1);
         
         var r = new Array<TweenedElement>();
         
