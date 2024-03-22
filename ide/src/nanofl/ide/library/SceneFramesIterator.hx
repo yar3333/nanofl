@@ -43,14 +43,16 @@ class SceneFramesIterator
 
     public function next() : Promise<CanvasRenderingContext2D>
     {
-        stage.update();
-
-        curFrame++;
-
-        if (scene.currentFrame >= scene.getTotalFrames() - 1) return Promise.resolve(ctx);
+        if (curFrame >= scene.getTotalFrames()) return Promise.resolve(ctx);
         
-        scene.advanceToNextFrame();
+        return stage.waitLoading().then(_ -> 
+        {
+            stage.update();
 
-        return stage.waitLoading().then(_ -> ctx);
+            curFrame++;
+            if (hasNext()) scene.advanceToNextFrame();
+
+            return ctx;
+        });
     }
 }

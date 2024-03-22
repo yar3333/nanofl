@@ -1561,8 +1561,14 @@ class nanofl_MovieClip extends createjs.Container {
 			sound.play();
 		}
 	}
-	addChildToLayer(child,layerIndex) {
+	addChildToLayer(child,layerIndex,beforeChild) {
 		this.layerOfChild.set(child,layerIndex);
+		if(beforeChild != null) {
+			let n = this.getChildIndex(beforeChild);
+			if(n >= 0) {
+				return this.addChildAt(child,n);
+			}
+		}
 		let _g = 0;
 		let _g1 = this.children.length;
 		while(_g < _g1) {
@@ -1638,8 +1644,8 @@ class nanofl_MovieClip extends createjs.Container {
 	}
 	gotoFrame(labelOrIndex) {
 		let newFrameIndex = this.getFrameIndexByLabel(labelOrIndex);
-		stdlib_Debug.assert(newFrameIndex >= 0,"Frame index must not be negative.",{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 152, className : "nanofl.MovieClip", methodName : "gotoFrame"});
-		stdlib_Debug.assert(newFrameIndex < this.getTotalFrames(),"Frame index must be less than total frames count.",{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 153, className : "nanofl.MovieClip", methodName : "gotoFrame"});
+		stdlib_Debug.assert(newFrameIndex >= 0,"Frame index must not be negative.",{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 160, className : "nanofl.MovieClip", methodName : "gotoFrame"});
+		stdlib_Debug.assert(newFrameIndex < this.getTotalFrames(),"Frame index must be less than total frames count.",{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 161, className : "nanofl.MovieClip", methodName : "gotoFrame"});
 		return new nanofl_engine_MovieClipGotoHelper(this,newFrameIndex);
 	}
 	getFrameIndexByLabel(labelOrIndex) {
@@ -3070,14 +3076,14 @@ Object.assign(nanofl_TextRun.prototype, {
 class nanofl_Video extends nanofl_SolidContainer {
 	constructor(symbol,params) {
 		super();
-		stdlib_Debug.assert(((symbol) instanceof nanofl_engine_libraryitems_VideoItem),null,{ fileName : "engine/nanofl/Video.hx", lineNumber : 31, className : "nanofl.Video", methodName : "new"});
+		stdlib_Debug.assert(((symbol) instanceof nanofl_engine_libraryitems_VideoItem),null,{ fileName : "engine/nanofl/Video.hx", lineNumber : 33, className : "nanofl.Video", methodName : "new"});
 		this.symbol = symbol;
+		this.duration = symbol.duration;
+		this.setBounds(0,0,symbol.width,symbol.height);
 		this.video = window.document.createElement("video");
 		this.video.src = symbol.library.realUrl(symbol.namePath + "." + symbol.ext);
 		this.video.loop = symbol.loop;
 		this.video.autoplay = symbol.autoPlay;
-		this.duration = symbol.duration;
-		this.setBounds(0,0,symbol.width,symbol.height);
 		let tmp = params != null ? params.currentTime : null;
 		this.video.currentTime = tmp != null ? tmp : 0.0001;
 		this.addChild(new createjs.Bitmap(new createjs.VideoBuffer(this.video)));
@@ -3989,7 +3995,7 @@ class nanofl_engine_MovieClipGotoHelper {
 	processSameKeyFrame(layer,newFrame) {
 		let tweenedElements = newFrame.keyFrame.getTweenedElements(newFrame.subIndex);
 		let displayObjects = this.mc.getChildrenByLayerIndex(layer.getIndex());
-		stdlib_Debug.assert(tweenedElements.length == displayObjects.length,"tweenedElements.length=" + tweenedElements.length + " != displayObjects.length=" + displayObjects.length,{ fileName : "engine/nanofl/engine/MovieClipGotoHelper.hx", lineNumber : 77, className : "nanofl.engine.MovieClipGotoHelper", methodName : "processSameKeyFrame"});
+		stdlib_Debug.assert(tweenedElements.length == displayObjects.length,"tweenedElements.length=" + tweenedElements.length + " != displayObjects.length=" + displayObjects.length,{ fileName : "engine/nanofl/engine/MovieClipGotoHelper.hx", lineNumber : 76, className : "nanofl.engine.MovieClipGotoHelper", methodName : "processSameKeyFrame"});
 		let _g = 0;
 		let _g1 = tweenedElements.length;
 		while(_g < _g1) {
@@ -3998,7 +4004,7 @@ class nanofl_engine_MovieClipGotoHelper {
 			if(dispObj.visible) {
 				let tweenedElement = tweenedElements[i];
 				if(tweenedElement.current != tweenedElement.original) {
-					stdlib_Debug.assert(((tweenedElement.current) instanceof nanofl_engine_elements_Instance),null,{ fileName : "engine/nanofl/engine/MovieClipGotoHelper.hx", lineNumber : 89, className : "nanofl.engine.MovieClipGotoHelper", methodName : "processSameKeyFrame"});
+					stdlib_Debug.assert(((tweenedElement.current) instanceof nanofl_engine_elements_Instance),null,{ fileName : "engine/nanofl/engine/MovieClipGotoHelper.hx", lineNumber : 88, className : "nanofl.engine.MovieClipGotoHelper", methodName : "processSameKeyFrame"});
 					tweenedElement.current.updateDisplayObjectTweenedProperties(dispObj);
 				}
 			}
@@ -4013,11 +4019,23 @@ class nanofl_engine_MovieClipGotoHelper {
 		let tweenedElements = newFrame.keyFrame.getTweenedElements(newFrame.subIndex);
 		let displayObjects = this.mc.getChildrenByLayerIndex(layer.getIndex());
 		let matched = 0;
-		while(matched < tweenedElements.length) {
+		while(matched < tweenedElements.length && matched < displayObjects.length) {
 			let elem = tweenedElements[matched].current;
 			let dispObj = displayObjects[matched];
 			if(!nanofl_engine_MovieClipGotoHelper.isElementMatchDisplayObject(elem,dispObj)) {
-				break;
+				if(elem.get_type()._hx_index != 0 && ((dispObj) instanceof createjs.Shape)) {
+					this.mc.removeChild(dispObj);
+					displayObjects.splice(matched,1);
+					if(matched >= displayObjects.length) {
+						break;
+					}
+					dispObj = displayObjects[matched];
+				} else if(elem.get_type()._hx_index == 0 && !((dispObj) instanceof createjs.Shape)) {
+					dispObj = this.mc.addChildToLayer(new createjs.Shape(),layerIndex,dispObj);
+					displayObjects.splice(matched,0,dispObj);
+				} else {
+					break;
+				}
 			}
 			switch(elem.get_type()._hx_index) {
 			case 0:
@@ -7807,10 +7825,12 @@ class nanofl_engine_movieclip_Layer {
 	}
 	getTweenedElements(frameIndex) {
 		let frame = this.getFrame(frameIndex);
-		if(frame != null) {
-			return frame.keyFrame.getTweenedElements(frame.subIndex);
+		let tmp = frame != null ? frame.keyFrame.getTweenedElements(frame.subIndex) : null;
+		if(tmp != null) {
+			return tmp;
+		} else {
+			return [];
 		}
-		return [];
 	}
 	loadPropertiesJson(obj,version) {
 		let tmp = obj.name;

@@ -66,17 +66,25 @@ class MovieClip extends Container
         #end
 	}
 	
-	public function addChildToLayer(child:DisplayObject, layerIndex:Int) : DisplayObject
+	public function addChildToLayer(child:DisplayObject, layerIndex:Int, ?beforeChild:DisplayObject) : DisplayObject
 	{
 		layerOfChild.set(child, layerIndex);
-		for (i in 0...children.length)
+		
+        if (beforeChild != null)
+        {
+            final n = getChildIndex(beforeChild);
+            if (n >= 0) return addChildAt(child, n);
+        }
+        
+        for (i in 0...children.length)
 		{
 			if (layerOfChild.get(children[i]) < layerIndex)
 			{
 				return addChildAt(child, i);
 			}
 		}
-		return addChild(child);
+		
+        return addChild(child);
 	}
 	
 	override public function removeAllChildren() : Void

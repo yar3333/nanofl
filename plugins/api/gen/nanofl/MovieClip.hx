@@ -6,7 +6,7 @@ extern class MovieClip extends easeljs.display.Container implements nanofl.engin
 	var currentFrame(default, null) : Int;
 	var paused : Bool;
 	var loop : Bool;
-	function addChildToLayer(child:easeljs.display.DisplayObject, layerIndex:Int):easeljs.display.DisplayObject;
+	function addChildToLayer(child:easeljs.display.DisplayObject, layerIndex:Int, ?beforeChild:easeljs.display.DisplayObject):easeljs.display.DisplayObject;
 	override function removeAllChildren():Void;
 	override function removeChild(child:easeljs.display.DisplayObject):Bool;
 	override function removeChildAt(index:Int):Bool;

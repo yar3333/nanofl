@@ -2,6 +2,8 @@ const { app, BrowserWindow, ipcMain, dialog, clipboard, screen, shell, utilityPr
 const path = require('path');
 const fs = require('node:fs');
 
+app.disableHardwareAcceleration();
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;

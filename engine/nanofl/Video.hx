@@ -20,9 +20,11 @@ class Video extends SolidContainer
 {
 	public var symbol(default, null) : VideoItem;
     
+    #if !ide
     public var video(default, null) : VideoElement;
+    #end
 
-    public var duration(default, null) : Float;
+    public final duration : Float;
 	
 	public function new(symbol:VideoItem, params:VideoParams)
 	{
@@ -32,23 +34,27 @@ class Video extends SolidContainer
 
         this.symbol = symbol;
         
-		video = Browser.document.createVideoElement();
+        duration = symbol.duration;
+		setBounds(0, 0, symbol.width, symbol.height);
+		
+        #if !ide
+        video = Browser.document.createVideoElement();
         video.src = symbol.library.realUrl(symbol.namePath + "." + symbol.ext);
         video.loop = symbol.loop;
         video.autoplay = symbol.autoPlay;
-
-        duration = symbol.duration;
-		setBounds(0, 0, symbol.width, symbol.height);
-
         video.currentTime = params?.currentTime ?? 0.0001;
-
         addChild(new easeljs.display.Bitmap(new easeljs.utils.VideoBuffer(video)));
+        #end
 	}
 
 	override public function clone(?recursive:Bool) : Video 
 	{
 		final r : Video = (cast this)._cloneProps(new Video(symbol, null));
+
+        #if !ide
         r.video.currentTime = video.currentTime;
+        #end
+        
         return r;
 	}
 	

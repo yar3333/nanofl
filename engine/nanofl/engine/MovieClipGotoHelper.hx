@@ -1,6 +1,5 @@
 package nanofl.engine;
 
-import js.lib.Error;
 import easeljs.display.Shape;
 import nanofl.engine.elements.Element;
 import nanofl.engine.movieclip.Frame;
@@ -106,11 +105,29 @@ class MovieClipGotoHelper
         final tweenedElements = newFrame.keyFrame.getTweenedElements(newFrame.subIndex);
         final displayObjects = mc.getChildrenByLayerIndex(layer.getIndex());
 
-        var matched = 0; while (matched < tweenedElements.length)
+        var matched = 0; while (matched < tweenedElements.length && matched < displayObjects.length)
         {
             final elem = tweenedElements[matched].current;
-            final dispObj = displayObjects[matched];
-            if (!isElementMatchDisplayObject(elem, dispObj)) break;
+            var dispObj = displayObjects[matched];
+            if (!isElementMatchDisplayObject(elem, dispObj))
+            {
+                if (!elem.type.match(ElementType.shape) && Std.isOfType(dispObj, Shape))
+                {
+                    mc.removeChild(dispObj);
+                    displayObjects.splice(matched, 1);
+                    if (matched >= displayObjects.length) break;
+                    dispObj = displayObjects[matched];
+                }
+                else if (elem.type.match(ElementType.shape) && !Std.isOfType(dispObj, Shape))
+                {
+                    dispObj = mc.addChildToLayer(new Shape(), layerIndex, dispObj);
+                    displayObjects.insert(matched, dispObj);
+                }
+                else
+                {
+                    break;
+                }
+            }
             
             switch (elem.type)
             {
