@@ -2,9 +2,11 @@ package nanofl.ide.displayobjects;
 
 import js.lib.Promise;
 import stdlib.Std;
+import js.html.CanvasRenderingContext2D;
 import nanofl.Video.VideoParams;
-import nanofl.ide.libraryitems.VideoItem;
 import nanofl.engine.AdvancableDisplayObject;
+import nanofl.engine.movieclip.TweenedElement;
+import nanofl.ide.libraryitems.VideoItem;
 
 class IdeVideo extends nanofl.Video
     implements AdvancableDisplayObject
@@ -14,8 +16,13 @@ class IdeVideo extends nanofl.Video
     var _currentTime : Float;
     public var currentTime(get,set) : Float;
     function get_currentTime() return _currentTime;
-    function set_currentTime(v:Float) { currentFrame = -1; return _currentTime = v; }
-
+    function set_currentTime(v:Float)
+    { 
+        trace("set_currentTime " + v);
+        currentFrame = -1; 
+        return _currentTime = v;
+    }
+    
     inline function getFramerate() return (cast stage : nanofl.Stage).framerate;
     
     public function new(symbol:VideoItem, params:VideoParams)
@@ -52,9 +59,9 @@ class IdeVideo extends nanofl.Video
         _currentTime = Math.min(Math.max(0, duration - 0.0001), currentFrame / getFramerate() + 0.0001);
     }
 
-    public function advanceTo(advanceFrames:Int, framerate:Float)
+    public function advanceTo(advanceFrames:Int, framerate:Float, tweenedElement:TweenedElement)
     {
-        if (!symbol.autoPlay) return;
+        if (!symbol.autoPlay || tweenedElement.original != tweenedElement.current) return;
 
         advanceFrames += Math.round(_currentTime * framerate);
 
@@ -63,6 +70,8 @@ class IdeVideo extends nanofl.Video
         currentFrame = symbol.loop ? advanceFrames % totalFrames : Std.min(totalFrames - 1, advanceFrames);
 
         _currentTime = Math.min(Math.max(0, duration - 0.0001), currentFrame / framerate + 0.0001);
+        
+        trace("advanceTo " + _currentTime + " | " + advanceFrames);
     }
 
     override function clone(?recursive:Bool) : Video
@@ -73,5 +82,11 @@ class IdeVideo extends nanofl.Video
         r._currentTime = _currentTime;
         
         return r;
+    }
+
+    override function draw(ctx:CanvasRenderingContext2D, ?ignoreCache:Bool):Bool
+    {
+        trace("video " + _currentTime + " | " + currentFrame);
+        return super.draw(ctx, ignoreCache);
     }
 }

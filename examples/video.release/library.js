@@ -54,7 +54,36 @@ libraryData =
           },
           {
             "label": "",
-            "duration": 11,
+            "duration": 10,
+            "motionTween": {
+              "tweenType": "motion",
+              "motionTweenEasing": 0,
+              "motionTweenOrientToPath": false,
+              "motionTweenRotateCount": 0,
+              "motionTweenRotateCountX": 0,
+              "motionTweenRotateCountY": 0,
+              "motionTweenDirectionalLightRotateCountX": 0,
+              "motionTweenDirectionalLightRotateCountY": 0
+            },
+            "elements": [
+              {
+                "type": "shape"
+              },
+              {
+                "type": "instance",
+                "libraryItem": "test_with_sound",
+                "name": "",
+                "x": 149.1875000000001,
+                "y": 89.56249999999994,
+                "regX": 0,
+                "regY": 0,
+                "videoCurrentTime": 10.458
+              }
+            ]
+          },
+          {
+            "label": "",
+            "duration": 1,
             "motionTween": null,
             "elements": [
               {
@@ -68,7 +97,7 @@ libraryData =
                 "y": 89.56249999999994,
                 "regX": 0,
                 "regY": 0,
-                "videoCurrentTime": 0
+                "videoCurrentTime": 10.167
               }
             ]
           }

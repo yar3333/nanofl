@@ -2,6 +2,7 @@ package nanofl;
 
 import nanofl.engine.libraryitems.IPlayableItem;
 import nanofl.engine.libraryitems.ISpritableItem;
+import nanofl.engine.movieclip.TweenedElement;
 
 typedef SpriteParams =
 {
@@ -28,7 +29,7 @@ class Sprite extends easeljs.display.Sprite
     }
 
     #if ide
-    public function advanceTo(advanceFrames:Int, framerate:Float)
+    public function advanceTo(advanceFrames:Int, framerate:Float, tweenedElement:TweenedElement)
     {
         stdlib.Debug.methodNotSupported(this);
     }

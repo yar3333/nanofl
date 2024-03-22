@@ -4,7 +4,7 @@ import datatools.ArrayRO;
 import nanofl.engine.LibraryItemType;
 import nanofl.engine.ElementType;
 import nanofl.ide.libraryitems.MovieClipItem;
-import nanofl.ide.ElementLifeTracker.ElementLifeTrack;
+import nanofl.ide.ElementLifeTracker;
 import nanofl.engine.elements.Instance;
 import nanofl.engine.MaskTools;
 import easeljs.display.Container;

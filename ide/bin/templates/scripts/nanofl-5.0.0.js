@@ -1536,7 +1536,7 @@ Object.assign(nanofl_engine_AdvancableDisplayObject.prototype, {
 class nanofl_MovieClip extends createjs.Container {
 	constructor(symbol,params) {
 		super();
-		stdlib_Debug.assert(((symbol) instanceof nanofl_engine_libraryitems_MovieClipItem),null,{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 41, className : "nanofl.MovieClip", methodName : "new"});
+		stdlib_Debug.assert(((symbol) instanceof nanofl_engine_libraryitems_MovieClipItem),null,{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 42, className : "nanofl.MovieClip", methodName : "new"});
 		this.symbol = symbol;
 		let tmp = params != null ? params.currentFrame : null;
 		this.currentFrame = tmp != null ? tmp : 0;
@@ -1644,8 +1644,8 @@ class nanofl_MovieClip extends createjs.Container {
 	}
 	gotoFrame(labelOrIndex) {
 		let newFrameIndex = this.getFrameIndexByLabel(labelOrIndex);
-		stdlib_Debug.assert(newFrameIndex >= 0,"Frame index must not be negative.",{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 160, className : "nanofl.MovieClip", methodName : "gotoFrame"});
-		stdlib_Debug.assert(newFrameIndex < this.getTotalFrames(),"Frame index must be less than total frames count.",{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 161, className : "nanofl.MovieClip", methodName : "gotoFrame"});
+		stdlib_Debug.assert(newFrameIndex >= 0,"Frame index must not be negative.",{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 161, className : "nanofl.MovieClip", methodName : "gotoFrame"});
+		stdlib_Debug.assert(newFrameIndex < this.getTotalFrames(),"Frame index must be less than total frames count.",{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 162, className : "nanofl.MovieClip", methodName : "gotoFrame"});
 		return new nanofl_engine_MovieClipGotoHelper(this,newFrameIndex);
 	}
 	getFrameIndexByLabel(labelOrIndex) {
@@ -7975,7 +7975,7 @@ class nanofl_engine_movieclip_MotionTween {
 					let finishFilters = _g3;
 					this.fixFilterSequence(startFilters,finishFilters);
 					this.fixFilterSequence(finishFilters,startFilters);
-					stdlib_Debug.assert(startFilters.length == finishFilters.length,"startFilters.length = " + startFilters.length + " != finishFilters.length = " + finishFilters.length,{ fileName : "engine/nanofl/engine/movieclip/MotionTween.hx", lineNumber : 92, className : "nanofl.engine.movieclip.MotionTween", methodName : "apply"});
+					stdlib_Debug.assert(startFilters.length == finishFilters.length,"startFilters.length = " + startFilters.length + " != finishFilters.length = " + finishFilters.length,{ fileName : "engine/nanofl/engine/movieclip/MotionTween.hx", lineNumber : 93, className : "nanofl.engine.movieclip.MotionTween", methodName : "apply"});
 					let i = 0;
 					let _g6 = [];
 					let _g_current = 0;
@@ -8054,6 +8054,9 @@ class nanofl_engine_movieclip_MotionTween {
 			targetInstance.meshParams.directionalLightRotationX += (finishInstance.meshParams.directionalLightRotationX - startInstance.meshParams.directionalLightRotationX) * k + this.directionalLightRotateCountX * 360 * k;
 			targetInstance.meshParams.directionalLightRotationY += (finishInstance.meshParams.directionalLightRotationY - startInstance.meshParams.directionalLightRotationY) * k + this.directionalLightRotateCountY * 360 * k;
 		}
+		if(startInstance.get_symbol().get_type()._hx_index == 6 && finishInstance.get_symbol().get_type()._hx_index == 6 && startInstance.videoCurrentTime != null && finishInstance.videoCurrentTime != null) {
+			targetInstance.videoCurrentTime += (finishInstance.videoCurrentTime - startInstance.videoCurrentTime) * k;
+		}
 		if(startInstance.colorEffect != null || finishInstance.colorEffect != null) {
 			let startCE = startInstance.colorEffect != null ? startInstance.colorEffect : finishInstance.colorEffect.getNeutralClone();
 			let finishCE = finishInstance.colorEffect != null ? finishInstance.colorEffect : startInstance.colorEffect.getNeutralClone();
@@ -8075,7 +8078,7 @@ class nanofl_engine_movieclip_MotionTween {
 		return new nanofl_engine_movieclip_MotionTween(this.easing,this.orientToPath,this.rotateCount,this.rotateCountX,this.rotateCountY,this.directionalLightRotateCountX,this.directionalLightRotateCountY);
 	}
 	equ(_motionTween) {
-		stdlib_Debug.assert(((_motionTween) instanceof nanofl_engine_movieclip_MotionTween),null,{ fileName : "engine/nanofl/engine/movieclip/MotionTween.hx", lineNumber : 303, className : "nanofl.engine.movieclip.MotionTween", methodName : "equ"});
+		stdlib_Debug.assert(((_motionTween) instanceof nanofl_engine_movieclip_MotionTween),null,{ fileName : "engine/nanofl/engine/movieclip/MotionTween.hx", lineNumber : 312, className : "nanofl.engine.movieclip.MotionTween", methodName : "equ"});
 		let motionTween = _motionTween;
 		if(motionTween.easing != this.easing) {
 			return false;

@@ -1,5 +1,6 @@
 package components.nanofl.library.librarypreview;
 
+import nanofl.engine.movieclip.TweenedElement;
 import js.html.Audio;
 import js.html.CanvasElement;
 import js.html.VideoElement;
@@ -111,7 +112,7 @@ class Code extends wquery.Component
         if (instance != null)
         {
             final obj = instance.createDisplayObject();
-            if (Std.isOfType(obj, AdvancableDisplayObject)) (cast obj:AdvancableDisplayObject).advanceTo(0, stage.framerate);
+            if (Std.isOfType(obj, AdvancableDisplayObject)) (cast obj:AdvancableDisplayObject).advanceTo(0, stage.framerate, new TweenedElement(instance, instance));
             stage.addChild(obj);
             final bounds = DisplayObjectTools.getOuterBounds(obj);
             if (bounds != null)

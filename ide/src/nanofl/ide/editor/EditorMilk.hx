@@ -1,5 +1,6 @@
 package nanofl.ide.editor;
 
+import nanofl.engine.movieclip.TweenedElement;
 import stdlib.Debug;
 import datatools.ArrayTools;
 import nanofl.ide.navigator.PathItem;
@@ -43,7 +44,7 @@ class EditorMilk extends Container
             
             if (i < editPath.length - 1)
             {
-                obj.advanceTo(editPath[i].frameIndex, app.document.properties.framerate);
+                obj.advanceTo(editPath[i].frameIndex, app.document.properties.framerate, new TweenedElement(editPath[i].instance, editPath[i].instance));
                 obj = cast obj.getChildByElement(editPath[i + 1].instance);
             }
             else

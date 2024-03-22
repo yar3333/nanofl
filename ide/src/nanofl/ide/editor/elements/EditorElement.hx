@@ -139,7 +139,7 @@ abstract class EditorElement implements ISelectable
             {
                 frameAdvanceTo += Math.floor((cast track.sameElementSequence[0] : Instance).videoCurrentTime * framerate);
             }
-            (cast dispObj:AdvancableDisplayObject).advanceTo(frameAdvanceTo, framerate);
+            (cast dispObj:AdvancableDisplayObject).advanceTo(frameAdvanceTo, framerate, new TweenedElement(originalElement, currentElement));
         }
 
         return dispObj;

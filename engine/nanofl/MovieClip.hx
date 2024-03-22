@@ -1,6 +1,5 @@
 package nanofl;
 
-import nanofl.engine.movieclip.KeyFrame;
 import stdlib.Std;
 import js.lib.Map;
 import easeljs.display.Container;
@@ -10,6 +9,8 @@ import nanofl.engine.InstanceDisplayObject;
 import nanofl.engine.AdvancableDisplayObject;
 import nanofl.engine.libraryitems.MovieClipItem;
 import nanofl.engine.elements.Element;
+import nanofl.engine.movieclip.TweenedElement;
+import nanofl.engine.movieclip.KeyFrame;
 import stdlib.Debug;
 using stdlib.StringTools;
 using stdlib.Lambda;
@@ -194,7 +195,7 @@ class MovieClip extends Container
 	}
     
     #if ide
-    public function advanceTo(lifetimeOnParent:Int, framerate:Float)
+    public function advanceTo(lifetimeOnParent:Int, framerate:Float, tweenedElement:TweenedElement)
     {
         Debug.assert(currentFrame == 0);
         if (lifetimeOnParent == 0) return;
@@ -215,17 +216,17 @@ class MovieClip extends Container
             final layer = symbol.layers[layerIndex];
             final frame = layer.getFrame(currentFrame);
             if (frame == null) continue;
-            final elements = frame.keyFrame.elements;
+            final tweenedElements = frame.keyFrame.getTweenedElements(frame.subIndex);
             final dispObjs = getChildrenByLayerIndex(layerIndex);
-            Debug.assert(elements.length == dispObjs.length);
+            Debug.assert(tweenedElements.length == dispObjs.length);
             
-            for (j in 0...elements.length)
+            for (j in 0...tweenedElements.length)
             {
                 final dispObj = dispObjs[j];
                 if (!Std.isOfType(dispObj, AdvancableDisplayObject)) continue;
-                final track = tracker.getTrackOne(elements[j]);
+                final track = tracker.getTrackOne(tweenedElements[j].original);
                 Debug.assert(track != null);
-                (cast dispObj:AdvancableDisplayObject).advanceTo(!paused ? currentFrame - track.startFrameIndex : lifetimeOnParent, framerate);
+                (cast dispObj:AdvancableDisplayObject).advanceTo(!paused ? currentFrame - track.startFrameIndex : lifetimeOnParent, framerate, tweenedElements[j]);
             }
         }
     }

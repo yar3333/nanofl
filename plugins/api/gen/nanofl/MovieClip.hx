@@ -19,7 +19,7 @@ extern class MovieClip extends easeljs.display.Container implements nanofl.engin
 	function getChildrenByLayerIndex(layerIndex:Int):Array<easeljs.display.DisplayObject>;
 	function gotoFrame(labelOrIndex:Dynamic):nanofl.engine.MovieClipGotoHelper;
 	function advanceToNextFrame():Void;
-	function advanceTo(lifetimeOnParent:Int, framerate:Float):Void;
+	function advanceTo(lifetimeOnParent:Int, framerate:Float, tweenedElement:nanofl.engine.movieclip.TweenedElement):Void;
 	function getChildByElement(elem:nanofl.engine.elements.Element):easeljs.display.DisplayObject;
 	override function clone(?recursive:Bool):nanofl.MovieClip;
 	override function toString():String;

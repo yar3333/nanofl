@@ -7,7 +7,7 @@ extern class IdeVideo extends nanofl.Video implements nanofl.engine.AdvancableDi
 	private function set_currentTime(v:Float):Float;
 	function waitLoading():js.lib.Promise<{ }>;
 	function advanceToNextFrame():Void;
-	function advanceTo(advanceFrames:Int, framerate:Float):Void;
-	override function draw(ctx:js.html.CanvasRenderingContext2D, ?ignoreCache:Bool):Bool;
+	function advanceTo(advanceFrames:Int, framerate:Float, tweenedElement:nanofl.engine.movieclip.TweenedElement):Void;
 	override function clone(?recursive:Bool):nanofl.Video;
+	override function draw(ctx:js.html.CanvasRenderingContext2D, ?ignoreCache:Bool):Bool;
 }

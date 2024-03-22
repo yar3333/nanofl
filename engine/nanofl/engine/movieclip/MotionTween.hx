@@ -1,17 +1,18 @@
 package nanofl.engine.movieclip;
 
+import stdlib.Debug;
+import stdlib.Std;
+import datatools.ArrayRO;
+import nanofl.engine.IMotionTween;
+import nanofl.engine.geom.Matrix;
+import nanofl.engine.libraryitems.VideoItem;
 import nanofl.engine.libraryitems.MeshItem;
 import nanofl.engine.movieclip.TweenedElement;
 import nanofl.engine.movieclip.KeyFrame;
-import datatools.ArrayRO;
-import stdlib.Debug;
-import nanofl.engine.IMotionTween;
 import nanofl.engine.coloreffects.ColorEffectDouble;
 import nanofl.engine.elements.Element;
 import nanofl.engine.elements.Instance;
-import nanofl.engine.geom.Matrix;
 import nanofl.engine.plugins.FilterPlugins;
-import stdlib.Std;
 using stdlib.Lambda;
 
 #if ide
@@ -252,6 +253,14 @@ class MotionTween
             targetInstance.meshParams.directionalLightColor = ColorTools.getTweened(startInstance.meshParams.directionalLightColor, k, finishInstance.meshParams.directionalLightColor);
             targetInstance.meshParams.directionalLightRotationX += (finishInstance.meshParams.directionalLightRotationX - startInstance.meshParams.directionalLightRotationX) * k + directionalLightRotateCountX * 360 * k;
             targetInstance.meshParams.directionalLightRotationY += (finishInstance.meshParams.directionalLightRotationY - startInstance.meshParams.directionalLightRotationY) * k + directionalLightRotateCountY * 360 * k;
+        }
+        
+        if (startInstance.symbol.type.match(LibraryItemType.video) 
+         && finishInstance.symbol.type.match(LibraryItemType.video)
+         && startInstance.videoCurrentTime != null
+         && finishInstance.videoCurrentTime != null)
+        {
+            targetInstance.videoCurrentTime += (finishInstance.videoCurrentTime - startInstance.videoCurrentTime) * k;
         }
 
 		if (startInstance.colorEffect != null || finishInstance.colorEffect != null)

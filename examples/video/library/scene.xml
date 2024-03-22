@@ -6,8 +6,11 @@
 		<frame duration="8">
 			<instance libraryItem="test_with_sound" x="149.1875000000001" y="89.56249999999994" />
 		</frame>
-		<frame duration="11">
-			<instance libraryItem="test_with_sound" videoCurrentTime="0" x="149.1875000000001" y="89.56249999999994" />
+		<frame duration="10" tweenType="motion">
+			<instance libraryItem="test_with_sound" videoCurrentTime="10.458" x="149.1875000000001" y="89.56249999999994" />
+		</frame>
+		<frame>
+			<instance libraryItem="test_with_sound" videoCurrentTime="10.167" x="149.1875000000001" y="89.56249999999994" />
 		</frame>
 	</layer>
 </movieclip>
