@@ -5,4 +5,5 @@ package components.nanofl.library.librarypreview;
 	var container(get, never) : js.JQuery;
 	var canvas(get, never) : js.JQuery;
 	var sound(get, never) : js.JQuery;
+	var video(get, never) : js.JQuery;
 }

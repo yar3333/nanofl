@@ -33,11 +33,12 @@ class Instance extends Element
 	public var filters : Array<FilterDef>;
 	public var blendMode : BlendModes;
     public var meshParams : MeshParams;
+    public var videoCurrentTime : Float;
 	
 	public var symbol(get, never) : InstancableItem;
 	@:noCompletion function get_symbol() return (cast library.getItem(namePath) : InstancableItem);
 	
-	public function new(namePath:String, ?name:String, ?colorEffect:ColorEffect, ?filters:Array<FilterDef>, ?blendMode:BlendModes, ?meshParams:MeshParams)
+	public function new(namePath:String, ?name:String, ?colorEffect:ColorEffect, ?filters:Array<FilterDef>, ?blendMode:BlendModes, ?meshParams:MeshParams, ?videoCurrentTime:Float)
 	{
 		super();
 		
@@ -47,6 +48,7 @@ class Instance extends Element
 		this.filters = filters ?? [];
 		this.blendMode = blendMode ?? BlendModes.normal;
 		this.meshParams = meshParams ?? MeshParamsTools.createDefault();
+		this.videoCurrentTime = videoCurrentTime;
 	}
 	
 	#if ide
@@ -62,6 +64,7 @@ class Instance extends Element
 		filters = node.find(">filters>*").map(node -> FilterDef.load(node, version));
 		blendMode = node.getAttr("blendMode", BlendModes.normal);
 		meshParams = MeshParamsTools.load(node);
+		videoCurrentTime = node.getAttr("videoCurrentTime", "") != "" ? Std.parseFloat(node.getAttr("videoCurrentTime")) : null;
 		
 		return true;
 	}
@@ -79,6 +82,7 @@ class Instance extends Element
 		filters = (obj.filters ?? []).map(x -> FilterDef.loadJson(x, version));
 		blendMode = obj.blendMode ?? BlendModes.normal;
 		meshParams = obj.meshParams != null ? MeshParamsTools.loadJson(obj.meshParams) : null;
+        videoCurrentTime = obj.videoCurrentTime;
 		
 		return true;
     }
@@ -90,6 +94,7 @@ class Instance extends Element
 		out.attr("name", name, "");
 		out.attr("blendMode", blendMode, BlendModes.normal);
         if (meshParams != null && library.hasItem(namePath) && symbol.type == LibraryItemType.mesh) MeshParamsTools.save(meshParams, out);
+        if (videoCurrentTime != null && library.hasItem(namePath) && symbol.type == LibraryItemType.video) out.attr("videoCurrentTime", roundFloat1000(videoCurrentTime));
         if (colorEffect != null) colorEffect.save(out);
 		
         if (filters.length > 0)
@@ -111,6 +116,7 @@ class Instance extends Element
 		
 		if (blendMode != BlendModes.normal) obj.blendMode = blendMode ?? BlendModes.normal;
         if (meshParams != null && library.hasItem(namePath) && symbol.type == LibraryItemType.mesh) obj.meshParams = MeshParamsTools.saveJson(meshParams);
+        if (videoCurrentTime != null && library.hasItem(namePath) && symbol.type == LibraryItemType.video) obj.videoCurrentTime = videoCurrentTime;
         if (colorEffect != null) obj.colorEffect = colorEffect.saveJson();
 		
         if (filters.length > 0)
@@ -130,6 +136,7 @@ class Instance extends Element
 			ArrayTools.clone(filters),
 			blendMode,
             MeshParamsTools.clone(meshParams),
+            videoCurrentTime,
 		);
 		obj.library = library;
 		copyBaseProperties(obj);
@@ -146,6 +153,7 @@ class Instance extends Element
 			ArrayTools.clone(filters),
 			blendMode,
             MeshParamsTools.clone(meshParams),
+            videoCurrentTime,
 		);
 	}
 	
@@ -156,6 +164,7 @@ class Instance extends Element
 		filters = ArrayTools.clone((cast state:InstanceState).filters);
 		blendMode = (cast state:InstanceState).blendMode;
         meshParams = MeshParamsTools.clone((cast state:InstanceState).meshParams);
+        videoCurrentTime = (cast state:InstanceState).videoCurrentTime;
 	}
 	#end
 	
@@ -170,7 +179,11 @@ class Instance extends Element
             case LibraryItemType.movieclip: symbol.createDisplayObject(null);
             case LibraryItemType.bitmap: symbol.createDisplayObject(null);
             case LibraryItemType.mesh: symbol.createDisplayObject(meshParams);
-            case LibraryItemType.video: symbol.createDisplayObject(null); // TODO: currentFrame
+            #if !ide
+            case LibraryItemType.video: symbol.createDisplayObject({ currentTime:videoCurrentTime });
+            #else
+            case LibraryItemType.video: symbol.createDisplayObject(null);
+            #end
             case LibraryItemType.sound: throw new Error("Unexpected `sound` as DisplayObject creating.");
             case LibraryItemType.font: throw new Error("Unexpected `font` as DisplayObject creating.");
             case LibraryItemType.folder: throw new Error("Unexpected `folder` as DisplayObject creating.");
@@ -201,6 +214,15 @@ class Instance extends Element
         {
             MeshParamsTools.applyToMesh(meshParams, (cast dispObj:nanofl.Mesh));
         }
+
+        if (videoCurrentTime != null && Std.is(dispObj, nanofl.Video)) 
+        {
+            #if !ide
+            (cast dispObj:nanofl.Video).video.currentTime = videoCurrentTime;
+            #else
+            (cast dispObj:nanofl.ide.displayobjects.IdeVideo).currentTime = videoCurrentTime;
+            #end
+        }
     }
 
     public function updateDisplayObjectTweenedProperties(dispObj:DisplayObject) : Void
@@ -228,7 +250,14 @@ class Instance extends Element
 		if (!ArrayTools.equ((cast element:Instance).filters, filters)) return false;
 		if ((cast element:Instance).blendMode != blendMode) return false;
         if (!MeshParamsTools.equ((cast element:Instance).meshParams, meshParams)) return false;
+		if ((cast element:Instance).videoCurrentTime != videoCurrentTime) return false;
 		return true;
 	}
 	
+    #if ide
+   	static function roundFloat1000(f:Float) : Float
+	{
+		return Math.round(f * 1000) / 1000;
+	}
+    #end
 }

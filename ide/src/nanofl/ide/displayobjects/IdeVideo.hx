@@ -11,7 +11,7 @@ class IdeVideo extends nanofl.Video
     implements AdvancableDisplayObject
 {
     var currentFrame : Int;
-    var currentTime : Float;
+    public var currentTime : Float;
 
     inline function getFramerate() return (cast stage : nanofl.Stage).framerate;
     
@@ -50,6 +50,8 @@ class IdeVideo extends nanofl.Video
     public function advanceTo(advanceFrames:Int, framerate:Float)
     {
         if (!symbol.autoPlay) return;
+
+        advanceFrames += Math.round(currentTime * framerate);
 
         final totalFrames = Std.int(duration * framerate);
 

@@ -1,13 +1,14 @@
 package nanofl.engine.elements;
 
 extern class Instance extends nanofl.engine.elements.Element {
-	function new(namePath:String, ?name:String, ?colorEffect:nanofl.engine.coloreffects.ColorEffect, ?filters:Array<nanofl.engine.FilterDef>, ?blendMode:nanofl.engine.BlendModes, ?meshParams:nanofl.engine.MeshParams):Void;
+	function new(namePath:String, ?name:String, ?colorEffect:nanofl.engine.coloreffects.ColorEffect, ?filters:Array<nanofl.engine.FilterDef>, ?blendMode:nanofl.engine.BlendModes, ?meshParams:nanofl.engine.MeshParams, ?videoCurrentTime:Float):Void;
 	var namePath : String;
 	var name : String;
 	var colorEffect : nanofl.engine.coloreffects.ColorEffect;
 	var filters : Array<nanofl.engine.FilterDef>;
 	var blendMode : nanofl.engine.BlendModes;
 	var meshParams : nanofl.engine.MeshParams;
+	var videoCurrentTime : Float;
 	var symbol(get, never) : nanofl.engine.libraryitems.InstancableItem;
 	@:noCompletion
 	private function get_symbol():nanofl.engine.libraryitems.InstancableItem;

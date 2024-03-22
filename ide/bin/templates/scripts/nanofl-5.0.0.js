@@ -98,15 +98,6 @@ class HxOverrides {
 }
 HxOverrides.__name__ = "HxOverrides";
 class Lambda {
-	static array(it) {
-		let a = [];
-		let i = $getIterator(it);
-		while(i.hasNext()) {
-			let i1 = i.next();
-			a.push(i1);
-		}
-		return a;
-	}
 	static exists(it,f) {
 		let x = $getIterator(it);
 		while(x.hasNext()) {
@@ -3808,7 +3799,7 @@ class nanofl_engine_Loader {
 	static video(url) {
 		return new Promise(function(resolve,reject) {
 			let video = window.document.createElement("video");
-			video.currentTime = 0.001;
+			video.currentTime = 0.0001;
 			video.addEventListener("loadeddata",function() {
 				resolve(video);
 			},{ once : true});
@@ -4539,7 +4530,7 @@ class nanofl_engine_elements_Elements {
 }
 nanofl_engine_elements_Elements.__name__ = "nanofl.engine.elements.Elements";
 class nanofl_engine_elements_Instance extends nanofl_engine_elements_Element {
-	constructor(namePath,name,colorEffect,filters,blendMode,meshParams) {
+	constructor(namePath,name,colorEffect,filters,blendMode,meshParams,videoCurrentTime) {
 		super();
 		this.namePath = namePath;
 		this.name = name;
@@ -4550,6 +4541,7 @@ class nanofl_engine_elements_Instance extends nanofl_engine_elements_Element {
 		this.blendMode = tmp1 != null ? tmp1 : "normal";
 		let tmp2 = meshParams;
 		this.meshParams = tmp2 != null ? tmp2 : nanofl_engine_MeshParamsTools.createDefault();
+		this.videoCurrentTime = videoCurrentTime;
 	}
 	get_type() {
 		return nanofl_engine_ElementType.instance;
@@ -4562,8 +4554,8 @@ class nanofl_engine_elements_Instance extends nanofl_engine_elements_Element {
 			return false;
 		}
 		this.namePath = obj.libraryItem;
-		stdlib_Debug.assert(this.namePath != null,null,{ fileName : "engine/nanofl/engine/elements/Instance.hx", lineNumber : 73, className : "nanofl.engine.elements.Instance", methodName : "loadPropertiesJson"});
-		stdlib_Debug.assert(this.namePath != "",null,{ fileName : "engine/nanofl/engine/elements/Instance.hx", lineNumber : 74, className : "nanofl.engine.elements.Instance", methodName : "loadPropertiesJson"});
+		stdlib_Debug.assert(this.namePath != null,null,{ fileName : "engine/nanofl/engine/elements/Instance.hx", lineNumber : 78, className : "nanofl.engine.elements.Instance", methodName : "loadPropertiesJson"});
+		stdlib_Debug.assert(this.namePath != "",null,{ fileName : "engine/nanofl/engine/elements/Instance.hx", lineNumber : 79, className : "nanofl.engine.elements.Instance", methodName : "loadPropertiesJson"});
 		let tmp = obj.name;
 		this.name = tmp != null ? tmp : "";
 		this.colorEffect = nanofl_engine_coloreffects_ColorEffect.loadJson(obj.colorEffect);
@@ -4580,10 +4572,11 @@ class nanofl_engine_elements_Instance extends nanofl_engine_elements_Element {
 		let tmp2 = obj.blendMode;
 		this.blendMode = tmp2 != null ? tmp2 : "normal";
 		this.meshParams = obj.meshParams != null ? nanofl_engine_MeshParamsTools.loadJson(obj.meshParams) : null;
+		this.videoCurrentTime = obj.videoCurrentTime;
 		return true;
 	}
 	clone() {
-		let obj = new nanofl_engine_elements_Instance(this.namePath,this.name,datatools_NullTools.clone(this.colorEffect),datatools_ArrayTools.clone(this.filters),this.blendMode,nanofl_engine_MeshParamsTools.clone(this.meshParams));
+		let obj = new nanofl_engine_elements_Instance(this.namePath,this.name,datatools_NullTools.clone(this.colorEffect),datatools_ArrayTools.clone(this.filters),this.blendMode,nanofl_engine_MeshParamsTools.clone(this.meshParams),this.videoCurrentTime);
 		obj.library = this.library;
 		this.copyBaseProperties(obj);
 		return obj;
@@ -4607,7 +4600,7 @@ class nanofl_engine_elements_Instance extends nanofl_engine_elements_Element {
 		case 5:
 			throw new Error("Unexpected `sound` as DisplayObject creating.");
 		case 6:
-			dispObj = this.get_symbol().createDisplayObject(null);
+			dispObj = this.get_symbol().createDisplayObject({ currentTime : this.videoCurrentTime});
 			break;
 		}
 		this.elementUpdateDisplayObjectBaseProperties(dispObj);
@@ -4637,6 +4630,9 @@ class nanofl_engine_elements_Instance extends nanofl_engine_elements_Element {
 		dispObj.compositeOperation = this.blendMode;
 		if(this.meshParams != null && ((dispObj) instanceof nanofl_Mesh)) {
 			nanofl_engine_MeshParamsTools.applyToMesh(this.meshParams,dispObj);
+		}
+		if(this.videoCurrentTime != null && ((dispObj) instanceof nanofl_Video)) {
+			dispObj.video.currentTime = this.videoCurrentTime;
 		}
 	}
 	updateDisplayObjectTweenedProperties(dispObj) {
@@ -4668,13 +4664,10 @@ class nanofl_engine_elements_Instance extends nanofl_engine_elements_Element {
 		if(!nanofl_engine_MeshParamsTools.equ(element.meshParams,this.meshParams)) {
 			return false;
 		}
+		if(element.videoCurrentTime != this.videoCurrentTime) {
+			return false;
+		}
 		return true;
-	}
-	getFilters() {
-		return this.filters;
-	}
-	setFilters(filters) {
-		this.filters = filters;
 	}
 }
 nanofl_engine_elements_Instance.__name__ = "nanofl.engine.elements.Instance";
@@ -7940,7 +7933,7 @@ class nanofl_engine_movieclip_MotionTween {
 					let targetInstance = this.getMovedInstance(startInstance,finishInstance,k,guide);
 					let _g = [];
 					let _g1 = 0;
-					let _g2 = startInstance.getFilters();
+					let _g2 = startInstance.filters;
 					while(_g1 < _g2.length) {
 						let v = _g2[_g1];
 						++_g1;
@@ -7951,7 +7944,7 @@ class nanofl_engine_movieclip_MotionTween {
 					let startFilters = _g;
 					let _g3 = [];
 					let _g4 = 0;
-					let _g5 = finishInstance.getFilters();
+					let _g5 = finishInstance.filters;
 					while(_g4 < _g5.length) {
 						let v = _g5[_g4];
 						++_g4;
@@ -7971,7 +7964,7 @@ class nanofl_engine_movieclip_MotionTween {
 						let x = _g_array[_g_current++];
 						_g6.push(x.clone().tween(k,finishFilters[i++]));
 					}
-					targetInstance.setFilters(Lambda.array(_g6));
+					targetInstance.filters = _g6;
 					r.push(new nanofl_engine_movieclip_TweenedElement(startElement,targetInstance));
 				} else {
 					r.push(new nanofl_engine_movieclip_TweenedElement(startElement,startElement));

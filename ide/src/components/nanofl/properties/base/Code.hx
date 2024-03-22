@@ -129,4 +129,9 @@ abstract class Code extends wquery.Component
 	{
 		return Math.round(f * 100) / 100;
 	}
+
+	function roundFloat1000(f:Float) : Float
+	{
+		return Math.round(f * 1000) / 1000;
+	}
 }

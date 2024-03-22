@@ -29,6 +29,7 @@ class Code extends wquery.Component
 		"frame-label-pane": components.nanofl.properties.framelabel.Code,
 		"motion-tween-pane": components.nanofl.properties.motiontween.Code,
 		"mesh-params-pane": components.nanofl.properties.meshparams.Code,
+		"video-pane": components.nanofl.properties.video.Code,
 	};
 
 	@inject var app : Application;
@@ -81,6 +82,7 @@ class Code extends wquery.Component
 		template().frameLabel.bind(obj);
 		template().motionTween.bind(obj);
 		template().meshParams.bind(obj);
+		template().video.bind(obj);
 	}
 	
 	function nothing_change(e) fireChangeEvent();
@@ -97,6 +99,7 @@ class Code extends wquery.Component
 	function frameLabel_change(e) fireChangeEvent();
 	function motionTween_change(e) fireChangeEvent();
 	function meshParams_change(e) fireChangeEvent();
+	function video_change(e) fireChangeEvent();
 	
 	function fireChangeEvent()
 	{

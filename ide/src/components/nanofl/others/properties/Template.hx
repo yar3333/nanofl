@@ -49,6 +49,9 @@ class Template
 	
 	public var meshParams(get, never) : components.nanofl.properties.meshparams.Code;
 	inline function get_meshParams() return cast component.children.meshParams;
+	
+	public var video(get, never) : components.nanofl.properties.video.Code;
+	inline function get_video() return cast component.children.video;
 
 	public function new(component:wquery.Component) this.component = component;
 }

@@ -28,7 +28,8 @@ libraryData =
                 "x": 143.1875000000001,
                 "y": 89.56249999999994,
                 "regX": 0,
-                "regY": 0
+                "regY": 0,
+                "videoCurrentTime": 10
               }
             ]
           }

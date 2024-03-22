@@ -50,8 +50,10 @@ abstract class EditorElement implements ISelectable
 	
 	@:allow(nanofl.ide.editor.tools.TransformEditorTool)
 	@:allow(nanofl.ide.editor.tools.TextEditorTool)
+	@:allow(components.nanofl.properties.video.Code)
 	var dispObj : DisplayObject;
-	var selectionBoxShape : Shape;
+	
+    var selectionBoxShape : Shape;
 	var emptyClipMark : DisplayObject;
 	var emptyClipMarkSelected : DisplayObject;
 	var regPointMark : DisplayObject;

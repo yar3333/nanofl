@@ -1,13 +1,13 @@
 package nanofl.ide;
 
-import stdlib.Debug;
-import nanofl.engine.movieclip.Layer;
 import js.lib.Set;
+import stdlib.Debug;
 import nanofl.engine.LibraryItemType;
 import nanofl.engine.ElementType;
 import nanofl.engine.elements.Instance;
 import nanofl.engine.elements.Element;
 import nanofl.engine.libraryitems.MovieClipItem;
+import nanofl.engine.movieclip.Layer;
 using nanofl.engine.MovieClipItemTools;
 using stdlib.Lambda;
 

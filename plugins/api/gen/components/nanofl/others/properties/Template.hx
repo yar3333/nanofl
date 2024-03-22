@@ -17,4 +17,5 @@ package components.nanofl.others.properties;
 	var frameLabel(get, never) : components.nanofl.properties.framelabel.Code;
 	var motionTween(get, never) : components.nanofl.properties.motiontween.Code;
 	var meshParams(get, never) : components.nanofl.properties.meshparams.Code;
+	var video(get, never) : components.nanofl.properties.video.Code;
 }
