@@ -125,6 +125,7 @@ class ElementLifeTracker
             if (elemA.type != elemB.type) return null;
             if (elemA.type != ElementType.instance) return null;
             if ((cast elemA:Instance).namePath != (cast elemB:Instance).namePath) return null;
+            if ((cast elemA:Instance).symbol.type.match(LibraryItemType.video) && (cast elemA:Instance).videoCurrentTime != null && (cast elemB:Instance).videoCurrentTime != null) return null;
         }
 
         return (cast b[limit] : Instance);
