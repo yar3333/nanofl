@@ -81,7 +81,8 @@ class AudioHelper
 
         final trackVideos = tracker.tracks.filter(x -> x.sameElementSequence[0].type.match(ElementType.instance)
                                               && (cast x.sameElementSequence[0] : Instance).symbol.type.match(LibraryItemType.video)
-                                              && getVideoItemFromTrack(x).hasAudio);
+                                              && getVideoItemFromTrack(x).hasAudio
+                                              && (x.sameElementSequence.length == 1 || !x.sameElementSequence[0].parent.hasGoodMotionTween()));
         for (track in trackVideos)
         {
             final mcVideo = getVideoItemFromTrack(track);
