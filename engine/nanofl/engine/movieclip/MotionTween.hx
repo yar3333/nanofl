@@ -3,9 +3,7 @@ package nanofl.engine.movieclip;
 import stdlib.Debug;
 import stdlib.Std;
 import datatools.ArrayRO;
-import nanofl.engine.IMotionTween;
 import nanofl.engine.geom.Matrix;
-import nanofl.engine.libraryitems.VideoItem;
 import nanofl.engine.libraryitems.MeshItem;
 import nanofl.engine.movieclip.TweenedElement;
 import nanofl.engine.movieclip.KeyFrame;
@@ -22,7 +20,6 @@ using htmlparser.HtmlParserTools;
 #end
 
 class MotionTween
-	implements IMotionTween
 {
 	public var keyFrame : KeyFrame;
 	
@@ -307,7 +304,7 @@ class MotionTween
 		);
 	}
 	
-	public function equ(_motionTween:IMotionTween) : Bool
+	public function equ(_motionTween:MotionTween) : Bool
 	{
 		stdlib.Debug.assert(Std.isOfType(_motionTween, MotionTween));
 		

@@ -94,7 +94,8 @@ class AudioHelper
 
     static function createAudioTrack(item:{ namePath:String, ext:String, loop:Bool }, track:ElementLifeTrack, framerate:Float, library:IdeLibrary) : AudioTrack
     {
-        return {
+        return
+        {
             delayBeforeStart: track.startFrameIndex / framerate,
             filePath: library.libraryDir + "/" + item.namePath + "." + item.ext,
             loop: item.loop,

@@ -215,6 +215,8 @@ class Code extends wquery.Component
 
     function stopPlaying()
     {
+        if (soundPlaying == null && (cast template().video[0] : VideoElement).paused) return;
+
         if (audioPlaying != null) { audioPlaying.pause(); audioPlaying = null; }
         soundPlaying = null;
         

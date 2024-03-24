@@ -1,5 +1,6 @@
 package components.nanofl.library.libraryview;
 
+import nanofl.engine.Log;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.Application;
 import nanofl.ide.Globals;
@@ -122,7 +123,14 @@ class Code extends wquery.Component
 	
 	function onResizeNorth(paneName:String, paneElem:JQuery, paneState:LayoutPaneState, paneOptions:LayoutPaneOptions, paneLayoutName:String)
 	{
-		template().preview.resize(paneElem.innerWidth(), paneState.innerHeight - 10);
-		preferences.application.previewHeight = paneState.size;
+        try
+        {
+            template().preview.resize(paneElem.innerWidth(), paneState.innerHeight - 10);
+            preferences.application.previewHeight = paneState.size;
+        }
+        catch (e)
+        {
+            Log.console.error(e);
+        }
 	}
 }

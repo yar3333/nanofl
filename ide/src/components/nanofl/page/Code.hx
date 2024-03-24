@@ -2,6 +2,7 @@ package components.nanofl.page;
 
 import js.Browser;
 import js.JQuery;
+import nanofl.engine.Log.console;
 import nanofl.ide.ILayout;
 import nanofl.ide.draganddrop.DragAndDrop;
 import nanofl.ide.preferences.Preferences;
@@ -148,26 +149,40 @@ class Code extends wquery.Component
 	
 	function onResizeEast(paneName:String, paneElem:js.JQuery, paneState:LayoutPaneState, paneOptions:LayoutPaneOptions, paneLayoutName:String) : Void
 	{
-		template().library.resize(paneState.innerWidth, paneState.innerHeight - template().rightNav.outerHeight());
-		template().properties.resize(paneState.innerWidth, paneState.innerHeight - template().rightNav.outerHeight());
-		template().output.resize(paneState.innerWidth, paneState.innerHeight - template().rightNav.outerHeight());
+        try
+        {
+            template().library.resize(paneState.innerWidth, paneState.innerHeight - template().rightNav.outerHeight());
+            template().properties.resize(paneState.innerWidth, paneState.innerHeight - template().rightNav.outerHeight());
+            template().output.resize(paneState.innerWidth, paneState.innerHeight - template().rightNav.outerHeight());
+        }
+        catch (e)
+        {
+            console.error(e);
+        }
 	}
 	
 	function onResizeCenter(paneName:String, paneElem:js.JQuery, paneState:LayoutPaneState, paneOptions:LayoutPaneOptions, paneLayoutName:String) : Void
 	{
-		var documentsHeight = template().openedFiles.outerHeight();
+        try
+        {
+            final documentsHeight = template().openedFiles.outerHeight();
 		
-		template().content.find(">*").not(template().startPage)
-			.width(paneState.innerWidth)
-			.height(paneState.innerHeight - documentsHeight);
-		
-		template().startPage
-			.css("margin-top", -documentsHeight + "px")
-			.width(paneState.innerWidth)
-			.height(paneState.innerHeight);
-		
-		template().movie.resize();
-		template().openedFiles.resize();
+            template().content.find(">*").not(template().startPage)
+                .width(paneState.innerWidth)
+                .height(paneState.innerHeight - documentsHeight);
+            
+            template().startPage
+                .css("margin-top", -documentsHeight + "px")
+                .width(paneState.innerWidth)
+                .height(paneState.innerHeight);
+            
+            template().movie.resize();
+            template().openedFiles.resize();
+        }
+        catch (e)
+        {
+            console.error(e);
+        }
 	}
 	
 	function resize(maxWidth:Int, maxHeight:Int)

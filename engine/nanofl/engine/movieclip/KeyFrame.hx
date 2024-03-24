@@ -1,6 +1,5 @@
 package nanofl.engine.movieclip;
 
-import nanofl.engine.IMotionTween;
 import datatools.ArrayRO;
 import nanofl.engine.Library;
 import datatools.ArrayTools;
@@ -23,7 +22,7 @@ class KeyFrame
 	public var label : String;
 	public var duration : Int;
 	
-	var motionTween : IMotionTween;
+	var motionTween : MotionTween;
 	
 	var _elements : Array<Element>;
 	public var elements(get, never) : ArrayRO<Element>;

@@ -3624,13 +3624,6 @@ nanofl_engine_ILibraryItem.__isInterface__ = true;
 Object.assign(nanofl_engine_ILibraryItem.prototype, {
 	__class__: nanofl_engine_ILibraryItem
 });
-class nanofl_engine_IMotionTween {
-}
-nanofl_engine_IMotionTween.__name__ = "nanofl.engine.IMotionTween";
-nanofl_engine_IMotionTween.__isInterface__ = true;
-Object.assign(nanofl_engine_IMotionTween.prototype, {
-	__class__: nanofl_engine_IMotionTween
-});
 class nanofl_engine_ISelectable {
 }
 nanofl_engine_ISelectable.__name__ = "nanofl.engine.ISelectable";
@@ -7975,7 +7968,7 @@ class nanofl_engine_movieclip_MotionTween {
 					let finishFilters = _g3;
 					this.fixFilterSequence(startFilters,finishFilters);
 					this.fixFilterSequence(finishFilters,startFilters);
-					stdlib_Debug.assert(startFilters.length == finishFilters.length,"startFilters.length = " + startFilters.length + " != finishFilters.length = " + finishFilters.length,{ fileName : "engine/nanofl/engine/movieclip/MotionTween.hx", lineNumber : 93, className : "nanofl.engine.movieclip.MotionTween", methodName : "apply"});
+					stdlib_Debug.assert(startFilters.length == finishFilters.length,"startFilters.length = " + startFilters.length + " != finishFilters.length = " + finishFilters.length,{ fileName : "engine/nanofl/engine/movieclip/MotionTween.hx", lineNumber : 90, className : "nanofl.engine.movieclip.MotionTween", methodName : "apply"});
 					let i = 0;
 					let _g6 = [];
 					let _g_current = 0;
@@ -8078,7 +8071,7 @@ class nanofl_engine_movieclip_MotionTween {
 		return new nanofl_engine_movieclip_MotionTween(this.easing,this.orientToPath,this.rotateCount,this.rotateCountX,this.rotateCountY,this.directionalLightRotateCountX,this.directionalLightRotateCountY);
 	}
 	equ(_motionTween) {
-		stdlib_Debug.assert(((_motionTween) instanceof nanofl_engine_movieclip_MotionTween),null,{ fileName : "engine/nanofl/engine/movieclip/MotionTween.hx", lineNumber : 312, className : "nanofl.engine.movieclip.MotionTween", methodName : "equ"});
+		stdlib_Debug.assert(((_motionTween) instanceof nanofl_engine_movieclip_MotionTween),null,{ fileName : "engine/nanofl/engine/movieclip/MotionTween.hx", lineNumber : 309, className : "nanofl.engine.movieclip.MotionTween", methodName : "equ"});
 		let motionTween = _motionTween;
 		if(motionTween.easing != this.easing) {
 			return false;
@@ -8118,7 +8111,6 @@ class nanofl_engine_movieclip_MotionTween {
 	}
 }
 nanofl_engine_movieclip_MotionTween.__name__ = "nanofl.engine.movieclip.MotionTween";
-nanofl_engine_movieclip_MotionTween.__interfaces__ = [nanofl_engine_IMotionTween];
 Object.assign(nanofl_engine_movieclip_MotionTween.prototype, {
 	__class__: nanofl_engine_movieclip_MotionTween
 });

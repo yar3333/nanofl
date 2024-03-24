@@ -1,5 +1,6 @@
 package nanofl.ide.displayobjects;
 
+import stdlib.Debug;
 import js.lib.Promise;
 import stdlib.Std;
 import js.html.CanvasRenderingContext2D;
@@ -11,17 +12,7 @@ import nanofl.ide.libraryitems.VideoItem;
 class IdeVideo extends nanofl.Video
     implements AdvancableDisplayObject
 {
-    var currentFrame : Int;
-   
-    var _currentTime : Float;
-    public var currentTime(get,set) : Float;
-    function get_currentTime() return _currentTime;
-    function set_currentTime(v:Float)
-    { 
-        trace("set_currentTime " + v);
-        currentFrame = -1; 
-        return _currentTime = v;
-    }
+    public var currentTime : Float;
     
     inline function getFramerate() return (cast stage : nanofl.Stage).framerate;
     
@@ -34,7 +25,7 @@ class IdeVideo extends nanofl.Video
 
     public function waitLoading() : Promise<{}>
     {
-        return VideoCache.getImageAsync((cast symbol:VideoItem).getUrl(), _currentTime).then(canvas ->
+        return VideoCache.getImageAsync((cast symbol:VideoItem).getUrl(), currentTime).then(canvas ->
         {
             removeAllChildren();
             addChild(new easeljs.display.Bitmap(canvas));
@@ -42,51 +33,32 @@ class IdeVideo extends nanofl.Video
         });
     }
 
-	public function advanceToNextFrame() : Void
-    {
-        if (currentFrame == -1)
-        {
-            currentFrame = Math.floor(_currentTime * getFramerate());
-        }
-
-        final totalFrames = Std.int(duration * getFramerate());
-        
-        if (!symbol.loop && currentFrame >= totalFrames - 1) return;
-
-        currentFrame++;
-        if (currentFrame >= totalFrames) currentFrame -= totalFrames;
-
-        _currentTime = Math.min(Math.max(0, duration - 0.0001), currentFrame / getFramerate() + 0.0001);
-    }
+    public function advanceToNextFrame() : Void Debug.methodNotSupported(this);
 
     public function advanceTo(advanceFrames:Int, framerate:Float, tweenedElement:TweenedElement)
     {
         if (!symbol.autoPlay || tweenedElement.original != tweenedElement.current) return;
 
-        advanceFrames += Math.round(_currentTime * framerate);
+        advanceFrames += Math.round(currentTime * framerate);
 
         final totalFrames = Std.int(duration * framerate);
 
-        currentFrame = symbol.loop ? advanceFrames % totalFrames : Std.min(totalFrames - 1, advanceFrames);
+        final currentFrame = symbol.loop ? advanceFrames % totalFrames : Std.min(totalFrames - 1, advanceFrames);
 
-        _currentTime = Math.min(Math.max(0, duration - 0.0001), currentFrame / framerate + 0.0001);
+        currentTime = Math.min(Math.max(0, duration - 0.0001), currentFrame / framerate + 0.0001);
         
-        trace("advanceTo " + _currentTime + " | " + advanceFrames);
+        trace("advanceTo " + currentTime + " | " + advanceFrames);
     }
 
     override function clone(?recursive:Bool) : Video
     {
-		final r : IdeVideo = (cast this)._cloneProps(new IdeVideo(cast symbol, null));
-
-        r.currentFrame = currentFrame;
-        r._currentTime = _currentTime;
-        
+		final r : IdeVideo = (cast this)._cloneProps(new IdeVideo(cast symbol, { currentTime:currentTime }));
         return r;
     }
 
     override function draw(ctx:CanvasRenderingContext2D, ?ignoreCache:Bool):Bool
     {
-        trace("video " + _currentTime + " | " + currentFrame);
+        trace("video " + currentTime);
         return super.draw(ctx, ignoreCache);
     }
 }

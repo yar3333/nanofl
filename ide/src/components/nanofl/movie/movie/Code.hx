@@ -1,5 +1,6 @@
 package components.nanofl.movie.movie;
 
+import nanofl.engine.Log.console;
 using js.jquery.Layout;
 using Lambda;
 
@@ -68,12 +69,26 @@ class Code extends wquery.Component
 	
 	function onResizeEditorNorth(paneName:String, paneElem:js.JQuery, paneState:LayoutPaneState, paneOptions:LayoutPaneOptions, paneLayoutName:String) : Void
 	{
-		fixTimelineSize();
+        try
+        {
+            fixTimelineSize();
+        }
+        catch (e)
+        {
+            console.error(e);
+        }
 	}
 	
 	function onResizeFrameCenter(paneName:String, paneElem:js.JQuery, paneState:LayoutPaneState, paneOptions:LayoutPaneOptions, paneLayoutName:String) : Void
 	{
-		resizeEditor(paneState.innerWidth, paneState.innerHeight - template().navigatorLine.height() - statusBar.height());
+        try
+        {
+            resizeEditor(paneState.innerWidth, paneState.innerHeight - template().navigatorLine.height() - statusBar.height());
+        }
+        catch (e)
+        {
+            console.error(e);
+        }
 	}
 	
 	function fixTimelineSize()

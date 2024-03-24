@@ -80,7 +80,7 @@ AudioHelper.getSceneTracks = function(framerate,library) {
 	while(_g1 < _g2.length) {
 		var v = _g2[_g1];
 		++_g1;
-		if(v.sameElementSequence[0].get_type()._hx_index == 1 && v.sameElementSequence[0].get_symbol().get_type()._hx_index == 6 && AudioHelper.getVideoItemFromTrack(v).hasAudio) {
+		if(v.sameElementSequence[0].get_type()._hx_index == 1 && v.sameElementSequence[0].get_symbol().get_type()._hx_index == 6 && AudioHelper.getVideoItemFromTrack(v).hasAudio && (v.sameElementSequence.length == 1 || !v.sameElementSequence[0].parent.hasGoodMotionTween())) {
 			_g.push(v);
 		}
 	}

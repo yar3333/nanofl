@@ -1167,12 +1167,6 @@ nanofl_engine_ILibraryItem.__isInterface__ = true;
 nanofl_engine_ILibraryItem.prototype = {
 	__class__: nanofl_engine_ILibraryItem
 };
-var nanofl_engine_IMotionTween = function() { };
-nanofl_engine_IMotionTween.__name__ = "nanofl.engine.IMotionTween";
-nanofl_engine_IMotionTween.__isInterface__ = true;
-nanofl_engine_IMotionTween.prototype = {
-	__class__: nanofl_engine_IMotionTween
-};
 var nanofl_engine_ISelectable = function() { };
 nanofl_engine_ISelectable.__name__ = "nanofl.engine.ISelectable";
 nanofl_engine_ISelectable.__isInterface__ = true;
