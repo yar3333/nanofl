@@ -1081,14 +1081,6 @@ class haxe_ds_ObjectMap {
 	constructor() {
 		this.h = { __keys__ : { }};
 	}
-	set(key,value) {
-		let id = key.__id__;
-		if(id == null) {
-			id = (key.__id__ = $global.$haxeUID++);
-		}
-		this.h[id] = value;
-		this.h.__keys__[id] = key;
-	}
 	get(key) {
 		return this.h[key.__id__];
 	}
@@ -7924,72 +7916,58 @@ class nanofl_engine_movieclip_MotionTween {
 		return frame.keyFrame.getGuideLine();
 	}
 	apply(frameSubIndex) {
-		let startElements = this.keyFrame.get_elements();
-		let nextKeyFrame = this.keyFrame.getNextKeyFrame();
-		let finishElements = nextKeyFrame != null ? nextKeyFrame.get_elements() : null;
 		let guideLine = this.getGuideLine(this.keyFrame,frameSubIndex);
 		let guide = guideLine != null ? new nanofl_engine_movieclip_Guide(guideLine) : null;
-		let t = frameSubIndex / (this.keyFrame.duration + 1);
+		let ease = nanofl_engine_Ease.get(this.easing / 100);
+		let k = ease(frameSubIndex / (this.keyFrame.duration + 1));
+		let instancesMap = this.getInstancesMap();
 		let r = [];
-		if(finishElements != null) {
-			let ease = nanofl_engine_Ease.get(this.easing / 100);
-			let k = ease(t);
-			let instancesMap = this.getInstancesMap(startElements,finishElements);
-			let _g = 0;
-			let _g1 = startElements;
-			while(_g < _g1.length) {
-				let startElement = _g1[_g];
-				++_g;
-				if(((startElement) instanceof nanofl_engine_elements_Instance) && instancesMap.h.__keys__[startElement.__id__] != null) {
-					let startInstance = startElement;
-					let finishInstance = instancesMap.h[startInstance.__id__];
-					let targetInstance = this.getMovedInstance(startInstance,finishInstance,k,guide);
-					let _g = [];
-					let _g1 = 0;
-					let _g2 = startInstance.filters;
-					while(_g1 < _g2.length) {
-						let v = _g2[_g1];
-						++_g1;
-						if(Object.prototype.hasOwnProperty.call(nanofl_engine_plugins_FilterPlugins.plugins.h,v.name)) {
-							_g.push(v);
-						}
+		let _g = 0;
+		let _g1 = this.keyFrame.get_elements();
+		while(_g < _g1.length) {
+			let originalElement = _g1[_g];
+			++_g;
+			if(instancesMap.has(originalElement)) {
+				let startInstance = originalElement;
+				let finishInstance = instancesMap.get(startInstance);
+				let currentInstance = this.getMovedInstance(startInstance,finishInstance,k,guide);
+				let _g = [];
+				let _g1 = 0;
+				let _g2 = startInstance.filters;
+				while(_g1 < _g2.length) {
+					let v = _g2[_g1];
+					++_g1;
+					if(Object.prototype.hasOwnProperty.call(nanofl_engine_plugins_FilterPlugins.plugins.h,v.name)) {
+						_g.push(v);
 					}
-					let startFilters = _g;
-					let _g3 = [];
-					let _g4 = 0;
-					let _g5 = finishInstance.filters;
-					while(_g4 < _g5.length) {
-						let v = _g5[_g4];
-						++_g4;
-						if(Object.prototype.hasOwnProperty.call(nanofl_engine_plugins_FilterPlugins.plugins.h,v.name)) {
-							_g3.push(v);
-						}
-					}
-					let finishFilters = _g3;
-					this.fixFilterSequence(startFilters,finishFilters);
-					this.fixFilterSequence(finishFilters,startFilters);
-					stdlib_Debug.assert(startFilters.length == finishFilters.length,"startFilters.length = " + startFilters.length + " != finishFilters.length = " + finishFilters.length,{ fileName : "engine/nanofl/engine/movieclip/MotionTween.hx", lineNumber : 90, className : "nanofl.engine.movieclip.MotionTween", methodName : "apply"});
-					let i = 0;
-					let _g6 = [];
-					let _g_current = 0;
-					let _g_array = startFilters;
-					while(_g_current < _g_array.length) {
-						let x = _g_array[_g_current++];
-						_g6.push(x.clone().tween(k,finishFilters[i++]));
-					}
-					targetInstance.filters = _g6;
-					r.push(new nanofl_engine_movieclip_TweenedElement(startElement,targetInstance));
-				} else {
-					r.push(new nanofl_engine_movieclip_TweenedElement(startElement,startElement));
 				}
-			}
-		} else {
-			let _g = 0;
-			let _g1 = this.keyFrame.get_elements();
-			while(_g < _g1.length) {
-				let element = _g1[_g];
-				++_g;
-				r.push(new nanofl_engine_movieclip_TweenedElement(element,element));
+				let startFilters = _g;
+				let _g3 = [];
+				let _g4 = 0;
+				let _g5 = finishInstance.filters;
+				while(_g4 < _g5.length) {
+					let v = _g5[_g4];
+					++_g4;
+					if(Object.prototype.hasOwnProperty.call(nanofl_engine_plugins_FilterPlugins.plugins.h,v.name)) {
+						_g3.push(v);
+					}
+				}
+				let finishFilters = _g3;
+				this.fixFilterSequence(startFilters,finishFilters);
+				this.fixFilterSequence(finishFilters,startFilters);
+				stdlib_Debug.assert(startFilters.length == finishFilters.length,"startFilters.length = " + startFilters.length + " != finishFilters.length = " + finishFilters.length,{ fileName : "engine/nanofl/engine/movieclip/MotionTween.hx", lineNumber : 83, className : "nanofl.engine.movieclip.MotionTween", methodName : "apply"});
+				let i = 0;
+				let _g6 = [];
+				let _g_current = 0;
+				let _g_array = startFilters;
+				while(_g_current < _g_array.length) {
+					let x = _g_array[_g_current++];
+					_g6.push(x.clone().tween(k,finishFilters[i++]));
+				}
+				currentInstance.filters = _g6;
+				r.push(new nanofl_engine_movieclip_TweenedElement(originalElement,currentInstance));
+			} else {
+				r.push(new nanofl_engine_movieclip_TweenedElement(originalElement,originalElement));
 			}
 		}
 		return r;
@@ -8005,20 +7983,26 @@ class nanofl_engine_movieclip_MotionTween {
 			}
 		}
 	}
-	getInstancesMap(startElements,finishElements) {
-		let r = new haxe_ds_ObjectMap();
-		if(finishElements != null) {
-			let startInstances = datatools_ArrayRO.filterByType(startElements,nanofl_engine_elements_Instance);
-			let finishInstances = datatools_ArrayRO.filterByType(finishElements,nanofl_engine_elements_Instance);
-			let _g = 0;
-			while(_g < startInstances.length) {
-				let instance = startInstances[_g];
-				++_g;
-				let _g1 = 0;
-				while(_g1 < finishInstances.length) {
-					let nextInstance = finishInstances[_g1];
-					++_g1;
-					if(nextInstance.namePath == instance.namePath) {
+	getInstancesMap() {
+		let startElements = this.keyFrame.get_elements();
+		let tmp = this.keyFrame.getNextKeyFrame();
+		let finishElements = tmp != null ? tmp.get_elements() : null;
+		let r = new Map();
+		if(finishElements == null) {
+			return r;
+		}
+		let startInstances = datatools_ArrayRO.filterByType(startElements,nanofl_engine_elements_Instance);
+		let finishInstances = datatools_ArrayRO.filterByType(finishElements,nanofl_engine_elements_Instance);
+		let _g = 0;
+		while(_g < startInstances.length) {
+			let instance = startInstances[_g];
+			++_g;
+			let _g1 = 0;
+			while(_g1 < finishInstances.length) {
+				let nextInstance = finishInstances[_g1];
+				++_g1;
+				if(nextInstance.namePath == instance.namePath) {
+					if(instance.get_symbol().get_type()._hx_index != 6 || instance.videoCurrentTime != null && nextInstance.videoCurrentTime != null) {
 						r.set(instance,nextInstance);
 						HxOverrides.remove(finishInstances,nextInstance);
 						break;
@@ -8071,7 +8055,7 @@ class nanofl_engine_movieclip_MotionTween {
 		return new nanofl_engine_movieclip_MotionTween(this.easing,this.orientToPath,this.rotateCount,this.rotateCountX,this.rotateCountY,this.directionalLightRotateCountX,this.directionalLightRotateCountY);
 	}
 	equ(_motionTween) {
-		stdlib_Debug.assert(((_motionTween) instanceof nanofl_engine_movieclip_MotionTween),null,{ fileName : "engine/nanofl/engine/movieclip/MotionTween.hx", lineNumber : 309, className : "nanofl.engine.movieclip.MotionTween", methodName : "equ"});
+		stdlib_Debug.assert(((_motionTween) instanceof nanofl_engine_movieclip_MotionTween),null,{ fileName : "engine/nanofl/engine/movieclip/MotionTween.hx", lineNumber : 296, className : "nanofl.engine.movieclip.MotionTween", methodName : "equ"});
 		let motionTween = _motionTween;
 		if(motionTween.easing != this.easing) {
 			return false;
@@ -8721,7 +8705,6 @@ class stdlib_Uuid {
 }
 stdlib_Uuid.__name__ = "stdlib.Uuid";
 function $getIterator(o) { if( o instanceof Array ) return new haxe_iterators_ArrayIterator(o); else return o.iterator(); }
-$global.$haxeUID |= 0;
 if(typeof(performance) != "undefined" ? typeof(performance.now) == "function" : false) {
 	HxOverrides.now = performance.now.bind(performance);
 }

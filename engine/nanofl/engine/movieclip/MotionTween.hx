@@ -1,14 +1,13 @@
 package nanofl.engine.movieclip;
 
+import js.lib.Map;
 import stdlib.Debug;
 import stdlib.Std;
-import datatools.ArrayRO;
 import nanofl.engine.geom.Matrix;
 import nanofl.engine.libraryitems.MeshItem;
 import nanofl.engine.movieclip.TweenedElement;
 import nanofl.engine.movieclip.KeyFrame;
 import nanofl.engine.coloreffects.ColorEffectDouble;
-import nanofl.engine.elements.Element;
 import nanofl.engine.elements.Instance;
 import nanofl.engine.plugins.FilterPlugins;
 using stdlib.Lambda;
@@ -48,62 +47,48 @@ class MotionTween
     {
         if (keyFrame.layer.parentIndex == null) return null;
         
-        var parentLayer = keyFrame.layer.parentLayer;
+        final parentLayer = keyFrame.layer.parentLayer;
         if (parentLayer.type != LayerType.guide) return null;
         
-        var frame = parentLayer.getFrame(keyFrame.getIndex() + frameSubIndex);
+        final frame = parentLayer.getFrame(keyFrame.getIndex() + frameSubIndex);
         return frame.keyFrame.getGuideLine();
     }
     
     public function apply(frameSubIndex:Int) : Array<TweenedElement>
     {
-        var startElements = keyFrame.elements;
-        var nextKeyFrame = keyFrame.getNextKeyFrame();
-        var finishElements = nextKeyFrame != null ? nextKeyFrame.elements : null;
-        var guideLine = getGuideLine(keyFrame, frameSubIndex);
-        var guide = guideLine != null ? new Guide(guideLine) : null;
-        var t = frameSubIndex / (keyFrame.duration + 1);
+        final guideLine = getGuideLine(keyFrame, frameSubIndex);
+        final guide = guideLine != null ? new Guide(guideLine) : null;
         
-        var r = new Array<TweenedElement>();
+        final ease = Ease.get(easing / 100);
+        final k = ease(frameSubIndex / (keyFrame.duration + 1));
+        final instancesMap = getInstancesMap();
         
-        if (finishElements != null)
+        final r = new Array<TweenedElement>();
+        
+        for (originalElement in keyFrame.elements)
         {
-            final ease = Ease.get(easing / 100);
-            final k = ease(t);
-            final instancesMap = getInstancesMap(startElements, finishElements);
-            
-            for (startElement in startElements)
+            if (instancesMap.has((cast originalElement:Instance)))
             {
-                if (Std.isOfType(startElement, Instance) && instancesMap.exists((cast startElement:Instance)))
-                {
-                    final startInstance = (cast startElement:Instance);
-                    final finishInstance = instancesMap.get(startInstance);
-                    
-                    final targetInstance = getMovedInstance(startInstance, finishInstance, k, guide);
-                    
-                    final startFilters = startInstance.filters.filter(x -> FilterPlugins.plugins.exists(x.name));
-                    final finishFilters = finishInstance.filters.filter(x -> FilterPlugins.plugins.exists(x.name));
-                    
-                    fixFilterSequence(startFilters, finishFilters);
-                    fixFilterSequence(finishFilters, startFilters);
-                    
-                    Debug.assert(startFilters.length == finishFilters.length, "startFilters.length = " + startFilters.length + " != finishFilters.length = " + finishFilters.length);
-                    
-                    targetInstance.filters = startFilters.mapi((i, startFilter) -> startFilter.clone().tween(k, finishFilters[i]));
-                    
-                    r.push(new TweenedElement(startElement, targetInstance));
-                }
-                else
-                {
-                    r.push(new TweenedElement(startElement, startElement));
-                }
+                final startInstance = (cast originalElement:Instance);
+                final finishInstance = instancesMap.get(startInstance);
+                
+                final currentInstance = getMovedInstance(startInstance, finishInstance, k, guide);
+                
+                final startFilters = startInstance.filters.filter(x -> FilterPlugins.plugins.exists(x.name));
+                final finishFilters = finishInstance.filters.filter(x -> FilterPlugins.plugins.exists(x.name));
+                
+                fixFilterSequence(startFilters, finishFilters);
+                fixFilterSequence(finishFilters, startFilters);
+                
+                Debug.assert(startFilters.length == finishFilters.length, "startFilters.length = " + startFilters.length + " != finishFilters.length = " + finishFilters.length);
+                
+                currentInstance.filters = startFilters.mapi((i, startFilter) -> startFilter.clone().tween(k, finishFilters[i]));
+                
+                r.push(new TweenedElement(originalElement, currentInstance));
             }
-        }
-        else
-        {
-            for (element in keyFrame.elements)
+            else
             {
-                r.push(new TweenedElement(element, element));
+                r.push(new TweenedElement(originalElement, originalElement));
             }
         }
         
@@ -121,20 +106,25 @@ class MotionTween
         }
     }
     
-    function getInstancesMap(startElements:ArrayRO<Element>, finishElements:ArrayRO<Element>) : Map<Instance, Instance>
+    public function getInstancesMap() : Map<Instance, Instance>
     {
-        var r = new Map<Instance, Instance>();
+        final startElements = keyFrame.elements;
+        final finishElements = keyFrame.getNextKeyFrame()?.elements;
+
+        final r = new Map<Instance, Instance>();
         
-        if (finishElements != null)
+        if (finishElements == null) return r;
+        
+        final startInstances  =  startElements.filterByType(Instance);
+        final finishInstances = finishElements.filterByType(Instance);
+        
+        for (instance in startInstances)
         {
-            var startInstances  =  startElements.filterByType(Instance);
-            var finishInstances = finishElements.filterByType(Instance);
-            
-            for (instance in startInstances)
+            for (nextInstance in finishInstances)
             {
-                for (nextInstance in finishInstances)
+                if (nextInstance.namePath == instance.namePath)
                 {
-                    if (nextInstance.namePath == instance.namePath)
+                    if (!instance.symbol.type.match(LibraryItemType.video) || instance.videoCurrentTime != null && nextInstance.videoCurrentTime != null)
                     {
                         r.set(instance, nextInstance);
                         finishInstances.remove(nextInstance);
@@ -149,10 +139,7 @@ class MotionTween
     
     public function isGood() : Bool
     {
-        var startElements = keyFrame.elements;
-        var nextKeyFrame = keyFrame.getNextKeyFrame();
-        var finishElements = nextKeyFrame != null ? nextKeyFrame.elements : null;
-        return getInstancesMap(startElements, finishElements).iterator().hasNext();
+        return getInstancesMap().size > 0;
     }
     
     #if ide

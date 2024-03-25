@@ -80,7 +80,7 @@ AudioHelper.getSceneTracks = function(framerate,library) {
 	while(_g1 < _g2.length) {
 		var v = _g2[_g1];
 		++_g1;
-		if(v.sameElementSequence[0].get_type()._hx_index == 1 && v.sameElementSequence[0].get_symbol().get_type()._hx_index == 6 && AudioHelper.getVideoItemFromTrack(v).hasAudio && (v.sameElementSequence.length == 1 || !v.sameElementSequence[0].parent.hasGoodMotionTween())) {
+		if(v.sameElementSequence[0].get_type()._hx_index == 1 && v.sameElementSequence[0].get_symbol().get_type()._hx_index == 6 && AudioHelper.getVideoItemFromTrack(v).hasAudio && !AudioHelper.isInstanceTweened(v.sameElementSequence[0])) {
 			_g.push(v);
 		}
 	}
@@ -90,7 +90,8 @@ AudioHelper.getSceneTracks = function(framerate,library) {
 		var track = trackVideos[_g];
 		++_g;
 		var mcVideo = AudioHelper.getVideoItemFromTrack(track);
-		r.push(AudioHelper.createAudioTrack(mcVideo,track,framerate,library));
+		var audioTrack = AudioHelper.createAudioTrack(mcVideo,track,framerate,library);
+		r.push(audioTrack);
 	}
 	return r;
 };
@@ -106,6 +107,16 @@ AudioHelper.getVideoItemFromTrack = function(track) {
 	var element = track.sameElementSequence[0];
 	var instance = element;
 	return instance.get_symbol();
+};
+AudioHelper.isInstanceTweened = function(instance) {
+	if(!instance.parent.hasMotionTween()) {
+		return false;
+	}
+	var instancesMap = instance.parent.getMotionTween().getInstancesMap();
+	if(!instancesMap.has(instance)) {
+		return false;
+	}
+	return instancesMap.get(instance) != instance;
 };
 var Main = function() { };
 Main.__name__ = true;

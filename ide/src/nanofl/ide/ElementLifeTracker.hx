@@ -68,7 +68,9 @@ class ElementLifeTracker
                 final duration = detectRelatedElementsAndDuration(layer, keyFrameIndex, element, sameElementSequence);
                 
                 final frameIndex = keyFrame.getIndex();
-                final lifetimeFrames = frameIndex + duration < itemTotalFrames ? duration : lifetimeOnParent;
+                final lifetimeFrames = frameIndex + duration < itemTotalFrames 
+                                        ? duration 
+                                        : lifetimeOnParent - frameIndex;
 
                 tracks.push
                 ({

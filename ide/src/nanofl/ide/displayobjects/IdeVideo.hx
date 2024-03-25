@@ -3,7 +3,6 @@ package nanofl.ide.displayobjects;
 import stdlib.Debug;
 import js.lib.Promise;
 import stdlib.Std;
-import js.html.CanvasRenderingContext2D;
 import nanofl.Video.VideoParams;
 import nanofl.engine.AdvancableDisplayObject;
 import nanofl.engine.movieclip.TweenedElement;
@@ -47,7 +46,7 @@ class IdeVideo extends nanofl.Video
 
         currentTime = Math.min(Math.max(0, duration - 0.0001), currentFrame / framerate + 0.0001);
         
-        trace("advanceTo " + currentTime + " | " + advanceFrames);
+        //trace("advanceTo " + currentTime + " | " + advanceFrames);
     }
 
     override function clone(?recursive:Bool) : Video
@@ -56,9 +55,9 @@ class IdeVideo extends nanofl.Video
         return r;
     }
 
-    override function draw(ctx:CanvasRenderingContext2D, ?ignoreCache:Bool):Bool
-    {
-        trace("video " + currentTime);
-        return super.draw(ctx, ignoreCache);
-    }
+    // override function draw(ctx:js.html.CanvasRenderingContext2D, ?ignoreCache:Bool):Bool
+    // {
+    //     trace("video " + currentTime);
+    //     return super.draw(ctx, ignoreCache);
+    // }
 }

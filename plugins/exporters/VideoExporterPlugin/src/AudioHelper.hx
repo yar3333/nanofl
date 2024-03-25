@@ -7,6 +7,7 @@ import nanofl.ide.libraryitems.MovieClipItem;
 import nanofl.ide.libraryitems.SoundItem;
 import nanofl.ide.libraryitems.VideoItem;
 using nanofl.ide.MovieClipItemTools;
+using Lambda;
 
 /**
     https://ffmpeg.org/ffmpeg-filters.html#adelay
@@ -82,11 +83,16 @@ class AudioHelper
         final trackVideos = tracker.tracks.filter(x -> x.sameElementSequence[0].type.match(ElementType.instance)
                                               && (cast x.sameElementSequence[0] : Instance).symbol.type.match(LibraryItemType.video)
                                               && getVideoItemFromTrack(x).hasAudio
-                                              && (x.sameElementSequence.length == 1 || !x.sameElementSequence[0].parent.hasGoodMotionTween()));
+                                              && !isInstanceTweened((cast x.sameElementSequence[0] : Instance)));
         for (track in trackVideos)
         {
             final mcVideo = getVideoItemFromTrack(track);
-            r.push(createAudioTrack(mcVideo, track, framerate, library));
+            final audioTrack = createAudioTrack(mcVideo, track, framerate, library);
+            
+            r.push(audioTrack);
+            
+            //trace("trackVideo: startFrameIndex = " + track.startFrameIndex + "; lifetimeFrames = " + track.lifetimeFrames);
+            //trace("trackAudio: delayBeforeStart = " + audioTrack.delayBeforeStart + "; duration = " + audioTrack.duration);
         }
 
         return r;
@@ -115,5 +121,13 @@ class AudioHelper
         final element = track.sameElementSequence[0];
         final instance : Instance = cast element;
         return (cast instance.symbol : VideoItem);
+    }
+
+    static function isInstanceTweened(instance:Instance) : Bool
+    {
+        if (!instance.parent.hasMotionTween()) return false;
+        final instancesMap = instance.parent.getMotionTween().getInstancesMap();
+        if (!instancesMap.has(instance)) return false;
+        return instancesMap.get(instance) != instance;
     }
 }
