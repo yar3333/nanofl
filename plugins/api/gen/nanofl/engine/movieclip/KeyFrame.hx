@@ -8,6 +8,7 @@ extern class KeyFrame {
 	var elements(get, never) : Array<nanofl.engine.elements.Element>;
 	private function get_elements():Array<nanofl.engine.elements.Element>;
 	function getNextKeyFrame():nanofl.engine.movieclip.KeyFrame;
+	function getPrevKeyFrame():nanofl.engine.movieclip.KeyFrame;
 	function addElement(element:nanofl.engine.elements.Element, ?index:Int):Void;
 	function removeElementAt(n:Int):Void;
 	function removeElement(element:nanofl.engine.elements.Element):Void;

@@ -11,7 +11,6 @@ extern class MotionTween {
 	var directionalLightRotateCountX : Int;
 	var directionalLightRotateCountY : Int;
 	function apply(frameSubIndex:Int):Array<nanofl.engine.movieclip.TweenedElement>;
-	function getInstancesMap():js.lib.Map<nanofl.engine.elements.Instance, nanofl.engine.elements.Instance>;
 	function isGood():Bool;
 	function save(out:htmlparser.XmlBuilder):Void;
 	function saveJson():Dynamic;

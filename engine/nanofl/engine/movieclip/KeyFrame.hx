@@ -50,6 +50,12 @@ class KeyFrame
     {
         return layer.keyFrames[getKeyIndex() + 1];
     }
+
+	public function getPrevKeyFrame() : KeyFrame
+    {
+        final n = getKeyIndex();
+        return n > 0 ? layer.keyFrames[n - 1] : null;
+    }
     
     function getKeyIndex() : Int return layer.keyFrames.indexOf((cast this:KeyFrame));
     
@@ -153,7 +159,7 @@ class KeyFrame
             label: label ?? "",
             duration: duration ?? 1,
             motionTween: motionTween?.saveJson(),
-            elements: elements.map(x -> x.saveJson()),
+            elements: elements.filter(x -> x.type != ElementType.shape || !(cast x:ShapeElement).isEmpty()).map(x -> x.saveJson()),
         };
     }
     #end

@@ -125,9 +125,10 @@ class AudioHelper
 
     static function isInstanceTweened(instance:Instance) : Bool
     {
-        if (!instance.parent.hasMotionTween()) return false;
-        final instancesMap = instance.parent.getMotionTween().getInstancesMap();
-        if (!instancesMap.has(instance)) return false;
-        return instancesMap.get(instance) != instance;
+        // if (!instance.parent.hasMotionTween()) return false;
+        // final instancesMap = instance.parent.getMotionTween().getInstancesMap();
+        // if (!instancesMap.has(instance)) return false;
+        // return instancesMap.get(instance) != instance;
+        return instance.parent.hasMotionTween() || instance.parent.duration == 1 && (instance.parent.getPrevKeyFrame()?.hasMotionTween() ?? false);
     }
 }

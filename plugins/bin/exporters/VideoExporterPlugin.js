@@ -110,13 +110,20 @@ AudioHelper.getVideoItemFromTrack = function(track) {
 };
 AudioHelper.isInstanceTweened = function(instance) {
 	if(!instance.parent.hasMotionTween()) {
-		return false;
+		if(instance.parent.duration == 1) {
+			var tmp = instance.parent.getPrevKeyFrame();
+			var tmp1 = tmp != null ? tmp.hasMotionTween() : null;
+			if(tmp1 != null) {
+				return tmp1;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	} else {
+		return true;
 	}
-	var instancesMap = instance.parent.getMotionTween().getInstancesMap();
-	if(!instancesMap.has(instance)) {
-		return false;
-	}
-	return instancesMap.get(instance) != instance;
 };
 var Main = function() { };
 Main.__name__ = true;

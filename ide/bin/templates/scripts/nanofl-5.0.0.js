@@ -4557,8 +4557,8 @@ class nanofl_engine_elements_Instance extends nanofl_engine_elements_Element {
 			return false;
 		}
 		this.namePath = obj.libraryItem;
-		stdlib_Debug.assert(this.namePath != null,null,{ fileName : "engine/nanofl/engine/elements/Instance.hx", lineNumber : 78, className : "nanofl.engine.elements.Instance", methodName : "loadPropertiesJson"});
-		stdlib_Debug.assert(this.namePath != "",null,{ fileName : "engine/nanofl/engine/elements/Instance.hx", lineNumber : 79, className : "nanofl.engine.elements.Instance", methodName : "loadPropertiesJson"});
+		stdlib_Debug.assert(this.namePath != null,null,{ fileName : "engine/nanofl/engine/elements/Instance.hx", lineNumber : 79, className : "nanofl.engine.elements.Instance", methodName : "loadPropertiesJson"});
+		stdlib_Debug.assert(this.namePath != "",null,{ fileName : "engine/nanofl/engine/elements/Instance.hx", lineNumber : 80, className : "nanofl.engine.elements.Instance", methodName : "loadPropertiesJson"});
 		let tmp = obj.name;
 		this.name = tmp != null ? tmp : "";
 		this.colorEffect = nanofl_engine_coloreffects_ColorEffect.loadJson(obj.colorEffect);
@@ -4636,6 +4636,8 @@ class nanofl_engine_elements_Instance extends nanofl_engine_elements_Element {
 		}
 		if(this.videoCurrentTime != null && ((dispObj) instanceof nanofl_Video)) {
 			dispObj.video.currentTime = this.videoCurrentTime;
+			let tmp = this.parent.getMotionTween();
+			dispObj.video.muted = tmp != null;
 		}
 	}
 	updateDisplayObjectTweenedProperties(dispObj) {
@@ -7724,6 +7726,9 @@ class nanofl_engine_movieclip_KeyFrame {
 			return false;
 		}
 		return true;
+	}
+	getMotionTween() {
+		return this.motionTween;
 	}
 	getElementsWithoutEmptyShapes(elements) {
 		let _g = [];

@@ -19,9 +19,6 @@ libraryData =
             "motionTween": null,
             "elements": [
               {
-                "type": "shape"
-              },
-              {
                 "type": "instance",
                 "libraryItem": "test_with_sound",
                 "name": "",
@@ -39,9 +36,6 @@ libraryData =
             "motionTween": null,
             "elements": [
               {
-                "type": "shape"
-              },
-              {
                 "type": "instance",
                 "libraryItem": "test_with_sound",
                 "name": "",
@@ -54,7 +48,7 @@ libraryData =
           },
           {
             "label": "",
-            "duration": 10,
+            "duration": 53,
             "motionTween": {
               "tweenType": "motion",
               "motionTweenEasing": 0,
@@ -66,9 +60,6 @@ libraryData =
               "motionTweenDirectionalLightRotateCountY": 0
             },
             "elements": [
-              {
-                "type": "shape"
-              },
               {
                 "type": "instance",
                 "libraryItem": "test_with_sound",
@@ -86,9 +77,6 @@ libraryData =
             "duration": 1,
             "motionTween": null,
             "elements": [
-              {
-                "type": "shape"
-              },
               {
                 "type": "instance",
                 "libraryItem": "test_with_sound",

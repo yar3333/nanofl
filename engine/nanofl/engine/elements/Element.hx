@@ -135,7 +135,7 @@ abstract class Element
 	#if ide
     public final function save(out:XmlBuilder) : Void
     {
-        if (Std.isOfType(this, ShapeElement) && (cast this : ShapeElement).isEmpty()) return;
+        if (type.match(ElementType.shape) && (cast this:ShapeElement).isEmpty()) return;
 
         out.begin(type.getName());
         saveProperties(out);
