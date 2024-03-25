@@ -11,6 +11,7 @@ typedef SpriteParams =
 
 class Sprite extends easeljs.display.Sprite
     implements nanofl.engine.AdvancableDisplayObject
+    #if ide implements nanofl.ide.IdeAdvancableDisplayObject #end
 {
     final symbol : ISpritableItem;
 

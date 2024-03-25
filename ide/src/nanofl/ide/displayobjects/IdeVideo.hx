@@ -1,15 +1,13 @@
 package nanofl.ide.displayobjects;
 
-import stdlib.Debug;
 import js.lib.Promise;
 import stdlib.Std;
 import nanofl.Video.VideoParams;
-import nanofl.engine.AdvancableDisplayObject;
 import nanofl.engine.movieclip.TweenedElement;
 import nanofl.ide.libraryitems.VideoItem;
 
 class IdeVideo extends nanofl.Video
-    implements AdvancableDisplayObject
+    implements nanofl.ide.IdeAdvancableDisplayObject
 {
     public var currentTime : Float;
     
@@ -31,8 +29,6 @@ class IdeVideo extends nanofl.Video
             return null;
         });
     }
-
-    public function advanceToNextFrame() : Void Debug.methodNotSupported(this);
 
     public function advanceTo(advanceFrames:Int, framerate:Float, tweenedElement:TweenedElement)
     {

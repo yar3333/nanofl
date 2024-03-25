@@ -11,13 +11,6 @@ import nanofl.engine.movieclip.Layer;
 using nanofl.engine.MovieClipItemTools;
 using stdlib.Lambda;
 
-typedef ElementLifeTrack =
-{
-    var sameElementSequence : Array<Element>;
-    var startFrameIndex : Int;
-    var lifetimeFrames : Int;
-}
-
 class ElementLifeTracker
 {
     var ignoreElements = new Set<Element>();

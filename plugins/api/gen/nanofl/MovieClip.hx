@@ -1,6 +1,6 @@
 package nanofl;
 
-extern class MovieClip extends easeljs.display.Container implements nanofl.engine.AdvancableDisplayObject implements nanofl.engine.InstanceDisplayObject {
+extern class MovieClip extends easeljs.display.Container implements nanofl.ide.IdeAdvancableDisplayObject implements nanofl.engine.AdvancableDisplayObject implements nanofl.engine.InstanceDisplayObject {
 	function new(symbol:nanofl.engine.libraryitems.MovieClipItem, params:nanofl.MovieClip.MovieClipParams):Void;
 	var symbol(default, null) : nanofl.engine.libraryitems.MovieClipItem;
 	var currentFrame(default, null) : Int;

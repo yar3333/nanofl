@@ -1,7 +1,5 @@
 package nanofl.ide.editor.elements;
 
-import nanofl.ide.displayobjects.IdeVideo;
-import nanofl.ide.ElementLifeTracker.ElementLifeTrack;
 import js.lib.Error;
 import stdlib.Debug;
 import easeljs.display.Container;
@@ -9,7 +7,6 @@ import easeljs.display.DisplayObject;
 import easeljs.events.MouseEvent;
 import easeljs.geom.Rectangle;
 import easeljs.display.Shape;
-import nanofl.engine.AdvancableDisplayObject;
 import nanofl.engine.elements.Element;
 import nanofl.engine.elements.Instance;
 import nanofl.engine.elements.ShapeElement;
@@ -19,6 +16,8 @@ import nanofl.engine.geom.BoundsTools;
 import nanofl.engine.geom.Point;
 import nanofl.engine.ISelectable;
 import nanofl.engine.movieclip.TweenedElement;
+import nanofl.ide.ElementLifeTracker;
+import nanofl.ide.displayobjects.IdeVideo;
 import nanofl.ide.navigator.Navigator;
 import nanofl.ide.editor.Editor;
 import nanofl.ide.editor.NewObjectParams;
@@ -132,14 +131,14 @@ abstract class EditorElement implements ISelectable
     {
         final dispObj = currentElement.createDisplayObject();
 
-        if (Std.isOfType(dispObj, AdvancableDisplayObject))
+        if (Std.isOfType(dispObj, IdeAdvancableDisplayObject))
         {
             var frameAdvanceTo = navigator.pathItem.frameIndex - track.startFrameIndex;
             if (currentElement != track.sameElementSequence[0] && Std.isOfType(dispObj, IdeVideo))
             {
                 frameAdvanceTo += Math.floor((cast track.sameElementSequence[0] : Instance).videoCurrentTime * framerate);
             }
-            (cast dispObj:AdvancableDisplayObject).advanceTo(frameAdvanceTo, framerate, new TweenedElement(originalElement, currentElement));
+            (cast dispObj:IdeAdvancableDisplayObject).advanceTo(frameAdvanceTo, framerate, new TweenedElement(originalElement, currentElement));
         }
 
         return dispObj;

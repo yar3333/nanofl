@@ -1,6 +1,7 @@
 import nanofl.engine.ElementType;
 import nanofl.engine.LibraryItemType;
 import nanofl.engine.elements.Instance;
+import nanofl.ide.ElementLifeTrack;
 import nanofl.ide.ElementLifeTracker;
 import nanofl.ide.library.IdeLibrary;
 import nanofl.ide.libraryitems.MovieClipItem;

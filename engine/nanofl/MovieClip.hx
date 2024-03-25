@@ -24,6 +24,7 @@ typedef MovieClipParams =
 class MovieClip extends Container 
     implements InstanceDisplayObject
     implements AdvancableDisplayObject
+    #if ide implements nanofl.ide.IdeAdvancableDisplayObject #end
     #if !ide implements IEventHandlers #end
 {
 	var layerOfChild : Map<DisplayObject, Int>;
@@ -223,10 +224,10 @@ class MovieClip extends Container
             for (j in 0...tweenedElements.length)
             {
                 final dispObj = dispObjs[j];
-                if (!Std.isOfType(dispObj, AdvancableDisplayObject)) continue;
+                if (!Std.isOfType(dispObj, nanofl.ide.IdeAdvancableDisplayObject)) continue;
                 final track = tracker.getTrackOne(tweenedElements[j].original);
                 Debug.assert(track != null);
-                (cast dispObj:AdvancableDisplayObject).advanceTo(!paused ? currentFrame - track.startFrameIndex : lifetimeOnParent, framerate, tweenedElements[j]);
+                (cast dispObj:nanofl.ide.IdeAdvancableDisplayObject).advanceTo(!paused ? currentFrame - track.startFrameIndex : lifetimeOnParent, framerate, tweenedElements[j]);
             }
         }
     }
