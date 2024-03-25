@@ -119,7 +119,7 @@ class EditorLayer
     
     public function getItemAtPos(pos:Point) : EditorElement
     {
-        for (item in getItems())
+        for (item in getElements())
         {
             if (item.hitTest(pos)) return item;
         }
@@ -211,7 +211,7 @@ class EditorLayer
 	}
 	
 	@:noprofile
-	public function getItems(?r:Array<EditorElement>, includeShape=false) : Array<EditorElement>
+	public function getElements(?r:Array<EditorElement>, includeShape=false) : Array<EditorElement>
 	{
 		if (r == null) r = [];
 		
@@ -227,7 +227,7 @@ class EditorLayer
 	}
 	
 	@:noprofile
-	public function getSelectedItems(?r:Array<EditorElement>) : Array<EditorElement>
+	public function getSelectedElements(?r:Array<EditorElement>) : Array<EditorElement>
 	{
 		if (r == null) r  = [];
 		
@@ -254,7 +254,7 @@ class EditorLayer
 	{
 		if (!editable) return false;
 		
-		for (item in getItems()) if (!item.selected) return false;
+		for (item in getElements()) if (!item.selected) return false;
 		return shape.element.isAllSelected();
 	}
 	
@@ -263,7 +263,7 @@ class EditorLayer
 		if (!editable) return;
 		
 		shape.element.selectAll();
-		for (item in getItems()) item.selected = true;
+		for (item in getElements()) item.selected = true;
 	}
 	
 	public function deselectAll()
@@ -271,7 +271,7 @@ class EditorLayer
 		if (!editable) return;
 		
 		shape.element.deselectAll();
-		for (item in getItems()) item.selected = false;
+		for (item in getElements()) item.selected = false;
 	}
 	
 	public function breakApartSelectedItems()
@@ -399,7 +399,7 @@ class EditorLayer
 			var parentLayer = editor.layers[parentIndex];
 			if (!parentLayer.shape.element.isEmpty())
 			{
-				for (item in getSelectedItems())
+				for (item in getSelectedElements())
 				{
 					var elem = item.currentElement;
 					

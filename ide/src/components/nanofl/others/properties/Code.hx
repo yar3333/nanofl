@@ -6,8 +6,8 @@ import nanofl.ide.Globals;
 import nanofl.ide.ui.View;
 import nanofl.ide.ActiveView;
 import nanofl.ide.Application;
+import nanofl.ide.ILayout;
 import nanofl.ide.PropertiesObject;
-import nanofl.engine.movieclip.KeyFrame in KeyFrame;
 
 #if profiler @:build(Profiler.buildMarked()) #end
 @:rtti
@@ -34,6 +34,7 @@ class Code extends wquery.Component
 
 	@inject var app : Application;
 	@inject var view : View;
+	@inject var layout : ILayout;
 	
 	var freeze = false;
 	
@@ -137,24 +138,19 @@ class Code extends wquery.Component
 	
 	function getPropertiesObject() : PropertiesObject
 	{
-		if (app.document != null)
-		{
-			switch (app.activeView)
-			{
-				case ActiveView.TIMELINE:
-					var keyFrame = view.movie.timeline.getActiveKeyFrame();
-                    return PropertiesObject.KEY_FRAME((cast keyFrame:KeyFrame));
-					
-				case _:
-                    return app.document.editor.getPropertiesObject();
-			}
-		}
+		if (app.document == null) return PropertiesObject.NONE;
 		
-		return PropertiesObject.NONE;
+        switch (app.activeView)
+        {
+            case ActiveView.TIMELINE if (view.movie.timeline.getActiveKeyFrame() != null):
+                return PropertiesObject.KEY_FRAME(view.movie.timeline.getActiveKeyFrame());
+            case _:
+                return app.document.editor.getPropertiesObject();
+        }
 	}
 	
 	public function activate()
 	{
-		(cast page : components.nanofl.page.Code).showPropertiesPanel();
+        layout.showPropertiesPanel();
 	}
 }

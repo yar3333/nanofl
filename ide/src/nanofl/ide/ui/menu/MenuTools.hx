@@ -202,12 +202,12 @@ class MenuTools
 	
 	static function tempActiveView<T>(app:Application, view:ActiveView, callb:Void->T) : T
 	{
-		var saved = app.activeView;
-		app.activeView = view;
+		final saved = app.activeView;
+		app.setActiveView(view, null);
 		
-		var r = callb();
+		final r = callb();
 		
-		app.activeView = saved;
+		app.setActiveView(saved, null);
 		
 		return r;
 	}

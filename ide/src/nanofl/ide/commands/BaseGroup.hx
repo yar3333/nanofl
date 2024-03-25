@@ -7,11 +7,11 @@ class BaseGroup extends InjectContainer
 	
 	function tempActiveView(view:ActiveView, callb:Void->Void) : Void
 	{
-		var saved = app.activeView;
-		app.activeView = view;
+		final saved = app.activeView;
+		app.setActiveView(view, null);
 		
 		callb();
 		
-		app.activeView = saved;
+		app.setActiveView(saved, null);
 	}
 }

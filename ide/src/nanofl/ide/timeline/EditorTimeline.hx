@@ -3,12 +3,14 @@ package nanofl.ide.timeline;
 import js.lib.Promise;
 import js.lib.Set;
 import datatools.ArrayRO;
+import js.JQuery.JqEvent;
 import nanofl.engine.elements.Elements;
 import nanofl.engine.LayerType;
 import nanofl.engine.movieclip.KeyFrame;
 import nanofl.engine.movieclip.Layer;
 import nanofl.ide.DocumentProperties;
 import nanofl.ide.editor.Editor;
+import nanofl.ide.editor.elements.EditorElement;
 import nanofl.ide.library.IdeLibrary;
 import nanofl.ide.navigator.Navigator;
 import nanofl.ide.navigator.PathItem;
@@ -19,6 +21,7 @@ import nanofl.ide.undo.document.UndoQueue;
 
 class EditorTimeline
 {
+	var app : Application;
 	var editor : Editor;
 	var undoQueue : UndoQueue;
 	var library : IdeLibrary;
@@ -48,8 +51,9 @@ class EditorTimeline
 	
 	public final xmlLayersTag = "layers";
 	
-	public function new(editor:Editor, undoQueue:UndoQueue, library:IdeLibrary, preferences:Preferences, pathItem:PathItem, navigator:Navigator, properties:DocumentProperties)
+	public function new(app:Application, editor:Editor, undoQueue:UndoQueue, library:IdeLibrary, preferences:Preferences, pathItem:PathItem, navigator:Navigator, properties:DocumentProperties)
 	{
+		this.app = app;
 		this.editor = editor;
 		this.undoQueue = undoQueue;
 		this.library = library;
@@ -123,4 +127,24 @@ class EditorTimeline
 	{
 		layer.addKeyFrame(keyFrame);
 	}
+
+    public function getEditorElements() : Array<EditorElement>
+    {
+        return editor.getElements(false);
+    }
+
+    public function setEditorSelected(elements:Array<EditorElement>) : Void
+    {
+        editor.deselectAll();
+
+        for (element in elements)
+        {
+            editor.select(element, false);
+        }
+    }
+
+    public function setActiveViewToTimeline(e:JqEvent) : Void
+    {
+        app.setActiveView(ActiveView.TIMELINE, e);
+    }
 }

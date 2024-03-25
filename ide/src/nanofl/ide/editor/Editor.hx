@@ -127,7 +127,7 @@ class Editor extends InjectContainer
 	@:profile
 	public function updateElement(element:Element)
 	{
-		for (item in getItems(true))
+		for (item in getElements(true))
 		{
 			if (item.currentElement == element)
 			{
@@ -209,7 +209,7 @@ class Editor extends InjectContainer
 	public function selectAll()
 	{
 		figure.selectAll();
-		for (item in getItems())
+		for (item in getElements())
 		{
 			item.selected = true;
 		}
@@ -332,19 +332,19 @@ class Editor extends InjectContainer
 	
 	public function updateTransformations()
 	{
-		for (item in getItems())
+		for (item in getElements())
 		{
 			item.updateTransformations();
 		}
 	}
 	
 	@:noprofile
-	public function getItems(includeShape=false) : Array<EditorElement>
+	public function getElements(includeShape=false) : Array<EditorElement>
 	{
 		var r = [];
 		for (layer in layers)
 		{
-			layer.getItems(r, includeShape);
+			layer.getElements(r, includeShape);
 		}
 		return r;
 	}
@@ -353,7 +353,7 @@ class Editor extends InjectContainer
 	public function getSelectedItems() : Array<EditorElement>
 	{
 		var r = [];
-		for (layer in layers) layer.getSelectedItems(r);
+		for (layer in layers) layer.getSelectedElements(r);
 		return r;
 	}
 	
@@ -589,14 +589,14 @@ class Editor extends InjectContainer
 	@:allow(nanofl.ide.undo)
 	function getTransformationStates() : Array<TransformationState>
 	{
-		return getItems().map(x -> TransformationState.fromElement(x.originalElement));
+		return getElements().map(x -> TransformationState.fromElement(x.originalElement));
 	}
 	
 	@:profile
 	@:allow(nanofl.ide.undo)
 	function setTransformationStates(states:Array<TransformationState>)
 	{
-		var items = getItems();
+		var items = getElements();
 		for (i in 0...states.length)
 		{
 			states[i].toElement(items[i].originalElement);
@@ -792,7 +792,7 @@ class Editor extends InjectContainer
 				if (polygon.isInRectangle(x, y, width, height)) r.push(polygon);
 			}
 			
-			for (item in layer.getItems())
+			for (item in layer.getElements())
 			{
 				if (item.originalElement == item.currentElement)
 				{

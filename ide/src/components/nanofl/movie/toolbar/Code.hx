@@ -50,7 +50,7 @@ class Code extends wquery.Component
 	
 	public function switchTo<T:EditorTool>(clas:Class<T>)
 	{
-		app.activeView = ActiveView.EDITOR;
+		app.setActiveView(ActiveView.EDITOR, null);
 		app.document.editor.switchTool(clas);
 		view.properties.activate();
 	}

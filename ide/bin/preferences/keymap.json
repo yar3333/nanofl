@@ -71,9 +71,7 @@
 	{ "shortcut":"F6"					, "command":"timeline.convertToKeyFrame" },
 	{ "shortcut":"F7"					, "command":"timeline.addBlankKeyFrame" },
 	{ "shortcut":"Shift+F5"				, "command":"timeline.removeFrame" },
-	{ "shortcut":"Ctrl+,"				, "command":"timeline.gotoPrevFrame" },
-	{ "shortcut":"Ctrl+."				, "command":"timeline.gotoNextFrame" },
-	{ "shortcut":"Left"					, "command":"timeline.gotoPrevFrame", "when":"!editor.hasSelected" },
-	{ "shortcut":"Right"				, "command":"timeline.gotoNextFrame", "when":"!editor.hasSelected" },
+	{ "shortcut":","					, "command":"timeline.gotoPrevFrame" },
+	{ "shortcut":"."					, "command":"timeline.gotoNextFrame" },
 	{ "shortcut":"Enter"				, "command":"timeline.play" }
 ]

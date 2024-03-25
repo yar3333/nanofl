@@ -18,6 +18,7 @@ using stdlib.Lambda;
 @:rtti
 class Navigator extends InjectContainer
 {
+	@inject var app : Application;
 	@inject var view : View;
 	@inject var preferences : Preferences;
 	
@@ -178,6 +179,7 @@ class Navigator extends InjectContainer
 
         final timeline = new EditorTimeline
         (
+            app,
             document.editor,
             document.undoQueue,
             document.library.getRawLibrary(),

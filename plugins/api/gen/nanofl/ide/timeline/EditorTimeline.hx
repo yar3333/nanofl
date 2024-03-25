@@ -1,7 +1,7 @@
 package nanofl.ide.timeline;
 
 extern class EditorTimeline {
-	function new(editor:nanofl.ide.editor.Editor, undoQueue:nanofl.ide.undo.document.UndoQueue, library:nanofl.ide.library.IdeLibrary, preferences:nanofl.ide.preferences.Preferences, pathItem:nanofl.ide.navigator.PathItem, navigator:nanofl.ide.navigator.Navigator, properties:nanofl.ide.DocumentProperties):Void;
+	function new(app:nanofl.ide.Application, editor:nanofl.ide.editor.Editor, undoQueue:nanofl.ide.undo.document.UndoQueue, library:nanofl.ide.library.IdeLibrary, preferences:nanofl.ide.preferences.Preferences, pathItem:nanofl.ide.navigator.PathItem, navigator:nanofl.ide.navigator.Navigator, properties:nanofl.ide.DocumentProperties):Void;
 	var layers(get, never) : Array<nanofl.engine.movieclip.Layer>;
 	private function get_layers():Array<nanofl.engine.movieclip.Layer>;
 	var editable(get, never) : Bool;
@@ -41,4 +41,7 @@ extern class EditorTimeline {
 	function duplicateLayerWoFrames(layer:nanofl.engine.movieclip.Layer):nanofl.engine.movieclip.Layer;
 	function getLayerKeyFrames(layer:nanofl.engine.movieclip.Layer):Array<nanofl.engine.movieclip.KeyFrame>;
 	function addKeyFrame(layer:nanofl.engine.movieclip.Layer, keyFrame:nanofl.engine.movieclip.KeyFrame):Void;
+	function getEditorElements():Array<nanofl.ide.editor.elements.EditorElement>;
+	function setEditorSelected(elements:Array<nanofl.ide.editor.elements.EditorElement>):Void;
+	function setActiveViewToTimeline(e:js.JQuery.JqEvent):Void;
 }

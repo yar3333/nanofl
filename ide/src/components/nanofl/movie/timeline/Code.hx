@@ -6,10 +6,13 @@ import stdlib.ExceptionTools;
 import wquery.ComponentList;
 import htmlparser.XmlBuilder;
 import htmlparser.XmlNodeElement;
+import nanofl.engine.ElementType;
 import nanofl.engine.LayerType;
 import nanofl.engine.Version;
 import nanofl.engine.movieclip.Layer;
 import nanofl.engine.movieclip.KeyFrame;
+import nanofl.engine.elements.Instance;
+import nanofl.engine.elements.Element;
 import nanofl.ide.Globals;
 import nanofl.ide.AsyncTicker;
 import nanofl.ide.keyboard.Keyboard;
@@ -88,7 +91,7 @@ class Code extends wquery.Component
 		
 		layers = new ComponentList<components.nanofl.movie.timelinelayer.Code>(components.nanofl.movie.timelinelayer.Code, this, template().content);
 		
-		q(js.Browser.document).mouseup(function(e)
+		q(js.Browser.document).mouseup(e ->
 		{
 			if (e.which == 1)
 			{
@@ -115,7 +118,7 @@ class Code extends wquery.Component
 		template().framesHeader.on("mousemove", ">*", onFrameHeaderMouseMove);
 		template().framesBorder.on("mousemove", ">*", onFrameHeaderMouseMove);
 		
-		template().content.on("mousedown", ">*>.frames-content>*>*", e -> if (e.which == 1) onFrameMouseDown(e));
+		template().content.on("mousedown", ">*>.frames-content>*>*", e -> { adapter.setActiveViewToTimeline(e); if (e.which == 1) onFrameMouseDown(e); });
 		template().content.on("mousemove", ">*>.frames-content>*>*", onFrameMouseMove);
 		template().content.on("dblclick",  ">*>.frames-content>*>*", onDoubleClickOnFrame);
 		template().content.on("click",     ">*>.frames-content>*>*", e -> if (e.altKey) onDoubleClickOnFrame(e));
@@ -925,7 +928,20 @@ class Code extends wquery.Component
 	{
 		mouseDownOnHeader = true;
 		deselectAllFrames();
+
+        final oldElements = adapter.getEditorElements();
 		adapter.frameIndex = q(e.currentTarget).index();
+        final newElements = adapter.getEditorElements();
+
+        final elementsToSelect = [];
+        var i = 0; while (i < oldElements.length && i < newElements.length)
+        {
+            if (!isElementMatch(oldElements[i].originalElement, newElements[i].originalElement)) break;
+            if (oldElements[i].selected) elementsToSelect.push(newElements[i]);
+            i++;
+        }
+
+        adapter.setEditorSelected(elementsToSelect);
 	}
 	
 	function onFrameHeaderMouseMove(e:JqEvent)
@@ -1350,4 +1366,16 @@ class Code extends wquery.Component
 		
 		if (changes.activeFrame) updateActiveFrame();
 	}
+
+    function isElementMatch(elemA:Element, elemB:Element)
+    {
+        if (elemA.type != elemB.type) return false;
+
+        if (elemA.type == ElementType.instance)
+        {
+            if ((cast elemA:Instance).namePath != (cast elemB:Instance).namePath) return false;
+        }
+
+        return true;
+    }
 }

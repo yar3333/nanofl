@@ -28,8 +28,8 @@ extern class EditorLayer {
 	function duplicateSelected():Void;
 	function isShowSelection():Bool;
 	function addElement(element:nanofl.engine.elements.Element, ?index:Int):nanofl.ide.editor.elements.EditorElement;
-	function getItems(?r:Array<nanofl.ide.editor.elements.EditorElement>, ?includeShape:Bool):Array<nanofl.ide.editor.elements.EditorElement>;
-	function getSelectedItems(?r:Array<nanofl.ide.editor.elements.EditorElement>):Array<nanofl.ide.editor.elements.EditorElement>;
+	function getElements(?r:Array<nanofl.ide.editor.elements.EditorElement>, ?includeShape:Bool):Array<nanofl.ide.editor.elements.EditorElement>;
+	function getSelectedElements(?r:Array<nanofl.ide.editor.elements.EditorElement>):Array<nanofl.ide.editor.elements.EditorElement>;
 	function hasSelected():Bool;
 	function isAllSelected():Bool;
 	function selectAll():Void;

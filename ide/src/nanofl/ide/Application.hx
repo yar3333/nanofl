@@ -40,13 +40,16 @@ class Application extends js.injecting.InjectContainer
     final preferences : Preferences;
 	final recents : Recents;
     final documentTools : DocumentTools;
+    final clipboard : Clipboard;
 	
 	@:noCompletion var _activeView = ActiveView.EDITOR;
-    public var activeView(get, set) : ActiveView;
+    public var activeView(get, never) : ActiveView;
     @:noCompletion function get_activeView() return _activeView;
-    @:noCompletion function set_activeView(v)
+    
+    public function setActiveView(v:ActiveView, e:JqEvent)
     {
         log("activeView: " + _activeView + " -> " + v);
+        if (e != null) clipboard.restoreFocus(e.originalEvent);
         return _activeView = v;
     }
 	
@@ -87,12 +90,10 @@ class Application extends js.injecting.InjectContainer
 		
 		new JQuery(Browser.window).on("close", e -> { e.preventDefault(); quit(); });
 		
-        final clipboard = injector.getService(Clipboard);
-		view.movie.editor  .on("mousedown", e -> { activeView = ActiveView.EDITOR;   clipboard.restoreFocus(e.originalEvent); });
-		view.movie.timeline.on("mousedown", e -> { activeView = ActiveView.TIMELINE; clipboard.restoreFocus(e.originalEvent); });
-		view.movie.timeline.on("mousedown", e -> { activeView = ActiveView.TIMELINE; clipboard.restoreFocus(e.originalEvent); });
-		view.library       .on("mousedown", e -> { activeView = ActiveView.LIBRARY;  clipboard.restoreFocus(e.originalEvent); });
-		view.output        .on("mousedown", e -> { activeView = ActiveView.OUTPUT; });
+        this.clipboard = injector.getService(Clipboard);
+		view.movie.editor  .on("mousedown", e -> setActiveView(ActiveView.EDITOR, e));
+		view.library       .on("mousedown", e -> setActiveView(ActiveView.LIBRARY, e));
+		view.output        .on("mousedown", e -> setActiveView(ActiveView.OUTPUT, null));
 		
 		this.preferences = injector.getService(Preferences);
         preferences.storage.applyToIDE(true);

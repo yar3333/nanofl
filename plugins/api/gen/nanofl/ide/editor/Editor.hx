@@ -51,7 +51,7 @@ extern class Editor extends nanofl.ide.InjectContainer {
 	function removeSelected():Void;
 	function translateSelected(dx:Float, dy:Float, ?lowLevel:Bool):Void;
 	function updateTransformations():Void;
-	function getItems(?includeShape:Bool):Array<nanofl.ide.editor.elements.EditorElement>;
+	function getElements(?includeShape:Bool):Array<nanofl.ide.editor.elements.EditorElement>;
 	function getSelectedItems():Array<nanofl.ide.editor.elements.EditorElement>;
 	function getObjectLayerIndex(obj:nanofl.engine.ISelectable):Int;
 	function extractSelected():Array<nanofl.engine.elements.Element>;

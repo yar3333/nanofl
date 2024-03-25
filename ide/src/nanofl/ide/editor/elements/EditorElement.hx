@@ -16,7 +16,6 @@ import nanofl.engine.geom.BoundsTools;
 import nanofl.engine.geom.Point;
 import nanofl.engine.ISelectable;
 import nanofl.engine.movieclip.TweenedElement;
-import nanofl.ide.ElementLifeTracker;
 import nanofl.ide.displayobjects.IdeVideo;
 import nanofl.ide.navigator.Navigator;
 import nanofl.ide.editor.Editor;
