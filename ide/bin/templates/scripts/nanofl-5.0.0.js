@@ -4557,8 +4557,8 @@ class nanofl_engine_elements_Instance extends nanofl_engine_elements_Element {
 			return false;
 		}
 		this.namePath = obj.libraryItem;
-		stdlib_Debug.assert(this.namePath != null,null,{ fileName : "engine/nanofl/engine/elements/Instance.hx", lineNumber : 79, className : "nanofl.engine.elements.Instance", methodName : "loadPropertiesJson"});
-		stdlib_Debug.assert(this.namePath != "",null,{ fileName : "engine/nanofl/engine/elements/Instance.hx", lineNumber : 80, className : "nanofl.engine.elements.Instance", methodName : "loadPropertiesJson"});
+		stdlib_Debug.assert(this.namePath != null,null,{ fileName : "engine/nanofl/engine/elements/Instance.hx", lineNumber : 78, className : "nanofl.engine.elements.Instance", methodName : "loadPropertiesJson"});
+		stdlib_Debug.assert(this.namePath != "",null,{ fileName : "engine/nanofl/engine/elements/Instance.hx", lineNumber : 79, className : "nanofl.engine.elements.Instance", methodName : "loadPropertiesJson"});
 		let tmp = obj.name;
 		this.name = tmp != null ? tmp : "";
 		this.colorEffect = nanofl_engine_coloreffects_ColorEffect.loadJson(obj.colorEffect);
@@ -4636,8 +4636,19 @@ class nanofl_engine_elements_Instance extends nanofl_engine_elements_Element {
 		}
 		if(this.videoCurrentTime != null && ((dispObj) instanceof nanofl_Video)) {
 			dispObj.video.currentTime = this.videoCurrentTime;
-			let tmp = this.parent.getMotionTween();
-			dispObj.video.muted = tmp != null;
+			let tmp;
+			if(this.parent.getMotionTween() == null) {
+				if(this.parent.duration == 1) {
+					let tmp1 = this.parent.getPrevKeyFrame();
+					let tmp2 = tmp1 != null ? tmp1.hasMotionTween() : null;
+					tmp = tmp2 != null && tmp2;
+				} else {
+					tmp = false;
+				}
+			} else {
+				tmp = true;
+			}
+			dispObj.video.muted = tmp;
 		}
 	}
 	updateDisplayObjectTweenedProperties(dispObj) {
@@ -7640,6 +7651,14 @@ class nanofl_engine_movieclip_KeyFrame {
 	getNextKeyFrame() {
 		return this.layer._keyFrames[this.getKeyIndex() + 1];
 	}
+	getPrevKeyFrame() {
+		let n = this.getKeyIndex();
+		if(n > 0) {
+			return this.layer._keyFrames[n - 1];
+		} else {
+			return null;
+		}
+	}
 	getKeyIndex() {
 		return this.layer._keyFrames.indexOf(this);
 	}
@@ -7688,6 +7707,9 @@ class nanofl_engine_movieclip_KeyFrame {
 	}
 	clone() {
 		return this.duplicate();
+	}
+	hasMotionTween() {
+		return this.motionTween != null;
 	}
 	getGuideLine() {
 		return new nanofl_engine_movieclip_GuideLine(this.getShape(false));

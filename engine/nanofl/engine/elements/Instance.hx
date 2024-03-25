@@ -215,7 +215,7 @@ class Instance extends Element
         {
             #if !ide
             (cast dispObj:nanofl.Video).video.currentTime = videoCurrentTime;
-            (cast dispObj:nanofl.Video).video.muted = parent.getMotionTween() != null;
+            (cast dispObj:nanofl.Video).video.muted = parent.getMotionTween() != null || parent.duration == 1 && (parent.getPrevKeyFrame()?.hasMotionTween() ?? false);
             #else
             (cast dispObj:nanofl.ide.displayobjects.IdeVideo).currentTime = videoCurrentTime;
             #end
