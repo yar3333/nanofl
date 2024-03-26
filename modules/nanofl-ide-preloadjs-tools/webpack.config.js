@@ -3,6 +3,7 @@
 module.exports = {
     target: 'electron-preload',
 	mode: 'development',
+    devtool: false,
     entry: './src/main.ts',
     module: {
         rules: [

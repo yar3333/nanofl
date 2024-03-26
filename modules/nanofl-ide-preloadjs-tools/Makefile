@@ -8,6 +8,7 @@ $(DEST): node_modules
 	
 clean:
 	rm -fr  dist
+	rm -f $(DEST)
 	
 rebuild: clean build
 

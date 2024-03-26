@@ -75,9 +75,9 @@ class Code extends wquery.Component
 
         switch (item?.type)
         {
-            case LibraryItemType.bitmap:
-            case LibraryItemType.movieclip:
-            case LibraryItemType.mesh:
+            case LibraryItemType.bitmap,
+                 LibraryItemType.movieclip,
+                 LibraryItemType.mesh:
                 showInstancableItem((cast item : InstancableItem));
             
             case LibraryItemType.video:
@@ -89,8 +89,7 @@ class Code extends wquery.Component
             case LibraryItemType.sound:
                 showSoundItem((cast item : SoundItem));
             
-            case LibraryItemType.folder:
-            case null:
+            case LibraryItemType.folder, null:
                 template().canvas.hide();
                 template().video.hide();
                 template().sound.hide();
