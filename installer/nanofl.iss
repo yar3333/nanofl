@@ -39,7 +39,7 @@ Name: modifypath;       Description: "Add application directory to the PATH"; Gr
 
 [Files]
 Source: "C:\MyProg\NanoFL\ide\bin\*"; DestDir: "{app}"; Flags: ignoreversion createallsubdirs recursesubdirs; MinVersion: 0,5.0; Languages: english; Excludes: "\examples"
-Source: "C:\MyProg\NanoFL\ide\bin\examples\*"; DestDir: "{userdocs}\NanoFL\Examples"; Flags: ignoreversion createallsubdirs recursesubdirs; MinVersion: 0,5.0; Languages: english
+Source: "C:\MyProg\NanoFL\examples\*"; DestDir: "{userdocs}\NanoFL\Examples"; Flags: ignoreversion createallsubdirs recursesubdirs; MinVersion: 0,5.0; Languages: english
 
 [Icons]
 Name: "{commonstartmenu}\NanoFL"; Filename: "{app}\NanoFL.exe"; IconFilename: "{app}\NanoFL.exe"

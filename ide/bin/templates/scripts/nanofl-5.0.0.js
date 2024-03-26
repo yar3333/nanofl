@@ -7632,7 +7632,8 @@ class nanofl_engine_movieclip_KeyFrame {
 		}
 		this.label = label;
 		this.duration = duration;
-		this._elements = elements != null ? elements : [];
+		let tmp = elements;
+		this._elements = tmp != null ? tmp : [];
 		let _g = 0;
 		let _g1 = this.get_elements();
 		while(_g < _g1.length) {
@@ -7735,13 +7736,7 @@ class nanofl_engine_movieclip_KeyFrame {
 		if(keyFrame.duration != this.duration) {
 			return false;
 		}
-		if(keyFrame.motionTween == null && this.motionTween != null) {
-			return false;
-		}
-		if(keyFrame.motionTween != null && this.motionTween == null) {
-			return false;
-		}
-		if(keyFrame.motionTween != null && this.motionTween != null && !keyFrame.motionTween.equ(this.motionTween)) {
+		if(!datatools_NullTools.equ(keyFrame.motionTween,this.motionTween)) {
 			return false;
 		}
 		if(!datatools_ArrayTools.equ(this.getElementsWithoutEmptyShapes(keyFrame._elements),this.getElementsWithoutEmptyShapes(this._elements))) {

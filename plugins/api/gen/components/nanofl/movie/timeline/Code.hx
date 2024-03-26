@@ -33,5 +33,4 @@ extern class Code extends wquery.Component implements nanofl.ide.timeline.ITimel
 	function play():Void;
 	function stop():Void;
 	function renameSelectedLayerByUser():Void;
-	function getActiveKeyFrame():nanofl.engine.movieclip.KeyFrame;
 }

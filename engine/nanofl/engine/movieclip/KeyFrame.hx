@@ -1,5 +1,6 @@
 package nanofl.engine.movieclip;
 
+import datatools.NullTools;
 import datatools.ArrayRO;
 import nanofl.engine.Library;
 import datatools.ArrayTools;
@@ -8,6 +9,7 @@ import nanofl.engine.elements.Elements;
 import nanofl.engine.elements.ShapeElement;
 import stdlib.Debug;
 using stdlib.Lambda;
+using stdlib.StringTools;
 
 #if ide
 import htmlparser.HtmlNodeElement;
@@ -32,7 +34,7 @@ class KeyFrame
 	{
         this.label = label;
 		this.duration = duration;
-		this._elements = elements != null ? elements : [];
+		this._elements = elements ?? [];
 		
         for (element in this.elements)
 		{
@@ -154,13 +156,16 @@ class KeyFrame
     
     public function saveJson() : Dynamic
     {
-        return
-        {
-            label: label ?? "",
-            duration: duration ?? 1,
-            motionTween: motionTween?.saveJson(),
-            elements: elements.filter(x -> x.type != ElementType.shape || !(cast x:ShapeElement).isEmpty()).map(x -> x.saveJson()),
-        };
+        final r : Dynamic = {};
+
+        if (!StringTools.isNullOrEmpty(label)) r.label = label;
+        if (duration != 1) r.duration = duration;
+        if (motionTween != null) r.motionTween =  motionTween.saveJson();
+        
+        final elementsToSave = elements.filter(x -> !x.type.match(ElementType.shape) || !(cast x:ShapeElement).isEmpty());
+        if (elementsToSave.length > 0) r.elements = elementsToSave.map(x -> x.saveJson());
+        
+        return r;
     }
     #end
     
@@ -176,7 +181,7 @@ class KeyFrame
 		if (elements.length > 0 && Std.isOfType(elements[0], ShapeElement)) return cast elements[0];
 		if (createIfNotExist)
 		{
-			var shape = new ShapeElement();
+			final shape = new ShapeElement();
 			addElement(shape, 0);
 			return shape;
 		}
@@ -190,7 +195,7 @@ class KeyFrame
 			label != null ? label : this.label,
 			duration != null ? duration : this.duration,
 			motionTween != null ? (cast motionTween.clone() : MotionTween) : null,
-			elements != null ? ArrayTools.clone(elements) : ArrayTools.clone(this._elements)
+			elements != null ? ArrayTools.clone(elements) : ArrayTools.clone(this._elements),
 		);
 	}
 	
@@ -198,9 +203,7 @@ class KeyFrame
 	{
         if (keyFrame.label != label) return false;
         if (keyFrame.duration != duration) return false;
-        if (keyFrame.motionTween == null && motionTween != null) return false;
-        if (keyFrame.motionTween != null && motionTween == null) return false;
-        if (keyFrame.motionTween != null && motionTween != null && !keyFrame.motionTween.equ(motionTween)) return false;
+        if (!NullTools.equ(keyFrame.motionTween, motionTween)) return false;
         if (!ArrayTools.equ(getElementsWithoutEmptyShapes(keyFrame._elements), getElementsWithoutEmptyShapes(_elements))) return false;
 		return true;
 	}

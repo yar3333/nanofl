@@ -6,6 +6,6 @@ build: $(DEST_WINDOWS)
 
 $(DEST_WINDOWS):
 	@echo installer ===========================================================
-	"c:\Program Files (x86)\Inno Setup 5\iscc" -qp -dVERSION=$(VERSION) nanofl.iss
+	"c:\Program Files (x86)\Inno Setup 6\iscc" -qp -dVERSION=$(VERSION) nanofl.iss
 
 .PHONY: build
