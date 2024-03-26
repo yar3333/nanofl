@@ -2,7 +2,6 @@ package components.nanofl.movie.timeline;
 
 extern class Code extends wquery.Component implements nanofl.ide.timeline.ITimelineView {
 	function new(parent:wquery.Component, parentNode:haxe.extern.EitherType<String, haxe.extern.EitherType<js.html.Element, js.JQuery>>, ?params:Dynamic, ?attachMode:wquery.AttachMode):Void;
-	function bind(adapter:nanofl.ide.timeline.EditorTimeline):Void;
 	function init():Void;
 	function hasSelectedFramesWithTween():Bool;
 	function hasSelectedFramesWithoutTween():Bool;

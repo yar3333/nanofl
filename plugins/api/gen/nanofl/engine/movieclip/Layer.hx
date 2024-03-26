@@ -20,7 +20,7 @@ extern class Layer {
 	function removeFrame(frameIndex:Int):Bool;
 	function getHumanType():String;
 	function getIcon():String;
-	function getNestLevel(layers:Array<nanofl.engine.movieclip.Layer>):Int;
+	function getNestLevel():Int;
 	function getChildLayers():Array<nanofl.engine.movieclip.Layer>;
 	function getTweenedElements(frameIndex:Int):Array<nanofl.engine.movieclip.TweenedElement>;
 	function save(out:htmlparser.XmlBuilder):Void;

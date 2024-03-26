@@ -203,14 +203,14 @@ class Layer
     }
     
     #if ide
-    public function getNestLevel(layers:ArrayRO<Layer>) : Int
+    public function getNestLevel() : Int
     {
         var r = 0;
         var layer = this;
         while (layer.parentIndex != null)
         {
             r++;
-            layer = layers[layer.parentIndex];
+            layer = layersContainer.layers[layer.parentIndex];
         }
         return r;
     }

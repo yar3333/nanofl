@@ -9,7 +9,6 @@ import nanofl.engine.libraryitems.InstancableItem;
 import nanofl.ide.navigator.PathItem;
 import nanofl.ide.Document;
 import nanofl.ide.preferences.Preferences;
-import nanofl.ide.timeline.EditorTimeline;
 import nanofl.ide.ui.View;
 import nanofl.ide.undo.states.NavigatorState;
 using stdlib.Lambda;
@@ -177,19 +176,6 @@ class Navigator extends InjectContainer
 			_editPath.push(new PathItem(document.library.getSceneInstance()));
 		}
 
-        final timeline = new EditorTimeline
-        (
-            app,
-            document.editor,
-            document.undoQueue,
-            document.library.getRawLibrary(),
-            preferences,
-            pathItem,
-            this,
-            document.properties
-        );
-		
-		view.movie.timeline.bind(timeline);
 		view.movie.navigator.update();
 		view.movie.timeline.update();
 		

@@ -142,8 +142,8 @@ class Code extends wquery.Component
 		
         switch (app.activeView)
         {
-            case ActiveView.TIMELINE if (view.movie.timeline.getActiveKeyFrame() != null):
-                return PropertiesObject.KEY_FRAME(view.movie.timeline.getActiveKeyFrame());
+            case ActiveView.TIMELINE if (app.document?.navigator.pathItem.frame?.keyFrame != null):
+                return PropertiesObject.KEY_FRAME(app.document.navigator.pathItem.frame.keyFrame);
             case _:
                 return app.document.editor.getPropertiesObject();
         }

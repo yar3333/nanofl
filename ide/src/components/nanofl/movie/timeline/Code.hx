@@ -13,8 +13,17 @@ import nanofl.engine.movieclip.Layer;
 import nanofl.engine.movieclip.KeyFrame;
 import nanofl.engine.elements.Instance;
 import nanofl.engine.elements.Element;
+import nanofl.engine.elements.Elements;
+import nanofl.ide.Application;
 import nanofl.ide.Globals;
 import nanofl.ide.AsyncTicker;
+import nanofl.ide.Document;
+import nanofl.ide.ActiveView;
+import nanofl.ide.preferences.Preferences;
+import nanofl.ide.navigator.Navigator;
+import nanofl.ide.navigator.PathItem;
+import nanofl.ide.ui.View;
+import nanofl.ide.editor.Editor;
 import nanofl.ide.keyboard.Keyboard;
 import nanofl.ide.keyboard.ShortcutTools;
 import nanofl.ide.draganddrop.DragAndDrop;
@@ -22,7 +31,6 @@ import nanofl.ide.draganddrop.IDragAndDrop;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.draganddrop.AllowedDropEffect;
 import nanofl.ide.timeline.ITimelineView;
-import nanofl.ide.timeline.EditorTimeline;
 import nanofl.ide.timeline.droppers.LayerToHeaderTitleDropper;
 import nanofl.ide.timeline.droppers.LayerToLayerDropper;
 import nanofl.ide.timeline.droppers.LayerToTitleDropper;
@@ -48,24 +56,34 @@ class Code extends wquery.Component
 	static var ADDITIONAL_FRAMES_TO_DISPLAY(null, never) = 200;
 	static var FRAME_WIDTH(null, never) = 10;
 	static var SCROLLBAR_SIZE(null, never) = 20;
+
+    static final XML_LAYERS_TAG = "layers";
 	
 	@inject var dragAndDrop : DragAndDrop;
 	@inject var keyboard : Keyboard;
+	@inject var app : Application;
+	@inject var view : View;
+	@inject var preferences : Preferences;
+
+    var document(get, never) : Document; @:noCompletion function get_document() return app.document;
+    var editor(get, never) : Editor; @:noCompletion function get_editor() return document?.editor;
+    var navigator(get, never) : Navigator; @:noCompletion function get_navigator() return document?.navigator;
+    var pathItem(get, never) : PathItem; @:noCompletion function get_pathItem() return navigator?.pathItem;
 	
-	var layers : ComponentList<components.nanofl.movie.timelinelayer.Code>;
+	var layerComponents : ComponentList<components.nanofl.movie.timelinelayer.Code>;
 	
-	var adapter : EditorTimeline;
-	
+	var editable(get, never) : Bool; @:noCompletion function get_editable() return !pathItem.mcItem.isGroup();
+    
 	function getLayerNodes() : JQuery return template().content.find(">div");
 	function getLayerNodeByIndex(n:Int) : JQuery return template().content.find(">div:nth-child(" + (n + 1) + ")");
 	function getLayerNodeByFrameNode(elem:JQuery) : JQuery return elem.parent().parent().parent();
-	function getLayerFramesContainerByIndex(n:Int) : JQuery return layers.getByIndex(n).q("#framesContent");
+	function getLayerFramesContainerByIndex(n:Int) : JQuery return layerComponents.getByIndex(n).q("#framesContent");
 	
 	function getFrameNodes(filter="") : JQuery return template().content.find(">div>.frames-content>*>*" + filter);
 	function getFrameNodesByLayerIndex(n:Int, filter="") : JQuery return template().content.find(">div:nth-child(" + (n + 1) + ")>.frames-content>*>*" + filter);
 	function getFrameNodesByLayer(elem:JQuery, filter="") : JQuery return elem.find(">.frames-content>*>*" + filter);
 	
-	function getLayerByLayerNode(elem:JQuery) : Layer return adapter.layers[elem.index()];
+	function getLayerByLayerNode(elem:JQuery) : Layer return pathItem.mcItem.layers[elem.index()];
 	
 	var mouseDownOnHeader : Bool;
 	var mouseDownOnFrame : JQuery;
@@ -75,23 +93,29 @@ class Code extends wquery.Component
 	
 	var freeze = false;
 	
-	public function bind(adapter:EditorTimeline)
-	{
-		this.adapter = adapter;
-		
-		if (adapter == null) return;
-		
-		template().layerContextMenu.build(template().container,	"#" + template().content[0].id + ">*",	adapter.getLayerContextMenu(), beforeShowLayerContextMenu);
-		template().frameContextMenu.build(template().content,	">*>.frames-content>*>*",				adapter.getFrameContextMenu(), beforeShowFrameContextMenu);
-	}
-	
 	public function init()
 	{
 		Globals.injector.injectInto(this);
 		
-		layers = new ComponentList<components.nanofl.movie.timelinelayer.Code>(components.nanofl.movie.timelinelayer.Code, this, template().content);
+		layerComponents = new ComponentList<components.nanofl.movie.timelinelayer.Code>(components.nanofl.movie.timelinelayer.Code, this, template().content);
 		
-		q(js.Browser.document).mouseup(e ->
+		template().layerContextMenu.build
+        (
+            template().container,
+            "#" + template().content[0].id + ">*",
+            preferences.storage.getMenu("layerContextMenu"),
+            beforeShowLayerContextMenu
+        );
+		
+        template().frameContextMenu.build
+        (
+            template().content,
+            ">*>.frames-content>*>*",
+            preferences.storage.getMenu("frameContextMenu"),
+            beforeShowFrameContextMenu
+        );
+		
+        q(js.Browser.document).mouseup(e ->
 		{
 			if (e.which == 1)
 			{
@@ -102,7 +126,7 @@ class Code extends wquery.Component
 		
 		q(js.Browser.document).on("mousedown", _ ->
 		{
-			if (adapter != null && adapter.frameIndex != playStartFrameIndex) stop();
+			if (pathItem != null && pathItem.frameIndex != playStartFrameIndex) stop();
 		});
 
 		q(js.Browser.document).on("keydown", (e:JqEvent) ->
@@ -110,7 +134,7 @@ class Code extends wquery.Component
             final playShortcut = keyboard.keymap.find(x -> x.command == "timeline.play")?.shortcut;
             if (ShortcutTools.toString(e) == playShortcut) return;
 			
-            if (adapter != null && adapter.frameIndex != playStartFrameIndex) stop();
+            if (pathItem != null && pathItem.frameIndex != playStartFrameIndex) stop();
 		});
 		
 		template().framesHeader.on("mousedown", ">*", e -> if (e.which == 1) onFrameHeaderMouseDown(e));
@@ -118,7 +142,7 @@ class Code extends wquery.Component
 		template().framesHeader.on("mousemove", ">*", onFrameHeaderMouseMove);
 		template().framesBorder.on("mousemove", ">*", onFrameHeaderMouseMove);
 		
-		template().content.on("mousedown", ">*>.frames-content>*>*", e -> { adapter.setActiveViewToTimeline(e); if (e.which == 1) onFrameMouseDown(e); });
+		template().content.on("mousedown", ">*>.frames-content>*>*", e -> { app.setActiveView(ActiveView.TIMELINE, e); if (e.which == 1) onFrameMouseDown(e); });
 		template().content.on("mousemove", ">*>.frames-content>*>*", onFrameMouseMove);
 		template().content.on("dblclick",  ">*>.frames-content>*>*", onDoubleClickOnFrame);
 		template().content.on("click",     ">*>.frames-content>*>*", e -> if (e.altKey) onDoubleClickOnFrame(e));
@@ -153,28 +177,28 @@ class Code extends wquery.Component
 	{
 		if (dx < 0)
 		{
-			adapter.frameIndex = Math.ceil(template().hScrollbar.position / FRAME_WIDTH);
+			navigator.setFrameIndex(Math.ceil(template().hScrollbar.position / FRAME_WIDTH));
 		}
 		else
 		if (dx > 0)
 		{
-			adapter.frameIndex = Math.floor((template().hScrollbar.position + getVisibleFramesWidth()) / FRAME_WIDTH) - 1;
+			navigator.setFrameIndex(Math.floor((template().hScrollbar.position + getVisibleFramesWidth()) / FRAME_WIDTH) - 1);
 		}
 	}
 	
 	function beforeShowLayerContextMenu(menu:nanofl.ide.ui.menu.ContextMenu, e:JqEvent, layerElem:JQuery)
 	{
-		if (!adapter.editable) return false;
+		if (!editable) return false;
 		
 		deselectAllFrames();
 		deselectAllLayers();
 		layerElem.addClass("selected");
 		
-		var indexes = getSelectedLayerIndexes();
+		final indexes = getSelectedLayerIndexes();
 		Debug.assert(indexes.length == 1);
 		
-		var index = indexes[0];
-		var layer = adapter.layers[index];
+		final index = indexes[0];
+		final layer = pathItem.mcItem.layers[index];
 		
 		if (layer.type == LayerType.folder)
 		{
@@ -182,11 +206,11 @@ class Code extends wquery.Component
 			return false;
 		}
 		
-		freezed(() -> adapter.layerIndex = index);
+		freezed(() -> navigator.setLayerIndex(index));
 		
-		var parentIndex = getPotentialParentLayerIndex(index);
-		var parentLayerType = parentIndex != null ? adapter.layers[parentIndex].type : null;
-		var humanType = layer.getHumanType();
+		final parentIndex = getPotentialParentLayerIndex(index);
+		final parentLayerType = parentIndex != null ? pathItem.mcItem.layers[parentIndex].type : null;
+		final humanType = layer.getHumanType();
 		
 		menu.toggleItem("timeline.switchLayerTypeToMask",	humanType != "masked" && humanType != "guided");
 		menu.toggleItem("timeline.switchLayerTypeToGuide",	humanType != "masked" && humanType != "guided");
@@ -201,15 +225,15 @@ class Code extends wquery.Component
 	
 	function beforeShowFrameContextMenu(menu:nanofl.ide.ui.menu.ContextMenu, e:JqEvent, frameNode:JQuery)
 	{
-		if (!adapter.editable) return false;
+		if (!editable) return false;
 		
 		if (!frameNode.hasClass("selected"))
 		{
 			var layerNode = getLayerNodeByFrameNode(frameNode);
 			freezed(() ->
 			{
-				adapter.layerIndex = layerNode.index();
-				adapter.frameIndex = frameNode.index();
+				navigator.setLayerIndex(layerNode.index());
+				navigator.setFrameIndex(frameNode.index());
 			});
 			deselectAllFrames();
 			deselectAllLayers();
@@ -244,14 +268,13 @@ class Code extends wquery.Component
 	{
 		if (freeze) return;
 		
-		var editable = adapter.editable;
 		template().controls.find("button").prop("disabled", !editable);
 		template().visibleAll.add(template().lockedAll).css("visibility", editable ? "" : "hidden");
 		
-		layers.clear();
+		layerComponents.clear();
 		template().content.html("");
 		
-		for (i in 0...adapter.layers.length)
+		for (i in 0...pathItem.mcItem.layers.length)
 		{
 			createLayer(i);
 		}
@@ -265,10 +288,10 @@ class Code extends wquery.Component
 	
 	function extendSelection(layerIndex:Int, frameIndex:Int)
 	{
-		var fromLayerIndex = Std.min(layerIndex, adapter.layerIndex);
-		var fromFrameIndex = Std.min(frameIndex, adapter.frameIndex);
-		var toLayerIndex = Std.max(layerIndex, adapter.layerIndex);
-		var toFrameIndex = Std.max(frameIndex, adapter.frameIndex);
+		var fromLayerIndex = Std.min(layerIndex, pathItem.layerIndex);
+		var fromFrameIndex = Std.min(frameIndex, pathItem.frameIndex);
+		var toLayerIndex = Std.max(layerIndex, pathItem.layerIndex);
+		var toFrameIndex = Std.max(frameIndex, pathItem.frameIndex);
 		
 		for (i in fromLayerIndex...(toLayerIndex + 1))
 		{
@@ -282,7 +305,7 @@ class Code extends wquery.Component
 	
 	public function insertFrame()
 	{
-		adapter.beginTransaction();
+		beginTransaction();
 		
 		var changes = new Changes();
 		
@@ -296,21 +319,21 @@ class Code extends wquery.Component
 		
 		if (!hasSelectedFrames)
 		{
-			for (layer in adapter.layers)
+			for (layer in pathItem.mcItem.layers)
 			{
-				layer.insertFrame(adapter.frameIndex);
+				layer.insertFrame(pathItem.frameIndex);
 			}
 			changes.frames = true;
 		}
 		
 		updateInvalidated(changes);
 		
-		adapter.commitTransaction();
+		commitTransaction();
 	}
 	
 	public function convertToKeyFrame()
 	{
-		adapter.beginTransaction();
+		beginTransaction();
 		
 		var changes = new Changes();
 		var wasConvert = false;
@@ -324,14 +347,14 @@ class Code extends wquery.Component
 		
 		updateInvalidated(changes);
 		
-		if (wasConvert) adapter.onConvertToKeyFrame();
+		if (wasConvert) onConvertToKeyFrame();
 		
-		adapter.commitTransaction();
+		commitTransaction();
 	}
 	
 	public function addBlankKeyFrame()
 	{
-		adapter.beginTransaction();
+		beginTransaction();
 		
 		var changes = new Changes();
 		
@@ -345,8 +368,8 @@ class Code extends wquery.Component
 			{
 				if (e.frameIndex == e.layer.getTotalFrames() - 1)
 				{
-					adapter.addNewKeyFrameToLayer(e.layer);
-					wantToChangeFrameIndexTo = adapter.getTotalFrames() - 1;
+                    e.layer.addKeyFrame(new KeyFrame());
+					wantToChangeFrameIndexTo = pathItem.getTotalFrames() - 1;
 					changes.frames = true;
 				}
 			}
@@ -360,49 +383,49 @@ class Code extends wquery.Component
 		if (wantToChangeFrameIndexTo != null)
 		{
 			//adapter.setFrameIndex(wantToChangeFrameIndexTo, changes);
-			adapter.frameIndex = wantToChangeFrameIndexTo;
+			navigator.setFrameIndex(wantToChangeFrameIndexTo);
 		}
 		
-		adapter.commitTransaction();
+		commitTransaction();
 		
 		updateInvalidated(changes);
 	}
 	
 	public function removeSelectedFrames()
 	{
-		adapter.beginTransaction();
+		beginTransaction();
 		
 		var changes = new Changes();
 		var wasRemoves = false;
 		
-		iterateSelectedFramesReversed(function(e)
+		iterateSelectedFramesReversed(e ->
 		{
 			e.layer.removeFrame(e.frameIndex);
 			changes.frames = true;
 			wasRemoves = true;
 		});
 		
-		adapter.commitTransaction();
+		commitTransaction();
 		
-		freezed(function() adapter.frameIndex = Std.min(adapter.frameIndex, adapter.getTotalFrames() - 1));
+		freezed(() -> navigator.setFrameIndex(Std.min(pathItem.frameIndex, pathItem.getTotalFrames() - 1)));
 		
 		updateInvalidated(changes);
 		
-		if (wasRemoves) adapter.onFrameRemoved();
+		if (wasRemoves) onFrameRemoved();
 	}
 	
 	@:profile
 	function createLayer(layerIndex:Int)
 	{
-		var layer = adapter.layers[layerIndex];
+		final layer = pathItem.mcItem.layers[layerIndex];
 		
-		var t = layers.create
+		final t = layerComponents.create
 		({
 			  title: htmlEscape(layer.name != "" ? layer.name : " ")
 			, iconCssClass: layer.getIcon()
-			, layerCssClass: " subLayer" + adapter.getLayerNestLevel(layer) + " layer-type-" + layer.type + (layerIndex == adapter.layerIndex ? " active" : "")
-			, layerLockedCssClass: adapter.editable ? (layer.locked ? "icon-lock" : "custom-icon-point") : "custom-icon-empty"
-			, layerVisibleCssClass: adapter.editable ? (layer.visible ? "custom-icon-point" : "custom-icon-remove") : "custom-icon-empty"
+			, layerCssClass: " subLayer" + layer.getNestLevel() + " layer-type-" + layer.type + (layerIndex == pathItem.layerIndex ? " active" : "")
+			, layerLockedCssClass: editable ? (layer.locked ? "icon-lock" : "custom-icon-point") : "custom-icon-empty"
+			, layerVisibleCssClass: editable ? (layer.visible ? "custom-icon-point" : "custom-icon-remove") : "custom-icon-empty"
 		});
 		
 		t.event_iconClick.on(onIconClick.bind(t, _));
@@ -411,11 +434,11 @@ class Code extends wquery.Component
 		t.event_visibleClick.on(onVisibleClick.bind(t, _));
 		t.event_lockedClick.on(onLockedClick.bind(t, _));
 		
-		Debug.assert(layers.getByIndex(layerIndex) == t);
+		Debug.assert(layerComponents.getByIndex(layerIndex) == t);
 		
-		if (adapter.editable)
+		if (editable)
 		{
-			var title = t.q("#title");
+			final title = t.q("#title");
 			
 			title.editable
 			({
@@ -436,10 +459,10 @@ class Code extends wquery.Component
 				setData: (jq:JQuery, value:String) ->
 				{
 					value = StringTools.trim(value);
-					adapter.beginTransaction();
+					beginTransaction();
 					layer.name = value;
 					jq.html(htmlEscape(value != "" ? value : " "));
-					adapter.commitTransaction();
+					commitTransaction();
 				},
 				cssClass: "inPlaceEdit"
 			});
@@ -470,81 +493,75 @@ class Code extends wquery.Component
 	
 	function addLayer_click(e)
 	{
-		adapter.beginTransaction();
+		beginTransaction();
 		
-		var layer = adapter.newLayer("Layer " + adapter.layers.length);
-		adapter.addNewKeyFrameToLayer(layer);
+		final layer = new Layer("Layer " + pathItem.mcItem.layers.length);
+		layer.addKeyFrame(new KeyFrame());
 		
-		var prevLayer = adapter.layerIndex != null && adapter.layerIndex >= 0 && adapter.layerIndex < adapter.layers.length
-					  ? adapter.layers[adapter.layerIndex]
+		final prevLayer = pathItem.layerIndex != null && pathItem.layerIndex >= 0 && pathItem.layerIndex < pathItem.mcItem.layers.length
+					  ? pathItem.mcItem.layers[pathItem.layerIndex]
 					  : null;
-		adapter.addLayersBlock([ layer ], adapter.layerIndex);
-		if (prevLayer != null && prevLayer.parentIndex != null) layer.parentIndex = prevLayer.parentIndex;
+		pathItem.mcItem.addLayersBlock([ layer ], pathItem.layerIndex);
+		if (prevLayer?.parentIndex != null) layer.parentIndex = prevLayer.parentIndex;
 		
 		update();
 		
-		freezed(() ->
-		{
-			adapter.onLayerAdded();
-		});
+		freezed(() -> onLayerAdded());
 		
-		adapter.commitTransaction();
+		commitTransaction();
 	}
 	
 	function addFolder_click(e)
 	{
-		adapter.beginTransaction();
+		beginTransaction();
 		
-		var n = adapter.layerIndex;
-		while (n != null && n >= 0 && n < adapter.layers.length && adapter.layers[n].parentIndex != null) n++;
+		var n = pathItem.layerIndex;
+		while (n != null && n >= 0 && n < pathItem.mcItem.layers.length && pathItem.mcItem.layers[n].parentIndex != null) n++;
 		
-		adapter.addLayersBlock([ adapter.newLayer("TLLayer " + adapter.layers.length, LayerType.folder) ], n);
+		pathItem.mcItem.addLayersBlock([ new Layer("TLLayer " + pathItem.mcItem.layers.length, LayerType.folder) ], n);
 		
 		update();
 		
-		adapter.commitTransaction();
+		commitTransaction();
 	}
 	
 	function removeLayer_click(e)
 	{
-		adapter.beginTransaction();
+		beginTransaction();
 		
-		var layerNodes = getLayerNodes();
+		final layerNodes = getLayerNodes();
 		
 		var i = layerNodes.length - 1;
 		while (i >= 0)
 		{
 			if (layerNodes[i].hasClass("selected"))
 			{
-				adapter.removeLayer(i);
+				pathItem.mcItem.removeLayer(i);
 			}
 			i--;
 		}
 
-        if (adapter.layers.length == 0)
+        if (pathItem.mcItem.layers.length == 0)
         {
-            adapter.addLayer(adapter.newLayer("Layer 1"));
+            pathItem.mcItem.addLayer(new Layer("Layer 1"));
         }
 		
-		if (adapter.layerIndex >= adapter.layers.length)
+		if (pathItem.layerIndex >= pathItem.mcItem.layers.length)
 		{
-			adapter.layerIndex = Std.max(0, adapter.layers.length - 1);
+			navigator.setLayerIndex(Std.max(0, pathItem.mcItem.layers.length - 1));
 		}
 		
 		update();
 		
-		freezed(() ->
-		{
-			adapter.onLayerRemoved();
-		});
+		freezed(() -> onLayerRemoved());
 		
-		adapter.commitTransaction();
+		commitTransaction();
 	}
 	
 	@:profile
 	public function updateHeader()
 	{
-		var displayFrameCount = adapter.getTotalFrames() + ADDITIONAL_FRAMES_TO_DISPLAY;
+		final displayFrameCount = pathItem.getTotalFrames() + ADDITIONAL_FRAMES_TO_DISPLAY;
 		
 		if (template().framesHeader.children().length != displayFrameCount)
 		{
@@ -552,7 +569,7 @@ class Code extends wquery.Component
 			var framesBorder = "";
 			for (i in 0...displayFrameCount)
 			{
-				var active = i == adapter.frameIndex ? " class='active'" : "";
+				final active = i == pathItem.frameIndex ? " class='active'" : "";
 				framesHeader += "<span" + active + ">" + (i % 5 == 0 ? Std.string(i) : "&nbsp;") + "</span>";
 				framesBorder += "<span" + active + ">&nbsp;</span>";
 			}
@@ -563,9 +580,9 @@ class Code extends wquery.Component
 	
 	function onIconClick(t:components.nanofl.movie.timelinelayer.Code, e:JqEvent)
 	{
-		var layerNode = t.q("#layerRow");
-		var type = getLayerByLayerNode(layerNode).type;
-		var layerIndex = layerNode.index();
+		final layerNode = t.q("#layerRow");
+		final type = getLayerByLayerNode(layerNode).type;
+		final layerIndex = layerNode.index();
 		
 		if (e.ctrlKey)
 		{
@@ -579,7 +596,7 @@ class Code extends wquery.Component
 				getFrameNodesByLayer(layerNode, ".frame").addClass("selected");
 				if (type != LayerType.folder)
 				{
-					adapter.layerIndex = layerNode.index();
+					navigator.setLayerIndex(layerNode.index());
 				}
 				else
 				{
@@ -590,14 +607,14 @@ class Code extends wquery.Component
 		else
 		if (e.shiftKey)
 		{
-			for (i in Std.min(adapter.layerIndex, layerIndex)...(Std.max(adapter.layerIndex, layerIndex) + 1))
+			for (i in Std.min(pathItem.layerIndex, layerIndex)...(Std.max(pathItem.layerIndex, layerIndex) + 1))
 			{
 				getFrameNodesByLayerIndex(i, ".frame").addClass("selected");
 				getLayerNodeByIndex(i).addClass("selected");
 			}
 			if (type != LayerType.folder)
 			{
-				adapter.layerIndex = layerIndex;
+				navigator.setLayerIndex(layerIndex);
 			}
 		}
 		else
@@ -607,7 +624,7 @@ class Code extends wquery.Component
 			getFrameNodesByLayer(layerNode, ".frame").addClass("selected");
 			if (type != LayerType.folder)
 			{
-				adapter.layerIndex = layerIndex;
+				navigator.setLayerIndex(layerIndex);
 			}
 			else
 			{
@@ -615,32 +632,29 @@ class Code extends wquery.Component
 			}
 		}
 		
-		freezed(() ->
-		{
-			adapter.onLayersSelectionChange(getSelectedLayerIndexes());
-		});
+		freezed(() -> onLayersSelectionChange(getSelectedLayerIndexes()));
 	}
 	
 	function onVisibleClick(t:components.nanofl.movie.timelinelayer.Code, e:JqEvent)
 	{
-		if (!adapter.editable) return;
+		if (!editable) return;
 		
 		var layerData = getLayerByLayerNode(t.q("#layerRow"));
 		q(e.currentTarget).find(">i").attr("class", !layerData.visible ? "custom-icon-point" : "custom-icon-remove");
 		layerData.visible = !layerData.visible;
 		
-		adapter.onLayerVisibleChange();
+		onLayerVisibleChange();
 	}
 	
 	function onLockedClick(t:components.nanofl.movie.timelinelayer.Code, e:JqEvent)
 	{
-		if (!adapter.editable) return;
+		if (!editable) return;
 		
 		var layerData = getLayerByLayerNode(t.q("#layerRow"));
 		q(e.currentTarget).find(">i").attr("class", layerData.locked ? "custom-icon-point" : "icon-lock");
 		layerData.locked = !layerData.locked;
 		
-		adapter.onLayerLockChange();
+		onLayerLockChange();
 	}
 	
 	@:profile
@@ -652,16 +666,16 @@ class Code extends wquery.Component
 		{
 			var frameNodes = getFrameNodesByLayer(layerNode);
 			frameNodes.removeClass("active");
-			frameNodes[adapter.frameIndex].addClass("active");
+			frameNodes[pathItem.frameIndex].addClass("active");
 		}
 		
 		var headerFrames = template().framesHeader.children();
 		headerFrames.removeClass("active");
-		headerFrames[adapter.frameIndex].addClass("active");
+		headerFrames[pathItem.frameIndex].addClass("active");
 		
 		var borderFrames = template().framesBorder.children();
 		borderFrames.removeClass("active");
-		borderFrames[adapter.frameIndex].addClass("active");
+		borderFrames[pathItem.frameIndex].addClass("active");
 	}
 	
 	@:profile
@@ -671,9 +685,9 @@ class Code extends wquery.Component
 		
 		var layerNodes = getLayerNodes();
 		layerNodes.removeClass("active");
-		if (adapter.layerIndex != null)
+		if (pathItem.layerIndex != null)
 		{
-			q(layerNodes[adapter.layerIndex]).addClass("selected active");
+			q(layerNodes[pathItem.layerIndex]).addClass("selected active");
 		}
 	}
 	
@@ -704,7 +718,7 @@ class Code extends wquery.Component
 	{
 		if (freeze) return;
 		
-		updateLayerFrames(adapter.layerIndex, true);
+		updateLayerFrames(pathItem.layerIndex, true);
 	}
 	
 	@:profile
@@ -712,26 +726,26 @@ class Code extends wquery.Component
 	{
 		if (freeze) return;
 		
-		for (i in 0...adapter.layers.length)
+		for (i in 0...pathItem.mcItem.layers.length)
 		{
-			var frameNode = getFrameNodesByLayerIndex(i, ":nth-child(" + (adapter.frameIndex + 1) + ")");
-			updateFrame(adapter.frameIndex, frameNode[0], getFrameCssClasses(i, adapter.frameIndex), true);
+			var frameNode = getFrameNodesByLayerIndex(i, ":nth-child(" + (pathItem.frameIndex + 1) + ")");
+			updateFrame(pathItem.frameIndex, frameNode[0], getFrameCssClasses(i, pathItem.frameIndex), true);
 		}
 	}
 	
 	public function updateFrames(isUpdateHeader=true)
 	{
 		if (isUpdateHeader) updateHeader();
-		for (i in 0...adapter.layers.length) updateLayerFrames(i, true);
+		for (i in 0...pathItem.mcItem.layers.length) updateLayerFrames(i, true);
 		updateScrolls();
 	}
 	
 	@:profile
 	function updateLayerFrames(layerIndex:Int, keepSelection:Bool)
 	{
-		if (layerIndex >= adapter.layers.length) return;
+		if (layerIndex >= pathItem.mcItem.layers.length) return;
 		
-		var displayedFrameCount = adapter.getTotalFrames() + ADDITIONAL_FRAMES_TO_DISPLAY;
+		var displayedFrameCount = pathItem.getTotalFrames() + ADDITIONAL_FRAMES_TO_DISPLAY;
 		var container = getLayerFramesContainerByIndex(layerIndex);
 		var frames = JQuery.makeArray(container.children());
 		
@@ -759,9 +773,9 @@ class Code extends wquery.Component
 	{
 		var r = [];
 		
-		var displayedFrameCount = adapter.getTotalFrames() + ADDITIONAL_FRAMES_TO_DISPLAY;
+		var displayedFrameCount = pathItem.getTotalFrames() + ADDITIONAL_FRAMES_TO_DISPLAY;
 		
-		for (keyFrame in adapter.getLayerKeyFrames(adapter.layers[layerIndex]))
+		for (keyFrame in pathItem.mcItem.layers[layerIndex].keyFrames)
 		{
 			var base = "frame";
 			if (!keyFrame.isEmpty()) base += " frame-notEmpty";
@@ -771,9 +785,9 @@ class Code extends wquery.Component
 			if (keyFrame.duration > 1) r.push(base + " finishKeyFrame");
 		}
 		
-		if (layerIndex + 1 < adapter.layers.length)
+		if (layerIndex + 1 < pathItem.mcItem.layers.length)
 		{
-			for (i in r.length...adapter.layers[layerIndex + 1].getTotalFrames())
+			for (i in r.length...pathItem.mcItem.layers[layerIndex + 1].getTotalFrames())
 			{
 				r.push("nextLayerFrame");
 			}
@@ -786,7 +800,7 @@ class Code extends wquery.Component
 	
 	function getFrameCssClasses(layerIndex:Int, frameIndex:Int) : String
 	{
-		var frame = adapter.layers[layerIndex].getFrame(frameIndex);
+		var frame = pathItem.mcItem.layers[layerIndex].getFrame(frameIndex);
 		
 		if (frame != null)
 		{
@@ -799,9 +813,9 @@ class Code extends wquery.Component
 			return r;
 		}
 		
-		if (layerIndex < adapter.layers.length - 1)
+		if (layerIndex < pathItem.mcItem.layers.length - 1)
 		{
-			var nextLayerFramesCount = adapter.layers[layerIndex + 1].getTotalFrames();
+			var nextLayerFramesCount = pathItem.mcItem.layers[layerIndex + 1].getTotalFrames();
 			if (frameIndex < nextLayerFramesCount) return "nextLayerFrame";
 		}
 		
@@ -811,7 +825,7 @@ class Code extends wquery.Component
 	function updateFrame(frameIndex:Int, frameElement:js.html.Element, cssClasses:String, keepSelection:Bool)
 	{
 		var selected = keepSelection && frameElement.hasClass("selected") ? " selected" : "";
-		var active = frameIndex == adapter.frameIndex ? " active" : "";
+		var active = frameIndex == pathItem.frameIndex ? " active" : "";
 		frameElement.setAttribute("class", cssClasses + selected + active);
 	}
 	
@@ -830,40 +844,39 @@ class Code extends wquery.Component
 			var layer = layerNodes[i];
 			var frameNodes = getFrameNodesByLayer(q(layer));
 			frameNodes.removeClass("selected");
-			if (layerIndexes.has(i)) frameNodes[adapter.frameIndex].addClass("selected");
+			if (layerIndexes.has(i)) frameNodes[pathItem.frameIndex].addClass("selected");
 		}
 	}
 	
-	@:profile
 	public function getAciveFrame() : KeyFrame
 	{
-		return adapter != null ? adapter.layers[adapter.layerIndex].getFrame(adapter.frameIndex).keyFrame : null;
+		return pathItem?.frame?.keyFrame;
 	}
 	
 	function visibleAll_click(e)
 	{
-		var hasVisible = adapter.layers.exists(layer -> layer.visible);
+		var hasVisible = pathItem.mcItem.layers.exists(layer -> layer.visible);
 		getLayerNodes().find(">.timeline-visible>i").attr("class", hasVisible ? "custom-icon-remove" : "custom-icon-point");
 		
-		for (layer in adapter.layers)
+		for (layer in pathItem.mcItem.layers)
 		{
 			layer.visible = !hasVisible;
 		}
 		
-		adapter.onLayerVisibleChange();
+		onLayerVisibleChange();
 	}
 	
 	function lockedAll_click(e)
 	{
-		var hasUnlocked = adapter.layers.exists(layer -> !layer.locked);
+		var hasUnlocked = pathItem.mcItem.layers.exists(layer -> !layer.locked);
 		getLayerNodes().find(">.timeline-locked>i").attr("class", hasUnlocked ? "icon-lock" : "custom-icon-point");
 		
-		for (layer in adapter.layers)
+		for (layer in pathItem.mcItem.layers)
 		{
 			layer.locked = hasUnlocked;
 		}
 		
-		adapter.onLayerLockChange();
+		onLayerLockChange();
 	}
 	
 	function onFrameMouseDown(e:JqEvent)
@@ -918,7 +931,7 @@ class Code extends wquery.Component
 					}
 				}
 				
-				adapter.frameIndex = frameIndex;
+				navigator.setFrameIndex(frameIndex);
 				fixActiveFrame();
 			}
 		}
@@ -929,9 +942,9 @@ class Code extends wquery.Component
 		mouseDownOnHeader = true;
 		deselectAllFrames();
 
-        final oldElements = adapter.getEditorElements();
-		adapter.frameIndex = q(e.currentTarget).index();
-        final newElements = adapter.getEditorElements();
+        final oldElements = editor.getElements(false);
+		navigator.setFrameIndex(q(e.currentTarget).index());
+        final newElements = editor.getElements(false);
 
         final elementsToSelect = [];
         var i = 0; while (i < oldElements.length && i < newElements.length)
@@ -941,7 +954,11 @@ class Code extends wquery.Component
             i++;
         }
 
-        adapter.setEditorSelected(elementsToSelect);
+        editor.deselectAll();
+        for (element in elementsToSelect)
+        {
+            editor.select(element, false);
+        }
 	}
 	
 	function onFrameHeaderMouseMove(e:JqEvent)
@@ -949,7 +966,7 @@ class Code extends wquery.Component
 		if (!mouseDownOnHeader) return;
 		
 		deselectAllFrames();
-		adapter.frameIndex = q(e.currentTarget).index();
+		navigator.setFrameIndex(q(e.currentTarget).index());
 	}
 	
 	function freezed(f:Void->Void) : Void
@@ -974,7 +991,7 @@ class Code extends wquery.Component
 			}
 		});
 		
-		adapter.onTweenCreated();
+		onTweenCreated();
 	}
 	
 	public function removeTween() 
@@ -984,7 +1001,7 @@ class Code extends wquery.Component
 			keyFrame.removeMotionTween();
 		});
 		
-		adapter.onTweenRemoved();
+		onTweenRemoved();
 	}
 	
 	public function hasSelectedFrames()
@@ -1000,60 +1017,56 @@ class Code extends wquery.Component
 		var layerNodes = getLayerNodes();
 		for (i in 0...layerNodes.length)
 		{
-			var rLayer = adapter.duplicateLayerWoFrames(adapter.layers[i]);
+			var rLayer = pathItem.mcItem.layers[i].duplicate([], null);
 			
 			var frameNodes = getFrameNodesByLayer(q(layerNodes[i]));
 			
-			for (keyFrame in adapter.getLayerKeyFrames(adapter.layers[i]))
+			for (keyFrame in pathItem.mcItem.layers[i].keyFrames)
 			{
 				if (frameNodes[keyFrame.getIndex()].hasClass("selected"))
 				{
-					adapter.addKeyFrame(rLayer, keyFrame.clone());
+					rLayer.addKeyFrame(keyFrame.clone());
 					
-					for (namePath in adapter.getNamePaths(keyFrame))
+					for (namePath in Elements.getUsedSymbolNamePaths(keyFrame.elements))
 					{
 						if (namePaths.indexOf(namePath) < 0) namePaths.push(namePath);
 					}
 				}
 			}
 			
-			if (adapter.getLayerKeyFrames(rLayer).length > 0)
+			if (rLayer.keyFrames.length > 0)
 			{
 				rLayer.save(out);
 			}
 		}
 		out.end();
 		
-		return adapter.getLibraryItems(namePaths);
+		return namePaths.map(x -> document.library.getItem(x));
 	}
 	
 	public function pasteFromXml(xml:XmlNodeElement) : Bool
 	{
 		var r = false;
 		
-		if (adapter.editable)
+		if (editable)
 		{
-			for (layersNode in xml.find(">" + adapter.xmlLayersTag))
+			for (layersNode in xml.find(">" + XML_LAYERS_TAG))
 			{
-				var layerIndex = adapter.layerIndex;
+				var layerIndex = pathItem.layerIndex;
 				for (layerNode in layersNode.find(">layer"))
 				{
 					var layer = Layer.load(layerNode, Version.document);
 					
-					if (layerIndex == adapter.layers.length)
+					if (layerIndex == pathItem.mcItem.layers.length)
 					{
-						//switch (pathItem.typed)
-						{
-							//case PathItemTyped.FLAT(pathItem):
-								adapter.addLayer(layer);
-						}
+                        pathItem.mcItem.addLayer(layer);
 						r = true;
 					}
 					else
 					{
-						for (keyFrame in adapter.getLayerKeyFrames(layer))
+						for (keyFrame in layer.keyFrames)
 						{
-							adapter.addKeyFrame(adapter.layers[layerIndex], keyFrame.clone());
+							pathItem.mcItem.layers[layerIndex].addKeyFrame(keyFrame.clone());
 							r = true;
 						}
 					}
@@ -1075,7 +1088,7 @@ class Code extends wquery.Component
 			{
 				if (frameNodes[j].hasClass("frame") && frameNodes[j].hasClass("selected"))
 				{
-					var f = adapter.layers[i].getFrame(j);
+					var f = pathItem.mcItem.layers[i].getFrame(j);
 					callb(f.keyFrame);
 					j += f.keyFrame.duration - f.subIndex;
 				}
@@ -1100,17 +1113,17 @@ class Code extends wquery.Component
 	
 	public function gotoPrevFrame()
 	{
-		if (adapter.frameIndex > 0)
+		if (pathItem.frameIndex > 0)
 		{
-			adapter.frameIndex = adapter.frameIndex - 1;
+			navigator.setFrameIndex(pathItem.frameIndex - 1);
 		}
 	}
 	
 	public function gotoNextFrame()
 	{
-		if (adapter.frameIndex < adapter.getTotalFrames() - 1)
+		if (pathItem.frameIndex < pathItem.getTotalFrames() - 1)
 		{
-			adapter.frameIndex = adapter.frameIndex + 1;
+			navigator.setFrameIndex(pathItem.frameIndex + 1);
 		}
 	}
 	
@@ -1119,20 +1132,20 @@ class Code extends wquery.Component
         final layerIndexes = getSelectedLayerIndexes();
 		Debug.assert(layerIndexes.length == 1);
 
-        final layer = adapter.layers[layerIndexes[0]];
+        final layer = pathItem.mcItem.layers[layerIndexes[0]];
         if (layer.getHumanType() == humanType) return;
         
-        adapter.beginTransaction();
+        beginTransaction();
 
         setLayerType(layer, humanType);
 		preserveLayerSelection(() -> update());
 
-        adapter.commitTransaction();
+        commitTransaction();
 	}
 	
 	function setLayerType(layer:Layer, humanType:String)
 	{
-		var index = adapter.layers.indexOf(layer);
+		var index = pathItem.mcItem.layers.indexOf(layer);
 		
 		switch (humanType)
 		{
@@ -1140,10 +1153,10 @@ class Code extends wquery.Component
 				if ([ "masked", "guided" ].has(layer.getHumanType()))
 				{
 					var parentIndex = layer.parentIndex;
-					var newParentIndex = adapter.layers[parentIndex].parentIndex;
-					while (index < adapter.layers.length && adapter.layers[index].parentIndex == parentIndex)
+					var newParentIndex = pathItem.mcItem.layers[parentIndex].parentIndex;
+					while (index < pathItem.mcItem.layers.length && pathItem.mcItem.layers[index].parentIndex == parentIndex)
 					{
-						adapter.layers[index].parentIndex = newParentIndex;
+						pathItem.mcItem.layers[index].parentIndex = newParentIndex;
 						index++;
 					}
 				}
@@ -1168,10 +1181,10 @@ class Code extends wquery.Component
 	
 	function getPotentialParentLayerIndex(layerIndex:Int) : Int
 	{
-		var i = layerIndex - 1; while (i > 0 && adapter.layers[i].parentIndex != null) i--;
+		var i = layerIndex - 1; while (i > 0 && pathItem.mcItem.layers[i].parentIndex != null) i--;
 		if (i >= 0)
 		{
-			switch (adapter.layers[i].type)
+			switch (pathItem.mcItem.layers[i].type)
 			{
 				case LayerType.folder
 				   , LayerType.mask
@@ -1187,16 +1200,16 @@ class Code extends wquery.Component
 	
 	function iterateSelectedFrames(callb:{ layerIndex:Int, frameIndex:Int, layer:Layer, frameNode:js.html.Element }->Void)
 	{
-		for (i in 0...adapter.layers.length)
+		for (i in 0...pathItem.mcItem.layers.length)
 		{
-			if (adapter.layers[i].type == LayerType.folder) continue;
+			if (pathItem.mcItem.layers[i].type == LayerType.folder) continue;
 			
 			var frameNodes = getFrameNodesByLayerIndex(i);
 			for (j in 0...frameNodes.length)
 			{
 				if (frameNodes[j].hasClass("selected"))
 				{
-					callb({ layerIndex:i, frameIndex:j, layer:adapter.layers[i], frameNode:frameNodes[j] });
+					callb({ layerIndex:i, frameIndex:j, layer:pathItem.mcItem.layers[i], frameNode:frameNodes[j] });
 				}
 			}
 		}
@@ -1204,9 +1217,9 @@ class Code extends wquery.Component
 	
 	function iterateSelectedFramesReversed(callb:{ layerIndex:Int, frameIndex:Int, layer:Layer, frameNode:js.html.Element }->Void)
 	{
-		for (i in 0...adapter.layers.length)
+		for (i in 0...pathItem.mcItem.layers.length)
 		{
-			if (adapter.layers[i].type == LayerType.folder) continue;
+			if (pathItem.mcItem.layers[i].type == LayerType.folder) continue;
 			
 			var frameNodes = getFrameNodesByLayerIndex(i);
 			var j = frameNodes.length - 1;
@@ -1214,7 +1227,7 @@ class Code extends wquery.Component
 			{
 				if (frameNodes[j].hasClass("selected"))
 				{
-					callb({ layerIndex:i, frameIndex:j, layer:adapter.layers[i], frameNode:frameNodes[j] });
+					callb({ layerIndex:i, frameIndex:j, layer:pathItem.mcItem.layers[i], frameNode:frameNodes[j] });
 				}
 				j--;
 			}
@@ -1244,17 +1257,17 @@ class Code extends wquery.Component
 	{
 		if (playTimer != null) { stop(); return; }
 		
-		playStartFrameIndex = adapter.frameIndex;
+		playStartFrameIndex = pathItem.frameIndex;
 		
-        var totalFrames = adapter.getTotalFrames();
+        var totalFrames = pathItem.getTotalFrames();
 		
-		playTimer = new AsyncTicker(adapter.framerate, () ->
+		playTimer = new AsyncTicker(document.properties.framerate, () ->
 		{
-            final nextFrameIndex = (adapter.frameIndex + 1) % totalFrames;
+            final nextFrameIndex = (pathItem.frameIndex + 1) % totalFrames;
 
-            return adapter.setFrameIndexAndWaitStageUpdating(nextFrameIndex).then(_ ->
+            return navigator.setFrameIndex(nextFrameIndex).then(_ ->
 			{
-                if (adapter.frameIndex == totalFrames - 1) stop();
+                if (pathItem.frameIndex == totalFrames - 1) stop();
                 ensureActiveFrameVisible();
                 return null;
             });
@@ -1274,24 +1287,19 @@ class Code extends wquery.Component
 	
 	public function renameSelectedLayerByUser()
 	{
-		for (layerComp in layers)
+		for (layerComponent in layerComponents)
 		{
-			if (layerComp.selected)
+			if (layerComponent.selected)
 			{
-				layerComp.beginEditTitle();
+				layerComponent.beginEditTitle();
 				break;
 			}
 		}
 	}
 	
-	public function getActiveKeyFrame() : KeyFrame
-	{
-		return adapter.layers[adapter.layerIndex].getFrame(adapter.frameIndex)?.keyFrame;
-	}
-	
 	function ensureActiveFrameVisible()
 	{
-		var posX = adapter.frameIndex * FRAME_WIDTH;
+		var posX = pathItem.frameIndex * FRAME_WIDTH;
 		if (posX < template().hScrollbar.position)
 		{
 			template().hScrollbar.position = posX;
@@ -1320,7 +1328,7 @@ class Code extends wquery.Component
 		
 		deselectAllFrames();
 		
-		var layer = adapter.layers[layerIndex];
+		var layer = pathItem.mcItem.layers[layerIndex];
 		if (layer.type != LayerType.folder)
 		{
 			var frame = layer.getFrame(frameIndex);
@@ -1340,9 +1348,9 @@ class Code extends wquery.Component
 	{
 		freezed(() ->
 		{
-			adapter.layerIndex = layerIndex;
-			adapter.frameIndex = frameIndex;
-			adapter.onLayersSelectionChange([ layerIndex ]);
+			navigator.setLayerIndex(layerIndex);
+			navigator.setFrameIndex(frameIndex);
+			onLayersSelectionChange([ layerIndex ]);
 		});
 		
 		fixActiveFrame();
@@ -1378,4 +1386,24 @@ class Code extends wquery.Component
 
         return true;
     }
+
+	function beginTransaction()
+    {
+        app.document.undoQueue.beginTransaction({ timeline:true });
+    }
+	
+    function commitTransaction()
+    {
+        app.document.undoQueue.commitTransaction();
+    }
+
+	function onLayerAdded() : Void editor.rebind();
+	function onLayerRemoved() : Void editor.rebind();
+	function onLayerVisibleChange() : Void editor.rebind();
+	function onLayerLockChange() : Void editor.rebind();
+	function onTweenCreated() : Void editor.rebind();
+	function onTweenRemoved() : Void editor.rebind();
+	function onConvertToKeyFrame() : Void editor.rebind();
+	function onFrameRemoved() : Void editor.rebind();
+	function onLayersSelectionChange(indexes:Array<Int>) : Void editor.selectLayers(indexes);    
 }
