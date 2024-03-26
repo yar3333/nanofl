@@ -1,10 +1,11 @@
 package nanofl.ide;
 
-import stdlib.ExceptionTools;
-import stdlib.Std;
 import js.Lib;
 import js.lib.Error;
 import js.lib.Promise;
+import stdlib.ExceptionTools;
+import stdlib.Std;
+import stdlib.Timer;
 import nanofl.engine.Log;
 import nanofl.engine.Log.console;
 import nanofl.ide.sys.FileSystem;
@@ -13,7 +14,6 @@ import nanofl.ide.sys.MainProcess;
 import nanofl.ide.ui.View;
 using StringTools;
 using stdlib.Lambda;
-import stdlib.Timer;
 
 @:rtti
 class CommandLine extends InjectContainer
@@ -28,13 +28,13 @@ class CommandLine extends InjectContainer
 
     public static function process() : Promise<{}>
     {
-        var commandLine = new CommandLine();
+        final commandLine = new CommandLine();
         return commandLine.processInner();
     }
 
 	function processInner() : Promise<{}>
 	{
-        var args = mainProcess.getCommandLineArgs();
+        final args = mainProcess.getCommandLineArgs();
         //console.log(args);
         return processNextArg(args);
 	}
@@ -43,7 +43,7 @@ class CommandLine extends InjectContainer
 	{
         if (args.length == 0) return Promise.resolve(null);
 
-		var arg = args.shift();
+		final arg = args.shift();
 
 		if (arg.endsWith(".js") || arg.endsWith(".jsnf"))
 		{
@@ -99,7 +99,7 @@ class CommandLine extends InjectContainer
 		
 		if (arg == "-resize-fit")
 		{
-			var reWH = ~/^(\d*)[xX](\d*)$/;
+			final reWH = ~/^(\d*)[xX](\d*)$/;
 			if (args.length > 0 && args[0] != "x" && args[0] != "X" && reWH.match(args[0]))
 			{
 				args.shift();
@@ -171,6 +171,11 @@ class CommandLine extends InjectContainer
 				return processNextArg(args);
 			}
             return error("JS code expected after '-script' option.");
+		}
+		
+        if (arg == "-devTools")
+		{
+			return processNextArg(args);
 		}
 		
 		if (!arg.startsWith("-"))

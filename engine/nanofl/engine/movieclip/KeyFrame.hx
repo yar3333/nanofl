@@ -57,7 +57,7 @@ class KeyFrame
         return n > 0 ? layer.keyFrames[n - 1] : null;
     }
     
-    function getKeyIndex() : Int return layer.keyFrames.indexOf((cast this:KeyFrame));
+    function getKeyIndex() : Int return layer.keyFrames.indexOf(this);
     
     public function addElement(element:Element, ?index:Int)
     {

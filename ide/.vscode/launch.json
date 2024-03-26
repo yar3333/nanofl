@@ -9,6 +9,7 @@
             "request": "launch",
             "type": "node",
             "runtimeExecutable": "${workspaceFolder}/bin/NanoFL.exe",
+            "runtimeArgs": [ "-devTools" ],
             "cwd": "${workspaceFolder}/bin",
             "console": "internalConsole"
         }
