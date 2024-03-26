@@ -40,14 +40,15 @@ class AudioHelper
         final args = [];
         if (tracks.length == 0) return args;
         
-        for (tracks in tracks)
+        for (track in tracks)
         {
-            if (tracks.duration != null)
+            if (track.duration != null)
             {
-                if (tracks.loop) args.push("-stream_loop"); args.push("-1");
-                if (tracks.duration != null) args.push("-t"); args.push(tracks.duration + "");
+                if (track.loop) args.push("-stream_loop"); args.push("-1");
+                if (track.seekTo != 0) args.push("-ss"); args.push(track.seekTo + "");
+                if (track.duration != null) args.push("-t"); args.push(track.duration + "");
             }
-            args.push("-i"); args.push(tracks.filePath);
+            args.push("-i"); args.push(track.filePath);
         }
 
         var filters = new Array<String>();
@@ -78,7 +79,7 @@ class AudioHelper
         {
             final item = getMovieClipItemFromTrack(track);
             final mcSound : SoundItem = cast library.getItem(item.relatedSound);
-            r.push(createAudioTrack(mcSound, track, framerate, library));
+            r.push(createAudioTrack(mcSound, track, framerate, library, 0));
         }
 
         final trackVideos = tracker.tracks.filter(x -> x.sameElementSequence[0].type.match(ElementType.instance)
@@ -88,7 +89,7 @@ class AudioHelper
         for (track in trackVideos)
         {
             final mcVideo = getVideoItemFromTrack(track);
-            final audioTrack = createAudioTrack(mcVideo, track, framerate, library);
+            final audioTrack = createAudioTrack(mcVideo, track, framerate, library, (cast track.sameElementSequence[0] : Instance).videoCurrentTime ?? 0);
             
             r.push(audioTrack);
             
@@ -99,13 +100,14 @@ class AudioHelper
         return r;
     }
 
-    static function createAudioTrack(item:{ namePath:String, ext:String, loop:Bool }, track:ElementLifeTrack, framerate:Float, library:IdeLibrary) : AudioTrack
+    static function createAudioTrack(item:{ namePath:String, ext:String, loop:Bool }, track:ElementLifeTrack, framerate:Float, library:IdeLibrary, seekTo:Float) : AudioTrack
     {
         return
         {
             delayBeforeStart: track.startFrameIndex / framerate,
             filePath: library.libraryDir + "/" + item.namePath + "." + item.ext,
             loop: item.loop,
+            seekTo: seekTo,
             duration: item.loop ? track.lifetimeFrames / framerate : null,
         };
     }
