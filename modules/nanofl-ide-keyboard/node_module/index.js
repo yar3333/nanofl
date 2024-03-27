@@ -673,9 +673,7 @@ var nanofl_ide_keyboard_Keyboard = $hx_exports["Keyboard"] = function(commands) 
 	this.onKeyDown = new stdlib_Event(this);
 	this.commands = commands;
 	jQuery(window.document).keydown(function(e) {
-		nanofl_ide_keyboard_Keyboard.log("keydown");
 		if(!_gthis.isInputActive() && !nanofl_ide_keyboard_ShortcutTools.equ(nanofl_ide_keyboard_ShortcutTools.ctrl(nanofl_ide_keyboard_Keys.X),e) && !nanofl_ide_keyboard_ShortcutTools.equ(nanofl_ide_keyboard_ShortcutTools.ctrl(nanofl_ide_keyboard_Keys.C),e) && !nanofl_ide_keyboard_ShortcutTools.equ(nanofl_ide_keyboard_ShortcutTools.ctrl(nanofl_ide_keyboard_Keys.V),e)) {
-			nanofl_ide_keyboard_Keyboard.log("keydown: disabled = " + _gthis.disabled);
 			if(_gthis.disabled <= 0) {
 				_gthis.processKeyDown(e);
 			}
@@ -723,6 +721,7 @@ nanofl_ide_keyboard_Keyboard.prototype = {
 				}
 				return r;
 			}});
+			nanofl_ide_keyboard_Keyboard.log("processed = " + (processed == null ? "null" : "" + processed));
 			if(processed) {
 				e.preventDefault();
 				e.stopPropagation();
@@ -800,7 +799,7 @@ nanofl_ide_keyboard_Keyboard.prototype = {
 		var tmp = filter;
 		filter = tmp != null ? tmp : "";
 		var shortcut = nanofl_ide_keyboard_ShortcutTools.toString(e);
-		nanofl_ide_keyboard_Keyboard.log("shortcut = " + shortcut);
+		nanofl_ide_keyboard_Keyboard.log("shortcut = " + shortcut + "; filter = " + filter);
 		var km = Lambda.find(keymap,function(x) {
 			if(x.shortcut == shortcut && (filter == "" || filter == x.command.split(".")[0])) {
 				return _gthis.testWhen(x.when,whenVars);
@@ -811,6 +810,7 @@ nanofl_ide_keyboard_Keyboard.prototype = {
 		if(km == null) {
 			return false;
 		}
+		nanofl_ide_keyboard_Keyboard.log("command = " + km.command);
 		return this.commands.run(km.command);
 	}
 	,testWhen: function(when,vars) {
@@ -1684,7 +1684,7 @@ var Enum = { };
 js_Boot.__toStr = ({ }).toString;
 var q = window.jQuery;
 haxe_SysTools.winMetaCharacters = [32,40,41,37,33,94,34,60,62,38,124,10,13,44,59];
-nanofl_ide_keyboard_Keyboard.__rtti = "<class path=\"nanofl.ide.keyboard.Keyboard\" params=\"\">\n\t<log set=\"method\" line=\"180\" static=\"1\"><f a=\"v\">\n\t<d/>\n\t<x path=\"Void\"/>\n</f></log>\n\t<commands final=\"1\"><t path=\"nanofl.ide.keyboard.Commands\"/></commands>\n\t<keymap public=\"1\" expr=\"new Array&lt;KeymapItem&gt;()\" line=\"15\">\n\t\t<c path=\"Array\"><t path=\"nanofl.ide.keyboard.KeymapItem\"/></c>\n\t\t<meta><m n=\":value\"><e><![CDATA[new Array<KeymapItem>()]]></e></m></meta>\n\t</keymap>\n\t<onCtrlButtonChange final=\"1\" public=\"1\"><c path=\"stdlib.Event\"><a><pressed><x path=\"Bool\"/></pressed></a></c></onCtrlButtonChange>\n\t<onShiftButtonChange final=\"1\" public=\"1\"><c path=\"stdlib.Event\"><a><pressed><x path=\"Bool\"/></pressed></a></c></onShiftButtonChange>\n\t<onAltButtonChange final=\"1\" public=\"1\"><c path=\"stdlib.Event\"><a><pressed><x path=\"Bool\"/></pressed></a></c></onAltButtonChange>\n\t<onKeymapChange final=\"1\" public=\"1\"><c path=\"stdlib.Event\"><a/></c></onKeymapChange>\n\t<onKeyDown final=\"1\" public=\"1\"><c path=\"stdlib.Event\"><t path=\"nanofl.ide.keyboard.KeyDownEvent\"/></c></onKeyDown>\n\t<disabled expr=\"0\" line=\"24\">\n\t\t<x path=\"Int\"/>\n\t\t<meta><m n=\":value\"><e>0</e></m></meta>\n\t</disabled>\n\t<enable public=\"1\" set=\"method\" line=\"25\"><f a=\"\"><x path=\"Void\"/></f></enable>\n\t<disable public=\"1\" set=\"method\" line=\"26\"><f a=\"\"><x path=\"Void\"/></f></disable>\n\t<processKeyDown set=\"method\" line=\"72\"><f a=\"e\">\n\t<t path=\"js.JqEvent\"/>\n\t<x path=\"Void\"/>\n</f></processKeyDown>\n\t<setKeymap public=\"1\" set=\"method\" line=\"109\"><f a=\"keymap\">\n\t<c path=\"Array\"><t path=\"nanofl.ide.keyboard.KeymapItem\"/></c>\n\t<x path=\"Void\"/>\n</f></setKeymap>\n\t<getShortcutsForCommand public=\"1\" set=\"method\" line=\"121\"><f a=\"command\">\n\t<c path=\"String\"/>\n\t<c path=\"Array\"><c path=\"String\"/></c>\n</f></getShortcutsForCommand>\n\t<getKeymap set=\"method\" line=\"127\"><f a=\"\"><c path=\"Array\"><t path=\"nanofl.ide.keyboard.KeymapItem\"/></c></f></getKeymap>\n\t<isInputActive set=\"method\" line=\"150\"><f a=\"\"><x path=\"Bool\"/></f></isInputActive>\n\t<processShortcut set=\"method\" line=\"158\"><f a=\"e:keymap:filter:whenVars\">\n\t<t path=\"nanofl.ide.keyboard.Shortcut\"/>\n\t<c path=\"Array\"><t path=\"nanofl.ide.keyboard.KeymapItem\"/></c>\n\t<c path=\"String\"/>\n\t<t path=\"nanofl.ide.keyboard.WhenVars\"/>\n\t<x path=\"Bool\"/>\n</f></processShortcut>\n\t<testWhen set=\"method\" line=\"171\"><f a=\"when:vars\">\n\t<c path=\"String\"/>\n\t<t path=\"nanofl.ide.keyboard.WhenVars\"/>\n\t<x path=\"Bool\"/>\n</f></testWhen>\n\t<new public=\"1\" set=\"method\" line=\"29\"><f a=\"commands\">\n\t<t path=\"nanofl.ide.keyboard.Commands\"/>\n\t<x path=\"Void\"/>\n</f></new>\n\t<meta>\n\t\t<m n=\":expose\"><e>\"Keyboard\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
+nanofl_ide_keyboard_Keyboard.__rtti = "<class path=\"nanofl.ide.keyboard.Keyboard\" params=\"\">\n\t<log set=\"method\" line=\"185\" static=\"1\"><f a=\"v\">\n\t<d/>\n\t<x path=\"Void\"/>\n</f></log>\n\t<commands final=\"1\"><t path=\"nanofl.ide.keyboard.Commands\"/></commands>\n\t<keymap public=\"1\" set=\"null\" expr=\"new Array&lt;KeymapItem&gt;()\" line=\"15\">\n\t\t<c path=\"Array\"><t path=\"nanofl.ide.keyboard.KeymapItem\"/></c>\n\t\t<meta><m n=\":value\"><e><![CDATA[new Array<KeymapItem>()]]></e></m></meta>\n\t</keymap>\n\t<onCtrlButtonChange final=\"1\" public=\"1\"><c path=\"stdlib.Event\"><a><pressed><x path=\"Bool\"/></pressed></a></c></onCtrlButtonChange>\n\t<onShiftButtonChange final=\"1\" public=\"1\"><c path=\"stdlib.Event\"><a><pressed><x path=\"Bool\"/></pressed></a></c></onShiftButtonChange>\n\t<onAltButtonChange final=\"1\" public=\"1\"><c path=\"stdlib.Event\"><a><pressed><x path=\"Bool\"/></pressed></a></c></onAltButtonChange>\n\t<onKeymapChange final=\"1\" public=\"1\"><c path=\"stdlib.Event\"><a/></c></onKeymapChange>\n\t<onKeyDown final=\"1\" public=\"1\"><c path=\"stdlib.Event\"><t path=\"nanofl.ide.keyboard.KeyDownEvent\"/></c></onKeyDown>\n\t<disabled expr=\"0\" line=\"24\">\n\t\t<x path=\"Int\"/>\n\t\t<meta><m n=\":value\"><e>0</e></m></meta>\n\t</disabled>\n\t<enable public=\"1\" set=\"method\" line=\"25\"><f a=\"\"><x path=\"Void\"/></f></enable>\n\t<disable public=\"1\" set=\"method\" line=\"26\"><f a=\"\"><x path=\"Void\"/></f></disable>\n\t<processKeyDown set=\"method\" line=\"73\"><f a=\"e\">\n\t<t path=\"js.JqEvent\"/>\n\t<x path=\"Void\"/>\n</f></processKeyDown>\n\t<setKeymap public=\"1\" set=\"method\" line=\"112\"><f a=\"keymap\">\n\t<c path=\"Array\"><t path=\"nanofl.ide.keyboard.KeymapItem\"/></c>\n\t<x path=\"Void\"/>\n</f></setKeymap>\n\t<getShortcutsForCommand public=\"1\" set=\"method\" line=\"124\"><f a=\"command\">\n\t<c path=\"String\"/>\n\t<c path=\"Array\"><c path=\"String\"/></c>\n</f></getShortcutsForCommand>\n\t<getKeymap set=\"method\" line=\"130\"><f a=\"\"><c path=\"Array\"><t path=\"nanofl.ide.keyboard.KeymapItem\"/></c></f></getKeymap>\n\t<isInputActive set=\"method\" line=\"153\"><f a=\"\"><x path=\"Bool\"/></f></isInputActive>\n\t<processShortcut set=\"method\" line=\"161\"><f a=\"e:keymap:filter:whenVars\">\n\t<t path=\"nanofl.ide.keyboard.Shortcut\"/>\n\t<c path=\"Array\"><t path=\"nanofl.ide.keyboard.KeymapItem\"/></c>\n\t<c path=\"String\"/>\n\t<t path=\"nanofl.ide.keyboard.WhenVars\"/>\n\t<x path=\"Bool\"/>\n</f></processShortcut>\n\t<testWhen set=\"method\" line=\"176\"><f a=\"when:vars\">\n\t<c path=\"String\"/>\n\t<t path=\"nanofl.ide.keyboard.WhenVars\"/>\n\t<x path=\"Bool\"/>\n</f></testWhen>\n\t<new public=\"1\" set=\"method\" line=\"29\"><f a=\"commands\">\n\t<t path=\"nanofl.ide.keyboard.Commands\"/>\n\t<x path=\"Void\"/>\n</f></new>\n\t<meta>\n\t\t<m n=\":expose\"><e>\"Keyboard\"</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
 nanofl_ide_keyboard_Keys.BACKSPACE = 8;
 nanofl_ide_keyboard_Keys.TAB = 9;
 nanofl_ide_keyboard_Keys.ENTER = 13;

@@ -34,8 +34,8 @@
 			{ "name":"Copy",				"command":"clipboard.copy",				"icon":"custom-icon-copy" },
 			{ "name":"Paste",				"command":"clipboard.paste",			"icon":"custom-icon-paste" },
 			{ "name":"------------------" },
-			{ "name":"Select All",			"command":"document.toggleSelection" },
-			{ "name":"Deselect All",		"command":"document.deselectAll" },
+			{ "name":"Select All",			"command":"editor.toggleSelection" },
+			{ "name":"Deselect All",		"command":"editor.deselectAll" },
 			{ "name":"------------------" },
 			{ "name":"Preferencies...",		"command":"application.preferences",	"icon":"custom-icon-preferencies" }
 		]

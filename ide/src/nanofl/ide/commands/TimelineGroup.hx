@@ -34,5 +34,5 @@ class TimelineGroup extends BaseGroup
 	public function copy()	tempActiveView(ActiveView.TIMELINE, clipboard.copy);
 	public function paste()	tempActiveView(ActiveView.TIMELINE, clipboard.paste);
 	
-	public function renameLayer() timeline.renameSelectedLayerByUser();
+	public function renameLayer() timeline.renameActiveLayerByUser();
 }

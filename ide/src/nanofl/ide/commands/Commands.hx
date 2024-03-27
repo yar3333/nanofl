@@ -1,5 +1,7 @@
 package nanofl.ide.commands;
 
+import nanofl.engine.Log.console;
+
 @:rtti
 class Commands
 {
@@ -37,23 +39,27 @@ class Commands
 	
 	public function validateCommand(command:String)
 	{
-		if (command.split(".").length != 2)
+        final groupAndMethod = command.split(".");
+		
+        if (groupAndMethod.length != 2)
 		{
-			trace("Bad command '" + command + "': expected format 'group.method'.");
+			console.warn("Bad command '" + command + "': expected format 'group.method'.");
+            return;
 		}
-		else
-		if (!Reflect.isFunction(Reflect.field(this, "get_" + command.split(".")[0])))
+
+		if (!Reflect.isFunction(Reflect.field(this, "get_" + groupAndMethod[0])))
 		{
-			trace("Bad command '" + command + "': unknow group.");
+			console.warn("Bad command '" + command + "': unknow group.");
+            return;
 		}
-		/*else
-		if (
-			!Reflect.isFunction(Reflect.field(Reflect.field(this, "get_" + command.split(".")[0])(), command.split(".")[1]))
-		 && !Reflect.isFunction(Reflect.field(Reflect.field(this, "get_" + command.split(".")[0])(), command.split(".")[1] + "_"))
-		)
+
+        final group = Reflect.callMethod(this, Reflect.field(this, "get_" + groupAndMethod[0]), []);
+		
+        if (!Reflect.isFunction(Reflect.field(group, groupAndMethod[1])))
 		{
-			trace("Bad command '" + command + "': unknow method.");
-		}*/
+			console.warn("Bad command '" + command + "': command not found.");
+            return;
+		}
 	}
 	
 	public function run(command:String, ?params:Array<Dynamic>) : Bool
@@ -62,9 +68,9 @@ class Commands
 
         log("Commands.run: " + command);
 		
-		var groupAndMethod = command.split(".");
+		final groupAndMethod = command.split(".");
 		
-		var group = Reflect.callMethod(this, Reflect.field(this, "get_" + groupAndMethod[0]), []);
+		final group = Reflect.callMethod(this, Reflect.field(this, "get_" + groupAndMethod[0]), []);
 		if (group == null) return false;
 		
 		var method = Reflect.field(group, groupAndMethod[1]);

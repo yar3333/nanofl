@@ -21,7 +21,7 @@ interface ITimelineView
 	
 	function setSelectedLayerType(type:String) : Void;
 	
-	function renameSelectedLayerByUser() : Void;
+	function renameActiveLayerByUser() : Void;
 	
 	function pasteFromXml(xml:XmlDocument) : Bool;
 }

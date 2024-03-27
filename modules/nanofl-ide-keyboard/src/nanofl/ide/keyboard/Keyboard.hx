@@ -12,7 +12,7 @@ class Keyboard
 {
 	final commands : Commands;
 	
-	public var keymap = new Array<KeymapItem>();
+	public var keymap(default, null) = new Array<KeymapItem>();
 	
 	public final onCtrlButtonChange : Event<{ pressed:Bool }>;
 	public final onShiftButtonChange : Event<{ pressed:Bool }>;
@@ -39,14 +39,14 @@ class Keyboard
 		new JQuery(Browser.document)
 			.keydown(e ->
 			{
-				log("keydown");
+				//log("keydown");
 				
 				if (!isInputActive() 
 				 && !ShortcutTools.ctrl(Keys.X).equ(e)
 				 && !ShortcutTools.ctrl(Keys.C).equ(e)
 				 && !ShortcutTools.ctrl(Keys.V).equ(e))
 				{
-                    log("keydown: disabled = " + disabled);
+                    //log("keydown: disabled = " + disabled);
                     if (disabled <= 0)
                     {
                         processKeyDown(e);
@@ -91,11 +91,13 @@ class Keyboard
                     shiftKey : e.shiftKey,
                     processShortcut : (filter, whenVars) ->
                     {
-                        var r = processShortcut(e, keymap, filter, whenVars);
+                        final r = processShortcut(e, keymap, filter, whenVars);
                         if (r) processed = true;
                         return r;
                     }
                 });
+
+                log("processed = " + processed);
                 
                 if (processed)
                 {
@@ -159,10 +161,12 @@ class Keyboard
         filter = filter ?? "";
 
 		final shortcut = e.toString();
-        log("shortcut = " + shortcut);
+        log("shortcut = " + shortcut + "; filter = " + filter);
 		
 		final km = keymap.find(x -> x.shortcut == shortcut && (filter == "" || filter == x.command.split(".")[0]) && testWhen(x.when, whenVars));
 		if (km == null) return false;
+        
+        log("command = " + km.command);
 		
 		return commands.run(km.command);
 	}
@@ -171,8 +175,8 @@ class Keyboard
     {
         if (when == null || when.trim() == "") return true;
         
-        var editor = vars.editor;
-        var library = vars.library;
+        final editor = vars.editor;
+        final library = vars.library;
         return js.Lib.eval(when);
     }
 	

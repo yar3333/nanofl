@@ -6,6 +6,7 @@ import stdlib.ExceptionTools;
 import wquery.ComponentList;
 import htmlparser.XmlBuilder;
 import htmlparser.XmlNodeElement;
+import nanofl.engine.Log.console;
 import nanofl.engine.ElementType;
 import nanofl.engine.LayerType;
 import nanofl.engine.Version;
@@ -136,13 +137,16 @@ class Code extends wquery.Component
 			
             if (pathItem != null && pathItem.frameIndex != playStartFrameIndex) stop();
 		});
-		
+
+		template().content .on("mousedown", e -> app.setActiveView(ActiveView.TIMELINE, e));
+		template().controls.on("mousedown", e -> app.setActiveView(ActiveView.TIMELINE, e));
+
 		template().framesHeader.on("mousedown", ">*", e -> if (e.which == 1) onFrameHeaderMouseDown(e));
 		template().framesBorder.on("mousedown", ">*", e -> if (e.which == 1) onFrameHeaderMouseDown(e));
 		template().framesHeader.on("mousemove", ">*", onFrameHeaderMouseMove);
 		template().framesBorder.on("mousemove", ">*", onFrameHeaderMouseMove);
 		
-		template().content.on("mousedown", ">*>.frames-content>*>*", e -> { app.setActiveView(ActiveView.TIMELINE, e); if (e.which == 1) onFrameMouseDown(e); });
+        template().content.on("mousedown", ">*>.frames-content>*>*", e -> if (e.which == 1) onFrameMouseDown(e));
 		template().content.on("mousemove", ">*>.frames-content>*>*", onFrameMouseMove);
 		template().content.on("dblclick",  ">*>.frames-content>*>*", onDoubleClickOnFrame);
 		template().content.on("click",     ">*>.frames-content>*>*", e -> if (e.altKey) onDoubleClickOnFrame(e));
@@ -491,7 +495,7 @@ class Code extends wquery.Component
 		updateLayerFrames(layerIndex, false);
 	}
 	
-	function addLayer_click(e)
+	function addLayer_click(_)
 	{
 		beginTransaction();
 		
@@ -504,7 +508,7 @@ class Code extends wquery.Component
 		pathItem.mcItem.addLayersBlock([ layer ], pathItem.layerIndex);
 		if (prevLayer?.parentIndex != null) layer.parentIndex = prevLayer.parentIndex;
 		
-		update();
+        update();
 		
 		freezed(() -> onLayerAdded());
 		
@@ -1285,16 +1289,17 @@ class Code extends wquery.Component
 		}
 	}
 	
-	public function renameSelectedLayerByUser()
+	public function renameActiveLayerByUser()
 	{
-		for (layerComponent in layerComponents)
-		{
-			if (layerComponent.selected)
-			{
-				layerComponent.beginEditTitle();
-				break;
-			}
-		}
+		if (!editable) return;
+        
+        if (pathItem.layerIndex < 0 || pathItem.layerIndex > layerComponents.length - 1)
+        {
+            console.warn("renameActiveLayerByUser: pathItem.layerIndex = " + pathItem.layerIndex + "; layerComponents.length = " + layerComponents.length);
+            return;
+        }
+
+        layerComponents.getByIndex(pathItem.layerIndex).beginEditTitle();
 	}
 	
 	function ensureActiveFrameVisible()

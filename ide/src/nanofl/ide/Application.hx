@@ -280,12 +280,12 @@ class Application extends js.injecting.InjectContainer
             {
                 editor:
                 {
-                    hasSelected: document?.editor.hasSelected() 
+                    hasSelected: document?.editor.hasSelected() ?? false
                 },
                 
                 library:
                 {
-                    selectedCount: document.library.getSelectedItems().length
+                    selectedCount: document?.library.getSelectedItems().length ?? 0
                 },
             };
 			
