@@ -41,10 +41,7 @@ class Keyboard
 			{
 				//log("keydown");
 				
-				if (!isInputActive() 
-				 && !ShortcutTools.ctrl(Keys.X).equ(e)
-				 && !ShortcutTools.ctrl(Keys.C).equ(e)
-				 && !ShortcutTools.ctrl(Keys.V).equ(e))
+				if (!isInputActive())
 				{
                     //log("keydown: disabled = " + disabled);
                     if (disabled <= 0)
@@ -122,30 +119,7 @@ class Keyboard
 	public function getShortcutsForCommand(command:String) : Array<String>
 	{
 		commands.validateCommand(command);
-		return getKeymap().filter((x) -> x.command == command).map((x) -> x.shortcut);
-	}
-	
-	function getKeymap() : Array<KeymapItem>
-	{
-		var r = keymap.copy();
-		
-		r.push({ shortcut:"Ctrl+X", command:"document.cut" });
-		r.push({ shortcut:"Ctrl+C", command:"document.copy" });
-		r.push({ shortcut:"Ctrl+V", command:"document.paste" });
-		
-		r.push({ shortcut:"Ctrl+X", command:"editor.cut" });
-		r.push({ shortcut:"Ctrl+C", command:"editor.copy" });
-		r.push({ shortcut:"Ctrl+V", command:"editor.paste" });
-		
-		r.push({ shortcut:"Ctrl+X", command:"library.cut" });
-		r.push({ shortcut:"Ctrl+C", command:"library.copy" });
-		r.push({ shortcut:"Ctrl+V", command:"library.paste" });
-		
-		r.push({ shortcut:"Ctrl+X", command:"timeline.cut" });
-		r.push({ shortcut:"Ctrl+C", command:"timeline.copy" });
-		r.push({ shortcut:"Ctrl+V", command:"timeline.paste" });
-		
-		return r;
+		return keymap.filter(x -> x.command == command).map((x) -> x.shortcut);
 	}
 	
 	function isInputActive() : Bool
@@ -182,6 +156,6 @@ class Keyboard
 	
 	static function log(v:Dynamic)
 	{
-		//trace(Reflect.isFunction(v) ? v() : v);
+		trace(Reflect.isFunction(v) ? v() : v);
 	}
 }

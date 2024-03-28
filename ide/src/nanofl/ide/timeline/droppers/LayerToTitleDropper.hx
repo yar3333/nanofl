@@ -1,10 +1,9 @@
 package nanofl.ide.timeline.droppers;
 
+import js.JQuery;
 import htmlparser.HtmlNodeElement;
-import js.JQuery.JqEvent;
 import nanofl.ide.draganddrop.DropEffect;
 import nanofl.ide.draganddrop.IDropArea;
-import js.JQuery;
 
 class LayerToTitleDropper
 	extends BaseLayerDropper

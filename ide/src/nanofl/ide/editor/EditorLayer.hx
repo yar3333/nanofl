@@ -70,6 +70,8 @@ class EditorLayer
 		this.layer = layer;
 		this.frame = layer.getFrame(frameIndex);
 		this.framerate = framerate;
+
+        log("new EditorLayer index = " + layer.getIndex() + "; frameIndex = " + frameIndex + "; frame = " + (frame != null));
         
 		if (frame != null)
 		{
@@ -504,6 +506,6 @@ class EditorLayer
 	
 	static function log(v:Dynamic, ?infos:haxe.PosInfos)
 	{
-		//trace(Reflect.isFunction(v) ? v() : v, infos);
+		trace(Reflect.isFunction(v) ? v() : v, infos);
 	}
 }

@@ -46,7 +46,7 @@ class LibraryItemToEditorDropper
 		
 		if (app.document.id != data.getAttribute("documentID"))
 		{
-			app.document.library.drop(dropEffect, data, "").then(function(items:Array<IIdeLibraryItem>)
+			app.document.library.drop(dropEffect, data, "").then(items ->
 			{
 				view.alerter.info("Items were added to library.");
 				processItem(app, view, app.document.library.getItem(namePath), e);

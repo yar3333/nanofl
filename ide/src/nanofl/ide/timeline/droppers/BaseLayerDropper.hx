@@ -1,6 +1,6 @@
 package nanofl.ide.timeline.droppers;
 
-import haxe.Timer;
+import stdlib.Timer;
 import datatools.ArrayRO;
 import htmlparser.HtmlNodeElement;
 import nanofl.engine.movieclip.Layer;
@@ -77,12 +77,11 @@ class BaseLayerDropper extends InjectContainer
 		
 		app.document.undoQueue.commitTransaction();
 		
-		Timer.delay(function()
+		Timer.delayAsync(1).then(_ ->
 		{
             view.movie.timeline.update();
             app.document.editor.rebind();
-		}
-		, 0);
+		});
 	}
 	
 	function isLayerChildOf(childIndex:Int, parentIndex:Int)

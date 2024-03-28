@@ -17,7 +17,6 @@ import nanofl.ide.Globals;
 import nanofl.ide.sys.FileSystem;
 import nanofl.ide.libraryitems.LibraryItemTools;
 import nanofl.ide.draganddrop.DragAndDrop;
-import nanofl.ide.draganddrop.IDragAndDrop;
 import nanofl.ide.preferences.Preferences;
 import nanofl.ide.sys.Shell;
 import nanofl.ide.ui.Popups;
@@ -68,6 +67,7 @@ class Code extends wquery.Component
 		activeNamePath = v != null ? v.namePath : "";
 		select(activeNamePath != "" ? [ activeNamePath ] : []);
 		preview.item = v;
+        ensureActiveItemVisible();
 		return v;
 	}
 	
@@ -81,14 +81,14 @@ class Code extends wquery.Component
 		
 		items = new ComponentList<components.nanofl.library.libraryitem.Code>(components.nanofl.library.libraryitem.Code, this, template().content);
 		
-		dragAndDrop.ready.then(function(api:IDragAndDrop)
+		dragAndDrop.ready.then(api ->
 		{
-			api.draggable(template().content, ">li", "libraryItem", function(out:XmlBuilder, e:JqEvent)
+			api.draggable(template().content, ">li", "libraryItem", (out:XmlBuilder, e:JqEvent) ->
 			{
 				if (readOnly) return null;
 				
-				var element = new JQuery(e.currentTarget);
-				var item = app.document.library.getItem(element.attr("data-name-path"));
+				final element = new JQuery(e.currentTarget);
+				final item = app.document.library.getItem(element.attr("data-name-path"));
 				
 				if (!element.hasClass("selected"))
 				{
@@ -366,6 +366,11 @@ class Code extends wquery.Component
 		q(elements[n]).addClass("selected");
 		if (preview != null) preview.item = active;
 	}
+
+    public function ensureActiveItemVisible()
+    {
+        // TODO: ensureActiveItemVisible
+    }
 	
 	function getItemLink(item:IIdeLibraryItem) : String
 	{

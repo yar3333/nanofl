@@ -432,6 +432,7 @@ class EditorLibrary extends InjectContainer
             return document.reloadWoTransactionForced().then(_ ->
             {
                 view.library.select(newNamePaths);
+                view.library.activeItem = library.getItem(newNamePaths[0]);
                 document.undoQueue.commitTransaction();
             });
         });

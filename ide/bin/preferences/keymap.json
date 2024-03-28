@@ -73,5 +73,21 @@
 	{ "shortcut":"Shift+F5"				, "command":"timeline.removeFrame" },
 	{ "shortcut":","					, "command":"timeline.gotoPrevFrame" },
 	{ "shortcut":"."					, "command":"timeline.gotoNextFrame" },
-	{ "shortcut":"Enter"				, "command":"timeline.play" }
+	{ "shortcut":"Enter"				, "command":"timeline.play" },
+	
+    { "shortcut":"Ctrl+X", "command":"document.cut" },
+    { "shortcut":"Ctrl+C", "command":"document.copy" },
+    { "shortcut":"Ctrl+V", "command":"document.paste" },
+    
+    { "shortcut":"Ctrl+X", "command":"editor.cut" },
+    { "shortcut":"Ctrl+C", "command":"editor.copy" },
+    { "shortcut":"Ctrl+V", "command":"editor.paste" },
+    
+    { "shortcut":"Ctrl+X", "command":"library.cut" },
+    { "shortcut":"Ctrl+C", "command":"library.copy" },
+    { "shortcut":"Ctrl+V", "command":"library.paste" },
+    
+    { "shortcut":"Ctrl+X", "command":"timeline.cut" },
+    { "shortcut":"Ctrl+C", "command":"timeline.copy" },
+    { "shortcut":"Ctrl+V", "command":"timeline.paste"}
 ]

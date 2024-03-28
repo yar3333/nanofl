@@ -1,21 +1,19 @@
 package nanofl.ide;
 
+import js.Browser;
 import htmlparser.XmlBuilder;
 import htmlparser.XmlDocument;
-import js.Browser;
-import js.JQuery;
 import nanofl.ide.libraryitems.BitmapItem;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.editor.Editor;
 import nanofl.ide.keyboard.Keyboard;
-import nanofl.ide.keyboard.Keys;
 import nanofl.ide.library.LibraryItems;
 import nanofl.ide.preferences.Preferences;
 import nanofl.ide.sys.FileSystem;
 import nanofl.ide.sys.Folders;
 import nanofl.ide.timeline.ITimelineView;
 import nanofl.ide.ui.View;
-using StringTools;
+using stdlib.StringTools;
 using stdlib.Lambda;
 using nanofl.ide.keyboard.ShortcutTools;
 
@@ -29,21 +27,6 @@ class Clipboard extends InjectContainer
 	@inject var app : Application;
 	@inject var clipboard : nanofl.ide.sys.Clipboard;
 	@inject var view : View;
-	
-	public function new()
-	{
-		super();
-		
-		new JQuery(Browser.document).keydown(function(e)
-		{
-			if (!isInputActive())
-			{
-				if (ShortcutTools.ctrl(Keys.X).equ(e)) { e.preventDefault(); cut(); }
-				if (ShortcutTools.ctrl(Keys.C).equ(e)) { e.preventDefault(); copy(); }
-				if (ShortcutTools.ctrl(Keys.V).equ(e)) { e.preventDefault(); paste(); }
-			}
-		});
-	}
 	
 	function copyInner(isCut:Bool) : Bool
 	{
@@ -242,8 +225,13 @@ class Clipboard extends InjectContainer
 	{
 		if (e != null && js.Browser.document.activeElement != e.target && isInputActive())
 		{
+            log("restoreFocus hit");
 			js.Browser.document.activeElement.blur();
 		}
+        else
+        {
+            log("restoreFocus miss");
+        }
 	}
 	
 	function getStringForCopy(isCut:Bool) : String
@@ -357,6 +345,6 @@ class Clipboard extends InjectContainer
 	
 	static function log(v:Dynamic, ?infos:haxe.PosInfos)
 	{
-		//trace(Reflect.isFunction(v) ? v() : v, infos);
+		trace(Reflect.isFunction(v) ? v() : v, infos);
 	}
 }

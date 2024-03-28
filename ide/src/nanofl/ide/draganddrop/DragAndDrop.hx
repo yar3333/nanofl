@@ -7,11 +7,11 @@ class DragAndDrop
 {
 	var resolve : IDragAndDrop->Void;
 	
-	public var ready(default, null) : Promise<IDragAndDrop>;
+	public final ready : Promise<IDragAndDrop>;
 	
 	public function new()
 	{
-		ready = new Promise<IDragAndDrop>(function(resolve, reject)
+		ready = new Promise<IDragAndDrop>((resolve, reject) ->
 		{
 			this.resolve = resolve;
 		});
