@@ -32,5 +32,5 @@ extern class Code extends wquery.Component implements nanofl.ide.timeline.ITimel
 	function selectLayersByIndexes(layerIndexes:Array<Int>, ?replaceSelection:Bool):Void;
 	function play():Void;
 	function stop():Void;
-	function renameSelectedLayerByUser():Void;
+	function renameActiveLayerByUser():Void;
 }

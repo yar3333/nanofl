@@ -26,7 +26,12 @@ class Code extends wquery.Component
 	
 	public var activeItem(get, set) : IIdeLibraryItem;
 	function get_activeItem() return template().items.active;
-	function set_activeItem(v:IIdeLibraryItem) return template().items.active = v;
+	function set_activeItem(v:IIdeLibraryItem)
+    {
+        template().items.active = v;
+        ensureActiveItemVisible();
+        return v;
+    }
 
 	public var readOnly(get, set) : Bool;
 	function get_readOnly() return template().items.readOnly;
@@ -133,4 +138,9 @@ class Code extends wquery.Component
             Log.console.error(e);
         }
 	}
+
+    function ensureActiveItemVisible()
+    {
+        // TODO: ensureActiveItemVisible
+    }
 }

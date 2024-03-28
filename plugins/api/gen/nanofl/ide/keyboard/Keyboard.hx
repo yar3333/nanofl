@@ -2,7 +2,7 @@ package nanofl.ide.keyboard;
 
 extern class Keyboard {
 	function new(commands:nanofl.ide.keyboard.Commands):Void;
-	var keymap : Array<nanofl.ide.keyboard.KeymapItem>;
+	var keymap(default, null) : Array<nanofl.ide.keyboard.KeymapItem>;
 	var onCtrlButtonChange : stdlib.Event<{ public var pressed(default, default) : Bool; }>;
 	var onShiftButtonChange : stdlib.Event<{ public var pressed(default, default) : Bool; }>;
 	var onAltButtonChange : stdlib.Event<{ public var pressed(default, default) : Bool; }>;

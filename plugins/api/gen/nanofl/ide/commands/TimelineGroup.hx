@@ -17,8 +17,8 @@ extern class TimelineGroup extends nanofl.ide.commands.BaseGroup {
 	function switchLayerTypeToMasked():Void;
 	function switchLayerTypeToGuide():Void;
 	function switchLayerTypeToGuided():Void;
+	function renameLayer():Void;
 	function cut():Void;
 	function copy():Void;
 	function paste():Void;
-	function renameLayer():Void;
 }

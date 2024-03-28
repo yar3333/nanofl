@@ -190,11 +190,11 @@ class LibraryItems
 		
 		if (document.id == sourceDocumentID)
 		{
-			log("\njust rename");
+			log("\tjust rename");
 			
 			if (folder != "") (cast document.library.getItem(folder) : FolderItem).opened = true;
 			
-			var namePaths = data.find(">libraryitems>item")
+			final namePaths = data.find(">libraryitems>item")
 				.map(x -> x.getAttribute("namePath"))
 				.filter(namePath ->
 				{
@@ -280,6 +280,6 @@ class LibraryItems
 	
 	static function log(v:Dynamic, ?infos:haxe.PosInfos)
 	{
-		trace(Reflect.isFunction(v) ? v() : v, infos);
+		//trace(Reflect.isFunction(v) ? v() : v, infos);
 	}
 }

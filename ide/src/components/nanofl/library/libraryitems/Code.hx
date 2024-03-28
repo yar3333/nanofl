@@ -64,10 +64,9 @@ class Code extends wquery.Component
 	}
 	function set_active(v:IIdeLibraryItem)
 	{
-		activeNamePath = v != null ? v.namePath : "";
+		activeNamePath = v?.namePath ?? "";
 		select(activeNamePath != "" ? [ activeNamePath ] : []);
 		preview.item = v;
-        ensureActiveItemVisible();
 		return v;
 	}
 	
@@ -366,11 +365,6 @@ class Code extends wquery.Component
 		q(elements[n]).addClass("selected");
 		if (preview != null) preview.item = active;
 	}
-
-    public function ensureActiveItemVisible()
-    {
-        // TODO: ensureActiveItemVisible
-    }
 	
 	function getItemLink(item:IIdeLibraryItem) : String
 	{
@@ -422,8 +416,6 @@ class Code extends wquery.Component
                     if (!app.document.library.hasItem(newNamePath))
                     {
                         app.document.library.renameItems([{ oldNamePath:namePath, newNamePath:newNamePath }]);
-                        view.library.activeItem = null;
-                        app.document.library.update();
                         view.library.activeItem = app.document.library.getItem(newNamePath);
                     }
                     else

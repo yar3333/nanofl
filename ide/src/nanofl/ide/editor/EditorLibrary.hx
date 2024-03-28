@@ -83,7 +83,12 @@ class EditorLibrary extends InjectContainer
 		for (t in itemRenames)
 		{
 			library.renameItem(t.oldNamePath, t.newNamePath);
+            if (view.library.activeItem?.namePath == t.oldNamePath)
+            {
+                view.library.activeItem = getItem(t.newNamePath);
+            }
 		}
+        update();
 		document.undoQueue.commitTransaction();
 	}
 	

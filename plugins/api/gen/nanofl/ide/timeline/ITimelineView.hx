@@ -15,6 +15,6 @@ interface ITimelineView {
 	function play():Void;
 	function stop():Void;
 	function setSelectedLayerType(type:String):Void;
-	function renameSelectedLayerByUser():Void;
+	function renameActiveLayerByUser():Void;
 	function pasteFromXml(xml:htmlparser.XmlDocument):Bool;
 }

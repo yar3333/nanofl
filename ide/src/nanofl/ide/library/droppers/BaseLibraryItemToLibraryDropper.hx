@@ -2,7 +2,6 @@ package nanofl.ide.library.droppers;
 
 import nanofl.ide.ui.View;
 import htmlparser.HtmlNodeElement;
-import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.Application;
 import nanofl.ide.draganddrop.DragImageType;
 import nanofl.ide.draganddrop.DropEffect;
@@ -26,14 +25,14 @@ class BaseLibraryItemToLibraryDropper extends InjectContainer
 	{
 		Debug.assert(folder != null);
 		
-		var saveActiveItem = view.library.activeItem;
+		final saveActiveItem = view.library.activeItem;
 		view.library.activeItem = null;
 		LibraryItems.drop(dropEffect, data, app.document, folder).then(droppedItems ->
 		{
 			if (droppedItems.length > 0)
 			{
 				view.library.select(droppedItems.map(x -> x.namePath));
-				view.library.activeItem = app.document.library.getItem(data.getAttribute("namePath"));
+				view.library.activeItem = droppedItems[0];
 			}
 			else
 			{

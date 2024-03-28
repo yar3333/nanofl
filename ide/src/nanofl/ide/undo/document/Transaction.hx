@@ -58,7 +58,6 @@ class Transaction extends undoqueue.Transaction<Operation>
 			case Operation.LIBRARY_RENAME_ITEMS(oldLibraryState, newLibraryState, itemRenames):
 				document.library.setState(newLibraryState);
 				document.library.renameItems(itemRenames);
-				document.library.update();
 				
 			case Operation.LIBRARY_CHANGE_ITEMS(oldLibraryState, newLibraryState):
 				document.library.setState(newLibraryState);
