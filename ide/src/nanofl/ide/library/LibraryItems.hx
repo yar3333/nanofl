@@ -192,7 +192,7 @@ class LibraryItems
 		{
 			log("\njust rename");
 			
-			if (folder != "") cast(document.library.getItem(folder), FolderItem).opened = true;
+			if (folder != "") (cast document.library.getItem(folder) : FolderItem).opened = true;
 			
 			var namePaths = data.find(">libraryitems>item")
 				.map(x -> x.getAttribute("namePath"))
@@ -206,10 +206,10 @@ class LibraryItems
 					return true;
 				});
 			
-			var renames = [];
+			final renames = [];
 			for (namePath in getWithoutSubItems(namePaths))
 			{
-				var newNamePath = Path.join([ folder, Path.withoutDirectory(namePath) ]);
+				final newNamePath = Path.join([ folder, Path.withoutDirectory(namePath) ]);
 				if (namePath != newNamePath && document.library.canRenameItem(namePath, newNamePath))
 				{
 					renames.push({ oldNamePath:namePath, newNamePath:newNamePath });
@@ -255,7 +255,7 @@ class LibraryItems
 	
 	static function getWithoutSubItems(namePaths:Array<String>) : Array<String>
 	{
-		var r = [];
+		final r = [];
 		
 		for (namePath in namePaths)
 		{
@@ -280,6 +280,6 @@ class LibraryItems
 	
 	static function log(v:Dynamic, ?infos:haxe.PosInfos)
 	{
-		//trace(Reflect.isFunction(v) ? v() : v, infos);
+		trace(Reflect.isFunction(v) ? v() : v, infos);
 	}
 }

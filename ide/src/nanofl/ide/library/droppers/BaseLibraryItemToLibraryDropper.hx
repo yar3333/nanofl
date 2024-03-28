@@ -28,7 +28,7 @@ class BaseLibraryItemToLibraryDropper extends InjectContainer
 		
 		var saveActiveItem = view.library.activeItem;
 		view.library.activeItem = null;
-		LibraryItems.drop(dropEffect, data, app.document, folder).then((droppedItems:Array<IIdeLibraryItem>) ->
+		LibraryItems.drop(dropEffect, data, app.document, folder).then(droppedItems ->
 		{
 			if (droppedItems.length > 0)
 			{
