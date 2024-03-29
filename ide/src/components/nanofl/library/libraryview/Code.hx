@@ -1,12 +1,15 @@
 package components.nanofl.library.libraryview;
 
+import js.JQuery;
+import stdlib.Std;
+import nanofl.engine.LibraryItemType;
 import nanofl.engine.Log;
-import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.Application;
 import nanofl.ide.Globals;
+import nanofl.ide.libraryitems.FolderItem;
+import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.editor.EditorLibrary;
 import nanofl.ide.preferences.Preferences;
-import js.JQuery;
 using js.jquery.Layout;
 using StringTools;
 
@@ -80,11 +83,13 @@ class Code extends wquery.Component
 	public function gotoPrevItem(overwriteSelection:Bool)
 	{
 		template().items.gotoPrevItem(overwriteSelection);
+        ensureActiveItemVisible();
 	}
 	
 	public function gotoNextItem(overwriteSelection:Bool)
 	{
 		template().items.gotoNextItem(overwriteSelection);
+        ensureActiveItemVisible();
 	}
 	
 	public function showPropertiesPopup()
@@ -141,6 +146,55 @@ class Code extends wquery.Component
 
     function ensureActiveItemVisible()
     {
-        // TODO: ensureActiveItemVisible
+        if (activeItem == null) return;
+
+        if (openFolders(activeItem.namePath))
+        {
+            template().items.updateVisibility();
+        }
+
+        final container = template().centerContainer;
+        final scrollPos = container.scrollTop();
+        final height = container.innerHeight();
+        final rect = template().items.getItemElementBounds(activeItem.namePath);
+        rect.y += scrollPos;
+        log("scrollPos = " + scrollPos + "; height = " + height + "; rect.y = " + rect.y + "; rect.height = " + rect.height);
+
+        if (rect.y >= scrollPos && rect.y + rect.height <= scrollPos + height) return;
+
+        final maxScrollPos = container[0].scrollHeight - height;
+        log("maxScrollPos = " + maxScrollPos);
+
+        if (rect.y < scrollPos)
+            container.scrollTop(Std.min(maxScrollPos, Std.max(0, Math.floor(rect.y - rect.height / 2))));
+        else
+            container.scrollTop(Std.min(maxScrollPos, Std.max(0, Math.floor(rect.y - height + rect.height * 3 / 2))));
     }
+
+    function openFolders(namePath:String) : Bool
+    {
+        final item = app.document.library.getItem(namePath);
+        
+        var r = false;
+        
+        if (item.type.match(LibraryItemType.folder))
+        {
+            if (!(cast item:FolderItem).opened)
+            {
+                r = true;
+                (cast item:FolderItem).opened = true;
+            }
+        }
+
+        final n = namePath.lastIndexOf("/");
+        if (n > 0) r = openFolders(namePath.substr(0, n)) || r;
+
+        return r;
+    }
+
+	
+	static function log(v:Dynamic)
+	{
+		//trace(Reflect.isFunction(v) ? v() : v);
+	}
 }

@@ -7,6 +7,7 @@ import js.html.File;
 import stdlib.Std;
 import htmlparser.XmlBuilder;
 import wquery.ComponentList;
+import easeljs.geom.Rectangle;
 import nanofl.engine.Log.console;
 import nanofl.engine.libraryitems.FolderItem;
 import nanofl.engine.libraryitems.FontItem;
@@ -156,7 +157,7 @@ class Code extends wquery.Component
 			
 			if (Std.isOfType(item, FolderItem))
 			{
-				var folder : FolderItem = cast item;
+				final folder : FolderItem = cast item;
 				folder.opened = !folder.opened;
 				updateVisibility();
 			}
@@ -172,7 +173,7 @@ class Code extends wquery.Component
 			}
 			else
 			{
-                var filePath = LibraryItemTools.getFilePathToRunInExternalEditor(fileSystem, app.document.library.libraryDir, item.namePath);
+                final filePath = LibraryItemTools.getFilePathToRunInExternalEditor(fileSystem, app.document.library.libraryDir, item.namePath);
                 if (filePath != null) shell.openInAssociatedApplication(filePath);
 			}
 		});
@@ -198,7 +199,7 @@ class Code extends wquery.Component
 		{
 			for (item in app.document.library.getItems().filter(filterItems))
 			{
-				var namePaths = item.namePath.split("/");
+				final namePaths = item.namePath.split("/");
 				
 				var cssClass = item.namePath == activeNamePath  ? "selected" : "";
 				if (activeNamePath.startsWith(item.namePath + "/") && Std.isOfType(item, FolderItem))
@@ -207,7 +208,7 @@ class Code extends wquery.Component
 					cssClass += " opened";
 				}
 				
-				var component = items.create
+				final component = items.create
 				({
 					namePath: StringTools.htmlEscape(item.namePath),
 					name: StringTools.htmlEscape(namePaths[namePaths.length - 1]),
@@ -221,13 +222,13 @@ class Code extends wquery.Component
 				component.q("#item").editable(getEditableParams(item.namePath));
 			}
 			
-			var elements = getElements(); 
+			final elements = getElements(); 
 			
 			template().contextMenu.build(elements, preferences.storage.getMenu("libraryItemsContextMenu"), (menu:ContextMenu, e:JqEvent, _:JQuery) ->
 			{
 				if (readOnly) return false;
 				
-				var element = q(e.currentTarget);
+				final element = q(e.currentTarget);
 				
 				if (!element.hasClass("selected"))
 				{
@@ -252,7 +253,7 @@ class Code extends wquery.Component
 	
 	public function showPropertiesPopup()
 	{
-		var popup = getPropertiesPopup();
+		final popup = getPropertiesPopup();
 		if (popup != null) popup.show(cast active);
 	}
 	
@@ -274,22 +275,30 @@ class Code extends wquery.Component
 		}
 		return null;
 	}
+
+    public function getItemElementBounds(namePath:String) : Rectangle
+    {
+        final element = getElement(namePath);
+        final pos = element.position();
+        return new Rectangle(pos.left, pos.top, element.outerWidth(), element.outerHeight());
+    }
 	
-	function updateVisibility()
+	public function updateVisibility()
 	{
 		for (element in getElements())
 		{
-			var namePath = element.attr("data-name-path");
+			final namePath = element.attr("data-name-path");
 			
 			if (isVisible(namePath))
 			{
 				element.show();
 				element.toggleClass("selected", namePath == activeNamePath);
 				
-				var item = app.document.library.getItem(namePath);
+				final item = app.document.library.getItem(namePath);
 				if (Std.isOfType(item, FolderItem))
 				{
 					element.find(">i").attr("class", item.getIcon());
+                    element.toggleClass("opened", (cast item:FolderItem).opened);
 				}
 			}
 			else
@@ -312,7 +321,7 @@ class Code extends wquery.Component
 	
 	public function getSelectedItems() : Array<IIdeLibraryItem>
 	{
-		var r = [];
+		final r = [];
 		for (element in getElements())
 		{
 			if (element.hasClass("selected"))
@@ -342,7 +351,7 @@ class Code extends wquery.Component
 	{
 		if (active == null) return;
 		
-		var elements = getElements();
+		final elements = getElements();
 		var n = getElement(activeNamePath).index() - 1;
 		while (n >= 0 && !q(elements[n]).is(":visible")) n--;
 		if (n < 0) return;
@@ -356,7 +365,7 @@ class Code extends wquery.Component
 	{
 		if (active == null) return;
 		
-		var elements = getElements();
+		final elements = getElements();
 		var n = getElement(activeNamePath).index() + 1;
 		while (n < elements.length && !q(elements[n]).is(":visible")) n++;
 		if (n >= elements.length) return;
@@ -375,10 +384,10 @@ class Code extends wquery.Component
 	
 	function isVisible(namePath:String) : Bool
 	{
-		var parts = namePath.split("/");
+		final parts = namePath.split("/");
 		for (i in 1...parts.length)
 		{
-			var folder : FolderItem = cast app.document.library.getItem(parts.slice(0, i).join("/"));
+			final folder : FolderItem = cast app.document.library.getItem(parts.slice(0, i).join("/"));
 			if (!folder.opened) return false;
 		}
 		return true;
@@ -412,7 +421,7 @@ class Code extends wquery.Component
 			{
 				if (value != "" && Path.withoutDirectory(namePath) != value)
 				{
-					var newNamePath = Path.join([ Path.directory(namePath), value ]); 
+					final newNamePath = Path.join([ Path.directory(namePath), value ]); 
                     if (!app.document.library.hasItem(newNamePath))
                     {
                         app.document.library.renameItems([{ oldNamePath:namePath, newNamePath:newNamePath }]);
@@ -434,9 +443,9 @@ class Code extends wquery.Component
 		{
 			if (app.document.library.hasItem(activeNamePath)) return;
 			
-			var namePaths = app.document.library.getItems().map(x -> x.namePath).sorted();
+			final namePaths = app.document.library.getItems().map(x -> x.namePath).sorted();
 			
-			var index = namePaths.findIndex(x -> x > activeNamePath);
+			final index = namePaths.findIndex(x -> x > activeNamePath);
 			if (index >= 0)
 			{
 				for (i in index...namePaths.length)

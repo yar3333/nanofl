@@ -156,6 +156,6 @@ class Keyboard
 	
 	static function log(v:Dynamic)
 	{
-		trace(Reflect.isFunction(v) ? v() : v);
+		//trace(Reflect.isFunction(v) ? v() : v);
 	}
 }

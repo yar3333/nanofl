@@ -165,13 +165,6 @@ Reflect.fields = function(o) {
 	}
 	return a;
 };
-Reflect.isFunction = function(f) {
-	if(typeof(f) == "function") {
-		return !(f.__name__ || f.__ename__);
-	} else {
-		return false;
-	}
-};
 Reflect.compare = function(a,b) {
 	if(a == b) {
 		return 0;
@@ -699,7 +692,6 @@ var nanofl_ide_keyboard_Keyboard = $hx_exports["Keyboard"] = function(commands) 
 };
 nanofl_ide_keyboard_Keyboard.__name__ = true;
 nanofl_ide_keyboard_Keyboard.log = function(v) {
-	console.log("src/nanofl/ide/keyboard/Keyboard.hx:159:",Reflect.isFunction(v) ? v() : v);
 };
 nanofl_ide_keyboard_Keyboard.prototype = {
 	enable: function() {
