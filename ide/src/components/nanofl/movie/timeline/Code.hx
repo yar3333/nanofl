@@ -28,7 +28,6 @@ import nanofl.ide.editor.Editor;
 import nanofl.ide.keyboard.Keyboard;
 import nanofl.ide.keyboard.ShortcutTools;
 import nanofl.ide.draganddrop.DragAndDrop;
-import nanofl.ide.draganddrop.IDragAndDrop;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.draganddrop.AllowedDropEffect;
 import nanofl.ide.timeline.ITimelineView;
@@ -459,7 +458,7 @@ class Code extends wquery.Component
 				cssClass: "inPlaceEdit"
 			});
 			
-			dragAndDrop.ready.then((api:IDragAndDrop) ->
+			dragAndDrop.ready.then(api ->
 			{
 				api.draggable(title, null, "layer", (out:XmlBuilder, e:JqEvent) ->
 				{

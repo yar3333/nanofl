@@ -2,7 +2,6 @@ package components.nanofl.library.library;
 
 import js.html.File;
 import nanofl.ide.draganddrop.DragAndDrop;
-import nanofl.ide.draganddrop.IDragAndDrop;
 import nanofl.ide.library.droppers.LibraryItemToLibraryDropper;
 
 @:rtti
@@ -20,7 +19,7 @@ class Code extends components.nanofl.library.libraryview.Code
 	{
 		super.init();
 		
-		dragAndDrop.ready.then((api:IDragAndDrop) ->
+		dragAndDrop.ready.then(api ->
 		{
 			api.droppable
 			(

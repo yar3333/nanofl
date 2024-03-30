@@ -2,28 +2,28 @@ package nanofl.ide.timeline.droppers;
 
 import stdlib.Timer;
 import datatools.ArrayRO;
+import js.JQuery;
 import htmlparser.HtmlNodeElement;
 import nanofl.engine.movieclip.Layer;
 import nanofl.engine.LayerType;
 import nanofl.ide.Application;
+import nanofl.ide.draganddrop.IDropArea;
+import nanofl.ide.draganddrop.DropEffect;
 import nanofl.ide.navigator.PathItem;
 import nanofl.ide.draganddrop.DragImageType;
 import nanofl.ide.ui.View;
 
 @:rtti
-class BaseLayerDropper extends InjectContainer
+abstract class BaseLayerDropper extends InjectContainer
+    implements IDropArea
 {
 	@inject var app : Application;
 	@inject var view : View;
 	
 	var pathItem(get, never) : PathItem;
-	@:noCompletion function get_pathItem() : PathItem
-	{
-		// TODO: remove cast
-        return cast app.document.navigator.pathItem;
-	}
+	@:noCompletion function get_pathItem() return app.document.navigator.pathItem;
 	
-	var layers(get, never) : ArrayRO<Layer>; function get_layers() : ArrayRO<Layer> return pathItem.mcItem.layers;
+	var layers(get, never) : ArrayRO<Layer>; function get_layers() return pathItem.mcItem.layers;
 	
 	public function getDragImageType(data:HtmlNodeElement)
 	{
@@ -90,5 +90,7 @@ class BaseLayerDropper extends InjectContainer
 		if (pi == null) return false;
 		if (pi == parentIndex) return true;
 		return isLayerChildOf(pi, parentIndex);
-	}	
+	}
+
+    abstract public function drop(dropEffect:DropEffect, data:HtmlNodeElement, e:JqEvent) : Void;
 }

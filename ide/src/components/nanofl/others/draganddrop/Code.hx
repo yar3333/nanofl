@@ -21,7 +21,7 @@ class Code extends wquery.Component
 	 * Specify selector if you want to delegate from parent element specified by `elem`. In other case, set `selector` to null.
 	 * If you use selector, then you must manualy add `draggable="true"` attribute to the draggable elements.
 	 */
-	public function draggable(elem:JQuery, selector:String, dragType:String, getData:XmlBuilder->JqEvent->AllowedDropEffect, ?removeMoved:HtmlNodeElement->Void)
+	public function draggable(elem:JQuery, selector:String, dragType:String, getData:(out:XmlBuilder, e:JqEvent)->AllowedDropEffect, ?removeMoved:(data:XmlDocument)->Void)
 	{
 		if (selector == null || selector == "") elem.attr("draggable", "true");
 		
@@ -40,6 +40,7 @@ class Code extends wquery.Component
 			data.end();
 			
 			e.dataTransfer.setData("text/plain", data.toString());
+            log("-----> setData " + data.toString());
 			e.dataTransfer.setDragImage(new JQuery("<div/>")[0], 0, 0);
 			
 			dataXml = e.dataTransfer.effectAllowed == AllowedDropEffect.move 
@@ -174,6 +175,7 @@ class Code extends wquery.Component
 	function getDraggedXml(jqEvent:JqEvent) : HtmlNodeElement
 	{
 		final e : DragEvent = jqEvent.originalEvent;
+        log("-----> getData " + e.dataTransfer.getData("text/plain"));
 		final doc = new XmlDocument(e.dataTransfer.getData("text/plain"));
 		return doc.children[0];
 	}

@@ -3,11 +3,8 @@ package nanofl.ide.timeline.droppers;
 import js.JQuery;
 import htmlparser.HtmlNodeElement;
 import nanofl.ide.draganddrop.DropEffect;
-import nanofl.ide.draganddrop.IDropArea;
 
-class LayerToTitleDropper
-	extends BaseLayerDropper
-	implements IDropArea
+class LayerToTitleDropper extends BaseLayerDropper
 {
 	var layerRow : JQuery;
 	
