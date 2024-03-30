@@ -10,6 +10,8 @@ extern class Code extends wquery.Component {
 	function filterItems(item:nanofl.ide.libraryitems.IIdeLibraryItem):Bool;
 	function update():Void;
 	function showPropertiesPopup():Void;
+	function getItemElementBounds(namePath:String):easeljs.geom.Rectangle;
+	function updateVisibility():Void;
 	function removeSelected():Void;
 	function renameByUser(namePath:String):Void;
 	function getSelectedItems():Array<nanofl.ide.libraryitems.IIdeLibraryItem>;

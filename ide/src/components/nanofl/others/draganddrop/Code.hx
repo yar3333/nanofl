@@ -12,8 +12,7 @@ import nanofl.ide.draganddrop.IDragAndDrop;
 import nanofl.ide.draganddrop.IDropArea;
 import js.JQuery;
 
-class Code
-	extends wquery.Component
+class Code extends wquery.Component
 	implements IDragAndDrop
 {
 	var lastDragEnter : js.html.Element;
@@ -28,15 +27,15 @@ class Code
 		
 		var dataXml : XmlDocument;
 		
-		elem.on("dragstart", selector, function(_e:JqEvent)
+		elem.on("dragstart", selector, (jqEvent:JqEvent) ->
 		{
-			//log("dragstart\t" +  elemToStr(elem[0]));
+			log("dragstart\t" +  elemToStr(elem[0]));
 			
-			var e : DragEvent = _e.originalEvent;
+			final e : DragEvent = jqEvent.originalEvent;
 			
-			var data = new XmlBuilder();
+			final data = new XmlBuilder();
 			data.begin("drag").attr("dragType", dragType);
-			e.dataTransfer.effectAllowed = getData(data, _e);
+			e.dataTransfer.effectAllowed = getData(data, jqEvent);
 			if (e.dataTransfer.effectAllowed == null) { e.preventDefault(); return; }
 			data.end();
 			
@@ -49,9 +48,11 @@ class Code
 					: null;
 		});
 		
-		elem.on("dragend", selector, function(e:JqEvent)
+		elem.on("dragend", selector, (jqEvent:JqEvent) ->
 		{
-			if ((cast e.originalEvent:DragEvent).dataTransfer.dropEffect == DropEffect.move)
+            final e : DragEvent = jqEvent.originalEvent;
+
+			if (e.dataTransfer.dropEffect == DropEffect.move)
 			{
 				if (removeMoved != null) removeMoved(dataXml);
 			}
@@ -65,41 +66,37 @@ class Code
 			if (lastDragEnter == e.currentTarget) return;
 			lastDragEnter = e.currentTarget;
 			
-			//log("dragenter\t" + StringTools.rpad(elemToStr(e.target), " ", 35) + elemToStr(e.currentTarget));
+			log("dragenter\t" + StringTools.rpad(elemToStr(e.target), " ", 35) + elemToStr(e.currentTarget));
 			
 			template().container.find(">*").hide();
-			var xml = getDraggedXml(e);
-			if (xml != null)
+			final xml = getDraggedXml(e);
+			if (xml == null || !drops.exists(xml.getAttribute("dragType"))) return;
 			{
-				var dragType = xml.getAttribute("dragType");
-				if (drops.exists(dragType))
-				{
-					//log("dragType = " + dragType);
-					var drop = drops.get(dragType);
-					var dragImageType = drop.getDragImageType(xml);
-					if (dragImageType != null)
-					{
-						switch (dragImageType)
-						{
-							case DragImageType.ICON_TEXT(icon, text):
-								template().iconText.show();
-								template().icon.attr("class", icon);
-								template().text.html(text);
-								
-							case DragImageType.RECTANGLE(width, height):
-								template().rectangle
-									.width(width)
-									.height(height)
-									.css("left", -Math.round(width  / 2) + "px")
-									.css("top",  -Math.round(height / 2) + "px")
-									.show();
-						}
-					}
-				}
+                final drop = drops.get(xml.getAttribute("dragType"));
+                final dragImageType = drop.getDragImageType(xml);
+                if (dragImageType == null) return;
+			    
+                log("dragenter dragImageType = " + dragImageType);
+                
+                switch (dragImageType)
+                {
+                    case DragImageType.ICON_TEXT(icon, text):
+                        template().iconText.show();
+                        template().icon.attr("class", icon);
+                        template().text.html(text);
+                        
+                    case DragImageType.RECTANGLE(width, height):
+                        template().rectangle
+                            .width(width)
+                            .height(height)
+                            .css("left", -Math.round(width  / 2) + "px")
+                            .css("top",  -Math.round(height / 2) + "px")
+                            .show();
+                }
 			}
 		}
 		
-		elem.on("dragenter", selector, function(e:JqEvent)
+		elem.on("dragenter", selector, e ->
 		{
 			log("dragenter");
 			
@@ -108,7 +105,7 @@ class Code
 			onDragEnter(e);
 		});
 		
-		elem.on("dragover", selector, function(e:JqEvent)
+		elem.on("dragover", selector, e ->
 		{
 			log("dragover");
 			
@@ -121,7 +118,7 @@ class Code
 				.css("top",  e.originalEvent.pageY + "px");
 		});
 		
-		elem.on("dragleave", selector, function(e:JqEvent)
+		elem.on("dragleave", selector, e ->
 		{
 			log("dragleave");
 			
@@ -136,18 +133,18 @@ class Code
 			
 			lastDragEnter = null;
 			
-			//log("dragleave\t" + StringTools.rpad(elemToStr(e.target), " ", 35) + elemToStr(e.currentTarget));
+			log("dragleave\t" + StringTools.rpad(elemToStr(e.target), " ", 35) + elemToStr(e.currentTarget));
 			template().container.find(">*").hide();
 		});
 		
-		elem.on("dragend", selector, function(e:JqEvent)
+		elem.on("dragend", selector, e ->
 		{
 			log("dragend");
 			
 			lastDragEnter = null;
 		});
 		
-		elem.on("drop", selector, function(e:JqEvent)
+		elem.on("drop", selector, e ->
 		{
 			log("drop");
 			
@@ -156,13 +153,13 @@ class Code
 			
 			template().container.find(">*").hide();
 			
-			var xml = getDraggedXml(e);
+			final xml = getDraggedXml(e);
 			if (xml != null)
 			{
-				var dragType = xml.getAttribute("dragType");
+				final dragType = xml.getAttribute("dragType");
 				if (drops.exists(dragType))
 				{
-					var drop = drops.get(dragType);
+					final drop = drops.get(dragType);
 					drop.drop((cast e.originalEvent:DragEvent).dataTransfer.dropEffect, xml, e);
 				}
 			}
@@ -174,10 +171,10 @@ class Code
 		});
 	}
 	
-	function getDraggedXml(e:JqEvent) : HtmlNodeElement
+	function getDraggedXml(jqEvent:JqEvent) : HtmlNodeElement
 	{
-		var e : DragEvent = e.originalEvent;
-		var doc = new XmlDocument(e.dataTransfer.getData("text/plain"));
+		final e : DragEvent = jqEvent.originalEvent;
+		final doc = new XmlDocument(e.dataTransfer.getData("text/plain"));
 		return doc.children[0];
 	}
 	
@@ -188,6 +185,6 @@ class Code
 	
 	static function log(v:Dynamic, ?infos:haxe.PosInfos)
 	{
-		//trace(Reflect.isFunction(v) ? v() : v, infos);
+		trace(Reflect.isFunction(v) ? v() : v, infos);
 	}
 }

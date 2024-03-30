@@ -506,6 +506,6 @@ class EditorLayer
 	
 	static function log(v:Dynamic, ?infos:haxe.PosInfos)
 	{
-		trace(Reflect.isFunction(v) ? v() : v, infos);
+		//trace(Reflect.isFunction(v) ? v() : v, infos);
 	}
 }
