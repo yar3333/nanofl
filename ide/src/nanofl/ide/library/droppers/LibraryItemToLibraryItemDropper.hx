@@ -1,20 +1,17 @@
 package nanofl.ide.library.droppers;
 
 import haxe.io.Path;
-import htmlparser.HtmlNodeElement;
-import js.JQuery.JqEvent;
+import htmlparser.XmlDocument;
+import js.JQuery;
 import nanofl.engine.libraryitems.FolderItem;
 import nanofl.ide.Application;
 import nanofl.ide.draganddrop.DropEffect;
-import nanofl.ide.draganddrop.IDropArea;
 using stdlib.Lambda;
 
-class LibraryItemToLibraryItemDropper extends BaseLibraryItemToLibraryDropper implements IDropArea
+class LibraryItemToLibraryItemDropper extends BaseLibraryItemToLibraryDropper
 {
-	public function drop(dropEffect:DropEffect, data:HtmlNodeElement, e:JqEvent)
+	function processDropInner(dropEffect:DropEffect, data:XmlDocument, e:JqEvent) : Void
 	{
-		if (view.library.readOnly) return;
-		
 		dropToLibraryItemsFolder(dropEffect, data, getTargetFolderForDrop(app, e));
 	}
 	

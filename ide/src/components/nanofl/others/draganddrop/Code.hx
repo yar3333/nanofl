@@ -1,16 +1,17 @@
 package components.nanofl.others.draganddrop;
 
-import htmlparser.HtmlNodeElement;
-import htmlparser.XmlBuilder;
-import htmlparser.XmlDocument;
+import haxe.Json;
 import js.html.DragEvent;
 import js.html.File;
+import js.JQuery;
+import nanofl.ide.draganddrop.DragInfo;
 import nanofl.ide.draganddrop.AllowedDropEffect;
 import nanofl.ide.draganddrop.DragImageType;
 import nanofl.ide.draganddrop.DropEffect;
 import nanofl.ide.draganddrop.IDragAndDrop;
-import nanofl.ide.draganddrop.IDropArea;
-import js.JQuery;
+import nanofl.ide.draganddrop.IDropProcessor;
+using stdlib.Lambda;
+using stdlib.StringTools;
 
 class Code extends wquery.Component
 	implements IDragAndDrop
@@ -21,32 +22,24 @@ class Code extends wquery.Component
 	 * Specify selector if you want to delegate from parent element specified by `elem`. In other case, set `selector` to null.
 	 * If you use selector, then you must manualy add `draggable="true"` attribute to the draggable elements.
 	 */
-	public function draggable(elem:JQuery, selector:String, dragType:String, getData:(out:XmlBuilder, e:JqEvent)->AllowedDropEffect, ?removeMoved:(data:XmlDocument)->Void)
+    public function draggable(elem:JQuery, selector:String, getInfo:(e:JqEvent)->DragInfo, ?removeMoved:DragInfo->Void) : Void
 	{
 		if (selector == null || selector == "") elem.attr("draggable", "true");
-		
-		var dataXml : XmlDocument;
+
+        var info : DragInfo = null;
 		
 		elem.on("dragstart", selector, (jqEvent:JqEvent) ->
 		{
 			log("dragstart\t" +  elemToStr(elem[0]));
 			
 			final e : DragEvent = jqEvent.originalEvent;
-			
-			final data = new XmlBuilder();
-			data.begin("drag").attr("dragType", dragType);
-			e.dataTransfer.effectAllowed = getData(data, jqEvent);
-			if (e.dataTransfer.effectAllowed == null) { e.preventDefault(); return; }
-			data.end();
-			
-			e.dataTransfer.setData("text/plain", data.toString());
-            log("-----> setData " + data.toString());
-			e.dataTransfer.setDragImage(new JQuery("<div/>")[0], 0, 0);
-			
-			dataXml = e.dataTransfer.effectAllowed == AllowedDropEffect.move 
-			       || e.dataTransfer.effectAllowed == AllowedDropEffect.copyMove
-					? data.xml
-					: null;
+
+            info = getInfo(jqEvent);
+            if (info?.effect == null) { e.preventDefault(); return; }
+
+            e.dataTransfer.effectAllowed = info.effect;
+            e.dataTransfer.setData(info.type + "|" + Json.stringify(info.params), info.data);
+            e.dataTransfer.setDragImage(new JQuery("<div/>")[0], 0, 0);
 		});
 		
 		elem.on("dragend", selector, (jqEvent:JqEvent) ->
@@ -55,12 +48,12 @@ class Code extends wquery.Component
 
 			if (e.dataTransfer.dropEffect == DropEffect.move)
 			{
-				if (removeMoved != null) removeMoved(dataXml);
+				if (removeMoved != null && info != null) removeMoved(info);
 			}
 		});
 	}
 	
-	public function droppable(elem:JQuery, ?selector:String, drops:Map<String, IDropArea>, ?filesDrop:Array<File>->JqEvent->Void) : Void
+	public function droppable(elem:JQuery, ?selector:String, dropProcessor:IDropProcessor, ?dropFilesProcessor:Array<File>->JqEvent->Void) : Void
 	{
 		function onDragEnter(e:JqEvent)
 		{
@@ -70,31 +63,32 @@ class Code extends wquery.Component
 			log("dragenter\t" + StringTools.rpad(elemToStr(e.target), " ", 35) + elemToStr(e.currentTarget));
 			
 			template().container.find(">*").hide();
-			final xml = getDraggedXml(e);
-			if (xml == null || !drops.exists(xml.getAttribute("dragType"))) return;
-			{
-                final drop = drops.get(xml.getAttribute("dragType"));
-                final dragImageType = drop.getDragImageType(xml);
-                if (dragImageType == null) return;
-			    
-                log("dragenter dragImageType = " + dragImageType);
-                
-                switch (dragImageType)
+
+            for (type in getTypesFromEvent(e))
+            {
+                final dragImageType = dropProcessor.getDragImageType(type, getParamsFromEvent(e, type));
+                if (dragImageType != null)
                 {
-                    case DragImageType.ICON_TEXT(icon, text):
-                        template().iconText.show();
-                        template().icon.attr("class", icon);
-                        template().text.html(text);
-                        
-                    case DragImageType.RECTANGLE(width, height):
-                        template().rectangle
-                            .width(width)
-                            .height(height)
-                            .css("left", -Math.round(width  / 2) + "px")
-                            .css("top",  -Math.round(height / 2) + "px")
-                            .show();
+                    log("dragenter dragImageType = " + dragImageType);
+
+                    switch (dragImageType)
+                    {
+                        case DragImageType.ICON_TEXT(icon, text):
+                            template().iconText.show();
+                            template().icon.attr("class", icon);
+                            template().text.html(text);
+                            
+                        case DragImageType.RECTANGLE(width, height):
+                            template().rectangle
+                                .width(width)
+                                .height(height)
+                                .css("left", -Math.round(width  / 2) + "px")
+                                .css("top",  -Math.round(height / 2) + "px")
+                                .show();
+                    }
+                    break;
                 }
-			}
+            }
 		}
 		
 		elem.on("dragenter", selector, e ->
@@ -153,34 +147,47 @@ class Code extends wquery.Component
 			e.stopPropagation();
 			
 			template().container.find(">*").hide();
+
+            for (type in getTypesFromEvent(e))
+            {
+                if (dropProcessor.processDrop(type, getParamsFromEvent(e, type), getDataFromEvent(e, type), e)) break;
+            }
 			
-			final xml = getDraggedXml(e);
-			if (xml != null)
+			if (dropFilesProcessor != null && (cast e.originalEvent:DragEvent).dataTransfer.files.length > 0)
 			{
-				final dragType = xml.getAttribute("dragType");
-				if (drops.exists(dragType))
-				{
-					final drop = drops.get(dragType);
-					drop.drop((cast e.originalEvent:DragEvent).dataTransfer.dropEffect, xml, e);
-				}
-			}
-			
-			if (filesDrop != null && (cast e.originalEvent:DragEvent).dataTransfer.files.length > 0)
-			{
-				filesDrop(cast JQuery.makeArray((cast e.originalEvent:DragEvent).dataTransfer.files), e);
+				dropFilesProcessor(cast JQuery.makeArray((cast e.originalEvent:DragEvent).dataTransfer.files), e);
 			}
 		});
 	}
 	
-	function getDraggedXml(jqEvent:JqEvent) : HtmlNodeElement
+	static function getTypesFromEvent(jqEvent:JqEvent) : Array<String>
 	{
 		final e : DragEvent = jqEvent.originalEvent;
-        log("-----> getData " + e.dataTransfer.getData("text/plain"));
-		final doc = new XmlDocument(e.dataTransfer.getData("text/plain"));
-		return doc.children[0];
+        return e.dataTransfer.types.map(x ->
+        {
+            final n = x.indexOf("|");
+            if (n < 0) return x;
+            return x.substr(0, n);
+        });
 	}
+
+    static function getParamsFromEvent(jqEvent:JqEvent, type:String) : Dynamic
+    {
+        final e : DragEvent = jqEvent.originalEvent;
+        final key = e.dataTransfer.types.find(x -> x == type || x.startsWith(type + "|"));
+        final n = key.indexOf("|");
+        if (n < 0) return null;
+        return Json.parse(key.substr(n + 1));
+    }
+
+    static function getDataFromEvent(jqEvent:JqEvent, type:String) : String
+    {
+        final e : DragEvent = jqEvent.originalEvent;
+        final key = e.dataTransfer.types.find(x -> x == type || x.startsWith(type + "|"));
+        return e.dataTransfer.getData(key);        
+    }
 	
-	function elemToStr(elem:js.html.Element) : String
+	static function elemToStr(elem:js.html.Element) : String
 	{
 		return elem.tagName + (elem.id != null ? "#" + elem.id : "");
 	}

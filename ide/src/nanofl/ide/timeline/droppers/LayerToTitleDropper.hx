@@ -1,7 +1,7 @@
 package nanofl.ide.timeline.droppers;
 
 import js.JQuery;
-import htmlparser.HtmlNodeElement;
+import htmlparser.XmlDocument;
 import nanofl.ide.draganddrop.DropEffect;
 
 class LayerToTitleDropper extends BaseLayerDropper
@@ -15,7 +15,7 @@ class LayerToTitleDropper extends BaseLayerDropper
 		this.layerRow = layerRow;
 	}
 
-	public function drop(dropEffect:DropEffect, data:HtmlNodeElement, e:JqEvent)
+	function processDropInner(dropEffect:DropEffect, data:XmlDocument, e:JqEvent)
 	{
 		moveLayer(Std.parseInt(data.getAttribute("layerIndex")), layerRow.index());
 	}

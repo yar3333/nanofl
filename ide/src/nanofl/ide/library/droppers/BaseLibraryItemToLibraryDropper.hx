@@ -1,27 +1,44 @@
 package nanofl.ide.library.droppers;
 
-import nanofl.ide.ui.View;
+import js.html.DragEvent;
+import nanofl.ide.draganddrop.DragDataType;
+import js.JQuery;
 import htmlparser.HtmlNodeElement;
+import htmlparser.XmlDocument;
 import nanofl.ide.Application;
+import nanofl.ide.draganddrop.IDropProcessor;
 import nanofl.ide.draganddrop.DragImageType;
 import nanofl.ide.draganddrop.DropEffect;
 import nanofl.ide.library.LibraryItems;
+import nanofl.ide.ui.View;
 import stdlib.Debug;
 using stdlib.Lambda;
 
 @:rtti
-class BaseLibraryItemToLibraryDropper extends InjectContainer
+abstract class BaseLibraryItemToLibraryDropper extends InjectContainer
+    implements IDropProcessor
 {
 	@inject var app : Application;
 	@inject var view : View;
 	
-	public function getDragImageType(data:HtmlNodeElement) : DragImageType
+	public function getDragImageType(type:String, params:Dynamic) : DragImageType
 	{
-		if (view.library.readOnly) return null;
-		return DragImageType.ICON_TEXT(data.getAttribute("icon"), data.getAttribute("text")); // or namePath
+		if (type != DragDataType.DDT_LIBRARYITEMS || view.library.readOnly) return null;
+
+		return DragImageType.ICON_TEXT(params.icon, params.text); // or namePath
 	}
+
+    final public function processDrop(type:String, params:Dynamic, data:String, e:JqEvent) : Bool
+    {
+        if (type != DragDataType.DDT_LIBRARYITEMS || view.library.readOnly) return false;
+        
+        processDropInner((cast e.originalEvent:DragEvent).dataTransfer.dropEffect, new XmlDocument(data), e);
+        return true;
+    }
+
+    abstract function processDropInner(dropEffect:DropEffect, data:XmlDocument, e:JqEvent) : Void;
 	
-	function dropToLibraryItemsFolder(dropEffect:DropEffect, data:HtmlNodeElement, folder:String)
+	function dropToLibraryItemsFolder(dropEffect:DropEffect, data:XmlDocument, folder:String)
 	{
 		Debug.assert(folder != null);
 		

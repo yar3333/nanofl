@@ -117,9 +117,7 @@ class Code extends wquery.Component
 			api.droppable
 			(
 				template().content,
-				[
-					"libraryItem" => new LibraryItemToEditorDropper()
-				],
+				new LibraryItemToEditorDropper(),
 				(files:Array<File>, e:JqEvent) ->
 				{
 					log("editor.drop files");

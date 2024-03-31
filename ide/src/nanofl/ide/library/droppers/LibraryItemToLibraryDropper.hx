@@ -1,16 +1,13 @@
 package nanofl.ide.library.droppers;
 
-import htmlparser.HtmlNodeElement;
-import js.JQuery.JqEvent;
+import js.JQuery;
+import htmlparser.XmlDocument;
 import nanofl.ide.draganddrop.DropEffect;
-import nanofl.ide.draganddrop.IDropArea;
 
-class LibraryItemToLibraryDropper extends BaseLibraryItemToLibraryDropper implements IDropArea
+class LibraryItemToLibraryDropper extends BaseLibraryItemToLibraryDropper
 {
-	public function drop(dropEffect:DropEffect, data:HtmlNodeElement, e:JqEvent)
+	function processDropInner(dropEffect:DropEffect, data:XmlDocument, e:JqEvent) : Void
 	{
-		if (view.library.readOnly) return;
-		
 		dropToLibraryItemsFolder(dropEffect, data, "");
 	}
 }

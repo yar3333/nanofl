@@ -124,7 +124,6 @@ class LibraryItems
         return null;
     }    
 	
-	#if ide
 	public static function getFiles(items:Array<IIdeLibraryItem>) : Array<String>
 	{
 		var r = []; for (item in items) r = r.concat(item.getLibraryFilePaths());
@@ -145,28 +144,35 @@ class LibraryItems
 		
 		return r;
 	}
-	#end
 	
-	#if !test
-	public static function drag(document:Document, item:IIdeLibraryItem, items:Array<IIdeLibraryItem>, out:XmlBuilder) : AllowedDropEffect
+	public static function getDragParams(document:Document, item:IIdeLibraryItem, items:Array<IIdeLibraryItem>) : Dynamic
 	{
-		out.attr("documentID", document.id);
-		
-		out.attr("namePath", item.namePath);
-		out.attr("icon", item.getIcon());
-		out.attr("text", item.namePath);
-		
+        final r : Dynamic =
+        {
+            documentID: document.id,
+            namePath: item.namePath,
+            icon: item.getIcon(),
+            text: item.namePath,
+        };
+
 		if (Std.isOfType(item, InstancableItem))
 		{
-			var obj = (cast item:InstancableItem).createDisplayObject(null);
-			var bounds =  DisplayObjectTools.getInnerBounds(obj);
-			out.attr("width",  bounds?.width ?? 0);
-			out.attr("height", bounds?.height ?? 0);
+			final obj = (cast item:InstancableItem).createDisplayObject(null);
+			final bounds =  DisplayObjectTools.getInnerBounds(obj);
+			r.width = bounds?.width ?? 0;
+			r.height = bounds?.height ?? 0;
 		}
+
+        return r;
+	}
 		
-		LibraryItems.saveToXml(items, out);
+    public static function getDragData(document:Document, item:IIdeLibraryItem, items:Array<IIdeLibraryItem>) : String
+    {
+        final out = new XmlBuilder();
+
+        LibraryItems.saveToXml(items, out);
 		
-		var files = LibraryItems.getFiles(items);
+		final files = LibraryItems.getFiles(items);
 		if (files.length > 0)
 		{
 			out.begin("libraryfiles").attr("libraryDir", document.library.libraryDir);
@@ -177,7 +183,7 @@ class LibraryItems
 			out.end();
 		}
 		
-		return AllowedDropEffect.copyMove;
+		return out.toString();
 	}
 	
 	public static function drop(dropEffect:DropEffect, data:HtmlNodeElement, document:Document, folder:String) : Promise<Array<IIdeLibraryItem>>
@@ -251,7 +257,6 @@ class LibraryItems
 			}
 		}
 	}
-	#end
 	
 	static function getWithoutSubItems(namePaths:Array<String>) : Array<String>
 	{

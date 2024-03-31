@@ -1,5 +1,7 @@
 package components.nanofl.library.libraryitems;
 
+import nanofl.ide.draganddrop.DragDataType;
+import nanofl.ide.draganddrop.AllowedDropEffect;
 import haxe.io.Path;
 import js.Browser;
 import js.JQuery;
@@ -83,7 +85,7 @@ class Code extends wquery.Component
 		
 		dragAndDrop.ready.then(api ->
 		{
-			api.draggable(template().content, ">li", "libraryItem", (out:XmlBuilder, e:JqEvent) ->
+			api.draggable(template().content, ">li", (e:JqEvent) ->
 			{
 				if (readOnly) return null;
 				
@@ -94,16 +96,20 @@ class Code extends wquery.Component
 				{
 					select([ item.namePath ]);
 				}
-				
-				return LibraryItems.drag(app.document, item, app.document.library.getSelectedItemsWithDependencies(), out);
+
+				return
+				{
+                    effect: AllowedDropEffect.copyMove,
+                    type: DragDataType.DDT_LIBRARYITEMS,
+                    params: LibraryItems.getDragParams(app.document, item, app.document.library.getSelectedItemsWithDependencies()),
+                    data: LibraryItems.getDragData(app.document, item, app.document.library.getSelectedItemsWithDependencies()),
+                };
 			});
 			
 			api.droppable
 			(
 				template().content, ">li",
-				[
-					"libraryItem" => new LibraryItemToLibraryItemDropper()
-				],
+                new LibraryItemToLibraryItemDropper(),
 				(files:Array<File>, e:JqEvent) ->
 				{
 					if (readOnly) return;

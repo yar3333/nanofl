@@ -1,13 +1,15 @@
 package nanofl.ide.timeline.droppers;
 
+import js.html.DragEvent;
+import htmlparser.XmlDocument;
+import nanofl.ide.draganddrop.DragDataType;
 import stdlib.Timer;
 import datatools.ArrayRO;
 import js.JQuery;
-import htmlparser.HtmlNodeElement;
 import nanofl.engine.movieclip.Layer;
 import nanofl.engine.LayerType;
 import nanofl.ide.Application;
-import nanofl.ide.draganddrop.IDropArea;
+import nanofl.ide.draganddrop.IDropProcessor;
 import nanofl.ide.draganddrop.DropEffect;
 import nanofl.ide.navigator.PathItem;
 import nanofl.ide.draganddrop.DragImageType;
@@ -15,7 +17,7 @@ import nanofl.ide.ui.View;
 
 @:rtti
 abstract class BaseLayerDropper extends InjectContainer
-    implements IDropArea
+    implements IDropProcessor
 {
 	@inject var app : Application;
 	@inject var view : View;
@@ -25,11 +27,21 @@ abstract class BaseLayerDropper extends InjectContainer
 	
 	var layers(get, never) : ArrayRO<Layer>; function get_layers() return pathItem.mcItem.layers;
 	
-	public function getDragImageType(data:HtmlNodeElement)
+    public function getDragImageType(type:String, params:Dynamic) : DragImageType
 	{
-		return DragImageType.ICON_TEXT(data.getAttribute("icon"), data.getAttribute("text"));
+        if (type != DragDataType.DDT_LAYER) return null;
+		return DragImageType.ICON_TEXT(params.icon, params.text);
 	}
-	
+
+    public function processDrop(type:String, params:Dynamic, data:String, e:JqEvent) : Bool
+    {
+        if (type != DragDataType.DDT_LAYER) return false;
+        processDropInner((cast e.originalEvent:DragEvent).dataTransfer.dropEffect, new XmlDocument(data), e);
+        return true;
+    }
+
+    abstract function processDropInner(dropEffect:DropEffect, data:XmlDocument, e:JqEvent) : Void;
+
 	function moveLayer(srcLayerIndex:Int, destLayerIndex:Int)
 	{
 		if (srcLayerIndex == destLayerIndex
@@ -91,6 +103,4 @@ abstract class BaseLayerDropper extends InjectContainer
 		if (pi == parentIndex) return true;
 		return isLayerChildOf(pi, parentIndex);
 	}
-
-    abstract public function drop(dropEffect:DropEffect, data:HtmlNodeElement, e:JqEvent) : Void;
 }

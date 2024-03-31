@@ -1,8 +1,8 @@
 package nanofl.ide.timeline.droppers;
 
-import htmlparser.HtmlNodeElement;
-import nanofl.ide.draganddrop.DropEffect;
 import js.JQuery;
+import htmlparser.XmlDocument;
+import nanofl.ide.draganddrop.DropEffect;
 
 class LayerToLayerDropper extends BaseLayerDropper
 {
@@ -15,7 +15,7 @@ class LayerToLayerDropper extends BaseLayerDropper
 		this.content = content;
 	}
 	
-	public function drop(dropEffect:DropEffect, data:HtmlNodeElement, e:JqEvent)
+	function processDropInner(dropEffect:DropEffect, data:XmlDocument, e:JqEvent)
 	{
 		var lastLayerRow = content.children(":last-child");
 		if (lastLayerRow.length == 0 || e.pageY > lastLayerRow.offset().top + lastLayerRow.height())

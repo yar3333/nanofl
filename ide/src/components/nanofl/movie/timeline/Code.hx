@@ -1,5 +1,6 @@
 package components.nanofl.movie.timeline;
 
+import nanofl.ide.draganddrop.DragDataType;
 import js.JQuery;
 import js.Browser;
 import stdlib.ExceptionTools;
@@ -152,21 +153,8 @@ class Code extends wquery.Component
 		
 		dragAndDrop.ready.then(api ->
 		{
-			api.droppable
-			(
-				template().headerTitle,
-				[
-					"layer" => new LayerToHeaderTitleDropper()
-				]
-			);
-			
-			api.droppable
-			(
-				template().content,
-				[
-					"layer" => new LayerToLayerDropper(template().content)
-				]
-			);
+			api.droppable(template().headerTitle, new LayerToHeaderTitleDropper());
+			api.droppable(template().content, new LayerToLayerDropper(template().content));
 		});
 		
 		var padLeft = template().buttons.width();
@@ -460,22 +448,20 @@ class Code extends wquery.Component
 			
 			dragAndDrop.ready.then(api ->
 			{
-				api.draggable(title, null, "layer", (out:XmlBuilder, e:JqEvent) ->
+				api.draggable(title, null, (e:JqEvent) ->
 				{
-					out.attr("text", layer.name);
-					out.attr("icon", layer.getIcon());
-					out.attr("layerIndex", Std.string(layerIndex));
-					layer.save(out);
-					return AllowedDropEffect.move;
+                    final xml = new XmlBuilder();
+					layer.save(xml);
+                    return
+                    { 
+                        effect: AllowedDropEffect.move,
+                        type: DragDataType.DDT_LAYER,
+                        params: { text:layer.name, icon:layer.getIcon(), layerIndex:layerIndex },
+                        data: xml.toString(),
+                    };
 				});
 				
-				api.droppable
-				(
-					title,
-					[
-						"layer" => new LayerToTitleDropper(t.q("#layerRow"))
-					]
-				);
+				api.droppable(title, new LayerToTitleDropper(t.q("#layerRow")));
 			});
 		}
 		

@@ -24,9 +24,7 @@ class Code extends components.nanofl.library.libraryview.Code
 			api.droppable
 			(
 				template().container,
-				[
-					"libraryItem" => new LibraryItemToLibraryDropper()
-				],
+				new LibraryItemToLibraryDropper(),
 				(files:Array<File>, _) ->
 				{
 					app.document.library.addUploadedFiles(files, "");
