@@ -5,7 +5,6 @@ import js.html.DragEvent;
 import js.html.File;
 import js.JQuery;
 import nanofl.ide.draganddrop.DragInfo;
-import nanofl.ide.draganddrop.AllowedDropEffect;
 import nanofl.ide.draganddrop.DragImageType;
 import nanofl.ide.draganddrop.DropEffect;
 import nanofl.ide.draganddrop.IDragAndDrop;
@@ -67,27 +66,27 @@ class Code extends wquery.Component
             for (type in getTypesFromEvent(e))
             {
                 final dragImageType = dropProcessor.getDragImageType(type, getParamsFromEvent(e, type));
-                if (dragImageType != null)
-                {
-                    log("dragenter dragImageType = " + dragImageType);
+                if (dragImageType == null) continue;
+                
+                log("dragenter dragImageType = " + dragImageType);
 
-                    switch (dragImageType)
-                    {
-                        case DragImageType.ICON_TEXT(icon, text):
-                            template().iconText.show();
-                            template().icon.attr("class", icon);
-                            template().text.html(text);
-                            
-                        case DragImageType.RECTANGLE(width, height):
-                            template().rectangle
-                                .width(width)
-                                .height(height)
-                                .css("left", -Math.round(width  / 2) + "px")
-                                .css("top",  -Math.round(height / 2) + "px")
-                                .show();
-                    }
-                    break;
+                switch (dragImageType)
+                {
+                    case DragImageType.ICON_TEXT(icon, text):
+                        template().iconText.show();
+                        template().icon.attr("class", icon);
+                        template().text.html(text);
+                        
+                    case DragImageType.RECTANGLE(width, height):
+                        template().rectangle
+                            .width(width)
+                            .height(height)
+                            .css("left", -Math.round(width  / 2) + "px")
+                            .css("top",  -Math.round(height / 2) + "px")
+                            .show();
                 }
+                
+                break;
             }
 		}
 		

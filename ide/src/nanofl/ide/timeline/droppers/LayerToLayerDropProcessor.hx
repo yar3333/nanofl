@@ -4,7 +4,7 @@ import js.JQuery;
 import htmlparser.XmlDocument;
 import nanofl.ide.draganddrop.DropEffect;
 
-class LayerToLayerDropper extends BaseLayerDropper
+class LayerToLayerDropProcessor extends BaseLayerDropProcessor
 {
 	var content : JQuery;
 	

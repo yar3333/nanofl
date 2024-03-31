@@ -8,6 +8,6 @@ extern class Code extends wquery.Component implements nanofl.ide.draganddrop.IDr
 			 * If you use selector, then you must manualy add `draggable="true"` attribute to the draggable elements.
 			 
 	**/
-	function draggable(elem:js.JQuery, selector:String, dragType:String, getData:(htmlparser.XmlBuilder, js.JQuery.JqEvent) -> nanofl.ide.draganddrop.AllowedDropEffect, ?removeMoved:htmlparser.HtmlNodeElement -> Void):Void;
-	function droppable(elem:js.JQuery, ?selector:String, drops:Map<String, nanofl.ide.draganddrop.IDropArea>, ?filesDrop:(Array<js.html.File>, js.JQuery.JqEvent) -> Void):Void;
+	function draggable(elem:js.JQuery, selector:String, getInfo:(e:js.JQuery.JqEvent) -> nanofl.ide.draganddrop.DragInfo, ?removeMoved:nanofl.ide.draganddrop.DragInfo -> Void):Void;
+	function droppable(elem:js.JQuery, ?selector:String, dropProcessor:nanofl.ide.draganddrop.IDropProcessor, ?dropFilesProcessor:(Array<js.html.File>, js.JQuery.JqEvent) -> Void):Void;
 }

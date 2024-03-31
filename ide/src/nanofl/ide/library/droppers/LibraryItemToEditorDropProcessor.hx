@@ -5,7 +5,6 @@ import nanofl.ide.draganddrop.DragDataType;
 import nanofl.ide.draganddrop.IDropProcessor;
 import js.JQuery;
 import htmlparser.XmlDocument;
-import htmlparser.HtmlNodeElement;
 import easeljs.geom.Rectangle;
 import nanofl.DisplayObjectTools;
 import nanofl.engine.LayerType;
@@ -18,7 +17,7 @@ import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.ui.View;
 
 @:rtti
-class LibraryItemToEditorDropper extends InjectContainer
+class LibraryItemToEditorDropProcessor extends InjectContainer
     implements IDropProcessor
 {
 	@inject var app : Application;
@@ -26,7 +25,7 @@ class LibraryItemToEditorDropper extends InjectContainer
 	
     public function getDragImageType(type:String, params:Dynamic) : DragImageType
 	{
-		if (type != DragDataType.DDT_LIBRARYITEMS) return null;
+		if (type != DragDataType.LIBRARYITEMS) return null;
         if (params.width == null) return null;
 		
         if (app.document.editor.activeLayer.type == LayerType.folder) return null;
@@ -41,7 +40,7 @@ class LibraryItemToEditorDropper extends InjectContainer
 
     public function processDrop(type:String, params:Dynamic, data:String, e:JqEvent) : Bool
     {
-        if (type != DragDataType.DDT_LIBRARYITEMS) return false;
+        if (type != DragDataType.LIBRARYITEMS) return false;
         
         processDropInner((cast e.originalEvent:DragEvent).dataTransfer.dropEffect, new XmlDocument(data), e);
         return true;

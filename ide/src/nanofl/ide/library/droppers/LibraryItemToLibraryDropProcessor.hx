@@ -4,7 +4,7 @@ import js.JQuery;
 import htmlparser.XmlDocument;
 import nanofl.ide.draganddrop.DropEffect;
 
-class LibraryItemToLibraryDropper extends BaseLibraryItemToLibraryDropper
+class LibraryItemToLibraryDropProcessor extends BaseLibraryItemToLibraryDropProcessor
 {
 	function processDropInner(dropEffect:DropEffect, data:XmlDocument, e:JqEvent) : Void
 	{

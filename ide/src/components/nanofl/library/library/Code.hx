@@ -2,7 +2,7 @@ package components.nanofl.library.library;
 
 import js.html.File;
 import nanofl.ide.draganddrop.DragAndDrop;
-import nanofl.ide.library.droppers.LibraryItemToLibraryDropper;
+import nanofl.ide.library.droppers.LibraryItemToLibraryDropProcessor;
 
 @:rtti
 class Code extends components.nanofl.library.libraryview.Code
@@ -24,7 +24,7 @@ class Code extends components.nanofl.library.libraryview.Code
 			api.droppable
 			(
 				template().container,
-				new LibraryItemToLibraryDropper(),
+				new LibraryItemToLibraryDropProcessor(),
 				(files:Array<File>, _) ->
 				{
 					app.document.library.addUploadedFiles(files, "");

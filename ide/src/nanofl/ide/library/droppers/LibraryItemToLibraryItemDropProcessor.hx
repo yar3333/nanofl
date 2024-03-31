@@ -8,7 +8,7 @@ import nanofl.ide.Application;
 import nanofl.ide.draganddrop.DropEffect;
 using stdlib.Lambda;
 
-class LibraryItemToLibraryItemDropper extends BaseLibraryItemToLibraryDropper
+class LibraryItemToLibraryItemDropProcessor extends BaseLibraryItemToLibraryDropProcessor
 {
 	function processDropInner(dropEffect:DropEffect, data:XmlDocument, e:JqEvent) : Void
 	{

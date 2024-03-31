@@ -19,7 +19,7 @@ import nanofl.ide.Application;
 import nanofl.ide.Globals;
 import nanofl.ide.draganddrop.DragAndDrop;
 import nanofl.ide.editor.EditorMouseEvent;
-import nanofl.ide.library.droppers.LibraryItemToEditorDropper;
+import nanofl.ide.library.droppers.LibraryItemToEditorDropProcessor;
 import nanofl.ide.navigator.PathItem;
 import nanofl.ide.preferences.Preferences;
 import nanofl.ide.ui.View;
@@ -117,13 +117,13 @@ class Code extends wquery.Component
 			api.droppable
 			(
 				template().content,
-				new LibraryItemToEditorDropper(),
+				new LibraryItemToEditorDropProcessor(),
 				(files:Array<File>, e:JqEvent) ->
 				{
 					log("editor.drop files");
 					app.document.library.addUploadedFiles(files, "").then((items:Array<IIdeLibraryItem>) ->
 					{
-						for (item in items) LibraryItemToEditorDropper.processItem(app, view, item, e);
+						for (item in items) LibraryItemToEditorDropProcessor.processItem(app, view, item, e);
 					});
 				}
 			);

@@ -32,9 +32,9 @@ import nanofl.ide.draganddrop.DragAndDrop;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.draganddrop.AllowedDropEffect;
 import nanofl.ide.timeline.ITimelineView;
-import nanofl.ide.timeline.droppers.LayerToHeaderTitleDropper;
-import nanofl.ide.timeline.droppers.LayerToLayerDropper;
-import nanofl.ide.timeline.droppers.LayerToTitleDropper;
+import nanofl.ide.timeline.droppers.LayerToHeaderTitleDropProcessor;
+import nanofl.ide.timeline.droppers.LayerToLayerDropProcessor;
+import nanofl.ide.timeline.droppers.LayerToTitleDropProcessor;
 import nanofl.ide.ui.AutoScrollHorizontally;
 import stdlib.Debug;
 import stdlib.Std;
@@ -153,8 +153,8 @@ class Code extends wquery.Component
 		
 		dragAndDrop.ready.then(api ->
 		{
-			api.droppable(template().headerTitle, new LayerToHeaderTitleDropper());
-			api.droppable(template().content, new LayerToLayerDropper(template().content));
+			api.droppable(template().headerTitle, new LayerToHeaderTitleDropProcessor());
+			api.droppable(template().content, new LayerToLayerDropProcessor(template().content));
 		});
 		
 		var padLeft = template().buttons.width();
@@ -455,13 +455,13 @@ class Code extends wquery.Component
                     return
                     { 
                         effect: AllowedDropEffect.move,
-                        type: DragDataType.DDT_LAYER,
+                        type: DragDataType.LAYER,
                         params: { text:layer.name, icon:layer.getIcon(), layerIndex:layerIndex },
                         data: xml.toString(),
                     };
 				});
 				
-				api.droppable(title, new LayerToTitleDropper(t.q("#layerRow")));
+				api.droppable(title, new LayerToTitleDropProcessor(t.q("#layerRow")));
 			});
 		}
 		

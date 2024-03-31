@@ -28,7 +28,7 @@ import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.Application;
 import nanofl.ide.ISymbol;
 import nanofl.ide.library.LibraryItems;
-import nanofl.ide.library.droppers.LibraryItemToLibraryItemDropper;
+import nanofl.ide.library.droppers.LibraryItemToLibraryItemDropProcessor;
 import nanofl.ide.navigator.PathItem;
 import nanofl.ide.ui.menu.ContextMenu;
 using stdlib.Lambda;
@@ -100,7 +100,7 @@ class Code extends wquery.Component
 				return
 				{
                     effect: AllowedDropEffect.copyMove,
-                    type: DragDataType.DDT_LIBRARYITEMS,
+                    type: DragDataType.LIBRARYITEMS,
                     params: LibraryItems.getDragParams(app.document, item, app.document.library.getSelectedItemsWithDependencies()),
                     data: LibraryItems.getDragData(app.document, item, app.document.library.getSelectedItemsWithDependencies()),
                 };
@@ -109,12 +109,12 @@ class Code extends wquery.Component
 			api.droppable
 			(
 				template().content, ">li",
-                new LibraryItemToLibraryItemDropper(),
+                new LibraryItemToLibraryItemDropProcessor(),
 				(files:Array<File>, e:JqEvent) ->
 				{
 					if (readOnly) return;
 					
-					app.document.library.addUploadedFiles(files, LibraryItemToLibraryItemDropper.getTargetFolderForDrop(app, e));
+					app.document.library.addUploadedFiles(files, LibraryItemToLibraryItemDropProcessor.getTargetFolderForDrop(app, e));
 				}
 			);
 		});

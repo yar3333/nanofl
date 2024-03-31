@@ -16,7 +16,7 @@ import nanofl.ide.draganddrop.DragImageType;
 import nanofl.ide.ui.View;
 
 @:rtti
-abstract class BaseLayerDropper extends InjectContainer
+abstract class BaseLayerDropProcessor extends InjectContainer
     implements IDropProcessor
 {
 	@inject var app : Application;
@@ -27,15 +27,15 @@ abstract class BaseLayerDropper extends InjectContainer
 	
 	var layers(get, never) : ArrayRO<Layer>; function get_layers() return pathItem.mcItem.layers;
 	
-    public function getDragImageType(type:String, params:Dynamic) : DragImageType
+    final public function getDragImageType(type:String, params:Dynamic) : DragImageType
 	{
-        if (type != DragDataType.DDT_LAYER) return null;
+        if (type != DragDataType.LAYER) return null;
 		return DragImageType.ICON_TEXT(params.icon, params.text);
 	}
 
-    public function processDrop(type:String, params:Dynamic, data:String, e:JqEvent) : Bool
+    final public function processDrop(type:String, params:Dynamic, data:String, e:JqEvent) : Bool
     {
-        if (type != DragDataType.DDT_LAYER) return false;
+        if (type != DragDataType.LAYER) return false;
         processDropInner((cast e.originalEvent:DragEvent).dataTransfer.dropEffect, new XmlDocument(data), e);
         return true;
     }
