@@ -1,5 +1,6 @@
 package nanofl.ide.editor;
 
+import nanofl.ide.library.dropprocessors.LibraryDragAndDropTools;
 import stdlib.Debug;
 import haxe.io.Path;
 import js.lib.Promise;
@@ -323,9 +324,9 @@ class EditorLibrary extends InjectContainer
 		update();
 	}
 	
-	public function drop(dropEffect:DropEffect, data:HtmlNodeElement, folder:String) : Promise<Array<IIdeLibraryItem>>
+	public function dropItemsIntoFolder(dropEffect:DropEffect, data:HtmlNodeElement, folder:String) : Promise<Array<IIdeLibraryItem>>
 	{
-		return LibraryItems.drop(dropEffect, data, document, folder);
+		return LibraryDragAndDropTools.dropItemsIntoFolder(dropEffect, data, document, folder);
 	}
 	
 	public function getWithExandedFolders(items:Array<IIdeLibraryItem>) : Array<IIdeLibraryItem>

@@ -1,4 +1,4 @@
-package nanofl.ide.library.droppers;
+package nanofl.ide.library.dropprocessors;
 
 import js.JQuery;
 import htmlparser.XmlDocument;

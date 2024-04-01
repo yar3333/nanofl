@@ -4,6 +4,6 @@ import js.JQuery;
 
 interface IDropProcessor
 {
-	function getDragImageType(type:String, params:Dynamic) : DragImageType;
-    function processDrop(type:String, params:Dynamic, data:String, e:JqEvent) : Bool;
+	function getDragImageType(type:DragDataType, params:DragInfoParams) : DragImageType;
+    function processDrop(type:DragDataType, params:DragInfoParams, data:String, e:JqEvent) : Bool;
 }

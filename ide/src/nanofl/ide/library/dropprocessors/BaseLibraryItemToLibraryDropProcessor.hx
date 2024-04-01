@@ -1,5 +1,6 @@
-package nanofl.ide.library.droppers;
+package nanofl.ide.library.dropprocessors;
 
+import nanofl.ide.draganddrop.DragInfoParams;
 import js.html.DragEvent;
 import nanofl.ide.draganddrop.DragDataType;
 import js.JQuery;
@@ -20,14 +21,14 @@ abstract class BaseLibraryItemToLibraryDropProcessor extends InjectContainer
 	@inject var app : Application;
 	@inject var view : View;
 	
-	public function getDragImageType(type:String, params:Dynamic) : DragImageType
+	public function getDragImageType(type:DragDataType, params:DragInfoParams) : DragImageType
 	{
 		if (type != DragDataType.LIBRARYITEMS || view.library.readOnly) return null;
 
 		return DragImageType.ICON_TEXT(params.icon, params.text); // or namePath
 	}
 
-    final public function processDrop(type:String, params:Dynamic, data:String, e:JqEvent) : Bool
+    final public function processDrop(type:DragDataType, params:DragInfoParams, data:String, e:JqEvent) : Bool
     {
         if (type != DragDataType.LIBRARYITEMS || view.library.readOnly) return false;
         
@@ -43,7 +44,8 @@ abstract class BaseLibraryItemToLibraryDropProcessor extends InjectContainer
 		
 		final saveActiveItem = view.library.activeItem;
 		view.library.activeItem = null;
-		LibraryItems.drop(dropEffect, data, app.document, folder).then(droppedItems ->
+
+        app.document.library.dropItemsIntoFolder(dropEffect, data, folder).then(droppedItems ->
 		{
 			if (droppedItems.length > 0)
 			{

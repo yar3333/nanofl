@@ -1,5 +1,6 @@
 package components.nanofl.others.draganddrop;
 
+import nanofl.ide.draganddrop.DragInfoParams;
 import haxe.Json;
 import js.html.DragEvent;
 import js.html.File;
@@ -170,7 +171,7 @@ class Code extends wquery.Component
         });
 	}
 
-    static function getParamsFromEvent(jqEvent:JqEvent, type:String) : Dynamic
+    static function getParamsFromEvent(jqEvent:JqEvent, type:String) : DragInfoParams
     {
         final e : DragEvent = jqEvent.originalEvent;
         final key = e.dataTransfer.types.find(x -> x == type || x.startsWith(type + "|"));

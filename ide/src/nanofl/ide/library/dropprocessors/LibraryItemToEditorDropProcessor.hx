@@ -1,5 +1,6 @@
-package nanofl.ide.library.droppers;
+package nanofl.ide.library.dropprocessors;
 
+import nanofl.ide.draganddrop.DragInfoParams;
 import js.html.DragEvent;
 import nanofl.ide.draganddrop.DragDataType;
 import nanofl.ide.draganddrop.IDropProcessor;
@@ -23,7 +24,7 @@ class LibraryItemToEditorDropProcessor extends InjectContainer
 	@inject var app : Application;
 	@inject var view : View;
 	
-    public function getDragImageType(type:String, params:Dynamic) : DragImageType
+    public function getDragImageType(type:DragDataType, params:DragInfoParams) : DragImageType
 	{
 		if (type != DragDataType.LIBRARYITEMS) return null;
         if (params.width == null) return null;
@@ -38,7 +39,7 @@ class LibraryItemToEditorDropProcessor extends InjectContainer
 		);
 	}
 
-    public function processDrop(type:String, params:Dynamic, data:String, e:JqEvent) : Bool
+    public function processDrop(type:DragDataType, params:DragInfoParams, data:String, e:JqEvent) : Bool
     {
         if (type != DragDataType.LIBRARYITEMS) return false;
         
@@ -56,7 +57,7 @@ class LibraryItemToEditorDropProcessor extends InjectContainer
 		
 		if (app.document.id != data.getAttribute("documentID"))
 		{
-			app.document.library.drop(dropEffect, data, "").then(items ->
+			app.document.library.dropItemsIntoFolder(dropEffect, data, "").then(items ->
 			{
 				view.alerter.info("Items were added to library.");
 				processItem(app, view, app.document.library.getItem(namePath), e);

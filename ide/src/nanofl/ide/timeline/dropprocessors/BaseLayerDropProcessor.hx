@@ -1,5 +1,6 @@
-package nanofl.ide.timeline.droppers;
+package nanofl.ide.timeline.dropprocessors;
 
+import nanofl.ide.draganddrop.DragInfoParams;
 import js.html.DragEvent;
 import htmlparser.XmlDocument;
 import nanofl.ide.draganddrop.DragDataType;
@@ -27,13 +28,13 @@ abstract class BaseLayerDropProcessor extends InjectContainer
 	
 	var layers(get, never) : ArrayRO<Layer>; function get_layers() return pathItem.mcItem.layers;
 	
-    final public function getDragImageType(type:String, params:Dynamic) : DragImageType
+    final public function getDragImageType(type:DragDataType, params:DragInfoParams) : DragImageType
 	{
         if (type != DragDataType.LAYER) return null;
 		return DragImageType.ICON_TEXT(params.icon, params.text);
 	}
 
-    final public function processDrop(type:String, params:Dynamic, data:String, e:JqEvent) : Bool
+    final public function processDrop(type:DragDataType, params:DragInfoParams, data:String, e:JqEvent) : Bool
     {
         if (type != DragDataType.LAYER) return false;
         processDropInner((cast e.originalEvent:DragEvent).dataTransfer.dropEffect, new XmlDocument(data), e);

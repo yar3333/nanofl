@@ -1,4 +1,4 @@
-package nanofl.ide.timeline.droppers;
+package nanofl.ide.timeline.dropprocessors;
 
 import js.JQuery;
 import htmlparser.XmlDocument;

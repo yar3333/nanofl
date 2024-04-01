@@ -2,7 +2,7 @@ package components.nanofl.library.library;
 
 import js.html.File;
 import nanofl.ide.draganddrop.DragAndDrop;
-import nanofl.ide.library.droppers.LibraryItemToLibraryDropProcessor;
+import nanofl.ide.library.dropprocessors.LibraryItemToLibraryDropProcessor;
 
 @:rtti
 class Code extends components.nanofl.library.libraryview.Code

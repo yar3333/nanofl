@@ -19,7 +19,7 @@ import nanofl.ide.Application;
 import nanofl.ide.Globals;
 import nanofl.ide.draganddrop.DragAndDrop;
 import nanofl.ide.editor.EditorMouseEvent;
-import nanofl.ide.library.droppers.LibraryItemToEditorDropProcessor;
+import nanofl.ide.library.dropprocessors.LibraryItemToEditorDropProcessor;
 import nanofl.ide.navigator.PathItem;
 import nanofl.ide.preferences.Preferences;
 import nanofl.ide.ui.View;

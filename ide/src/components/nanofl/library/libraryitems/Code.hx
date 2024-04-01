@@ -1,5 +1,6 @@
 package components.nanofl.library.libraryitems;
 
+import nanofl.ide.library.dropprocessors.LibraryDragAndDropTools;
 import nanofl.ide.draganddrop.DragDataType;
 import nanofl.ide.draganddrop.AllowedDropEffect;
 import haxe.io.Path;
@@ -28,7 +29,7 @@ import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.Application;
 import nanofl.ide.ISymbol;
 import nanofl.ide.library.LibraryItems;
-import nanofl.ide.library.droppers.LibraryItemToLibraryItemDropProcessor;
+import nanofl.ide.library.dropprocessors.LibraryItemToLibraryItemDropProcessor;
 import nanofl.ide.navigator.PathItem;
 import nanofl.ide.ui.menu.ContextMenu;
 using stdlib.Lambda;
@@ -101,8 +102,8 @@ class Code extends wquery.Component
 				{
                     effect: AllowedDropEffect.copyMove,
                     type: DragDataType.LIBRARYITEMS,
-                    params: LibraryItems.getDragParams(app.document, item, app.document.library.getSelectedItemsWithDependencies()),
-                    data: LibraryItems.getDragData(app.document, item, app.document.library.getSelectedItemsWithDependencies()),
+                    params: LibraryDragAndDropTools.getDragParams(app.document, item, app.document.library.getSelectedItemsWithDependencies()),
+                    data: LibraryDragAndDropTools.getDragData(app.document, item, app.document.library.getSelectedItemsWithDependencies()),
                 };
 			});
 			

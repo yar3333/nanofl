@@ -32,9 +32,9 @@ import nanofl.ide.draganddrop.DragAndDrop;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.draganddrop.AllowedDropEffect;
 import nanofl.ide.timeline.ITimelineView;
-import nanofl.ide.timeline.droppers.LayerToHeaderTitleDropProcessor;
-import nanofl.ide.timeline.droppers.LayerToLayerDropProcessor;
-import nanofl.ide.timeline.droppers.LayerToTitleDropProcessor;
+import nanofl.ide.timeline.dropprocessors.LayerToHeaderTitleDropProcessor;
+import nanofl.ide.timeline.dropprocessors.LayerToLayerDropProcessor;
+import nanofl.ide.timeline.dropprocessors.LayerToTitleDropProcessor;
 import nanofl.ide.ui.AutoScrollHorizontally;
 import stdlib.Debug;
 import stdlib.Std;
@@ -456,7 +456,15 @@ class Code extends wquery.Component
                     { 
                         effect: AllowedDropEffect.move,
                         type: DragDataType.LAYER,
-                        params: { text:layer.name, icon:layer.getIcon(), layerIndex:layerIndex },
+                        params:
+                        { 
+                            documentId: document.id,
+
+                            icon: layer.getIcon(),
+                            text: layer.name, 
+                            
+                            timelineLayerIndex: layerIndex,
+                        },
                         data: xml.toString(),
                     };
 				});
