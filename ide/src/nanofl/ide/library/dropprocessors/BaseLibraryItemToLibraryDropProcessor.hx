@@ -45,7 +45,7 @@ abstract class BaseLibraryItemToLibraryDropProcessor extends InjectContainer
 		final saveActiveItem = view.library.activeItem;
 		view.library.activeItem = null;
 
-        app.document.library.dropItemsIntoFolder(dropEffect, data, folder).then(droppedItems ->
+        LibraryDragAndDropTools.dropItemsIntoFolder(dropEffect, data, app.document, folder).then(droppedItems ->
 		{
 			if (droppedItems.length > 0)
 			{

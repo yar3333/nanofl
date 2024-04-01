@@ -324,11 +324,6 @@ class EditorLibrary extends InjectContainer
 		update();
 	}
 	
-	public function dropItemsIntoFolder(dropEffect:DropEffect, data:HtmlNodeElement, folder:String) : Promise<Array<IIdeLibraryItem>>
-	{
-		return LibraryDragAndDropTools.dropItemsIntoFolder(dropEffect, data, document, folder);
-	}
-	
 	public function getWithExandedFolders(items:Array<IIdeLibraryItem>) : Array<IIdeLibraryItem>
 	{
 		var r = items.copy();

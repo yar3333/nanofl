@@ -57,7 +57,7 @@ class LibraryItemToEditorDropProcessor extends InjectContainer
 		
 		if (app.document.id != data.getAttribute("documentID"))
 		{
-			app.document.library.dropItemsIntoFolder(dropEffect, data, "").then(items ->
+			LibraryDragAndDropTools.dropItemsIntoFolder(dropEffect, data, app.document, "").then(items ->
 			{
 				view.alerter.info("Items were added to library.");
 				processItem(app, view, app.document.library.getItem(namePath), e);
