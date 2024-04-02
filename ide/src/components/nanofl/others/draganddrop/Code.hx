@@ -1,11 +1,12 @@
 package components.nanofl.others.draganddrop;
 
-import nanofl.ide.draganddrop.DragDataType;
-import nanofl.ide.draganddrop.DragInfoParams;
 import haxe.Json;
+import js.JQuery;
 import js.html.DragEvent;
 import js.html.File;
-import js.JQuery;
+import haxe.crypto.BaseCode;
+import nanofl.ide.draganddrop.DragDataType;
+import nanofl.ide.draganddrop.DragInfoParams;
 import nanofl.ide.draganddrop.DragInfo;
 import nanofl.ide.draganddrop.DragImageType;
 import nanofl.ide.draganddrop.DropEffect;
@@ -16,6 +17,8 @@ using stdlib.StringTools;
 class Code extends wquery.Component
 	implements IDragAndDrop
 {
+    static final safeEncoder = new BaseCode(haxe.io.Bytes.ofString("abcdefghijklmnopqrstuvwxyz012345"));
+
 	var lastDragEnter : js.html.Element;
 	
 	/**
@@ -38,7 +41,7 @@ class Code extends wquery.Component
             if (info?.effect == null) { e.preventDefault(); return; }
 
             e.dataTransfer.effectAllowed = info.effect;
-            e.dataTransfer.setData(info.type + "|" + Json.stringify(info.params), info.data);
+            e.dataTransfer.setData(info.type + "|" + safeEncoder.encodeString(Json.stringify(info.params)), info.data);
             e.dataTransfer.setDragImage(new JQuery("<div/>")[0], 0, 0);
 		});
 		
@@ -177,7 +180,7 @@ class Code extends wquery.Component
         final key = e.dataTransfer.types.find(x -> x == type || x.startsWith(type + "|"));
         final n = key.indexOf("|");
         if (n < 0) return null;
-        return Json.parse(key.substr(n + 1));
+        return Json.parse(safeEncoder.decodeString(key.substr(n + 1)));
     }
 
     static function getDataFromEvent(jqEvent:JqEvent, type:String) : String
