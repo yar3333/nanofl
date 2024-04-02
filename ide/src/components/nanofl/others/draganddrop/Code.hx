@@ -197,6 +197,6 @@ class Code extends wquery.Component
 	
 	static function log(v:Dynamic, ?infos:haxe.PosInfos)
 	{
-		trace(Reflect.isFunction(v) ? v() : v, infos);
+		//trace(Reflect.isFunction(v) ? v() : v, infos);
 	}
 }

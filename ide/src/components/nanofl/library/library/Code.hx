@@ -31,14 +31,16 @@ class Code extends components.nanofl.library.libraryview.Code
 				template().container,
                 null,
                 (type, params) -> LibraryDragAndDropTools.getDragImageTypeIconText(view, type, params),
+
                 (type, params, data, e) ->
                 {
                     if (type != DragDataType.LIBRARYITEMS || view.library.readOnly) return false;
                     
                     final dropEffect = (cast e.originalEvent:DragEvent).dataTransfer.dropEffect;                                        
-                    LibraryDragAndDropTools.dropToLibraryItemsFolder(app.document, view, dropEffect, new XmlDocument(data), "");
+                    LibraryDragAndDropTools.dropToLibraryItemsFolder(app.document, view, dropEffect, params, new XmlDocument(data), "");
                     return true;
                 },
+                
 				(files:Array<File>, _) ->
 				{
 					app.document.library.addUploadedFiles(files, "");

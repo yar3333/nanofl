@@ -117,7 +117,16 @@ class EditorGroup extends BaseGroup
 	
 	function translateSelected(dx:Float, dy:Float)
 	{
-        var k = 100 / app.document.editor.zoomLevel;
-        app.document.editor.translateSelected(dx * k, dy * k);
+        if (app.document.editor.zoomLevel < 400)
+        {
+            dx = Math.round(dx);
+            dy = Math.round(dy);
+        }
+        else
+        {
+            dx = Math.round(dx) / 10;
+            dy = Math.round(dy) / 10;
+        }
+        app.document.editor.translateSelected(dx, dy);
 	}
 }

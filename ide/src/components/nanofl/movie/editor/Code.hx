@@ -1,5 +1,6 @@
 package components.nanofl.movie.editor;
 
+import nanofl.ide.ActiveView;
 import nanofl.ide.library.LibraryDragAndDropTools;
 import htmlparser.XmlDocument;
 import js.html.DragEvent;
@@ -127,6 +128,7 @@ class Code extends wquery.Component
                 {
                     if (type != DragDataType.LIBRARYITEMS) return false;
                     LibraryDragAndDropTools.dropIntoEditor(app.document, view, type, params, data, e);
+                    app.setActiveView(ActiveView.EDITOR, e);
                     return true;
                 },
 				(files, e) ->
@@ -135,6 +137,7 @@ class Code extends wquery.Component
 					app.document.library.addUploadedFiles(files, "").then(items ->
 					{
 						for (item in items) LibraryDragAndDropTools.addLibraryItemIntoEditor(app.document, view, item, e);
+                        app.setActiveView(ActiveView.EDITOR, e);
 					});
 				}
 			);

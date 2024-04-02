@@ -113,7 +113,7 @@ class Code extends wquery.Component
                 ">li",
                 (type, params) -> LibraryDragAndDropTools.getDragImageTypeIconText(view, type, params),
 
-                (type:DragDataType, params:DragInfoParams, data:String, e:JqEvent) ->
+                (type, params, data, e) ->
                 {
                     if (type != DragDataType.LIBRARYITEMS || view.library.readOnly) return false;
                     
@@ -124,13 +124,15 @@ class Code extends wquery.Component
                     (
                         app.document, 
                         view, 
-                        dropEffect, 
+                        dropEffect,
+                        params,
                         new XmlDocument(data), 
                         LibraryDragAndDropTools.getTargetFolderForDrop(app.document, namePath)
                     );
                     return true;
                 },
-				(files:Array<File>, e:JqEvent) ->
+                
+				(files, e) ->
 				{
 					if (readOnly) return;
 

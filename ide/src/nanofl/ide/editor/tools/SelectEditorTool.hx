@@ -147,9 +147,16 @@ class SelectEditorTool extends EditorTool
 				}
 				
 			case MouseMode.TRANSLATE_SELECTED:
-				editor.translateSelected( -accumDX + pos.x - startPos.x, -accumDY + pos.y - startPos.y, true);
-				accumDX = pos.x - startPos.x;
-				accumDY = pos.y - startPos.y;
+				var dx = pos.x - startPos.x;
+				var dy = pos.y - startPos.y;
+                if (editor.zoomLevel < 400)
+                {
+                    dx = Math.round(dx);
+                    dy = Math.round(dy);
+                }
+                editor.translateSelected( -accumDX + dx, -accumDY + dy, true);
+				accumDX = dx;
+				accumDY = dy;
 				if (editor.figure.hasSelected()) e.invalidateEditorShapes();
 				else                             e.invalidateEditorLight();
 				

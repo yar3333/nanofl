@@ -170,6 +170,8 @@ class Editor extends InjectContainer
 	
 	public function selectWoUpdate(obj:ISelectable, deselectOthers=true)
 	{
+        log("editor.selectWoUpdate");
+
 		var changed = false;
 		
 		if (deselectOthers)
@@ -195,6 +197,8 @@ class Editor extends InjectContainer
 	
 	public function deselectWoUpdate(obj:ISelectable)
 	{
+        log("editor.deselectWoUpdate");
+
 		var changed = false;
 		
 		if (obj != null && obj.selected)
@@ -405,14 +409,14 @@ class Editor extends InjectContainer
 		if (!Std.isOfType(element, Instance) || isItemCanBeAdded(cast((cast element:Instance).symbol, IIdeLibraryItem)))
 		{
 			if (addUndoTransaction) document.undoQueue.beginTransaction({ elements:true });
-			var r = activeLayer.addElement(element);
-			rebind();
+			final r = activeLayer.addElement(element);
+			//rebind(); // `rebind()` recreate `EditorElement` so returned `r` became unused!
 			if (addUndoTransaction) document.undoQueue.commitTransaction();
 			return r;
 		}
 		else
 		{
-			js.Browser.alert("Can't add symbol '" + cast(element, Instance).namePath + "' due recursion.");
+			view.alerter.error("Can't add symbol '" + (cast element:Instance).namePath + "': recursion detected.");
 			return null;
 		}
 	}
@@ -898,5 +902,10 @@ class Editor extends InjectContainer
 			view.movie.editor.viewX = savedViewState.x;
 			view.movie.editor.viewY = savedViewState.y;
 		}
+	}
+	
+	static function log(v:Dynamic, ?infos:haxe.PosInfos)
+	{
+		//haxe.Log.trace(Reflect.isFunction(v) ? v() : v, infos);
 	}
 }

@@ -95,7 +95,7 @@ class LibraryDragAndDropTools
         // so reference to item may became bad
         if (document.id != params.documentId)
         {
-            LibraryDragAndDropTools.dropItemsIntoFolderInner(dropEffect, new XmlDocument(data), document, "").then(items ->
+            LibraryDragAndDropTools.dropItemsIntoFolderInner(document, dropEffect, params, new XmlDocument(data), "").then(items ->
             {
                 view.alerter.info("Items were added to library.");
                 LibraryDragAndDropTools.addLibraryItemIntoEditor(document, view, document.library.getItem(params.libraryItemNamePath), e);
@@ -107,14 +107,14 @@ class LibraryDragAndDropTools
         }
     }
 
-	public static function dropToLibraryItemsFolder(document:Document, view:View, dropEffect:DropEffect, data:XmlDocument, folder:String)
+	public static function dropToLibraryItemsFolder(document:Document, view:View, dropEffect:DropEffect, params:DragInfoParams, data:XmlDocument, folder:String)
 	{
 		Debug.assert(folder != null);
 		
 		final saveActiveItem = view.library.activeItem;
 		view.library.activeItem = null;
 
-        LibraryDragAndDropTools.dropItemsIntoFolderInner(dropEffect, data, document, folder).then(droppedItems ->
+        LibraryDragAndDropTools.dropItemsIntoFolderInner(document, dropEffect, params, data, folder).then(droppedItems ->
 		{
 			if (droppedItems.length > 0)
 			{
@@ -129,15 +129,13 @@ class LibraryDragAndDropTools
 		});
 	}    
 	
-	static function dropItemsIntoFolderInner(dropEffect:DropEffect, data:HtmlNodeElement, document:Document, folder:String) : Promise<Array<IIdeLibraryItem>>
+	static function dropItemsIntoFolderInner(document:Document, dropEffect:DropEffect, params:DragInfoParams, data:HtmlNodeElement, folder:String) : Promise<Array<IIdeLibraryItem>>
 	{
 		Debug.assert(folder != null);
 		
-		var sourceDocumentID = data.getAttribute("documentID");
-		
 		log("LibraryItems.drop");
 		
-		if (document.id == sourceDocumentID)
+		if (document.id == params.documentId)
 		{
 			log("\tjust rename");
 			
@@ -228,33 +226,39 @@ class LibraryDragAndDropTools
 
 	public static function addLibraryItemIntoEditor(document:Document, view:View, item:IIdeLibraryItem, e:JqEvent)
 	{
-		log("editor.dropLibraryItem");
+		log("addLibraryItemIntoEditor");
 		
-		if (document.navigator.pathItem.getTotalFrames() == 0) { view.alerter.error("There is no frame to drop into."); return; }
+		if (document.navigator.pathItem.frame == null) { view.alerter.error("There is no frame to drop into."); return; }
 		
-		if (Std.isOfType(item, InstancableItem))
-		{
-			addElementIntoEditor(document, view, (cast item:InstancableItem).newInstance(), e);
-		}
-		else
-		{
-			view.alerter.error("Items of the type '" + item.type + "' can't be added on the scene.");
-		}
+		if (!Std.isOfType(item, InstancableItem)) { view.alerter.error("Items of the type '" + item.type + "' can't be added to the scene."); return; }
+
+        final instance = (cast item:InstancableItem).newInstance();
+
+		final obj = instance.createDisplayObject();
+		final bounds = DisplayObjectTools.getInnerBounds(obj) ?? new Rectangle(0, 0, 0, 0);
+		
+		final pt = view.movie.editor.getMousePosOnDisplayObject(e);
+
+        var dx = pt.x - bounds.x - bounds.width  / 2;
+        var dy = pt.y - bounds.y - bounds.height / 2;
+
+        if (document.editor.zoomLevel < 400)
+        {
+            dx = Math.round(dx);
+            dy = Math.round(dy);
+        }
+        else
+        {
+            dx = Math.round(dx * 10) / 10;
+            dy = Math.round(dy * 10) / 10;
+        }
+		
+		instance.translate(dx, dy);
+
+        final editorElement = document.editor.addElement(instance);
+        document.editor.select(editorElement);
 	}
 	
-	static function addElementIntoEditor(document:Document, view:View, element:Element, e:JqEvent)
-	{
-		var obj = element.createDisplayObject();
-		var bounds = DisplayObjectTools.getInnerBounds(obj);
-		
-		if (bounds == null) bounds = new Rectangle(0, 0, 0, 0);
-		
-		var pt = view.movie.editor.getMousePosOnDisplayObject(e);
-		
-		element.translate(pt.x - bounds.x - bounds.width / 2, pt.y - bounds.y - bounds.height / 2);
-		document.editor.addElement(element);
-	}
-
 	public static function getTargetFolderForDrop(document:Document, namePath:String) : String
 	{
 		var folder = namePath;
@@ -268,6 +272,6 @@ class LibraryDragAndDropTools
 	
     static function log(v:Dynamic, ?infos:haxe.PosInfos)
 	{
-		//trace(Reflect.isFunction(v) ? v() : v, infos);
+		trace(Reflect.isFunction(v) ? v() : v, infos);
 	}
 }
