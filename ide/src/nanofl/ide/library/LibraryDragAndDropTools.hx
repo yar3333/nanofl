@@ -1,5 +1,6 @@
 package nanofl.ide.library;
 
+import js.html.DragEvent;
 import nanofl.engine.elements.Element;
 import easeljs.geom.Rectangle;
 import js.JQuery.JqEvent;
@@ -84,7 +85,27 @@ class LibraryDragAndDropTools
 			Math.round(params.width  * k),
 			Math.round(params.height * k)
 		);
-	}    
+	}
+
+    public static function dropIntoEditor(document:Document, view:View, type:DragDataType, params:DragInfoParams, data:String, e:JqEvent) : Void
+    {
+        final dropEffect = (cast e.originalEvent:DragEvent).dataTransfer.dropEffect;
+        
+        // don't get item here, because app.document.library.drop may reload items
+        // so reference to item may became bad
+        if (document.id != params.documentId)
+        {
+            LibraryDragAndDropTools.dropItemsIntoFolderInner(dropEffect, new XmlDocument(data), document, "").then(items ->
+            {
+                view.alerter.info("Items were added to library.");
+                LibraryDragAndDropTools.addLibraryItemIntoEditor(document, view, document.library.getItem(params.libraryItemNamePath), e);
+            });
+        }
+        else
+        {
+            LibraryDragAndDropTools.addLibraryItemIntoEditor(document, view, document.library.getItem(params.libraryItemNamePath), e);
+        }
+    }
 
 	public static function dropToLibraryItemsFolder(document:Document, view:View, dropEffect:DropEffect, data:XmlDocument, folder:String)
 	{
@@ -108,7 +129,7 @@ class LibraryDragAndDropTools
 		});
 	}    
 	
-	public static function dropItemsIntoFolderInner(dropEffect:DropEffect, data:HtmlNodeElement, document:Document, folder:String) : Promise<Array<IIdeLibraryItem>>
+	static function dropItemsIntoFolderInner(dropEffect:DropEffect, data:HtmlNodeElement, document:Document, folder:String) : Promise<Array<IIdeLibraryItem>>
 	{
 		Debug.assert(folder != null);
 		
@@ -205,15 +226,15 @@ class LibraryDragAndDropTools
 		return r;
 	}
 
-	public static function addLibraryItemIntoEditor(app:Application, view:View, item:IIdeLibraryItem, e:JqEvent)
+	public static function addLibraryItemIntoEditor(document:Document, view:View, item:IIdeLibraryItem, e:JqEvent)
 	{
 		log("editor.dropLibraryItem");
 		
-		if (app.document.navigator.pathItem.getTotalFrames() == 0) { view.alerter.error("There is no frame to drop into."); return; }
+		if (document.navigator.pathItem.getTotalFrames() == 0) { view.alerter.error("There is no frame to drop into."); return; }
 		
 		if (Std.isOfType(item, InstancableItem))
 		{
-			addElementIntoEditor(app, view, (cast item:InstancableItem).newInstance(), e);
+			addElementIntoEditor(document, view, (cast item:InstancableItem).newInstance(), e);
 		}
 		else
 		{
@@ -221,7 +242,7 @@ class LibraryDragAndDropTools
 		}
 	}
 	
-	static function addElementIntoEditor(app:Application, view:View, element:Element, e:JqEvent)
+	static function addElementIntoEditor(document:Document, view:View, element:Element, e:JqEvent)
 	{
 		var obj = element.createDisplayObject();
 		var bounds = DisplayObjectTools.getInnerBounds(obj);
@@ -231,7 +252,7 @@ class LibraryDragAndDropTools
 		var pt = view.movie.editor.getMousePosOnDisplayObject(e);
 		
 		element.translate(pt.x - bounds.x - bounds.width / 2, pt.y - bounds.y - bounds.height / 2);
-		app.document.editor.addElement(element);
+		document.editor.addElement(element);
 	}
 
 	public static function getTargetFolderForDrop(document:Document, namePath:String) : String

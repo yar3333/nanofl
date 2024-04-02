@@ -126,26 +126,7 @@ class Code extends wquery.Component
                 (type, params, data, e) ->
                 {
                     if (type != DragDataType.LIBRARYITEMS) return false;
-
-                    final dropEffect = (cast e.originalEvent:DragEvent).dataTransfer.dropEffect;
-
-                    log("editor.drop data");
-                    
-                    // don't get item here, because app.document.library.drop may reload items
-                    // so reference to item may became bad
-                    if (app.document.id != params.documentId)
-                    {
-                        LibraryDragAndDropTools.dropItemsIntoFolderInner(dropEffect, new XmlDocument(data), app.document, "").then(items ->
-                        {
-                            view.alerter.info("Items were added to library.");
-                            LibraryDragAndDropTools.addLibraryItemIntoEditor(app, view, app.document.library.getItem(params.libraryItemNamePath), e);
-                        });
-                    }
-                    else
-                    {
-                        LibraryDragAndDropTools.addLibraryItemIntoEditor(app, view, app.document.library.getItem(params.libraryItemNamePath), e);
-                    }
-
+                    LibraryDragAndDropTools.dropIntoEditor(app.document, view, type, params, data, e);
                     return true;
                 },
 				(files, e) ->
@@ -153,7 +134,7 @@ class Code extends wquery.Component
 					log("editor.drop files");
 					app.document.library.addUploadedFiles(files, "").then(items ->
 					{
-						for (item in items) LibraryDragAndDropTools.addLibraryItemIntoEditor(app, view, item, e);
+						for (item in items) LibraryDragAndDropTools.addLibraryItemIntoEditor(app.document, view, item, e);
 					});
 				}
 			);
