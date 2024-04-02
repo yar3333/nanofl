@@ -1,6 +1,9 @@
 package components.nanofl.library.libraryitems;
 
-import nanofl.ide.library.dropprocessors.LibraryDragAndDropTools;
+import nanofl.ide.library.LibraryDragAndDropTools;
+import htmlparser.XmlDocument;
+import js.html.DragEvent;
+import nanofl.ide.draganddrop.DragInfoParams;
 import nanofl.ide.draganddrop.DragDataType;
 import nanofl.ide.draganddrop.AllowedDropEffect;
 import haxe.io.Path;
@@ -29,7 +32,6 @@ import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.Application;
 import nanofl.ide.ISymbol;
 import nanofl.ide.library.LibraryItems;
-import nanofl.ide.library.dropprocessors.LibraryItemToLibraryItemDropProcessor;
 import nanofl.ide.navigator.PathItem;
 import nanofl.ide.ui.menu.ContextMenu;
 using stdlib.Lambda;
@@ -109,24 +111,45 @@ class Code extends wquery.Component
 			
 			api.droppable
 			(
-				template().content, ">li",
-                new LibraryItemToLibraryItemDropProcessor(),
+				template().content, 
+                ">li",
+                (type, params) -> LibraryDragAndDropTools.getDragImageTypeIconText(view, type, params),
+
+                (type:DragDataType, params:DragInfoParams, data:String, e:JqEvent) ->
+                {
+                    if (type != DragDataType.LIBRARYITEMS || view.library.readOnly) return false;
+                    
+                    final dropEffect = (cast e.originalEvent:DragEvent).dataTransfer.dropEffect;                    
+                    final namePath = e.currentTarget.getAttribute("data-name-path");
+
+                    LibraryDragAndDropTools.dropToLibraryItemsFolder
+                    (
+                        app.document, 
+                        view, 
+                        dropEffect, 
+                        new XmlDocument(data), 
+                        LibraryDragAndDropTools.getTargetFolderForDrop(app.document, namePath)
+                    );
+                    return true;
+                },
 				(files:Array<File>, e:JqEvent) ->
 				{
 					if (readOnly) return;
+
+                    final namePath = e.currentTarget.getAttribute("data-name-path");
 					
-					app.document.library.addUploadedFiles(files, LibraryItemToLibraryItemDropProcessor.getTargetFolderForDrop(app, e));
+					app.document.library.addUploadedFiles(files, LibraryDragAndDropTools.getTargetFolderForDrop(app.document, namePath));
 				}
 			);
 		});
 		
-		template().content.on("click", ">li", function(e:JqEvent)
+		template().content.on("click", ">li", (e:JqEvent) ->
 		{
 			//trace("click on " + e.currentTarget.id);
-			var element = new JQuery(e.currentTarget);
-			var index = element.index();
-			var namePath = element.attr("data-name-path");
-			var elements = getElements();
+			final element = new JQuery(e.currentTarget);
+			final index = element.index();
+			final namePath = element.attr("data-name-path");
+			final elements = getElements();
 			
 			if (e.ctrlKey)
 			{
@@ -157,10 +180,10 @@ class Code extends wquery.Component
 			if (preview != null) preview.item = active;
 		});
 		
-		template().content.on("dblclick", ">li", function(e:JqEvent)
+		template().content.on("dblclick", ">li", (e:JqEvent) ->
 		{
-			var element = new JQuery(e.currentTarget);
-			var item = app.document.library.getItem(element.attr("data-name-path"));
+			final element = new JQuery(e.currentTarget);
+			final item = app.document.library.getItem(element.attr("data-name-path"));
 			
 			if (Std.isOfType(item, FolderItem))
 			{

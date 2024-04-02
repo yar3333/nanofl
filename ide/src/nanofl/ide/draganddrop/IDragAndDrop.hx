@@ -11,5 +11,5 @@ interface IDragAndDrop
 	 */
 	function draggable(elem:JQuery, selector:String, getInfo:(e:JqEvent)->DragInfo, ?removeMoved:DragInfo->Void) : Void;
 	
-    function droppable(elem:JQuery, ?selector:String, dropProcessor:IDropProcessor, ?dropFilesProcessor:Array<File>->JqEvent->Void) : Void;
+	function droppable(elem:JQuery, ?selector:String, getDragImageType:(type:DragDataType, params:DragInfoParams)->DragImageType, processDropData:(type:DragDataType, params:DragInfoParams, data:String, e:JqEvent)->Bool, ?processDropFiles:Array<File>->JqEvent->Void) : Void;
 }

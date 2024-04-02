@@ -14,11 +14,6 @@ typedef DragInfo = {
 		        You can access these parameters on `dragenter`/`dragover`.
 		    
 	**/
-	var params(default, never) : Dynamic;
-	/**
-		
-		        Any string. Used in `drops` as key.
-		    
-	**/
-	var type(default, never) : String;
+	var params(default, never) : nanofl.ide.draganddrop.DragInfoParams;
+	var type(default, never) : nanofl.ide.draganddrop.DragDataType;
 };

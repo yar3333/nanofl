@@ -1,5 +1,8 @@
 package components.nanofl.movie.timeline;
 
+import js.html.DragEvent;
+import nanofl.ide.draganddrop.DragInfoParams;
+import nanofl.ide.timeline.LayerDragAndDropTools;
 import nanofl.ide.draganddrop.DragDataType;
 import js.JQuery;
 import js.Browser;
@@ -32,9 +35,6 @@ import nanofl.ide.draganddrop.DragAndDrop;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.draganddrop.AllowedDropEffect;
 import nanofl.ide.timeline.ITimelineView;
-import nanofl.ide.timeline.dropprocessors.LayerToHeaderTitleDropProcessor;
-import nanofl.ide.timeline.dropprocessors.LayerToLayerDropProcessor;
-import nanofl.ide.timeline.dropprocessors.LayerToTitleDropProcessor;
 import nanofl.ide.ui.AutoScrollHorizontally;
 import stdlib.Debug;
 import stdlib.Std;
@@ -153,8 +153,37 @@ class Code extends wquery.Component
 		
 		dragAndDrop.ready.then(api ->
 		{
-			api.droppable(template().headerTitle, new LayerToHeaderTitleDropProcessor());
-			api.droppable(template().content, new LayerToLayerDropProcessor(template().content));
+			api.droppable
+            (
+                template().headerTitle,
+                null,
+                LayerDragAndDropTools.getDragImageType,
+                (type:DragDataType, params:DragInfoParams, data:String, e:JqEvent) ->
+                {
+                    if (type != DragDataType.LAYER) return false;
+                    LayerDragAndDropTools.moveLayer(app.document, view.movie.timeline, params.timelineLayerIndex, 0);                    
+                    return true;
+                }    
+            );
+			
+            api.droppable
+            (
+                template().content,
+                null,
+                LayerDragAndDropTools.getDragImageType,
+                (type:DragDataType, params:DragInfoParams, data:String, e:JqEvent) ->
+                {
+                    if (type != DragDataType.LAYER) return false;
+                    
+                    final lastLayerRow = template().content.children(":last-child");
+                    if (lastLayerRow.length == 0 || e.pageY > lastLayerRow.offset().top + lastLayerRow.height())
+                    {
+                        LayerDragAndDropTools.moveLayer(app.document, view.movie.timeline, params.timelineLayerIndex, app.document.navigator.pathItem.mcItem.layers.length);
+                    }
+
+                    return true;
+                }
+            );
 		});
 		
 		var padLeft = template().buttons.width();
@@ -469,7 +498,18 @@ class Code extends wquery.Component
                     };
 				});
 				
-				api.droppable(title, new LayerToTitleDropProcessor(t.q("#layerRow")));
+				api.droppable
+                (
+                    title,
+                    LayerDragAndDropTools.getDragImageType,
+                    (type:DragDataType, params:DragInfoParams, data:String, e:JqEvent) ->
+                    {
+                        if (type != DragDataType.LAYER) return false;
+                        LayerDragAndDropTools.moveLayer(app.document, view.movie.timeline, params.timelineLayerIndex, t.q("#layerRow").index());
+                        return true;
+                    }
+                );
+
 			});
 		}
 		

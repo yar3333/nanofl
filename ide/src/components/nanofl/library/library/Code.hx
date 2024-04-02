@@ -1,8 +1,12 @@
 package components.nanofl.library.library;
 
+import js.html.DragEvent;
 import js.html.File;
+import htmlparser.XmlDocument;
 import nanofl.ide.draganddrop.DragAndDrop;
-import nanofl.ide.library.dropprocessors.LibraryItemToLibraryDropProcessor;
+import nanofl.ide.draganddrop.DragDataType;
+import nanofl.ide.library.LibraryDragAndDropTools;
+import nanofl.ide.ui.View;
 
 @:rtti
 class Code extends components.nanofl.library.libraryview.Code
@@ -14,6 +18,7 @@ class Code extends components.nanofl.library.libraryview.Code
 	};
 	
 	@inject var dragAndDrop : DragAndDrop;
+	@inject var view : View;
 	
 	override function init()
 	{
@@ -24,7 +29,16 @@ class Code extends components.nanofl.library.libraryview.Code
 			api.droppable
 			(
 				template().container,
-				new LibraryItemToLibraryDropProcessor(),
+                null,
+                (type, params) -> LibraryDragAndDropTools.getDragImageTypeIconText(view, type, params),
+                (type, params, data, e) ->
+                {
+                    if (type != DragDataType.LIBRARYITEMS || view.library.readOnly) return false;
+                    
+                    final dropEffect = (cast e.originalEvent:DragEvent).dataTransfer.dropEffect;                                        
+                    LibraryDragAndDropTools.dropToLibraryItemsFolder(app.document, view, dropEffect, new XmlDocument(data), "");
+                    return true;
+                },
 				(files:Array<File>, _) ->
 				{
 					app.document.library.addUploadedFiles(files, "");

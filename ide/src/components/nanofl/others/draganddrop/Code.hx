@@ -1,5 +1,6 @@
 package components.nanofl.others.draganddrop;
 
+import nanofl.ide.draganddrop.DragDataType;
 import nanofl.ide.draganddrop.DragInfoParams;
 import haxe.Json;
 import js.html.DragEvent;
@@ -9,7 +10,6 @@ import nanofl.ide.draganddrop.DragInfo;
 import nanofl.ide.draganddrop.DragImageType;
 import nanofl.ide.draganddrop.DropEffect;
 import nanofl.ide.draganddrop.IDragAndDrop;
-import nanofl.ide.draganddrop.IDropProcessor;
 using stdlib.Lambda;
 using stdlib.StringTools;
 
@@ -53,7 +53,7 @@ class Code extends wquery.Component
 		});
 	}
 	
-	public function droppable(elem:JQuery, ?selector:String, dropProcessor:IDropProcessor, ?dropFilesProcessor:Array<File>->JqEvent->Void) : Void
+	public function droppable(elem:JQuery, ?selector:String, getDragImageType:(type:DragDataType, params:DragInfoParams)->DragImageType, processDropData:(type:DragDataType, params:DragInfoParams, data:String, e:JqEvent)->Bool, ?processDropFiles:Array<File>->JqEvent->Void) : Void
 	{
 		function onDragEnter(e:JqEvent)
 		{
@@ -66,7 +66,7 @@ class Code extends wquery.Component
 
             for (type in getTypesFromEvent(e))
             {
-                final dragImageType = dropProcessor.getDragImageType(type, getParamsFromEvent(e, type));
+                final dragImageType = getDragImageType(type, getParamsFromEvent(e, type));
                 if (dragImageType == null) continue;
                 
                 log("dragenter dragImageType = " + dragImageType);
@@ -150,12 +150,12 @@ class Code extends wquery.Component
 
             for (type in getTypesFromEvent(e))
             {
-                if (dropProcessor.processDrop(type, getParamsFromEvent(e, type), getDataFromEvent(e, type), e)) break;
+                if (processDropData(type, getParamsFromEvent(e, type), getDataFromEvent(e, type), e)) break;
             }
 			
-			if (dropFilesProcessor != null && (cast e.originalEvent:DragEvent).dataTransfer.files.length > 0)
+			if (processDropFiles != null && (cast e.originalEvent:DragEvent).dataTransfer.files.length > 0)
 			{
-				dropFilesProcessor(cast JQuery.makeArray((cast e.originalEvent:DragEvent).dataTransfer.files), e);
+				processDropFiles(cast JQuery.makeArray((cast e.originalEvent:DragEvent).dataTransfer.files), e);
 			}
 		});
 	}

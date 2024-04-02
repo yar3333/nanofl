@@ -12,6 +12,7 @@ interface ITimelineView {
 	function updateFrames(?isUpdateHeader:Bool):Void;
 	function updateHeader():Void;
 	function updateActiveFrame():Void;
+	function update():Void;
 	function play():Void;
 	function stop():Void;
 	function setSelectedLayerType(type:String):Void;

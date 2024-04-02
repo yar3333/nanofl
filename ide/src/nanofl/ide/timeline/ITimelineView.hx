@@ -15,6 +15,7 @@ interface ITimelineView
 	function updateFrames(isUpdateHeader:Bool=true) : Void;
 	function updateHeader() : Void;
 	function updateActiveFrame() : Void;
+	function update() : Void;
 	
 	function play() : Void;
 	function stop() : Void;

@@ -41,7 +41,6 @@ extern class EditorLibrary extends nanofl.ide.InjectContainer {
 	function selectUnusedItems():Void;
 	function removeUnusedItems():Void;
 	function optimize():Void;
-	function drop(dropEffect:nanofl.ide.draganddrop.DropEffect, data:htmlparser.HtmlNodeElement, folder:String):js.lib.Promise<Array<nanofl.ide.libraryitems.IIdeLibraryItem>>;
 	function getWithExandedFolders(items:Array<nanofl.ide.libraryitems.IIdeLibraryItem>):Array<nanofl.ide.libraryitems.IIdeLibraryItem>;
 	function fixErrors():Void;
 	function publishItems(settings:nanofl.ide.PublishSettings, destDir:String):nanofl.ide.library.IdeLibrary;

@@ -1,5 +1,10 @@
 package components.nanofl.movie.editor;
 
+import nanofl.ide.library.LibraryDragAndDropTools;
+import htmlparser.XmlDocument;
+import js.html.DragEvent;
+import nanofl.ide.draganddrop.DragInfoParams;
+import nanofl.ide.draganddrop.DragDataType;
 import js.lib.Promise;
 import js.JQuery;
 import js.html.CanvasElement;
@@ -19,7 +24,6 @@ import nanofl.ide.Application;
 import nanofl.ide.Globals;
 import nanofl.ide.draganddrop.DragAndDrop;
 import nanofl.ide.editor.EditorMouseEvent;
-import nanofl.ide.library.dropprocessors.LibraryItemToEditorDropProcessor;
 import nanofl.ide.navigator.PathItem;
 import nanofl.ide.preferences.Preferences;
 import nanofl.ide.ui.View;
@@ -117,13 +121,39 @@ class Code extends wquery.Component
 			api.droppable
 			(
 				template().content,
-				new LibraryItemToEditorDropProcessor(),
-				(files:Array<File>, e:JqEvent) ->
+                null,
+                (type, params) -> LibraryDragAndDropTools.getDragImageTypeRectangle(app.document, type, params),
+                (type, params, data, e) ->
+                {
+                    if (type != DragDataType.LIBRARYITEMS) return false;
+
+                    final dropEffect = (cast e.originalEvent:DragEvent).dataTransfer.dropEffect;
+
+                    log("editor.drop data");
+                    
+                    // don't get item here, because app.document.library.drop may reload items
+                    // so reference to item may became bad
+                    if (app.document.id != params.documentId)
+                    {
+                        LibraryDragAndDropTools.dropItemsIntoFolderInner(dropEffect, new XmlDocument(data), app.document, "").then(items ->
+                        {
+                            view.alerter.info("Items were added to library.");
+                            LibraryDragAndDropTools.addLibraryItemIntoEditor(app, view, app.document.library.getItem(params.libraryItemNamePath), e);
+                        });
+                    }
+                    else
+                    {
+                        LibraryDragAndDropTools.addLibraryItemIntoEditor(app, view, app.document.library.getItem(params.libraryItemNamePath), e);
+                    }
+
+                    return true;
+                },
+				(files, e) ->
 				{
 					log("editor.drop files");
-					app.document.library.addUploadedFiles(files, "").then((items:Array<IIdeLibraryItem>) ->
+					app.document.library.addUploadedFiles(files, "").then(items ->
 					{
-						for (item in items) LibraryItemToEditorDropProcessor.processItem(app, view, item, e);
+						for (item in items) LibraryDragAndDropTools.addLibraryItemIntoEditor(app, view, item, e);
 					});
 				}
 			);
