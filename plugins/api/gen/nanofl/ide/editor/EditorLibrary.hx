@@ -31,6 +31,7 @@ extern class EditorLibrary extends nanofl.ide.InjectContainer {
 	function gotoPrevItem(overwriteSelection:Bool):Void;
 	function gotoNextItem(overwriteSelection:Bool):Void;
 	function showPropertiesPopup():Void;
+	function select(namePaths:Array<String>):Void;
 	function createEmptyMovieClip():Void;
 	function createFolder():Void;
 	function importFiles(?folderPath:String):js.lib.Promise<{ }>;

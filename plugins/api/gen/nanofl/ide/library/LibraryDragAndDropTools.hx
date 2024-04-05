@@ -6,7 +6,7 @@ extern class LibraryDragAndDropTools {
 	static function getDragImageTypeIconText(view:nanofl.ide.ui.View, type:nanofl.ide.draganddrop.DragDataType, params:nanofl.ide.draganddrop.DragInfoParams):nanofl.ide.draganddrop.DragImageType;
 	static function getDragImageTypeRectangle(document:nanofl.ide.Document, type:nanofl.ide.draganddrop.DragDataType, params:nanofl.ide.draganddrop.DragInfoParams):nanofl.ide.draganddrop.DragImageType;
 	static function dropIntoEditor(document:nanofl.ide.Document, view:nanofl.ide.ui.View, type:nanofl.ide.draganddrop.DragDataType, params:nanofl.ide.draganddrop.DragInfoParams, data:String, e:js.JQuery.JqEvent):Void;
-	static function dropToLibraryItemsFolder(document:nanofl.ide.Document, view:nanofl.ide.ui.View, dropEffect:nanofl.ide.draganddrop.DropEffect, data:htmlparser.XmlDocument, folder:String):Void;
+	static function dropToLibraryItemsFolder(document:nanofl.ide.Document, dropEffect:nanofl.ide.draganddrop.DropEffect, params:nanofl.ide.draganddrop.DragInfoParams, data:htmlparser.XmlDocument, folder:String):Void;
 	static function addLibraryItemIntoEditor(document:nanofl.ide.Document, view:nanofl.ide.ui.View, item:nanofl.ide.libraryitems.IIdeLibraryItem, e:js.JQuery.JqEvent):Void;
 	static function getTargetFolderForDrop(document:nanofl.ide.Document, namePath:String):String;
 }

@@ -123,7 +123,6 @@ class Code extends wquery.Component
                     LibraryDragAndDropTools.dropToLibraryItemsFolder
                     (
                         app.document, 
-                        view, 
                         dropEffect,
                         params,
                         new XmlDocument(data), 
@@ -455,7 +454,7 @@ class Code extends wquery.Component
                     if (!app.document.library.hasItem(newNamePath))
                     {
                         app.document.library.renameItems([{ oldNamePath:namePath, newNamePath:newNamePath }]);
-                        view.library.activeItem = app.document.library.getItem(newNamePath);
+                        app.document.library.activeItem = app.document.library.getItem(newNamePath);
                     }
                     else
                     {

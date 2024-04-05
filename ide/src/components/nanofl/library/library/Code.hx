@@ -37,7 +37,7 @@ class Code extends components.nanofl.library.libraryview.Code
                     if (type != DragDataType.LIBRARYITEMS || view.library.readOnly) return false;
                     
                     final dropEffect = (cast e.originalEvent:DragEvent).dataTransfer.dropEffect;                                        
-                    LibraryDragAndDropTools.dropToLibraryItemsFolder(app.document, view, dropEffect, params, new XmlDocument(data), "");
+                    LibraryDragAndDropTools.dropToLibraryItemsFolder(app.document, dropEffect, params, new XmlDocument(data), "");
                     return true;
                 },
                 

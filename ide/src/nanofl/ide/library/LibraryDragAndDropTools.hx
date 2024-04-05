@@ -107,25 +107,25 @@ class LibraryDragAndDropTools
         }
     }
 
-	public static function dropToLibraryItemsFolder(document:Document, view:View, dropEffect:DropEffect, params:DragInfoParams, data:XmlDocument, folder:String)
+	public static function dropToLibraryItemsFolder(document:Document, dropEffect:DropEffect, params:DragInfoParams, data:XmlDocument, folder:String)
 	{
 		Debug.assert(folder != null);
 		
-		final saveActiveItem = view.library.activeItem;
-		view.library.activeItem = null;
+		final saveActiveItem = document.library.activeItem;
+		document.library.activeItem = null;
 
         LibraryDragAndDropTools.dropItemsIntoFolderInner(document, dropEffect, params, data, folder).then(droppedItems ->
 		{
 			if (droppedItems.length > 0)
 			{
-				view.library.select(droppedItems.map(x -> x.namePath));
-				view.library.activeItem = droppedItems[0];
+                document.library.activeItem = droppedItems[0];
+				document.library.select(droppedItems.map(x -> x.namePath));
 			}
 			else
 			{
-				view.library.activeItem = saveActiveItem;
+				document.library.activeItem = saveActiveItem;
 			}
-			view.library.update();
+			document.library.update();
 		});
 	}    
 	

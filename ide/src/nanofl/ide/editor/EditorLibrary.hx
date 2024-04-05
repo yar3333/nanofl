@@ -79,9 +79,9 @@ class EditorLibrary extends InjectContainer
 		for (t in itemRenames)
 		{
 			library.renameItem(t.oldNamePath, t.newNamePath);
-            if (view.library.activeItem?.namePath == t.oldNamePath)
+            if (activeItem?.namePath == t.oldNamePath)
             {
-                view.library.activeItem = getItem(t.newNamePath);
+                activeItem = getItem(t.newNamePath);
             }
 		}
         update();
@@ -192,6 +192,7 @@ class EditorLibrary extends InjectContainer
 	public function gotoPrevItem(overwriteSelection:Bool) view.library.gotoPrevItem(overwriteSelection);
 	public function gotoNextItem(overwriteSelection:Bool) view.library.gotoNextItem(overwriteSelection);
 	public function showPropertiesPopup() view.library.showPropertiesPopup();
+	public function select(namePaths:Array<String>) view.library.select(namePaths);
 	
 	public function createEmptyMovieClip()
 	{
@@ -272,8 +273,8 @@ class EditorLibrary extends InjectContainer
                     {
                         final folder : FolderItem = cast getItem(folderPath);
                         folder.opened = true;
-                        view.library.update();
-                        view.library.select(e.added.map(x -> x.namePath));
+                        document.library.update();
+                        select(e.added.map(x -> x.namePath));
                     }
                     return e.added;
                 });
@@ -297,7 +298,7 @@ class EditorLibrary extends InjectContainer
 	
 	public function selectUnusedItems()
 	{
-		view.library.select(IdeLibraryTools.getUnusedItems(library, false).map(x -> x.namePath));
+		select(IdeLibraryTools.getUnusedItems(library, false).map(x -> x.namePath));
 	}
 	
 	public function removeUnusedItems()
@@ -427,8 +428,8 @@ class EditorLibrary extends InjectContainer
 
             return document.reloadWoTransactionForced().then(_ ->
             {
-                view.library.select(newNamePaths);
-                view.library.activeItem = library.getItem(newNamePaths[0]);
+                select(newNamePaths);
+                activeItem = library.getItem(newNamePaths[0]);
                 document.undoQueue.commitTransaction();
             });
         });
