@@ -57,10 +57,6 @@ class EditorLibrary extends InjectContainer
 		this.document = document;
 	}
 	
-	public var activeItem(get, set) : IIdeLibraryItem;
-	function get_activeItem() return view.library.activeItem;
-	function set_activeItem(v:IIdeLibraryItem) return view.library.activeItem = v;
-	
 	public function addItems(items:Array<IIdeLibraryItem>, addUndoTransaction=true)
 	{
 		if (addUndoTransaction) document.undoQueue.beginTransaction({ libraryAddItems:true });
@@ -76,16 +72,15 @@ class EditorLibrary extends InjectContainer
 	public function renameItems(itemRenames:Array<{ oldNamePath:String, newNamePath:String }>)
 	{
 		document.undoQueue.beginTransaction({ libraryRenameItems:itemRenames });
-		for (t in itemRenames)
+		
+        for (t in itemRenames)
 		{
 			library.renameItem(t.oldNamePath, t.newNamePath);
-            if (activeItem?.namePath == t.oldNamePath)
-            {
-                activeItem = getItem(t.newNamePath);
-            }
 		}
         update();
-		document.undoQueue.commitTransaction();
+        select(itemRenames.map(x -> x.newNamePath));
+		
+        document.undoQueue.commitTransaction();
 	}
 	
 	public function removeItems(namePaths:Array<String>) : Void
@@ -185,7 +180,7 @@ class EditorLibrary extends InjectContainer
 	public function hasSelected() return getSelectedItems().length > 0;
 	
 	public function removeSelected() view.library.removeSelected();
-	public function renameByUser(namePath:String) view.library.renameByUser(namePath);
+	public function renameSelectedByUser() view.library.renameSelectedByUser();
 	public function deselectAll() view.library.deselectAll();
 	public function update() view.library.update();
 	public function getSelectedItems() : Array<IIdeLibraryItem> return view.library.getSelectedItems();
@@ -209,7 +204,6 @@ class EditorLibrary extends InjectContainer
             final symbol = MovieClipItem.createWithFrame(namePath);
             addItems([ symbol ]);
             update();
-            activeItem = symbol;
             select([ symbol.namePath ]);
 		});
 	}
@@ -432,7 +426,6 @@ class EditorLibrary extends InjectContainer
             return document.reloadWoTransactionForced().then(_ ->
             {
                 select(newNamePaths);
-                activeItem = library.getItem(newNamePaths[0]);
                 document.undoQueue.commitTransaction();
             });
         });

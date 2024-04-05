@@ -27,15 +27,6 @@ class Code extends wquery.Component
 	
 	var layout : LayoutInstance;
 	
-	public var activeItem(get, set) : IIdeLibraryItem;
-	function get_activeItem() return template().items.active;
-	function set_activeItem(v:IIdeLibraryItem)
-    {
-        template().items.active = v;
-        ensureActiveItemVisible();
-        return v;
-    }
-
 	public var readOnly(get, set) : Bool;
 	function get_readOnly() return template().items.readOnly;
 	function set_readOnly(v) return template().items.readOnly = v;
@@ -50,7 +41,11 @@ class Code extends wquery.Component
 	{
 		Globals.injector.injectInto(this);
 		
-		template().items.preview = template().preview;
+        template().items.onActiveItemChange.on(e -> 
+        {
+            template().preview.item = app.document.library.hasItem(e.namePath) ? app.document.library.getItem(e.namePath) : null;
+            ensureActiveItemVisible(e.namePath);
+        });
 		
 		layout = template().container.layout
 		({
@@ -83,13 +78,11 @@ class Code extends wquery.Component
 	public function gotoPrevItem(overwriteSelection:Bool)
 	{
 		template().items.gotoPrevItem(overwriteSelection);
-        ensureActiveItemVisible();
 	}
 	
 	public function gotoNextItem(overwriteSelection:Bool)
 	{
 		template().items.gotoNextItem(overwriteSelection);
-        ensureActiveItemVisible();
 	}
 	
 	public function showPropertiesPopup()
@@ -144,11 +137,11 @@ class Code extends wquery.Component
         }
 	}
 
-    function ensureActiveItemVisible()
+    function ensureActiveItemVisible(namePath:String)
     {
-        if (activeItem == null) return;
+        if (namePath == null || namePath == "") return;
 
-        if (openFolders(activeItem.namePath))
+        if (openFolders(namePath))
         {
             template().items.updateVisibility();
         }
@@ -156,7 +149,8 @@ class Code extends wquery.Component
         final container = template().centerContainer;
         final scrollPos = container.scrollTop();
         final height = container.innerHeight();
-        final rect = template().items.getItemElementBounds(activeItem.namePath);
+        final rect = template().items.getItemElementBounds(namePath);
+        if (rect == null) return;
         rect.y += scrollPos;
         log("scrollPos = " + scrollPos + "; height = " + height + "; rect.y = " + rect.y + "; rect.height = " + rect.height);
 

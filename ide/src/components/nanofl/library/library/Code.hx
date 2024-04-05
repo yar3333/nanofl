@@ -57,9 +57,9 @@ class Code extends components.nanofl.library.libraryview.Code
 		template().items.removeSelected();
 	}
 	
-	@:allow(nanofl.ide.editor.EditorLibrary.renameByUser)
-	function renameByUser(namePath:String) : Void
+	@:allow(nanofl.ide.editor.EditorLibrary.renameSelectedByUser)
+	function renameSelectedByUser() : Void
 	{
-		template().items.renameByUser(namePath);
+		template().items.renameSelectedByUser();
 	}
 }

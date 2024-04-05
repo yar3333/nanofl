@@ -99,20 +99,20 @@ class Clipboard extends InjectContainer
 		else
 		if (hasImage())
 		{
-            var namePath = app.document.library.getNextItemName();
-            var destFile = app.document.library.libraryDir + "/" + namePath + ".png";
+            final namePath = app.document.library.getNextItemName();
+            final destFile = app.document.library.libraryDir + "/" + namePath + ".png";
             log("paste image: " + destFile);
-            var r = savePngImageFromClipboard(destFile);
+            final r = savePngImageFromClipboard(destFile);
             if (r)
             {
                 app.document.undoQueue.beginTransaction({ libraryAddItems:true });
                 
-                var item = new BitmapItem(namePath, "png");
+                final item = new BitmapItem(namePath, "png");
                 app.document.library.addItems([ item ], false);
-                app.document.library.preload().then(function(_)
+                app.document.library.preload().then(_ ->
                 {
                     app.document.library.update();
-                    app.document.library.activeItem = item;
+                    app.document.library.select([ namePath ]);
                     
                     if (app.activeView == ActiveView.EDITOR || app.activeView == ActiveView.TIMELINE)
                     {

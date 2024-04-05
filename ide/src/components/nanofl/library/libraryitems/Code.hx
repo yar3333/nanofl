@@ -1,8 +1,8 @@
 package components.nanofl.library.libraryitems;
 
+import wquery.Event;
 import js.Browser;
 import js.JQuery;
-import js.html.File;
 import js.html.DragEvent;
 import stdlib.Std;
 import htmlparser.XmlDocument;
@@ -16,7 +16,6 @@ import nanofl.engine.libraryitems.InstancableItem;
 import nanofl.engine.libraryitems.MovieClipItem;
 import nanofl.engine.libraryitems.SoundItem;
 import nanofl.ide.Globals;
-import nanofl.ide.draganddrop.DragInfoParams;
 import nanofl.ide.draganddrop.DragDataType;
 import nanofl.ide.draganddrop.AllowedDropEffect;
 import nanofl.ide.sys.FileSystem;
@@ -54,25 +53,24 @@ class Code extends wquery.Component
 	
 	var items : ComponentList<components.nanofl.library.libraryitem.Code>;
 	
-	@:allow(components.nanofl.library.libraryview.Code)
-	var activeNamePath = "";
+	@:noCompletion var _activeNamePath = "";
+    var activeNamePath(get, set) : String;
+    @:noCompletion function get_activeNamePath() return _activeNamePath;
+    @:noCompletion function set_activeNamePath(namePath:String)
+    {
+        _activeNamePath = namePath;
+        onActiveItemChange.emit({ namePath:namePath });
+        return namePath;
+    }
 	
-	public var preview : components.nanofl.library.librarypreview.Code;
-	
-	public var active(get, set) : IIdeLibraryItem;
-	function get_active()
+	function getActiveItem()
 	{
 		return app.document != null && app.document.library.hasItem(activeNamePath)
 			 ? app.document.library.getItem(activeNamePath)
 			 : null;
 	}
-	function set_active(v:IIdeLibraryItem)
-	{
-		activeNamePath = v?.namePath ?? "";
-		select(activeNamePath != "" ? [ activeNamePath ] : []);
-		preview.item = v;
-		return v;
-	}
+
+    public final onActiveItemChange = new Event<{ namePath:String }>();
 	
 	public var readOnly = false;
 	
@@ -175,8 +173,6 @@ class Code extends wquery.Component
 			}
 			
 			activeNamePath = namePath;
-			
-			if (preview != null) preview.item = active;
 		});
 		
 		template().content.on("dblclick", ">li", (e:JqEvent) ->
@@ -267,26 +263,24 @@ class Code extends wquery.Component
 				
 				activeNamePath = element.attr("data-name-path");
 				
-				menu.toggleItem("library.properties", getPropertiesPopup() != null);
+				menu.toggleItem("library.properties", getPropertiesPopup(getActiveItem()) != null);
 				
 				return true;
 			});
 		}
 		
-		if (preview != null)
-		{
-			if (active != null && !filterItems(active)) active = null;
-			preview.item = active;
-		}
+        final activeItem = getActiveItem();
+		if (activeItem != null && !filterItems(activeItem)) activeNamePath = "";
 	}
 	
 	public function showPropertiesPopup()
 	{
-		final popup = getPropertiesPopup();
-		if (popup != null) popup.show(cast active);
+        final activeItem = getActiveItem();
+		final popup = getPropertiesPopup(activeItem);
+		if (popup != null) popup.show(activeItem);
 	}
 	
-	function getPropertiesPopup() : { function show(item:Dynamic) : Void; }
+	function getPropertiesPopup(active:IIdeLibraryItem) : { function show(item:Dynamic) : Void; }
 	{
 		if (Std.isOfType(active, ISymbol))
 		{
@@ -309,6 +303,7 @@ class Code extends wquery.Component
     {
         final element = getElement(namePath);
         final pos = element.position();
+        if (pos == null) return null;
         return new Rectangle(pos.left, pos.top, element.outerWidth(), element.outerHeight());
     }
 	
@@ -343,9 +338,11 @@ class Code extends wquery.Component
 		app.document.library.removeItems(getSelectedItems().map(item -> item.namePath));
 	}
 	
-	public function renameByUser(namePath:String) : Void
+	public function renameSelectedByUser() : Void
 	{
-		getElement(namePath).beginEdit(getEditableParams(namePath));
+        if (activeNamePath == null || activeNamePath == "") return;
+        final element = getElement(activeNamePath);
+		element.beginEdit(getEditableParams(activeNamePath));
 	}
 	
 	public function getSelectedItems() : Array<IIdeLibraryItem>
@@ -363,45 +360,52 @@ class Code extends wquery.Component
 	
 	public function deselectAll()
 	{
-		getElements().removeClass("selected");
+		select([]);
 	}
 	
 	public function select(namePaths:Array<String>)
 	{
-		deselectAll();
+		getElements().removeClass("selected");
 		
 		for (namePath in namePaths)
 		{
 			getElement(namePath).addClass("selected");
 		}
+
+        activeNamePath = namePaths.length > 0 ? namePaths[namePaths.length - 1] : "";
 	}
 	
 	public function gotoPrevItem(overwriteSelection:Bool)
 	{
-		if (active == null) return;
+		if (activeNamePath == "") return;
 		
 		final elements = getElements();
 		var n = getElement(activeNamePath).index() - 1;
 		while (n >= 0 && !q(elements[n]).is(":visible")) n--;
-		if (n < 0) return;
-		activeNamePath = elements[n].getAttribute("data-name-path");
-		if (overwriteSelection) deselectAll();
+		
+        if (n < 0) return;
+		
+        if (overwriteSelection) deselectAll();
 		q(elements[n]).addClass("selected");
-		if (preview != null) preview.item = active;
+
+        activeNamePath = elements[n].getAttribute("data-name-path");
 	}
 	
 	public function gotoNextItem(overwriteSelection:Bool)
 	{
-		if (active == null) return;
+		if (activeNamePath == "") return;
 		
 		final elements = getElements();
 		var n = getElement(activeNamePath).index() + 1;
 		while (n < elements.length && !q(elements[n]).is(":visible")) n++;
-		if (n >= elements.length) return;
-		activeNamePath = elements[n].getAttribute("data-name-path");
+		
+        if (n >= elements.length) return;
+		
+        
 		if (overwriteSelection) deselectAll();
 		q(elements[n]).addClass("selected");
-		if (preview != null) preview.item = active;
+
+		activeNamePath = elements[n].getAttribute("data-name-path");
 	}
 	
 	function getItemLink(item:IIdeLibraryItem) : String
@@ -454,7 +458,7 @@ class Code extends wquery.Component
                     if (!app.document.library.hasItem(newNamePath))
                     {
                         app.document.library.renameItems([{ oldNamePath:namePath, newNamePath:newNamePath }]);
-                        app.document.library.activeItem = app.document.library.getItem(newNamePath);
+                        app.document.library.select([ newNamePath ]);
                     }
                     else
                     {
@@ -468,39 +472,34 @@ class Code extends wquery.Component
 	
 	function fixActive()
 	{
-		if (app.document != null)
-		{
-			if (app.document.library.hasItem(activeNamePath)) return;
-			
-			final namePaths = app.document.library.getItems().map(x -> x.namePath).sorted();
-			
-			final index = namePaths.findIndex(x -> x > activeNamePath);
-			if (index >= 0)
-			{
-				for (i in index...namePaths.length)
-				{
-					if (isVisible(namePaths[i]))
-					{
-						activeNamePath = namePaths[i];
-						return;
-					}
-				}
-			}
-			
-			var i = namePaths.length - 1; while (i >= 0)
-			{
-				if (isVisible(namePaths[i]))
-				{
-					activeNamePath = namePaths[i];
-					return;
-				}
-				i--;
-			}
-		}
-		else
-		{
-			activeNamePath = "";
-		}
+		if (app.document == null) { activeNamePath = ""; return; }
+		
+        if (app.document.library.hasItem(activeNamePath)) return;
+        
+        final namePaths = app.document.library.getItems().map(x -> x.namePath).sorted();
+        
+        final index = namePaths.findIndex(x -> x > activeNamePath);
+        if (index >= 0)
+        {
+            for (i in index...namePaths.length)
+            {
+                if (isVisible(namePaths[i]))
+                {
+                    activeNamePath = namePaths[i];
+                    return;
+                }
+            }
+        }
+        
+        var i = namePaths.length - 1; while (i >= 0)
+        {
+            if (isVisible(namePaths[i]))
+            {
+                activeNamePath = namePaths[i];
+                return;
+            }
+            i--;
+        }
 	}
 	
 	static function log(v:Dynamic, ?infos:haxe.PosInfos)

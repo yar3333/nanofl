@@ -15,7 +15,7 @@ class LibraryGroup extends BaseGroup
 	public function importFiles()			app.document.library.importFiles();
 	public function remove()				app.document.library.removeSelected();
 	public function deselectAll()			app.document.library.deselectAll();
-	public function rename()				if (app.document.library.activeItem != null) app.document.library.renameByUser(app.document.library.activeItem.namePath);
+	public function rename()				app.document.library.renameSelectedByUser();
 	public function gotoPrev()				app.document.library.gotoPrevItem(true);
 	public function gotoNext()				app.document.library.gotoNextItem(true);
 	public function gotoPrevExtSelect()		app.document.library.gotoPrevItem(false);

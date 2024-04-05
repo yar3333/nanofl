@@ -111,21 +111,14 @@ class LibraryDragAndDropTools
 	{
 		Debug.assert(folder != null);
 		
-		final saveActiveItem = document.library.activeItem;
-		document.library.activeItem = null;
-
         LibraryDragAndDropTools.dropItemsIntoFolderInner(document, dropEffect, params, data, folder).then(droppedItems ->
 		{
+            document.library.update();
+            
 			if (droppedItems.length > 0)
 			{
-                document.library.activeItem = droppedItems[0];
 				document.library.select(droppedItems.map(x -> x.namePath));
 			}
-			else
-			{
-				document.library.activeItem = saveActiveItem;
-			}
-			document.library.update();
 		});
 	}    
 	
