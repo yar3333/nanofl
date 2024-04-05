@@ -206,8 +206,11 @@ class EditorLibrary extends InjectContainer
                 return;
             }
 
-            addItems([ MovieClipItem.createWithFrame(namePath) ]);
+            final symbol = MovieClipItem.createWithFrame(namePath);
+            addItems([ symbol ]);
             update();
+            activeItem = symbol;
+            select([ symbol.namePath ]);
 		});
 	}
 	
