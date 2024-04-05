@@ -1,5 +1,6 @@
 package components.nanofl.library.libraryview;
 
+import haxe.io.Path;
 import js.JQuery;
 import stdlib.Std;
 import nanofl.engine.LibraryItemType;
@@ -43,7 +44,7 @@ class Code extends wquery.Component
 		
         template().items.onActiveItemChange.on(e -> 
         {
-            template().preview.item = app.document.library.hasItem(e.namePath) ? app.document.library.getItem(e.namePath) : null;
+            template().preview.item = app.document?.library.hasItem(e.namePath) ? app.document.library.getItem(e.namePath) : null;
             ensureActiveItemVisible(e.namePath);
         });
 		
@@ -141,7 +142,7 @@ class Code extends wquery.Component
     {
         if (namePath == null || namePath == "") return;
 
-        if (openFolders(namePath))
+        if (openFolders(Path.directory(namePath)))
         {
             template().items.updateVisibility();
         }
@@ -167,6 +168,8 @@ class Code extends wquery.Component
 
     function openFolders(namePath:String) : Bool
     {
+        if (namePath == null || namePath == "") return false;
+
         final item = app.document.library.getItem(namePath);
         
         var r = false;

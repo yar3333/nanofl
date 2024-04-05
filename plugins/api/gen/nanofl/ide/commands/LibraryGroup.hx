@@ -22,6 +22,9 @@ extern class LibraryGroup extends nanofl.ide.commands.BaseGroup {
 	function duplicate():Void;
 	function openInAssociated():Void;
 	function showInExplorer():Void;
+	function openSelected():Void;
+	function expandFolder():Void;
+	function collapseFolder():Void;
 	function cut():Void;
 	function copy():Void;
 	function paste():Void;

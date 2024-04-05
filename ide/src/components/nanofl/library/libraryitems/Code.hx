@@ -178,29 +178,7 @@ class Code extends wquery.Component
 		template().content.on("dblclick", ">li", (e:JqEvent) ->
 		{
 			final element = new JQuery(e.currentTarget);
-			final item = app.document.library.getItem(element.attr("data-name-path"));
-			
-			if (Std.isOfType(item, FolderItem))
-			{
-				final folder : FolderItem = cast item;
-				folder.opened = !folder.opened;
-				updateVisibility();
-			}
-			else
-			if (Std.isOfType(item, MovieClipItem))
-			{
-				app.document.navigator.navigateTo([ new PathItem((cast item:MovieClipItem).newInstance()) ]);
-			}
-			else
-			if (Std.isOfType(item, FontItem))
-			{
-				popups.fontProperties.show((cast item:FontItem));
-			}
-			else
-			{
-                final filePath = LibraryItemTools.getFilePathToRunInExternalEditor(fileSystem, app.document.library.libraryDir, item.namePath);
-                if (filePath != null) shell.openInAssociatedApplication(filePath);
-			}
+            app.document.library.openItem(element.attr("data-name-path"));
 		});
 	}
 	
@@ -217,8 +195,6 @@ class Code extends wquery.Component
 	public function update()
 	{
 		items.clear();
-		
-		fixActive();
 		
 		if (app.document != null)
 		{
@@ -268,6 +244,8 @@ class Code extends wquery.Component
 				return true;
 			});
 		}
+
+        fixActiveNamePath();
 		
         final activeItem = getActiveItem();
 		if (activeItem != null && !filterItems(activeItem)) activeNamePath = "";
@@ -470,7 +448,7 @@ class Code extends wquery.Component
 		};
 	}
 	
-	function fixActive()
+	function fixActiveNamePath()
 	{
 		if (app.document == null) { activeNamePath = ""; return; }
 		

@@ -29,6 +29,9 @@ class LibraryGroup extends BaseGroup
 	public function duplicate()			    app.document.library.duplicate();
 	public function openInAssociated()		app.document.library.openInAssociated();
 	public function showInExplorer()		app.document.library.showInExplorer();
+	public function openSelected()		    app.document.library.openItem();
+	public function expandFolder()		    app.document.library.expandFolder();
+	public function collapseFolder()	    app.document.library.collapseFolder();
 	
 	public function cut()					tempActiveView(ActiveView.LIBRARY, clipboard.cut);
 	public function copy()					tempActiveView(ActiveView.LIBRARY, clipboard.copy);

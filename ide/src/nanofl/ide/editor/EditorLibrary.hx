@@ -1,5 +1,6 @@
 package nanofl.ide.editor;
 
+import nanofl.ide.navigator.PathItem;
 import haxe.io.Path;
 import js.lib.Promise;
 import js.Browser;
@@ -447,6 +448,83 @@ class EditorLibrary extends InjectContainer
             final filePath = LibraryItemTools.getFilePathToRunInExternalEditor(fileSystem, library.libraryDir, item.namePath);
             if (filePath != null) shell.showInFileExplorer(filePath);
         }
+    }
+
+    function getItemOrSelected(?namePath:String) : IIdeLibraryItem
+    {
+        if (namePath == null && getSelectedItems().length == 1) namePath = getSelectedItems()[0].namePath;
+        if (namePath == null) return null;
+        if (!library.hasItem(namePath)) return null;
+        return library.getItem(namePath);
+    }
+
+    public function openItem(?namePath:String) : Bool
+    {
+        final item = getItemOrSelected(namePath);
+        if (item == null) return false;
+			
+        if (Std.isOfType(item, FolderItem))
+        {
+            final folder : FolderItem = cast item;
+            folder.opened = !folder.opened;
+            update();
+            return true;
+        }
+        else
+        if (Std.isOfType(item, MovieClipItem))
+        {
+            document.navigator.navigateTo([ new PathItem((cast item:MovieClipItem).newInstance()) ]);
+            return true;
+        }
+        else
+        if (Std.isOfType(item, FontItem))
+        {
+            popups.fontProperties.show((cast item:FontItem));
+            return true;
+        }
+        else
+        {
+            final filePath = LibraryItemTools.getFilePathToRunInExternalEditor(fileSystem, document.library.libraryDir, item.namePath);
+            if (filePath != null)
+            {
+                shell.openInAssociatedApplication(filePath);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function expandFolder(?namePath:String) : Bool
+    {
+        final item = getItemOrSelected(namePath);
+        if (item == null) return false;
+        if (!Std.isOfType(item, FolderItem)) return false;
+        
+        final folder : FolderItem = cast item;
+        if (!folder.opened)
+        {
+            folder.opened = true;
+            update();
+        }
+        
+        return true;
+    }
+
+	public function collapseFolder(?namePath:String) : Bool
+	{
+        final item = getItemOrSelected(namePath);
+        if (item == null) return false;
+        if (!Std.isOfType(item, FolderItem)) return false;
+        
+        final folder : FolderItem = cast item;
+        if (folder.opened)
+        {
+            folder.opened = false;
+            update();
+        }
+        
+        return true;
     }
 
 	static function log(v:Dynamic, ?infos:haxe.PosInfos)

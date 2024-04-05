@@ -65,6 +65,8 @@
 	{ "shortcut":"Shift+Down"			, "command":"library.gotoNextExtSelect" },
 	{ "shortcut":"Ctrl+F8"				, "command":"library.newEmptyMovieClip" },
 	{ "shortcut":"Ctrl+R"				, "command":"library.importFiles" },
+	{ "shortcut":"Right"				, "command":"library.expandFolder" },
+	{ "shortcut":"Left"					, "command":"library.collapseFolder" },
 	
 	{ "shortcut":"F2"					, "command":"timeline.renameLayer" },
 	{ "shortcut":"F5"					, "command":"timeline.insertFrame" },
