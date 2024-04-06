@@ -32,7 +32,7 @@ class SceneFramesIterator
         this.sceneInstance = library.getSceneInstance();
         this.framerate = documentProperties.framerate;
 
-        stage = new nanofl.Stage(canvas, documentProperties.framerate);
+        stage = new nanofl.Stage(canvas);
        
         if (applyBackgroundColor)
         {

@@ -40,7 +40,7 @@ class Code extends wquery.Component
 		Globals.injector.injectInto(this);
 		
 		canvas = cast template().canvas[0];
-		stage = new Stage(canvas, app.document?.properties.framerate ?? 0);
+		stage = new Stage(canvas);
 	}
 	
 	public function resize(maxWidth:Int, maxHeight:Int)
@@ -69,7 +69,6 @@ class Code extends wquery.Component
 	
 	function update()
 	{
-        stage.framerate = app.document?.properties.framerate ?? 0;
 		stage.removeAllChildren();
 		stage.clear();
 
@@ -111,7 +110,6 @@ class Code extends wquery.Component
         if (instance != null)
         {
             final obj = instance.createDisplayObject();
-            if (Std.isOfType(obj, IdeAdvancableDisplayObject)) (cast obj:IdeAdvancableDisplayObject).advanceTo(0, stage.framerate, new TweenedElement(instance, instance));
             stage.addChild(obj);
             final bounds = DisplayObjectTools.getOuterBounds(obj);
             if (bounds != null)
