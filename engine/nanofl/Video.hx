@@ -1,10 +1,8 @@
 package nanofl;
 
-import js.Browser;
-import js.html.VideoElement;
+import stdlib.Debug;
 import nanofl.engine.InstanceDisplayObject;
 import nanofl.engine.libraryitems.VideoItem;
-import stdlib.Debug;
 using stdlib.StringTools;
 using stdlib.Lambda;
 
@@ -21,7 +19,7 @@ class Video extends SolidContainer
 	public var symbol(default, null) : VideoItem;
     
     #if !ide
-    public var video(default, null) : VideoElement;
+    public var video(default, null) : js.html.VideoElement;
     #end
 
     public final duration : Float;
@@ -38,7 +36,7 @@ class Video extends SolidContainer
 		setBounds(0, 0, symbol.width, symbol.height);
 		
         #if !ide
-        video = Browser.document.createVideoElement();
+        video = js.Browser.document.createVideoElement();
         video.src = symbol.library.realUrl(symbol.namePath + "." + symbol.ext);
         video.loop = symbol.loop;
         video.autoplay = symbol.autoPlay;

@@ -69,7 +69,7 @@ class SceneFramesIterator
     {
         if (scene != null) stage.removeChild(scene);
 
-        final scene : MovieClip = cast sceneInstance.createDisplayObject();
+        scene = cast sceneInstance.createDisplayObject();
         stage.addChild(scene);
         scene.advanceTo(curFrame, framerate, new TweenedElement(sceneInstance, sceneInstance));
     }
