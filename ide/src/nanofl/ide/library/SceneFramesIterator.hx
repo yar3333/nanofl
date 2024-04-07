@@ -32,7 +32,7 @@ class SceneFramesIterator
         this.sceneInstance = library.getSceneInstance();
         this.framerate = documentProperties.framerate;
 
-        stage = new nanofl.Stage(canvas, documentProperties.framerate);
+        stage = new nanofl.Stage(canvas);
        
         if (applyBackgroundColor)
         {
@@ -69,7 +69,7 @@ class SceneFramesIterator
     {
         if (scene != null) stage.removeChild(scene);
 
-        final scene : MovieClip = cast sceneInstance.createDisplayObject();
+        scene = cast sceneInstance.createDisplayObject();
         stage.addChild(scene);
         scene.advanceTo(curFrame, framerate, new TweenedElement(sceneInstance, sceneInstance));
     }

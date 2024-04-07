@@ -489,11 +489,12 @@ class Editor extends InjectContainer
 			);
 		}
 		
-		var symbol = MovieClipItem.createWithFrame(namePath, elements);
+		final symbol = MovieClipItem.createWithFrame(namePath, elements);
 		
 		document.library.addItems([ symbol ], false);
+        document.library.select([ symbol.namePath ]);
 		
-		var instance = symbol.newInstance();
+		final instance = symbol.newInstance();
 		instance.translate
 		(
 			bounds.minX + (bounds.maxX - bounds.minX) / 2 * (regX + 1),

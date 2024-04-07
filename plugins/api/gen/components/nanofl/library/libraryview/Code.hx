@@ -2,9 +2,6 @@ package components.nanofl.library.libraryview;
 
 extern class Code extends wquery.Component {
 	function new(parent:wquery.Component, parentNode:haxe.extern.EitherType<String, haxe.extern.EitherType<js.html.Element, js.JQuery>>, ?params:Dynamic, ?attachMode:wquery.AttachMode):Void;
-	var activeItem(get, set) : nanofl.ide.libraryitems.IIdeLibraryItem;
-	private function get_activeItem():nanofl.ide.libraryitems.IIdeLibraryItem;
-	private function set_activeItem(v:nanofl.ide.libraryitems.IIdeLibraryItem):nanofl.ide.libraryitems.IIdeLibraryItem;
 	var readOnly(get, set) : Bool;
 	private function get_readOnly():Bool;
 	private function set_readOnly(v:Bool):Bool;

@@ -94,7 +94,7 @@ class Code extends wquery.Component
 		
 		canvas = cast template().content[0];
 		
-		stage = new Stage(canvas, app.document?.properties.framerate ?? 0);
+		stage = new Stage(canvas);
         stage.recacheOnUpdate = false;
 		
 		stage.addChild(background = new Shape());
@@ -317,8 +317,6 @@ class Code extends wquery.Component
 	@:profile
 	function rebind(isCenterView=false) : Promise<{}>
 	{
-        stage.framerate = app.document.properties.framerate;
-
 		updateBackground();
 		
 		milk.update();

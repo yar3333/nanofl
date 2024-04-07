@@ -5,15 +5,12 @@ import js.lib.Promise;
 @:expose
 class Stage extends easeljs.display.Stage
 {
-    public var framerate : Float;
 	public var recacheOnUpdate : Bool;
     
-    public function new(canvas:Dynamic, framerate:Float)
+    public function new(canvas:Dynamic)
 	{
 		super(canvas);
 
-        this.framerate = framerate;
-        
         this.tickOnUpdate = false;
 		
         recacheOnUpdate = true;

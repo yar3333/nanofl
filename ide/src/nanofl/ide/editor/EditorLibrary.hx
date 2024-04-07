@@ -1,5 +1,6 @@
 package nanofl.ide.editor;
 
+import nanofl.ide.navigator.PathItem;
 import haxe.io.Path;
 import js.lib.Promise;
 import js.Browser;
@@ -57,10 +58,6 @@ class EditorLibrary extends InjectContainer
 		this.document = document;
 	}
 	
-	public var activeItem(get, set) : IIdeLibraryItem;
-	function get_activeItem() return view.library.activeItem;
-	function set_activeItem(v:IIdeLibraryItem) return view.library.activeItem = v;
-	
 	public function addItems(items:Array<IIdeLibraryItem>, addUndoTransaction=true)
 	{
 		if (addUndoTransaction) document.undoQueue.beginTransaction({ libraryAddItems:true });
@@ -76,16 +73,15 @@ class EditorLibrary extends InjectContainer
 	public function renameItems(itemRenames:Array<{ oldNamePath:String, newNamePath:String }>)
 	{
 		document.undoQueue.beginTransaction({ libraryRenameItems:itemRenames });
-		for (t in itemRenames)
+		
+        for (t in itemRenames)
 		{
 			library.renameItem(t.oldNamePath, t.newNamePath);
-            if (view.library.activeItem?.namePath == t.oldNamePath)
-            {
-                view.library.activeItem = getItem(t.newNamePath);
-            }
 		}
         update();
-		document.undoQueue.commitTransaction();
+        select(itemRenames.map(x -> x.newNamePath));
+		
+        document.undoQueue.commitTransaction();
 	}
 	
 	public function removeItems(namePaths:Array<String>) : Void
@@ -185,13 +181,14 @@ class EditorLibrary extends InjectContainer
 	public function hasSelected() return getSelectedItems().length > 0;
 	
 	public function removeSelected() view.library.removeSelected();
-	public function renameByUser(namePath:String) view.library.renameByUser(namePath);
+	public function renameSelectedByUser() view.library.renameSelectedByUser();
 	public function deselectAll() view.library.deselectAll();
 	public function update() view.library.update();
 	public function getSelectedItems() : Array<IIdeLibraryItem> return view.library.getSelectedItems();
 	public function gotoPrevItem(overwriteSelection:Bool) view.library.gotoPrevItem(overwriteSelection);
 	public function gotoNextItem(overwriteSelection:Bool) view.library.gotoNextItem(overwriteSelection);
 	public function showPropertiesPopup() view.library.showPropertiesPopup();
+	public function select(namePaths:Array<String>) view.library.select(namePaths);
 	
 	public function createEmptyMovieClip()
 	{
@@ -205,8 +202,10 @@ class EditorLibrary extends InjectContainer
                 return;
             }
 
-            addItems([ MovieClipItem.createWithFrame(namePath) ]);
+            final symbol = MovieClipItem.createWithFrame(namePath);
+            addItems([ symbol ]);
             update();
+            select([ symbol.namePath ]);
 		});
 	}
 	
@@ -272,8 +271,8 @@ class EditorLibrary extends InjectContainer
                     {
                         final folder : FolderItem = cast getItem(folderPath);
                         folder.opened = true;
-                        view.library.update();
-                        view.library.select(e.added.map(x -> x.namePath));
+                        document.library.update();
+                        select(e.added.map(x -> x.namePath));
                     }
                     return e.added;
                 });
@@ -297,7 +296,7 @@ class EditorLibrary extends InjectContainer
 	
 	public function selectUnusedItems()
 	{
-		view.library.select(IdeLibraryTools.getUnusedItems(library, false).map(x -> x.namePath));
+		select(IdeLibraryTools.getUnusedItems(library, false).map(x -> x.namePath));
 	}
 	
 	public function removeUnusedItems()
@@ -427,8 +426,7 @@ class EditorLibrary extends InjectContainer
 
             return document.reloadWoTransactionForced().then(_ ->
             {
-                view.library.select(newNamePaths);
-                view.library.activeItem = library.getItem(newNamePaths[0]);
+                select(newNamePaths);
                 document.undoQueue.commitTransaction();
             });
         });
@@ -450,6 +448,83 @@ class EditorLibrary extends InjectContainer
             final filePath = LibraryItemTools.getFilePathToRunInExternalEditor(fileSystem, library.libraryDir, item.namePath);
             if (filePath != null) shell.showInFileExplorer(filePath);
         }
+    }
+
+    function getItemOrSelected(?namePath:String) : IIdeLibraryItem
+    {
+        if (namePath == null && getSelectedItems().length == 1) namePath = getSelectedItems()[0].namePath;
+        if (namePath == null) return null;
+        if (!library.hasItem(namePath)) return null;
+        return library.getItem(namePath);
+    }
+
+    public function openItem(?namePath:String) : Bool
+    {
+        final item = getItemOrSelected(namePath);
+        if (item == null) return false;
+			
+        if (Std.isOfType(item, FolderItem))
+        {
+            final folder : FolderItem = cast item;
+            folder.opened = !folder.opened;
+            update();
+            return true;
+        }
+        else
+        if (Std.isOfType(item, MovieClipItem))
+        {
+            document.navigator.navigateTo([ new PathItem((cast item:MovieClipItem).newInstance()) ]);
+            return true;
+        }
+        else
+        if (Std.isOfType(item, FontItem))
+        {
+            popups.fontProperties.show((cast item:FontItem));
+            return true;
+        }
+        else
+        {
+            final filePath = LibraryItemTools.getFilePathToRunInExternalEditor(fileSystem, document.library.libraryDir, item.namePath);
+            if (filePath != null)
+            {
+                shell.openInAssociatedApplication(filePath);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function expandFolder(?namePath:String) : Bool
+    {
+        final item = getItemOrSelected(namePath);
+        if (item == null) return false;
+        if (!Std.isOfType(item, FolderItem)) return false;
+        
+        final folder : FolderItem = cast item;
+        if (!folder.opened)
+        {
+            folder.opened = true;
+            update();
+        }
+        
+        return true;
+    }
+
+	public function collapseFolder(?namePath:String) : Bool
+	{
+        final item = getItemOrSelected(namePath);
+        if (item == null) return false;
+        if (!Std.isOfType(item, FolderItem)) return false;
+        
+        final folder : FolderItem = cast item;
+        if (folder.opened)
+        {
+            folder.opened = false;
+            update();
+        }
+        
+        return true;
     }
 
 	static function log(v:Dynamic, ?infos:haxe.PosInfos)

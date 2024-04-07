@@ -11,8 +11,6 @@ class IdeVideo extends nanofl.Video
 {
     public var currentTime : Float;
     
-    inline function getFramerate() return (cast stage : nanofl.Stage).framerate;
-    
     public function new(symbol:VideoItem, params:VideoParams)
     {
         super(symbol, null);

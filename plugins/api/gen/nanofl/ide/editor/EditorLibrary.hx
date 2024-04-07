@@ -4,9 +4,6 @@ extern class EditorLibrary extends nanofl.ide.InjectContainer {
 	function new(library:nanofl.ide.library.IdeLibrary, document:nanofl.ide.Document):Void;
 	var libraryDir(get, never) : String;
 	private function get_libraryDir():String;
-	var activeItem(get, set) : nanofl.ide.libraryitems.IIdeLibraryItem;
-	private function get_activeItem():nanofl.ide.libraryitems.IIdeLibraryItem;
-	private function set_activeItem(v:nanofl.ide.libraryitems.IIdeLibraryItem):nanofl.ide.libraryitems.IIdeLibraryItem;
 	function addItems(items:Array<nanofl.ide.libraryitems.IIdeLibraryItem>, ?addUndoTransaction:Bool):Void;
 	function canRenameItem(oldNamePath:String, newNamePath:String):Bool;
 	function renameItems(itemRenames:Array<{ public var oldNamePath(default, default) : String; public var newNamePath(default, default) : String; }>):Void;
@@ -24,13 +21,14 @@ extern class EditorLibrary extends nanofl.ide.InjectContainer {
 	function getSelectedItemsWithDependencies():Array<nanofl.ide.libraryitems.IIdeLibraryItem>;
 	function hasSelected():Bool;
 	function removeSelected():Void;
-	function renameByUser(namePath:String):Void;
+	function renameSelectedByUser():Void;
 	function deselectAll():Void;
 	function update():Void;
 	function getSelectedItems():Array<nanofl.ide.libraryitems.IIdeLibraryItem>;
 	function gotoPrevItem(overwriteSelection:Bool):Void;
 	function gotoNextItem(overwriteSelection:Bool):Void;
 	function showPropertiesPopup():Void;
+	function select(namePaths:Array<String>):Void;
 	function createEmptyMovieClip():Void;
 	function createFolder():Void;
 	function importFiles(?folderPath:String):js.lib.Promise<{ }>;
@@ -47,4 +45,7 @@ extern class EditorLibrary extends nanofl.ide.InjectContainer {
 	function duplicate():Void;
 	function openInAssociated():Void;
 	function showInExplorer():Void;
+	function openItem(?namePath:String):Bool;
+	function expandFolder(?namePath:String):Bool;
+	function collapseFolder(?namePath:String):Bool;
 }

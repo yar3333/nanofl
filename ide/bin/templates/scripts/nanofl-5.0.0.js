@@ -2182,7 +2182,7 @@ class nanofl_Player {
 				}
 			}
 			return nanofl_Player.library.preload().then(function(_) {
-				nanofl_Player.stage = new nanofl_Stage(canvas,args.framerate);
+				nanofl_Player.stage = new nanofl_Stage(canvas);
 				if(args.scaleMode != nanofl_engine_ScaleMode.custom) {
 					let originalWidth = args.container.offsetWidth;
 					let originalHeight = args.container.offsetHeight;
@@ -2330,9 +2330,8 @@ Object.assign(nanofl_SpriteButton.prototype, {
 	__class__: nanofl_SpriteButton
 });
 class nanofl_Stage extends createjs.Stage {
-	constructor(canvas,framerate) {
+	constructor(canvas) {
 		super(canvas);
-		this.framerate = framerate;
 		this.tickOnUpdate = false;
 		this.recacheOnUpdate = true;
 		this.enableMouseOver(10);
@@ -3068,7 +3067,7 @@ Object.assign(nanofl_TextRun.prototype, {
 class nanofl_Video extends nanofl_SolidContainer {
 	constructor(symbol,params) {
 		super();
-		stdlib_Debug.assert(((symbol) instanceof nanofl_engine_libraryitems_VideoItem),null,{ fileName : "engine/nanofl/Video.hx", lineNumber : 33, className : "nanofl.Video", methodName : "new"});
+		stdlib_Debug.assert(((symbol) instanceof nanofl_engine_libraryitems_VideoItem),null,{ fileName : "engine/nanofl/Video.hx", lineNumber : 31, className : "nanofl.Video", methodName : "new"});
 		this.symbol = symbol;
 		this.duration = symbol.duration;
 		this.setBounds(0,0,symbol.width,symbol.height);
