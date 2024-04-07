@@ -1031,7 +1031,7 @@ class Code extends wquery.Component
 	
 	public function hasSelectedFrames()
 	{
-		return getFrameNodes("selected").length > 0;
+		return getFrameNodes(".selected").length > 0;
 	}
 	
 	public function saveSelectedToXml(out:XmlBuilder) : Array<IIdeLibraryItem>

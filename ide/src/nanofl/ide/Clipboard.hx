@@ -61,8 +61,9 @@ class Clipboard extends InjectContainer
 				case ActiveView.EDITOR:
                     return app.document.editor.hasSelected();
 					
-				case ActiveView.TIMELINE:	
-                    return view.movie.timeline.hasSelectedFrames();
+				case ActiveView.TIMELINE:
+                    final z = view.movie.timeline.hasSelectedFrames();
+                    return z;
 					
 				case ActiveView.OUTPUT:
 					return view.output.hasSelected();
@@ -261,23 +262,20 @@ class Clipboard extends InjectContainer
 			switch (app.activeView)
 			{
 				case ActiveView.EDITOR:
-					var out = new XmlBuilder();
-					
-					var items : Array<IIdeLibraryItem>;
-                    items = app.document.editor.saveSelectedToXml(out);
+					final out = new XmlBuilder();
+					final items = app.document.editor.saveSelectedToXml(out);
                     if (isCut) app.document.editor.removeSelected();
-							
 					return getStringForCopyFromLibraryItems(out, items);
 					
 				case ActiveView.LIBRARY:
-					var out = new XmlBuilder();
-					var items = app.document.library.getSelectedItemsWithDependencies();
+					final out = new XmlBuilder();
+					final items = app.document.library.getSelectedItemsWithDependencies();
 					if (isCut) app.document.library.removeSelected();
 					return getStringForCopyFromLibraryItems(out, items);
 					
 				case ActiveView.TIMELINE:
-					var out = new XmlBuilder();
-					var items = view.movie.timeline.saveSelectedToXml(out);
+					final out = new XmlBuilder();
+					final items = view.movie.timeline.saveSelectedToXml(out);
 					if (isCut) view.movie.timeline.removeSelectedFrames();
 					return getStringForCopyFromLibraryItems(out, items);
 					
@@ -291,10 +289,10 @@ class Clipboard extends InjectContainer
 	{
 		LibraryItems.saveToXml(items, out);
 		
-		var data = out.toString();
+		final data = out.toString();
 		
 		log("copy items = " + items.length);
-		var files = LibraryItems.getFiles(items);
+		final files = LibraryItems.getFiles(items);
 		log("copy files = " + files.length);
 		saveFilesIntoClipboard(app.document.library.libraryDir, files);
 		
@@ -303,7 +301,7 @@ class Clipboard extends InjectContainer
 	
 	function isInputActive() : Bool
 	{
-		var activeElement = Browser.document.activeElement;
+		final activeElement = Browser.document.activeElement;
 		return activeElement != null && ["textarea", "input", "select"].indexOf(activeElement.nodeName.toLowerCase()) >= 0;
 	}
 	
@@ -317,14 +315,14 @@ class Clipboard extends InjectContainer
 	
 	function savePngImageFromClipboard(destPath:String) : Bool
 	{
-		var data = clipboard.readImageAsPngBytes();
+		final data = clipboard.readImageAsPngBytes();
 		fileSystem.saveBinary(destPath, data);
         return true;
 	}
 	
 	public function loadFilesFromClipboard(destDir:String) : Void
 	{
-		var clipboardDir = folders.temp + "/clipboard";
+		final clipboardDir = folders.temp + "/clipboard";
         if (fileSystem.exists(clipboardDir))
         {
             fileSystem.copyAny(clipboardDir, destDir);
