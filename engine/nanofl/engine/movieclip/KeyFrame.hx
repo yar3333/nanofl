@@ -163,7 +163,7 @@ class KeyFrame
         if (motionTween != null) r.motionTween =  motionTween.saveJson();
         
         final elementsToSave = elements.filter(x -> !x.type.match(ElementType.shape) || !(cast x:ShapeElement).isEmpty());
-        if (elementsToSave.length > 0) r.elements = elementsToSave.map(x -> x.saveJson());
+        r.elements = elementsToSave.map(x -> x.saveJson());
         
         return r;
     }
