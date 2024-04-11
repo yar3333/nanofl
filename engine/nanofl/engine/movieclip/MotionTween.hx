@@ -123,8 +123,6 @@ class MotionTween
             for (nextInstance in finishInstances)
             {
                 if (nextInstance.namePath == instance.namePath)
-                {
-                    if (!instance.symbol.type.match(LibraryItemType.video) || instance.videoCurrentTime != null && nextInstance.videoCurrentTime != null)
                     {
                         r.set(instance, nextInstance);
                         finishInstances.remove(nextInstance);
@@ -132,7 +130,6 @@ class MotionTween
                     }
                 }
             }
-        }
         
         return r;
     }

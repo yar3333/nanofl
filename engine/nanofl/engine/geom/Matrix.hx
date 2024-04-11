@@ -8,7 +8,7 @@ using htmlparser.HtmlParserTools;
 
 class Matrix
 {
-	static var DEG_TO_RAD = Math.PI / 180;
+	static final DEG_TO_RAD = Math.PI / 180;
 	
 	public var a : Float;
 	public var b : Float;
@@ -73,7 +73,7 @@ class Matrix
 		}
 	}
     #end
-	
+
 	public function decompose() : { x:Float, y:Float, scaleX:Float, scaleY:Float, rotation:Float, skewX:Float, skewY:Float }
 	{
 		var r : Dynamic = {};
@@ -82,7 +82,7 @@ class Matrix
 		r.y = ty;
 		r.scaleX = Math.sqrt(a * a + b * b);
 		r.scaleY = Math.sqrt(c * c + d * d);
-		
+	
 		var skewX = Math.atan2(-c, d);
 		var skewY = Math.atan2(b, a);
 		
@@ -104,6 +104,25 @@ class Matrix
 		
 		return r;
 	}
+    // // https://stackoverflow.com/questions/5107134/find-the-rotation-and-skew-of-a-matrix-transformation
+    // public function decompose() : { x:Float, y:Float, scaleX:Float, scaleY:Float, rotation:Float, skewX:Float, skewY:Float }
+	// {
+    //     final angle = Math.atan2(b, a);
+    //     final denom = Math.pow(a, 2) + Math.pow(b, 2);
+    //     final scaleX = Math.sqrt(denom);
+    //     final scaleY = (a * d - c * b) / scaleX;
+    //     final skewX = Math.atan2(a * c + b * d, denom);
+    //     return
+    //     {
+    //         rotation: angle / DEG_TO_RAD,  // this is rotation angle in degrees
+    //         scaleX: scaleX,                // scaleX factor  
+    //         scaleY: scaleY,                // scaleY factor
+    //         skewX: skewX / DEG_TO_RAD,     // skewX angle degrees
+    //         skewY: 0,                      // skewY angle degrees
+    //         x: tx,                         // translation point x
+    //         y: ty,                         // translation point y
+    //     };
+	// }
 	
 	public function setMatrix(m:{ a:Float, b:Float, c:Float, d:Float, tx:Float, ty:Float }) : Matrix
 	{
@@ -171,6 +190,24 @@ class Matrix
 	{
 		return setMatrix(new Matrix().appendTransform(x, y, scaleX, scaleY, rotation, skewX, skewY, regX, regY));
 	}
+    // // https://github.com/leeoniya/transformation-matrix-js/blob/master/src/matrix.js
+	// public function setTransform(x:Float, y:Float, scaleX:Float, scaleY:Float, rotation:Float, skewX:Float, skewY:Float, regX=0.0, regY=0.0) : Matrix
+	// {
+    //     // a - scale x
+    //     // b - skew y
+    //     // c - skew x
+    //     // d - scale y
+    //     // e - translate x
+    //     // f - translate y
+    //     final r = new Matrix(scaleX, skewY, skewX, scaleY, x, y);
+    //     if (rotation != 0) r.rotate(rotation);
+	// 	if (regX != 0 || regY != 0)
+	// 	{
+	// 		r.tx -= regX * r.a + regY * r.c;
+	// 		r.ty -= regX * r.b + regY * r.d;
+	// 	}
+    //     return setMatrix(r);
+	// }
 	
 	public function appendMatrix(m:Matrix) : Matrix
 	{
@@ -289,6 +326,11 @@ class Matrix
 	
 	public function rotate(angle:Float) : Matrix
 	{
+        // rotate: function(angle) {
+        // 	var cos = Math.cos(angle),
+        // 		sin = Math.sin(angle);
+        // 	this.append(cos, sin, -sin, cos, 0, 0);
+
 		var cos = Math.cos(angle);
 		var sin = Math.sin(angle);
 
