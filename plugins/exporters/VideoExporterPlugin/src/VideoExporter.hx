@@ -37,6 +37,7 @@ class VideoExporter
                     .concat(audioArgs)
                     .concat([ "-map", "0:v" ])
                     .concat(ffmpegQualityOptions)
+                    .concat([ "-t", Math.floor(args.library.getSceneItem().getTotalFrames() / args.documentProperties.framerate * 1000) + "ms" ] )
                     .concat([ args.destFilePath ]);
 
         Browser.console.log("FFmpeg: ", ffmpegArgs);

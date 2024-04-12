@@ -68,11 +68,21 @@ class AudioHelper
 
     public static function getSceneTracks(framerate:Float, library:IdeLibrary) : Array<AudioTrack>
     {
-        final tracker = ElementLifeTracker.createForMovieClip(library.getSceneItem(), true);
+        final sceneItem = library.getSceneItem();
+        final tracker = ElementLifeTracker.createForMovieClip(sceneItem, true);
         
         final r = new Array<AudioTrack>();
-        
-        final trackMovieClips = tracker.tracks.filter(x -> x.sameElementSequence[0].type.match(ElementType.instance)
+
+        final sceneTrack : ElementLifeTrack =
+        {
+            lifetimeFrames: sceneItem.getTotalFrames(),
+            startFrameIndex: 0,
+            sameElementSequence: [ library.getSceneInstance() ]
+        };
+
+        final tracksWithScene = [ sceneTrack ].concat(tracker.tracks);
+
+        final trackMovieClips = tracksWithScene.filter(x -> x.sameElementSequence[0].type.match(ElementType.instance)
                                                   && (cast x.sameElementSequence[0] : Instance).symbol.type.match(LibraryItemType.movieclip)
                                                   && getMovieClipItemFromTrack(x).relatedSound != null
                                                   && getMovieClipItemFromTrack(x).relatedSound != "");

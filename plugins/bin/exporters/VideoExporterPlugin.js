@@ -57,11 +57,14 @@ AudioHelper.getFFmpegArgsForMixTracks = function(tracks,startInputIndex) {
 	return args;
 };
 AudioHelper.getSceneTracks = function(framerate,library) {
-	var tracker = nanofl.ide.ElementLifeTracker.createForMovieClip(library.getSceneItem(),true);
+	var sceneItem = library.getSceneItem();
+	var tracker = nanofl.ide.ElementLifeTracker.createForMovieClip(sceneItem,true);
 	var r = [];
+	var sceneTrack = { lifetimeFrames : sceneItem.getTotalFrames(), startFrameIndex : 0, sameElementSequence : [library.getSceneInstance()]};
+	var tracksWithScene = [sceneTrack].concat(tracker.tracks);
 	var _g = [];
 	var _g1 = 0;
-	var _g2 = tracker.tracks;
+	var _g2 = tracksWithScene;
 	while(_g1 < _g2.length) {
 		var v = _g2[_g1];
 		++_g1;
@@ -183,7 +186,7 @@ VideoExporter.run = function(api,args,ffmpegQualityOptions) {
 	var dataOut = new Uint8Array(args.documentProperties.width * args.documentProperties.height * 3);
 	var totalFrames = args.library.getSceneItem().getTotalFrames();
 	var sceneFramesIterator = args.library.getSceneFramesIterator(args.documentProperties,true);
-	var ffmpegArgs = videoArgs.concat(audioArgs).concat(["-map","0:v"]).concat(ffmpegQualityOptions).concat([args.destFilePath]);
+	var ffmpegArgs = videoArgs.concat(audioArgs).concat(["-map","0:v"]).concat(ffmpegQualityOptions).concat(["-t",Math.floor(args.library.getSceneItem().getTotalFrames() / args.documentProperties.framerate * 1000) + "ms"]).concat([args.destFilePath]);
 	$global.console.log("FFmpeg: ",ffmpegArgs);
 	var frameNum = 0;
 	try {

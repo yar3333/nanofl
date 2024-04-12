@@ -117,10 +117,11 @@ class Application extends js.injecting.InjectContainer
 	
 	public function createNewEmptyDocument(?width:Int, ?height:Int, ?framerate:Float) : Document
 	{
-		var properties = new DocumentProperties("", width, height, "#FFFFFF", framerate);
+		final properties = new DocumentProperties("", width, height, "#FFFFFF", framerate);
 		
-		var document = documentTools.createTemporary(properties);
+		final document = documentTools.createTemporary(properties);
 		document.library.getRawLibrary().addSceneWithFrame();
+        document.saveNative();
 		document.activate(true);
 		return document;
 	}
@@ -129,10 +130,10 @@ class Application extends js.injecting.InjectContainer
 	{
 		if (path == null)
 		{
-			var importers = ImporterPlugins.plugins.array();
+			final importers = ImporterPlugins.plugins.array();
 			importers.sort((a, b) -> Reflect.compare(a.name, b.name));
 			
-			var filters = [];
+			final filters = [];
 			var allExtensions = ["nfl"]; for (importer in importers) allExtensions = allExtensions.concat(importer.fileFilterExtensions);
 			filters.push({ name:"All supported formats", extensions:allExtensions });
 			filters.push({ name:"NanoFL documents (*.nfl)", extensions:["nfl"] });

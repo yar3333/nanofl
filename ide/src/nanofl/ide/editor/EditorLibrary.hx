@@ -228,7 +228,7 @@ class EditorLibrary extends InjectContainer
 	
 	public function importFiles(folderPath="") : Promise<{}>
 	{
-        var filters = LoaderPlugins.plugins.filter(x -> x.extensions != null && x.extensions.length > 0)
+        final filters = LoaderPlugins.plugins.filter(x -> x.extensions != null && x.extensions.length > 0)
                                            .map(x -> { name:x.menuItemName + " files", extensions:x.extensions });
         
         filters.unshift({ name:"All supported files", extensions:filters.flatMap(x -> x.extensions).distinct() });
@@ -245,9 +245,9 @@ class EditorLibrary extends InjectContainer
     {
         for (path in paths)
         {
-            var file = Path.withoutDirectory(path);
-            var destLocalPath = Path.join([ folderPath, file ]);
-            var dest = Path.join([ library.libraryDir, destLocalPath ]);
+            final file = Path.withoutDirectory(path);
+            final destLocalPath = Path.join([ folderPath, file ]);
+            final dest = Path.join([ library.libraryDir, destLocalPath ]);
             fileSystem.copyFile(path, dest);
         }
     }
