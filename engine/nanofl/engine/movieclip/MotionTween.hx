@@ -123,13 +123,13 @@ class MotionTween
             for (nextInstance in finishInstances)
             {
                 if (nextInstance.namePath == instance.namePath)
-                    {
-                        r.set(instance, nextInstance);
-                        finishInstances.remove(nextInstance);
-                        break;
-                    }
+                {
+                    r.set(instance, nextInstance);
+                    finishInstances.remove(nextInstance);
+                    break;
                 }
             }
+        }
         
         return r;
     }
@@ -210,10 +210,15 @@ class MotionTween
 		
 		var startProps  = translatedMatrixByLocalVector(startInstance .matrix.clone(), startInstance.regX, startInstance.regY).decompose();
 		var finishProps = translatedMatrixByLocalVector(finishInstance.matrix.clone(), startInstance.regX, startInstance.regY).decompose();
+
+        log("startProps = "); log(startProps);
+        log("finishProps = "); log(finishProps);
 		
 		var props = guide.get(startProps, finishProps, orientToPath, k);
 		
-		targetInstance.matrix.setTransform
+		log("scaleX = " + (startProps.scaleX + (finishProps.scaleX - startProps.scaleX) * k));
+        
+        targetInstance.matrix.setTransform
 		(
 			props.x,
 			props.y,
@@ -304,8 +309,8 @@ class MotionTween
 		return true;
 	}
 	
-	static function log(v:Dynamic, ?infos:haxe.PosInfos)
+	static function log(v:Dynamic)
 	{
-		//trace(Reflect.isFunction(v) ? v() : v, infos);
+		//trace(Reflect.isFunction(v) ? v() : v);
 	}
 }

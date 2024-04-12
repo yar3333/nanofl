@@ -1,0 +1,6 @@
+--interp
+--library utest
+--class-path ../../engine
+--class-path src
+--library HtmlParser
+--main Main

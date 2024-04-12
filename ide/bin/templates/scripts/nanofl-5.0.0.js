@@ -5971,7 +5971,7 @@ class nanofl_engine_geom_Matrix {
 		this.tx = tx;
 		this.ty = ty;
 	}
-	decompose() {
+	decomposeFast() {
 		let r = { };
 		r.x = this.tx;
 		r.y = this.ty;
@@ -5979,18 +5979,42 @@ class nanofl_engine_geom_Matrix {
 		r.scaleY = Math.sqrt(this.c * this.c + this.d * this.d);
 		let skewX = Math.atan2(-this.c,this.d);
 		let skewY = Math.atan2(this.b,this.a);
-		if(skewX == skewY) {
-			r.rotation = skewY * 180 / Math.PI;
+		if(Math.abs(skewX - skewY) < 1e-13) {
+			r.rotation = skewY / nanofl_engine_geom_Matrix.DEG_TO_RAD;
 			if(this.a < 0 && this.d >= 0) {
 				r.rotation += r.rotation <= 0 ? 180 : -180;
 			}
-			r.skewX = r.skewY = 0;
+			r.skewX = 0;
+			r.skewY = 0;
 		} else {
 			r.rotation = 0;
-			r.skewX = skewX * 180 / Math.PI;
-			r.skewY = skewY * 180 / Math.PI;
+			r.skewX = skewX / nanofl_engine_geom_Matrix.DEG_TO_RAD;
+			r.skewY = skewY / nanofl_engine_geom_Matrix.DEG_TO_RAD;
 		}
 		return r;
+	}
+	decompose() {
+		let r0 = this.decomposeFast();
+		if(r0.skewX == 0 && r0.skewY == 0) {
+			return r0;
+		}
+		let m = this.clone().scale(-1,1);
+		let r = m.decomposeFast();
+		if(r.skewX == 0 && r.skewY == 0) {
+			r.scaleX = -r.scaleX;
+			r.x = -r.x;
+			r.rotation = -r.rotation;
+			return r;
+		}
+		let m1 = this.clone().scale(1,-1);
+		let r1 = m1.decomposeFast();
+		if(r1.skewX == 0 && r1.skewY == 0) {
+			r1.scaleY = -r1.scaleY;
+			r1.y = -r1.y;
+			r1.rotation = -r1.rotation;
+			return r1;
+		}
+		return r0;
 	}
 	setMatrix(m) {
 		this.a = m.a;
@@ -6098,6 +6122,15 @@ class nanofl_engine_geom_Matrix {
 			this.tx -= regX * this.a + regY * this.c;
 			this.ty -= regX * this.b + regY * this.d;
 		}
+		return this;
+	}
+	scale(kx,ky) {
+		this.a *= kx;
+		this.d *= ky;
+		this.c *= kx;
+		this.b *= ky;
+		this.tx *= kx;
+		this.ty *= ky;
 		return this;
 	}
 	getAverageScale() {
@@ -8023,11 +8056,9 @@ class nanofl_engine_movieclip_MotionTween {
 				let nextInstance = finishInstances[_g1];
 				++_g1;
 				if(nextInstance.namePath == instance.namePath) {
-					if(instance.get_symbol().get_type()._hx_index != 6 || instance.videoCurrentTime != null && nextInstance.videoCurrentTime != null) {
-						r.set(instance,nextInstance);
-						HxOverrides.remove(finishInstances,nextInstance);
-						break;
-					}
+					r.set(instance,nextInstance);
+					HxOverrides.remove(finishInstances,nextInstance);
+					break;
 				}
 			}
 		}
@@ -8040,7 +8071,12 @@ class nanofl_engine_movieclip_MotionTween {
 		let targetInstance = js_Boot.__cast(startInstance.clone() , nanofl_engine_elements_Instance);
 		let startProps = this.translatedMatrixByLocalVector(startInstance.matrix.clone(),startInstance.regX,startInstance.regY).decompose();
 		let finishProps = this.translatedMatrixByLocalVector(finishInstance.matrix.clone(),startInstance.regX,startInstance.regY).decompose();
+		nanofl_engine_movieclip_MotionTween.log("startProps = ");
+		nanofl_engine_movieclip_MotionTween.log(startProps);
+		nanofl_engine_movieclip_MotionTween.log("finishProps = ");
+		nanofl_engine_movieclip_MotionTween.log(finishProps);
 		let props = guide.get(startProps,finishProps,this.orientToPath,k);
+		nanofl_engine_movieclip_MotionTween.log("scaleX = " + (startProps.scaleX + (finishProps.scaleX - startProps.scaleX) * k));
 		targetInstance.matrix.setTransform(props.x,props.y,startProps.scaleX + (finishProps.scaleX - startProps.scaleX) * k,startProps.scaleY + (finishProps.scaleY - startProps.scaleY) * k,props.rotation + this.rotateCount * 360 * k,startProps.skewX + (finishProps.skewX - startProps.skewX) * k,startProps.skewY + (finishProps.skewY - startProps.skewY) * k);
 		this.translatedMatrixByLocalVector(targetInstance.matrix,-startInstance.regX,-startInstance.regY);
 		if(((startInstance.get_symbol()) instanceof nanofl_engine_libraryitems_MeshItem) && ((finishInstance.get_symbol()) instanceof nanofl_engine_libraryitems_MeshItem)) {
@@ -8076,7 +8112,7 @@ class nanofl_engine_movieclip_MotionTween {
 		return new nanofl_engine_movieclip_MotionTween(this.easing,this.orientToPath,this.rotateCount,this.rotateCountX,this.rotateCountY,this.directionalLightRotateCountX,this.directionalLightRotateCountY);
 	}
 	equ(_motionTween) {
-		stdlib_Debug.assert(((_motionTween) instanceof nanofl_engine_movieclip_MotionTween),null,{ fileName : "engine/nanofl/engine/movieclip/MotionTween.hx", lineNumber : 296, className : "nanofl.engine.movieclip.MotionTween", methodName : "equ"});
+		stdlib_Debug.assert(((_motionTween) instanceof nanofl_engine_movieclip_MotionTween),null,{ fileName : "engine/nanofl/engine/movieclip/MotionTween.hx", lineNumber : 298, className : "nanofl.engine.movieclip.MotionTween", methodName : "equ"});
 		let motionTween = _motionTween;
 		if(motionTween.easing != this.easing) {
 			return false;
@@ -8113,6 +8149,8 @@ class nanofl_engine_movieclip_MotionTween {
 		let tmp5 = obj.motionTweenDirectionalLightRotateCountX;
 		let tmp6 = obj.motionTweenDirectionalLightRotateCountY;
 		return new nanofl_engine_movieclip_MotionTween(tmp != null ? tmp : 0,tmp1 != null && tmp1,tmp2 != null ? tmp2 : 0,tmp3 != null ? tmp3 : 0,tmp4 != null ? tmp4 : 0,tmp5 != null ? tmp5 : 0,tmp6 != null ? tmp6 : 0);
+	}
+	static log(v) {
 	}
 }
 nanofl_engine_movieclip_MotionTween.__name__ = "nanofl.engine.movieclip.MotionTween";

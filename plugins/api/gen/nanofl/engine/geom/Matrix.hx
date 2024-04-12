@@ -10,6 +10,12 @@ extern class Matrix {
 	var ty : Float;
 	function save(out:htmlparser.XmlBuilder):Void;
 	function saveJson(obj:Dynamic):Void;
+	/**
+		
+		        Direct decompose. `scaleX` and `scaleY` always non-negative.
+		    
+	**/
+	function decomposeFast():{ var rotation : Float; var scaleX : Float; var scaleY : Float; var skewX : Float; var skewY : Float; var x : Float; var y : Float; };
 	function decompose():{ var rotation : Float; var scaleX : Float; var scaleY : Float; var skewX : Float; var skewY : Float; var x : Float; var y : Float; };
 	function setMatrix(m:{ var a : Float; var b : Float; var c : Float; var d : Float; var tx : Float; var ty : Float; }):nanofl.engine.geom.Matrix;
 	function isIdentity():Bool;

@@ -74,7 +74,10 @@ class Matrix
 	}
     #end
 
-	public function decompose() : { x:Float, y:Float, scaleX:Float, scaleY:Float, rotation:Float, skewX:Float, skewY:Float }
+	/**
+        Direct decompose. `scaleX` and `scaleY` always non-negative.
+    **/
+    public function decomposeFast() : { x:Float, y:Float, scaleX:Float, scaleY:Float, rotation:Float, skewX:Float, skewY:Float }
 	{
 		var r : Dynamic = {};
 		
@@ -83,47 +86,57 @@ class Matrix
 		r.scaleX = Math.sqrt(a * a + b * b);
 		r.scaleY = Math.sqrt(c * c + d * d);
 	
-		var skewX = Math.atan2(-c, d);
-		var skewY = Math.atan2(b, a);
+		final skewX = Math.atan2(-c, d);
+		final skewY = Math.atan2(b, a);
 		
-		if (skewX == skewY)
+		if (Math.abs(skewX - skewY) < 1e-13)
 		{
-			r.rotation = skewY * 180 / Math.PI;
+			r.rotation = skewY / DEG_TO_RAD;
 			if (a < 0 && d >= 0)
 			{
 				r.rotation += (r.rotation <= 0) ? 180 : -180;
 			}
-			r.skewX = r.skewY = 0;
+			r.skewX = 0;
+            r.skewY = 0;
 		}
 		else
 		{
 			r.rotation = 0;
-			r.skewX = skewX * 180 / Math.PI;
-			r.skewY = skewY * 180 / Math.PI;
+			r.skewX = skewX / DEG_TO_RAD;
+			r.skewY = skewY / DEG_TO_RAD;
 		}
 		
 		return r;
 	}
-    // // https://stackoverflow.com/questions/5107134/find-the-rotation-and-skew-of-a-matrix-transformation
-    // public function decompose() : { x:Float, y:Float, scaleX:Float, scaleY:Float, rotation:Float, skewX:Float, skewY:Float }
-	// {
-    //     final angle = Math.atan2(b, a);
-    //     final denom = Math.pow(a, 2) + Math.pow(b, 2);
-    //     final scaleX = Math.sqrt(denom);
-    //     final scaleY = (a * d - c * b) / scaleX;
-    //     final skewX = Math.atan2(a * c + b * d, denom);
-    //     return
-    //     {
-    //         rotation: angle / DEG_TO_RAD,  // this is rotation angle in degrees
-    //         scaleX: scaleX,                // scaleX factor  
-    //         scaleY: scaleY,                // scaleY factor
-    //         skewX: skewX / DEG_TO_RAD,     // skewX angle degrees
-    //         skewY: 0,                      // skewY angle degrees
-    //         x: tx,                         // translation point x
-    //         y: ty,                         // translation point y
-    //     };
-	// }
-	
+
+    public function decompose() : { x:Float, y:Float, scaleX:Float, scaleY:Float, rotation:Float, skewX:Float, skewY:Float }
+    {
+        final r0 = decomposeFast();
+        if (r0.skewX == 0 && r0.skewY == 0) return r0;
+        
+        final m = clone().scale(-1, 1);
+        final r = m.decomposeFast();
+        if (r.skewX == 0 && r.skewY == 0)
+        {
+            r.scaleX = -r.scaleX;
+            r.x = -r.x;
+            r.rotation = -r.rotation;
+            return r;
+        }
+        
+        final m = clone().scale(1, -1);
+        final r = m.decomposeFast();
+        if (r.skewX == 0 && r.skewY == 0)
+        {
+            r.scaleY = -r.scaleY;
+            r.y = -r.y;
+            r.rotation = -r.rotation;
+            return r;
+        }
+        
+        return r0;
+    }
+
 	public function setMatrix(m:{ a:Float, b:Float, c:Float, d:Float, tx:Float, ty:Float }) : Matrix
 	{
 		a = m.a;
@@ -350,8 +363,8 @@ class Matrix
 	
 	public function skew(skewX:Float, skewY:Float) : Matrix
 	{
-		skewX = skewX*DEG_TO_RAD;
-		skewY = skewY*DEG_TO_RAD;
+		skewX *= DEG_TO_RAD;
+		skewY *= DEG_TO_RAD;
 		append(Math.cos(skewY), Math.sin(skewY), -Math.sin(skewX), Math.cos(skewX), 0, 0);
 		return this;
 	}
@@ -432,7 +445,8 @@ class Matrix
 		return (Math.sqrt(a*a + c*c) + Math.sqrt(b*b + d*d)) / 2;
 	}
 	
-	public function toNative() : easeljs.geom.Matrix2D
+	#if easeljs
+    public function toNative() : easeljs.geom.Matrix2D
 	{
 		return new easeljs.geom.Matrix2D(a, b, c, d, tx, ty);
 	}
@@ -441,6 +455,7 @@ class Matrix
 	{
 		return new Matrix(m.a, m.b, m.c, m.d, m.tx, m.ty);
 	}
+    #end
 	
 	public function toArray() : Array<Float>
 	{
