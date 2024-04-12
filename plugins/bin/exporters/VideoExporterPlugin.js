@@ -21,16 +21,16 @@ AudioHelper.getFFmpegArgsForMixTracks = function(tracks,startInputIndex) {
 		if(track.duration != null) {
 			if(track.loop) {
 				args.push("-stream_loop");
+				args.push("-1");
 			}
-			args.push("-1");
 			if(track.seekTo != 0) {
 				args.push("-ss");
+				args.push(track.seekTo + "");
 			}
-			args.push(track.seekTo + "");
 			if(track.duration != null) {
 				args.push("-t");
+				args.push(track.duration + "");
 			}
-			args.push(track.duration + "");
 		}
 		args.push("-i");
 		args.push(track.filePath);
@@ -84,7 +84,7 @@ AudioHelper.getSceneTracks = function(framerate,library) {
 	while(_g1 < _g2.length) {
 		var v = _g2[_g1];
 		++_g1;
-		if(v.sameElementSequence[0].get_type()._hx_index == 1 && v.sameElementSequence[0].get_symbol().get_type()._hx_index == 6 && AudioHelper.getVideoItemFromTrack(v).hasAudio && !AudioHelper.isInstanceTweened(v.sameElementSequence[0])) {
+		if(v.sameElementSequence[0].get_type()._hx_index == 1 && v.sameElementSequence[0].get_symbol().get_type()._hx_index == 6 && AudioHelper.getVideoItemFromTrack(v).hasAudio && !AudioHelper.isVideoInstanceTweenedSeeking(v.sameElementSequence[0])) {
 			_g.push(v);
 		}
 	}
@@ -113,22 +113,41 @@ AudioHelper.getVideoItemFromTrack = function(track) {
 	var instance = element;
 	return instance.get_symbol();
 };
-AudioHelper.isInstanceTweened = function(instance) {
-	if(!instance.parent.hasMotionTween()) {
-		if(instance.parent.duration == 1) {
-			var tmp = instance.parent.getPrevKeyFrame();
-			var tmp1 = tmp != null ? tmp.hasMotionTween() : null;
-			if(tmp1 != null) {
-				return tmp1;
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
-	} else {
-		return true;
+AudioHelper.isVideoInstanceTweenedSeeking = function(instance) {
+	if(instance.videoCurrentTime == null) {
+		return false;
 	}
+	if(instance.parent.hasGoodMotionTween()) {
+		var map = instance.parent.getMotionTween().getInstancesMap();
+		var finishInstance = map.get(instance);
+		return (finishInstance != null ? finishInstance.videoCurrentTime : null) != null;
+	}
+	var tmp;
+	if(instance.parent.duration == 1) {
+		var tmp1 = instance.parent.getPrevKeyFrame();
+		var tmp2 = tmp1 != null ? tmp1.hasMotionTween() : null;
+		tmp = tmp2 != null && tmp2;
+	} else {
+		tmp = false;
+	}
+	if(tmp) {
+		var map = instance.parent.getPrevKeyFrame().getMotionTween().getInstancesMap();
+		var startInstance = null;
+		var jsIterator = map.entries();
+		var _g_jsIterator = jsIterator;
+		var _g_lastStep = jsIterator.next();
+		while(!_g_lastStep.done) {
+			var v = _g_lastStep.value;
+			_g_lastStep = _g_jsIterator.next();
+			var x = v;
+			if(x[1] == instance) {
+				startInstance = x[0];
+				break;
+			}
+		}
+		return (startInstance != null ? startInstance.videoCurrentTime : null) != null;
+	}
+	return false;
 };
 var Main = function() { };
 Main.__name__ = true;

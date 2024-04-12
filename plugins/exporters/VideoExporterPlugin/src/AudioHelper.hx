@@ -1,3 +1,4 @@
+import js.lib.Map;
 import nanofl.engine.ElementType;
 import nanofl.engine.LibraryItemType;
 import nanofl.engine.elements.Instance;
@@ -44,9 +45,9 @@ class AudioHelper
         {
             if (track.duration != null)
             {
-                if (track.loop) args.push("-stream_loop"); args.push("-1");
-                if (track.seekTo != 0) args.push("-ss"); args.push(track.seekTo + "");
-                if (track.duration != null) args.push("-t"); args.push(track.duration + "");
+                if (track.loop) { args.push("-stream_loop"); args.push("-1"); }
+                if (track.seekTo != 0) { args.push("-ss"); args.push(track.seekTo + ""); }
+                if (track.duration != null) { args.push("-t"); args.push(track.duration + ""); }
             }
             args.push("-i"); args.push(track.filePath);
         }
@@ -85,7 +86,7 @@ class AudioHelper
         final trackVideos = tracker.tracks.filter(x -> x.sameElementSequence[0].type.match(ElementType.instance)
                                               && (cast x.sameElementSequence[0] : Instance).symbol.type.match(LibraryItemType.video)
                                               && getVideoItemFromTrack(x).hasAudio
-                                              && !isInstanceTweened((cast x.sameElementSequence[0] : Instance)));
+                                              && !isVideoInstanceTweenedSeeking((cast x.sameElementSequence[0] : Instance)));
         for (track in trackVideos)
         {
             final mcVideo = getVideoItemFromTrack(track);
@@ -126,12 +127,25 @@ class AudioHelper
         return (cast instance.symbol : VideoItem);
     }
 
-    static function isInstanceTweened(instance:Instance) : Bool
+    static function isVideoInstanceTweenedSeeking(instance:Instance) : Bool
     {
-        // if (!instance.parent.hasMotionTween()) return false;
-        // final instancesMap = instance.parent.getMotionTween().getInstancesMap();
-        // if (!instancesMap.has(instance)) return false;
-        // return instancesMap.get(instance) != instance;
-        return instance.parent.hasMotionTween() || instance.parent.duration == 1 && (instance.parent.getPrevKeyFrame()?.hasMotionTween() ?? false);
+        if (instance.videoCurrentTime == null) return false;
+        
+        if (instance.parent.hasGoodMotionTween())
+        {
+            final map = instance.parent.getMotionTween().getInstancesMap();
+            final finishInstance = map.get(instance);
+            return finishInstance?.videoCurrentTime != null;
+        }
+
+        if (instance.parent.duration == 1 && (instance.parent.getPrevKeyFrame()?.hasMotionTween() ?? false))
+        {
+            final map : Map<Dynamic, Dynamic> = instance.parent.getPrevKeyFrame().getMotionTween().getInstancesMap();
+            var startInstance : Instance = null;
+            for (x in map.keyValueIterator()) if (x.value == instance) { startInstance = x.key; break; }
+            return startInstance?.videoCurrentTime != null;
+        }
+        
+        return false;
     }
 }

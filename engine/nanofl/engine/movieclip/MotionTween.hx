@@ -106,7 +106,7 @@ class MotionTween
         }
     }
     
-    function getInstancesMap() : Map<Instance, Instance>
+    public function getInstancesMap() : Map<Instance, Instance>
     {
         final startElements = keyFrame.elements;
         final finishElements = keyFrame.getNextKeyFrame()?.elements;
