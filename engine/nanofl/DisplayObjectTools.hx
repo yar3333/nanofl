@@ -1,7 +1,6 @@
 package nanofl;
 
 import nanofl.engine.MaskTools;
-import nanofl.engine.LayerType;
 import easeljs.display.Container;
 import easeljs.display.DisplayObject;
 import easeljs.geom.Rectangle;
@@ -239,26 +238,7 @@ class DisplayObjectTools
 
         if (Std.isOfType(dispObj, MovieClip))
         {
-            final mc : MovieClip = cast dispObj;
-            final masks = new Map<Int, Container>();
-            
-            for (layerIndex in 0...mc.symbol.layers.length)
-            {
-                final layer = mc.symbol.layers[layerIndex];
-                if (layer.parentLayer?.type == LayerType.mask)
-                {
-                    for (child in mc.getChildrenByLayerIndex(layerIndex))
-                    {
-                        var mask = masks.get(layer.parentIndex);
-                        if (mask == null)
-                        {
-                            mask = MaskTools.createMaskFromMovieClipLayer(mc, layer.parentIndex);
-                            masks.set(layer.parentIndex, mask);
-                        }
-                        MaskTools.applyMaskToDisplayObject(mask, child);
-                    }
-                }
-            }
+            MaskTools.processMovieClip((cast dispObj:MovieClip));
         }
 
         if (!force && !childChanged && dispObj.cacheCanvas == null && !isNeedCache(dispObj)) return false;

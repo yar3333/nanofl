@@ -8,18 +8,31 @@ import easeljs.display.DisplayObject;
 class MaskTools
 {
     static var onePixTransarentCanvas : CanvasElement;
-    static function getOnePixTransarentCanvas()
+
+    public static function processMovieClip(mc:MovieClip) : Void
     {
-        if (onePixTransarentCanvas == null)
+        final masks = new Map<Int, Container>();
+        
+        for (layerIndex in 0...mc.symbol.layers.length)
         {
-            onePixTransarentCanvas = Browser.document.createCanvasElement();
-            onePixTransarentCanvas.width = 1;
-            onePixTransarentCanvas.height = 1;
+            final layer = mc.symbol.layers[layerIndex];
+            if (layer.parentLayer?.type == LayerType.mask)
+            {
+                for (child in mc.getChildrenByLayerIndex(layerIndex))
+                {
+                    var mask = masks.get(layer.parentIndex);
+                    if (mask == null)
+                    {
+                        mask = MaskTools.createMaskFromMovieClipLayer(mc, layer.parentIndex);
+                        masks.set(layer.parentIndex, mask);
+                    }
+                    MaskTools.applyMaskToDisplayObject(mask, child);
+                }
+            }
         }
-        return onePixTransarentCanvas;
     }
 
-    public static function createMaskFromMovieClipLayer(mc:MovieClip, layerIndex:Int) : Container
+    static function createMaskFromMovieClipLayer(mc:MovieClip, layerIndex:Int) : Container
     {
         final mask = new Container();
         for (obj in mc.getChildrenByLayerIndex(layerIndex))
@@ -31,7 +44,7 @@ class MaskTools
         return mask;
     }
 
-    public static function applyMaskToDisplayObject(mask:DisplayObject, obj:DisplayObject) : Void
+    static function applyMaskToDisplayObject(mask:DisplayObject, obj:DisplayObject) : Void
 	{
 	    final objBounds = DisplayObjectTools.getOuterBounds(obj);
 		if (objBounds == null || objBounds.width == 0 || objBounds.height == 0) return;
@@ -59,12 +72,23 @@ class MaskTools
 
         final cacheBounds = DisplayObjectTools.getRectangleForCaching(intersection);
 		
-        maskContainer.cache(cast cacheBounds.x, cast cacheBounds.y, cast cacheBounds.width, cast cacheBounds.height, 2); // cache scale > 1 to prevent blinking
-        obj          .cache(cast cacheBounds.x, cast cacheBounds.y, cast cacheBounds.width, cast cacheBounds.height, 2);
+        maskContainer.cache(cast cacheBounds.x, cast cacheBounds.y, cast cacheBounds.width, cast cacheBounds.height, 1); // cache scale > 1 to prevent blinking
+        obj          .cache(cast cacheBounds.x, cast cacheBounds.y, cast cacheBounds.width, cast cacheBounds.height, 1);
 		
 		new easeljs.filters.AlphaMaskFilter(maskContainer.cacheCanvas)
             .applyFilter(obj.cacheCanvas.getContext2d(), 0, 0, 
                 maskContainer.cacheCanvas.width, 
                 maskContainer.cacheCanvas.height);
 	}
+
+    static function getOnePixTransarentCanvas()
+    {
+        if (onePixTransarentCanvas == null)
+        {
+            onePixTransarentCanvas = Browser.document.createCanvasElement();
+            onePixTransarentCanvas.width = 1;
+            onePixTransarentCanvas.height = 1;
+        }
+        return onePixTransarentCanvas;
+    }
 }
