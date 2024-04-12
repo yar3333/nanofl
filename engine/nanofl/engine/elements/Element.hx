@@ -28,6 +28,8 @@ abstract class Element
 	public var matrix = new Matrix();
 	public var regX = 0.0;
 	public var regY = 0.0;
+	public var flipX = false;
+	public var flipY = false;
 	
     function new() {}
 	
@@ -120,6 +122,8 @@ abstract class Element
 		matrix = Matrix.load(node);
 		regX = node.getAttr("regX", 0.0);
 		regY = node.getAttr("regY", 0.0);
+        flipX = node.getAttr("flipX", false);
+        flipY = node.getAttr("flipY", false);
 		return true;
 	}
     #end
@@ -129,6 +133,8 @@ abstract class Element
 		matrix = Matrix.loadJson(obj);
 		regX = obj.regX ?? 0.0;
 		regY = obj.regY ?? 0.0;
+		flipX = obj.flipX ?? false;
+		flipY = obj.flipY ?? false;
 		return true;
 	}
 	
@@ -154,6 +160,8 @@ abstract class Element
 		matrix.save(out);
 		out.attr("regX", regX, 0.0);
 		out.attr("regY", regY, 0.0);
+		out.attr("flipX", flipX, false);
+		out.attr("flipY", flipY, false);
 	}
 
 	function savePropertiesJson(obj:Dynamic) : Void
@@ -161,6 +169,8 @@ abstract class Element
         matrix.saveJson(obj);
         obj.regX = regX ?? 0.0;
         obj.regY = regY ?? 0.0;
+        if (flipX) obj.flipX = true;
+        if (flipY) obj.flipY = true;
 	}
     #end
 	
@@ -172,6 +182,8 @@ abstract class Element
 		obj.matrix = matrix.clone();
 		obj.regX = regX;
 		obj.regY = regY;
+		obj.flipX = flipX;
+		obj.flipY = flipY;
 	}
 	
 	public function translate(dx:Float, dy:Float)
@@ -184,7 +196,7 @@ abstract class Element
 	function elementUpdateDisplayObjectBaseProperties(dispObj:easeljs.display.DisplayObject)
 	{
 		dispObj.visible = visible;
-		dispObj.set(matrix.decompose());
+		dispObj.set(decomposeMatrix());
 		dispObj.filters = [];
 	}
 	
@@ -195,12 +207,14 @@ abstract class Element
 	
 	public function equ(element:Element) : Bool
 	{
-        if (Type.getClass(element) != Type.getClass((cast this:Element))) return false;
+        if (Type.getClass(element) != Type.getClass(this)) return false;
 		if (element.visible != visible) return false;
 		
 		if (!element.matrix.equ(matrix)) return false;
 		if (element.regX != regX) return false;
 		if (element.regY != regY) return false;
+		if (element.flipX != flipX) return false;
+		if (element.flipY != flipY) return false;
 		
 		return true;
 	}
@@ -228,4 +242,9 @@ abstract class Element
 	{
 		return [];
 	}
+
+    public function decomposeMatrix() : { x:Float, y:Float, scaleX:Float, scaleY:Float, rotation:Float, skewX:Float, skewY:Float }
+    {
+        return matrix.decompose(flipX, flipY);
+    }
 }

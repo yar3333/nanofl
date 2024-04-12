@@ -905,8 +905,8 @@ class Editor extends InjectContainer
 		}
 	}
 	
-	static function log(v:Dynamic, ?infos:haxe.PosInfos)
+	static function log(v:Dynamic)
 	{
-		//haxe.Log.trace(Reflect.isFunction(v) ? v() : v, infos);
+		//haxe.Log.trace(Reflect.isFunction(v) ? v() : v);
 	}
 }

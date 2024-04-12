@@ -40,33 +40,39 @@ class TransformEditorTool extends SelectEditorTool
 		
 		transformationBox.resize.bind(function(_, e)
 		{
-			var selectedItems = editor.getSelectedItems();
-			var shapeSelected = editor.figure.hasSelected();
+            log("e.kx = " + e.kx);
+            //log("e.ky = " + e.ky);
+
+			final selectedItems = editor.getSelectedItems();
+			final shapeSelected = editor.figure.hasSelected();
 			
 			if (selectedItems.length == 1 && !shapeSelected)
 			{
-				var item = selectedItems[0];
+				final item = selectedItems[0];
 
-                var oldScaleX = item.dispObj.scaleX;
-                var oldScaleY = item.dispObj.scaleY;
+                final oldScaleX = item.dispObj.scaleX;
+                final oldScaleY = item.dispObj.scaleY;
                 item.dispObj.scaleX = 1;
                 item.dispObj.scaleY = 1;
-                var scale = localToLocalVector(transformationBox, e.kx, e.ky, item.dispObj);
-                item.dispObj.scaleX = oldScaleX * scale.x;
-                item.dispObj.scaleY = oldScaleY * scale.y;
+                final scale = localToLocalVector(transformationBox, e.kx, e.ky, item.dispObj);
+                item.dispObj.scaleX = Math.abs(oldScaleX) * scale.x;
+                item.dispObj.scaleY = Math.abs(oldScaleY) * scale.y;
                 
-                var bounds = item.getBounds();
-                var v = localToLocalVector(item.dispObj, bounds.x, bounds.y, transformationBox.parent);
+                final bounds = item.getBounds();
+                final v = localToLocalVector(item.dispObj, bounds.x, bounds.y, transformationBox.parent);
                 item.dispObj.x = transformationBox.x - v.x;
                 item.dispObj.y = transformationBox.y - v.y;
                 
                 item.originalElement.matrix.setMatrix(item.dispObj.getMatrix());
+
+                if (e.kx < 0) item.originalElement.flipX = !item.originalElement.flipX;
+                if (e.ky < 0) item.originalElement.flipY = !item.originalElement.flipY;
 			}
 			else
 			{
-				var angle = transformationBox.rotation * Math.PI / 180;
+				final angle = transformationBox.rotation * Math.PI / 180;
 				
-				var m = new Matrix()
+				final m = new Matrix()
 					.translate(-e.regX, -e.regY)
 					.rotate(-angle)
 					.scale(e.kx, e.ky)
@@ -76,6 +82,8 @@ class TransformEditorTool extends SelectEditorTool
 				for (item in selectedItems)
 				{
 					item.originalElement.matrix.prependMatrix(m);
+                    if (e.kx < 0) item.originalElement.flipX = !item.originalElement.flipX;
+                    if (e.ky < 0) item.originalElement.flipY = !item.originalElement.flipY;
 				}
 				
 				editor.figure.transformSelected(m);
@@ -86,7 +94,7 @@ class TransformEditorTool extends SelectEditorTool
 		
 		transformationBox.rotate.bind(function(t, e)
 		{
-			var m = new Matrix()
+			final m = new Matrix()
 					.translate(-e.regX, -e.regY)
 					.rotate(e.angle)
 					.translate( e.regX,  e.regY);
@@ -103,13 +111,13 @@ class TransformEditorTool extends SelectEditorTool
 		
 		transformationBox.changeRegPoint.bind(function(t, _)
 		{
-			var selectedItems = editor.getSelectedItems();
-			var shapeSelected = editor.figure.hasSelected();
+			final selectedItems = editor.getSelectedItems();
+			final shapeSelected = editor.figure.hasSelected();
 			
 			if (selectedItems.length == 1 && !shapeSelected)
 			{
-				var item = selectedItems[0];
-				var regPoint = transformationBox.localToLocal(transformationBox.regPointX, transformationBox.regPointY, item.dispObj);
+				final item = selectedItems[0];
+				final regPoint = transformationBox.localToLocal(transformationBox.regPointX, transformationBox.regPointY, item.dispObj);
 				item.currentElement.regX = regPoint.x;
 				item.currentElement.regY = regPoint.y;
 				item.update();
@@ -118,12 +126,12 @@ class TransformEditorTool extends SelectEditorTool
 
 		transformationBox.barMove.bind(function(t, e)
         {
-            var selectedItems = editor.getSelectedItems();
-            var shapeSelected = editor.figure.hasSelected();
+            final selectedItems = editor.getSelectedItems();
+            final shapeSelected = editor.figure.hasSelected();
             
             if (selectedItems.length == 1 && !shapeSelected)
             {
-                var item = selectedItems[0];
+                final item = selectedItems[0];
                 if (Std.is(item, EditorElementInstance))
                 {
                     switch (e.code)
@@ -157,8 +165,8 @@ class TransformEditorTool extends SelectEditorTool
 	
 	function updateTransformationBox()
 	{
-		var selectedItems = editor.getSelectedItems();
-		var figureSelected = editor.figure.hasSelected();
+		final selectedItems = editor.getSelectedItems();
+		final figureSelected = editor.figure.hasSelected();
 		
 		if (selectedItems.length > 0 || figureSelected)
 		{
@@ -167,7 +175,7 @@ class TransformEditorTool extends SelectEditorTool
 			
 			if (selectedItems.length == 1 && !figureSelected)
 			{
-				var item = selectedItems[0];
+				final item = selectedItems[0];
 				
 				transformationBox.rotation = item.dispObj.rotation;
 				transformationBox.skewX = item.dispObj.skewX;
@@ -175,14 +183,14 @@ class TransformEditorTool extends SelectEditorTool
 				transformationBox.scaleX = stdlib.Std.sign(item.dispObj.scaleX);
 				transformationBox.scaleY = stdlib.Std.sign(item.dispObj.scaleY);
 				
-				var bounds = item.getBounds();
-				var pos = item.dispObj.localToLocal(bounds.x, bounds.y, transformationBox.parent);
+				final bounds = item.getBounds();
+				final pos = item.dispObj.localToLocal(bounds.x, bounds.y, transformationBox.parent);
 				transformationBox.x = pos.x;
 				transformationBox.y = pos.y;
 				transformationBox.width  = PointTools.getLength(localToLocalVector(item.dispObj, bounds.width,  0, transformationBox));
 				transformationBox.height = PointTools.getLength(localToLocalVector(item.dispObj, 0, bounds.height, transformationBox));
 				
-				var regPoint = item.dispObj.localToLocal(item.currentElement.regX, item.currentElement.regY, transformationBox);
+				final regPoint = item.dispObj.localToLocal(item.currentElement.regX, item.currentElement.regY, transformationBox);
 				transformationBox.regPointX = regPoint.x;
 				transformationBox.regPointY = regPoint.y;
 
@@ -190,11 +198,11 @@ class TransformEditorTool extends SelectEditorTool
 				{
 					transformationBox.enableBars = true;
 					
-					var kx = 0.5 + normalizeAngleDeg((cast item:EditorElementInstance).element.meshParams.rotationY) / 360;
+					final kx = 0.5 + normalizeAngleDeg((cast item:EditorElementInstance).element.meshParams.rotationY) / 360;
 					transformationBox.topBarPosition =
 					transformationBox.bottomBarPosition = kx;
 					
-					var ky = 0.5 - normalizeAngleDeg((cast item:EditorElementInstance).element.meshParams.rotationX) / 360;
+					final ky = 0.5 - normalizeAngleDeg((cast item:EditorElementInstance).element.meshParams.rotationX) / 360;
 					transformationBox.leftBarPosition =
 					transformationBox.rightBarPosition = ky;
 				}
@@ -207,11 +215,11 @@ class TransformEditorTool extends SelectEditorTool
 				transformationBox.scaleX = 1;
 				transformationBox.scaleY = 1;
 				
-				var bounds = { minX:1.0e10, minY:1.0e10, maxX:-1.0e10, maxY:-1.0e10 };
+				final bounds = { minX:1.0e10, minY:1.0e10, maxX:-1.0e10, maxY:-1.0e10 };
 				
 				for (item in selectedItems)
 				{
-					var b = item.getBounds();
+					final b = item.getBounds();
 					extendBounds(bounds, b.x, b.y, item.dispObj, transformationBox.parent);
 					extendBounds(bounds, b.x + b.width, b.y, item.dispObj, transformationBox.parent);
 					extendBounds(bounds, b.x + b.width, b.y + b.height, item.dispObj, transformationBox.parent);
@@ -236,11 +244,11 @@ class TransformEditorTool extends SelectEditorTool
 	
 	function updateDefaultRegPoint()
 	{
-		var selectedItems = editor.getSelectedItems();
+		final selectedItems = editor.getSelectedItems();
 		if (selectedItems.length == 1)
 		{
 			editor.updateTransformations();
-			var pt = selectedItems[0].dispObj.localToLocal(0, 0, transformationBox);
+			final pt = selectedItems[0].dispObj.localToLocal(0, 0, transformationBox);
 			transformationBox.defaultRegPointX = pt.x;
 			transformationBox.defaultRegPointY = pt.y;
 		}
@@ -253,7 +261,7 @@ class TransformEditorTool extends SelectEditorTool
 	
 	function extendBounds(bounds:Bounds, x:Float, y:Float, src:DisplayObject, dest:DisplayObject)
 	{
-		var pt = src.localToLocal(x, y, dest);
+		final pt = src.localToLocal(x, y, dest);
 		bounds.minX = Math.min(bounds.minX, pt.x);
 		bounds.minY = Math.min(bounds.minY, pt.y);
 		bounds.maxX = Math.max(bounds.maxX, pt.x);
@@ -262,8 +270,8 @@ class TransformEditorTool extends SelectEditorTool
 	
 	function localToLocalVector(src:DisplayObject, x:Float, y:Float, dst:DisplayObject) : Point
 	{
-		var pt0 = src.localToLocal(0, 0, dst);
-		var pt1 = src.localToLocal(x, y, dst);
+		final pt0 = src.localToLocal(0, 0, dst);
+		final pt1 = src.localToLocal(x, y, dst);
 		return { x:pt1.x - pt0.x, y:pt1.y - pt0.y };
 	}
 	
@@ -315,7 +323,7 @@ class TransformEditorTool extends SelectEditorTool
 	
 	function normalizeAngleDeg(a:Float)
 	{
-		var sign = Std.sign(a);
+		final sign = Std.sign(a);
 		a = Math.abs(a);
 		a -= Std.int(a / 360) * 360;
 		if (a > 180.0) a -= 360;
@@ -325,5 +333,10 @@ class TransformEditorTool extends SelectEditorTool
 	function traceDO(dispObj:Container)
 	{
 		trace("scaleX=" + dispObj.scaleX + ", scaleY=" + dispObj.scaleY + ", skewX=" + dispObj.skewX + ", skewY=" + dispObj.skewY);
+	}
+
+	static function log(v:Dynamic)
+	{
+		//haxe.Log.trace(Reflect.isFunction(v) ? v() : v);
 	}
 }

@@ -145,7 +145,7 @@ abstract class EditorElement implements ISelectable
 
 	public function updateTransformations()
 	{
-		var properties = currentElement.matrix.decompose();
+		var properties = currentElement.decomposeMatrix();
 		
 		dispObj.set(properties);
 		selectionBoxShape.set(properties);

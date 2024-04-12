@@ -33,7 +33,7 @@ class Code extends components.nanofl.properties.base.Code
 			template().w.val(Std.string(roundFloat100(item.width)));
 			template().h.val(Std.string(roundFloat100(item.height)));
 			
-			var props = item.originalElement.matrix.decompose();
+			var props = item.originalElement.decomposeMatrix();
 			var r : Float = null;
 			if (props.rotation != 0.0) r = props.rotation;
 			else
@@ -161,7 +161,7 @@ class Code extends components.nanofl.properties.base.Code
 		{
 			undoQueue.beginTransaction({ transformations:true });
 			
-			var props = item.originalElement.matrix.decompose();
+			var props = item.originalElement.decomposeMatrix();
 			props.skewX = 0;
 			props.skewY = 0;
 			props.rotation = rotation;

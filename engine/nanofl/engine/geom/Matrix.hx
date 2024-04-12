@@ -74,12 +74,46 @@ class Matrix
 	}
     #end
 
+    public function decompose(flipX=false, flipY=false) : { x:Float, y:Float, scaleX:Float, scaleY:Float, rotation:Float, skewX:Float, skewY:Float }
+    {
+        switch ([ flipX, flipY ])
+        {
+            case [ false, false ]:
+                return decomposeInner();
+
+            case [ true, false ]:
+                final m = clone().scale(-1, 1);
+                final r = m.decomposeInner();
+                r.scaleX = -r.scaleX;
+                r.x = -r.x;
+                r.rotation = -r.rotation;
+                return r;
+
+            case [ false, true ]:
+                final m = clone().scale(1, -1);
+                final r = m.decomposeInner();
+                r.scaleY = -r.scaleY;
+                r.y = -r.y;
+                r.rotation = -r.rotation;
+                return r;
+
+            case [ true, true ]:
+                final m = clone().scale(-1, -1);
+                final r = m.decomposeInner();
+                r.scaleX = -r.scaleX;
+                r.scaleY = -r.scaleY;
+                r.x = -r.x;
+                r.y = -r.y;
+                return r;
+        }
+    }
+
 	/**
-        Direct decompose. `scaleX` and `scaleY` always non-negative.
+        Direct decompose with no flip assumed. `scaleX` and `scaleY` always non-negative.
     **/
-    public function decomposeFast() : { x:Float, y:Float, scaleX:Float, scaleY:Float, rotation:Float, skewX:Float, skewY:Float }
+    function decomposeInner() : { x:Float, y:Float, scaleX:Float, scaleY:Float, rotation:Float, skewX:Float, skewY:Float }
 	{
-		var r : Dynamic = {};
+		final r : Dynamic = {};
 		
 		r.x = tx;
 		r.y = ty;
@@ -108,34 +142,6 @@ class Matrix
 		
 		return r;
 	}
-
-    public function decompose() : { x:Float, y:Float, scaleX:Float, scaleY:Float, rotation:Float, skewX:Float, skewY:Float }
-    {
-        final r0 = decomposeFast();
-        if (r0.skewX == 0 && r0.skewY == 0) return r0;
-        
-        final m = clone().scale(-1, 1);
-        final r = m.decomposeFast();
-        if (r.skewX == 0 && r.skewY == 0)
-        {
-            r.scaleX = -r.scaleX;
-            r.x = -r.x;
-            r.rotation = -r.rotation;
-            return r;
-        }
-        
-        final m = clone().scale(1, -1);
-        final r = m.decomposeFast();
-        if (r.skewX == 0 && r.skewY == 0)
-        {
-            r.scaleY = -r.scaleY;
-            r.y = -r.y;
-            r.rotation = -r.rotation;
-            return r;
-        }
-        
-        return r0;
-    }
 
 	public function setMatrix(m:{ a:Float, b:Float, c:Float, d:Float, tx:Float, ty:Float }) : Matrix
 	{

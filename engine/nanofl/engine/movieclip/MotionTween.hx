@@ -208,8 +208,8 @@ class MotionTween
 
 		var targetInstance = cast(startInstance.clone(), Instance);
 		
-		var startProps  = translatedMatrixByLocalVector(startInstance .matrix.clone(), startInstance.regX, startInstance.regY).decompose();
-		var finishProps = translatedMatrixByLocalVector(finishInstance.matrix.clone(), startInstance.regX, startInstance.regY).decompose();
+		var startProps  = translatedMatrixByLocalVector(startInstance .matrix.clone(), startInstance.regX, startInstance.regY).decompose(startInstance.flipX, startInstance.flipY);
+		var finishProps = translatedMatrixByLocalVector(finishInstance.matrix.clone(), startInstance.regX, startInstance.regY).decompose(finishInstance.flipX, finishInstance.flipY);
 
         log("startProps = "); log(startProps);
         log("finishProps = "); log(finishProps);

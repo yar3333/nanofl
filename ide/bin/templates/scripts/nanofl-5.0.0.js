@@ -4428,6 +4428,8 @@ Object.assign(nanofl_engine_coloreffects_ColorEffectTint.prototype, {
 });
 class nanofl_engine_elements_Element {
 	constructor() {
+		this.flipY = false;
+		this.flipX = false;
 		this.regY = 0.0;
 		this.regX = 0.0;
 		this.matrix = new nanofl_engine_geom_Matrix();
@@ -4441,6 +4443,10 @@ class nanofl_engine_elements_Element {
 		this.regX = tmp != null ? tmp : 0.0;
 		let tmp1 = obj.regY;
 		this.regY = tmp1 != null ? tmp1 : 0.0;
+		let tmp2 = obj.flipX;
+		this.flipX = tmp2 != null && tmp2;
+		let tmp3 = obj.flipY;
+		this.flipY = tmp3 != null && tmp3;
 		return true;
 	}
 	copyBaseProperties(obj) {
@@ -4449,10 +4455,12 @@ class nanofl_engine_elements_Element {
 		obj.matrix = this.matrix.clone();
 		obj.regX = this.regX;
 		obj.regY = this.regY;
+		obj.flipX = this.flipX;
+		obj.flipY = this.flipY;
 	}
 	elementUpdateDisplayObjectBaseProperties(dispObj) {
 		dispObj.visible = this.visible;
-		dispObj.set(this.matrix.decompose());
+		dispObj.set(this.decomposeMatrix());
 		dispObj.filters = [];
 	}
 	equ(element) {
@@ -4471,7 +4479,16 @@ class nanofl_engine_elements_Element {
 		if(element.regY != this.regY) {
 			return false;
 		}
+		if(element.flipX != this.flipX) {
+			return false;
+		}
+		if(element.flipY != this.flipY) {
+			return false;
+		}
 		return true;
+	}
+	decomposeMatrix() {
+		return this.matrix.decompose(this.flipX,this.flipY);
 	}
 	static parseJson(obj,version) {
 		let type;
@@ -5971,7 +5988,42 @@ class nanofl_engine_geom_Matrix {
 		this.tx = tx;
 		this.ty = ty;
 	}
-	decomposeFast() {
+	decompose(flipX,flipY) {
+		if(flipY == null) {
+			flipY = false;
+		}
+		if(flipX == null) {
+			flipX = false;
+		}
+		if(flipX) {
+			if(flipY) {
+				let m = this.clone().scale(-1,-1);
+				let r = m.decomposeInner();
+				r.scaleX = -r.scaleX;
+				r.scaleY = -r.scaleY;
+				r.x = -r.x;
+				r.y = -r.y;
+				return r;
+			} else {
+				let m = this.clone().scale(-1,1);
+				let r = m.decomposeInner();
+				r.scaleX = -r.scaleX;
+				r.x = -r.x;
+				r.rotation = -r.rotation;
+				return r;
+			}
+		} else if(flipY) {
+			let m = this.clone().scale(1,-1);
+			let r = m.decomposeInner();
+			r.scaleY = -r.scaleY;
+			r.y = -r.y;
+			r.rotation = -r.rotation;
+			return r;
+		} else {
+			return this.decomposeInner();
+		}
+	}
+	decomposeInner() {
 		let r = { };
 		r.x = this.tx;
 		r.y = this.ty;
@@ -5992,29 +6044,6 @@ class nanofl_engine_geom_Matrix {
 			r.skewY = skewY / nanofl_engine_geom_Matrix.DEG_TO_RAD;
 		}
 		return r;
-	}
-	decompose() {
-		let r0 = this.decomposeFast();
-		if(r0.skewX == 0 && r0.skewY == 0) {
-			return r0;
-		}
-		let m = this.clone().scale(-1,1);
-		let r = m.decomposeFast();
-		if(r.skewX == 0 && r.skewY == 0) {
-			r.scaleX = -r.scaleX;
-			r.x = -r.x;
-			r.rotation = -r.rotation;
-			return r;
-		}
-		let m1 = this.clone().scale(1,-1);
-		let r1 = m1.decomposeFast();
-		if(r1.skewX == 0 && r1.skewY == 0) {
-			r1.scaleY = -r1.scaleY;
-			r1.y = -r1.y;
-			r1.rotation = -r1.rotation;
-			return r1;
-		}
-		return r0;
 	}
 	setMatrix(m) {
 		this.a = m.a;
@@ -8069,8 +8098,8 @@ class nanofl_engine_movieclip_MotionTween {
 			guide = new nanofl_engine_movieclip_Guide(null);
 		}
 		let targetInstance = js_Boot.__cast(startInstance.clone() , nanofl_engine_elements_Instance);
-		let startProps = this.translatedMatrixByLocalVector(startInstance.matrix.clone(),startInstance.regX,startInstance.regY).decompose();
-		let finishProps = this.translatedMatrixByLocalVector(finishInstance.matrix.clone(),startInstance.regX,startInstance.regY).decompose();
+		let startProps = this.translatedMatrixByLocalVector(startInstance.matrix.clone(),startInstance.regX,startInstance.regY).decompose(startInstance.flipX,startInstance.flipY);
+		let finishProps = this.translatedMatrixByLocalVector(finishInstance.matrix.clone(),startInstance.regX,startInstance.regY).decompose(finishInstance.flipX,finishInstance.flipY);
 		nanofl_engine_movieclip_MotionTween.log("startProps = ");
 		nanofl_engine_movieclip_MotionTween.log(startProps);
 		nanofl_engine_movieclip_MotionTween.log("finishProps = ");
