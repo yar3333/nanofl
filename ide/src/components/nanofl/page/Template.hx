@@ -20,17 +20,11 @@ class Template
 	public var propertiesTab(get, never) : js.JQuery;
 	inline function get_propertiesTab() return component.q('#propertiesTab');
 	
-	public var outputTab(get, never) : js.JQuery;
-	inline function get_outputTab() return component.q('#outputTab');
-	
 	public var library(get, never) : components.nanofl.library.library.Code;
 	inline function get_library() return cast component.children.library;
 	
 	public var properties(get, never) : components.nanofl.others.properties.Code;
 	inline function get_properties() return cast component.children.properties;
-	
-	public var output(get, never) : components.nanofl.others.output.Code;
-	inline function get_output() return cast component.children.output;
 	
 	public var openedFiles(get, never) : components.nanofl.others.openedfiles.Code;
 	inline function get_openedFiles() return cast component.children.openedFiles;

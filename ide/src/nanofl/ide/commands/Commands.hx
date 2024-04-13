@@ -25,10 +25,6 @@ class Commands
 	public var timeline(get, never) : TimelineGroup;
 	function get_timeline() return _timeline ?? (_timeline = new TimelineGroup());
 	
-	var _output : OutputGroup;
-	public var output(get, never) : OutputGroup;
-	function get_output() return _output ?? (_output = new OutputGroup());
-	
 	var _clipboard : ClipboardGroup;
 	public var clipboard(get, never) : ClipboardGroup;
 	function get_clipboard() return _clipboard ?? (_clipboard = new ClipboardGroup());

@@ -156,8 +156,6 @@ class MenuTools
 		enableItemLazy(container, "editor.cut",				    () -> tempActiveView(app, ActiveView.EDITOR,	() -> app.document != null && clipboard.canCut()));
 		enableItemLazy(container, "editor.copy",			    () -> tempActiveView(app, ActiveView.EDITOR,	() -> app.document != null && clipboard.canCopy()));
 		enableItemLazy(container, "editor.paste",			    () -> tempActiveView(app, ActiveView.EDITOR,	() -> app.document != null && clipboard.canPaste()));
-		
-        enableItemLazy(container, "output.copy",			    () -> tempActiveView(app, ActiveView.OUTPUT,    () -> clipboard.canCopy()));
 	}
 
 	public static function enableItem(container:JQuery, command:String, enable=true)

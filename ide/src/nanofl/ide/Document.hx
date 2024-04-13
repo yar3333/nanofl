@@ -471,8 +471,6 @@ class Document extends InjectContainer
 	
 	public function publish() : Promise<Bool>
 	{
-		view.output.clear();
-		
         if (!saveNative()) throw new DocumentError("Can't save file " + getPath() + ".");
 
         try

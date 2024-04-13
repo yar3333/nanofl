@@ -64,9 +64,6 @@ class Clipboard extends InjectContainer
 				case ActiveView.TIMELINE:
                     final z = view.movie.timeline.hasSelectedFrames();
                     return z;
-					
-				case ActiveView.OUTPUT:
-					return view.output.hasSelected();
 			}
 		}
 	}
@@ -153,7 +150,7 @@ class Clipboard extends InjectContainer
 			
 			switch (app.activeView)
 			{
-				case ActiveView.EDITOR, ActiveView.LIBRARY, ActiveView.TIMELINE, ActiveView.OUTPUT:
+				case ActiveView.EDITOR, ActiveView.LIBRARY, ActiveView.TIMELINE:
 					var xml = try new XmlDocument(data) catch (_:Dynamic) return false;
 					if (xml.nodes.length == 0) return false;
 					
@@ -278,9 +275,6 @@ class Clipboard extends InjectContainer
 					final items = view.movie.timeline.saveSelectedToXml(out);
 					if (isCut) view.movie.timeline.removeSelectedFrames();
 					return getStringForCopyFromLibraryItems(out, items);
-					
-				case ActiveView.OUTPUT:
-					return view.output.getSelectedText();
 			}
 		}
 	}

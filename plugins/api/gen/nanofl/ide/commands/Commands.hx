@@ -12,8 +12,6 @@ extern class Commands {
 	private function get_library():nanofl.ide.commands.LibraryGroup;
 	var timeline(get, never) : nanofl.ide.commands.TimelineGroup;
 	private function get_timeline():nanofl.ide.commands.TimelineGroup;
-	var output(get, never) : nanofl.ide.commands.OutputGroup;
-	private function get_output():nanofl.ide.commands.OutputGroup;
 	var clipboard(get, never) : nanofl.ide.commands.ClipboardGroup;
 	private function get_clipboard():nanofl.ide.commands.ClipboardGroup;
 	function validateCommand(command:String):Void;

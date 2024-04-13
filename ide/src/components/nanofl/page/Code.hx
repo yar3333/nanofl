@@ -23,7 +23,6 @@ class Code extends wquery.Component
 	{
 		"library": components.nanofl.library.library.Code,
 		"properties": components.nanofl.others.properties.Code,
-		"output-pane": components.nanofl.others.output.Code,
 		"opened-files": components.nanofl.others.openedfiles.Code,
 		"start-page": components.nanofl.others.startpage.Code,
 		"movie": components.nanofl.movie.movie.Code,
@@ -65,7 +64,6 @@ class Code extends wquery.Component
 	public var shadow(get, never)       : nanofl.ide.ui.views.Shadow;	        function get_shadow()       return template().shadow;
 	public var alerter(get, never)      : nanofl.ide.ui.views.Alerter;          function get_alerter()      return template().alerter;
 	public var fpsMeter(get, never)     : nanofl.ide.ui.views.FpsMeter;	        function get_fpsMeter()     return template().fpsMeter;
-	public var output(get, never)       : nanofl.ide.ui.views.IOutputView;      function get_output()       return template().output;
 	public var startPage(get, never)    : nanofl.ide.ui.views.StartPage;        function get_startPage()    return template().startPageComponent;
 	public var openedFiles(get, never)  : nanofl.ide.ui.views.OpenedFilesView;  function get_openedFiles()  return template().openedFiles;
 
@@ -111,8 +109,6 @@ class Code extends wquery.Component
 	
 	function propertiesTab_click(e) showPropertiesPanel();
 	
-	function outputTab_click(e) showOutputPanel();
-	
 	public function showLibraryPanel()
 	{
 		switchPanel(template().libraryTab);
@@ -124,18 +120,12 @@ class Code extends wquery.Component
 		switchPanel(template().propertiesTab);
 	}
 	
-	public function showOutputPanel()
-	{
-		switchPanel(template().outputTab);
-	}
-	
 	function switchPanel(tab:JQuery)
 	{
 		var elements : Array<{ tab:JQuery, pane:{ function show():Void; function hide():Void; } }> =
 		[
 			{ tab:template().libraryTab,	pane:library },
 			{ tab:template().propertiesTab,	pane:properties },
-			{ tab:template().outputTab,		pane:output }
 		];
 		
 		var n = elements.findIndex(x -> x.tab.attr("id") == tab.attr("id"));
@@ -153,7 +143,6 @@ class Code extends wquery.Component
         {
             template().library.resize(paneState.innerWidth, paneState.innerHeight - template().rightNav.outerHeight());
             template().properties.resize(paneState.innerWidth, paneState.innerHeight - template().rightNav.outerHeight());
-            template().output.resize(paneState.innerWidth, paneState.innerHeight - template().rightNav.outerHeight());
         }
         catch (e)
         {

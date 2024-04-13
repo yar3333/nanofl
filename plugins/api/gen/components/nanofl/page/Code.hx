@@ -19,13 +19,10 @@ extern class Code extends wquery.Component implements nanofl.ide.ui.View impleme
 	private function get_alerter():nanofl.ide.ui.views.Alerter;
 	var fpsMeter(get, never) : nanofl.ide.ui.views.FpsMeter;
 	private function get_fpsMeter():nanofl.ide.ui.views.FpsMeter;
-	var output(get, never) : nanofl.ide.ui.views.IOutputView;
-	private function get_output():nanofl.ide.ui.views.IOutputView;
 	var startPage(get, never) : nanofl.ide.ui.views.StartPage;
 	private function get_startPage():nanofl.ide.ui.views.StartPage;
 	var openedFiles(get, never) : nanofl.ide.ui.views.OpenedFilesView;
 	private function get_openedFiles():nanofl.ide.ui.views.OpenedFilesView;
 	function showLibraryPanel():Void;
 	function showPropertiesPanel():Void;
-	function showOutputPanel():Void;
 }

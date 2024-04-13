@@ -13,7 +13,6 @@ interface View
 	var shadow(get, never) : Shadow;
 	var alerter(get, never) : Alerter;
 	var fpsMeter(get, never) : FpsMeter;
-	var output(get, never) : IOutputView;
 	var startPage(get, never) : StartPage;
 	
     @:allow(nanofl.ide.OpenedFiles)

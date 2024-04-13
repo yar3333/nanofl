@@ -93,7 +93,6 @@ class Application extends js.injecting.InjectContainer
         this.clipboard = injector.getService(Clipboard);
 		view.movie.editor  .on("mousedown", e -> setActiveView(ActiveView.EDITOR, e));
 		view.library       .on("mousedown", e -> setActiveView(ActiveView.LIBRARY, e));
-		view.output        .on("mousedown", e -> setActiveView(ActiveView.OUTPUT, null));
 		
 		this.preferences = injector.getService(Preferences);
         preferences.storage.applyToIDE(true);
@@ -101,13 +100,6 @@ class Application extends js.injecting.InjectContainer
         this.recents = injector.getService(Recents);
         
         this.documentTools = injector.getService(DocumentTools);
-		
-		Log.onMessage.bind((_, e) ->
-		{
-			if      (e.type == "warn")  view.output.writeWarning(e.message);
-			else if (e.type == "error") view.output.writeError(e.message);
-			else                        view.output.writeInfo(e.message);
-		});
 		
         injector.getService(Plugins).reload(false)
             .then(_ -> CommandLine.process())
@@ -297,9 +289,6 @@ class Application extends js.injecting.InjectContainer
                     
                 case ActiveView.TIMELINE:
                     e.processShortcut("timeline", whenVars) || e.processShortcut("", whenVars);
-                    
-                case ActiveView.OUTPUT:
-                    e.processShortcut("output", whenVars) || e.processShortcut("", whenVars);
                     
                 case ActiveView.EDITOR:
                     e.processShortcut("", whenVars);
