@@ -1,6 +1,6 @@
 package nanofl.engine;
 
 extern class MaskTools {
-	static function createMaskFromMovieClipLayer(mc:nanofl.MovieClip, layerIndex:Int):easeljs.display.Container;
-	static function applyMaskToDisplayObject(mask:easeljs.display.DisplayObject, obj:easeljs.display.DisplayObject):Void;
+	static function processMovieClip(mc:nanofl.MovieClip):Void;
+	static function applyMaskToDisplayObject(maskBitmapCache:easeljs.filters.BitmapCache, maskCacheCanvas:js.html.CanvasElement, obj:easeljs.display.DisplayObject):Void;
 }

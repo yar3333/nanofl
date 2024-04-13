@@ -59,7 +59,7 @@ class MaskTools
         return mask;
     }
 
-    static function applyMaskToDisplayObject(maskBitmapCache:BitmapCache, maskCacheCanvas:CanvasElement, obj:DisplayObject) : Void
+    public static function applyMaskToDisplayObject(maskBitmapCache:BitmapCache, maskCacheCanvas:CanvasElement, obj:DisplayObject) : Void
     {
         if (!obj.visible) return;
 

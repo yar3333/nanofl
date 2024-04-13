@@ -433,10 +433,8 @@ class EditorLayer
 		 && layer.parentLayer.getChildLayers().foreach(x -> x.locked))
 		{
             final mask = editor.layers[parentIndex].container;
-            final saveVisible = mask.visible;
-            mask.visible = true;
-			MaskTools.applyMaskToDisplayObject(mask, container);
-            mask.visible = saveVisible;
+            DisplayObjectTools.cache(mask);
+			for (child in container.children) MaskTools.applyMaskToDisplayObject(mask.bitmapCache, mask.cacheCanvas, child);
 		}
 	}
 	

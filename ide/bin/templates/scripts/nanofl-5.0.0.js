@@ -1746,13 +1746,12 @@ class nanofl_DisplayObjectTools {
 			while(_g < _g1.length) {
 				let child = _g1[_g];
 				++_g;
+				if(!child.visible) {
+					continue;
+				}
 				let b = nanofl_engine_geom_BoundsTools.transform(nanofl_DisplayObjectTools.getOuterBounds(child),child.getMatrix());
 				if(b != null) {
-					if(r != null) {
-						r = r.union(b);
-					} else {
-						r = b;
-					}
+					r = r != null ? r.union(b) : b;
 				}
 			}
 		} else {
@@ -1780,6 +1779,9 @@ class nanofl_DisplayObjectTools {
 			while(_g < _g1.length) {
 				let child = _g1[_g];
 				++_g;
+				if(!child.visible) {
+					continue;
+				}
 				let b = nanofl_engine_geom_BoundsTools.transform(nanofl_DisplayObjectTools.getInnerBounds(child),child.getMatrix());
 				if(b != null) {
 					if(r != null) {
@@ -1904,7 +1906,7 @@ class nanofl_DisplayObjectTools {
 		if(((obj) instanceof nanofl_TextField)) {
 			s += " '" + StringTools.replace(StringTools.replace(obj.text,"\r"," "),"\n"," ") + "'";
 		}
-		console.log("engine/nanofl/DisplayObjectTools.hx:215:",s);
+		console.log("engine/nanofl/DisplayObjectTools.hx:217:",s);
 		if(((obj) instanceof createjs.Container) && !((obj) instanceof nanofl_SolidContainer)) {
 			let _g = 0;
 			let _g1 = obj.children;
@@ -1938,29 +1940,7 @@ class nanofl_DisplayObjectTools {
 			}
 		}
 		if(((dispObj) instanceof nanofl_MovieClip)) {
-			let mc = dispObj;
-			let masks_h = { };
-			let _g = 0;
-			let _g1 = mc.symbol.get_layers().length;
-			while(_g < _g1) {
-				let layerIndex = _g++;
-				let layer = mc.symbol.get_layers()[layerIndex];
-				let tmp = layer.get_parentLayer();
-				if((tmp != null ? tmp.type : null) == nanofl_engine_LayerType.mask) {
-					let _g = 0;
-					let _g1 = mc.getChildrenByLayerIndex(layerIndex);
-					while(_g < _g1.length) {
-						let child = _g1[_g];
-						++_g;
-						let mask = masks_h[layer.parentIndex];
-						if(mask == null) {
-							mask = nanofl_engine_MaskTools.createMaskFromMovieClipLayer(mc,layer.parentIndex);
-							masks_h[layer.parentIndex] = mask;
-						}
-						nanofl_engine_MaskTools.applyMaskToDisplayObject(mask,child);
-					}
-				}
-			}
+			nanofl_engine_MaskTools.processMovieClip(dispObj);
 		}
 		if(!force && !childChanged && dispObj.cacheCanvas == null && !nanofl_DisplayObjectTools.isNeedCache(dispObj)) {
 			return false;
@@ -3826,6 +3806,124 @@ class nanofl_engine_Log {
 }
 nanofl_engine_Log.__name__ = "nanofl.engine.Log";
 class nanofl_engine_MaskTools {
+	static processMovieClip(mc) {
+		let masks_h = { };
+		let _g = 0;
+		let _g1 = mc.symbol.get_layers().length;
+		while(_g < _g1) {
+			let layerIndex = _g++;
+			let layer = mc.symbol.get_layers()[layerIndex];
+			let tmp = layer.get_parentLayer();
+			if((tmp != null ? tmp.type : null) == nanofl_engine_LayerType.mask) {
+				let _g = 0;
+				let _g1 = mc.getChildrenByLayerIndex(layerIndex);
+				while(_g < _g1.length) {
+					let child = _g1[_g];
+					++_g;
+					let mask = masks_h[layer.parentIndex];
+					if(mask == null) {
+						mask = nanofl_engine_MaskTools.createMaskFromMovieClipLayer(mc,layer.parentIndex);
+						masks_h[layer.parentIndex] = mask;
+					}
+					nanofl_engine_MaskTools.applyMaskToDisplayObject(mask.bitmapCache,mask.cacheCanvas,child);
+				}
+			}
+		}
+	}
+	static createMaskFromMovieClipLayer(mc,layerIndex) {
+		let _this = mc.children;
+		let result = new Array(_this.length);
+		let _g = 0;
+		let _g1 = _this.length;
+		while(_g < _g1) {
+			let i = _g++;
+			result[i] = _this[i].visible;
+		}
+		let savedVisible = result;
+		let _g2 = 0;
+		let _g3 = mc.children;
+		while(_g2 < _g3.length) {
+			let child = _g3[_g2];
+			++_g2;
+			child.visible = false;
+		}
+		let maskDisplayObjects = mc.getChildrenByLayerIndex(layerIndex);
+		let _g4 = 0;
+		while(_g4 < maskDisplayObjects.length) {
+			let child = maskDisplayObjects[_g4];
+			++_g4;
+			child.visible = true;
+		}
+		nanofl_DisplayObjectTools.cache(mc);
+		let maskBitmapCache = mc.bitmapCache;
+		let maskCacheCanvas = mc.cacheCanvas;
+		mc.bitmapCache = null;
+		mc.cacheCanvas = null;
+		let _g5 = 0;
+		let _g6 = mc.children.length;
+		while(_g5 < _g6) {
+			let i = _g5++;
+			mc.children[i].visible = savedVisible[i];
+		}
+		let mask = new createjs.DisplayObject();
+		mask.bitmapCache = maskBitmapCache;
+		mask.bitmapCache.target = mask;
+		mask.cacheCanvas = maskCacheCanvas;
+		return mask;
+	}
+	static applyMaskToDisplayObject(maskBitmapCache,maskCacheCanvas,obj) {
+		if(!obj.visible) {
+			return;
+		}
+		let mc = obj.parent;
+		let _this = mc.children;
+		let result = new Array(_this.length);
+		let _g = 0;
+		let _g1 = _this.length;
+		while(_g < _g1) {
+			let i = _g++;
+			result[i] = _this[i].visible;
+		}
+		let savedVisible = result;
+		let _g2 = 0;
+		let _g3 = mc.children;
+		while(_g2 < _g3.length) {
+			let child = _g3[_g2];
+			++_g2;
+			child.visible = false;
+		}
+		obj.visible = true;
+		nanofl_engine_MaskTools.applyMaskToDisplayObjectInner(maskBitmapCache,maskCacheCanvas,obj);
+		let _g4 = 0;
+		let _g5 = mc.children.length;
+		while(_g4 < _g5) {
+			let i = _g4++;
+			mc.children[i].visible = savedVisible[i];
+		}
+	}
+	static applyMaskToDisplayObjectInner(maskBitmapCache,maskCacheCanvas,obj) {
+		obj.transformMatrix = null;
+		let mc = obj.parent;
+		let objBounds = nanofl_DisplayObjectTools.getInnerBounds(mc);
+		if(objBounds == null || objBounds.width == 0 || objBounds.height == 0) {
+			return;
+		}
+		let maskBounds = new createjs.Rectangle(maskBitmapCache.x,maskBitmapCache.y,maskBitmapCache.width,maskBitmapCache.height);
+		let intersection = maskBounds.intersection(objBounds);
+		if(intersection == null || intersection.width == 0 || intersection.height == 0) {
+			obj.cache(0,0,1,1);
+			obj.cacheCanvas = nanofl_engine_MaskTools.getOnePixTransarentCanvas();
+			return;
+		}
+		mc.cache(maskBounds.x,maskBounds.y,maskBounds.width,maskBounds.height,1);
+		new createjs.AlphaMaskFilter(maskCacheCanvas).applyFilter(mc.cacheCanvas.getContext("2d",null),0,0,maskCacheCanvas.width,maskCacheCanvas.height);
+		obj.bitmapCache = mc.bitmapCache;
+		obj.bitmapCache.target = obj;
+		obj.cacheCanvas = mc.cacheCanvas;
+		obj.transformMatrix = new createjs.Matrix2D();
+		mc.bitmapCache = null;
+		mc.cacheCanvas = null;
+	}
 	static getOnePixTransarentCanvas() {
 		if(nanofl_engine_MaskTools.onePixTransarentCanvas == null) {
 			nanofl_engine_MaskTools.onePixTransarentCanvas = window.document.createElement("canvas");
@@ -3833,44 +3931,6 @@ class nanofl_engine_MaskTools {
 			nanofl_engine_MaskTools.onePixTransarentCanvas.height = 1;
 		}
 		return nanofl_engine_MaskTools.onePixTransarentCanvas;
-	}
-	static createMaskFromMovieClipLayer(mc,layerIndex) {
-		let mask = new createjs.Container();
-		let _g = 0;
-		let _g1 = mc.getChildrenByLayerIndex(layerIndex);
-		while(_g < _g1.length) {
-			let obj = _g1[_g];
-			++_g;
-			let clonedObj = obj.clone(true);
-			clonedObj.visible = true;
-			mask.addChild(clonedObj);
-		}
-		return mask;
-	}
-	static applyMaskToDisplayObject(mask,obj) {
-		let objBounds = nanofl_DisplayObjectTools.getOuterBounds(obj);
-		if(objBounds == null || objBounds.width == 0 || objBounds.height == 0) {
-			return;
-		}
-		mask.transformMatrix = obj.getMatrix().invert();
-		let maskContainer = new createjs.Container();
-		maskContainer.addChild(mask);
-		let maskContainerBounds = nanofl_DisplayObjectTools.getOuterBounds(maskContainer);
-		if(maskContainerBounds == null || maskContainerBounds.width == 0 || maskContainerBounds.height == 0) {
-			obj.cache(0,0,1,1);
-			obj.cacheCanvas = nanofl_engine_MaskTools.getOnePixTransarentCanvas();
-			return;
-		}
-		let intersection = maskContainerBounds.intersection(objBounds);
-		if(intersection == null || intersection.width == 0 || intersection.height == 0) {
-			obj.cache(0,0,1,1);
-			obj.cacheCanvas = nanofl_engine_MaskTools.getOnePixTransarentCanvas();
-			return;
-		}
-		let cacheBounds = nanofl_DisplayObjectTools.getRectangleForCaching(intersection);
-		maskContainer.cache(cacheBounds.x,cacheBounds.y,cacheBounds.width,cacheBounds.height,2);
-		obj.cache(cacheBounds.x,cacheBounds.y,cacheBounds.width,cacheBounds.height,2);
-		new createjs.AlphaMaskFilter(maskContainer.cacheCanvas).applyFilter(obj.cacheCanvas.getContext("2d",null),0,0,maskContainer.cacheCanvas.width,maskContainer.cacheCanvas.height);
 	}
 }
 nanofl_engine_MaskTools.__name__ = "nanofl.engine.MaskTools";
