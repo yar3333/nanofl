@@ -24,11 +24,12 @@ class DisplayObjectTools
 		{
 			for (child in (cast obj:Container).children)
 			{
-				var b = BoundsTools.transform(getOuterBounds(child), child.getMatrix());
+                if (!child.visible) continue;
+				
+                final b = BoundsTools.transform(getOuterBounds(child), child.getMatrix());
 				if (b != null)
 				{
-					if (r != null) r = r.union(b);
-					else r = b;
+					r = r != null ? r.union(b) : b;
 				}
 			}
 		}
@@ -61,7 +62,9 @@ class DisplayObjectTools
 		{
 			for (child in (cast obj:Container).children)
 			{
-				var b = BoundsTools.transform(getInnerBounds(child), child.getMatrix());
+                if (!child.visible) continue;
+				
+				final b = BoundsTools.transform(getInnerBounds(child), child.getMatrix());
 				if (b != null)
 				{
 					if (r != null) r = r.union(b);
@@ -78,7 +81,7 @@ class DisplayObjectTools
 			}
 			else
 			{
-				var savedCacheCanvas = obj.cacheCanvas;
+				final savedCacheCanvas = obj.cacheCanvas;
 				obj.cacheCanvas = null;
 				r = obj.getBounds();
 				obj.cacheCanvas = savedCacheCanvas;
@@ -255,7 +258,7 @@ class DisplayObjectTools
 
     public static function cache(dispObj:DisplayObject)
     {
-        final bounds = DisplayObjectTools.getInnerBounds(dispObj);
+        final bounds = DisplayObjectTools.getInnerBounds(dispObj); // TODO: or getOuterBounds() ???
         if (bounds == null || bounds.width <= 0 || bounds.height <= 0) return;
         
         final fixedX = Math.floor(bounds.x) - 1;

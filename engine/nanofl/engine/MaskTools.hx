@@ -1,8 +1,10 @@
 package nanofl.engine;
 
+import easeljs.geom.Matrix2D;
 import js.Browser;
 import js.html.CanvasElement;
-import easeljs.display.Container;
+import easeljs.filters.BitmapCache;
+import easeljs.geom.Rectangle;
 import easeljs.display.DisplayObject;
 
 class MaskTools
@@ -11,7 +13,7 @@ class MaskTools
 
     public static function processMovieClip(mc:MovieClip) : Void
     {
-        final masks = new Map<Int, Container>();
+        final masks = new Map<Int, DisplayObject>();
         
         for (layerIndex in 0...mc.symbol.layers.length)
         {
@@ -26,43 +28,64 @@ class MaskTools
                         mask = MaskTools.createMaskFromMovieClipLayer(mc, layer.parentIndex);
                         masks.set(layer.parentIndex, mask);
                     }
-                    MaskTools.applyMaskToDisplayObject(mask, child);
+                    MaskTools.applyMaskToDisplayObject(mask.bitmapCache, mask.cacheCanvas, child);
                 }
             }
         }
     }
 
-    static function createMaskFromMovieClipLayer(mc:MovieClip, layerIndex:Int) : Container
+    static function createMaskFromMovieClipLayer(mc:MovieClip, layerIndex:Int) : DisplayObject
     {
-        final mask = new Container();
-        for (obj in mc.getChildrenByLayerIndex(layerIndex))
-        {
-            final clonedObj = obj.clone(true);
-            clonedObj.visible = true;
-            mask.addChild(clonedObj);
-        }
+        final savedVisible = mc.children.map(x -> x.visible);
+        for (child in mc.children) child.visible = false;
+
+        final maskDisplayObjects = mc.getChildrenByLayerIndex(layerIndex);
+        for (child in maskDisplayObjects) child.visible = true;
+
+        DisplayObjectTools.cache(mc);
+
+        final maskBitmapCache = mc.bitmapCache;
+        final maskCacheCanvas = mc.cacheCanvas;
+        mc.bitmapCache = null;
+        mc.cacheCanvas = null;
+
+        for (i in 0...mc.children.length) mc.children[i].visible = savedVisible[i];
+        
+        final mask = new DisplayObject();
+        mask.bitmapCache = maskBitmapCache;
+        (cast mask.bitmapCache).target = mask;
+        mask.cacheCanvas = maskCacheCanvas;
+
         return mask;
     }
 
-    static function applyMaskToDisplayObject(mask:DisplayObject, obj:DisplayObject) : Void
-	{
-	    final objBounds = DisplayObjectTools.getOuterBounds(obj);
-		if (objBounds == null || objBounds.width == 0 || objBounds.height == 0) return;
-		
-        mask.transformMatrix = obj.getMatrix().invert();
+    static function applyMaskToDisplayObject(maskBitmapCache:BitmapCache, maskCacheCanvas:CanvasElement, obj:DisplayObject) : Void
+    {
+        if (!obj.visible) return;
 
-	    final maskContainer = new Container();
-		maskContainer.addChild(mask);
-		
-	    final maskContainerBounds = DisplayObjectTools.getOuterBounds(maskContainer);
-		if (maskContainerBounds == null || maskContainerBounds.width == 0 || maskContainerBounds.height == 0)
-        {
-            obj.cache(0, 0, 1, 1);
-            obj.cacheCanvas = getOnePixTransarentCanvas();
-            return; 
-        }
+        final mc = obj.parent;
+        final savedVisible = mc.children.map(x -> x.visible);
+        for (child in mc.children) child.visible = false;
+
+        obj.visible = true;
         
-	    final intersection = maskContainerBounds.intersection(objBounds);
+        applyMaskToDisplayObjectInner(maskBitmapCache, maskCacheCanvas, obj);
+        
+        for (i in 0...mc.children.length) mc.children[i].visible = savedVisible[i];
+    }
+
+    static function applyMaskToDisplayObjectInner(maskBitmapCache:BitmapCache, maskCacheCanvas:CanvasElement, obj:DisplayObject) : Void
+	{
+        obj.transformMatrix = null;
+
+        final mc = obj.parent;
+
+        final objBounds = DisplayObjectTools.getInnerBounds(mc);
+		if (objBounds == null || objBounds.width == 0 || objBounds.height == 0) return;
+
+	    final maskBounds = new Rectangle(maskBitmapCache.x, maskBitmapCache.y, maskBitmapCache.width, maskBitmapCache.height);
+        
+	    final intersection = maskBounds.intersection(objBounds);
 		if (intersection == null || intersection.width == 0 || intersection.height == 0)
         {
             obj.cache(0, 0, 1, 1);
@@ -70,15 +93,20 @@ class MaskTools
             return;
         }
 
-        final cacheBounds = DisplayObjectTools.getRectangleForCaching(intersection);
+        mc.cache(cast maskBounds.x, cast maskBounds.y, cast maskBounds.width, cast maskBounds.height, 1);
 		
-        maskContainer.cache(cast cacheBounds.x, cast cacheBounds.y, cast cacheBounds.width, cast cacheBounds.height, 1); // cache scale > 1 to prevent blinking
-        obj          .cache(cast cacheBounds.x, cast cacheBounds.y, cast cacheBounds.width, cast cacheBounds.height, 1);
-		
-		new easeljs.filters.AlphaMaskFilter(maskContainer.cacheCanvas)
-            .applyFilter(obj.cacheCanvas.getContext2d(), 0, 0, 
-                maskContainer.cacheCanvas.width, 
-                maskContainer.cacheCanvas.height);
+		new easeljs.filters.AlphaMaskFilter(maskCacheCanvas)
+            .applyFilter(mc.cacheCanvas.getContext2d(), 0, 0, 
+                maskCacheCanvas.width, 
+                maskCacheCanvas.height);
+
+        obj.bitmapCache = mc.bitmapCache;
+        (cast obj.bitmapCache).target = obj;
+        obj.cacheCanvas = mc.cacheCanvas;
+        obj.transformMatrix = new Matrix2D();
+
+        mc.bitmapCache = null;
+        mc.cacheCanvas = null;
 	}
 
     static function getOnePixTransarentCanvas()
