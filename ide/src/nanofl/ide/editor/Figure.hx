@@ -1,5 +1,6 @@
 package nanofl.ide.editor;
 
+import stdlib.Debug;
 import nanofl.engine.elements.ShapeElement;
 import nanofl.engine.fills.FillParams;
 import nanofl.engine.fills.IFill;
@@ -14,7 +15,6 @@ import nanofl.engine.strokes.StrokeParams;
 import nanofl.ide.editor.EditorLayer;
 import nanofl.ide.editor.Editor;
 import nanofl.ide.undo.states.FigureState;
-import stdlib.Debug;
 using nanofl.engine.geom.PointTools;
 using stdlib.Lambda;
 

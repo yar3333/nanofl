@@ -1,38 +1,47 @@
 package nanofl.engine;
 
+import haxe.Json;
 import js.Browser;
 import js.lib.Error;
 import haxe.Exception;
 import haxe.CallStack;
 import stdlib.Debug;
-import stdlib.Event;
 import stdlib.ExceptionTools;
 using StringTools;
 
 class Log
 {
     #if ide
-	public static var fileSystem : nanofl.ide.sys.FileSystem;
-	public static var onMessage = new Event<{ type:String, message:String }>(null);
-	public static var logFile : String;
+	static var fileSystem : nanofl.ide.sys.FileSystem;
+	static var folders : nanofl.ide.sys.Folders;
 	
-	public static function init(fileSystem:nanofl.ide.sys.FileSystem, alerter:components.nanofl.others.alerter.Code)
+	public static function init(fileSystem:nanofl.ide.sys.FileSystem, folders:nanofl.ide.sys.Folders, alerter:components.nanofl.others.alerter.Code)
 	{
+        Log.fileSystem = fileSystem;
+        Log.folders = folders;
+
 		Browser.window.onerror = cast function(msg:String, url:String, line:Int, col:Int, e:Dynamic)
 		{
 			if (Std.isOfType(e, Exception)) e = (cast e : Exception).details().replace(" line ", ":");
             console.error(e);
-			sendBugReport(e, msg);
+			//sendBugReport(e, msg);
             return true;
 		};
 		
 		haxe.Log.trace = function(v:Dynamic, ?p:haxe.PosInfos) console.log(v);
 	}
 	
-	public static function sendBugReport(err:Dynamic, ?data:String) : Void
-	{
+	//public static function sendBugReport(err:Dynamic, ?data:String) : Void
+	//{
 		//JQuery.postAjax("http://nanofl.com/report_error/", { exception:"NanoFL Editor " + Version.ide + "\n" + toString(err), data:data });
-	}
+	//}
+
+    public static function logShapeCombineError(shapeA:nanofl.ide.undo.states.ShapeState, shapeB:nanofl.ide.undo.states.ShapeState)
+    {
+        final fileName = folders.temp + "/shape_combine_errors/" + js.lib.Date.now() + ".json";
+        fileSystem.saveContent(fileName, Json.stringify({ shapeA:shapeA, shapeB:shapeB }, "\t"));
+        console.error("Detected shape combine error");
+    }
 	
 	static function toString(v:Dynamic) : String
 	{

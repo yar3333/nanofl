@@ -877,16 +877,15 @@ class ShapeElement extends Element
 		{
 			shape = cast shape.clone();
 			
-			var thisState = getState();
-			var shapeState = shape.getState();
+			final thisState = getState();
+			final shapeState = shape.getState();
 			
 			log(() -> "combine\nthisState=\n" + thisState + "\nshapeState=\n" + shapeState);
 			
 			try combineInner(this, shape)
 			catch (e:Dynamic)
 			{
-				console.error(ExceptionTools.wrap(e).message);
-				nanofl.engine.Log.sendBugReport(e, "combine\nthisState=\n" + thisState + "\nshapeState=\n" + shapeState);
+				nanofl.engine.Log.logShapeCombineError(thisState, shapeState);
 				setState(thisState);
 				
 				#if test
@@ -980,8 +979,7 @@ class ShapeElement extends Element
 		}
 		catch (e:Dynamic)
 		{
-			console.error(ExceptionTools.wrap(e).message);
-			nanofl.engine.Log.sendBugReport(e, "combineSelf\nthisState=\n" + thisState.toString());
+			nanofl.engine.Log.logShapeCombineError(thisState, thisState);
 			setState(thisState);
 			
 			#if test
@@ -1012,7 +1010,7 @@ class ShapeElement extends Element
 	
 	#if ide
 	@:allow(nanofl.ide.editor.Figure)
-	override function getState() : nanofl.ide.undo.states.ElementState
+	override function getState() : nanofl.ide.undo.states.ShapeState
 	{
 		return new nanofl.ide.undo.states.ShapeState(ArrayTools.clone(edges), ArrayTools.clone(polygons));
 	}
@@ -1020,7 +1018,7 @@ class ShapeElement extends Element
 	@:allow(nanofl.ide.editor.Figure)
 	override function setState(_state:nanofl.ide.undo.states.ElementState)
 	{
-		var state = cast(_state, nanofl.ide.undo.states.ShapeState);
+		final state = cast(_state, nanofl.ide.undo.states.ShapeState);
 		edges = ArrayTools.clone(state.edges);
 		polygons = ArrayTools.clone(state.polygons);
 	}

@@ -66,7 +66,7 @@ extern class ShapeElement extends nanofl.engine.elements.Element {
 	function combineSelf():Bool;
 	function combineSelected():Void;
 	function extractSelected():nanofl.engine.elements.ShapeElement;
-	override function getState():nanofl.ide.undo.states.ElementState;
+	override function getState():nanofl.ide.undo.states.ShapeState;
 	override function setState(_state:nanofl.ide.undo.states.ElementState):Void;
 	function replaceEdge(search:nanofl.engine.geom.Edge, replacement:Array<nanofl.engine.geom.Edge>):Void;
 	function swapInstance(oldNamePath:String, newNamePath:String):Void;

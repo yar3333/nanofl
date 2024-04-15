@@ -64,18 +64,6 @@ class CommandLine extends InjectContainer
 			});
 		}
 		
-		if (arg == "-pid")
-		{
-			if (args.length > 0 && !args[0].startsWith("-"))
-			{
-				app.pid = args.shift();
-				Log.logFile = folders.temp + "/logs/" + app.pid + ".log";
-				Log.onMessage.bind(function(_, e) if (e.type == "error") app.quit(true, 1));
-                return processNextArg(args);
-			}
-			return error("File path expected after '-pid' option.");
-		}
-		
 		if (arg == "-fps")
 		{
 			view.fpsMeter.enable();

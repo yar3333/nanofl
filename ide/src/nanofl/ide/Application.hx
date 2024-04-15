@@ -56,8 +56,6 @@ class Application extends js.injecting.InjectContainer
 	public var document(get, never) : Document;
 	function get_document() return openedFiles?.active;
 	
-	public var pid : String;
-	
 	@:noapi
 	public function new(injector:Injector)
 	{
@@ -83,7 +81,7 @@ class Application extends js.injecting.InjectContainer
 		this.popups = injector.getService(Popups);
 		this.openedFiles = injector.getService(OpenedFiles);
 	
-		Log.init(fileSystem, view.alerter);
+		Log.init(fileSystem, folders, view.alerter);
 		
 		new JQuery(Browser.window).resize();
 		new JQuery(Browser.document.body).focus();
@@ -187,12 +185,6 @@ class Application extends js.injecting.InjectContainer
 	function exit(exitCode=0)
 	{
 		openedFiles.closeAll();
-		if (pid != null)
-		{
-			fileSystem.saveContent(folders.temp + "/instances/" + pid + ".exitCode", Std.string(exitCode));
-			var pidFilePath = folders.temp + "/instances/" + pid;
-			if (fileSystem.exists(pidFilePath)) fileSystem.deleteFile(pidFilePath);
-		}
 		Browser.window.close();
 	}
 	

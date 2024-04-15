@@ -2,7 +2,6 @@ package nanofl.ide.undo.states;
 
 import nanofl.engine.geom.Polygon;
 import nanofl.engine.geom.StrokeEdge;
-import datatools.ArrayTools;
 import nanofl.engine.geom.Polygons;
 import nanofl.engine.geom.StrokeEdges;
 using stdlib.Lambda;

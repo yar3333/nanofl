@@ -46,8 +46,8 @@ class EraserEditorTool extends DrawEditorTool
 	{
 		for (edge in edges)
 		{
-			var contour = getContour(edge.x1, edge.y1, edge.x3, edge.y3);
-			var eraseShape = new ShapeElement
+			final contour = getContour(edge.x1, edge.y1, edge.x3, edge.y3);
+			final eraseShape = new ShapeElement
 			(
 				[ new Polygon(new EraseFill(), [ contour ]) ]
 			);
@@ -70,11 +70,11 @@ class EraserEditorTool extends DrawEditorTool
 	
 	function getContour(x1:Float, y1:Float, x2:Float, y2:Float) : Contour
 	{
-		var r = R / (editor.zoomLevel / 100);
-		var len = PointTools.getDist(x1, y1, x2, y2);
-		var t = r * 0.9;
+		final r = R / (editor.zoomLevel / 100);
+		final len = PointTools.getDist(x1, y1, x2, y2);
+		final t = r * 0.9;
 		
-		var edges =
+		final edges =
 		[
 			new Edge( 0, -r, -t, -t, -r, 0),
 			new Edge(-r,  0, -t,  t,  0, r),
@@ -84,7 +84,7 @@ class EraserEditorTool extends DrawEditorTool
 			new Edge(len, -r, 0, -r)
 		];
 		
-		var contour = new Contour(edges);
+		final contour = new Contour(edges);
 		contour.transform(new Matrix().rotate(Math.atan2(y2 - y1, x2 - x1)).translate(x1, y1));
 		return contour;
 	}
