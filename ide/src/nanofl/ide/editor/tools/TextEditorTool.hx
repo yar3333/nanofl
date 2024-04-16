@@ -63,7 +63,7 @@ class TextEditorTool extends EditorTool
 		textItem = cast item;
 		textItem.beginEditing();
 		
-		undoQueue.beginTransaction({ element:textItem.currentElement });
+		undoQueue.beginTransaction({ element:textItem.originalElement });
 	}
 	
 	override public function endEditing()

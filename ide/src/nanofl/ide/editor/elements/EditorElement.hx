@@ -7,6 +7,7 @@ import easeljs.display.DisplayObject;
 import easeljs.events.MouseEvent;
 import easeljs.geom.Rectangle;
 import easeljs.display.Shape;
+import nanofl.engine.Log.console;
 import nanofl.engine.elements.Element;
 import nanofl.engine.elements.Instance;
 import nanofl.engine.elements.ShapeElement;
@@ -167,6 +168,8 @@ abstract class EditorElement implements ISelectable
         final n = metaDispObj.children.indexOf(dispObj);
         metaDispObj.removeChildAt(n);
         metaDispObj.addChildAt(dispObj = createDisplayObjectForElement(), n);
+        log("EditorElement.update: metaDispObj.stage = " + (metaDispObj.stage!=null));
+        log("EditorElement.update: dispObj.stage = " + (dispObj.stage!=null));
         updateTransformations();
 	}
 	
@@ -319,8 +322,8 @@ abstract class EditorElement implements ISelectable
 	public function onMouseUp(e:MouseEvent) {}
 	public function onDoubleClick(e:MouseEvent) {}
 	
-	static function log(v:Dynamic, ?infos:haxe.PosInfos)
+	static function log(v:Dynamic)
 	{
-		//haxe.Log.trace(Reflect.isFunction(v) ? v() : v, infos);
+		//console.log(Reflect.isFunction(v) ? v() : v);
 	}
 }
