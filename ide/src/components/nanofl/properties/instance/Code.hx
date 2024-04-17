@@ -1,6 +1,8 @@
 package components.nanofl.properties.instance;
 
+import nanofl.engine.LibraryItemType;
 import nanofl.ide.PropertiesObject;
+import nanofl.ide.libraryitems.MovieClipItem;
 using StringTools;
 
 #if profiler @:build(Profiler.buildMarked()) #end
@@ -24,8 +26,12 @@ class Code extends components.nanofl.properties.base.Code
 		switch (obj)
 		{
 			case PropertiesObject.INSTANCE(item):
-				show();
-				template().namePathContainer.show();
+                show();
+
+                final symbol = item.element.symbol;
+
+				if (symbol.type.match(LibraryItemType.movieclip) && (cast symbol:MovieClipItem).isGroup()) template().namePathContainer.hide();
+                else                                                                                       template().namePathContainer.show();
 				
 				template().name.val(item.element.name);
 				
