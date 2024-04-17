@@ -127,9 +127,46 @@ abstract class EditorElement implements ISelectable
         update();
 	}
 
-    function createDisplayObjectForElement() : DisplayObject
+	public function updateTransformations()
+	{
+		final properties = currentElement.decomposeMatrix();
+		
+		dispObj.set(properties);
+		selectionBoxShape.set(properties);
+		
+		emptyClipMark.x = properties.x;
+		emptyClipMark.y = properties.y;
+		emptyClipMarkSelected.x = properties.x;
+		emptyClipMarkSelected.y = properties.y;
+		
+		final regPos = dispObj.localToLocal(currentElement.regX, currentElement.regY, metaDispObj);
+		regPointMark.x = regPos.x;
+		regPointMark.y = regPos.y;
+
+        DisplayObjectTools.recache(dispObj);
+	}
+	
+	public function update()
+	{
+        final oldDispObj = dispObj;
+        
+        updateDispObj();
+
+        if (dispObj != oldDispObj)
+        {
+            final n = metaDispObj.children.indexOf(oldDispObj);
+            Debug.assert(n >= 0);
+            metaDispObj.removeChildAt(n);
+            metaDispObj.addChildAt(dispObj, n);
+            log("EditorElement.update: dispObj.stage = " + (dispObj.stage!=null));        
+        }
+
+        updateTransformations();
+	}
+
+    function updateDispObj()
     {
-        final dispObj = currentElement.createDisplayObject();
+        dispObj = currentElement.createDisplayObject();
 
         if (Std.isOfType(dispObj, IdeAdvancableDisplayObject))
         {
@@ -140,38 +177,7 @@ abstract class EditorElement implements ISelectable
             }
             (cast dispObj:IdeAdvancableDisplayObject).advanceTo(frameAdvanceTo, framerate, new TweenedElement(originalElement, currentElement));
         }
-
-        return dispObj;
     }
-
-	public function updateTransformations()
-	{
-		var properties = currentElement.decomposeMatrix();
-		
-		dispObj.set(properties);
-		selectionBoxShape.set(properties);
-		
-		emptyClipMark.x = properties.x;
-		emptyClipMark.y = properties.y;
-		emptyClipMarkSelected.x = properties.x;
-		emptyClipMarkSelected.y = properties.y;
-		
-		var regPos = dispObj.localToLocal(currentElement.regX, currentElement.regY, metaDispObj);
-		regPointMark.x = regPos.x;
-		regPointMark.y = regPos.y;
-
-        DisplayObjectTools.recache(dispObj);
-	}
-	
-	public function update()
-	{
-        final n = metaDispObj.children.indexOf(dispObj);
-        metaDispObj.removeChildAt(n);
-        metaDispObj.addChildAt(dispObj = createDisplayObjectForElement(), n);
-        log("EditorElement.update: metaDispObj.stage = " + (metaDispObj.stage!=null));
-        log("EditorElement.update: dispObj.stage = " + (dispObj.stage!=null));
-        updateTransformations();
-	}
 	
 	public function getBounds() : Rectangle
 	{

@@ -1,7 +1,6 @@
 package nanofl.ide;
 
 import nanofl.ide.editor.Editor;
-import nanofl.ide.editor.Editor;
 import nanofl.ide.timeline.ITimelineView;
 
 class Invalidater

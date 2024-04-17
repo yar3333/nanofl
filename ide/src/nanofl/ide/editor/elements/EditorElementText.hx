@@ -17,29 +17,39 @@ class EditorElementText extends EditorElementSelectBox
 	
 	var tf(get, never) : TextField;
 	@:noCompletion function get_tf() return cast dispObj;
-	
+
 	override public function update()
 	{
-        log("EditorElementText.update");
+        log("EditorElementText.update stage = " + (tf.stage != null) + "; tf.id = " + tf.id);
 
-		super.update(); // tf recreated
+		super.update(); // tf recreated if need
+        log("stage = " + (tf.stage != null) + "; tf.id = " + tf.id);
 		
 		tf.dashedBorder = !selected && layer.isShowSelection();
-
-		tf.resize.bind((_, e) ->
-		{
-			element.width = PointTools.roundGap(e.width);
-			element.height = PointTools.roundGap(e.height);
-			editor.tool.itemChanged(this);
-			update();
-		});
-		
-		tf.change.bind((_, e) ->
-		{
-			editor.tool.itemChanged(this);
-			update();
-		});
 	}
+
+    override function updateDispObj()
+    {
+        if (Std.isOfType(dispObj, TextField)) return;
+        
+        log("EditorElementText: recreate tf");
+        
+        dispObj = currentElement.createDisplayObject();
+        
+        tf.resize.bind((_, e) ->
+        {
+            element.width = PointTools.roundGap(e.width);
+            element.height = PointTools.roundGap(e.height);
+            editor.tool.itemChanged(this);
+            update();
+        });
+        
+        tf.change.bind((_, e) ->
+        {
+            editor.tool.itemChanged(this);
+            update();
+        });
+    }
 	
 	public function getPropertiesObject(newObjectParams:NewObjectParams) : PropertiesObject
 	{
@@ -105,6 +115,6 @@ class EditorElementText extends EditorElementSelectBox
 
     static function log(v:Dynamic)
     {
-        console.log(Reflect.isFunction(v) ? v() : v);
+        //console.log(Reflect.isFunction(v) ? v() : v);
     }
 }

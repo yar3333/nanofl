@@ -1,5 +1,6 @@
 package nanofl.ide.editor.tools;
 
+import stdlib.Debug;
 import easeljs.display.Container;
 import easeljs.display.Shape;
 import nanofl.ide.editor.EditorMouseEvent;
@@ -7,7 +8,6 @@ import nanofl.ide.editor.elements.EditorElement;
 import nanofl.ide.editor.elements.EditorElementText;
 import nanofl.ide.PropertiesObject;
 import nanofl.engine.elements.TextElement;
-import nanofl.engine.geom.Point;
 import nanofl.ide.editor.tools.EditorTool;
 import nanofl.ide.editor.tools.SelectEditorTool;
 import nanofl.ide.editor.transformationshapes.TransformationBox;
@@ -61,6 +61,7 @@ class TextEditorTool extends EditorTool
 		endEditing();
 		
 		textItem = cast item;
+        Debug.assert(textItem.dispObj.stage != null);
 		textItem.beginEditing();
 		
 		undoQueue.beginTransaction({ element:textItem.originalElement });
