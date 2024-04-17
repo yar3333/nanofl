@@ -2483,7 +2483,7 @@ class nanofl_TextField extends nanofl_SolidContainer {
 		}
 	}
 	set_newTextFormat(format) {
-		stdlib_Debug.assert(format != null,"TextField.newTextFormat must not be null." + haxe_CallStack.toString(haxe_CallStack.callStack()),{ fileName : "engine/nanofl/TextField.hx", lineNumber : 109, className : "nanofl.TextField", methodName : "set_newTextFormat"});
+		stdlib_Debug.assert(format != null,"TextField.newTextFormat must not be null." + haxe_CallStack.toString(haxe_CallStack.callStack()),{ fileName : "engine/nanofl/TextField.hx", lineNumber : 110, className : "nanofl.TextField", methodName : "set_newTextFormat"});
 		return this._newTextFormat = format;
 	}
 	get_text() {
@@ -2546,6 +2546,67 @@ class nanofl_TextField extends nanofl_SolidContainer {
 		}
 		return r;
 	}
+	getTextLines() {
+		let runs = this.textRuns.slice();
+		if(this.selectable && !this.dashedBorder) {
+			runs = this.getSplittedByPosition(runs,0);
+		}
+		let lines = this.getSplittedToLines(runs);
+		let r = [];
+		let charIndex = 0;
+		let _g = 0;
+		let _g1 = lines.length;
+		while(_g < _g1) {
+			let i = _g++;
+			let runsLine = [];
+			let _g1 = 0;
+			let _g2 = lines[i];
+			while(_g1 < _g2.length) {
+				let run = _g2[_g1];
+				++_g1;
+				if(run.kerning) {
+					runsLine.push(run);
+				} else {
+					let _g = 0;
+					let _g1 = run.characters.length;
+					while(_g < _g1) {
+						let j = _g++;
+						runsLine.push(run.duplicate(run.characters.charAt(j)));
+					}
+				}
+			}
+			let lineWidth = 0.0;
+			let lineMinY = 1.0e10;
+			let lineMaxY = -1.0e10;
+			let lineSpacing = null;
+			let chunks = [];
+			let _g3 = 0;
+			let _g4 = runsLine.length;
+			while(_g3 < _g4) {
+				let j = _g3++;
+				let run = runsLine[j];
+				let selected = this.selectable && !this.dashedBorder && charIndex >= 0 && charIndex < 0;
+				let text = this.createFirstText(run,selected);
+				let bounds = text.getBounds();
+				let fontHeight = nanofl_TextField.measureFontHeight(run.family,run.style,run.size);
+				let fontBaselineCoef = nanofl_TextField.measureFontBaselineCoef(run.family,run.style);
+				stdlib_Debug.assert(run.letterSpacing != null,null,{ fileName : "engine/nanofl/TextField.hx", lineNumber : 278, className : "nanofl.TextField", methodName : "getTextLines"});
+				text.setBounds(bounds.x,-fontHeight * fontBaselineCoef,bounds.width + (!run.kerning ? run.letterSpacing : 0),fontHeight);
+				bounds = text.getBounds();
+				if(i == lines.length - 1 || j < runsLine.length - 1) {
+					lineWidth += bounds.width;
+				}
+				lineMinY = Math.min(lineMinY,bounds.y);
+				lineMaxY = Math.max(lineMaxY,bounds.y + bounds.height);
+				stdlib_Debug.assert(run.lineSpacing != null,null,{ fileName : "engine/nanofl/TextField.hx", lineNumber : 296, className : "nanofl.TextField", methodName : "getTextLines"});
+				lineSpacing = lineSpacing != null ? Math.max(lineSpacing,run.lineSpacing) : run.lineSpacing;
+				chunks.push({ text : text, textSecond : this.createSecondText(run,selected), charIndex : charIndex, bounds : bounds, backgroundColor : !selected ? run.backgroundColor : "darkblue", format : run});
+				charIndex += run.characters.length;
+			}
+			r.push({ chunks : chunks, width : lineWidth, minY : lineMinY, maxY : lineMaxY, align : StringTools.trim(runsLine[0].align).toLowerCase(), spacing : lineSpacing - 2});
+		}
+		return r;
+	}
 	getSplittedToLines(runs) {
 		let runLines = [];
 		let runLine = [];
@@ -2580,67 +2641,6 @@ class nanofl_TextField extends nanofl_SolidContainer {
 		runLines.push(runLine);
 		return runLines;
 	}
-	getTextLines() {
-		let runs = this.textRuns.slice();
-		if(this.selectable && !this.dashedBorder) {
-			runs = this.getSplittedByPosition(runs,0);
-		}
-		let lines = this.getSplittedToLines(runs);
-		let r = [];
-		let charIndex = 0;
-		let _g = 0;
-		let _g1 = lines.length;
-		while(_g < _g1) {
-			let i = _g++;
-			let runsLine = [];
-			let _g1 = 0;
-			let _g2 = lines[i];
-			while(_g1 < _g2.length) {
-				let run = _g2[_g1];
-				++_g1;
-				if(run.kerning) {
-					runsLine.push(run);
-				} else {
-					let _g_offset = 0;
-					let _g_s = run.characters;
-					while(_g_offset < _g_s.length) {
-						let c = _g_s.charCodeAt(_g_offset++);
-						runsLine.push(run.duplicate(String.fromCodePoint(c)));
-					}
-				}
-			}
-			let lineWidth = 0.0;
-			let lineMinY = 1.0e10;
-			let lineMaxY = -1.0e10;
-			let lineSpacing = null;
-			let chunks = [];
-			let _g3 = 0;
-			let _g4 = runsLine.length;
-			while(_g3 < _g4) {
-				let j = _g3++;
-				let run = runsLine[j];
-				let selected = this.selectable && !this.dashedBorder && charIndex >= 0 && charIndex < 0;
-				let text = this.createFirstText(run,selected);
-				let bounds = text.getBounds();
-				let fontHeight = nanofl_TextField.measureFontHeight(run.family,run.style,run.size);
-				let fontBaselineCoef = nanofl_TextField.measureFontBaselineCoef(run.family,run.style);
-				stdlib_Debug.assert(run.letterSpacing != null,null,{ fileName : "engine/nanofl/TextField.hx", lineNumber : 311, className : "nanofl.TextField", methodName : "getTextLines"});
-				text.setBounds(bounds.x,-fontHeight * fontBaselineCoef,bounds.width + (!run.kerning ? run.letterSpacing : 0),fontHeight);
-				bounds = text.getBounds();
-				if(i == lines.length - 1 || j < runsLine.length - 1) {
-					lineWidth += bounds.width;
-				}
-				lineMinY = Math.min(lineMinY,bounds.y);
-				lineMaxY = Math.max(lineMaxY,bounds.y + bounds.height);
-				stdlib_Debug.assert(run.lineSpacing != null,null,{ fileName : "engine/nanofl/TextField.hx", lineNumber : 329, className : "nanofl.TextField", methodName : "getTextLines"});
-				lineSpacing = lineSpacing != null ? Math.max(lineSpacing,run.lineSpacing) : run.lineSpacing;
-				chunks.push({ text : text, textSecond : this.createSecondText(run,selected), charIndex : charIndex, bounds : bounds, backgroundColor : !selected ? run.backgroundColor : "darkblue", format : run});
-				charIndex += run.characters.length;
-			}
-			r.push({ chunks : chunks, width : lineWidth, minY : lineMinY, maxY : lineMaxY, align : StringTools.trim(runsLine[0].align).toLowerCase(), spacing : lineSpacing - 2});
-		}
-		return r;
-	}
 	update() {
 		if(!this.needUpdate && !this.isTextChanged()) {
 			return;
@@ -2659,6 +2659,7 @@ class nanofl_TextField extends nanofl_SolidContainer {
 		this.globalBackground.visible = false;
 		this.borders.visible = false;
 		let sizeChanged = false;
+		nanofl_TextField.log("text = " + JSON.stringify(this.text));
 		this.textLines = this.getTextLines();
 		this._minWidth = 0.0;
 		this._minHeight = nanofl_TextField.PADDING * 2;
@@ -2667,6 +2668,12 @@ class nanofl_TextField extends nanofl_SolidContainer {
 		while(_g2 < _g3.length) {
 			let line = _g3[_g2];
 			++_g2;
+			nanofl_TextField.log(function() {
+				return "line = " + JSON.stringify(Lambda.fold(line.chunks,function(x,r) {
+					r += x.text.text;
+					return r;
+				},""));
+			});
 			this._minWidth = Math.max(this._minWidth,line.width + nanofl_TextField.PADDING * 2);
 			if(this._minWidth > this.width) {
 				switch(line.align) {
@@ -2930,7 +2937,7 @@ class nanofl_TextField extends nanofl_SolidContainer {
 		nanofl_TextField.fontBaselineCoefCache.h[key] = r;
 		return r;
 	}
-	static log(v,infos) {
+	static log(v) {
 	}
 }
 $hx_exports["nanofl"]["TextField"] = nanofl_TextField;
@@ -3085,7 +3092,7 @@ Object.assign(nanofl_Video.prototype, {
 });
 class nanofl_engine_ColorTools {
 	static parse(s) {
-		nanofl_engine_ColorTools.log("parse color " + s,{ fileName : "engine/nanofl/engine/ColorTools.hx", lineNumber : 45, className : "nanofl.engine.ColorTools", methodName : "parse"});
+		nanofl_engine_ColorTools.log("parse color " + s);
 		let r = -1;
 		let g = -1;
 		let b = -1;
@@ -3310,7 +3317,7 @@ class nanofl_engine_ColorTools {
 		let rgbaFinish = nanofl_engine_ColorTools.parse(finish);
 		return nanofl_engine_ColorTools.rgbaToString({ r : rgbaStart.r + Math.round((rgbaFinish.r - rgbaStart.r) * k), g : rgbaStart.g + Math.round((rgbaFinish.g - rgbaStart.g) * k), b : rgbaStart.b + Math.round((rgbaFinish.b - rgbaStart.b) * k), a : rgbaStart.a + (rgbaFinish.a - rgbaStart.a) * k});
 	}
-	static log(v,infos) {
+	static log(v) {
 	}
 }
 $hx_exports["nanofl"]["engine"]["ColorTools"] = nanofl_engine_ColorTools;
@@ -4811,7 +4818,7 @@ class nanofl_engine_elements_ShapeElement extends nanofl_engine_elements_Element
 			default:
 				nanofl_engine_elements_ShapeElement.log(function() {
 					return "Unknow fill type '" + Std.string(fillObj.type) + "'.";
-				},{ fileName : "engine/nanofl/engine/elements/ShapeElement.hx", lineNumber : 110, className : "nanofl.engine.elements.ShapeElement", methodName : "loadPropertiesJson"});
+				});
 			}
 		}
 		let _g2 = 0;
@@ -4981,7 +4988,7 @@ class nanofl_engine_elements_ShapeElement extends nanofl_engine_elements_Element
 		}
 		return true;
 	}
-	static log(v,infos) {
+	static log(v) {
 	}
 }
 nanofl_engine_elements_ShapeElement.__name__ = "nanofl.engine.elements.ShapeElement";
@@ -6436,14 +6443,14 @@ class nanofl_engine_geom_Polygons {
 				++i;
 			}
 		}
-		nanofl_engine_geom_Polygons.log("normalize > removeDublicates vvvvvvvvvvv",{ fileName : "engine/nanofl/engine/geom/Polygons.hx", lineNumber : 199, className : "nanofl.engine.geom.Polygons", methodName : "normalize"});
+		nanofl_engine_geom_Polygons.log("normalize > removeDublicates vvvvvvvvvvv");
 		nanofl_engine_geom_Polygons.removeDublicates(polygons);
-		nanofl_engine_geom_Polygons.log("normalize > removeDublicates ^^^^^^^^^^^",{ fileName : "engine/nanofl/engine/geom/Polygons.hx", lineNumber : 201, className : "nanofl.engine.geom.Polygons", methodName : "normalize"});
+		nanofl_engine_geom_Polygons.log("normalize > removeDublicates ^^^^^^^^^^^");
 		if(nanofl_engine_geom_Polygons.hasDublicates(polygons)) {
 			console.log("engine/nanofl/engine/geom/Polygons.hx:203:","normalize > DUPS DETECTED!!!!!!!");
 		}
 	}
-	static log(v,infos) {
+	static log(v) {
 	}
 }
 nanofl_engine_geom_Polygons.__name__ = "nanofl.engine.geom.Polygons";
@@ -7063,8 +7070,8 @@ class nanofl_engine_libraryitems_MeshItem extends nanofl_engine_libraryitems_Ins
 		});
 	}
 	processPreloadedJson(json) {
-		nanofl_engine_libraryitems_MeshItem.log("processPreloadedJson",{ fileName : "engine/nanofl/engine/libraryitems/MeshItem.hx", lineNumber : 86, className : "nanofl.engine.libraryitems.MeshItem", methodName : "processPreloadedJson"});
-		nanofl_engine_libraryitems_MeshItem.log(json,{ fileName : "engine/nanofl/engine/libraryitems/MeshItem.hx", lineNumber : 87, className : "nanofl.engine.libraryitems.MeshItem", methodName : "processPreloadedJson"});
+		nanofl_engine_libraryitems_MeshItem.log("processPreloadedJson");
+		nanofl_engine_libraryitems_MeshItem.log(json);
 		let loader = new GLTFLoader();
 		let _gthis = this;
 		return loader.parseAsync(json,this.library.realUrl("")).then(function(gltf) {
@@ -7082,7 +7089,7 @@ class nanofl_engine_libraryitems_MeshItem extends nanofl_engine_libraryitems_Ins
 		this.boundingRadius = 0.0;
 		let _gthis = this;
 		this.scene.traverse(function(object) {
-			nanofl_engine_libraryitems_MeshItem.log("MeshItem.updateBoundingRadius object " + object.type + " / " + object.name,{ fileName : "engine/nanofl/engine/libraryitems/MeshItem.hx", lineNumber : 115, className : "nanofl.engine.libraryitems.MeshItem", methodName : "updateBoundingRadius"});
+			nanofl_engine_libraryitems_MeshItem.log("MeshItem.updateBoundingRadius object " + object.type + " / " + object.name);
 			if(object.type == "Mesh") {
 				let mesh = object;
 				mesh.updateMatrixWorld(true);
@@ -7091,7 +7098,7 @@ class nanofl_engine_libraryitems_MeshItem extends nanofl_engine_libraryitems_Ins
 			}
 		});
 		this.boundingRadius = Math.sqrt(this.boundingRadius);
-		nanofl_engine_libraryitems_MeshItem.log("MeshItem.updateBoundingRadius boundingRadius = " + this.boundingRadius,{ fileName : "engine/nanofl/engine/libraryitems/MeshItem.hx", lineNumber : 128, className : "nanofl.engine.libraryitems.MeshItem", methodName : "updateBoundingRadius"});
+		nanofl_engine_libraryitems_MeshItem.log("MeshItem.updateBoundingRadius boundingRadius = " + this.boundingRadius);
 	}
 	createDisplayObject(params) {
 		let r = super.createDisplayObject(params);
@@ -7135,7 +7142,7 @@ class nanofl_engine_libraryitems_MeshItem extends nanofl_engine_libraryitems_Ins
 	toString() {
 		return "MeshItem(" + this.namePath + ")";
 	}
-	static log(v,infos) {
+	static log(v) {
 	}
 }
 nanofl_engine_libraryitems_MeshItem.__name__ = "nanofl.engine.libraryitems.MeshItem";
@@ -7564,9 +7571,9 @@ class nanofl_engine_movieclip_Guide {
 		this.guideLine = tmp != null ? tmp : new nanofl_engine_movieclip_GuideLine();
 	}
 	get(startProps,finishProps,orientToPath,t) {
-		nanofl_engine_movieclip_Guide.log("Guide.getPos: " + startProps.x + ", " + startProps.y + " => " + finishProps.x + ", " + finishProps.y + "; t = " + t,{ fileName : "engine/nanofl/engine/movieclip/Guide.hx", lineNumber : 14, className : "nanofl.engine.movieclip.Guide", methodName : "get"});
+		nanofl_engine_movieclip_Guide.log("Guide.getPos: " + startProps.x + ", " + startProps.y + " => " + finishProps.x + ", " + finishProps.y + "; t = " + t);
 		let path = this.guideLine.getPath(startProps,finishProps);
-		nanofl_engine_movieclip_Guide.log("path = " + path.join("; "),{ fileName : "engine/nanofl/engine/movieclip/Guide.hx", lineNumber : 17, className : "nanofl.engine.movieclip.Guide", methodName : "get"});
+		nanofl_engine_movieclip_Guide.log("path = " + path.join("; "));
 		let result = new Array(path.length);
 		let _g = 0;
 		let _g1 = path.length;
@@ -7614,7 +7621,7 @@ class nanofl_engine_movieclip_Guide {
 		}
 		return Reflect.copy(finishProps);
 	}
-	static log(v,infos) {
+	static log(v) {
 	}
 }
 nanofl_engine_movieclip_Guide.__name__ = "nanofl.engine.movieclip.Guide";
@@ -7666,7 +7673,7 @@ class nanofl_engine_movieclip_GuideLine {
 		}
 		let start = this.shape.getNearestStrokeEdge(startPos);
 		let end = this.shape.getNearestStrokeEdge(finishPos);
-		nanofl_engine_movieclip_GuideLine.log("Guide.findPath " + nanofl_engine_geom_PointTools.toString(startPos) + " (" + start.t + ") => " + nanofl_engine_geom_PointTools.toString(finishPos) + " (" + end.t + ")" + "\tend.edge = " + Std.string(end.edge),{ fileName : "engine/nanofl/engine/movieclip/GuideLine.hx", lineNumber : 75, className : "nanofl.engine.movieclip.GuideLine", methodName : "findPath"});
+		nanofl_engine_movieclip_GuideLine.log("Guide.findPath " + nanofl_engine_geom_PointTools.toString(startPos) + " (" + start.t + ") => " + nanofl_engine_geom_PointTools.toString(finishPos) + " (" + end.t + ")" + "\tend.edge = " + Std.string(end.edge));
 		let params = { counter : 0, endEdge : end.edge, bestLen : 1.0e100, bestPath : [], path : [], len : 0.0};
 		let startEdgeIndex = stdlib_LambdaIterable.findIndex(this.shape.edges,function(e) {
 			return e.equ(start.edge);
@@ -7736,7 +7743,7 @@ class nanofl_engine_movieclip_GuideLine {
 		}
 		return r;
 	}
-	static log(v,infos) {
+	static log(v) {
 	}
 }
 nanofl_engine_movieclip_GuideLine.__name__ = "nanofl.engine.movieclip.GuideLine";

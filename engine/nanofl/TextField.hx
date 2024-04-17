@@ -165,7 +165,7 @@ class TextField extends SolidContainer
 		textLines = [];
 		
 		#if ide
-		addMouseDownEventListener(pressdown);
+		addMouseDownEventListener(onMousePressDown);
 		#end
 		
 		addChild(globalBackground = new Shape());
@@ -367,6 +367,7 @@ class TextField extends SolidContainer
 		var sizeChanged = false;
 		
         log("text = " + Json.stringify(text));
+        #if ide log("teAr = " + Json.stringify(textarea?.html() ?? "")); #end
 		textLines = getTextLines();
 		
 		_minWidth = 0.0;
@@ -725,7 +726,7 @@ class TextField extends SolidContainer
 					'"></textarea>'
 				);
 				new js.JQuery(stage.canvas).after(textarea);
-                log("set textarea.html = *" + text + "*");
+                log("set textarea.html = " + Json.stringify(text));
 				textarea.html(text);
 				setTextareaSelection();
 				textarea.keydown(keydown);
@@ -776,50 +777,64 @@ class TextField extends SolidContainer
 		final bounds = textLines[0].chunks[0].text.getTransformedBounds();
 		if (pt.y < bounds.y || pt.y < bounds.y  + bounds.height && pt.x <= bounds.x) return 0;
 		
-		for (line in textLines)
+		for (lineIndex in 0...textLines.length)
 		{
-			for (t in line.chunks)
+            final line = textLines[lineIndex];
+			for (chunkIndex in 0...line.chunks.length)
 			{
+                final t = line.chunks[chunkIndex];
 				final bounds = t.text.getTransformedBounds();
-				if (pt.x >= bounds.x && pt.y < bounds.y + bounds.height && pt.x < bounds.x + bounds.width)
-				{
-					for (i in 0...t.text.text.length)
-					{
-						final w2 = new Text(t.text.text.substr(0, i + 1), t.text.font).getMeasuredWidth();
-						if (bounds.x + w2 > pt.x)
-						{
-							final w1 = new Text(t.text.text.substr(0, i), t.text.font).getMeasuredWidth();
-							final w = (w1 + w2) / 2;
-							return t.charIndex + i + (pt.x < bounds.x + w ? 0 : 1);
-						}
-					}
+                if (pt.y < bounds.y + bounds.height)
+                {
+                    if (pt.x >= bounds.x && pt.x < bounds.x + bounds.width)
+                    {
+                        for (i in 0...t.text.text.length)
+                        {
+                            final w2 = new Text(t.text.text.substr(0, i + 1), t.text.font).getMeasuredWidth();
+                            if (bounds.x + w2 > pt.x)
+                            {
+                                final w1 = new Text(t.text.text.substr(0, i), t.text.font).getMeasuredWidth();
+                                final w = (w1 + w2) / 2;
+                                return Std.min(text.length, t.charIndex + i + (pt.x < bounds.x + w ? 0 : 1));
+                            }
+                        }
+    				}
+                    else if (pt.y >= bounds.y && chunkIndex == 0 && pt.x < bounds.x)
+                    {
+                        return Std.min(text.length, t.charIndex);
+                    }
+                    else if (pt.y >= bounds.y && chunkIndex == line.chunks.length - 1 && pt.x >= bounds.x + bounds.width)
+                    {
+                        return Std.min(text.length, t.charIndex + t.text.text.length - (lineIndex < textLines.length - 1 ? 1 : 0));
+                    }
 				}
 			}
 		}
 		
 		final lastLine = textLines[textLines.length - 1];
 		final lastText = lastLine.chunks[lastLine.chunks.length - 1];
-		return lastText.charIndex + lastText.text.text.length;
+		return Std.min(text.length, lastText.charIndex + lastText.text.text.length);
 	}
 	
-	function pressdown(e:MouseEvent)
+	function onMousePressDown(e:MouseEvent)
 	{
 		if (dashedBorder && !editing) return;
 		
 		if (e.nativeEvent.which == 1)
 		{
 			selectionStart = selectionEnd = getCharIndexByPoint(e.stageX, e.stageY);
+            log("onMousePressDown selectionStart = selectionEnd = " + selectionStart);
 			setTextareaSelection();
 			
 			change.call(null);
 			updateStage();
 			
-			stage.addStageMouseMoveEventListener(pressmove);
-			stage.addStageMouseUpEventListener(pressup);
+			stage.addStageMouseMoveEventListener(onMousePressMove);
+			stage.addStageMouseUpEventListener(onMousePressUp);
 		}
 	}
 		
-	function pressmove(e:MouseEvent)
+	function onMousePressMove(e:MouseEvent)
 	{
 		if (dashedBorder && !editing) return;
 		
@@ -829,12 +844,12 @@ class TextField extends SolidContainer
 		updateStage();
 	}
 		
-	function pressup(e:MouseEvent)
+	function onMousePressUp(e:MouseEvent)
 	{
 		if (stage != null)
 		{
-			stage.removeStageMouseMoveEventListener(pressmove);
-			stage.removeStageMouseUpEventListener(pressup);
+			stage.removeStageMouseMoveEventListener(onMousePressMove);
+			stage.removeStageMouseUpEventListener(onMousePressUp);
 		}
 		
 		if (dashedBorder && !editing) return;
@@ -1054,6 +1069,6 @@ class TextField extends SolidContainer
 	
 	static function log(v:Dynamic)
 	{
-		nanofl.engine.Log.console.log(Reflect.isFunction(v) ? v() : v);
+		//nanofl.engine.Log.console.log(Reflect.isFunction(v) ? v() : v);
 	}
 }
