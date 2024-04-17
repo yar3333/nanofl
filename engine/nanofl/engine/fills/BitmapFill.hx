@@ -101,6 +101,7 @@ class BitmapFill extends BaseFill implements IFill
 	
 	public function getBitmapWidth()
 	{
+        if (bitmapPath == null || !library.hasItem(bitmapPath)) return 1.0;
 		var item : BitmapItem = cast library.getItem(bitmapPath);
 		if (item == null || !Std.isOfType(item, BitmapItem)) return 1.0;
 		return item.image.width;
@@ -133,6 +134,6 @@ class BitmapFill extends BaseFill implements IFill
 	
 	public function toString() : String
 	{
-		return 'new BitmapFill("red")';
+		return 'new BitmapFill("' + bitmapPath + '")';
 	}
 }

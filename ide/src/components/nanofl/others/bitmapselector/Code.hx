@@ -1,5 +1,6 @@
 package components.nanofl.others.bitmapselector;
 
+import haxe.io.Path;
 import nanofl.ide.libraryitems.BitmapItem;
 import wquery.Event;
 //using js.jquery.Spectrum;
@@ -74,7 +75,7 @@ class Code extends wquery.Component
 		else
 		{
 			bitmapPath = null;
-			template().image.attr("src", Type.getClassName(Type.getClass(this)).replace(".", "/") + "/support/nothing.png");
+			template().image.attr("src", "../../" + Path.directory(Type.getClassName(Type.getClass(this)).replace(".", "/")) + "/support/nothing.png");
 		}
 		
 		template().prev.toggleClass("~disabled", bitmaps.length == 0 || n < 0);
