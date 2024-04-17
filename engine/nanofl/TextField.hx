@@ -1,7 +1,7 @@
 package nanofl;
 
+import haxe.Json;
 import haxe.Timer;
-import haxe.Utf8;
 import js.Browser;
 import js.html.CanvasRenderingContext2D;
 import stdlib.Event;
@@ -15,6 +15,7 @@ import nanofl.engine.TextChunk;
 import nanofl.engine.TextLine;
 using nanofl.engine.DrawTools;
 using StringTools;
+using stdlib.Lambda;
 
 @:expose
 @:build(JsProp.marked())
@@ -126,7 +127,7 @@ class TextField extends SolidContainer
 	function get_text() return textRuns.map(run -> run.characters).join("");
 	function set_text(v:String) : String
 	{
-		var format = textRuns.length > 0 ? textRuns[textRuns.length - 1] : newTextFormat;
+		final format = textRuns.length > 0 ? textRuns[textRuns.length - 1] : newTextFormat;
 		textRuns.splice(0, textRuns.length);
 		textRuns.push(format.duplicate(v));
 		return v;
@@ -180,20 +181,20 @@ class TextField extends SolidContainer
 	
 	function getSplittedByPosition(runs:Array<TextRun>, position:Int, textToInsert="") : Array<TextRun>
 	{
-		var r = [];
+		final r = [];
 		
 		if (position > 0)
 		{
 			var charIndex = 0;
 			for (run in runs)
 			{
-				var len = Utf8.length(run.characters);
+				var len = run.characters.length;
 				if (position > charIndex && position < charIndex + len)
 				{
-					r.push(run.duplicate(Utf8.sub(run.characters, 0, position - charIndex)));
+					r.push(run.duplicate(run.characters.substr(0, position - charIndex)));
 					if (textToInsert.length > 0) r.push(run.duplicate(textToInsert));
-					r.push(run.duplicate(Utf8.sub(run.characters, position - charIndex, len - (position - charIndex))));
-					len += Utf8.length(textToInsert);
+					r.push(run.duplicate(run.characters.substr(position - charIndex, len - (position - charIndex))));
+					len += textToInsert.length;
 				}
 				else
 				{
@@ -203,7 +204,7 @@ class TextField extends SolidContainer
 						if (textToInsert.length > 0)
 						{
 							r.push(run.duplicate(textToInsert));
-							len += Utf8.length(textToInsert);
+							len += textToInsert.length;
 						}
 					}
 				}
@@ -219,36 +220,6 @@ class TextField extends SolidContainer
 		return r;
 	}
 	
-	function getSplittedToLines(runs:Array<TextRun>) : Array<Array<TextRun>>
-	{
-		var runLines = new Array<Array<TextRun>>();
-		var runLine = new Array<TextRun>();
-		for (run in runs)
-		{
-			var lines = run.characters.split("\n");
-			if (lines.length == 1)
-			{
-				if (run.characters != "") runLine.push(run);
-			}
-			else
-			{
-				for (i in 0...lines.length)
-				{
-					if (lines[i] != "") runLine.push(run.duplicate(lines[i]));
-					if (i < lines.length - 1)
-					{
-						runLine.push(run.duplicate(" "));
-						runLines.push(runLine);
-						runLine = [];
-					}
-				}
-			}
-		}
-		if (runLine.length == 0) runLine.push(runs.length > 0 ? runs[runs.length - 1].duplicate(" ") : newTextFormat.duplicate(" "));
-		runLines.push(runLine);
-		return runLines;
-	}
-	
 	public function getTextLines() : Array<TextLine>
 	{
 		var runs = textRuns.copy();
@@ -262,9 +233,9 @@ class TextField extends SolidContainer
 			}
 		}
 		
-		var lines = getSplittedToLines(runs);
+		final lines = getSplittedToLines(runs);
 		
-		var r = new Array<TextLine>();
+		final r = new Array<TextLine>();
 		var charIndex = 0;
 		for (i in 0...lines.length)
 		{
@@ -278,13 +249,9 @@ class TextField extends SolidContainer
 				}
 				else
 				{
-					//Utf8.iter(run.characters, function(c)
-					for (c in run.characters.iterator())
+					for (j in 0...run.characters.length)
 					{
-						//var s = new Utf8();
-						//s.addChar(c);
-						//runsLine.push(run.duplicate(s.toString()));
-						runsLine.push(run.duplicate(String.fromCharCode(c)));
+						runsLine.push(run.duplicate(run.characters.charAt(j)));
 					}
 				}
 			}
@@ -294,20 +261,20 @@ class TextField extends SolidContainer
 			var lineMaxY = -1.0e10;
 			var lineSpacing = null;
 			
-			var chunks = new Array<TextChunk>();
+			final chunks = new Array<TextChunk>();
 			for (j in 0...runsLine.length)
 			{
-				var run = runsLine[j];
+				final run = runsLine[j];
 				
-				var selected = ((selectable || editing) && (!dashedBorder || editing))
+				final selected = ((selectable || editing) && (!dashedBorder || editing))
 							&& charIndex >= Std.min(selectionStart, selectionEnd)
 					        && charIndex < Std.max(selectionStart, selectionEnd);
 				
-				var text = createFirstText(run, selected);
+				final text = createFirstText(run, selected);
 				
 				var bounds = text.getBounds();
-				var fontHeight = measureFontHeight(run.family, run.style, run.size);
-				var fontBaselineCoef = measureFontBaselineCoef(run.family, run.style);
+				final fontHeight = measureFontHeight(run.family, run.style, run.size);
+				final fontBaselineCoef = measureFontBaselineCoef(run.family, run.style);
 				stdlib.Debug.assert(run.letterSpacing != null);
 				text.setBounds
 				(
@@ -339,7 +306,7 @@ class TextField extends SolidContainer
 					format: run
 				});
 				
-				charIndex += Utf8.length(run.characters);
+				charIndex += run.characters.length;
 			}
 			
 			r.push
@@ -356,6 +323,36 @@ class TextField extends SolidContainer
 		return r;
 	}
 	
+	function getSplittedToLines(runs:Array<TextRun>) : Array<Array<TextRun>>
+	{
+		final runLines = new Array<Array<TextRun>>();
+		var runLine = new Array<TextRun>();
+		for (run in runs)
+		{
+			final lines = run.characters.split("\n");
+			if (lines.length == 1)
+			{
+				if (run.characters != "") runLine.push(run);
+			}
+			else
+			{
+				for (i in 0...lines.length)
+				{
+					if (lines[i] != "") runLine.push(run.duplicate(lines[i]));
+					if (i < lines.length - 1)
+					{
+						runLine.push(run.duplicate(" "));
+						runLines.push(runLine);
+						runLine = [];
+					}
+				}
+			}
+		}
+		if (runLine.length == 0) runLine.push(runs.length > 0 ? runs[runs.length - 1].duplicate(" ") : newTextFormat.duplicate(" "));
+		runLines.push(runLine);
+		return runLines;
+	}
+
 	public function update() : Void
 	{
 		if (!needUpdate && !isTextChanged()) return;
@@ -369,13 +366,16 @@ class TextField extends SolidContainer
 		
 		var sizeChanged = false;
 		
+        log("text = " + Json.stringify(text));
 		textLines = getTextLines();
 		
 		_minWidth = 0.0;
 		_minHeight = PADDING * 2;
 		for (line in textLines)
 		{
-			_minWidth = Math.max(_minWidth, line.width + PADDING * 2);
+            log(() -> "line = " + Json.stringify(line.chunks.fold((x, r) -> r += x.text.text, "")));
+			
+            _minWidth = Math.max(_minWidth, line.width + PADDING * 2);
 			if (_minWidth > width)
 			{
 				switch (line.align)
@@ -397,7 +397,7 @@ class TextField extends SolidContainer
 		var innerY = PADDING;
 		for (i in 0...textLines.length)
 		{
-			var line = textLines[i];
+			final line = textLines[i];
 			
 			var innerX = PADDING + switch (line.align)
 			{
@@ -423,13 +423,14 @@ class TextField extends SolidContainer
 				}
 				
 				#if ide
+                log("line = " + i + "; t.charIndex = " + t.charIndex + "; t.text.text = " + Json.stringify(t.text.text) + "; selection = " + selectionStart + " | " + selectionEnd);
 				if (t.charIndex == selectionEnd)
 				{
 					caretStartPos = t.text.localToLocal(t.bounds.x, t.bounds.y, this);
 					caretEndPos = t.text.localToLocal(t.bounds.x, t.bounds.y + t.bounds.height, this);
 				}
 				else
-				if (t.charIndex + Utf8.length(t.text.text) == selectionEnd)
+				if (t.charIndex + t.text.text.length == selectionEnd)
 				{
 					caretStartPos = t.text.localToLocal(t.bounds.x + t.bounds.width, t.bounds.y, this);
 					caretEndPos = t.text.localToLocal(t.bounds.x + t.bounds.width, t.bounds.y + t.bounds.height, this);
@@ -507,9 +508,9 @@ class TextField extends SolidContainer
 		{
 			borders.visible = true;
 			
-			var dashPt0 = globalToLocal(0, 0);
-			var dashPt1 = globalToLocal(2, 2);
-			var dashLen = (Math.abs(dashPt1.x - dashPt0.x) + Math.abs(dashPt1.y - dashPt0.y)) / 2;
+			final dashPt0 = globalToLocal(0, 0);
+			final dashPt1 = globalToLocal(2, 2);
+			final dashLen = (Math.abs(dashPt1.x - dashPt0.x) + Math.abs(dashPt1.y - dashPt0.y)) / 2;
 			
 			borders.graphics
 				.clear()
@@ -607,10 +608,10 @@ class TextField extends SolidContainer
 	
 	public static function measureFontHeight(family:String, style:String, size:Float) : Float
 	{
-		var key = family + "|" + style + "|" + size;
+		final key = family + "|" + style + "|" + size;
 		if (fontHeightCache.exists(key)) return fontHeightCache.get(key);
 		
-		var div = Browser.document.createElement("div");
+		final div = Browser.document.createElement("div");
 		div.innerHTML = "Mp";
 		div.style.position = "absolute";
 		div.style.top  = "0";
@@ -623,7 +624,7 @@ class TextField extends SolidContainer
 		
 		if (Browser.document.body == null) Browser.document.body = cast Browser.document.querySelector("body");
 		Browser.document.body.appendChild(div);
-		var r = div.offsetHeight;
+		final r = div.offsetHeight;
 		Browser.document.body.removeChild(div);
 		
 		fontHeightCache.set(key, r);
@@ -632,16 +633,16 @@ class TextField extends SolidContainer
 	
 	public static function measureFontBaselineCoef(family:String, style:String) : Float
 	{
-		var key = family + "|" + style;
+		final key = family + "|" + style;
 		if (fontBaselineCoefCache.exists(key)) return fontBaselineCoefCache.get(key);
 		
-		var container = Browser.document.createElement("div");
+		final container = Browser.document.createElement("div");
 		container.style.height = "100px";
 		container.style.position = "absolute";
 		container.style.top = "0";
 		container.style.left = "0";
 		
-		var letter = Browser.document.createElement("span");
+		final letter = Browser.document.createElement("span");
 		letter.style.fontFamily = family;
 		letter.style.fontWeight = style.indexOf("bold") >= 0 ? "bold" : "normal";
 		letter.style.fontStyle = style.indexOf("italic") >= 0 ? "italic" : "normal";
@@ -649,7 +650,7 @@ class TextField extends SolidContainer
 		letter.style.lineHeight = "0";
 		letter.innerHTML = "A";
 		
-		var strut = Browser.document.createElement("span");
+		final strut = Browser.document.createElement("span");
 		strut.style.fontFamily = family;
 		strut.style.fontWeight = style.indexOf("bold") >= 0 ? "bold" : "normal";
 		strut.style.fontStyle = style.indexOf("italic") >= 0 ? "italic" : "normal";
@@ -663,7 +664,7 @@ class TextField extends SolidContainer
 		container.appendChild(strut);
 		Browser.document.body.appendChild(container);
 		
-		var r = 1 - (letter.offsetTop + letter.offsetHeight - container.offsetHeight - container.offsetTop) / 100;
+		final r = 1 - (letter.offsetTop + letter.offsetHeight - container.offsetHeight - container.offsetTop) / 100;
 		
 		container.remove();
 		
@@ -702,7 +703,7 @@ class TextField extends SolidContainer
 				caretBlinkShow = !caretBlinkShow;
 			}
 			
-			caretTimer.run = function() { updateCaretInner(); if (stage != null) stage.update(); };
+			caretTimer.run = () -> { updateCaretInner(); if (stage != null) stage.update(); };
 			updateCaretInner();
 			
 			if (textarea == null)
@@ -724,6 +725,7 @@ class TextField extends SolidContainer
 					'"></textarea>'
 				);
 				new js.JQuery(stage.canvas).after(textarea);
+                log("set textarea.html = *" + text + "*");
 				textarea.html(text);
 				setTextareaSelection();
 				textarea.keydown(keydown);
@@ -732,11 +734,11 @@ class TextField extends SolidContainer
 				textarea.on("paste", paste);
 				textarea.blur
 				(
-					function(e) Timer.delay
+					function(_) Timer.delay
 					(
 						function()
 						{
-							var activeElement = Browser.document.activeElement;
+							final activeElement = Browser.document.activeElement;
 							if (textarea != null && (activeElement == null || ["input", "textarea"].indexOf(activeElement.tagName.toLowerCase()) < 0))
 							{
 								textarea.focus();
@@ -769,25 +771,25 @@ class TextField extends SolidContainer
 	{
 		if (textLines.length == 0) return 0;
 		
-		var pt = globalToLocal(stageX, stageY);
+		final pt = globalToLocal(stageX, stageY);
 		
-		var bounds = textLines[0].chunks[0].text.getTransformedBounds();
+		final bounds = textLines[0].chunks[0].text.getTransformedBounds();
 		if (pt.y < bounds.y || pt.y < bounds.y  + bounds.height && pt.x <= bounds.x) return 0;
 		
 		for (line in textLines)
 		{
 			for (t in line.chunks)
 			{
-				var bounds = t.text.getTransformedBounds();
+				final bounds = t.text.getTransformedBounds();
 				if (pt.x >= bounds.x && pt.y < bounds.y + bounds.height && pt.x < bounds.x + bounds.width)
 				{
-					for (i in 0...Utf8.length(t.text.text))
+					for (i in 0...t.text.text.length)
 					{
-						var w2 = new Text(Utf8.sub(t.text.text, 0, i + 1), t.text.font).getMeasuredWidth();
+						final w2 = new Text(t.text.text.substr(0, i + 1), t.text.font).getMeasuredWidth();
 						if (bounds.x + w2 > pt.x)
 						{
-							var w1 = new Text(Utf8.sub(t.text.text, 0, i), t.text.font).getMeasuredWidth();
-							var w = (w1 + w2) / 2;
+							final w1 = new Text(t.text.text.substr(0, i), t.text.font).getMeasuredWidth();
+							final w = (w1 + w2) / 2;
 							return t.charIndex + i + (pt.x < bounds.x + w ? 0 : 1);
 						}
 					}
@@ -795,9 +797,9 @@ class TextField extends SolidContainer
 			}
 		}
 		
-		var lastLine = textLines[textLines.length - 1];
-		var lastText = lastLine.chunks[lastLine.chunks.length - 1];
-		return lastText.charIndex + Utf8.length(lastText.text.text);
+		final lastLine = textLines[textLines.length - 1];
+		final lastText = lastLine.chunks[lastLine.chunks.length - 1];
+		return lastText.charIndex + lastText.text.text.length;
 	}
 	
 	function pressdown(e:MouseEvent)
@@ -847,7 +849,7 @@ class TextField extends SolidContainer
 	{
 		removeSelectedFromTextRuns();
 		
-		var runs = getSplittedByPosition(textRuns, selectionEnd, s);
+		final runs = getSplittedByPosition(textRuns, selectionEnd, s);
 		
 		textRuns.splice(0, textRuns.length);
 		for (run in runs) textRuns.push(run);
@@ -859,12 +861,12 @@ class TextField extends SolidContainer
 	
 	function removeSelectedFromTextRuns()
 	{
-		var runs = getSplittedByPosition(getSplittedByPosition(textRuns, selectionStart), selectionEnd);
+		final runs = getSplittedByPosition(getSplittedByPosition(textRuns, selectionStart), selectionEnd);
 		
 		var charIndex = 0;
 		var i = 0; while (i < runs.length && charIndex < selectionEnd)
 		{
-			var len = Utf8.length(runs[i].characters);
+			final len = runs[i].characters.length;
 			if (charIndex >= selectionStart && charIndex + len <= selectionEnd)
 			{
 				newTextFormat = runs.splice(i, 1)[0].clone();
@@ -884,11 +886,11 @@ class TextField extends SolidContainer
 	
 	function setTextareaSelection() : Void
 	{
-		Timer.delay(function()
+		Timer.delay(() ->
 		{
 			if (textarea != null)
 			{
-				var ta : js.html.TextAreaElement = cast textarea[0];
+				final ta : js.html.TextAreaElement = cast textarea[0];
 				if (ta.setSelectionRange != null)
 				{
 					ta.focus();
@@ -897,7 +899,7 @@ class TextField extends SolidContainer
 				else
 				if ((cast ta).createTextRange)
 				{
-					var range = (cast ta).createTextRange();
+					final range = (cast ta).createTextRange();
 					range.collapse(true);
 					range.moveEnd("character", Std.max(selectionStart, selectionEnd));
 					range.moveStart("character", Std.min(selectionStart, selectionEnd));
@@ -911,7 +913,7 @@ class TextField extends SolidContainer
 	{
 		if (textarea == null) return;
 		
-		var ta : js.html.TextAreaElement = cast textarea[0];
+		final ta : js.html.TextAreaElement = cast textarea[0];
 		
 		if (!Math.isNaN(ta.selectionStart))
 		{
@@ -923,7 +925,7 @@ class TextField extends SolidContainer
 		{
 			ta.focus();
 			
-			var r = (cast Browser.document).selection.createRange();
+			final r = (cast Browser.document).selection.createRange();
 			if (r == null)
 			{
 				selectionStart = 0;
@@ -931,8 +933,8 @@ class TextField extends SolidContainer
 			}
 			else
 			{
-				var re : Dynamic = (cast ta).createTextRange();
-				var rc : Dynamic = re.duplicate();
+				final re : Dynamic = (cast ta).createTextRange();
+				final rc : Dynamic = re.duplicate();
 				re.moveToBookmark(r.getBookmark());
 				rc.setEndPoint('EndToStart', re);
 				
@@ -944,13 +946,12 @@ class TextField extends SolidContainer
 	
 	function keydown(e:js.JQuery.JqEvent)
 	{
-		var length = Utf8.length(text);
+		final length = text.length;
 		
+        log("keydown: " + e.keyCode);
+        
 		switch (e.keyCode)
         {
-			case 13: // Enter
-				insertToTextRuns("\n");
-				
 			case 8: // backspace
 				if (selectionStart == selectionEnd && selectionStart > 0) selectionStart--;
 				removeSelectedFromTextRuns();
@@ -988,19 +989,16 @@ class TextField extends SolidContainer
 	{
 		if (!e.ctrlKey && !e.altKey  && e.charCode != 0)
 		{
-			log("keypress / insert");
-			insertToTextRuns(String.fromCharCode(e.charCode));
+            final c = e.charCode != "\r".code ? String.fromCharCode(e.charCode) : "\n";
+			log("keypress: " + Json.stringify(c));
+			insertToTextRuns(c);
 			restoreSelectionFromTextarea();
-			log("keypress / restoreSelectionFromTextarea " + selectionStart + ".." + selectionEnd);
-			log(textarea.val());
 		}
 	}
 	
 	function keyup(e:js.JQuery.JqEvent)
 	{
 		restoreSelectionFromTextarea();
-		log("keyup / restoreSelectionFromTextarea " + selectionStart + ".." + selectionEnd);
-		log(textarea.val());
 		change.call(null);
 		updateStage();
 	}
@@ -1015,7 +1013,7 @@ class TextField extends SolidContainer
 		var charIndex = 0;
 		for (run in textRuns)
 		{
-			var len = Utf8.length(run.characters);
+			final len = run.characters.length;
 			if (selectionEnd >= charIndex && selectionEnd < charIndex + len)
 			{
 				return run.duplicate("");
@@ -1028,14 +1026,14 @@ class TextField extends SolidContainer
 	
 	public function setSelectionFormat(format:TextRun) : Void
 	{
-		var startIndex = editing ? Std.min(selectionStart, selectionEnd) : 0;
-		var finishIndex = editing ? Std.max(selectionStart, selectionEnd) : this.text.length;
+		final startIndex = editing ? Std.min(selectionStart, selectionEnd) : 0;
+		final finishIndex = editing ? Std.max(selectionStart, selectionEnd) : this.text.length;
 		
-		var runs = getSplittedByPosition(getSplittedByPosition(textRuns, startIndex), finishIndex);
+		final runs = getSplittedByPosition(getSplittedByPosition(textRuns, startIndex), finishIndex);
 		var charIndex = 0;
 		for (run in runs)
 		{
-			var len = Utf8.length(run.characters);
+			final len = run.characters.length;
 			if (startIndex == finishIndex || charIndex >= startIndex && charIndex + len <= finishIndex)
 			{
 				run.applyFormat(format);
@@ -1054,8 +1052,8 @@ class TextField extends SolidContainer
 	
 	#end
 	
-	static function log(v:Dynamic, ?infos:haxe.PosInfos)
+	static function log(v:Dynamic)
 	{
-		//trace(Reflect.isFunction(v) ? v() : v, infos);
+		nanofl.engine.Log.console.log(Reflect.isFunction(v) ? v() : v);
 	}
 }
