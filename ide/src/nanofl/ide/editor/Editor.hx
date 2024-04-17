@@ -492,7 +492,7 @@ class Editor extends InjectContainer
 		final symbol = MovieClipItem.createWithFrame(namePath, elements);
 		
 		document.library.addItems([ symbol ], false);
-        document.library.select([ symbol.namePath ]);
+        if (!symbol.isGroup()) document.library.select([ symbol.namePath ]);
 		
 		final instance = symbol.newInstance();
 		instance.translate

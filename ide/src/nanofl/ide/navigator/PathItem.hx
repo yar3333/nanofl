@@ -1,5 +1,6 @@
 package nanofl.ide.navigator;
 
+import haxe.io.Path;
 import stdlib.Debug;
 import nanofl.engine.Library;
 import nanofl.engine.elements.Instance;
@@ -50,7 +51,7 @@ class PathItem
     }
     
 	public function getNavigatorIcon() return mcItem.getIcon();    
-	public function getNavigatorName() return mcItem.namePath;
+	public function getNavigatorName() return mcItem.isGroup() ? "group" : Path.withoutDirectory(mcItem.namePath);
     public function isScene() return mcItem.namePath == Library.SCENE_NAME_PATH;
     
     public function equ(p:PathItem) : Bool

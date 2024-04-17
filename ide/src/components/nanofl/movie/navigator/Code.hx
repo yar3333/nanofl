@@ -38,22 +38,22 @@ class Code extends wquery.Component
 		var editPath = app.document.navigator.editPath;
 		if (!editPath[0].isScene())
 		{
-			s += getLi(-1, Library.SCENE_NAME_PATH, app.document.library.getSceneItem().getIcon(), false);
+			s += getLi(-1, Library.SCENE_NAME_PATH, "scene", app.document.library.getSceneItem().getIcon(), false);
 		}
 		for (i in 0...editPath.length)
 		{
-			s += getLi(i, editPath[i].getNavigatorName(), editPath[i].getNavigatorIcon(), i == editPath.length - 1);
+			s += getLi(i, editPath[i].mcItem.namePath, editPath[i].getNavigatorName(), editPath[i].getNavigatorIcon(), i == editPath.length - 1);
 		}
 		
 		template().container.html(s);
 	}
 	
-	function getLi(index:Int, name:String, icon:String, isLast:Bool)
+	function getLi(index:Int, namePath:String, name:String, icon:String, isLast:Bool)
 	{
-		return "<li" + (isLast ? " class='active'" : "") + " title='" + name + "'>"
+		return "<li" + (isLast ? " class='active'" : "") + " title='" + namePath + "'>"
 			 + (!isLast ? "<a href='javascript:void(0)' data-index='" + index +"'>" : "")
 			 + "<i class='" + icon + "'></i>"
-			 + " " + Path.withoutDirectory(name)
+			 + " " + name
 			 + (!isLast ? "</a>" : "")
 			 + (!isLast ? "<span class='divider'>/</span>" : "")
 			 + "</li>";
