@@ -8,7 +8,6 @@ import stdlib.Debug;
 import stdlib.Std;
 import htmlparser.XmlBuilder;
 import wquery.ComponentList;
-import nanofl.engine.Log.console;
 import nanofl.ide.Globals;
 import nanofl.ide.Document;
 import nanofl.ide.keyboard.Keyboard;
@@ -279,8 +278,8 @@ class Code extends wquery.Component
 		normalizeTabCount();
 	}
 	
-	static function log(v:Dynamic, ?infos:haxe.PosInfos)
+	static function log(v:Dynamic)
 	{
-		//trace(Reflect.isFunction(v) ? v() : v, infos);
+		//nanofl.engine.Log.console.log(Reflect.isFunction(v) ? v() : v);
 	}
 }

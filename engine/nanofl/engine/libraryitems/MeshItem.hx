@@ -209,8 +209,8 @@ class MeshItem extends InstancableItem
 	
 	public function toString() return "MeshItem(" + namePath + ")";
 	
-	static function log(v:Dynamic, ?infos:haxe.PosInfos)
+	static function log(v:Dynamic)
 	{
-		//haxe.Log.trace(Reflect.isFunction(v) ? v() : v, infos);
+		//nanofl.engine.Log.console.log(Reflect.isFunction(v) ? v() : v);
 	}
 }

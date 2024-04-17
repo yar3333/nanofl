@@ -3,7 +3,6 @@ package nanofl.ide.editor.elements;
 import nanofl.TextField;
 import nanofl.TextRun;
 import nanofl.engine.elements.TextElement;
-import nanofl.engine.Log.console;
 import nanofl.ide.editor.EditorMouseEvent;
 import nanofl.ide.editor.NewObjectParams;
 import nanofl.ide.editor.elements.EditorElementSelectBox;
@@ -113,8 +112,8 @@ class EditorElementText extends EditorElementSelectBox
 		return { width:tf.minWidth, height:tf.minHeight };
 	}
 
-    static function log(v:Dynamic)
-    {
-        //console.log(Reflect.isFunction(v) ? v() : v);
-    }
+	static function log(v:Dynamic)
+	{
+		//nanofl.engine.Log.console.log(Reflect.isFunction(v) ? v() : v);
+	}
 }

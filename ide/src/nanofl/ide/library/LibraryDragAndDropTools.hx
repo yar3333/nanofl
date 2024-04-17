@@ -1,7 +1,6 @@
 package nanofl.ide.library;
 
 import js.html.DragEvent;
-import nanofl.engine.elements.Element;
 import easeljs.geom.Rectangle;
 import js.JQuery.JqEvent;
 import nanofl.engine.LayerType;
@@ -263,8 +262,8 @@ class LibraryDragAndDropTools
 		return folder;
 	}
 	
-    static function log(v:Dynamic, ?infos:haxe.PosInfos)
+	static function log(v:Dynamic)
 	{
-		//trace(Reflect.isFunction(v) ? v() : v, infos);
+		//nanofl.engine.Log.console.log(Reflect.isFunction(v) ? v() : v);
 	}
 }

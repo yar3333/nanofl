@@ -6,7 +6,6 @@ import js.lib.Promise;
 import haxe.io.Path;
 import stdlib.Debug;
 import stdlib.ExceptionTools;
-import nanofl.engine.Log.console;
 import nanofl.engine.geom.Matrix;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.DocumentProperties;
@@ -713,8 +712,8 @@ class Document extends InjectContainer
 		return new Exporter(plugin.name, plugin.getParams(preferences.storage));
 	}
 	
-	static function log(v:Dynamic, ?infos:haxe.PosInfos)
+	static function log(v:Dynamic)
 	{
-		//trace(Reflect.isFunction(v) ? v() : v, infos);
+		//nanofl.engine.Log.console.log(Reflect.isFunction(v) ? v() : v);
 	}
 }

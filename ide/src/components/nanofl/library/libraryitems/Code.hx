@@ -9,18 +9,15 @@ import htmlparser.XmlDocument;
 import haxe.io.Path;
 import wquery.ComponentList;
 import easeljs.geom.Rectangle;
-import nanofl.engine.Log.console;
 import nanofl.engine.libraryitems.FolderItem;
 import nanofl.engine.libraryitems.FontItem;
 import nanofl.engine.libraryitems.InstancableItem;
-import nanofl.engine.libraryitems.MovieClipItem;
 import nanofl.engine.libraryitems.SoundItem;
 import nanofl.ide.Globals;
 import nanofl.ide.draganddrop.DragDataType;
 import nanofl.ide.draganddrop.AllowedDropEffect;
 import nanofl.ide.sys.FileSystem;
 import nanofl.ide.library.LibraryDragAndDropTools;
-import nanofl.ide.libraryitems.LibraryItemTools;
 import nanofl.ide.draganddrop.DragAndDrop;
 import nanofl.ide.preferences.Preferences;
 import nanofl.ide.sys.Shell;
@@ -29,7 +26,6 @@ import nanofl.ide.ui.View;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.Application;
 import nanofl.ide.ISymbol;
-import nanofl.ide.navigator.PathItem;
 import nanofl.ide.ui.menu.ContextMenu;
 using stdlib.Lambda;
 using StringTools;
@@ -480,8 +476,8 @@ class Code extends wquery.Component
         }
 	}
 	
-	static function log(v:Dynamic, ?infos:haxe.PosInfos)
+	static function log(v:Dynamic)
 	{
-		//trace(Reflect.isFunction(v) ? v() : v, infos);
+		//nanofl.engine.Log.console.log(Reflect.isFunction(v) ? v() : v);
 	}
 }

@@ -2,7 +2,6 @@ package nanofl.ide.plugins;
 
 import stdlib.Timer;
 import js.lib.Promise;
-import haxe.Serializer;
 import haxe.io.Path;
 import nanofl.ide.sys.Folders;
 import nanofl.ide.sys.FileSystem;
@@ -77,8 +76,8 @@ class Plugins extends InjectContainer
 		return r;
 	}
 	
-	static function log(v:Dynamic, ?infos:haxe.PosInfos)
+	static function log(v:Dynamic)
 	{
-		//trace(Reflect.isFunction(v) ? v() : v, infos);
+		//nanofl.engine.Log.console.log(Reflect.isFunction(v) ? v() : v);
 	}
 }

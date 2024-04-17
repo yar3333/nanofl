@@ -7,7 +7,6 @@ import easeljs.display.DisplayObject;
 import easeljs.events.MouseEvent;
 import easeljs.geom.Rectangle;
 import easeljs.display.Shape;
-import nanofl.engine.Log.console;
 import nanofl.engine.elements.Element;
 import nanofl.engine.elements.Instance;
 import nanofl.engine.elements.ShapeElement;
@@ -330,6 +329,6 @@ abstract class EditorElement implements ISelectable
 	
 	static function log(v:Dynamic)
 	{
-		//console.log(Reflect.isFunction(v) ? v() : v);
+		//nanofl.engine.Log.console.log(Reflect.isFunction(v) ? v() : v);
 	}
 }

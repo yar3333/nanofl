@@ -414,8 +414,8 @@ class Polygons
 		return ArrayTools.equ(a, b) && ArrayTools.equ(a.map(x -> x.fill), b.map(x -> x.fill));
 	}
 	
-	static function log(v:Dynamic, ?infos:haxe.PosInfos)
+	static function log(v:Dynamic)
 	{
-		//haxe.Log.trace(Reflect.isFunction(v) ? v() : v, infos);
+		//nanofl.engine.Log.console.log(Reflect.isFunction(v) ? v() : v);
 	}
 }

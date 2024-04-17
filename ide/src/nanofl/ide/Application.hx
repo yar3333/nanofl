@@ -9,7 +9,6 @@ import stdlib.Uuid;
 import nanofl.ide.sys.FileSystem;
 import nanofl.engine.Version;
 import nanofl.engine.Log;
-import nanofl.engine.Log.console;
 import nanofl.ide.commands.Commands;
 import nanofl.ide.editor.NewObjectParams;
 import nanofl.ide.filesystem.ExternalChangesDetector;
@@ -292,6 +291,6 @@ class Application extends js.injecting.InjectContainer
 	
 	static function log(v:Dynamic)
 	{
-		//trace(Reflect.isFunction(v) ? v() : v);
+		//nanofl.engine.Log.console.log(Reflect.isFunction(v) ? v() : v);
 	}
 }

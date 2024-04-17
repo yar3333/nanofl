@@ -195,8 +195,8 @@ class Code extends wquery.Component
 		return elem.tagName + (elem.id != null ? "#" + elem.id : "");
 	}
 	
-	static function log(v:Dynamic, ?infos:haxe.PosInfos)
+	static function log(v:Dynamic)
 	{
-		//trace(Reflect.isFunction(v) ? v() : v, infos);
+		//nanofl.engine.Log.console.log(Reflect.isFunction(v) ? v() : v);
 	}
 }

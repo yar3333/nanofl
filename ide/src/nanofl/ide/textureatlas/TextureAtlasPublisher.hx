@@ -105,8 +105,8 @@ class TextureAtlasPublisher
         return r;
     }
 
-	static function log(v:Dynamic, ?infos:haxe.PosInfos)
-    {
-        //haxe.Log.trace(Reflect.isFunction(v) ? v() : v, infos);
-    }
+	static function log(v:Dynamic)
+	{
+		//nanofl.engine.Log.console.log(Reflect.isFunction(v) ? v() : v);
+	}
 }

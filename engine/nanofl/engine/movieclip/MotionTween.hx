@@ -311,6 +311,6 @@ class MotionTween
 	
 	static function log(v:Dynamic)
 	{
-		//trace(Reflect.isFunction(v) ? v() : v);
+		//nanofl.engine.Log.console.log(Reflect.isFunction(v) ? v() : v);
 	}
 }

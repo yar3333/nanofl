@@ -337,6 +337,6 @@ class TransformEditorTool extends SelectEditorTool
 
 	static function log(v:Dynamic)
 	{
-		//haxe.Log.trace(Reflect.isFunction(v) ? v() : v);
+		//nanofl.engine.Log.console.log(Reflect.isFunction(v) ? v() : v);
 	}
 }

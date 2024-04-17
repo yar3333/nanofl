@@ -510,8 +510,8 @@ class Edge
         return new Edge(obj.x1, obj.y1, obj.x2, obj.y2, obj.x3, obj.y3);
     }
 	
-	static function log(v:Dynamic, ?infos:haxe.PosInfos)
+	static function log(v:Dynamic)
 	{
-		//haxe.Log.trace(v, infos);
+		//nanofl.engine.Log.console.log(Reflect.isFunction(v) ? v() : v);
 	}
 }

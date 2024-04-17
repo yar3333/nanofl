@@ -1,15 +1,8 @@
 package components.nanofl.movie.editor;
 
-import nanofl.ide.ActiveView;
-import nanofl.ide.library.LibraryDragAndDropTools;
-import htmlparser.XmlDocument;
-import js.html.DragEvent;
-import nanofl.ide.draganddrop.DragInfoParams;
-import nanofl.ide.draganddrop.DragDataType;
-import js.lib.Promise;
 import js.JQuery;
+import js.lib.Promise;
 import js.html.CanvasElement;
-import js.html.File;
 import datatools.ArrayRO;
 import easeljs.display.Container;
 import easeljs.events.MouseEvent;
@@ -18,15 +11,16 @@ import easeljs.display.Shape;
 import nanofl.DisplayObjectTools;
 import nanofl.Stage;
 import nanofl.engine.geom.Matrix;
-import nanofl.engine.Log.console;
-import nanofl.ide.editor.EditorMilk;
-import nanofl.ide.libraryitems.IIdeLibraryItem;
+import nanofl.ide.ActiveView;
 import nanofl.ide.Application;
 import nanofl.ide.Globals;
-import nanofl.ide.draganddrop.DragAndDrop;
+import nanofl.ide.editor.EditorMilk;
 import nanofl.ide.editor.EditorMouseEvent;
+import nanofl.ide.draganddrop.DragAndDrop;
+import nanofl.ide.draganddrop.DragDataType;
 import nanofl.ide.navigator.PathItem;
 import nanofl.ide.preferences.Preferences;
+import nanofl.ide.library.LibraryDragAndDropTools;
 import nanofl.ide.ui.View;
 using js.jquery.MouseWheel;
 using nanofl.engine.geom.PointTools;
@@ -414,14 +408,14 @@ class Code extends wquery.Component
 		template().content.width(template().container.innerWidth());
 		template().content.height(template().container.innerHeight());
 		
-		var oldCanvasWidth = canvas.width;
-		var oldCanvasHeight = canvas.height;
+		final oldCanvasWidth  = canvas.width;
+		final oldCanvasHeight = canvas.height;
 		canvas.width = template().container.innerWidth();
 		canvas.height = template().container.innerHeight();
 		
 		updateBackground();
 		
-		root.x += (canvas.width - oldCanvasWidth) / 2;
+		root.x += (canvas.width  - oldCanvasWidth)  / 2;
 		root.y += (canvas.height - oldCanvasHeight) / 2;
 		
 		if (app.document != null && app.document.editor.ready) update();
@@ -436,8 +430,8 @@ class Code extends wquery.Component
 			.drawRect(0, 0, canvas.width, canvas.height)
 			.endFill();
 		
-		var hitArea = new Shape();
-			hitArea.graphics
+		final hitArea = new Shape();
+		hitArea.graphics
 			.beginFill("#FFFFFF")
 			.drawRect(0, 0, canvas.width, canvas.height)
 			.endFill();
@@ -452,9 +446,9 @@ class Code extends wquery.Component
 	
 	function zoom(x:Float, y:Float, zoom:Float)
 	{
-		var pt1 = root.globalToLocal(x, y);
+		final pt1 = root.globalToLocal(x, y);
 		root.scaleX = root.scaleY = zoom / 100;
-		var pt2 = root.localToGlobal(pt1.x, pt1.y);
+		final pt2 = root.localToGlobal(pt1.x, pt1.y);
 		root.x -= pt2.x - x;
 		root.y -= pt2.y - y;
 		update();
@@ -463,21 +457,21 @@ class Code extends wquery.Component
 	
 	function getMousePos(e:JqEvent) : nanofl.engine.geom.Point
 	{
-		var offset = template().content.offset();
+		final offset = template().content.offset();
 		return { x:e.pageX - offset.left, y:e.pageY - offset.top };
 	}
 	
 	public function getMousePosOnDisplayObject(e:JqEvent) : nanofl.engine.geom.Point
 	{
-		var mpos = getMousePos(e.originalEvent);
+		final mpos = getMousePos(e.originalEvent);
 		return container.globalToLocal(mpos.x, mpos.y);
 	}
 	
 	public function show() template().container.show();
 	public function hide() template().container.hide();
 	
-	static function log(v:Dynamic, ?infos:haxe.PosInfos)
+	static function log(v:Dynamic)
 	{
-		//haxe.Log.trace(Reflect.isFunction(v) ? v() : v, infos);
+		//nanofl.engine.Log.console.log(Reflect.isFunction(v) ? v() : v);
 	}
 }

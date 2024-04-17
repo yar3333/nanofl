@@ -69,8 +69,8 @@ class PencilEditorTool extends DrawEditorTool
 		);
 	}
 	
-	static function log(v:Dynamic, ?infos:haxe.PosInfos)
- 	{
- 		//haxe.Log.trace(v, infos);
+	static function log(v:Dynamic)
+	{
+		//nanofl.engine.Log.console.log(Reflect.isFunction(v) ? v() : v);
 	}
 }

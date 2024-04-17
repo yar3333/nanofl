@@ -2,7 +2,6 @@ package nanofl.engine.elements;
 
 import js.lib.Set;
 import stdlib.Debug;
-import stdlib.ExceptionTools;
 import datatools.ArrayTools;
 import nanofl.engine.geom.Bounds;
 import nanofl.engine.geom.Contour;
@@ -1286,8 +1285,8 @@ class ShapeElement extends Element
 	
 	override public function toString() return (parent != null ? parent.toString() + " / " : "") + "Shape";
 
-    static function log(v:Dynamic, ?infos:haxe.PosInfos)
+	static function log(v:Dynamic)
 	{
-		//haxe.Log.trace(Reflect.isFunction(v) ? v() : v, infos);
+		//nanofl.engine.Log.console.log(Reflect.isFunction(v) ? v() : v);
 	}
 }
