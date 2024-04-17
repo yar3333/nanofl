@@ -5135,7 +5135,7 @@ class nanofl_engine_fills_BitmapFill extends nanofl_engine_fills_BaseFill {
 	}
 	begin(g) {
 		if(this.library.hasItem(this.bitmapPath)) {
-			let image = (js_Boot.__cast(this.library.getItem(this.bitmapPath) , nanofl_engine_libraryitems_BitmapItem)).image;
+			let image = this.library.getItem(this.bitmapPath).image;
 			g.beginBitmapFill(image,this.repeat,this.matrix.toNative());
 		} else {
 			g.beginFill("rgba(0,0,0,0)");
