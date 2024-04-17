@@ -194,7 +194,7 @@ class Code extends wquery.Component
 		
 		if (app.document != null)
 		{
-			for (item in app.document.library.getItems().filter(filterItems))
+			for (item in app.document.library.getItemsWoGroups().filter(x -> filterItems(x)))
 			{
 				final namePaths = item.namePath.split("/");
 				
@@ -450,7 +450,7 @@ class Code extends wquery.Component
 		
         if (app.document.library.hasItem(activeNamePath)) return;
         
-        final namePaths = app.document.library.getItems().map(x -> x.namePath).sorted();
+        final namePaths = app.document.library.getItemsWoGroups().map(x -> x.namePath).sorted();
         
         final index = namePaths.findIndex(x -> x > activeNamePath);
         if (index >= 0)

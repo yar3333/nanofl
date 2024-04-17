@@ -117,8 +117,8 @@ class IdeLibrary extends nanofl.engine.Library
 	{
 		//trace("IdeLibrary.load " + libraryDir);
 		
-		var files = [];
-		var dirs = [];
+		final files = [];
+		final dirs = [];
 		
 		fileSystem.findFiles
 		(
@@ -140,7 +140,7 @@ class IdeLibrary extends nanofl.engine.Library
 			
 			for (dir in dirs)
 			{
-				var namePath = Path.withoutExtension(dir);
+                final namePath = Path.withoutExtension(dir);
 				if (!hasItem(namePath))
 				{
 					addItem(new FolderItem(namePath));
@@ -268,10 +268,10 @@ class IdeLibrary extends nanofl.engine.Library
 
     override function ensureFolderOfItemExists(namePath:String)
     {
-        var parts = namePath.split("/");
+        final parts = namePath.split("/");
         for (i in 1...parts.length)
         {
-            var folder = parts.slice(0, i).join("/");
+            final folder = parts.slice(0, i).join("/");
             if (!hasItem(folder)) addItem(new FolderItem(folder));
         }
     }

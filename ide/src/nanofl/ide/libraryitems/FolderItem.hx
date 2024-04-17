@@ -18,7 +18,7 @@ class FolderItem extends nanofl.engine.libraryitems.FolderItem
 	
 	override public function save(fileSystem:FileSystem) 
 	{
-		fileSystem.createDirectory(library.libraryDir + "/" + namePath);
+		if (hasDataToSave()) fileSystem.createDirectory(library.libraryDir + "/" + namePath);
 	}
 	
 	public static function parse(namePath:String, itemNode:HtmlNodeElement) : FolderItem

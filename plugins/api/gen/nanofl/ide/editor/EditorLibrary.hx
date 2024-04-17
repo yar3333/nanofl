@@ -17,6 +17,7 @@ extern class EditorLibrary extends nanofl.ide.InjectContainer {
 	function getSceneInstance():nanofl.engine.elements.Instance;
 	function getSceneItem():nanofl.ide.libraryitems.MovieClipItem;
 	function getItems(?includeScene:Bool):Array<nanofl.ide.libraryitems.IIdeLibraryItem>;
+	function getItemsWoGroups(?includeScene:Bool):Array<nanofl.ide.libraryitems.IIdeLibraryItem>;
 	function getRawLibrary():nanofl.ide.library.IdeLibrary;
 	function getSelectedItemsWithDependencies():Array<nanofl.ide.libraryitems.IIdeLibraryItem>;
 	function hasSelected():Bool;

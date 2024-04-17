@@ -259,13 +259,13 @@ class MovieClipItem	extends InstancableItem
     }
 
     #if ide
-	function hasDataToSave() return true;
+	function hasDataToSave() return !isGroup();
     
     override function saveProperties(xml:XmlBuilder) : Void
     {
         switch (isGroup())
         {
-            case false:
+            case false: // movie clip
                 super.saveProperties(xml);
 
                 xml.attr("autoPlay", autoPlay, true);
@@ -278,7 +278,7 @@ class MovieClipItem	extends InstancableItem
                 
                 for (layer in layers) layer.save(xml);
 
-            case true:
+            case true: // group
                 stdlib.Debug.assert(layers.length == 1);
                 stdlib.Debug.assert(getTotalFrames() == 1);
                 for (element in layers[0].keyFrames[0].elements)
@@ -287,7 +287,7 @@ class MovieClipItem	extends InstancableItem
                 }
         }
 
-        final groups = MovieClipItemTools.getInstances(this).filter(x -> x.namePath.startsWith(Library.GROUPS_NAME_PATH)).map(x -> (cast x.symbol:MovieClipItem));
+        final groups = MovieClipItemTools.getInstances(this).filter(x -> x.namePath.startsWith(Library.GROUPS_NAME_PATH + "/")).map(x -> (cast x.symbol:MovieClipItem));
         if (groups.length > 0)
         {
             xml.begin("groups");

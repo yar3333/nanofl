@@ -1,6 +1,5 @@
 package nanofl.ide.editor;
 
-import nanofl.ide.navigator.PathItem;
 import haxe.io.Path;
 import js.lib.Promise;
 import js.Browser;
@@ -8,11 +7,13 @@ import js.html.File;
 import stdlib.ExceptionTools;
 import stdlib.Debug;
 import stdlib.Std;
+import nanofl.engine.Library;
 import nanofl.engine.LibraryItemType;
 import nanofl.engine.Log.console;
 import nanofl.engine.FontVariant;
 import nanofl.engine.movieclip.KeyFrame;
 import nanofl.engine.movieclip.Layer;
+import nanofl.ide.navigator.PathItem;
 import nanofl.ide.MovieClipItemTools;
 import nanofl.ide.PublishSettings;
 import nanofl.ide.sys.Shell;
@@ -141,6 +142,7 @@ class EditorLibrary extends InjectContainer
 	public function getSceneInstance() return library.getSceneInstance();
 	public function getSceneItem() return library.getSceneItem();
 	public function getItems(?includeScene:Bool) return library.getItemsAsIde(includeScene);
+	public function getItemsWoGroups(?includeScene:Bool) return library.getItemsAsIde(includeScene).filter(x -> x.namePath != Library.GROUPS_NAME_PATH && !x.namePath.startsWith(Library.GROUPS_NAME_PATH + "/"));
 	
 	@:allow(nanofl.ide.undo)
 	function getState(itemsToClone:Array<String>) return library.getState(itemsToClone);

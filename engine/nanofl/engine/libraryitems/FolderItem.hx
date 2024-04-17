@@ -36,7 +36,7 @@ class FolderItem extends LibraryItem
     public function preload() : Promise<{}> return Promise.resolve();
 
     #if ide
-	function hasDataToSave() return true;
+	function hasDataToSave() return namePath != Library.GROUPS_NAME_PATH;
     
     function saveProperties(xml:XmlBuilder) : Void {}
 
