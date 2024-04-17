@@ -60,7 +60,7 @@ class BitmapFill extends BaseFill implements IFill
 	
 	public function saveJson()
 	{
-        var r =
+        final r =
         {
             type: "bitmap",
             bitmapPath: bitmapPath,
@@ -73,7 +73,7 @@ class BitmapFill extends BaseFill implements IFill
 	
 	public function clone() : BitmapFill
 	{
-		var r = new BitmapFill(bitmapPath, repeat, matrix.clone());
+		final r = new BitmapFill(bitmapPath, repeat, matrix.clone());
 		r.library = library;
 		return r;
 	}
@@ -90,7 +90,7 @@ class BitmapFill extends BaseFill implements IFill
 	{
 		if (library.hasItem(bitmapPath))
 		{
-			var image = cast(library.getItem(bitmapPath), BitmapItem).image;
+			final image = (cast library.getItem(bitmapPath) : BitmapItem).image;
 			g.beginBitmapFill(image, repeat, matrix.toNative());
 		}
 		else
@@ -102,7 +102,7 @@ class BitmapFill extends BaseFill implements IFill
 	public function getBitmapWidth()
 	{
         if (bitmapPath == null || !library.hasItem(bitmapPath)) return 1.0;
-		var item : BitmapItem = cast library.getItem(bitmapPath);
+		final item : BitmapItem = cast library.getItem(bitmapPath);
 		if (item == null || !Std.isOfType(item, BitmapItem)) return 1.0;
 		return item.image.width;
 	}
@@ -112,7 +112,7 @@ class BitmapFill extends BaseFill implements IFill
 		if (e == this) return true;
 		if (Std.isOfType(e, BitmapFill))
 		{
-			var ee : BitmapFill = cast e;
+			final ee : BitmapFill = cast e;
 			return ee.bitmapPath == bitmapPath && ee.matrix.equ(matrix) && ee.repeat == repeat;
 		}
 		return false;
@@ -127,7 +127,7 @@ class BitmapFill extends BaseFill implements IFill
 	
 	public function getTransformed(m:Matrix) : IFill
 	{
-		var r = clone();
+		final r = clone();
 		r.matrix.prependMatrix(m);
 		return r;
 	}
