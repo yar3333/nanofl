@@ -1,12 +1,11 @@
 package components.nanofl.movie.timeline;
 
-import js.html.DragEvent;
-import nanofl.ide.draganddrop.DragInfoParams;
-import nanofl.ide.timeline.LayerDragAndDropTools;
-import nanofl.ide.draganddrop.DragDataType;
 import js.JQuery;
 import js.Browser;
 import stdlib.ExceptionTools;
+import stdlib.Debug;
+import stdlib.Std;
+import stdlib.Timer;
 import wquery.ComponentList;
 import htmlparser.XmlBuilder;
 import htmlparser.XmlNodeElement;
@@ -24,6 +23,9 @@ import nanofl.ide.Globals;
 import nanofl.ide.AsyncTicker;
 import nanofl.ide.Document;
 import nanofl.ide.ActiveView;
+import nanofl.ide.draganddrop.DragInfoParams;
+import nanofl.ide.timeline.LayerDragAndDropTools;
+import nanofl.ide.draganddrop.DragDataType;
 import nanofl.ide.preferences.Preferences;
 import nanofl.ide.navigator.Navigator;
 import nanofl.ide.navigator.PathItem;
@@ -36,8 +38,6 @@ import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.draganddrop.AllowedDropEffect;
 import nanofl.ide.timeline.ITimelineView;
 import nanofl.ide.ui.AutoScrollHorizontally;
-import stdlib.Debug;
-import stdlib.Std;
 using stdlib.StringTools;
 using js.jquery.Editable;
 using nanofl.ide.HtmlElementTools;
@@ -99,22 +99,6 @@ class Code extends wquery.Component
 		Globals.injector.injectInto(this);
 		
 		layerComponents = new ComponentList<components.nanofl.movie.timelinelayer.Code>(components.nanofl.movie.timelinelayer.Code, this, template().content);
-		
-		template().layerContextMenu.build
-        (
-            template().container,
-            "#" + template().content[0].id + ">*",
-            preferences.storage.getMenu("layerContextMenu"),
-            beforeShowLayerContextMenu
-        );
-		
-        template().frameContextMenu.build
-        (
-            template().content,
-            ">*>.frames-content>*>*",
-            preferences.storage.getMenu("frameContextMenu"),
-            beforeShowFrameContextMenu
-        );
 		
         q(js.Browser.document).mouseup(e ->
 		{
@@ -191,7 +175,28 @@ class Code extends wquery.Component
 		new AutoScrollHorizontally(template().headers, template().hScrollbar, padLeft, padRight, onAutoScrollHorizontally);
 		new AutoScrollHorizontally(template().borders, template().hScrollbar, padLeft, padRight, onAutoScrollHorizontally);
 		new AutoScrollHorizontally(template().content, template().hScrollbar, padLeft, padRight, onAutoScrollHorizontally);
+
+        Timer.delayAsync(1).then(_ -> initConectMenus()); // wait for keymap
 	}
+
+    function initConectMenus()
+    {
+   		template().layerContextMenu.build
+        (
+            template().container,
+            "#" + template().content[0].id + ">*",
+            preferences.storage.getMenu("layerContextMenu"),
+            beforeShowLayerContextMenu
+        );
+		
+        template().frameContextMenu.build
+        (
+            template().content,
+            ">*>.frames-content>*>*",
+            preferences.storage.getMenu("frameContextMenu"),
+            beforeShowFrameContextMenu
+        );
+    }
 	
 	function onAutoScrollHorizontally(dx:Int)
 	{
@@ -220,22 +225,26 @@ class Code extends wquery.Component
 		final index = indexes[0];
 		final layer = pathItem.mcItem.layers[index];
 		
-		if (layer.type == LayerType.folder)
-		{
-			e.preventDefault();
-			return false;
-		}
+		// if (layer.type == LayerType.folder)
+		// {
+		// 	e.preventDefault();
+		// 	return false;
+		// }
 		
-		freezed(() -> navigator.setLayerIndex(index));
+        if (layer.type != LayerType.folder)
+        {
+		    freezed(() -> navigator.setLayerIndex(index));
+        }
 		
 		final parentIndex = getPotentialParentLayerIndex(index);
 		final parentLayerType = parentIndex != null ? pathItem.mcItem.layers[parentIndex].type : null;
 		final humanType = layer.getHumanType();
 		
-		menu.toggleItem("timeline.switchLayerTypeToMask",	humanType != "masked" && humanType != "guided");
-		menu.toggleItem("timeline.switchLayerTypeToGuide",	humanType != "masked" && humanType != "guided");
-		menu.toggleItem("timeline.switchLayerTypeToMasked",	parentLayerType == LayerType.mask);
-		menu.toggleItem("timeline.switchLayerTypeToGuided",	parentLayerType == LayerType.guide);
+		menu.toggleItem("timeline.switchLayerTypeToNormal",	layer.type != LayerType.folder);
+		menu.toggleItem("timeline.switchLayerTypeToMask",	layer.type != LayerType.folder && humanType != "masked" && humanType != "guided");
+		menu.toggleItem("timeline.switchLayerTypeToGuide",	layer.type != LayerType.folder && humanType != "masked" && humanType != "guided");
+		menu.toggleItem("timeline.switchLayerTypeToMasked",	layer.type != LayerType.folder && (parentLayerType == LayerType.mask || layer.parentLayer?.type == LayerType.mask));
+		menu.toggleItem("timeline.switchLayerTypeToGuided",	layer.type != LayerType.folder && parentLayerType == LayerType.guide);
 		
 		menu.getAllItems().removeClass("checked");
 		menu.getItem("timeline.switchLayerTypeTo" + layer.getHumanType().capitalize()).addClass("checked");
@@ -518,6 +527,11 @@ class Code extends wquery.Component
 	
 	function addLayer_click(_)
 	{
+        addLayer();
+    }
+	
+	public function addLayer()
+	{
 		beginTransaction();
 		
 		final layer = new Layer("Layer " + pathItem.mcItem.layers.length);
@@ -536,7 +550,12 @@ class Code extends wquery.Component
 		commitTransaction();
 	}
 	
-	function addFolder_click(e)
+	function addFolder_click(_)
+	{
+        addFolder();
+    }
+	
+	public function addFolder()
 	{
 		beginTransaction();
 		
@@ -550,8 +569,13 @@ class Code extends wquery.Component
 		commitTransaction();
 	}
 	
-	function removeLayer_click(e)
+	function removeLayer_click(_)
 	{
+        removeLayer();
+	}
+
+    public function removeLayer()
+    {
 		beginTransaction();
 		
 		final layerNodes = getLayerNodes();
@@ -580,8 +604,8 @@ class Code extends wquery.Component
 		
 		freezed(() -> editor.rebind());
 		
-		commitTransaction();
-	}
+		commitTransaction();        
+    }
 	
 	@:profile
 	public function updateHeader()

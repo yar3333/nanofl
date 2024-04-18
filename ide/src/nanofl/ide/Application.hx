@@ -233,7 +233,7 @@ class Application extends js.injecting.InjectContainer
 	
 	function createKeyboard(commands:Commands) : Keyboard
 	{
-		var keyboard = new Keyboard(commands);
+		final keyboard = new Keyboard(commands);
 		
 		keyboard.onCtrlButtonChange.bind((_, e) ->
 		{

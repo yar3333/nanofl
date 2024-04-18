@@ -31,6 +31,9 @@ class TimelineGroup extends BaseGroup
 	public function switchLayerTypeToGuided()	timeline.setSelectedLayerType("guided");
 	
 	public function renameLayer() timeline.renameActiveLayerByUser();
+	public function addLayer() timeline.addLayer();
+	public function addFolder() timeline.addFolder();
+	public function removeLayer() timeline.removeLayer();
 	
     public function cut()	tempActiveView(ActiveView.TIMELINE, clipboard.cut);
 	public function copy()	tempActiveView(ActiveView.TIMELINE, clipboard.copy);
