@@ -103,6 +103,3 @@ nanofl.engine.Plugins.registerGenerator(new MyPluginClass());
 ```
 
 For example of the generator plugin written on Haxe, see [CreateJSGeneratorPlugin](https://bitbucket.org/nanofl/plugins/src/default/CreateJSGeneratorPlugin).
-
-----------------------------------------------------------------------------------------------------
-<a href="https://bitbucket.org/nanofl/site/src/default/docs/write_plugin/index.md" target="_blank">Edit this page at bitbucket</a>

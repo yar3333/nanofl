@@ -181,7 +181,3 @@ This class represent a piece of text and it's format. Used in TextField to store
 ### Methods
 * `new([characters], [fillColor], [size])` - constructor
 * `clone()` - returns a copy of this object
-
-----------------------------------------------------------------------------------------------------
-
-<a href="https://bitbucket.org/nanofl/site/src/default/docs/api/index.md" target="_blank">Edit this page at bitbucket</a>
