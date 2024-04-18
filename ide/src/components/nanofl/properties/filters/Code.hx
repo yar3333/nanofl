@@ -26,6 +26,9 @@ class Code extends components.nanofl.properties.base.Code
 					
 					item.element.filters.push(new FilterDef(name, {}));
 					rebind(true);
+                    
+                    template().usedFilters.val(item.element.filters.length - 1);
+                    rebind(false);
 					
 					undoQueue.commitTransaction();
 					
@@ -109,17 +112,14 @@ class Code extends components.nanofl.properties.base.Code
 		switch (obj)
 		{
 			case PropertiesObject.INSTANCE(item):
-				var nn : Array<String> = cast template().usedFilters.val();
-				if (nn == null) return;
+				final s = template().usedFilters.val();
+				if (s == null) return;
 				
 				undoQueue.beginTransaction({ element:item.originalElement });
 				
-				var indexes = nn.map(s -> Std.parseInt(s));
-				indexes.sort((a, b) -> -Reflect.compare(a, b));
-				for (i in indexes)
-				{
-					item.element.filters.splice(i, 1);
-				}
+                final n = Std.parseInt(s);
+				item.element.filters.splice(n, 1);
+
 				rebind(true);
 				
 				undoQueue.commitTransaction();
@@ -135,8 +135,8 @@ class Code extends components.nanofl.properties.base.Code
 		switch (obj)
 		{
 			case PropertiesObject.INSTANCE(item):
-				var nn : Array<String> = cast template().usedFilters.val();
-				var n = nn != null && nn.length == 1 ? Std.parseInt(nn[0]) : null;
+				final s = template().usedFilters.val();
+				final n = s != null ? Std.parseInt(s) : null;
 				return n != null && n < item.element.filters.length ? item.element.filters[n] : null;
 				
 			case _:
