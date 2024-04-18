@@ -89,14 +89,14 @@
 	{
 		"name":"Help", "align":"right", "items":
 		[
-			{ "name":"Application Site...",		"command":"http://nanofl.com/",						"icon":"icon-help" },
-			{ "name":"Command-line options...",	"command":"http://nanofl.com/docs/command_line/",	"icon":"icon-help" },
-			{ "name":"Hotkeys...",				"command":"application.showHotkeys",				"icon":"icon-help" },
+			{ "name":"Application Site...",		"command":"https://github.com/yar3333/nanofl",									"icon":"icon-help" },
+			{ "name":"Command-line options...",	"command":"https://github.com/yar3333/nanofl/blob/master/doc/command_line.md",	"icon":"icon-help" },
+			{ "name":"Hotkeys...",				"command":"application.showHotkeys",											"icon":"icon-help" },
 			{ "name":"------------------" },
-			{ "name":"Report a Error...",		"command":"https://bitbucket.org/nanofl/nanofl/issues?status=new&status=open&kind=bug", "icon":"icon-help" },
-			{ "name":"Reload Plugins",			"command":"application.reloadPlugins",				"icon":"icon-help" },
+			{ "name":"Report a Error...",		"command":"https://github.com/yar3333/nanofl/issues", 							"icon":"icon-help" },
+			{ "name":"Reload Plugins",			"command":"application.reloadPlugins",											"icon":"icon-help" },
 			{ "name":"------------------" },
-			{ "name":"About NanoFL...",			"command":"application.about",						"icon":"icon-help" }
+			{ "name":"About NanoFL...",			"command":"application.about",													"icon":"icon-help" }
 		]
 	}
 ]
