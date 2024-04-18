@@ -48,7 +48,9 @@
 			{ "name":"------------------" },
 			{ "name":"Insert Frame",		"command":"timeline.insertFrame",		"icon":"custom-icon-frame-empty" },
 			{ "name":"Convert to Keyframe",	"command":"timeline.convertToKeyFrame",	"icon":"custom-icon-frame-key" },
-			{ "name":"Remove Frame",		"command":"timeline.removeFrame",		"icon":"custom-icon-frame-remove" }
+			{ "name":"Remove Frame",		"command":"timeline.removeFrame",		"icon":"custom-icon-frame-remove" },
+			{ "name":"------------------" },
+			{ "name":"Play",				"command":"timeline.play",				"icon":"custom-icon-run" }
 		]
 	},
 	{

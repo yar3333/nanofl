@@ -607,6 +607,11 @@ class Code extends wquery.Component
 		commitTransaction();        
     }
 	
+	function play_click(_)
+	{
+        play();
+	}
+	
 	@:profile
 	public function updateHeader()
 	{
@@ -1323,6 +1328,9 @@ class Code extends wquery.Component
 		});
 		
 		ensureActiveFrameVisible();
+
+        template().play.hide();
+        template().stop.show();
 	}
 	
 	public function stop()
@@ -1332,6 +1340,9 @@ class Code extends wquery.Component
 			playTimer.stop();
 			playTimer = null;
 		}
+
+        template().stop.hide();
+        template().play.show();
 	}
 	
 	public function renameActiveLayerByUser()

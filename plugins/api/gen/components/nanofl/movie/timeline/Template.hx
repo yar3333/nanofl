@@ -18,6 +18,8 @@ package components.nanofl.movie.timeline;
 	var addLayer(get, never) : js.JQuery;
 	var addFolder(get, never) : js.JQuery;
 	var removeLayer(get, never) : js.JQuery;
+	var play(get, never) : js.JQuery;
+	var stop(get, never) : js.JQuery;
 	var hscrollContainer(get, never) : js.JQuery;
 	var hScrollbar(get, never) : components.nanofl.common.horizontalscrollbar.Code;
 	var frameContextMenu(get, never) : components.nanofl.common.contextmenu.Code;

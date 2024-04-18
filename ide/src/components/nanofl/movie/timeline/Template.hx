@@ -52,6 +52,12 @@ class Template
 	
 	public var removeLayer(get, never) : js.JQuery;
 	inline function get_removeLayer() return component.q('#removeLayer');
+
+	public var play(get, never) : js.JQuery;
+	inline function get_play() return component.q('#play');
+
+	public var stop(get, never) : js.JQuery;
+	inline function get_stop() return component.q('#stop');
 	
 	public var hscrollContainer(get, never) : js.JQuery;
 	inline function get_hscrollContainer() return component.q('#hscrollContainer');

@@ -42,8 +42,8 @@ Source: "C:\MyProg\NanoFL\ide\bin\*"; DestDir: "{app}"; Flags: ignoreversion cre
 Source: "C:\MyProg\NanoFL\examples\*"; DestDir: "{userdocs}\NanoFL\Examples"; Flags: ignoreversion createallsubdirs recursesubdirs; MinVersion: 0,5.0; Languages: english
 
 [Icons]
-Name: "{commonstartmenu}\NanoFL"; Filename: "{app}\NanoFL.exe"; IconFilename: "{app}\NanoFL.exe"
-Name: "{commondesktop}\NanoFL"; Filename: "{app}\NanoFL.exe"; IconFilename: "{app}\NanoFL.exe"; Tasks: desktopicon
+Name: "{commonstartmenu}\NanoFL"; Filename: "{app}\NanoFL.exe"; IconFilename: "{app}\resources\app\static\nanofl\favicon.ico"
+Name: "{commondesktop}\NanoFL"; Filename: "{app}\NanoFL.exe"; IconFilename: "{app}\resources\app\static\nanofl\favicon.ico"; Tasks: desktopicon
 
 [Registry]
 Root: HKCR; Subkey: ".nfl"; ValueType: string; ValueName: ""; ValueData: "NanoFL.Document"; Flags: uninsdeletevalue; Tasks: nflAssociation

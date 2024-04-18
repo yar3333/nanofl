@@ -10,6 +10,9 @@ extern class Code extends wquery.Component implements nanofl.ide.timeline.ITimel
 	function convertToKeyFrame():Void;
 	function addBlankKeyFrame():Void;
 	function removeSelectedFrames():Void;
+	function addLayer():Void;
+	function addFolder():Void;
+	function removeLayer():Void;
 	function updateHeader():Void;
 	function fixActiveFrame():Void;
 	function fixActiveLayer():Void;
