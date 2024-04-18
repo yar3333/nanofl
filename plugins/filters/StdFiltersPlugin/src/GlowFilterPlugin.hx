@@ -13,10 +13,10 @@ class GlowFilterPlugin implements IFilterPlugin
 	[
 		{ type:"float",	name:"blurX",		label:"Blur X",			defaultValue:5, 					units:"px",	minValue:0 },
 		{ type:"float",	name:"blurY",		label:"Blur Y",			defaultValue:5, 					units:"px",	minValue:0 },
-		{ type:"int",	name:"strength", 	label:"Strength",		defaultValue:100, 					units:"%",	minValue:0, maxValue:100 },
-		{ type:"int",	name:"quality", 	label:"Quality",		defaultValue:1, 								minValue:1, maxValue:3 },
+		{ type:"slider",name:"strength", 	label:"Strength",		defaultValue:100, 					units:"%",	minValue:0, maxValue:100 },
+		{ type:"slider",name:"quality", 	label:"Quality",		defaultValue:1, 								minValue:1, maxValue:3 },
 		{ type:"color",	name:"color",		label:"Color",			defaultValue:"#000000" },
-		{ type:"int",	name:"alpha",		label:"Alpha",			defaultValue:100,	neutralValue:0,	units:"%",	minValue:0,	maxValue:100 },
+		{ type:"slider",name:"alpha",		label:"Alpha",			defaultValue:100,	neutralValue:0,	units:"%",	minValue:0,	maxValue:100 },
 		{ type:"bool",	name:"knockout",	label:"Knockout",		defaultValue:false },
 		{ type:"bool",	name:"inner",		label:"Inner shadow",	defaultValue:false },
 	];

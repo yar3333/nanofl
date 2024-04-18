@@ -12,10 +12,10 @@ class AdjustColorFilterPlugin implements IFilterPlugin
 	
 	public var properties : Array<CustomProperty> =
 	[
-		{ type:"int",	name:"brightness",	label:"Brightness",	defaultValue:0,	minValue:-100,	maxValue:100,	units:"%" },
-		{ type:"int",	name:"contrast",	label:"Contrast",	defaultValue:0,	minValue:-100,	maxValue:100,	units:"%" },
-		{ type:"int",	name:"saturation", 	label:"Saturation",	defaultValue:0,	minValue:-100,	maxValue:100,	units:"%" },
-		{ type:"int",	name:"hue", 		label:"Hue",		defaultValue:0,	minValue:-180,	maxValue:180,	units:"deg" },
+		{ type:"slider",	name:"brightness",	label:"Brightness",	defaultValue:0,	minValue:-100,	maxValue:100,	units:"%" },
+		{ type:"slider",	name:"contrast",	label:"Contrast",	defaultValue:0,	minValue:-100,	maxValue:100,	units:"%" },
+		{ type:"slider",	name:"saturation", 	label:"Saturation",	defaultValue:0,	minValue:-100,	maxValue:100,	units:"%" },
+		{ type:"slider",	name:"hue", 		label:"Hue",		defaultValue:0,	minValue:-180,	maxValue:180,	units:"deg" },
 	];
 	
 	public function getFilter(params:Dynamic)

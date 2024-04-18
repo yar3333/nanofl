@@ -1,6 +1,6 @@
 package components.nanofl.common.slider;
 
-import js.html.Console;
+import js.html.WheelEvent;
 import wquery.Event;
 import stdlib.Std;
 using js.bootstrap.Slider;
@@ -63,12 +63,33 @@ class Code extends wquery.Component
 		
 		template().slider.slider();
 		
-		template().slider.on("slide", function(e)
+		template().slider.on("slide", e ->
 		{
-			var v = fromSliderValue((cast e).value);
+			final v = fromSliderValue((cast e).value);
 			template().value.val(Std.string(v));
 			event_change.emit({ value:v });
 		});
+
+        template().container.on("wheel", ".slider", jqEvent -> 
+        {
+            final e : WheelEvent = cast jqEvent.originalEvent;
+            
+            var v = value;
+
+            if (v != null)
+            {
+                v -= Std.sign(e.deltaY);
+                v = Math.max(min, Math.min(max, v));
+            }
+            else
+            {
+                v = Std.sign(e.deltaY) > 0 ? min : max;
+            }
+
+            value = v;
+			
+            event_change.emit({ value:v });
+        });
     }
 	
 	public function show()
@@ -142,7 +163,7 @@ class Code extends wquery.Component
 		}
 		
 		r = Math.round(r * nativeMax);
-        //Console.log("toSliderValue (" + min + "; " + max + "; naviveMax=" + nativeMax + "): " + v + " =>" + r);
+        log("toSliderValue (" + min + "; " + max + "; naviveMax=" + nativeMax + "): " + v + " =>" + r);
         return r;
 	}
 	
@@ -164,7 +185,12 @@ class Code extends wquery.Component
 		
 		r = Math.min(max, Math.max(min, r));
 		
-        //Console.log("fromSliderValue (" + min + "; " + max + "): " + v + " =>" + r);
+        log("fromSliderValue (" + min + "; " + max + "): " + v + " =>" + r);
         return r;
+	}
+	
+	static function log(v:Dynamic)
+	{
+		//nanofl.engine.Log.console.log(Reflect.isFunction(v) ? v() : v);
 	}
 }
