@@ -13,9 +13,6 @@ libraryData =
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
     "layers": [
       {
         "name": "Label",
@@ -24,49 +21,55 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
-                "type": "shape"
-              },
-              {
-                "type": "group",
-                "name": "",
-                "x": 61.95,
-                "y": 6,
+                "type": "shape",
                 "regX": 0,
                 "regY": 0,
-                "elements": [
+                "fills": [
                   {
-                    "type": "shape",
-                    "regX": 0,
-                    "regY": 0,
-                    "fills": [
-                      {
-                        "type": "bitmap",
-                        "bitmapPath": "Bitmap 10",
-                        "repeat": "no-repeat",
-                        "x": 125,
-                        "y": 52.45
-                      }
-                    ],
-                    "figure": {
-                      "edges": [],
-                      "polygons": [
+                    "type": "bitmap",
+                    "bitmapPath": "Bitmap 10",
+                    "repeat": "no-repeat",
+                    "x": 258.5,
+                    "y": 95,
+                    "matrix": [
+                      0.8740740740740741,
+                      0,
+                      0,
+                      0.8740740740740741
+                    ]
+                  }
+                ],
+                "strokes": [
+                  {
+                    "type": "solid",
+                    "color": "#000000",
+                    "thickness": 1,
+                    "caps": "round",
+                    "joints": "round",
+                    "miterLimit": 3,
+                    "ignoreScale": false
+                  }
+                ],
+                "figure": {
+                  "edges": [
+                    {
+                      "strokeIndex": 0,
+                      "edges": "M258.5,95L258.5,362L494.5,362L494.5,95L258.5,95"
+                    }
+                  ],
+                  "polygons": [
+                    {
+                      "fillIndex": 0,
+                      "contours": [
                         {
-                          "fillIndex": 0,
-                          "contours": [
-                            {
-                              "edges": "M396,336.45L396,53.45L125,53.45L125,336.45L396,336.45"
-                            }
-                          ]
+                          "edges": "M258.5,95L258.5,362L494.5,362L494.5,95L258.5,95"
                         }
                       ]
                     }
-                  }
-                ]
+                  ]
+                }
               },
               {
                 "type": "instance",
@@ -75,9 +78,7 @@ libraryData =
                 "x": 74.5,
                 "y": 197.5,
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               }
             ]
           }
@@ -91,9 +92,6 @@ libraryData =
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
     "layers": [
       {
         "name": "Layer 1",
@@ -102,9 +100,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
