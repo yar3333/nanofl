@@ -67,6 +67,8 @@ abstract class EditorElement implements ISelectable
 
     final track : ElementLifeTrack;
     final framerate : Float;
+
+    var isDisplayObjectUpdated = false;
 	
 	public static function create(layer:EditorLayer, editor:Editor, navigator:Navigator, view:View, frame:Frame, tweenedElement:TweenedElement, track:ElementLifeTrack, framerate:Float) : EditorElement
 	{
@@ -147,17 +149,17 @@ abstract class EditorElement implements ISelectable
 	
 	public function update()
 	{
-        final oldDispObj = dispObj;
-        
-        updateDispObj();
-
-        if (dispObj != oldDispObj)
+        if (!isDisplayObjectUpdated)
         {
-            final n = metaDispObj.children.indexOf(oldDispObj);
+            isDisplayObjectUpdated = true;
+
+            final n = metaDispObj.children.indexOf(dispObj);
             Debug.assert(n >= 0);
+
+            updateDispObj();
+            
             metaDispObj.removeChildAt(n);
             metaDispObj.addChildAt(dispObj, n);
-            log("EditorElement.update: dispObj.stage = " + (dispObj.stage!=null));        
         }
 
         updateTransformations();

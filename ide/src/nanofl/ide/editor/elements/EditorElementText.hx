@@ -29,8 +29,6 @@ class EditorElementText extends EditorElementSelectBox
 
     override function updateDispObj()
     {
-        if (Std.isOfType(dispObj, TextField)) return;
-        
         log("EditorElementText: recreate tf");
         
         dispObj = currentElement.createDisplayObject();

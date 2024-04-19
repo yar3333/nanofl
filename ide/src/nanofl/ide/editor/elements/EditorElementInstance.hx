@@ -22,4 +22,10 @@ class EditorElementInstance extends EditorElementSelectBox
 			navigator.navigateDown(element);
 		}
 	}
+
+    override function updateTransformations()
+    {
+        element.updateDisplayObjectTweenedProperties(dispObj);
+        super.updateTransformations();
+    }
 }

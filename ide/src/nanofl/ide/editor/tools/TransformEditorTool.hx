@@ -38,7 +38,7 @@ class TransformEditorTool extends SelectEditorTool
 		controls.addChild(transformationBox = new TransformationBox());
 		transformationBox.rotateCursorUrl = "rotate.cur";
 		
-		transformationBox.resize.bind(function(_, e)
+		transformationBox.resize.bind((_, e) ->
 		{
             log("e.kx = " + e.kx);
             //log("e.ky = " + e.ky);
@@ -92,7 +92,7 @@ class TransformEditorTool extends SelectEditorTool
 			editor.update();
 		});
 		
-		transformationBox.rotate.bind(function(t, e)
+		transformationBox.rotate.bind((_, e) ->
 		{
 			final m = new Matrix()
 					.translate(-e.regX, -e.regY)
@@ -109,7 +109,7 @@ class TransformEditorTool extends SelectEditorTool
 			editor.update();
 		});
 		
-		transformationBox.changeRegPoint.bind(function(t, _)
+		transformationBox.changeRegPoint.bind((_, _) ->
 		{
 			final selectedItems = editor.getSelectedItems();
 			final shapeSelected = editor.figure.hasSelected();
@@ -124,7 +124,7 @@ class TransformEditorTool extends SelectEditorTool
 			}
 		});
 
-		transformationBox.barMove.bind(function(t, e)
+		transformationBox.barMove.bind((_, e) ->
         {
             final selectedItems = editor.getSelectedItems();
             final shapeSelected = editor.figure.hasSelected();
@@ -148,7 +148,8 @@ class TransformEditorTool extends SelectEditorTool
                             
                         case _:
                     }
-                    item.update();
+                    
+                    editor.update();
                 }
             }
         });

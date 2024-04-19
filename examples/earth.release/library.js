@@ -21,13 +21,7 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
-              {
-                "type": "shape"
-              },
               {
                 "type": "text",
                 "name": "",
@@ -195,13 +189,7 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
-              {
-                "type": "shape"
-              },
               {
                 "type": "instance",
                 "libraryItem": "earth",
