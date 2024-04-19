@@ -25,7 +25,7 @@ class EditorElementInstance extends EditorElementSelectBox
 
     override function updateTransformations()
     {
-        element.updateDisplayObjectTweenedProperties(dispObj);
+        (cast currentElement : Instance).updateDisplayObjectTweenedProperties(dispObj);
         super.updateTransformations();
     }
 }
