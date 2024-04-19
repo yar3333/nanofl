@@ -5,7 +5,6 @@ PROJECTS =	alpha \
 			coloreffects \
 			curve \
 			curvefill \
-			drawingobject \
 			earth \
 			emptyclips \
 			filters \
@@ -28,8 +27,8 @@ PROJECTS =	alpha \
 			textureatlas \
 			transform \
 			tween \
-			WaterLogic \
-			zindex
+			video \
+			WaterLogic
 
 DST_LIST = $(addsuffix .release,$(PROJECTS))
 

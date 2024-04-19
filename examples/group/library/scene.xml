@@ -1,18 +1,36 @@
 <movieclip version="2.3.0">
 	<layer name="Label">
 		<frame>
-			<group x="-100" y="0">
-				<group x="-81.25" y="-40.8" matrix="0.996261596679688,0.0863800048828125,-0.0863800048828125,0.996261596679688">
-					<shape>
-						<strokes>
-							<stroke type="solid" color="#FF0023" thickness="6.75" />
-						</strokes>
-						<figure>
-							<edge strokeIndex="0" edges="M581,30L581,362.95" />
-						</figure>
-					</shape>
-				</group>
-			</group>
+			<instance libraryItem="$groups/00000002-018EF669-000024D7-E433-51F2" x="298.5" y="223.5" />
+			<instance libraryItem="$groups/00000001-018EF668-0000163F-18C0-834A" x="232" y="171" />
 		</frame>
 	</layer>
+	<groups>
+		<group name="00000002-018EF669-000024D7-E433-51F2">
+			<shape>
+				<fills>
+					<fill type="solid" color="#f9b233" />
+				</fills>
+				<strokes>
+					<stroke type="solid" color="#000000" />
+				</strokes>
+				<figure>
+					<polygon fillIndex="0">
+						<contour edges="M-92,-66.5L-92,66.5L92,66.5L92,-66.5L-92,-66.5" />
+					</polygon>
+					<edge strokeIndex="0" edges="M-92,-66.5L-92,66.5L92,66.5L92,-66.5L-92,-66.5" />
+				</figure>
+			</shape>
+		</group>
+		<group name="00000001-018EF668-0000163F-18C0-834A">
+			<shape>
+				<strokes>
+					<stroke type="solid" color="#000000" />
+				</strokes>
+				<figure>
+					<edge strokeIndex="0" edges="M55.5,-35L-55.5,35" />
+				</figure>
+			</shape>
+		</group>
+	</groups>
 </movieclip>
