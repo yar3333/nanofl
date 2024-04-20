@@ -25,6 +25,7 @@ PrivilegesRequired=admin
 UninstallDisplayIcon={app}\NanoFL.exe
 ChangesAssociations=yes
 ChangesEnvironment=true
+ArchitecturesInstallIn64BitMode=x64
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
