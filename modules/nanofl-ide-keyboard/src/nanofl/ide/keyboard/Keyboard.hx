@@ -124,7 +124,7 @@ class Keyboard
 	
 	function isInputActive() : Bool
 	{
-		var activeElement = Browser.document.activeElement;
+		final activeElement = Browser.document.activeElement;
         if (activeElement == null) return false;
         if (!["textarea", "input", "select"].contains(activeElement.nodeName.toLowerCase())) return false;
         return true;

@@ -1022,19 +1022,19 @@ nanofl_ide_keyboard_ShortcutTools.equ = function(a,b) {
 	}
 };
 nanofl_ide_keyboard_ShortcutTools.key = function(keyCode) {
-	return { keyCode : keyCode};
+	return { keyCode : keyCode, altKey : false, ctrlKey : false, shiftKey : false};
 };
 nanofl_ide_keyboard_ShortcutTools.ctrl = function(keyCode) {
-	return { keyCode : keyCode, ctrlKey : true};
+	return { keyCode : keyCode, ctrlKey : true, altKey : false, shiftKey : false};
 };
 nanofl_ide_keyboard_ShortcutTools.shift = function(keyCode) {
-	return { keyCode : keyCode, shiftKey : true};
+	return { keyCode : keyCode, shiftKey : true, altKey : false, ctrlKey : false};
 };
 nanofl_ide_keyboard_ShortcutTools.alt = function(keyCode) {
-	return { keyCode : keyCode, altKey : true};
+	return { keyCode : keyCode, altKey : true, shiftKey : false, ctrlKey : false};
 };
 nanofl_ide_keyboard_ShortcutTools.ctrlShift = function(keyCode) {
-	return { keyCode : keyCode, ctrlKey : true, shiftKey : true};
+	return { keyCode : keyCode, ctrlKey : true, shiftKey : true, altKey : false};
 };
 nanofl_ide_keyboard_ShortcutTools.toString = function(e) {
 	return (e.ctrlKey ? "Ctrl+" : "") + (e.shiftKey ? "Shift+" : "") + (e.altKey ? "Alt+" : "") + nanofl_ide_keyboard_Keys.toString(e.keyCode);

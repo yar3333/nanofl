@@ -12,11 +12,11 @@ class ShortcutTools
 			&& a.altKey == b.altKey;
 	}
 	
-	public static function key(keyCode:Int) : Shortcut return { keyCode:keyCode };
-	public static function ctrl(keyCode:Int) : Shortcut return { keyCode:keyCode, ctrlKey:true };
-	public static function shift(keyCode:Int) : Shortcut return { keyCode:keyCode, shiftKey:true };
-	public static function alt(keyCode:Int) : Shortcut return { keyCode:keyCode, altKey:true };
-	public static function ctrlShift(keyCode:Int) : Shortcut return { keyCode:keyCode, ctrlKey:true, shiftKey:true };
+	public static function key(keyCode:Int) : Shortcut return { keyCode:keyCode, altKey:false, ctrlKey:false, shiftKey:false };
+	public static function ctrl(keyCode:Int) : Shortcut return { keyCode:keyCode, ctrlKey:true, altKey:false, shiftKey:false };
+	public static function shift(keyCode:Int) : Shortcut return { keyCode:keyCode, shiftKey:true, altKey:false, ctrlKey:false };
+	public static function alt(keyCode:Int) : Shortcut return { keyCode:keyCode, altKey:true, shiftKey:false, ctrlKey:false };
+	public static function ctrlShift(keyCode:Int) : Shortcut return { keyCode:keyCode, ctrlKey:true, shiftKey:true, altKey:false };
 
     public static function toString(e:Shortcut) : String
     {

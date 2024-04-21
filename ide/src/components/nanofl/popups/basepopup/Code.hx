@@ -17,12 +17,14 @@ class Code extends wquery.Component
     {
 		Globals.injector.injectInto(this);
 		
-        var popup = template().popup;
+        final popup = template().popup;
 		
 		popup.modal({ backdrop:false, keyboard:false, show:false });
 		
 		popup.keypress(e ->
 		{
+            e.preventDefault();
+
 			if (ShortcutTools.key(Keys.ENTER).equ(e))
 			{
 				popup.find(".btn-primary").click();
