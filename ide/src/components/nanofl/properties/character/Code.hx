@@ -67,7 +67,7 @@ class Code extends components.nanofl.properties.base.Code
 				
 				bindFamilies(stdFonts.concat(library != null ? library.getFonts() : []));
 				
-				var format = item != null ? item.getSelectionFormat() : newObjectParams.textFormat;
+				final format = item != null ? item.getSelectionFormat() : newObjectParams.textFormat;
 				
 				template().fillColor.value = format.fillColor;
 				template().family.selectpicker().val(format.family);
@@ -104,7 +104,7 @@ class Code extends components.nanofl.properties.base.Code
 	
 	function family_change(_) 
 	{
-		var t = Type.createEmptyInstance(TextRun);
+		final t = Type.createEmptyInstance(TextRun);
 		t.family = template().family.val();
 		if (t.family == "") t.family = null;
 		changeProperties(t);
@@ -112,8 +112,8 @@ class Code extends components.nanofl.properties.base.Code
 	
 	function style_change(_)
 	{
-		var t = Type.createEmptyInstance(TextRun);
-		var originalStyle = template().style.val();
+		final t = Type.createEmptyInstance(TextRun);
+		final originalStyle = template().style.val();
 		t.style = switch (originalStyle)
 		{
 			case "": null;
@@ -125,7 +125,7 @@ class Code extends components.nanofl.properties.base.Code
 	
 	function size_change(_)
 	{
-		var t = Type.createEmptyInstance(TextRun);
+		final t = Type.createEmptyInstance(TextRun);
 		t.size = template().size.value;
 		if (Math.isNaN(t.size)) t.size = null;
 		changeProperties(t);
@@ -133,35 +133,35 @@ class Code extends components.nanofl.properties.base.Code
 	
 	function fillColor_change(_)
 	{
-		var t = Type.createEmptyInstance(TextRun);
+		final t = Type.createEmptyInstance(TextRun);
 		t.fillColor = template().fillColor.value;
 		changeProperties(t);
 	}
 	
 	function strokeSize_change(_)
 	{
-		var t = Type.createEmptyInstance(TextRun);
+		final t = Type.createEmptyInstance(TextRun);
 		t.strokeSize = Std.parseFloat(template().strokeSize.val());
 		changeProperties(t);
 	}
 	
 	function strokeColor_change(_)
 	{
-		var t = Type.createEmptyInstance(TextRun);
+		final t = Type.createEmptyInstance(TextRun);
 		t.strokeColor = template().strokeColor.value;
 		changeProperties(t);
 	}
 	
 	function letterSpacing_change(_)
 	{
-		var t = Type.createEmptyInstance(TextRun);
+		final t = Type.createEmptyInstance(TextRun);
 		t.letterSpacing = Std.parseFloat(template().letterSpacing.val());
 		changeProperties(t);
 	}
 	
 	function kerning_change(_)
 	{
-		var t = Type.createEmptyInstance(TextRun);
+		final t = Type.createEmptyInstance(TextRun);
 		t.kerning = template().kerning.prop("checked");
 		template().letterSpacing.prop("disabled", t.kerning);
 		changeProperties(t);
@@ -176,7 +176,7 @@ class Code extends components.nanofl.properties.base.Code
 			case PropertiesObject.TEXT(item, newObjectParams):
 				for (name in Reflect.fields(format))
 				{
-					var value = Reflect.field(format, name);
+					final value = Reflect.field(format, name);
 					if (value != null) Reflect.setField(newObjectParams.textFormat, name, value);
 				}
 				

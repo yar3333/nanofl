@@ -22,7 +22,8 @@ class Code extends wquery.Component
 	
 	var nativeMax : Int;
 	
-	public var value(get, set) : Float;
+	var lastValue : Float;
+    public var value(get, set) : Float;
 
 	function get_value() : Float
 	{
@@ -45,6 +46,8 @@ class Code extends wquery.Component
 			template().value.val("");
 			template().slider.sliderSetValue(0.0);
 		}
+
+        lastValue = v;
 		
 		return v;
 	}
@@ -86,9 +89,11 @@ class Code extends wquery.Component
                 v = Std.sign(e.deltaY) > 0 ? min : max;
             }
 
-            value = v;
-			
-            event_change.emit({ value:v });
+            if (lastValue != v)
+            {
+                value = v;
+                event_change.emit({ value:v });
+            }
         });
     }
 	
@@ -118,10 +123,13 @@ class Code extends wquery.Component
 	
 	function value_keyup(e)
 	{
-		if (value != null)
+		final v = value;
+        if (v == lastValue) return;
+        
+        if (v != null)
 		{
-			template().slider.sliderSetValue(toSliderValue(value));
-			event_change.emit({ value:value });
+			template().slider.sliderSetValue(toSliderValue(v));
+			event_change.emit({ value:v });
 		}
 	}
 	
@@ -137,13 +145,17 @@ class Code extends wquery.Component
 	
 	function value_blur(e)
 	{
-		if (value == null)
+		final v = value;
+        if (v == lastValue) return;
+		
+        if (v == null)
 		{
 			template().slider.sliderDisable();
+            lastValue = null;
 		}
 		else
 		{
-			set_value(value);
+			set_value(v);
 		}
 	}
 	
