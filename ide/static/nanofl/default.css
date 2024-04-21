@@ -1,5 +1,10 @@
 body { overflow:hidden }
 
+*:focus-visible
+{
+    outline: none;
+}
+
 .no-user-select
 {
 	-webkit-touch-callout: none;
