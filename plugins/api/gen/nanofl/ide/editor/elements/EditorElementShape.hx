@@ -6,4 +6,5 @@ extern class EditorElementShape extends nanofl.ide.editor.elements.EditorElement
 	@:noCompletion
 	private function get_element():nanofl.engine.elements.ShapeElement;
 	override function getPropertiesObject(newObjectParams:nanofl.ide.editor.NewObjectParams):nanofl.ide.PropertiesObject;
+	override function update():Void;
 }

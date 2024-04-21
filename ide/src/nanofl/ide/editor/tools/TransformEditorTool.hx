@@ -248,7 +248,7 @@ class TransformEditorTool extends SelectEditorTool
 		final selectedItems = editor.getSelectedItems();
 		if (selectedItems.length == 1)
 		{
-			editor.updateTransformations();
+			editor.updateElements();
 			final pt = selectedItems[0].dispObj.localToLocal(0, 0, transformationBox);
 			transformationBox.defaultRegPointX = pt.x;
 			transformationBox.defaultRegPointY = pt.y;

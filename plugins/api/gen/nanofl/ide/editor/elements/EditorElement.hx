@@ -10,7 +10,6 @@ extern class EditorElement implements nanofl.engine.ISelectable {
 	private function set_selected(v:Bool):Bool;
 	var width(get, set) : Float;
 	var height(get, set) : Float;
-	function updateTransformations():Void;
 	function update():Void;
 	function getBounds():easeljs.geom.Rectangle;
 	function getTransformedBounds():easeljs.geom.Rectangle;

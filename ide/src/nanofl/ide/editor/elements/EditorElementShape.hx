@@ -13,4 +13,10 @@ class EditorElementShape extends EditorElement
         // TODO: getPropertiesObject / shape ????
         return PropertiesObject.NONE;
     }
+
+    override function update()
+    {
+        setDispObj(createDisplayObject());
+        super.update();
+    }
 }

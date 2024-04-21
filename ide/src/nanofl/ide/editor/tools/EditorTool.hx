@@ -100,7 +100,7 @@ class EditorTool
 	@:profile
 	public function draw(shapeSelections:Shape, itemSelections:Shape)
 	{
-		editor.updateTransformations();
+		editor.updateElements();
 	}
 	
 	public function selectionChange()

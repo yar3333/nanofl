@@ -334,11 +334,11 @@ class Editor extends InjectContainer
 		}
 	}
 	
-	public function updateTransformations()
+	public function updateElements()
 	{
 		for (item in getElements())
 		{
-			item.updateTransformations();
+			item.update();
 		}
 	}
 	
@@ -601,12 +601,12 @@ class Editor extends InjectContainer
 	@:allow(nanofl.ide.undo)
 	function setTransformationStates(states:Array<TransformationState>)
 	{
-		var items = getElements();
+		final items = getElements();
 		for (i in 0...states.length)
 		{
 			states[i].toElement(items[i].originalElement);
 		}
-		updateTransformations();
+		updateElements();
 	}
 	
 	@:allow(nanofl.ide.undo)
@@ -666,7 +666,7 @@ class Editor extends InjectContainer
 				m.c = 0.0;
 				m.d = 1.0;
 				
-				item.updateTransformations();
+				item.update();
 				tool.itemChanged(item);
 			}
 		}

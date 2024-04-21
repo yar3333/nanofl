@@ -7,9 +7,9 @@ using nanofl.engine.geom.PointTools;
 
 abstract class EditorElementSelectBox extends EditorElement
 {
-	override public function updateTransformations() 
+	override function update() 
 	{
-		super.updateTransformations();
+		super.update();
 		
 		var pt0 = metaDispObj.localToGlobal(0, 0);
 		var pt1 = metaDispObj.localToGlobal(1, 0);

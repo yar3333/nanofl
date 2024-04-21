@@ -49,7 +49,7 @@ class TextEditorTool extends EditorTool
 		transformationBox.move.bind(function(_, e)
 		{
 			textItem.element.translate(e.dx, e.dy);
-			editor.updateTransformations();
+			editor.updateElements();
 			view.properties.update();
 		});
 	}

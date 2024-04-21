@@ -67,8 +67,6 @@ abstract class EditorElement implements ISelectable
 
     final track : ElementLifeTrack;
     final framerate : Float;
-
-    var isDisplayObjectUpdated = false;
 	
 	public static function create(layer:EditorLayer, editor:Editor, navigator:Navigator, view:View, frame:Frame, tweenedElement:TweenedElement, track:ElementLifeTrack, framerate:Float) : EditorElement
 	{
@@ -125,10 +123,36 @@ abstract class EditorElement implements ISelectable
 		
 		attachEventHandlers();
 
-        update();
+        setDispObj(createDisplayObject());
 	}
 
-	public function updateTransformations()
+    final function setDispObj(newDispObj:DisplayObject)
+    {
+        final n = metaDispObj.children.indexOf(dispObj);
+        Debug.assert(n >= 0);
+        metaDispObj.removeChildAt(n);
+        metaDispObj.addChildAt(newDispObj, n);
+        dispObj = newDispObj;
+    }
+	
+    function createDisplayObject() : DisplayObject
+    {
+        final dispObj = currentElement.createDisplayObject();
+
+        if (Std.isOfType(dispObj, IdeAdvancableDisplayObject))
+        {
+            var frameAdvanceTo = navigator.pathItem.frameIndex - track.startFrameIndex;
+            if (currentElement != track.sameElementSequence[0] && Std.isOfType(dispObj, IdeVideo))
+            {
+                frameAdvanceTo += Math.floor((cast track.sameElementSequence[0] : Instance).videoCurrentTime * framerate);
+            }
+            (cast dispObj:IdeAdvancableDisplayObject).advanceTo(frameAdvanceTo, framerate, new TweenedElement(originalElement, currentElement));
+        }
+
+        return dispObj;
+    }
+
+	public function update()
 	{
 		final properties = currentElement.decomposeMatrix();
 		
@@ -146,39 +170,6 @@ abstract class EditorElement implements ISelectable
 
         DisplayObjectTools.recache(dispObj);
 	}
-	
-	public function update()
-	{
-        if (!isDisplayObjectUpdated)
-        {
-            isDisplayObjectUpdated = true;
-
-            final n = metaDispObj.children.indexOf(dispObj);
-            Debug.assert(n >= 0);
-
-            updateDispObj();
-            
-            metaDispObj.removeChildAt(n);
-            metaDispObj.addChildAt(dispObj, n);
-        }
-
-        updateTransformations();
-	}
-
-    function updateDispObj()
-    {
-        dispObj = currentElement.createDisplayObject();
-
-        if (Std.isOfType(dispObj, IdeAdvancableDisplayObject))
-        {
-            var frameAdvanceTo = navigator.pathItem.frameIndex - track.startFrameIndex;
-            if (currentElement != track.sameElementSequence[0] && Std.isOfType(dispObj, IdeVideo))
-            {
-                frameAdvanceTo += Math.floor((cast track.sameElementSequence[0] : Instance).videoCurrentTime * framerate);
-            }
-            (cast dispObj:IdeAdvancableDisplayObject).advanceTo(frameAdvanceTo, framerate, new TweenedElement(originalElement, currentElement));
-        }
-    }
 	
 	public function getBounds() : Rectangle
 	{

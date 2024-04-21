@@ -27,13 +27,13 @@ class EditorElementText extends EditorElementSelectBox
 		tf.dashedBorder = !selected && layer.isShowSelection();
 	}
 
-    override function updateDispObj()
+    override function createDisplayObject()
     {
         log("EditorElementText: recreate tf");
         
-        dispObj = currentElement.createDisplayObject();
+        final dispObj : TextField = cast super.createDisplayObject();
         
-        tf.resize.bind((_, e) ->
+        dispObj.resize.bind((_, e) ->
         {
             element.width = PointTools.roundGap(e.width);
             element.height = PointTools.roundGap(e.height);
@@ -41,11 +41,13 @@ class EditorElementText extends EditorElementSelectBox
             update();
         });
         
-        tf.change.bind((_, e) ->
+        dispObj.change.bind((_, e) ->
         {
             editor.tool.itemChanged(this);
             update();
         });
+
+        return dispObj;
     }
 	
 	public function getPropertiesObject(newObjectParams:NewObjectParams) : PropertiesObject
