@@ -1,6 +1,6 @@
 # NanoFL
 
-HTML5 vector editor and animator. Help your to create animated banners, movie clips and games.
+Design animations for cartoons, banners, games, and the web with NanoFL. Free.
 
 * [Quick start](doc/quick_start/index.md)
 
