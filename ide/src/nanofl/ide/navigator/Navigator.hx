@@ -61,7 +61,7 @@ class Navigator extends InjectContainer
 	@:profile
 	public function setFrameIndex(index:Int, ?invalidater:Invalidater, commitBeforeChange=true) : Promise<{}>
 	{
-		var totalFrames = pathItem.getTotalFrames();
+		final totalFrames = pathItem.getTotalFrames();
 		
 		if (totalFrames > 0)
 		{
@@ -95,22 +95,21 @@ class Navigator extends InjectContainer
         return r;
 	}
 	
-	//@:allow(nanofl.ide.undo)
 	public function getState() : NavigatorState
 	{
-		var first =
+		final first =
 		{
 			namePath: editPath[0].mcItem.namePath,
 			layerIndex: editPath[0].layerIndex,
 			frameIndex: editPath[0].frameIndex
 		};
 		
-		var nexts = [];
+		final nexts = [];
 		for (i in 1...editPath.length)
 		{
 			nexts.push
 			({
-				elementIndex: editPath[i - 1].frame.keyFrame.elements.indexOf(editPath[i].instance), // TODO: group
+				elementIndex: editPath[i - 1].frame.keyFrame.elements.indexOf(editPath[i].instance),
 				layerIndex: editPath[i].layerIndex,
 				frameIndex: editPath[i].frameIndex
 			});
@@ -119,10 +118,9 @@ class Navigator extends InjectContainer
 		return new NavigatorState(first, nexts);
 	}
 	
-	//@:allow(nanofl.ide.undo)
 	public function setState(state:NavigatorState) : Void
 	{
-		var editPath = new Array<PathItem>();
+		final editPath = new Array<PathItem>();
 		
 		editPath.push(new PathItem
 		(

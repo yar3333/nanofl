@@ -239,7 +239,7 @@ class UndoQueue extends undoqueue.UndoQueue<Changes, Operation>
 		
 		if (oldFigureState != null)
 		{
-			var newFigureState = document.editor.figure.getState();
+			final newFigureState = document.editor.figure.getState();
 			if (!oldFigureState.equ(newFigureState))
 			{
 				addOperation(Operation.FIGURE(document.navigator.getState(), oldFigureState, newFigureState));
@@ -248,7 +248,7 @@ class UndoQueue extends undoqueue.UndoQueue<Changes, Operation>
 		
 		if (oldTransformationStates != null)
 		{
-			var newTransformationStates = document.editor.getTransformationStates();
+			final newTransformationStates = document.editor.getTransformationStates();
 			if (!ArrayTools.equ(oldTransformationStates, newTransformationStates))
 			{
 				addOperation(Operation.TRANSFORMATIONS(document.navigator.getState(), oldTransformationStates, newTransformationStates));
@@ -257,21 +257,22 @@ class UndoQueue extends undoqueue.UndoQueue<Changes, Operation>
 		
 		if (oldElementsState != null)
 		{
-			var newElementsState = document.editor.getElementsState();
+			final newElementsState = document.editor.getElementsState();
+            log(() -> "document.navigator.getState() = " + haxe.Json.stringify(document.navigator.getState(), "  "));
 			addOperation(Operation.ELEMENTS(document.navigator.getState(), oldElementsState, newElementsState));
 		}
 		
 		if (oldTimelineState != null)
 		{
-			var newTimelineState = document.navigator.pathItem.mcItem.getTimelineState();
+			final newTimelineState = document.navigator.pathItem.mcItem.getTimelineState();
 			addOperation(Operation.TIMELINE(document.navigator.getState(), oldTimelineState, newTimelineState));
 		}
 		
 		for (oldElementState in oldElementStates)
 		{
-			var elementIndex = document.editor.activeLayer.getElementIndex(oldElementState.element);
+			final elementIndex = document.editor.activeLayer.getElementIndex(oldElementState.element);
 			Debug.assert(elementIndex >= 0, "Wrong elementIndex = " + elementIndex);
-			var newElementState = oldElementState.element.getState();
+			final newElementState = oldElementState.element.getState();
 			if (!oldElementState.state.equ(newElementState))
 			{
 				addOperation(Operation.ELEMENT(document.navigator.getState(), elementIndex, oldElementState.state, newElementState));

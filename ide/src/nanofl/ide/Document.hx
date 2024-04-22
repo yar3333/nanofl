@@ -281,6 +281,7 @@ class Document extends InjectContainer
 			final oldPath = path;
 			
             fileSystem.copyAny(Path.directory(oldPath), Path.directory(newPath));
+            fileSystem.rename(Path.join([ Path.directory(newPath), Path.withoutDirectory(oldPath) ]), newPath);
 			library.changeDir(Path.directory(newPath) + "/library");
 			
             lastModified = null;

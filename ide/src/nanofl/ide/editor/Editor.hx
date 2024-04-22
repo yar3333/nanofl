@@ -30,8 +30,6 @@ import nanofl.ide.ui.Popups;
 import nanofl.ide.ui.View;
 using nanofl.engine.geom.BoundsTools;
 using stdlib.Lambda;
-using nanofl.engine.geom.BoundsTools;
-using stdlib.Lambda;
 
 #if profiler @:build(Profiler.buildMarked()) #end
 @:rtti
@@ -47,13 +45,10 @@ class Editor extends InjectContainer
 	var document : Document;
     var pathItem : PathItem;
 	
-	//@:allow(components.nanofl.movie.part2D.editor.Client)
-	//@:allow(nanofl.ide.editor.elements.EditorElement)
 	public var tool(default, null) : EditorTool;
 	
 	public var container(default, null) = new Container();
 	
-	//@:allow(nanofl.ide.editor.EditorLayer)
 	public var layers : Array<EditorLayer>;
 	
 	public var activeLayer(get, never) : EditorLayer;
@@ -594,6 +589,8 @@ class Editor extends InjectContainer
 	@:allow(nanofl.ide.undo)
 	function getTransformationStates() : Array<TransformationState>
 	{
+        log("getTransformationStates");
+		
 		return getElements().map(x -> TransformationState.fromElement(x.originalElement));
 	}
 	
@@ -601,6 +598,8 @@ class Editor extends InjectContainer
 	@:allow(nanofl.ide.undo)
 	function setTransformationStates(states:Array<TransformationState>)
 	{
+        log("setTransformationStates" + states.length);
+
 		final items = getElements();
 		for (i in 0...states.length)
 		{
@@ -612,6 +611,8 @@ class Editor extends InjectContainer
 	@:allow(nanofl.ide.undo)
 	function getElementsState() : ElementsState
 	{
+        log("getElementsState");
+		
 		return new ElementsState(layers.map(layer -> layer.getElementsState()));
 	}
 	
@@ -619,6 +620,8 @@ class Editor extends InjectContainer
 	@:allow(nanofl.ide.undo)
 	function setElementsState(state:ElementsState)
 	{
+        log("setElementsState");
+		
 		var layers = pathItem.mcItem.layers;
 		for (i in 0...state.layerElements.length)
 		{
