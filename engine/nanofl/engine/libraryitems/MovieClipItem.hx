@@ -36,7 +36,7 @@ class MovieClipItem	extends InstancableItem
 	public var layers(get, never) : ArrayRO<Layer>; function get_layers() return _layers;
 	
 	public var autoPlay = true;
-	public var loop = true;
+	public var loop = false;
 	
 	public var likeButton = false;
 	public var textureAtlas : String;
@@ -269,7 +269,7 @@ class MovieClipItem	extends InstancableItem
                 super.saveProperties(xml);
 
                 xml.attr("autoPlay", autoPlay, true);
-                xml.attr("loop", loop, true);
+                xml.attr("loop", loop);
                 
                 xml.attr("likeButton", likeButton, false);
                 xml.attr("exportAsSprite", exportAsSprite, false);
@@ -310,8 +310,8 @@ class MovieClipItem	extends InstancableItem
             case false:
                 super.savePropertiesJson(obj);
 
-                obj.autoPlay = autoPlay ?? true;
-                obj.loop = loop ?? true;
+                obj.autoPlay = autoPlay;
+                obj.loop = loop;
                 
                 if (likeButton) obj.likeButton = likeButton;
                 if (exportAsSprite) obj.exportAsSprite = exportAsSprite;
