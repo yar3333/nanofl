@@ -172,8 +172,8 @@ class Code extends wquery.Component
             );
 		});
 		
-		var padLeft = template().buttons.width();
-		var padRight = SCROLLBAR_SIZE;
+		final padLeft = template().buttons.width();
+		final padRight = SCROLLBAR_SIZE;
 		new AutoScrollHorizontally(template().headers, template().hScrollbar, padLeft, padRight, onAutoScrollHorizontally);
 		new AutoScrollHorizontally(template().borders, template().hScrollbar, padLeft, padRight, onAutoScrollHorizontally);
 		new AutoScrollHorizontally(template().content, template().hScrollbar, padLeft, padRight, onAutoScrollHorizontally);
@@ -260,7 +260,7 @@ class Code extends wquery.Component
 		
 		if (!frameNode.hasClass("selected"))
 		{
-			var layerNode = getLayerNodeByFrameNode(frameNode);
+			final layerNode = getLayerNodeByFrameNode(frameNode);
 			freezed(() ->
 			{
 				navigator.setLayerIndex(layerNode.index());
@@ -328,14 +328,14 @@ class Code extends wquery.Component
 	
 	function extendSelection(layerIndex:Int, frameIndex:Int)
 	{
-		var fromLayerIndex = Std.min(layerIndex, pathItem.layerIndex);
-		var fromFrameIndex = Std.min(frameIndex, pathItem.frameIndex);
-		var toLayerIndex = Std.max(layerIndex, pathItem.layerIndex);
-		var toFrameIndex = Std.max(frameIndex, pathItem.frameIndex);
+		final fromLayerIndex = Std.min(layerIndex, pathItem.layerIndex);
+		final fromFrameIndex = Std.min(frameIndex, pathItem.frameIndex);
+		final toLayerIndex = Std.max(layerIndex, pathItem.layerIndex);
+		final toFrameIndex = Std.max(frameIndex, pathItem.frameIndex);
 		
 		for (i in fromLayerIndex...(toLayerIndex + 1))
 		{
-			var frameNodes = getFrameNodesByLayerIndex(i);
+			final frameNodes = getFrameNodesByLayerIndex(i);
 			for (j in fromFrameIndex...(toFrameIndex + 1))
 			{
 				frameNodes[j].addClass("selected");
@@ -393,7 +393,7 @@ class Code extends wquery.Component
 		
 		iterateSelectedFrames(function(e)
 		{
-			var frame = e.layer.getFrame(e.frameIndex);
+			final frame = e.layer.getFrame(e.frameIndex);
 			
 			if (frame.subIndex == 0)
 			{
@@ -793,7 +793,7 @@ class Code extends wquery.Component
 		
 		for (i in 0...pathItem.mcItem.layers.length)
 		{
-			var frameNode = getFrameNodesByLayerIndex(i, ":nth-child(" + (pathItem.frameIndex + 1) + ")");
+			final frameNode = getFrameNodesByLayerIndex(i, ":nth-child(" + (pathItem.frameIndex + 1) + ")");
 			updateFrame(pathItem.frameIndex, frameNode[0], getFrameCssClasses(i, pathItem.frameIndex), true);
 		}
 	}
@@ -810,24 +810,24 @@ class Code extends wquery.Component
 	{
 		if (layerIndex >= pathItem.mcItem.layers.length) return;
 		
-		var displayedFrameCount = pathItem.getTotalFrames() + ADDITIONAL_FRAMES_TO_DISPLAY;
-		var container = getLayerFramesContainerByIndex(layerIndex);
+		final displayedFrameCount = pathItem.getTotalFrames() + ADDITIONAL_FRAMES_TO_DISPLAY;
+		final container = getLayerFramesContainerByIndex(layerIndex);
 		var frames = JQuery.makeArray(container.children());
 		
-		var newFrames = [];
+		final newFrames = [];
 		for (i in frames.length...displayedFrameCount)
 		{
 			newFrames.push(Browser.document.createElement("span"));
 		}
 		frames = frames.concat(newFrames);
 		
-		var frag = Browser.document.createDocumentFragment();
+		final frag = Browser.document.createDocumentFragment();
 		for (frame in newFrames) frag.appendChild(frame);
 		container.append(cast frag);
 		
 		while (frames.length > displayedFrameCount) frames.pop().remove();
 		
-		var cssClasses = getFramesCssClasses(layerIndex);
+		final cssClasses = getFramesCssClasses(layerIndex);
 		for (i in 0...frames.length)
 		{
 			updateFrame(i, frames[i], cssClasses[i], keepSelection);
@@ -836,16 +836,17 @@ class Code extends wquery.Component
 	
 	function getFramesCssClasses(layerIndex:Int) : Array<String>
 	{
-		var r = [];
+		final r = [];
 		
-		var displayedFrameCount = pathItem.getTotalFrames() + ADDITIONAL_FRAMES_TO_DISPLAY;
+		final displayedFrameCount = pathItem.getTotalFrames() + ADDITIONAL_FRAMES_TO_DISPLAY;
 		
 		for (keyFrame in pathItem.mcItem.layers[layerIndex].keyFrames)
 		{
 			var base = "frame";
 			if (!keyFrame.isEmpty()) base += " frame-notEmpty";
 			if (keyFrame.hasMotionTween()) base += keyFrame.hasGoodMotionTween() ? " tween" : " tween-bad";
-			r.push(base + " startKeyFrame" + (keyFrame.duration == 1 ? " finishKeyFrame" : "") + (keyFrame.label != "" ? " frame-label" : ""));
+			
+            r.push(base + " startKeyFrame" + (keyFrame.duration == 1 ? " finishKeyFrame" : "") + (keyFrame.label != "" ? " frame-label" : ""));
 			for (i in 1...(keyFrame.duration - 1)) r.push(base);
 			if (keyFrame.duration > 1) r.push(base + " finishKeyFrame");
 		}
@@ -865,7 +866,7 @@ class Code extends wquery.Component
 	
 	function getFrameCssClasses(layerIndex:Int, frameIndex:Int) : String
 	{
-		var frame = pathItem.mcItem.layers[layerIndex].getFrame(frameIndex);
+		final frame = pathItem.mcItem.layers[layerIndex].getFrame(frameIndex);
 		
 		if (frame != null)
 		{
@@ -1217,8 +1218,8 @@ class Code extends wquery.Component
 			case "normal":
 				if ([ "masked", "guided" ].has(layer.getHumanType()))
 				{
-					var parentIndex = layer.parentIndex;
-					var newParentIndex = pathItem.mcItem.layers[parentIndex].parentIndex;
+					final parentIndex = layer.parentIndex;
+					final newParentIndex = pathItem.mcItem.layers[parentIndex].parentIndex;
 					while (index < pathItem.mcItem.layers.length && pathItem.mcItem.layers[index].parentIndex == parentIndex)
 					{
 						pathItem.mcItem.layers[index].parentIndex = newParentIndex;
@@ -1324,7 +1325,7 @@ class Code extends wquery.Component
 		
 		playStartFrameIndex = pathItem.frameIndex;
 		
-        var totalFrames = pathItem.getTotalFrames();
+        final totalFrames = pathItem.getTotalFrames();
 		
 		playTimer = new AsyncTicker(document.properties.framerate, () ->
 		{
@@ -1371,7 +1372,7 @@ class Code extends wquery.Component
 	
 	function ensureActiveFrameVisible()
 	{
-		var posX = pathItem.frameIndex * FRAME_WIDTH;
+		final posX = pathItem.frameIndex * FRAME_WIDTH;
 		if (posX < template().hScrollbar.position)
 		{
 			template().hScrollbar.position = posX;
@@ -1436,7 +1437,7 @@ class Code extends wquery.Component
 	function htmlEscape(s:String) : String
 	{
 		return StringTools.htmlEscape(s)
-			.replace(" ", "&nbsp;");
+			              .replace(" ", "&nbsp;");
 	}
 
     function isElementMatch(elemA:Element, elemB:Element)
