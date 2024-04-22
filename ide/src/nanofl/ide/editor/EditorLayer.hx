@@ -1,5 +1,7 @@
 package nanofl.ide.editor;
 
+import stdlib.Std;
+import stdlib.Debug;
 import datatools.ArrayRO;
 import nanofl.engine.LibraryItemType;
 import nanofl.engine.ElementType;
@@ -27,7 +29,6 @@ import nanofl.engine.geom.Point;
 import nanofl.ide.navigator.Navigator;
 import nanofl.ide.ui.View;
 import nanofl.engine.elements.Element;
-import stdlib.Debug;
 using stdlib.Lambda;
 using nanofl.engine.geom.PointTools;
 
@@ -502,6 +503,13 @@ class EditorLayer
 		
 		container.swapChildrenAt(i, j);
 	}
+
+    public function getInstanceTrack(instance:Instance) : ElementLifeTrack
+    {
+        if (!instance.symbol.type.match(LibraryItemType.movieclip)) return null;
+        final track = elementLifeTracker.getTrackOne(instance);
+        return track;
+    }
 	
 	static function log(v:Dynamic)
 	{

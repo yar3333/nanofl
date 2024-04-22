@@ -6,8 +6,10 @@ import stdlib.Debug;
 import datatools.ArrayRO;
 import nanofl.engine.elements.Instance;
 import nanofl.engine.libraryitems.InstancableItem;
-import nanofl.ide.navigator.PathItem;
+import nanofl.engine.LibraryItemType;
 import nanofl.ide.Document;
+import nanofl.ide.libraryitems.MovieClipItem;
+import nanofl.ide.navigator.PathItem;
 import nanofl.ide.preferences.Preferences;
 import nanofl.ide.ui.View;
 import nanofl.ide.undo.states.NavigatorState;
@@ -41,8 +43,26 @@ class Navigator extends InjectContainer
 	public function navigateDown(instance:Instance) : Void
 	{
         document.undoQueue.commitTransaction();
-		_editPath.push(new PathItem(instance));
-		update(false);
+
+        final newPathItem = new PathItem(instance);
+        if (instance.symbol.type.match(LibraryItemType.movieclip))
+        {
+            for (layer in document.editor.layers)
+            {
+                if (layer.getElementIndex(instance) >= 0)
+                {
+                    final track = layer.getInstanceTrack(instance);
+                    final mcItem : MovieClipItem = cast instance.symbol;
+                    final len = mcItem.getTotalFrames();
+                    final frameIndex = pathItem.frameIndex - track.startFrameIndex;
+                    newPathItem.setFrameIndex(mcItem.loop ? frameIndex % len : Std.min(len - 1, frameIndex));
+                    break;
+                }
+            }
+        }
+		_editPath.push(newPathItem);
+		
+        update(false);
 	}
 	
 	public function navigateTo(editPath:Array<PathItem>, isCenterView=true, commitBeforeChange=true) : Void

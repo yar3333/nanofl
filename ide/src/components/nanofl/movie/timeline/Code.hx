@@ -322,6 +322,8 @@ class Code extends wquery.Component
 		updateScrolls();
 		
 		fixActiveFrame();
+
+        ensureActiveFrameVisible();
 	}
 	
 	function extendSelection(layerIndex:Int, frameIndex:Int)
