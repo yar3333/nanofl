@@ -106,7 +106,10 @@ class UndoQueue extends undoqueue.UndoQueue<Changes, Operation>
             if (oldElementsState == null)
             {
                 log("\tsave ELEMENTS");
+                
                 oldElementsState = document.editor.getElementsState();
+                
+                log(() -> "oldElementsState =\n" + oldElementsState);
             }
 		}
 		
@@ -257,9 +260,14 @@ class UndoQueue extends undoqueue.UndoQueue<Changes, Operation>
 		
 		if (oldElementsState != null)
 		{
+			final navigatorState = document.navigator.getState();
 			final newElementsState = document.editor.getElementsState();
-            log(() -> "document.navigator.getState() = " + haxe.Json.stringify(document.navigator.getState(), "  "));
-			addOperation(Operation.ELEMENTS(document.navigator.getState(), oldElementsState, newElementsState));
+            
+            log(() -> "navigatorStage = " + haxe.Json.stringify(navigatorState, "  "));
+            log(() -> "oldElementsState =\n" + oldElementsState);
+            log(() -> "newElementsState =\n" + newElementsState);
+            
+			addOperation(Operation.ELEMENTS(navigatorState, oldElementsState, newElementsState));
 		}
 		
 		if (oldTimelineState != null)

@@ -40,6 +40,7 @@ class Transaction extends undoqueue.Transaction<Operation>
 				
 			case Operation.ELEMENTS(navigatorState, oldElementsState, newElementsState):
 				document.navigator.setState(navigatorState);
+                log(() -> "newElementsState =\n" + newElementsState);
 				document.editor.setElementsState(newElementsState);
 				
 			case Operation.TIMELINE(navigatorState, oldTimelineState, newTimelineState):

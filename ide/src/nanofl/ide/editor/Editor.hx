@@ -279,8 +279,8 @@ class Editor extends InjectContainer
 		{
 			layer.breakApartSelectedItems();
 		}
-		document.undoQueue.commitTransaction();
 		tool.selectionChange();
+		document.undoQueue.commitTransaction();
 		update();
 	}
 	

@@ -286,10 +286,10 @@ class TextElement extends Element
 	#if ide
 	public function breakApart() : Array<TextElement>
 	{
-		var tf = createDisplayObject();
+		final tf = createDisplayObject();
 		tf.update();
 		
-		var r = [];
+		final r = [];
 		
 		var y = tf.y;
 		for (line in tf.textLines)
@@ -301,7 +301,7 @@ class TextElement extends Element
 				{
 					var run = chunk.format.duplicate(c);
 					
-					var newTextElement = new TextElement("", 0, 0, selectable, border, [ run ], newTextFormat.duplicate());
+					final newTextElement = new TextElement("", 0, 0, selectable, border, [ run ], newTextFormat.duplicate());
 					newTextElement.matrix.tx = x;
 					newTextElement.matrix.ty = y + (chunk.bounds.y - line.minY);
 					

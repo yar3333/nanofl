@@ -10,4 +10,13 @@ class ElementsState
 	{
 		this.layerElements = layerElements;
 	}
+
+    public function toString() 
+    {
+        final r = [];
+        for (layer in layerElements) 
+        for (element in layer.elements) 
+            r.push("\t" + element.matrix);
+        return r.join("\n");
+    }
 }

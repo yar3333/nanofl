@@ -293,14 +293,15 @@ class EditorLayer
 					{
 						if (Std.isOfType(child, ShapeElement))
 						{
-							var newShape = cast(child, ShapeElement);
+							final newShape = (cast child : ShapeElement).clone();
 							newShape.transform(item.originalElement.matrix);
 							shape.element.combine(newShape);
 						}
 						else
 						{
-							child.matrix.prependMatrix(item.originalElement.matrix);
-							var newItem = addElement(child, i); i++;
+                            final newChild = child.clone();
+							newChild.matrix.prependMatrix(item.originalElement.matrix);
+							final newItem = addElement(newChild, i); i++;
 							newItem.selected = true;
 						}
 					}
