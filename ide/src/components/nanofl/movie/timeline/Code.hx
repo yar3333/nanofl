@@ -70,6 +70,8 @@ class Code extends wquery.Component
     var editor(get, never) : Editor; @:noCompletion function get_editor() return document?.editor;
     var navigator(get, never) : Navigator; @:noCompletion function get_navigator() return document?.navigator;
     var pathItem(get, never) : PathItem; @:noCompletion function get_pathItem() return navigator?.pathItem;
+
+    var lastPathItem : PathItem;
 	
 	var layerComponents : ComponentList<components.nanofl.movie.timelinelayer.Code>;
 	
@@ -296,6 +298,13 @@ class Code extends wquery.Component
 	public function update()
 	{
 		if (freeze) return;
+
+        if (lastPathItem != pathItem)
+        {
+            template().hScrollbar.position = 0;
+            template().container.scrollTop(0);
+            lastPathItem = pathItem;
+        }
 		
 		template().controls.find("button").prop("disabled", !editable);
 		template().visibleAll.add(template().lockedAll).css("visibility", editable ? "" : "hidden");
