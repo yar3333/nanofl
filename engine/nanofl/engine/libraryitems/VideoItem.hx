@@ -20,7 +20,7 @@ class VideoItem extends InstancableItem
     public var ext : String;
 
     public var autoPlay = true;
-    public var loop = true;
+    public var loop = false;
 	
     // set on preload()
     public var width(default, null) : Int;
@@ -98,25 +98,25 @@ class VideoItem extends InstancableItem
     override function saveProperties(xml:XmlBuilder) : Void
     {
         super.saveProperties(xml);
-		xml.attr("ext", ext, null);
+		xml.attr("ext", ext);
 		xml.attr("autoPlay", autoPlay, true);
-		xml.attr("loop", loop, true);
+		xml.attr("loop", loop);
     }
 
     override function savePropertiesJson(obj:Dynamic) : Void
     {
         super.savePropertiesJson(obj);
-		obj.ext = ext ?? null;
-        obj.autoPlay = autoPlay ?? true;
-		obj.loop = loop ?? true;
+		obj.ext = ext;
+        obj.autoPlay = autoPlay;
+		obj.loop = loop;
     }
     
     override function loadProperties(node:HtmlNodeElement) : Void
     {
         super.loadProperties(node);
-        ext = node.getAttr("ext", null);
+        ext = node.getAttr("ext");
         autoPlay = node.getAttr("autoPlay", true);
-		loop = node.getAttr("loop", true);
+		loop = node.getAttr("loop", false);
     }
     #end
     
@@ -125,7 +125,7 @@ class VideoItem extends InstancableItem
         if (obj.type != type) throw new Error("Type of item must be '" + type + "', but '" + obj.type + "' found.");
         
         super.loadPropertiesJson(obj);
-        ext = obj.ext ?? null;
+        ext = obj.ext;
         autoPlay = obj.autoPlay;
         loop = obj.loop;
     }
