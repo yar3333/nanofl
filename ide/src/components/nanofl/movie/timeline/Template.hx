@@ -71,5 +71,8 @@ class Template
 	public var layerContextMenu(get, never) : components.nanofl.common.contextmenu.Code;
 	inline function get_layerContextMenu() return cast component.children.layerContextMenu;
 
+	public var timelineContextMenu(get, never) : components.nanofl.common.contextmenu.Code;
+	inline function get_timelineContextMenu() return cast component.children.timelineContextMenu;
+
 	public function new(component:wquery.Component) this.component = component;
 }

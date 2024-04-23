@@ -7,9 +7,7 @@ class Invalidater
 {
 	public function new() {}
 	
-	var updateTimelineHeader = false;
 	var updateTimelineFrames = false;
-	var updateTimelineActiveFrame = false;
 	
 	var updateShapes = false;
 	var updateEditor = false;
@@ -17,9 +15,7 @@ class Invalidater
 	
 	var updateLibrary = false;
 	
-	public function invalidateTimelineHeader() { updateTimelineHeader = true; return this; }
 	public function invalidateTimelineFrames() { updateTimelineFrames = true; return this; }
-	public function invalidateTimelineActiveFrame() { updateTimelineActiveFrame = true; return this; }
 	
 	public function invalidateEditorShapes() { updateShapes = true; return this; }
 	public function invalidateEditorLight() { updateEditor = true; return this; }
@@ -30,10 +26,6 @@ class Invalidater
 	public function updateInvalidated(editor:Editor, timeline:ITimelineView, libraryView:components.nanofl.library.libraryview.Code)
 	{
 		if (updateTimelineFrames) timeline.updateFrames();
-		else
-		if (updateTimelineHeader) timeline.updateHeader();
-		
-		if (updateTimelineActiveFrame) timeline.updateActiveFrame();
 		
 		if (updateShapes) cast(editor, Editor).figure.updateShapes();
 		
@@ -51,7 +43,6 @@ class Invalidater
 			libraryView.update();
 		}
 		
-		updateTimelineHeader = false;
 		updateTimelineFrames = false;
 		
 		updateShapes = false;

@@ -32,7 +32,7 @@ class MovieClipItem	extends InstancableItem
 {
 	function get_type() return LibraryItemType.movieclip;
 	
-	public var _layers = new Array<Layer>();
+	var _layers = new Array<Layer>();
 	public var layers(get, never) : ArrayRO<Layer>; function get_layers() return _layers;
 	
 	public var autoPlay = true;

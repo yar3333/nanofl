@@ -12,9 +12,7 @@ interface ITimelineView
 	function createTween() : Void;
 	function removeTween() : Void;
 	function removeSelectedFrames() : Void;
-	function updateFrames(isUpdateHeader:Bool=true) : Void;
-	function updateHeader() : Void;
-	function updateActiveFrame() : Void;
+	function updateFrames() : Void;
 	function update() : Void;
 	
 	function play() : Void;
@@ -28,4 +26,6 @@ interface ITimelineView
     function removeLayer() : Void;
 	
 	function pasteFromXml(xml:XmlDocument) : Bool;
+
+    var frameCollapseFactor(get, set) : Int;
 }

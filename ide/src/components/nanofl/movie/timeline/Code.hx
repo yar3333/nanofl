@@ -95,6 +95,11 @@ class Code extends wquery.Component
 	var playStartFrameIndex : Int;
 	
 	var freeze = false;
+
+    var _frameCollapseFactor = 1;
+    public var frameCollapseFactor(get, set) : Int;
+    @:noCompletion function get_frameCollapseFactor() return _frameCollapseFactor;
+    @:noCompletion function set_frameCollapseFactor(v:Int) { if (_frameCollapseFactor != v) { _frameCollapseFactor = v; update(); } return v; }
 	
 	public function init()
 	{
@@ -198,6 +203,13 @@ class Code extends wquery.Component
             preferences.storage.getMenu("frameContextMenu"),
             beforeShowFrameContextMenu
         );
+		
+        template().timelineContextMenu.build
+        (
+            template().headers,
+            ">*>.timeline-frames>*>*",
+            preferences.storage.getMenu("timelineContextMenu"),
+        );
     }
 	
 	function onAutoScrollHorizontally(dx:Int)
@@ -270,7 +282,7 @@ class Code extends wquery.Component
 			deselectAllLayers();
 			frameNode.addClass("selected");
 			layerNode.addClass("selected");
-			fixActiveFrame();
+			updateFrames();
 		}
 	
 		return true;
@@ -311,18 +323,17 @@ class Code extends wquery.Component
 		
 		layerComponents.clear();
 		template().content.html("");
-		
+
+        final frameIndexesToShow = getFrameIndexesToShow();
+		updateHeader(frameIndexesToShow);
 		for (i in 0...pathItem.mcItem.layers.length)
 		{
-			createLayer(i);
+			createLayer(i, frameIndexesToShow);
 		}
 		
 		resize(template().container.width(), template().container.height());
-		updateHeader();
 		updateScrolls();
 		
-		fixActiveFrame();
-
         ensureActiveFrameVisible();
 	}
 	
@@ -363,7 +374,6 @@ class Code extends wquery.Component
 		}
 		
 		updateFrames();
-		updateActiveFrame();
         freezed(() -> editor.rebind());
 		
 		commitTransaction();
@@ -379,7 +389,6 @@ class Code extends wquery.Component
 		});
 		
 		updateFrames();
-		updateActiveFrame();
         freezed(() -> editor.rebind());
 		
 		commitTransaction();
@@ -415,7 +424,6 @@ class Code extends wquery.Component
 		}
 		
 		updateFrames();
-		updateActiveFrame();
         freezed(() -> editor.rebind());
 		
         commitTransaction();
@@ -436,14 +444,13 @@ class Code extends wquery.Component
 		freezed(() -> navigator.setFrameIndex(Std.min(pathItem.frameIndex, pathItem.getTotalFrames() - 1)));
 		
 		updateFrames();
-		updateActiveFrame();
         freezed(() -> editor.rebind());
 		
         commitTransaction();
 	}
 	
 	@:profile
-	function createLayer(layerIndex:Int)
+	function createLayer(layerIndex:Int, frameIndexesToShow:Array<Int>)
 	{
 		final layer = pathItem.mcItem.layers[layerIndex];
 		
@@ -533,7 +540,7 @@ class Code extends wquery.Component
 			});
 		}
 		
-		updateLayerFrames(layerIndex, false);
+		updateLayerFrames(layerIndex, false, frameIndexesToShow);
 	}
 	
 	function addLayer_click(_)
@@ -623,8 +630,7 @@ class Code extends wquery.Component
         play();
 	}
 	
-	@:profile
-	public function updateHeader()
+	function updateHeader(frameIndexesToShow:Array<Int>)
 	{
 		final displayFrameCount = pathItem.getTotalFrames() + ADDITIONAL_FRAMES_TO_DISPLAY;
 		
@@ -635,12 +641,27 @@ class Code extends wquery.Component
 			for (i in 0...displayFrameCount)
 			{
 				final active = i == pathItem.frameIndex ? " class='active'" : "";
-				framesHeader += "<span" + active + ">" + (i % 5 == 0 ? Std.string(i) : "&nbsp;") + "</span>";
-				framesBorder += "<span" + active + ">&nbsp;</span>";
+                final display = frameIndexesToShow.indexOf(i) >= 0 ? "" : " style='display:none'";
+				framesHeader += "<span" + active + display + ">" + (i % 5 == 0 ? Std.string(i) : "&nbsp;") + "</span>";
+				framesBorder += "<span" + active + display + ">&nbsp;</span>";
 			}
 			template().framesHeader.html(framesHeader);
 			template().framesBorder.html(framesBorder);
 		}
+        else
+        {
+            final frameHeaderNodes = template().framesHeader.children().toArray();
+            final frameBorderNodes = template().framesBorder.children().toArray();
+            for (i in  0...frameHeaderNodes.length)
+            {
+                final active = i == pathItem.frameIndex;
+                final display = frameIndexesToShow.indexOf(i) >= 0 ? "" : "none";
+                frameHeaderNodes[i].toggleClass("active", active);
+                frameHeaderNodes[i].style.display = display;
+                frameBorderNodes[i].toggleClass("active", active);
+                frameBorderNodes[i].style.display = display;
+            }
+        }
 	}
 	
 	function onIconClick(t:components.nanofl.movie.timelinelayer.Code, e:JqEvent)
@@ -723,27 +744,6 @@ class Code extends wquery.Component
 	}
 	
 	@:profile
-	public function fixActiveFrame()
-	{
-		if (freeze) return;
-		
-		for (layerNode in getLayerNodes())
-		{
-			final frameNodes = getFrameNodesByLayer(layerNode);
-			frameNodes.removeClass("active");
-			frameNodes[pathItem.frameIndex].addClass("active");
-		}
-		
-		final headerFrames = template().framesHeader.children();
-		headerFrames.removeClass("active");
-		headerFrames[pathItem.frameIndex].addClass("active");
-		
-		final borderFrames = template().framesBorder.children();
-		borderFrames.removeClass("active");
-		borderFrames[pathItem.frameIndex].addClass("active");
-	}
-	
-	@:profile
 	public function fixActiveLayer()
 	{
 		if (freeze) return;
@@ -778,35 +778,17 @@ class Code extends wquery.Component
 		template().container.find(">*>*>.timeline-frames>*").css("left", - e.position + "px");
 	}
 	
-	@:profile
-	public function updateActiveLayerFrames()
+	public function updateFrames()
 	{
-		if (freeze) return;
-		
-		updateLayerFrames(pathItem.layerIndex, true);
-	}
-	
-	@:profile
-	public function updateActiveFrame()
-	{
-		if (freeze) return;
-		
-		for (i in 0...pathItem.mcItem.layers.length)
-		{
-			final frameNode = getFrameNodesByLayerIndex(i, ":nth-child(" + (pathItem.frameIndex + 1) + ")");
-			updateFrame(pathItem.frameIndex, frameNode[0], getFrameCssClasses(i, pathItem.frameIndex), true);
-		}
-	}
-	
-	public function updateFrames(isUpdateHeader=true)
-	{
-		if (isUpdateHeader) updateHeader();
-		for (i in 0...pathItem.mcItem.layers.length) updateLayerFrames(i, true);
+        final frameIndexesToShow = getFrameIndexesToShow();
+
+		for (i in 0...pathItem.mcItem.layers.length) updateLayerFrames(i, true, frameIndexesToShow);
+		updateHeader(frameIndexesToShow);
 		updateScrolls();
 	}
 	
 	@:profile
-	function updateLayerFrames(layerIndex:Int, keepSelection:Bool)
+	function updateLayerFrames(layerIndex:Int, keepSelection:Bool, frameIndexesToShow:Array<Int>)
 	{
 		if (layerIndex >= pathItem.mcItem.layers.length) return;
 		
@@ -815,7 +797,7 @@ class Code extends wquery.Component
 		var frames = JQuery.makeArray(container.children());
 		
 		final newFrames = [];
-		for (i in frames.length...displayedFrameCount)
+		for (_ in frames.length...displayedFrameCount)
 		{
 			newFrames.push(Browser.document.createElement("span"));
 		}
@@ -830,7 +812,10 @@ class Code extends wquery.Component
 		final cssClasses = getFramesCssClasses(layerIndex);
 		for (i in 0...frames.length)
 		{
-			updateFrame(i, frames[i], cssClasses[i], keepSelection);
+            final selected = keepSelection && frames[i].hasClass("selected") ? " selected" : "";
+            final active = i == pathItem.frameIndex ? " active" : "";
+            frames[i].setAttribute("class", cssClasses[i] + selected + active);
+            frames[i].style.display = frameIndexesToShow.indexOf(i) >= 0 ? "" : "none";
 		}
 	}
 	
@@ -847,13 +832,13 @@ class Code extends wquery.Component
 			if (keyFrame.hasMotionTween()) base += keyFrame.hasGoodMotionTween() ? " tween" : " tween-bad";
 			
             r.push(base + " startKeyFrame" + (keyFrame.duration == 1 ? " finishKeyFrame" : "") + (keyFrame.label != "" ? " frame-label" : ""));
-			for (i in 1...(keyFrame.duration - 1)) r.push(base);
+			for (_ in 1...(keyFrame.duration - 1)) r.push(base);
 			if (keyFrame.duration > 1) r.push(base + " finishKeyFrame");
 		}
 		
 		if (layerIndex + 1 < pathItem.mcItem.layers.length)
 		{
-			for (i in r.length...pathItem.mcItem.layers[layerIndex + 1].getTotalFrames())
+			for (_ in r.length...pathItem.mcItem.layers[layerIndex + 1].getTotalFrames())
 			{
 				r.push("nextLayerFrame");
 			}
@@ -886,13 +871,6 @@ class Code extends wquery.Component
 		}
 		
 		return "";
-	}
-	
-	function updateFrame(frameIndex:Int, frameElement:js.html.Element, cssClasses:String, keepSelection:Bool)
-	{
-		final selected = keepSelection && frameElement.hasClass("selected") ? " selected" : "";
-		final active = frameIndex == pathItem.frameIndex ? " active" : "";
-		frameElement.setAttribute("class", cssClasses + selected + active);
 	}
 	
 	@:profile
@@ -998,7 +976,6 @@ class Code extends wquery.Component
 				}
 				
 				navigator.setFrameIndex(frameIndex);
-				fixActiveFrame();
 			}
 		}
 	}
@@ -1426,7 +1403,7 @@ class Code extends wquery.Component
 			editor.selectLayers([ layerIndex ]);
 		});
 		
-		fixActiveFrame();
+		updateFrames();
 		fixActiveLayer();
 	}
 	
@@ -1460,5 +1437,30 @@ class Code extends wquery.Component
     function commitTransaction()
     {
         app.document.undoQueue.commitTransaction();
+    }
+
+    function getFrameIndexesToShow() : Array<Int>
+    {
+        final r = [];
+        
+        final totalFrames = pathItem.getTotalFrames();
+        final layers = pathItem.mcItem.layers;
+
+        for (i in 0...totalFrames + (ADDITIONAL_FRAMES_TO_DISPLAY * _frameCollapseFactor))
+        {
+            if (i % _frameCollapseFactor == 0 || i == totalFrames - 1 || i == pathItem.frameIndex)
+            {
+                r.push(i);
+            }
+            else if (i < totalFrames) 
+            {
+                for (layer in layers)
+                {
+                    if (layer.getFrame(i)?.subIndex == 0) r.push(i);
+                }
+            }
+        }
+
+        return r;
     }
 }

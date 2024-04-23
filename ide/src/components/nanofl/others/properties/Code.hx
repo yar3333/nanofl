@@ -111,7 +111,7 @@ class Code extends wquery.Component
 			case PropertiesObject.INSTANCE(item):   app.document.editor.updateElement(item.element);
 			case PropertiesObject.TEXT(item, _):	app.document.editor.updateElement(item.element);
 			case PropertiesObject.SHAPE(_, _, _):	app.document.editor.updateShapes();
-			case PropertiesObject.KEY_FRAME(_):	    view.movie.timeline.updateActiveLayerFrames();
+			case PropertiesObject.KEY_FRAME(_):	    view.movie.timeline.updateFrames();
 			case PropertiesObject.NONE:				// nothing to do
 		}
 		

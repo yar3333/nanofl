@@ -521,7 +521,7 @@ class Editor extends InjectContainer
 	{
         if (tool != null) tool.endEditing();
 		
-		view.movie.timeline.updateActiveLayerFrames();
+		view.movie.timeline.updateFrames();
 
 		layers = [];
         DisplayObjectTools.callMethod(container, "dispose");
@@ -551,8 +551,7 @@ class Editor extends InjectContainer
 	{
 		var startTime = Date.now().getTime();
 		
-		view.movie.timeline.updateActiveLayerFrames();
-		view.movie.timeline.updateActiveFrame();
+		view.movie.timeline.updateFrames();
 		for (layer in layers) layer.update();
 		view.movie.editor.update();
 		view.properties.update();

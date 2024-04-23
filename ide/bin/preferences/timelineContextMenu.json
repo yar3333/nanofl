@@ -1,0 +1,12 @@
+[
+	{ "name":"Show all frames",	"command":"timeline.setFrameCollapseFactor", "params":[  1 ], "icon":"" },
+	{ "name":"Collapse x2",		"command":"timeline.setFrameCollapseFactor", "params":[  2 ], "icon":"" },
+	{ "name":"Collapse x3",		"command":"timeline.setFrameCollapseFactor", "params":[  3 ], "icon":"" },
+	{ "name":"Collapse x4",		"command":"timeline.setFrameCollapseFactor", "params":[  4 ], "icon":"" },
+	{ "name":"Collapse x5",		"command":"timeline.setFrameCollapseFactor", "params":[  5 ], "icon":"" },
+	{ "name":"Collapse x6",		"command":"timeline.setFrameCollapseFactor", "params":[  6 ], "icon":"" },
+	{ "name":"Collapse x10",	"command":"timeline.setFrameCollapseFactor", "params":[ 10 ], "icon":"" },
+	{ "name":"Collapse x12",	"command":"timeline.setFrameCollapseFactor", "params":[ 12 ], "icon":"" },
+	{ "name":"Collapse x15",	"command":"timeline.setFrameCollapseFactor", "params":[ 15 ], "icon":"" },
+	{ "name":"Collapse x20",	"command":"timeline.setFrameCollapseFactor", "params":[ 20 ], "icon":"" }
+]

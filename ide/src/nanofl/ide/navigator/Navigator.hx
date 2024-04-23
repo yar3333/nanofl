@@ -104,12 +104,12 @@ class Navigator extends InjectContainer
 		if (invalidater != null)
 		{
 			invalidater.invalidateEditorDeep();
-			invalidater.invalidateTimelineActiveFrame();
+			invalidater.invalidateTimelineFrames();
 		}
 		else
 		{
             r = document.editor.rebind();
-            view.movie.timeline.fixActiveFrame();
+            view.movie.timeline.updateFrames();
 		}
 
         return r;
