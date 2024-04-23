@@ -1,5 +1,6 @@
 package components.nanofl.movie.timeline;
 
+import haxe.Json;
 import js.JQuery;
 import js.Browser;
 import stdlib.ExceptionTools;
@@ -209,6 +210,7 @@ class Code extends wquery.Component
             template().headers,
             ">*>.timeline-frames>*>*",
             preferences.storage.getMenu("timelineContextMenu"),
+            beforeShowTimelineContextMenu
         );
     }
 	
@@ -284,6 +286,20 @@ class Code extends wquery.Component
 			layerNode.addClass("selected");
 			updateFrames();
 		}
+	
+		return true;
+	}	
+    
+    function beforeShowTimelineContextMenu(menu:nanofl.ide.ui.menu.ContextMenu, e:JqEvent, frameNode:JQuery)
+	{
+		final menuItems = menu.getItem("timeline.setFrameCollapseFactor");
+        
+        menuItems.removeClass("checked");
+        for (menuItem in menuItems)
+		{
+            final a = menuItem.find(">a");
+            if (Json.parse(a.attr("data-params"))[0] == frameCollapseFactor) menuItem.addClass("checked");
+        }
 	
 		return true;
 	}
@@ -636,31 +652,32 @@ class Code extends wquery.Component
 		
 		if (template().framesHeader.children().length != displayFrameCount)
 		{
-			var framesHeader = "";
-			var framesBorder = "";
-			for (i in 0...displayFrameCount)
+			var s = "";
+			for (_ in 0...displayFrameCount)
 			{
-				final active = i == pathItem.frameIndex ? " class='active'" : "";
-                final display = frameIndexesToShow.indexOf(i) >= 0 ? "" : " style='display:none'";
-				framesHeader += "<span" + active + display + ">" + (i % 5 == 0 ? Std.string(i) : "&nbsp;") + "</span>";
-				framesBorder += "<span" + active + display + ">&nbsp;</span>";
+				s += "<span></span>";
 			}
-			template().framesHeader.html(framesHeader);
-			template().framesBorder.html(framesBorder);
+			template().framesHeader.html(s);
+			template().framesBorder.html(s);
 		}
-        else
+
+        final activeFrameIndexToShow = getActiveFrameIndexToShow(frameIndexesToShow);
+        
+        final frameHeaderNodes = template().framesHeader.children().toArray();
+        final frameBorderNodes = template().framesBorder.children().toArray();
+        var showCounter = 0;
+        for (i in  0...frameHeaderNodes.length)
         {
-            final frameHeaderNodes = template().framesHeader.children().toArray();
-            final frameBorderNodes = template().framesBorder.children().toArray();
-            for (i in  0...frameHeaderNodes.length)
-            {
-                final active = i == pathItem.frameIndex;
-                final display = frameIndexesToShow.indexOf(i) >= 0 ? "" : "none";
-                frameHeaderNodes[i].toggleClass("active", active);
-                frameHeaderNodes[i].style.display = display;
-                frameBorderNodes[i].toggleClass("active", active);
-                frameBorderNodes[i].style.display = display;
-            }
+            final active = i == activeFrameIndexToShow;
+            final display = frameIndexesToShow.indexOf(i) >= 0 ? "" : "none";
+            frameHeaderNodes[i].toggleClass("active", active);
+            frameHeaderNodes[i].style.display = display;
+            frameBorderNodes[i].toggleClass("active", active);
+            frameBorderNodes[i].style.display = display;
+
+            frameHeaderNodes[i].innerHTML = showCounter % 5 == 0 ? Std.string(i) : "&nbsp;";
+            
+            if (display == "") showCounter++;
         }
 	}
 	
@@ -808,16 +825,24 @@ class Code extends wquery.Component
 		container.append(cast frag);
 		
 		while (frames.length > displayedFrameCount) frames.pop().remove();
+
+        final activeFrameIndexToShow = getActiveFrameIndexToShow(frameIndexesToShow);
 		
 		final cssClasses = getFramesCssClasses(layerIndex);
 		for (i in 0...frames.length)
 		{
             final selected = keepSelection && frames[i].hasClass("selected") ? " selected" : "";
-            final active = i == pathItem.frameIndex ? " active" : "";
+            final active = i == activeFrameIndexToShow ? " active" : "";
             frames[i].setAttribute("class", cssClasses[i] + selected + active);
             frames[i].style.display = frameIndexesToShow.indexOf(i) >= 0 ? "" : "none";
 		}
 	}
+
+    function getActiveFrameIndexToShow(frameIndexesToShow:Array<Int>) : Int
+    {
+        var i = 0; while (frameIndexesToShow[i] < pathItem.frameIndex) i++;
+        return frameIndexesToShow[i];
+    }
 	
 	function getFramesCssClasses(layerIndex:Int) : Array<String>
 	{
@@ -1448,7 +1473,7 @@ class Code extends wquery.Component
 
         for (i in 0...totalFrames + (ADDITIONAL_FRAMES_TO_DISPLAY * _frameCollapseFactor))
         {
-            if (i % _frameCollapseFactor == 0 || i == totalFrames - 1 || i == pathItem.frameIndex)
+            if (i % _frameCollapseFactor == 0 || i == totalFrames - 1)
             {
                 r.push(i);
             }
@@ -1456,7 +1481,15 @@ class Code extends wquery.Component
             {
                 for (layer in layers)
                 {
-                    if (layer.getFrame(i)?.subIndex == 0) r.push(i);
+                    final frame = layer.getFrame(i);
+                    if (frame != null)
+                    {
+                        if (frame.subIndex == 0 || frame.subIndex == frame.keyFrame.duration - 1)
+                        {
+                            r.push(i);
+                            break;
+                        }
+                    }
                 }
             }
         }
