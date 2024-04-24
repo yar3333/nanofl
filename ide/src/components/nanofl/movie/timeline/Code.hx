@@ -340,17 +340,59 @@ class Code extends wquery.Component
 		layerComponents.clear();
 		template().content.html("");
 
-        final frameIndexesToShow = getFrameIndexesToShow();
-		updateHeader(frameIndexesToShow);
 		for (i in 0...pathItem.mcItem.layers.length)
 		{
-			createLayer(i, frameIndexesToShow);
+			createLayer(i);
 		}
+        
+        resize(template().container.width(), template().container.height());
 		
-		resize(template().container.width(), template().container.height());
+		updateFrames();
+	}
+	
+	public function updateFrames()
+	{
+        final frameIndexesToShow = getFrameIndexesToShow();
+
+		for (i in 0...pathItem.mcItem.layers.length) updateLayerFrames(i, true, frameIndexesToShow);
+		updateHeader(frameIndexesToShow);
 		updateScrolls();
+        ensureActiveFrameVisible(frameIndexesToShow);
+	}
+	
+	function updateHeader(frameIndexesToShow:Array<Int>)
+	{
+		final displayFrameCount = pathItem.getTotalFrames() + ADDITIONAL_FRAMES_TO_DISPLAY;
 		
-        ensureActiveFrameVisible();
+		if (template().framesHeader.children().length != displayFrameCount)
+		{
+			var s = "";
+			for (_ in 0...displayFrameCount)
+			{
+				s += "<span></span>";
+			}
+			template().framesHeader.html(s);
+			template().framesBorder.html(s);
+		}
+
+        final activeFrameIndexToShow = getActiveFrameIndexToShow(frameIndexesToShow);
+        
+        final frameHeaderNodes = template().framesHeader.children().toArray();
+        final frameBorderNodes = template().framesBorder.children().toArray();
+        var showCounter = 0;
+        for (i in  0...frameHeaderNodes.length)
+        {
+            final active = i == activeFrameIndexToShow;
+            final display = frameIndexesToShow.indexOf(i) >= 0 ? "" : "none";
+            frameHeaderNodes[i].toggleClass("active", active);
+            frameHeaderNodes[i].style.display = display;
+            frameBorderNodes[i].toggleClass("active", active);
+            frameBorderNodes[i].style.display = display;
+
+            frameHeaderNodes[i].innerHTML = showCounter % 5 == 0 ? Std.string(i) : "&nbsp;";
+            
+            if (display == "") showCounter++;
+        }
 	}
 	
 	function extendSelection(layerIndex:Int, frameIndex:Int)
@@ -465,8 +507,7 @@ class Code extends wquery.Component
         commitTransaction();
 	}
 	
-	@:profile
-	function createLayer(layerIndex:Int, frameIndexesToShow:Array<Int>)
+	function createLayer(layerIndex:Int)
 	{
 		final layer = pathItem.mcItem.layers[layerIndex];
 		
@@ -555,8 +596,6 @@ class Code extends wquery.Component
 
 			});
 		}
-		
-		updateLayerFrames(layerIndex, false, frameIndexesToShow);
 	}
 	
 	function addLayer_click(_)
@@ -644,41 +683,6 @@ class Code extends wquery.Component
 	function play_click(_)
 	{
         play();
-	}
-	
-	function updateHeader(frameIndexesToShow:Array<Int>)
-	{
-		final displayFrameCount = pathItem.getTotalFrames() + ADDITIONAL_FRAMES_TO_DISPLAY;
-		
-		if (template().framesHeader.children().length != displayFrameCount)
-		{
-			var s = "";
-			for (_ in 0...displayFrameCount)
-			{
-				s += "<span></span>";
-			}
-			template().framesHeader.html(s);
-			template().framesBorder.html(s);
-		}
-
-        final activeFrameIndexToShow = getActiveFrameIndexToShow(frameIndexesToShow);
-        
-        final frameHeaderNodes = template().framesHeader.children().toArray();
-        final frameBorderNodes = template().framesBorder.children().toArray();
-        var showCounter = 0;
-        for (i in  0...frameHeaderNodes.length)
-        {
-            final active = i == activeFrameIndexToShow;
-            final display = frameIndexesToShow.indexOf(i) >= 0 ? "" : "none";
-            frameHeaderNodes[i].toggleClass("active", active);
-            frameHeaderNodes[i].style.display = display;
-            frameBorderNodes[i].toggleClass("active", active);
-            frameBorderNodes[i].style.display = display;
-
-            frameHeaderNodes[i].innerHTML = showCounter % 5 == 0 ? Std.string(i) : "&nbsp;";
-            
-            if (display == "") showCounter++;
-        }
 	}
 	
 	function onIconClick(t:components.nanofl.movie.timelinelayer.Code, e:JqEvent)
@@ -793,15 +797,6 @@ class Code extends wquery.Component
 	function hScrollbar_change(e)
 	{
 		template().container.find(">*>*>.timeline-frames>*").css("left", - e.position + "px");
-	}
-	
-	public function updateFrames()
-	{
-        final frameIndexesToShow = getFrameIndexesToShow();
-
-		for (i in 0...pathItem.mcItem.layers.length) updateLayerFrames(i, true, frameIndexesToShow);
-		updateHeader(frameIndexesToShow);
-		updateScrolls();
 	}
 	
 	@:profile
@@ -1336,12 +1331,9 @@ class Code extends wquery.Component
             return navigator.setFrameIndex(nextFrameIndex).then(_ ->
 			{
                 if (pathItem.frameIndex == totalFrames - 1) stop();
-                ensureActiveFrameVisible();
                 return null;
             });
 		});
-		
-		ensureActiveFrameVisible();
 
         template().play.hide();
         template().stop.show();
@@ -1372,9 +1364,12 @@ class Code extends wquery.Component
         layerComponents.getByIndex(pathItem.layerIndex).beginEditTitle();
 	}
 	
-	function ensureActiveFrameVisible()
+	function ensureActiveFrameVisible(frameIndexesToShow:Array<Int>)
 	{
-		final posX = pathItem.frameIndex * FRAME_WIDTH;
+        final activeFrameIndexToShow = getActiveFrameIndexToShow(frameIndexesToShow);
+
+        final frameNode = template().framesBorder.find(">*:nth-child(" + (activeFrameIndexToShow + 1) + ")");
+		final posX = frameNode.position().left;
 		if (posX < template().hScrollbar.position)
 		{
 			template().hScrollbar.position = posX;
