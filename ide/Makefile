@@ -1,5 +1,12 @@
+CSS_FILES =	src/components/nanofl/movie/timeline/template.css \
+		    src/components/nanofl/movie/timelinelayer/template.css \
+			src/components/nanofl/others/mainmenu/template.css \
+			src/components/nanofl/others/properties/template.css \
+			src/components/nanofl/popups/basepopup/template.css
+
 build: node_modules \
 	   bin/templates/scripts/three-r161.js \
+	   $(CSS_FILES) \
        engine \
        bin/plugins \
        bin/resources/app/static
@@ -38,6 +45,9 @@ bin/plugins:
 
 bin/resources/app/static:
 	npx symlink-dir static $@
+	
+%.css: %.less
+	npx lessc -s $^ $@
 
 ##############################################################################################
 

@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "cpx2": "^7.0.1",
+    "less": "^4.2.0",
     "symlink-dir": "^5.2.1",
     "webpack": "^5.90.1",
     "webpack-cli": "^5.1.4"
