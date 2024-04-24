@@ -45,8 +45,21 @@
 .frames-borders>*>* { height: 4px; line-height: 4px; }
 .frames-borders>*>* { border-right: solid 1px gray; border-bottom: none; }
 
-.timeline-row>.timeline-controls-buttons { margin-top:0; width:195px; text-align:left; text-indent:16px; }
-.timeline-controls-buttons .btn { margin-right:5px; }
+.timeline-row-controls-layerzone>* { display:inline-block; }
+.timeline-row-controls-layerzone { margin-top:0; width:195px; text-align:left;  }
+.timeline-row-controls-layerzone-buttons { text-indent:16px; }
+.timeline-row-controls-layerzone-buttons .btn { margin-right:5px; }
+
+.timeline-row-controls-layerzone .timeline-row-controls-layerzone-frameIndex
+{
+    margin-left: 10px;
+    font-size: 12px;
+    line-height: 14px;
+    width: 40px;
+    border: solid 1px gray;
+    padding-top: 3px;
+    text-align: center;
+}
 
 *>*.active:before
 {

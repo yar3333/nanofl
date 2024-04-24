@@ -358,6 +358,8 @@ class Code extends wquery.Component
 		updateHeader(frameIndexesToShow);
 		updateScrolls();
         ensureActiveFrameVisible(frameIndexesToShow);
+
+        template().activeFrameIndex.val(pathItem.frameIndex);
 	}
 	
 	function updateHeader(frameIndexesToShow:Array<Int>)

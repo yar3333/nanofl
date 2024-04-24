@@ -62,6 +62,9 @@ class Template
 	public var hscrollContainer(get, never) : js.JQuery;
 	inline function get_hscrollContainer() return component.q('#hscrollContainer');
 	
+    public var activeFrameIndex(get, never) : js.JQuery;
+	inline function get_activeFrameIndex() return component.q('#activeFrameIndex');
+	
 	public var hScrollbar(get, never) : components.nanofl.common.horizontalscrollbar.Code;
 	inline function get_hScrollbar() return cast component.children.hScrollbar;
 	
