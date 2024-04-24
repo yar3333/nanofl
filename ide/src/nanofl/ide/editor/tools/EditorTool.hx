@@ -2,7 +2,6 @@ package nanofl.ide.editor.tools;
 
 import easeljs.display.Container;
 import easeljs.display.Shape;
-import js.JQuery;
 import nanofl.ide.editor.Editor;
 import nanofl.ide.editor.EditorMouseEvent;
 import nanofl.ide.editor.NewObjectParams;
@@ -105,7 +104,7 @@ class EditorTool
 	
 	public function selectionChange()
 	{
-		view.movie.timeline.selectLayerFrames(editor.getSelectedLayerIndexes());
+		view.movie.timeline.selectLayersActiveFrames(editor.getSelectedLayerIndexes());
 		editor.updateShapes();
 	}
 	

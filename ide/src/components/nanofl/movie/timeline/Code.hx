@@ -100,7 +100,7 @@ class Code extends wquery.Component
     var _frameCollapseFactor = 1;
     public var frameCollapseFactor(get, set) : Int;
     @:noCompletion function get_frameCollapseFactor() return _frameCollapseFactor;
-    @:noCompletion function set_frameCollapseFactor(v:Int) { if (_frameCollapseFactor != v) { _frameCollapseFactor = v; update(); } return v; }
+    @:noCompletion function set_frameCollapseFactor(v:Int) { if (_frameCollapseFactor != v) { _frameCollapseFactor = v; updateFrames(); } return v; }
 	
 	public function init()
 	{
@@ -282,7 +282,7 @@ class Code extends wquery.Component
 			});
 			deselectAllFrames();
 			deselectAllLayers();
-			frameNode.addClass("selected");
+			getFrameGroup(frameNode).addClass("selected");
 			layerNode.addClass("selected");
 			updateFrames();
 		}
@@ -417,7 +417,7 @@ class Code extends wquery.Component
 		beginTransaction();
 		
 		var hasSelectedFrames = false;
-		iterateSelectedFramesReversed(function(e)
+		iterateSelectedFramesReversed(false, e ->
 		{
 			hasSelectedFrames = true;
 			e.layer.insertFrame(e.frameIndex);
@@ -427,7 +427,7 @@ class Code extends wquery.Component
 		{
 			for (layer in pathItem.mcItem.layers)
 			{
-				layer.insertFrame(pathItem.frameIndex);
+                for (i in 0...frameCollapseFactor) layer.insertFrame(pathItem.frameIndex);
 			}
 		}
 		
@@ -441,7 +441,7 @@ class Code extends wquery.Component
 	{
 		beginTransaction();
 		
-		iterateSelectedFrames(e ->
+		iterateSelectedFrames(true, e ->
 		{
 			e.layer.convertToKeyFrame(e.frameIndex);
 		});
@@ -458,7 +458,7 @@ class Code extends wquery.Component
 		
 		var wantToChangeFrameIndexTo = null;
 		
-		iterateSelectedFrames(function(e)
+		iterateSelectedFrames(true, e ->
 		{
 			final frame = e.layer.getFrame(e.frameIndex);
 			
@@ -493,7 +493,7 @@ class Code extends wquery.Component
 		
 		var wasRemoves = false;
 		
-		iterateSelectedFramesReversed(e ->
+		iterateSelectedFramesReversed(false, e ->
 		{
 			e.layer.removeFrame(e.frameIndex);
 			wasRemoves = true;
@@ -894,7 +894,7 @@ class Code extends wquery.Component
 	}
 	
 	@:profile
-	public function selectLayerFrames(layerIndexes:Array<Int>)
+	public function selectLayersActiveFrames(layerIndexes:Array<Int>)
 	{
 		if (freeze) return;
 		
@@ -908,7 +908,10 @@ class Code extends wquery.Component
 			final layer = layerNodes[i];
 			final frameNodes = getFrameNodesByLayer(q(layer));
 			frameNodes.removeClass("selected");
-			if (layerIndexes.has(i)) frameNodes[pathItem.frameIndex].addClass("selected");
+			if (layerIndexes.has(i))
+            {
+                getFrameGroup(new JQuery(frameNodes[pathItem.frameIndex])).addClass("selected");
+            }
 		}
 	}
 	
@@ -952,10 +955,12 @@ class Code extends wquery.Component
 		final layerIndex = layerNode.index();
 		
 		deselectAllLayers();
+
+        final frameGroup = getFrameGroup(mouseDownOnFrame);
 		
 		if (e.ctrlKey)
 		{
-			mouseDownOnFrame.toggleClass("selected");
+			frameGroup.toggleClass("selected");
 		}
 		else
 		if (e.shiftKey)
@@ -965,7 +970,7 @@ class Code extends wquery.Component
 		else
 		{
 			deselectAllFrames();
-			mouseDownOnFrame.addClass("selected");
+			frameGroup.addClass("selected");
 		}
 		
 		setActiveLayerAndFrameThenUpdate(layerIndex, frameIndex);
@@ -1031,6 +1036,19 @@ class Code extends wquery.Component
 		deselectAllFrames();
 		navigator.setFrameIndex(q(e.currentTarget).index());
 	}
+
+    function getFrameGroup(frameNode:JQuery) : JQuery
+    {
+        var r = new JQuery(frameNode);
+        while (true)
+        {
+            final next = frameNode.next();
+            if (next == null || next.is(":visible")) break;
+            r = r.add(next);
+            frameNode = next;
+        }
+        return r;
+    }
 	
 	function freezed(f:Void->Void) : Void
 	{
@@ -1261,7 +1279,7 @@ class Code extends wquery.Component
 		return null;
 	}
 	
-	function iterateSelectedFrames(callb:{ layerIndex:Int, frameIndex:Int, layer:Layer, frameNode:js.html.Element }->Void)
+	function iterateSelectedFrames(isVisibleOnly:Bool, callb:{ layerIndex:Int, frameIndex:Int, layer:Layer, frameNode:js.html.Element }->Void)
 	{
 		for (i in 0...pathItem.mcItem.layers.length)
 		{
@@ -1270,7 +1288,7 @@ class Code extends wquery.Component
 			final frameNodes = getFrameNodesByLayerIndex(i);
 			for (j in 0...frameNodes.length)
 			{
-				if (frameNodes[j].hasClass("selected"))
+				if (frameNodes[j].hasClass("selected") && (!isVisibleOnly || new JQuery(frameNodes[j]).is(":visible")))
 				{
 					callb({ layerIndex:i, frameIndex:j, layer:pathItem.mcItem.layers[i], frameNode:frameNodes[j] });
 				}
@@ -1278,7 +1296,7 @@ class Code extends wquery.Component
 		}
 	}
 	
-	function iterateSelectedFramesReversed(callb:{ layerIndex:Int, frameIndex:Int, layer:Layer, frameNode:js.html.Element }->Void)
+	function iterateSelectedFramesReversed(isVisibleOnly:Bool, callb:{ layerIndex:Int, frameIndex:Int, layer:Layer, frameNode:js.html.Element }->Void)
 	{
 		for (i in 0...pathItem.mcItem.layers.length)
 		{
@@ -1288,7 +1306,7 @@ class Code extends wquery.Component
 			var j = frameNodes.length - 1;
 			while (j >= 0)
 			{
-				if (frameNodes[j].hasClass("selected"))
+				if (frameNodes[j].hasClass("selected") && (!isVisibleOnly || new JQuery(frameNodes[j]).is(":visible")))
 				{
 					callb({ layerIndex:i, frameIndex:j, layer:pathItem.mcItem.layers[i], frameNode:frameNodes[j] });
 				}
