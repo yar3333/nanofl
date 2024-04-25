@@ -192,13 +192,14 @@ class Instance extends Element
 	
 	function elementUpdateDisplayObjectInstanceProperties(dispObj:easeljs.display.DisplayObject) : Void
 	{
-		if (dispObj.filters == null) dispObj.filters = [];
-		
-		if (colorEffect != null) colorEffect.apply(dispObj);
+        dispObj.filters = [];
+        dispObj.alpha = 1.0;
+
+        if (colorEffect != null) colorEffect.apply(dispObj);
 		
 		for (filter in filters)
 		{
-			var f = filter.getFilter();
+			final f = filter.getFilter();
 			if (f != null) dispObj.filters.push(f);
 		}
 		
