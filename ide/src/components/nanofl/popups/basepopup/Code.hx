@@ -21,20 +21,18 @@ class Code extends wquery.Component
 		
 		popup.modal({ backdrop:false, keyboard:false, show:false });
 		
-		popup.keypress(e ->
-		{
-            e.preventDefault();
-
+        popup.on("keydown", e ->
+        {
 			if (ShortcutTools.key(Keys.ENTER).equ(e))
 			{
+                e.preventDefault(); // prevent form submit
 				popup.find(".btn-primary").click();
 			}
-			else
-			if (ShortcutTools.key(Keys.ESCAPE).equ(e))
+            else if (ShortcutTools.key(Keys.ESCAPE).equ(e))
 			{
 				cancel_click(null);
 			}
-		});
+        });
 		
 		popup.on("hidden", _ ->
 		{
