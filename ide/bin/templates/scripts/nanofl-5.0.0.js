@@ -4694,9 +4694,8 @@ class nanofl_engine_elements_Instance extends nanofl_engine_elements_Element {
 		return dispObj;
 	}
 	elementUpdateDisplayObjectInstanceProperties(dispObj) {
-		if(dispObj.filters == null) {
-			dispObj.filters = [];
-		}
+		dispObj.filters = [];
+		dispObj.alpha = 1.0;
 		if(this.colorEffect != null) {
 			this.colorEffect.apply(dispObj);
 		}
@@ -7162,7 +7161,7 @@ class nanofl_engine_libraryitems_MovieClipItem extends nanofl_engine_libraryitem
 		this._spriteSheet = null;
 		this.exportAsSprite = false;
 		this.likeButton = false;
-		this.loop = true;
+		this.loop = false;
 		this.autoPlay = true;
 		this._layers = [];
 		super._hx_constructor(namePath);
@@ -7489,7 +7488,7 @@ class nanofl_engine_libraryitems_VideoItem extends nanofl_engine_libraryitems_In
 		this._hx_constructor(namePath,ext);
 	}
 	_hx_constructor(namePath,ext) {
-		this.loop = true;
+		this.loop = false;
 		this.autoPlay = true;
 		super._hx_constructor(namePath);
 		this.ext = ext;
@@ -7551,8 +7550,7 @@ class nanofl_engine_libraryitems_VideoItem extends nanofl_engine_libraryitems_In
 			throw new Error("Type of item must be '" + Std.string(this.get_type()) + "', but '" + Std.string(obj.type) + "' found.");
 		}
 		super.loadPropertiesJson(obj);
-		let tmp = obj.ext;
-		this.ext = tmp != null ? tmp : null;
+		this.ext = obj.ext;
 		this.autoPlay = obj.autoPlay;
 		this.loop = obj.loop;
 	}

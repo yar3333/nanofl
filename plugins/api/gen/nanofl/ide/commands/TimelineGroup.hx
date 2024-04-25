@@ -21,6 +21,7 @@ extern class TimelineGroup extends nanofl.ide.commands.BaseGroup {
 	function addLayer():Void;
 	function addFolder():Void;
 	function removeLayer():Void;
+	function setFrameCollapseFactor(?factor:Int):Void;
 	function cut():Void;
 	function copy():Void;
 	function paste():Void;

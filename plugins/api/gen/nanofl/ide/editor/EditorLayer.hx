@@ -47,4 +47,5 @@ extern class EditorLayer {
 	function getPolygonEdgeAtPos(pt:nanofl.engine.geom.Point):nanofl.engine.geom.Edge;
 	function getPolygonAtPos(pt:nanofl.engine.geom.Point):nanofl.engine.geom.Polygon;
 	function getObjectAtPos(pos:nanofl.engine.geom.Point):nanofl.engine.ISelectable;
+	function getInstanceTrack(instance:nanofl.engine.elements.Instance):nanofl.ide.ElementLifeTrack;
 }

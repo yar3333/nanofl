@@ -9,9 +9,7 @@ interface ITimelineView {
 	function createTween():Void;
 	function removeTween():Void;
 	function removeSelectedFrames():Void;
-	function updateFrames(?isUpdateHeader:Bool):Void;
-	function updateHeader():Void;
-	function updateActiveFrame():Void;
+	function updateFrames():Void;
 	function update():Void;
 	function play():Void;
 	function stop():Void;
@@ -21,4 +19,5 @@ interface ITimelineView {
 	function addFolder():Void;
 	function removeLayer():Void;
 	function pasteFromXml(xml:htmlparser.XmlDocument):Bool;
+	var frameCollapseFactor(get, set) : Int;
 }

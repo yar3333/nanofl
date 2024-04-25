@@ -2,10 +2,16 @@ package components.nanofl.movie.timeline;
 
 extern class Code extends wquery.Component implements nanofl.ide.timeline.ITimelineView {
 	function new(parent:wquery.Component, parentNode:haxe.extern.EitherType<String, haxe.extern.EitherType<js.html.Element, js.JQuery>>, ?params:Dynamic, ?attachMode:wquery.AttachMode):Void;
+	var frameCollapseFactor(get, set) : Int;
+	@:noCompletion
+	private function get_frameCollapseFactor():Int;
+	@:noCompletion
+	private function set_frameCollapseFactor(v:Int):Int;
 	function init():Void;
 	function hasSelectedFramesWithTween():Bool;
 	function hasSelectedFramesWithoutTween():Bool;
 	function update():Void;
+	function updateFrames():Void;
 	function insertFrame():Void;
 	function convertToKeyFrame():Void;
 	function addBlankKeyFrame():Void;
@@ -13,14 +19,9 @@ extern class Code extends wquery.Component implements nanofl.ide.timeline.ITimel
 	function addLayer():Void;
 	function addFolder():Void;
 	function removeLayer():Void;
-	function updateHeader():Void;
-	function fixActiveFrame():Void;
 	function fixActiveLayer():Void;
 	function resize(maxWidth:Int, maxHeight:Int):Void;
-	function updateActiveLayerFrames():Void;
-	function updateActiveFrame():Void;
-	function updateFrames(?isUpdateHeader:Bool):Void;
-	function selectLayerFrames(layerIndexes:Array<Int>):Void;
+	function selectLayersActiveFrames(layerIndexes:Array<Int>):Void;
 	function getAciveFrame():nanofl.engine.movieclip.KeyFrame;
 	function on(event:String, callb:js.JQuery.JqEvent -> Void):Void;
 	function createTween():Void;
