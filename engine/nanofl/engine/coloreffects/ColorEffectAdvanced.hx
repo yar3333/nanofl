@@ -98,8 +98,6 @@ class ColorEffectAdvanced extends ColorEffect
 	
 	public function apply(obj:easeljs.display.DisplayObject)
 	{
-		if (obj.filters == null) obj.filters = [];
-		
 		obj.filters.push(new easeljs.filters.ColorFilter(redMultiplier, greenMultiplier, blueMultiplier, alphaMultiplier, redOffset, greenOffset, blueOffset, alphaOffset));
 	}
 	

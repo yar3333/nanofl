@@ -122,16 +122,16 @@ class Application extends js.injecting.InjectContainer
 			final importers = ImporterPlugins.plugins.array();
 			importers.sort((a, b) -> Reflect.compare(a.name, b.name));
 			
-			final filters = [];
+			final fileFilters = [];
 			var allExtensions = ["nfl"]; for (importer in importers) allExtensions = allExtensions.concat(importer.fileFilterExtensions);
-			filters.push({ name:"All supported formats", extensions:allExtensions });
-			filters.push({ name:"NanoFL documents (*.nfl)", extensions:["nfl"] });
+			fileFilters.push({ name:"All supported formats", extensions:allExtensions });
+			fileFilters.push({ name:"NanoFL documents (*.nfl)", extensions:["nfl"] });
 			for (importer in importers) 
 			{
-				filters.push({ name:importer.fileFilterDescription, extensions:importer.fileFilterExtensions });
+				fileFilters.push({ name:importer.fileFilterDescription, extensions:importer.fileFilterExtensions });
 			}
 			
-			return popups.showOpenFile("Select NanoFL document to open", filters).then(filePath ->
+			return popups.showOpenFile("Select NanoFL document to open", fileFilters).then(filePath ->
             {
                 return filePath != null ? openDocument(filePath) : null;
             });

@@ -47,8 +47,6 @@ class ColorEffectBrightness extends ColorEffect
 	
 	public function apply(obj:easeljs.display.DisplayObject)
 	{
-		if (obj.filters == null) obj.filters = [];
-		
 		if (value > 0)
 		{
 			obj.filters.push(new easeljs.filters.ColorFilter(1, 1, 1, 1, value*255, value*255, value*255, 0));

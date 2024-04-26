@@ -51,9 +51,7 @@ class ColorEffectTint extends ColorEffect
 	
 	public function apply(obj:easeljs.display.DisplayObject)
 	{
-		var rgb = ColorTools.parse(color);
-		
-		if (obj.filters == null) obj.filters = [];
+		final rgb = ColorTools.parse(color);
 		
 		obj.filters.push
 		(

@@ -198,6 +198,7 @@ abstract class Element
 		dispObj.visible = visible;
 		dispObj.set(decomposeMatrix());
 		dispObj.filters = [];
+        dispObj.alpha = 1;
 	}
 	
 	public function transform(m:Matrix, applyToStrokeAndFill=true) : Void

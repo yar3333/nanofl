@@ -195,8 +195,8 @@ class Document extends InjectContainer
 			final exporters = ExporterPlugins.plugins.array();
 			exporters.sort((a, b) -> Reflect.compare(a.name, b.name));
 			
-			final filters = [];
-			filters.push({ name:"NanoFL documents (*.nfl)", extensions:["nfl"] });
+			final fileFilters = [];
+			fileFilters.push({ name:"NanoFL documents (*.nfl)", extensions:["nfl"] });
 			for (exporter in exporters) 
 			{
 				final extensions = exporter.fileFilterExtensions.filter((ext:String) ->
@@ -208,11 +208,11 @@ class Document extends InjectContainer
                 });
 				if (extensions.length > 0)
 				{
-					filters.push({ name:exporter.fileFilterDescription, extensions:extensions });
+					fileFilters.push({ name:exporter.fileFilterDescription, extensions:extensions });
 				}
 			}
 			
-            return popups.showSaveFile("Select document file name to save", filters).then(filePath ->
+            return popups.showSaveFile("Select document file name to save", fileFilters).then(filePath ->
             {
                 if (filePath == null) return Promise.resolve(false);
                 
