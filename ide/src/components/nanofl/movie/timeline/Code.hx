@@ -354,7 +354,10 @@ class Code extends wquery.Component
 	{
         final frameIndexesToShow = getFrameIndexesToShow();
 
-		for (i in 0...pathItem.mcItem.layers.length) updateLayerFrames(i, true, frameIndexesToShow);
+		for (i in 0...pathItem.mcItem.layers.length)
+        {
+            updateLayerFrames(i, true, frameIndexesToShow);
+        }
 		updateHeader(frameIndexesToShow);
 		updateScrolls();
         ensureActiveFrameVisible(frameIndexesToShow);
@@ -826,6 +829,8 @@ class Code extends wquery.Component
         final activeFrameIndexToShow = getActiveFrameIndexToShow(frameIndexesToShow);
 		
 		final cssClasses = getFramesCssClasses(layerIndex);
+        fixFramesCssClassesUsingFrameCollapseFactor(cssClasses, frameIndexesToShow);
+
 		for (i in 0...frames.length)
 		{
             final selected = keepSelection && frames[i].hasClass("selected") ? " selected" : "";
@@ -839,6 +844,23 @@ class Code extends wquery.Component
     {
         var i = 0; while (frameIndexesToShow[i] < pathItem.frameIndex) i++;
         return frameIndexesToShow[i];
+    }
+
+    function fixFramesCssClassesUsingFrameCollapseFactor(frameCssClasses:Array<String>, frameIndexesToShow:Array<Int>) : Void
+    {
+        for (i in 0...frameIndexesToShow.length)
+        {
+            final indexA = frameIndexesToShow[i];
+            final indexB = i < frameIndexesToShow.length - 1 ? frameIndexesToShow[i + 1] - 1 : frameCssClasses.length - 1;
+            
+            final cssA = frameCssClasses[indexA];
+            final cssB = frameCssClasses[indexB];
+
+            Debug.assert(cssA != null);
+            Debug.assert(cssB != null);
+            
+            frameCssClasses[indexA] = cssA + " " + cssB;
+        }
     }
 	
 	function getFramesCssClasses(layerIndex:Int) : Array<String>
@@ -1486,9 +1508,9 @@ class Code extends wquery.Component
         final totalFrames = pathItem.getTotalFrames();
         final layers = pathItem.mcItem.layers;
 
-        for (i in 0...totalFrames + (ADDITIONAL_FRAMES_TO_DISPLAY * _frameCollapseFactor))
+        for (i in 0...totalFrames + ADDITIONAL_FRAMES_TO_DISPLAY)
         {
-            if (i % _frameCollapseFactor == 0 || i == totalFrames - 1)
+            if (i % _frameCollapseFactor == 0)
             {
                 r.push(i);
             }
@@ -1499,7 +1521,7 @@ class Code extends wquery.Component
                     final frame = layer.getFrame(i);
                     if (frame != null)
                     {
-                        if (frame.subIndex == 0 || frame.subIndex == frame.keyFrame.duration - 1)
+                        if (frame.subIndex == 0)
                         {
                             r.push(i);
                             break;
