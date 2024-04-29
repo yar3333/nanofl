@@ -24,7 +24,6 @@ typedef MovieClipParams =
 class MovieClip extends Container 
     implements InstanceDisplayObject
     implements AdvancableDisplayObject
-    #if ide implements nanofl.ide.IdeAdvancableDisplayObject #end
     #if !ide implements IEventHandlers #end
 {
 	var layerOfChild : Map<DisplayObject, Int>;
@@ -179,59 +178,24 @@ class MovieClip extends Container
 		return null;
 	}
     
-	public function advanceToNextFrame() : Void
+	public function advanceTo(lifetimeOnParent:Int, framerate:Float, element:TweenedElement) : Void
 	{
         final totalFrames = getTotalFrames();
+
+        var newCurrentFrame = 0;
+        if (!paused && totalFrames > 1)
+        {
+            newCurrentFrame = loop 
+                ? lifetimeOnParent % totalFrames 
+                : Std.min(lifetimeOnParent, totalFrames - 1);
+        }
     	
-        final helper = gotoFrame
-        (
-            paused || totalFrames <= 1 || (!loop && currentFrame == totalFrames - 1)
-                ? currentFrame 
-                : (currentFrame + 1) % totalFrames
-        );
-        
-        for (child in helper.keepedAdvancableChildren) child.advanceToNextFrame();
+        final helper = gotoFrame(newCurrentFrame);
         
         for (obj in helper.createdDisplayObjects) DisplayObjectTools.callMethod(obj, "init");
 	}
     
     #if ide
-    public function advanceTo(lifetimeOnParent:Int, framerate:Float, tweenedElement:TweenedElement)
-    {
-        Debug.assert(currentFrame == 0);
-        if (lifetimeOnParent == 0) return;
-        
-        if (!paused)
-        {
-            gotoFrame
-            (
-                loop ? lifetimeOnParent % getTotalFrames() 
-                     : Std.min(lifetimeOnParent, getTotalFrames() - 1)
-            );
-        }
-
-        final tracker = nanofl.ide.ElementLifeTracker.createForMovieClip(symbol, false);
-
-        for (layerIndex in 0...symbol.layers.length)
-        {
-            final layer = symbol.layers[layerIndex];
-            final frame = layer.getFrame(currentFrame);
-            if (frame == null) continue;
-            final tweenedElements = frame.keyFrame.getTweenedElements(frame.subIndex);
-            final dispObjs = getChildrenByLayerIndex(layerIndex);
-            Debug.assert(tweenedElements.length == dispObjs.length);
-            
-            for (j in 0...tweenedElements.length)
-            {
-                final dispObj = dispObjs[j];
-                if (!Std.isOfType(dispObj, nanofl.ide.IdeAdvancableDisplayObject)) continue;
-                final track = tracker.getTrackOne(tweenedElements[j].original);
-                Debug.assert(track != null);
-                (cast dispObj:nanofl.ide.IdeAdvancableDisplayObject).advanceTo(!paused ? currentFrame - track.startFrameIndex : lifetimeOnParent, framerate, tweenedElements[j]);
-            }
-        }
-    }
-
     public function getChildByElement(elem:Element) : DisplayObject
     {
         final keyFrame : KeyFrame = cast elem.parent;

@@ -14,10 +14,8 @@ import nanofl.engine.geom.Polygon;
 import nanofl.engine.libraryitems.FontItem;
 import nanofl.engine.libraryitems.InstancableItem;
 import nanofl.engine.libraryitems.SoundItem;
-import nanofl.engine.movieclip.TweenedElement;
 import nanofl.ide.Application;
 import nanofl.ide.Globals;
-import nanofl.ide.IdeAdvancableDisplayObject;
 import nanofl.ide.libraryitems.VideoItem;
 using Lambda;
 

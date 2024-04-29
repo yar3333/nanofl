@@ -21,18 +21,11 @@ class MovieClipGotoHelper
     final symbol : MovieClipItem;
     
     public final createdDisplayObjects = new Array<DisplayObject>();
-    public final keepedAdvancableChildren : Array<AdvancableDisplayObject>;
 
     @:access(nanofl.MovieClip.currentFrame)
     public function new(mc:MovieClip, newFrameIndex:Int)
     {
-        if (mc.currentFrame == newFrameIndex)
-        {
-            keepedAdvancableChildren = mc.children.filterByType(AdvancableDisplayObject);
-            return;
-        }
-
-        keepedAdvancableChildren = new Array<AdvancableDisplayObject>();
+        if (mc.currentFrame == newFrameIndex) return;
 
         this.mc = mc;
         this.oldFrameIndex = mc.currentFrame;
@@ -88,11 +81,6 @@ class MovieClipGotoHelper
                     Debug.assert(Std.isOfType(tweenedElement.current, Instance));
                     (cast tweenedElement.current:Instance).updateDisplayObjectTweenedProperties(dispObj);
                 }
-            }
-            
-            if (Std.isOfType(dispObj, AdvancableDisplayObject))
-            {
-                keepedAdvancableChildren.push((cast dispObj : AdvancableDisplayObject));
             }
         }
         

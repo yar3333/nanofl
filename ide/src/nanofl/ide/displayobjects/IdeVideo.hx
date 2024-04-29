@@ -3,11 +3,12 @@ package nanofl.ide.displayobjects;
 import js.lib.Promise;
 import stdlib.Std;
 import nanofl.Video.VideoParams;
+import nanofl.engine.AdvancableDisplayObject;
 import nanofl.engine.movieclip.TweenedElement;
 import nanofl.ide.libraryitems.VideoItem;
 
 class IdeVideo extends nanofl.Video
-    implements nanofl.ide.IdeAdvancableDisplayObject
+    implements AdvancableDisplayObject
 {
     public var currentTime : Float;
     
@@ -28,11 +29,11 @@ class IdeVideo extends nanofl.Video
         });
     }
 
-    public function advanceTo(advanceFrames:Int, framerate:Float, tweenedElement:TweenedElement)
+    public function advanceTo(lifetimeOnParent:Int, framerate:Float, tweenedElement:TweenedElement) : Void
     {
         if (!symbol.autoPlay || tweenedElement.original != tweenedElement.current) return;
 
-        advanceFrames += Math.round(currentTime * framerate);
+        final advanceFrames = lifetimeOnParent + Math.round(currentTime * framerate);
 
         final totalFrames = Std.int(duration * framerate);
 

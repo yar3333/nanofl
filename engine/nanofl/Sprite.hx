@@ -1,5 +1,6 @@
 package nanofl;
 
+import stdlib.Std;
 import nanofl.engine.libraryitems.IPlayableItem;
 import nanofl.engine.libraryitems.ISpritableItem;
 import nanofl.engine.movieclip.TweenedElement;
@@ -11,7 +12,6 @@ typedef SpriteParams =
 
 class Sprite extends easeljs.display.Sprite
     implements nanofl.engine.AdvancableDisplayObject
-    #if ide implements nanofl.ide.IdeAdvancableDisplayObject #end
 {
     final symbol : ISpritableItem;
 
@@ -23,16 +23,10 @@ class Sprite extends easeljs.display.Sprite
         this.currentFrame = params?.currentFrame ?? 0;
     }
 
-	public function advanceToNextFrame() : Void
+    public function advanceTo(lifetimeOnParent:Int, framerate:Float, tweenedElement:TweenedElement)
     {
-        if (paused || Std.isOfType(symbol, IPlayableItem) && !(cast symbol:IPlayableItem).loop && currentFrame >= spriteSheet.getNumFrames() - 1) return;
-        super.advance();
+        if (paused) return;
+        
+        currentFrame = Std.min(symbol.spriteSheet.getNumFrames(), lifetimeOnParent);
     }
-
-    #if ide
-    public function advanceTo(advanceFrames:Int, framerate:Float, tweenedElement:TweenedElement)
-    {
-        stdlib.Debug.methodNotSupported(this);
-    }
-    #end
 }
