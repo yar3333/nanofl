@@ -79,7 +79,7 @@ class EditorLayer
 		{
 			frame.keyFrame.getShape(true).deselectAll();
 			
-            elementLifeTracker = ElementLifeTracker.createForLayer(navigator.pathItem.mcItem, layer.getIndex(), false);
+            updateElementLifeTracker();
 			for (tweenedElement in frame.keyFrame.getTweenedElements(frame.subIndex))
 			{
 				addDisplayObject(tweenedElement);
@@ -191,7 +191,10 @@ class EditorLayer
 	@:noprofile
 	function addDisplayObject(tweenedElement:TweenedElement, ?index:Int) : EditorElement
 	{
-		var item = EditorElement.create(this, editor, navigator, view, frame, tweenedElement, elementLifeTracker.getTrackOne(tweenedElement.original), framerate);
+        final track = elementLifeTracker.getTrackOne(tweenedElement.original);
+        Debug.assert(tweenedElement.original.type.match(ElementType.shape) || track != null);
+		
+        final item = EditorElement.create(this, editor, navigator, view, frame, tweenedElement, track, framerate);
 		
 		container.addChildAt(item.metaDispObj, index != null ? index : container.numChildren);
 		items.insert(index != null ? index : items.length, item);
@@ -202,9 +205,17 @@ class EditorLayer
 	public function addElement(element:Element, ?index:Int) : EditorElement
 	{
 		frame.keyFrame.addElement(element, index);
-        elementLifeTracker = ElementLifeTracker.createForLayer(navigator.pathItem.mcItem, layer.getIndex(), false);
+        updateElementLifeTracker();
 		return addDisplayObject(new TweenedElement(element, element), index);
 	}
+
+    function updateElementLifeTracker()
+    {
+        final saveAutoPlay = navigator.pathItem.mcItem.autoPlay;
+        navigator.pathItem.mcItem.autoPlay = true;
+        elementLifeTracker = ElementLifeTracker.createForLayer(navigator.pathItem.mcItem, layer.getIndex(), false);
+        navigator.pathItem.mcItem.autoPlay = saveAutoPlay;
+    }
 	
 	function removeItemAt(index:Int)
 	{
@@ -287,7 +298,7 @@ class EditorLayer
 			var item = items[i];
 			if (item.selected)
 			{
-				if (item.originalElement.type == ElementType.instance && (cast item.originalElement:Instance).symbol.type == LibraryItemType.movieclip)
+				if (item.originalElement.type.match(ElementType.instance) && (cast item.originalElement:Instance).symbol.type.match(LibraryItemType.movieclip))
 				{
 					removeItemAt(i);
 					var instance : Instance = cast item.originalElement;
