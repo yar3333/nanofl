@@ -485,7 +485,15 @@ class Document extends InjectContainer
             if (properties.publishSettings.useTextureAtlases && properties.publishSettings.textureAtlases.iterator().hasNext())
             {
                 log("Publish texture atlases");
-                TextureAtlasPublisher.publish(fileSystem, library.getRawLibrary(), properties.publishSettings.textureAtlases, destDir, properties.publishSettings.supportLocalFileOpen);
+                TextureAtlasPublisher.publish
+                (
+                    fileSystem,
+                    library.getRawLibrary(),
+                    properties.publishSettings.textureAtlases,
+                    destDir,
+                    properties.publishSettings.supportLocalFileOpen,
+                    properties.framerate,
+                );
             }
             else
             {

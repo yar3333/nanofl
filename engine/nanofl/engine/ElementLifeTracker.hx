@@ -1,4 +1,4 @@
-package nanofl.ide;
+package nanofl.engine;
 
 import js.lib.Set;
 import stdlib.Debug;

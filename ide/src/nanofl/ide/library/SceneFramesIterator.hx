@@ -71,6 +71,6 @@ class SceneFramesIterator
 
         scene = cast sceneInstance.createDisplayObject();
         stage.addChild(scene);
-        scene.advanceTo(curFrame, framerate, new TweenedElement(sceneInstance, sceneInstance));
+        scene.advanceTo(curFrame, new TweenedElement(sceneInstance, sceneInstance), framerate);
     }
 }

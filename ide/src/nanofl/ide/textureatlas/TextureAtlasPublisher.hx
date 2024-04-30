@@ -12,7 +12,7 @@ using stdlib.Lambda;
 
 class TextureAtlasPublisher
 {
-    public static function publish(fileSystem:FileSystem, library:IdeLibrary, textureAtlasesParams:Map<String, TextureAtlasParams>, destDir:String, supportLocalFileOpen:Bool)
+    public static function publish(fileSystem:FileSystem, library:IdeLibrary, textureAtlasesParams:Map<String, TextureAtlasParams>, destDir:String, supportLocalFileOpen:Bool, framerate:Float)
     {
         var names = library.getItemsAsIde(true).filterByType(ITextureItem).map(x -> x.textureAtlas).filter(x -> !StringTools.isNullOrEmpty(x)).distinct();
         names.sort(Reflect.compare);
@@ -26,7 +26,8 @@ class TextureAtlasPublisher
             var params = textureAtlasesParams.get(name);
             var textureAtlas = new TextureAtlasGenerator(params.width, params.height, params.padding).generate
             (
-                library.getItemsAsIde(true).filter(x -> Std.isOfType(x, ITextureItem) && (cast x:ITextureItem).textureAtlas == name)
+                library.getItemsAsIde(true).filter(x -> Std.isOfType(x, ITextureItem) && (cast x:ITextureItem).textureAtlas == name),
+                framerate
             );
 
             var imageUrl = saveTextureAtlasImageAndGetUrl(fileSystem, name, textureAtlas, destDir, supportLocalFileOpen);

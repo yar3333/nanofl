@@ -5,8 +5,7 @@ typedef SpriteParams = {
 	var currentFrame : Int;
 };
 
-extern class Sprite extends easeljs.display.Sprite implements nanofl.ide.IdeAdvancableDisplayObject implements nanofl.engine.AdvancableDisplayObject {
+extern class Sprite extends easeljs.display.Sprite implements nanofl.engine.AdvancableDisplayObject {
 	function new(symbol:nanofl.engine.libraryitems.ISpritableItem, params:nanofl.Sprite.SpriteParams):Void;
-	function advanceToNextFrame():Void;
-	function advanceTo(advanceFrames:Int, framerate:Float, tweenedElement:nanofl.engine.movieclip.TweenedElement):Void;
+	function advanceTo(lifetimeOnParent:Int, tweenedElement:nanofl.engine.movieclip.TweenedElement, framerate:Float):Void;
 }

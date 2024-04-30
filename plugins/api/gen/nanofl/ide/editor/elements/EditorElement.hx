@@ -23,5 +23,5 @@ extern class EditorElement implements nanofl.engine.ISelectable {
 	function onMouseDown(e:easeljs.events.MouseEvent):Void;
 	function onMouseUp(e:easeljs.events.MouseEvent):Void;
 	function onDoubleClick(e:easeljs.events.MouseEvent):Void;
-	static function create(layer:nanofl.ide.editor.EditorLayer, editor:nanofl.ide.editor.Editor, navigator:nanofl.ide.navigator.Navigator, view:nanofl.ide.ui.View, frame:nanofl.engine.movieclip.Frame, tweenedElement:nanofl.engine.movieclip.TweenedElement, track:nanofl.ide.ElementLifeTrack, framerate:Float):nanofl.ide.editor.elements.EditorElement;
+	static function create(layer:nanofl.ide.editor.EditorLayer, editor:nanofl.ide.editor.Editor, navigator:nanofl.ide.navigator.Navigator, view:nanofl.ide.ui.View, frame:nanofl.engine.movieclip.Frame, tweenedElement:nanofl.engine.movieclip.TweenedElement, track:nanofl.engine.ElementLifeTrack, framerate:Float):nanofl.ide.editor.elements.EditorElement;
 }

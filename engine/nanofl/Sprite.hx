@@ -23,10 +23,10 @@ class Sprite extends easeljs.display.Sprite
         this.currentFrame = params?.currentFrame ?? 0;
     }
 
-    public function advanceTo(lifetimeOnParent:Int, framerate:Float, tweenedElement:TweenedElement)
+    public function advanceTo(lifetimeOnParent:Int, tweenedElement:TweenedElement #if ide , framerate:Float #end)
     {
         if (paused) return;
-        
+
         currentFrame = Std.min(symbol.spriteSheet.getNumFrames(), lifetimeOnParent);
     }
 }

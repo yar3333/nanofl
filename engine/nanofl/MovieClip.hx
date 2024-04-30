@@ -125,6 +125,7 @@ class MovieClip extends Container
 		paused = true;
 	}
 	
+    #if !ide
 	public function gotoAndStop(labelOrIndex:Dynamic)
 	{
 		final helper = gotoFrame(labelOrIndex);
@@ -138,6 +139,7 @@ class MovieClip extends Container
 		play();
         for (obj in helper.createdDisplayObjects) DisplayObjectTools.callMethod(obj, "init");
 	}
+    #end
 	
 	public function getTotalFrames()
 	{
@@ -154,13 +156,13 @@ class MovieClip extends Container
 		return r;
 	}
 	
-	#if ide public #end
-	function gotoFrame(labelOrIndex:Dynamic) : nanofl.engine.MovieClipGotoHelper
+	
+	#if ide public #end function gotoFrame(labelOrIndex:Dynamic #if ide , framerate:Float #end) : nanofl.engine.MovieClipGotoHelper
 	{
 		final newFrameIndex = getFrameIndexByLabel(labelOrIndex);
         Debug.assert(newFrameIndex >= 0, "Frame index must not be negative.");
         Debug.assert(newFrameIndex < getTotalFrames(), "Frame index must be less than total frames count.");
-        return new nanofl.engine.MovieClipGotoHelper(this, newFrameIndex);
+        return new nanofl.engine.MovieClipGotoHelper(this, newFrameIndex, #if ide framerate #else createjs.utils.Ticker.framerate #end);
 	}
 	
 	function getFrameIndexByLabel(labelOrIndex:Dynamic) : Int
@@ -178,19 +180,21 @@ class MovieClip extends Container
 		return null;
 	}
     
-	public function advanceTo(lifetimeOnParent:Int, framerate:Float, element:TweenedElement) : Void
+	public function advanceTo(lifetimeOnParent:Int, element:TweenedElement #if ide , framerate:Float #end) : Void
 	{
+        if (paused) return;
+
         final totalFrames = getTotalFrames();
 
         var newCurrentFrame = 0;
-        if (!paused && totalFrames > 1)
+        if (totalFrames > 1)
         {
             newCurrentFrame = loop 
                 ? lifetimeOnParent % totalFrames 
                 : Std.min(lifetimeOnParent, totalFrames - 1);
         }
     	
-        final helper = gotoFrame(newCurrentFrame);
+        final helper = gotoFrame(newCurrentFrame #if ide , framerate #end);
         
         for (obj in helper.createdDisplayObjects) DisplayObjectTools.callMethod(obj, "init");
 	}

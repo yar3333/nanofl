@@ -58,7 +58,7 @@ AudioHelper.getFFmpegArgsForMixTracks = function(tracks,startInputIndex) {
 };
 AudioHelper.getSceneTracks = function(framerate,library) {
 	var sceneItem = library.getSceneItem();
-	var tracker = nanofl.ide.ElementLifeTracker.createForMovieClip(sceneItem,true);
+	var tracker = nanofl.engine.ElementLifeTracker.createForMovieClip(sceneItem,true);
 	var r = [];
 	var sceneTrack = { lifetimeFrames : sceneItem.getTotalFrames(), startFrameIndex : 0, sameElementSequence : [library.getSceneInstance()]};
 	var tracksWithScene = [sceneTrack].concat(tracker.tracks);

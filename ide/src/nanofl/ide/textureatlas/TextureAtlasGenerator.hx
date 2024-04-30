@@ -40,9 +40,9 @@ class TextureAtlasGenerator
 		this.rotate  = rotateMethod;
 	}
 	
-	public function generate(items:Array<IIdeLibraryItem>) : TextureAtlas
+	public function generate(items:Array<IIdeLibraryItem>, framerate:Float) : TextureAtlas
 	{
-		var images = getImages(items);
+		final images = getImages(items, framerate);
 		
 		for (image in images)
 		{
@@ -62,7 +62,7 @@ class TextureAtlasGenerator
 			return 0;
 		});
 		
-		var packer = new Packer<ImageData>(width, height, padding, method, rotate);
+		final packer = new Packer<ImageData>(width, height, padding, method, rotate);
 		
 		for (image in images)
 		{
@@ -122,7 +122,7 @@ class TextureAtlasGenerator
 		return { imagePngAsBase64:imagePngAsBase64, frames:frames, itemFrames:itemFrames };
 	}
 	
-	function getImages(items:Array<IIdeLibraryItem>) : Array<ImageData>
+	function getImages(items:Array<IIdeLibraryItem>, framerate:Float) : Array<ImageData>
 	{
 		var images = new Array<ImageData>();
 		var datas = [];
@@ -145,7 +145,7 @@ class TextureAtlasGenerator
 					var totalFrames = mc.getTotalFrames();
 					for (frameIndex in 0...totalFrames)
 					{
-						mc.gotoFrame(frameIndex);
+						mc.gotoFrame(frameIndex, framerate);
 
                         DisplayObjectTools.recache(mc, true);
                         final canvas = getCanvasWithoutEmptyEdges(mc.cacheCanvas);

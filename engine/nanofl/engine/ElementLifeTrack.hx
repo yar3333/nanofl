@@ -1,4 +1,4 @@
-package nanofl.ide;
+package nanofl.engine;
 
 import nanofl.engine.elements.Element;
 

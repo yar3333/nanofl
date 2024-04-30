@@ -4,5 +4,5 @@ import nanofl.engine.movieclip.TweenedElement;
 
 interface AdvancableDisplayObject
 {
-    function advanceTo(lifetimeOnParent:Int, framerate:Float, element:TweenedElement) : Void;
+    function advanceTo(lifetimeOnParent:Int, element:TweenedElement #if ide , framerate:Float #end) : Void;
 }

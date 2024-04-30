@@ -371,6 +371,16 @@ class datatools_ArrayRO {
 		}
 		return _g;
 	}
+	static skipWhile(this1,f) {
+		let n = 0;
+		while(n < this1.length) {
+			if(!f(this1[n])) {
+				return this1.slice(n);
+			}
+			++n;
+		}
+		return [];
+	}
 }
 class datatools_ArrayTools {
 	static equ(a,b) {
@@ -1528,7 +1538,7 @@ Object.assign(nanofl_engine_AdvancableDisplayObject.prototype, {
 class nanofl_MovieClip extends createjs.Container {
 	constructor(symbol,params) {
 		super();
-		stdlib_Debug.assert(((symbol) instanceof nanofl_engine_libraryitems_MovieClipItem),null,{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 43, className : "nanofl.MovieClip", methodName : "new"});
+		stdlib_Debug.assert(((symbol) instanceof nanofl_engine_libraryitems_MovieClipItem),null,{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 42, className : "nanofl.MovieClip", methodName : "new"});
 		this.symbol = symbol;
 		let tmp = params != null ? params.currentFrame : null;
 		this.currentFrame = tmp != null ? tmp : 0;
@@ -1636,9 +1646,9 @@ class nanofl_MovieClip extends createjs.Container {
 	}
 	gotoFrame(labelOrIndex) {
 		let newFrameIndex = this.getFrameIndexByLabel(labelOrIndex);
-		stdlib_Debug.assert(newFrameIndex >= 0,"Frame index must not be negative.",{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 162, className : "nanofl.MovieClip", methodName : "gotoFrame"});
-		stdlib_Debug.assert(newFrameIndex < this.getTotalFrames(),"Frame index must be less than total frames count.",{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 163, className : "nanofl.MovieClip", methodName : "gotoFrame"});
-		return new nanofl_engine_MovieClipGotoHelper(this,newFrameIndex);
+		stdlib_Debug.assert(newFrameIndex >= 0,"Frame index must not be negative.",{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 163, className : "nanofl.MovieClip", methodName : "gotoFrame"});
+		stdlib_Debug.assert(newFrameIndex < this.getTotalFrames(),"Frame index must be less than total frames count.",{ fileName : "engine/nanofl/MovieClip.hx", lineNumber : 164, className : "nanofl.MovieClip", methodName : "gotoFrame"});
+		return new nanofl_engine_MovieClipGotoHelper(this,newFrameIndex,createjs.Ticker.framerate);
 	}
 	getFrameIndexByLabel(labelOrIndex) {
 		if(typeof(labelOrIndex) == "number" && ((labelOrIndex | 0) === labelOrIndex)) {
@@ -1661,21 +1671,23 @@ class nanofl_MovieClip extends createjs.Container {
 		}
 		return null;
 	}
-	advanceToNextFrame() {
+	advanceTo(lifetimeOnParent,element) {
 		let totalFrames = this.getTotalFrames();
-		let helper = this.gotoFrame(this.paused || totalFrames <= 1 || !this.loop && this.currentFrame == totalFrames - 1 ? this.currentFrame : (this.currentFrame + 1) % totalFrames);
-		let _g = 0;
-		let _g1 = helper.keepedAdvancableChildren;
-		while(_g < _g1.length) {
-			let child = _g1[_g];
-			++_g;
-			child.advanceToNextFrame();
+		let newCurrentFrame = 0;
+		if(!this.paused && totalFrames > 1) {
+			if(this.loop) {
+				newCurrentFrame = lifetimeOnParent % totalFrames;
+			} else {
+				let b = totalFrames - 1;
+				newCurrentFrame = lifetimeOnParent < b ? lifetimeOnParent : b;
+			}
 		}
-		let _g2 = 0;
-		let _g3 = helper.createdDisplayObjects;
-		while(_g2 < _g3.length) {
-			let obj = _g3[_g2];
-			++_g2;
+		let helper = this.gotoFrame(newCurrentFrame);
+		let _g = 0;
+		let _g1 = helper.createdDisplayObjects;
+		while(_g < _g1.length) {
+			let obj = _g1[_g];
+			++_g;
 			nanofl_DisplayObjectTools.callMethod(obj,"init");
 		}
 	}
@@ -2171,6 +2183,8 @@ class nanofl_Player {
 					});
 					nanofl_Player.resize(args.scaleMode,originalWidth,originalHeight);
 				}
+				let sceneInstance = nanofl_Player.library.getSceneInstance();
+				let sceneTweenedElement = new nanofl_engine_movieclip_TweenedElement(sceneInstance,sceneInstance);
 				createjs.Ticker.paused = true;
 				createjs.Ticker.timingMode = createjs.Ticker.RAF_SYNCHED;
 				createjs.Ticker.framerate = args.framerate;
@@ -2178,9 +2192,10 @@ class nanofl_Player {
 					if(e.paused) {
 						return;
 					}
-					nanofl_Player.scene.advanceToNextFrame();
+					nanofl_Player.scene.advanceTo(nanofl_Player.lifetime,sceneTweenedElement);
 					nanofl_DisplayObjectTools.callMethod(nanofl_Player.scene,"onEnterFrame");
 					nanofl_Player.stage.update();
+					nanofl_Player.lifetime++;
 				},null);
 				if(args.clickToStart) {
 					let startButton = new Image();
@@ -2263,11 +2278,15 @@ class nanofl_Sprite extends createjs.Sprite {
 		let tmp = params != null ? params.currentFrame : null;
 		this.currentFrame = tmp != null ? tmp : 0;
 	}
-	advanceToNextFrame() {
-		if(this.paused || js_Boot.__implements(this.symbol,nanofl_engine_libraryitems_IPlayableItem) && !this.symbol.loop && this.currentFrame >= this.spriteSheet.getNumFrames() - 1) {
-			return;
+	advanceTo(lifetimeOnParent,tweenedElement) {
+		let tmp;
+		if(this.paused) {
+			tmp = 0;
+		} else {
+			let a = this.symbol.get_spriteSheet().getNumFrames();
+			tmp = a < lifetimeOnParent ? a : lifetimeOnParent;
 		}
-		super.advance();
+		this.currentFrame = tmp;
 	}
 }
 nanofl_Sprite.__name__ = "nanofl.Sprite";
@@ -3501,6 +3520,136 @@ class nanofl_engine_Ease {
 	}
 }
 nanofl_engine_Ease.__name__ = "nanofl.engine.Ease";
+class nanofl_engine_ElementLifeTracker {
+	constructor() {
+		this.tracks = [];
+		this.ignoreElements = new Set();
+	}
+	processMovieClipItem(item,globalFrameIndex,lifetimeOnParent,deep) {
+		let itemTotalFrames = item.getTotalFrames();
+		let _g = 0;
+		let _g1 = item.get_layers().length;
+		while(_g < _g1) {
+			let layerIndex = _g++;
+			this.processLayer(item,layerIndex,itemTotalFrames,0,itemTotalFrames,deep);
+		}
+	}
+	processLayer(item,layerIndex,itemTotalFrames,globalFrameIndex,lifetimeOnParent,deep) {
+		let layer = item.get_layers()[layerIndex];
+		let _g = 0;
+		let _g1 = layer._keyFrames.length;
+		while(_g < _g1) {
+			let keyFrameIndex = _g++;
+			let keyFrame = layer._keyFrames[keyFrameIndex];
+			let _g1 = 0;
+			let _g2 = keyFrame.get_elements();
+			while(_g1 < _g2.length) {
+				let element = _g2[_g1];
+				++_g1;
+				if(this.ignoreElements.has(element)) {
+					continue;
+				}
+				if(!item.autoPlay && keyFrameIndex > 0) {
+					continue;
+				}
+				let sameElementSequence = [element];
+				let duration = this.detectRelatedElementsAndDuration(layer,keyFrameIndex,element,sameElementSequence);
+				let frameIndex = keyFrame.getIndex();
+				let lifetimeFrames = frameIndex + duration < itemTotalFrames ? duration : lifetimeOnParent - frameIndex;
+				this.tracks.push({ sameElementSequence : sameElementSequence, startFrameIndex : globalFrameIndex + frameIndex, lifetimeFrames : lifetimeFrames});
+				if(deep) {
+					if(element.get_type() == nanofl_engine_ElementType.instance && element.get_symbol().get_type() == nanofl_engine_LibraryItemType.movieclip) {
+						let instance = element;
+						let mcChild = instance.get_symbol();
+						this.processMovieClipItem(mcChild,globalFrameIndex + frameIndex,lifetimeFrames,true);
+					}
+				}
+			}
+		}
+	}
+	detectRelatedElementsAndDuration(baseLayer,baseKeyFrameIndex,baseElement,sameElementSequence) {
+		let baseKeyFrame = baseLayer._keyFrames[baseKeyFrameIndex];
+		if(baseElement.get_type() != nanofl_engine_ElementType.instance) {
+			return baseKeyFrame.duration;
+		}
+		let baseElements = datatools_ArrayRO.skipWhile(baseKeyFrame.get_elements(),function(x) {
+			return x.get_type() == nanofl_engine_ElementType.shape;
+		});
+		let r = baseKeyFrame.duration;
+		let _g = 0;
+		let _g1 = baseLayer._keyFrames.slice(baseKeyFrameIndex + 1);
+		while(_g < _g1.length) {
+			let curKeyFrame = _g1[_g];
+			++_g;
+			let curInstance = nanofl_engine_ElementLifeTracker.findMatch(baseElements,datatools_ArrayRO.skipWhile(curKeyFrame.get_elements(),function(x) {
+				return x.get_type() == nanofl_engine_ElementType.shape;
+			}),baseElement);
+			if(curInstance == null) {
+				break;
+			}
+			this.ignoreElements.add(curInstance);
+			sameElementSequence.push(curInstance);
+			r += curKeyFrame.duration;
+		}
+		return r;
+	}
+	getTrackOne(element) {
+		let _g = [];
+		let _g1 = 0;
+		let _g2 = this.tracks;
+		while(_g1 < _g2.length) {
+			let v = _g2[_g1];
+			++_g1;
+			if(v.sameElementSequence.includes(element)) {
+				_g.push(v);
+			}
+		}
+		let tracks = _g;
+		if(tracks.length == 0) {
+			return null;
+		}
+		stdlib_Debug.assert(tracks.length == 1,null,{ fileName : "engine/nanofl/engine/ElementLifeTracker.hx", lineNumber : 133, className : "nanofl.engine.ElementLifeTracker", methodName : "getTrackOne"});
+		return tracks[0];
+	}
+	static createForLayer(item,layerIndex,deep) {
+		let itemTotalFrames = item.getTotalFrames();
+		let r = new nanofl_engine_ElementLifeTracker();
+		r.processLayer(item,layerIndex,itemTotalFrames,0,itemTotalFrames,deep);
+		r.ignoreElements = null;
+		return r;
+	}
+	static findMatch(a,b,instanceInA) {
+		let limit = a.indexOf(instanceInA);
+		stdlib_Debug.assert(limit >= 0,null,{ fileName : "engine/nanofl/engine/ElementLifeTracker.hx", lineNumber : 111, className : "nanofl.engine.ElementLifeTracker", methodName : "findMatch"});
+		if(b.length < limit + 1) {
+			return null;
+		}
+		let _g = 0;
+		let _g1 = limit + 1;
+		while(_g < _g1) {
+			let i = _g++;
+			let elemA = a[i];
+			let elemB = b[i];
+			if(elemA.get_type() != elemB.get_type()) {
+				return null;
+			}
+			if(elemA.get_type() != nanofl_engine_ElementType.instance) {
+				return null;
+			}
+			if(elemA.namePath != elemB.namePath) {
+				return null;
+			}
+			if(elemA.get_symbol().get_type()._hx_index == 6 && elemB.videoCurrentTime != null) {
+				return null;
+			}
+		}
+		return b[limit];
+	}
+}
+nanofl_engine_ElementLifeTracker.__name__ = "nanofl.engine.ElementLifeTracker";
+Object.assign(nanofl_engine_ElementLifeTracker.prototype, {
+	__class__: nanofl_engine_ElementLifeTracker
+});
 var nanofl_engine_ElementType = $hxEnums["nanofl.engine.ElementType"] = { __ename__:"nanofl.engine.ElementType",__constructs__:null
 	,shape: {_hx_name:"shape",_hx_index:0,__enum__:"nanofl.engine.ElementType",toString:$estr}
 	,instance: {_hx_name:"instance",_hx_index:1,__enum__:"nanofl.engine.ElementType",toString:$estr}
@@ -4009,16 +4158,15 @@ class nanofl_engine_MeshParamsTools {
 }
 nanofl_engine_MeshParamsTools.__name__ = "nanofl.engine.MeshParamsTools";
 class nanofl_engine_MovieClipGotoHelper {
-	constructor(mc,newFrameIndex) {
+	constructor(mc,newFrameIndex,framerate) {
 		this.createdDisplayObjects = [];
 		if(mc.currentFrame == newFrameIndex) {
-			this.keepedAdvancableChildren = stdlib_LambdaIterable.filterByType(mc.children,nanofl_engine_AdvancableDisplayObject);
 			return;
 		}
-		this.keepedAdvancableChildren = [];
 		this.mc = mc;
 		this.oldFrameIndex = mc.currentFrame;
 		this.newFrameIndex = newFrameIndex;
+		this.framerate = framerate;
 		this.symbol = mc.symbol;
 		let _g = 0;
 		let _g1 = this.symbol.get_layers();
@@ -4039,39 +4187,36 @@ class nanofl_engine_MovieClipGotoHelper {
 			this.processSameKeyFrame(layer,newFrame);
 		} else if(oldFrame != null && newFrame != null) {
 			this.processRelativeKeyFrames(layer,oldFrame,newFrame);
-		} else if(oldFrame != null || newFrame != null) {
-			this.processSeparatedKeyFrames(layer,oldFrame,newFrame);
 		}
 	}
 	processSameKeyFrame(layer,newFrame) {
+		let tracker = nanofl_engine_ElementLifeTracker.createForLayer(this.symbol,layer.getIndex(),false);
 		let tweenedElements = newFrame.keyFrame.getTweenedElements(newFrame.subIndex);
 		let displayObjects = this.mc.getChildrenByLayerIndex(layer.getIndex());
-		stdlib_Debug.assert(tweenedElements.length == displayObjects.length,"tweenedElements.length=" + tweenedElements.length + " != displayObjects.length=" + displayObjects.length,{ fileName : "engine/nanofl/engine/MovieClipGotoHelper.hx", lineNumber : 76, className : "nanofl.engine.MovieClipGotoHelper", methodName : "processSameKeyFrame"});
+		stdlib_Debug.assert(tweenedElements.length == displayObjects.length,"tweenedElements.length=" + tweenedElements.length + " != displayObjects.length=" + displayObjects.length,{ fileName : "engine/nanofl/engine/MovieClipGotoHelper.hx", lineNumber : 71, className : "nanofl.engine.MovieClipGotoHelper", methodName : "processSameKeyFrame"});
 		let _g = 0;
 		let _g1 = tweenedElements.length;
 		while(_g < _g1) {
 			let i = _g++;
 			let dispObj = displayObjects[i];
-			if(dispObj.visible) {
-				let tweenedElement = tweenedElements[i];
-				if(tweenedElement.current != tweenedElement.original) {
-					stdlib_Debug.assert(((tweenedElement.current) instanceof nanofl_engine_elements_Instance),null,{ fileName : "engine/nanofl/engine/MovieClipGotoHelper.hx", lineNumber : 88, className : "nanofl.engine.MovieClipGotoHelper", methodName : "processSameKeyFrame"});
-					tweenedElement.current.updateDisplayObjectTweenedProperties(dispObj);
-				}
+			let tweenedElement = tweenedElements[i];
+			if(tweenedElement.current != tweenedElement.original) {
+				stdlib_Debug.assert(((tweenedElement.current) instanceof nanofl_engine_elements_Instance),null,{ fileName : "engine/nanofl/engine/MovieClipGotoHelper.hx", lineNumber : 81, className : "nanofl.engine.MovieClipGotoHelper", methodName : "processSameKeyFrame"});
+				tweenedElement.current.updateDisplayObjectTweenedProperties(dispObj);
 			}
-			if(js_Boot.__implements(dispObj,nanofl_engine_AdvancableDisplayObject)) {
-				this.keepedAdvancableChildren.push(dispObj);
-			}
+			this.advance(dispObj,tracker,tweenedElement);
 		}
 		return true;
 	}
 	processRelativeKeyFrames(layer,oldFrame,newFrame) {
+		let tracker = nanofl_engine_ElementLifeTracker.createForLayer(this.symbol,layer.getIndex(),false);
 		let layerIndex = layer.getIndex();
 		let tweenedElements = newFrame.keyFrame.getTweenedElements(newFrame.subIndex);
 		let displayObjects = this.mc.getChildrenByLayerIndex(layer.getIndex());
 		let matched = 0;
 		while(matched < tweenedElements.length && matched < displayObjects.length) {
-			let elem = tweenedElements[matched].current;
+			let tweenedElement = tweenedElements[matched];
+			let elem = tweenedElement.current;
 			let dispObj = displayObjects[matched];
 			if(!nanofl_engine_MovieClipGotoHelper.isElementMatchDisplayObject(elem,dispObj)) {
 				if(elem.get_type()._hx_index != 0 && ((dispObj) instanceof createjs.Shape)) {
@@ -4090,15 +4235,20 @@ class nanofl_engine_MovieClipGotoHelper {
 			}
 			switch(elem.get_type()._hx_index) {
 			case 0:
-				this.mc.replaceChild(dispObj,this.createDisplayObject(layer,layerIndex,elem));
+				let newDispObj = this.createDisplayObject(layer,layerIndex,elem);
+				this.mc.replaceChild(dispObj,newDispObj);
+				dispObj = newDispObj;
 				break;
 			case 1:
 				elem.updateDisplayObjectTweenedProperties(dispObj);
 				break;
 			case 2:
-				this.mc.replaceChild(dispObj,this.createDisplayObject(layer,layerIndex,elem));
+				let newDispObj1 = this.createDisplayObject(layer,layerIndex,elem);
+				this.mc.replaceChild(dispObj,newDispObj1);
+				dispObj = newDispObj1;
 				break;
 			}
+			this.advance(dispObj,tracker,tweenedElement);
 			++matched;
 		}
 		while(displayObjects.length > matched) this.mc.removeChild(displayObjects.pop());
@@ -4108,29 +4258,8 @@ class nanofl_engine_MovieClipGotoHelper {
 		while(_g < _g1.length) {
 			let tweenedElement = _g1[_g];
 			++_g;
-			this.createDisplayObject(layer,layerIndex1,tweenedElement.current);
-		}
-		return true;
-	}
-	processSeparatedKeyFrames(layer,oldFrame,newFrame) {
-		let layerIndex = layer.getIndex();
-		if(oldFrame != null) {
-			let _g = 0;
-			let _g1 = this.mc.getChildrenByLayerIndex(layerIndex);
-			while(_g < _g1.length) {
-				let child = _g1[_g];
-				++_g;
-				this.mc.removeChild(child);
-			}
-		}
-		if(newFrame != null) {
-			let _g = 0;
-			let _g1 = layer.getTweenedElements(this.newFrameIndex);
-			while(_g < _g1.length) {
-				let tweenedElement = _g1[_g];
-				++_g;
-				this.createDisplayObject(layer,layerIndex,tweenedElement.current);
-			}
+			let dispObj = this.createDisplayObject(layer,layerIndex1,tweenedElement.current);
+			this.advance(dispObj,tracker,tweenedElement);
 		}
 		return true;
 	}
@@ -4140,6 +4269,15 @@ class nanofl_engine_MovieClipGotoHelper {
 		this.mc.addChildToLayer(obj,layerIndex);
 		this.createdDisplayObjects.push(obj);
 		return obj;
+	}
+	advance(dispObj,tracker,tweenedElement) {
+		if(!js_Boot.__implements(dispObj,nanofl_engine_AdvancableDisplayObject)) {
+			return;
+		}
+		let track = tracker.getTrackOne(tweenedElement.original);
+		if(track != null) {
+			dispObj.advanceTo(this.newFrameIndex - track.startFrameIndex,tweenedElement);
+		}
 	}
 	static isElementMatchDisplayObject(elem,dispObj) {
 		switch(elem.get_type()._hx_index) {
@@ -4308,9 +4446,6 @@ class nanofl_engine_coloreffects_ColorEffectAdvanced extends nanofl_engine_color
 		this.blueOffset = blueOffset;
 	}
 	apply(obj) {
-		if(obj.filters == null) {
-			obj.filters = [];
-		}
 		obj.filters.push(new createjs.ColorFilter(this.redMultiplier,this.greenMultiplier,this.blueMultiplier,this.alphaMultiplier,this.redOffset,this.greenOffset,this.blueOffset,this.alphaOffset));
 	}
 	clone() {
@@ -4320,7 +4455,7 @@ class nanofl_engine_coloreffects_ColorEffectAdvanced extends nanofl_engine_color
 		return new nanofl_engine_coloreffects_ColorEffectAdvanced(1,1,1,1,0,0,0,0);
 	}
 	getTweened(k,finish) {
-		stdlib_Debug.assert(((finish) instanceof nanofl_engine_coloreffects_ColorEffectAdvanced),null,{ fileName : "engine/nanofl/engine/coloreffects/ColorEffectAdvanced.hx", lineNumber : 128, className : "nanofl.engine.coloreffects.ColorEffectAdvanced", methodName : "getTweened"});
+		stdlib_Debug.assert(((finish) instanceof nanofl_engine_coloreffects_ColorEffectAdvanced),null,{ fileName : "engine/nanofl/engine/coloreffects/ColorEffectAdvanced.hx", lineNumber : 126, className : "nanofl.engine.coloreffects.ColorEffectAdvanced", methodName : "getTweened"});
 		return new nanofl_engine_coloreffects_ColorEffectAdvanced(this.alphaMultiplier + (finish.alphaMultiplier - this.alphaMultiplier) * k,this.redMultiplier + (finish.redMultiplier - this.redMultiplier) * k,this.greenMultiplier + (finish.greenMultiplier - this.greenMultiplier) * k,this.blueMultiplier + (finish.blueMultiplier - this.blueMultiplier) * k,this.alphaOffset + (finish.alphaOffset - this.alphaOffset) * k,this.redOffset + (finish.redOffset - this.redOffset) * k,this.greenOffset + (finish.greenOffset - this.greenOffset) * k,this.blueOffset + (finish.blueOffset - this.blueOffset) * k);
 	}
 	equ(c) {
@@ -4387,9 +4522,6 @@ class nanofl_engine_coloreffects_ColorEffectBrightness extends nanofl_engine_col
 		this.value = value;
 	}
 	apply(obj) {
-		if(obj.filters == null) {
-			obj.filters = [];
-		}
 		if(this.value > 0) {
 			obj.filters.push(new createjs.ColorFilter(1,1,1,1,this.value * 255,this.value * 255,this.value * 255,0));
 		} else if(this.value < 0) {
@@ -4462,9 +4594,6 @@ class nanofl_engine_coloreffects_ColorEffectTint extends nanofl_engine_coloreffe
 	}
 	apply(obj) {
 		let rgb = nanofl_engine_ColorTools.parse(this.color);
-		if(obj.filters == null) {
-			obj.filters = [];
-		}
 		obj.filters.push(new createjs.ColorFilter(1 - this.multiplier,1 - this.multiplier,1 - this.multiplier,1,rgb.r * this.multiplier,rgb.g * this.multiplier,rgb.b * this.multiplier,0));
 	}
 	clone() {
@@ -4529,6 +4658,7 @@ class nanofl_engine_elements_Element {
 		dispObj.visible = this.visible;
 		dispObj.set(this.decomposeMatrix());
 		dispObj.filters = [];
+		dispObj.alpha = 1;
 	}
 	equ(element) {
 		if(js_Boot.getClass(element) != js_Boot.getClass(this)) {
@@ -4694,8 +4824,6 @@ class nanofl_engine_elements_Instance extends nanofl_engine_elements_Element {
 		return dispObj;
 	}
 	elementUpdateDisplayObjectInstanceProperties(dispObj) {
-		dispObj.filters = [];
-		dispObj.alpha = 1.0;
 		if(this.colorEffect != null) {
 			this.colorEffect.apply(dispObj);
 		}
@@ -8770,17 +8898,6 @@ class stdlib_LambdaIterable {
 		}
 		return -1;
 	}
-	static filterByType(it,klass) {
-		let r = [];
-		let x = $getIterator(it);
-		while(x.hasNext()) {
-			let x1 = x.next();
-			if(js_Boot.__instanceof(x1,klass)) {
-				r.push(x1);
-			}
-		}
-		return r;
-	}
 }
 stdlib_LambdaIterable.__name__ = "stdlib.LambdaIterable";
 class stdlib_LambdaIterator {
@@ -8882,6 +8999,7 @@ haxe_Serializer.BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01
 nanofl_DisplayObjectTools.autoHitArea = false;
 nanofl_Mesh.DEG_TO_RAD = Math.PI / 180;
 nanofl_Player.spriteSheets = { };
+nanofl_Player.lifetime = 0;
 nanofl_Player.startButtonImageDataUri = "data:image/png;base64,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";
 nanofl_TextField.PADDING = 2.0;
 nanofl_TextField.fontHeightCache = new haxe_ds_StringMap();

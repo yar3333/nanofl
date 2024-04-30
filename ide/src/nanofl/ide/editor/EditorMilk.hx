@@ -44,7 +44,7 @@ class EditorMilk extends Container
             
             if (i < editPath.length - 1)
             {
-                obj.advanceTo(editPath[i].frameIndex, app.document.properties.framerate, new TweenedElement(editPath[i].instance, editPath[i].instance));
+                obj.advanceTo(editPath[i].frameIndex, new TweenedElement(editPath[i].instance, editPath[i].instance), app.document.properties.framerate);
                 obj = cast obj.getChildByElement(editPath[i + 1].instance);
             }
             else

@@ -8,6 +8,6 @@ extern class TextureAtlasGenerator {
 	var sorter(default, null) : Array<(nanofl.ide.textureatlas.ImageData, nanofl.ide.textureatlas.ImageData) -> Int>;
 	var rotate(default, null) : nanofl.ide.textureatlas.RotateMethod;
 	var padding(default, null) : Int;
-	function generate(items:Array<nanofl.ide.libraryitems.IIdeLibraryItem>):nanofl.ide.textureatlas.TextureAtlas;
+	function generate(items:Array<nanofl.ide.libraryitems.IIdeLibraryItem>, framerate:Float):nanofl.ide.textureatlas.TextureAtlas;
 	function toString():String;
 }

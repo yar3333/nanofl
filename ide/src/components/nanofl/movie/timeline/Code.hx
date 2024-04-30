@@ -794,8 +794,8 @@ class Code extends wquery.Component
 	
 	public function resize(maxWidth:Int, maxHeight:Int)
 	{
-		template().container.find(">*>*>.timeline-frames").width(maxWidth - template().buttons.width());
-		template().hscrollContainer.width(maxWidth - SCROLLBAR_SIZE - template().buttons.width());
+		template().container.find(">*>*>.timeline-frames").width(maxWidth - template().layerBottomPanel.width());
+		template().hscrollContainer.width(maxWidth - SCROLLBAR_SIZE - template().layerBottomPanel.width());
 		template().content.height(maxHeight - template().headers.height() - template().borders.height() - template().controls.height());
 	}
 	

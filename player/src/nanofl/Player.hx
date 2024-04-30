@@ -1,5 +1,6 @@
 package nanofl;
 
+import nanofl.engine.movieclip.TweenedElement;
 import js.html.Image;
 import js.Browser;
 import js.html.CanvasElement;
@@ -22,6 +23,8 @@ class Player
 	public static var scene : nanofl.MovieClip;
 	
 	public static var spriteSheets : Dynamic<easeljs.display.SpriteSheet> = {};
+
+    public static var lifetime = 0;
 	
 	static function __init__()
 	{
@@ -70,15 +73,19 @@ class Player
                     resize(args.scaleMode, originalWidth, originalHeight);
                 }
 
+                final sceneInstance = library.getSceneInstance();
+                final sceneTweenedElement = new TweenedElement(sceneInstance, sceneInstance);
+
                 Ticker.paused = true;
                 Ticker.timingMode = Ticker.RAF_SYNCHED;
                 Ticker.framerate = args.framerate;
                 Ticker.addTickEventListener(e ->
                 {
                     if (e.paused) return;
-                    scene.advanceToNextFrame();
+                    scene.advanceTo(lifetime, sceneTweenedElement);
                     DisplayObjectTools.callMethod(scene, "onEnterFrame");
                     stage.update();
+                    lifetime++;
                 });
                 
                 if (args.clickToStart)

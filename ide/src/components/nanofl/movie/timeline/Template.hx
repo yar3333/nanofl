@@ -64,6 +64,9 @@ class Template
 	
     public var activeFrameIndex(get, never) : js.JQuery;
 	inline function get_activeFrameIndex() return component.q('#activeFrameIndex');
+    
+    public var layerBottomPanel(get, never) : js.JQuery;
+	inline function get_layerBottomPanel() return component.q('#layerBottomPanel');
 	
 	public var hScrollbar(get, never) : components.nanofl.common.horizontalscrollbar.Code;
 	inline function get_hScrollbar() return cast component.children.hScrollbar;

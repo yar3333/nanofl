@@ -1,4 +1,4 @@
-package nanofl.ide;
+package nanofl.engine;
 
 typedef ElementLifeTrack = {
 	var lifetimeFrames : Int;

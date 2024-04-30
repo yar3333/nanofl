@@ -29,14 +29,12 @@ class IdeVideo extends nanofl.Video
         });
     }
 
-    public function advanceTo(lifetimeOnParent:Int, framerate:Float, tweenedElement:TweenedElement) : Void
+    public function advanceTo(lifetimeOnParent:Int, tweenedElement:TweenedElement, framerate:Float) : Void
     {
         if (!symbol.autoPlay || tweenedElement.original != tweenedElement.current) return;
 
         final advanceFrames = lifetimeOnParent + Math.round(currentTime * framerate);
-
         final totalFrames = Std.int(duration * framerate);
-
         final currentFrame = symbol.loop ? advanceFrames % totalFrames : Std.min(totalFrames - 1, advanceFrames);
 
         currentTime = Math.min(Math.max(0, duration - 0.0001), currentFrame / framerate + 0.0001);

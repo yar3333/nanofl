@@ -7,6 +7,7 @@ import easeljs.display.DisplayObject;
 import easeljs.events.MouseEvent;
 import easeljs.geom.Rectangle;
 import easeljs.display.Shape;
+import nanofl.engine.ElementLifeTrack;
 import nanofl.engine.AdvancableDisplayObject;
 import nanofl.engine.ISelectable;
 import nanofl.engine.elements.Element;
@@ -147,7 +148,7 @@ abstract class EditorElement implements ISelectable
             {
                 frameAdvanceTo += Math.floor((cast track.sameElementSequence[0] : Instance).videoCurrentTime * framerate);
             }
-            (cast dispObj:AdvancableDisplayObject).advanceTo(frameAdvanceTo, framerate, new TweenedElement(originalElement, currentElement));
+            (cast dispObj:AdvancableDisplayObject).advanceTo(frameAdvanceTo, new TweenedElement(originalElement, currentElement), framerate);
         }
 
         return dispObj;
