@@ -144,25 +144,26 @@ class Code extends wquery.Component
 		view.mainMenu.update();
 	}
 	
-	public function closeAll(?force:Bool) : Promise<{}>
+	public function closeAll(?force:Bool) : Promise<Bool>
 	{
-		var items = this.items.copy();
-		
 		var queue = Promise.resolve();
+
+        var allSuccess = true;
 		
-		for (item in items)
+		for (item in items.copy())
 		{
-			queue = queue.then(function(_)
+			queue = queue.then(_ ->
 			{
 				log("close " + item.id);
 				return item.close(force);
-			});
+			})
+            .then(success -> allSuccess = allSuccess && success);
 		}
 		
-		return queue.then(function(_)
+		return queue.then(_ ->
 		{
 			log("finish closing");
-			return null;
+			return allSuccess;
 		});
 	}
 	

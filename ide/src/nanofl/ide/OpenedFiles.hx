@@ -15,7 +15,7 @@ class OpenedFiles extends InjectContainer
 
     public function iterator() : Iterator<Document> return view.openedFiles.iterator();
     
-    public function closeAll(?force:Bool) : Promise<{}> return view.openedFiles.closeAll(force);
+    public function closeAll(?force:Bool) : Promise<Bool> return view.openedFiles.closeAll(force);
 	
     public function add(doc:Document) : Void view.openedFiles.add(doc);
 	

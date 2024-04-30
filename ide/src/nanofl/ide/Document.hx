@@ -661,45 +661,31 @@ class Document extends InjectContainer
 
 	public function saveWithPrompt() : Promise<Bool>
 	{
-		if (isModified)
-		{
-			return new Promise<Bool>(function(resolve, reject)
-			{
-                popups.showConfirm("Confirmation", "Document was changed!", "Save", "Cancel", "Don't save").then(r ->
+        return !isModified
+            ? Promise.resolve(true)
+            : popups.showConfirm("Confirmation", "Document was changed!", "Save", "Cancel", "Don't save").then(r ->
+              {
+                switch (r.response)
                 {
-                    switch (r.response)
-                    {
-                        case 0: save().then(r -> resolve(r));
-                        case 1: // do nothing
-                        case 2: resolve(true);
-                        case _: reject(new js.lib.Error());
-                    }
-                });
-			});
-		}
-		else
-		{
-			return Promise.resolve(true);
-		}
+                    case 0: return save();
+                    case 1: return Promise.resolve(false);
+                    case 2: return Promise.resolve(true);
+                    case _: throw new js.lib.Error();
+                }
+              });
 	}
 	
- 	public function close(?force:Bool) : Promise<{}>
+ 	public function close(?force:Bool) : Promise<Bool>
  	{
-		if (force)
-		{
-			dispose();
-			openedFiles.close(this);
-			return Promise.resolve(null);
-		}
-		else
-		{
-			return saveWithPrompt().then(function(success:Bool)
-			{
-				dispose();
-				openedFiles.close(this);
-				return null;
-			});
-		}
+        return (force ? Promise.resolve(true) : saveWithPrompt()).then(success ->
+        {
+            if (success)
+            {
+                dispose();
+                openedFiles.close(this);
+            }
+            return success;
+        });
  	}	
 	
 	public function undoStatusChanged() : Void

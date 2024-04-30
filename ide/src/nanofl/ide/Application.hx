@@ -44,6 +44,8 @@ class Application extends js.injecting.InjectContainer
 	@:noCompletion var _activeView = ActiveView.EDITOR;
     public var activeView(get, never) : ActiveView;
     @:noCompletion function get_activeView() return _activeView;
+
+    var readyToQuit = false;
     
     public function setActiveView(v:ActiveView, e:JqEvent)
     {
@@ -85,7 +87,14 @@ class Application extends js.injecting.InjectContainer
 		new JQuery(Browser.window).resize();
 		new JQuery(Browser.document.body).focus();
 		
-		new JQuery(Browser.window).on("close", e -> { e.preventDefault(); quit(); });
+		new JQuery(Browser.window).on("beforeunload", e ->
+        {
+            if (!readyToQuit)
+            {
+                e.preventDefault();
+                quit();
+            }
+        });
 		
         this.clipboard = injector.getService(Clipboard);
 		view.movie.editor  .on("mousedown", e -> setActiveView(ActiveView.EDITOR, e));
@@ -169,22 +178,16 @@ class Application extends js.injecting.InjectContainer
 		}
 	}
 	
-	public function quit(force=false, exitCode=0) : Void
+	public function quit(force=false) : Promise<Bool>
 	{
-		if (!force)
-		{
-			openedFiles.closeAll().then(_ -> exit(exitCode));
-		}
-		else
-		{
-			exit(exitCode);
-		}
-	}
-	
-	function exit(exitCode=0)
-	{
-		openedFiles.closeAll();
-		Browser.window.close();
+        return openedFiles.closeAll(force).then(success -> 
+        {
+            if (!success) return false;
+            readyToQuit = true;
+            Browser.window.close();
+            log("quit: CLOSE");
+            return true;
+        });
 	}
 	
 	function checkForUpdates() : Promise<{}>
