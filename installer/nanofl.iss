@@ -22,7 +22,7 @@ DisableDirPage=no
 DisableProgramGroupPage=yes
 DisableReadyPage=yes
 PrivilegesRequired=admin
-UninstallDisplayIcon={app}\NanoFL.exe
+UninstallDisplayIcon={app}\resources\app\static\nanofl\favicon.ico
 ChangesAssociations=yes
 ChangesEnvironment=true
 ArchitecturesInstallIn64BitMode=x64
@@ -49,22 +49,17 @@ Name: "{commondesktop}\NanoFL"; Filename: "{app}\NanoFL.exe"; IconFilename: "{ap
 [Registry]
 Root: HKCR; Subkey: ".nfl"; ValueType: string; ValueName: ""; ValueData: "NanoFL.Document"; Flags: uninsdeletevalue; Tasks: nflAssociation
 Root: HKCR; Subkey: "NanoFL.Document"; ValueType: string; ValueName: ""; ValueData: "Document"; Flags: uninsdeletekey; Tasks: nflAssociation
-Root: HKCR; Subkey: "NanoFL.Document\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\NanoFL.exe,0"; Flags: uninsdeletekey; Tasks: nflAssociation
+Root: HKCR; Subkey: "NanoFL.Document\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\resources\app\static\nanofl\favicon.ico"; Flags: uninsdeletekey; Tasks: nflAssociation
 Root: HKCR; Subkey: "NanoFL.Document\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\NanoFL.exe"" ""%1"""; Flags: uninsdeletekey; Tasks: nflAssociation
-
-Root: HKCR; Subkey: ".nflz"; ValueType: string; ValueName: ""; ValueData: "NanoFL.ZippedDocument"; Flags: uninsdeletevalue; Tasks: nflAssociation
-Root: HKCR; Subkey: "NanoFL.ZippedDocument"; ValueType: string; ValueName: ""; ValueData: "ZippedDocument"; Flags: uninsdeletekey; Tasks: nflAssociation
-Root: HKCR; Subkey: "NanoFL.ZippedDocument\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\NanoFL.exe,0"; Flags: uninsdeletekey; Tasks: nflAssociation
-Root: HKCR; Subkey: "NanoFL.ZippedDocument\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\NanoFL.exe"" ""%1"""; Flags: uninsdeletekey; Tasks: nflAssociation
 
 Root: HKCR; Subkey: ".jsnf"; ValueType: string; ValueName: ""; ValueData: "NanoFL.Script"; Flags: uninsdeletevalue; Tasks: jsnfAssociation
 Root: HKCR; Subkey: "NanoFL.Script"; ValueType: string; ValueName: ""; ValueData: "Script"; Flags: uninsdeletekey; Tasks: jsnfAssociation
-Root: HKCR; Subkey: "NanoFL.Script\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\NanoFL.exe,0"; Flags: uninsdeletekey; Tasks: jsnfAssociation
+Root: HKCR; Subkey: "NanoFL.Script\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\resources\app\static\nanofl\favicon.ico"; Flags: uninsdeletekey; Tasks: jsnfAssociation
 Root: HKCR; Subkey: "NanoFL.Script\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\NanoFL.exe"" ""%1"""; Flags: uninsdeletekey; Tasks: jsnfAssociation
 
 Root: HKCR; Subkey: ".svg"; ValueType: string; ValueName: ""; ValueData: "NanoFL.SVG"; Flags: uninsdeletevalue; Tasks: svgAssociation
 Root: HKCR; Subkey: "NanoFL.SVG"; ValueType: string; ValueName: ""; ValueData: "Scalable Vector Graphics"; Flags: uninsdeletekey; Tasks: svgAssociation
-Root: HKCR; Subkey: "NanoFL.SVG\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\NanoFL.exe,0"; Flags: uninsdeletekey; Tasks: svgAssociation
+Root: HKCR; Subkey: "NanoFL.SVG\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\resources\app\static\nanofl\favicon.ico"; Flags: uninsdeletekey; Tasks: svgAssociation
 Root: HKCR; Subkey: "NanoFL.SVG\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\NanoFL.exe"" ""%1"""; Flags: uninsdeletekey; Tasks: svgAssociation
 
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\NanoFL.exe"; ValueType: string; ValueName: ""; ValueData: """{app}\NanoFL.exe"""; Flags: uninsdeletekey
