@@ -64,6 +64,6 @@ extern class Document extends nanofl.ide.InjectContainer {
 	function canCopy():Bool;
 	function canPaste():Bool;
 	function saveWithPrompt():js.lib.Promise<Bool>;
-	function close(?force:Bool):js.lib.Promise<{ }>;
+	function close(?force:Bool):js.lib.Promise<Bool>;
 	function undoStatusChanged():Void;
 }

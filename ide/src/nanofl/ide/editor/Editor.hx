@@ -909,6 +909,6 @@ class Editor extends InjectContainer
 	
 	static function log(v:Dynamic)
 	{
-		//nanofl.engine.Log.console.log(Reflect.isFunction(v) ? v() : v);
+		nanofl.engine.Log.console.trace("Editor", Reflect.isFunction(v) ? v() : v);
 	}
 }

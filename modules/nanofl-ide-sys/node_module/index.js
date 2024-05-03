@@ -2383,7 +2383,7 @@ nanofl_ide_sys_node_NodeFileSystem.prototype = {
 		if(!append) {
 			window.electronApi.fs.writeFileSync(filePath,text);
 		} else {
-			throw new Error("Append to file is not supported.");
+			window.electronApi.fs.writeFileSync(filePath,text,{ flag : "a"});
 		}
 	}
 	,getBinary: function(filePath) {

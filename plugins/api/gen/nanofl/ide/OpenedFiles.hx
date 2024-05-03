@@ -7,7 +7,7 @@ extern class OpenedFiles extends nanofl.ide.InjectContainer {
 	var length(get, never) : Int;
 	private function get_length():Int;
 	function iterator():Iterator<nanofl.ide.Document>;
-	function closeAll(?force:Bool):js.lib.Promise<{ }>;
+	function closeAll(?force:Bool):js.lib.Promise<Bool>;
 	function add(doc:nanofl.ide.Document):Void;
 	function close(doc:nanofl.ide.Document):Void;
 	function activate(id:String):Void;

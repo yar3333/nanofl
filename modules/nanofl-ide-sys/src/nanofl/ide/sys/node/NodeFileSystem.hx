@@ -87,7 +87,7 @@ class NodeFileSystem implements nanofl.ide.sys.FileSystem
 		if (dir != "") createDirectory(dir);
 		
 		if (!append) ElectronApi.fs.writeFileSync(filePath, text);
-		else         throw new js.lib.Error("Append to file is not supported.");
+		else         ElectronApi.fs.writeFileSync(filePath, text, { flag:AppendCreate });
 	}
 	
 	public function getBinary(filePath:String) : haxe.io.Bytes

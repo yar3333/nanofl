@@ -10,5 +10,5 @@ extern class Application extends js.injecting.InjectContainer {
 	function createNewEmptyDocument(?width:Int, ?height:Int, ?framerate:Float):nanofl.ide.Document;
 	function openDocument(?path:String):js.lib.Promise<nanofl.ide.Document>;
 	function importDocument(?path:String, ?plugin:nanofl.ide.plugins.IImporterPlugin):js.lib.Promise<nanofl.ide.Document>;
-	function quit(?force:Bool, ?exitCode:Int):Void;
+	function quit(?force:Bool):js.lib.Promise<Bool>;
 }

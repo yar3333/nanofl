@@ -812,6 +812,6 @@ class Edges
 	
 	static function log(v:Dynamic)
 	{
-		//nanofl.engine.Log.console.log(Reflect.isFunction(v) ? v() : v);
+		//nanofl.engine.Log.console.trace("", Reflect.isFunction(v) ? v() : v);
 	}
 }

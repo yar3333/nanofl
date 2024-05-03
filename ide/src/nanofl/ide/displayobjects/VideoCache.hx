@@ -7,7 +7,6 @@ import js.lib.Promise;
 import js.html.CanvasElement;
 import js.html.VideoElement;
 import easeljs.utils.VideoBuffer;
-import nanofl.engine.Log.console;
 using stdlib.Lambda;
 
 class VideoCache
@@ -39,11 +38,11 @@ class VideoCache
             final r = frames.find(x -> x.position > position - 0.0002 && x.position < position + 0.0002);
             if (r != null)
             {
-                //console.log("VideoCache: hit");
+                //log("VideoCache: hit");
                 return r.canvas;
             }
         }
-        //console.log("VideoCache: miss");
+        //log("VideoCache: miss");
         return null;
     }
 
@@ -73,11 +72,17 @@ class VideoCache
 
 			video.addEventListener("error", () ->
             {
-				console.error("Failed to load '" + url + "'.");
+				nanofl.engine.Log.console.error("Failed to load '" + url + "'.");
+                log("ERROR: Failed to load '" + url + "'.");
 				reject(new Error("Failed to load '" + url + "'."));
             });
 
 			video.src = url;
 		});
-	}    
+	}
+	
+	static function log(v:Dynamic)
+	{
+		//nanofl.engine.Log.console.trace("", Reflect.isFunction(v) ? v() : v);
+	}
 }

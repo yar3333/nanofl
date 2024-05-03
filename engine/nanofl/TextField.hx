@@ -1069,6 +1069,6 @@ class TextField extends SolidContainer
 	
 	static function log(v:Dynamic)
 	{
-		//nanofl.engine.Log.console.log(Reflect.isFunction(v) ? v() : v);
+		//nanofl.engine.Log.console.trace("TextField", Reflect.isFunction(v) ? v() : v);
 	}
 }

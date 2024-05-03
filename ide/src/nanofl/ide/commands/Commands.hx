@@ -62,7 +62,7 @@ class Commands
 	{
 		validateCommand(command);
 
-        log("Commands.run: " + command);
+        log("run: " + command);
 		
 		final groupAndMethod = command.split(".");
 		
@@ -80,6 +80,6 @@ class Commands
 
 	static function log(v:Dynamic)
 	{
-		//nanofl.engine.Log.console.log(Reflect.isFunction(v) ? v() : v);
+		nanofl.engine.Log.console.trace("Commands", Reflect.isFunction(v) ? v() : v);
 	}
 }

@@ -8,7 +8,7 @@ extern class Code extends wquery.Component {
 	function add(doc:nanofl.ide.Document):Void;
 	function close(doc:nanofl.ide.Document):Void;
 	function activate(id:String):Void;
-	function closeAll(?force:Bool):js.lib.Promise<{ }>;
+	function closeAll(?force:Bool):js.lib.Promise<Bool>;
 	function iterator():haxe.iterators.ArrayIterator<nanofl.ide.Document>;
 	function outerHeight():Int;
 	function titleChanged(doc:nanofl.ide.Document):Void;

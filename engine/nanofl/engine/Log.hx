@@ -4,7 +4,6 @@ import haxe.Json;
 import js.Browser;
 import js.lib.Error;
 import haxe.Exception;
-import haxe.CallStack;
 import stdlib.Debug;
 import stdlib.ExceptionTools;
 using StringTools;
@@ -12,11 +11,13 @@ using StringTools;
 class Log
 {
     #if ide
-	static var fileSystem : nanofl.ide.sys.FileSystem;
-	static var folders : nanofl.ide.sys.Folders;
+    static var app : AppLike;
+    static var fileSystem : nanofl.ide.sys.FileSystem;
+    static var folders : nanofl.ide.sys.Folders;
 	
-	public static function init(fileSystem:nanofl.ide.sys.FileSystem, folders:nanofl.ide.sys.Folders, alerter:components.nanofl.others.alerter.Code)
+	public static function init(app:AppLike, fileSystem:nanofl.ide.sys.FileSystem, folders:nanofl.ide.sys.Folders)
 	{
+        Log.app = app;
         Log.fileSystem = fileSystem;
         Log.folders = folders;
 
@@ -58,7 +59,7 @@ class Log
 	{
 		if (Std.isOfType(v, Exception))
 		{
-			var stack = CallStack.toString((cast v : Exception).stack);
+			var stack = haxe.CallStack.toString((cast v : Exception).stack);
 			v = new Error(v.message);
 			v.stack = stack;
 		}
@@ -98,6 +99,59 @@ class Log
 		(cast r).stack = null;
 		return r;
 	}
+
+    @:allow(nanofl.engine.Console)
+    static function writeToFile(type:String, data:Array<Dynamic>) : Void
+    {
+        final dir = folders.temp + "/logs/";
+        if (!fileSystem.exists(dir)) fileSystem.createDirectory(dir);
+
+        final fileName = dir + "/" + (app.document?.id ?? "_general") + ".json";
+
+        var stack = haxe.CallStack.callStack();
+        if (isTopStackItemMatch(stack, null, "writeToFile"))
+        {
+            stack = stack.slice(1);
+
+            if (isTopStackItemMatch(stack, null, "log"))
+            {
+                stack = stack.slice(1);
+            }
+        }
+
+        fileSystem.saveContent
+        (
+            fileName,
+            Json.stringify
+            ({
+                dateTime: DateTools.format(Date.now(), "%Y-%m-%d %H:%M:%S"),
+                path: app.document?.path,
+                type: type,
+                data: data,
+                stack: haxe.CallStack.toString(stack)
+            }) + "\n",
+            true
+        );
+    }
+
+    static function isTopStackItemMatch(stack:Array<haxe.CallStack.StackItem>, classname:String, method:String) : Bool
+    {
+        if (stack.length > 0)
+        {
+            switch (stack[0])
+            {
+                case haxe.CallStack.StackItem.FilePos(s, file, line, column):
+                    switch (s)
+                    {
+                        case haxe.CallStack.StackItem.Method(classname, method):
+                            return classname == null && method == "writeToFile";
+                        case _:
+                    }
+                case _:
+            }
+        }
+        return false;
+    }
     #end
 
     public static final console = new Console();
@@ -112,15 +166,39 @@ private class Console
         Browser.console.groupCollapsed(...args);
         Browser.console.trace();
         Browser.console.groupEnd();
+
+        #if ide Log.writeToFile("log", args); #end
     }
 
     public function warn(...args:Dynamic) : Void
     {
         Browser.console.warn(...args);
+        
+        #if ide Log.writeToFile("warn", args); #end
     }
 
     public function error(...args:Dynamic) : Void
     {
         Browser.console.error(...args);
+        
+        #if ide Log.writeToFile("error", args); #end
+    }
+
+    public function trace(type:String, data:String)
+    {
+        Browser.console.groupCollapsed("trace:" + type, data);
+        Browser.console.trace();
+        Browser.console.groupEnd();
+
+        #if ide Log.writeToFile("trace:" + type, [ data ]); #end
+    }
+}
+
+typedef AppLike =
+{
+    var document(get, never) :
+    { 
+        var id(default, null) : String;
+        var path(default, null) : String;
     }
 }

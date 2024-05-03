@@ -1672,9 +1672,12 @@ class nanofl_MovieClip extends createjs.Container {
 		return null;
 	}
 	advanceTo(lifetimeOnParent,element) {
+		if(this.paused) {
+			return;
+		}
 		let totalFrames = this.getTotalFrames();
 		let newCurrentFrame = 0;
-		if(!this.paused && totalFrames > 1) {
+		if(totalFrames > 1) {
 			if(this.loop) {
 				newCurrentFrame = lifetimeOnParent % totalFrames;
 			} else {
@@ -2279,14 +2282,11 @@ class nanofl_Sprite extends createjs.Sprite {
 		this.currentFrame = tmp != null ? tmp : 0;
 	}
 	advanceTo(lifetimeOnParent,tweenedElement) {
-		let tmp;
 		if(this.paused) {
-			tmp = 0;
-		} else {
-			let a = this.symbol.get_spriteSheet().getNumFrames();
-			tmp = a < lifetimeOnParent ? a : lifetimeOnParent;
+			return;
 		}
-		this.currentFrame = tmp;
+		let a = this.symbol.get_spriteSheet().getNumFrames();
+		this.currentFrame = a < lifetimeOnParent ? a : lifetimeOnParent;
 	}
 }
 nanofl_Sprite.__name__ = "nanofl.Sprite";

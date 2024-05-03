@@ -3,7 +3,6 @@ package nanofl.ide;
 import js.lib.Promise;
 import haxe.io.Path;
 import stdlib.Uuid;
-import nanofl.engine.Log.console;
 import nanofl.ide.DocumentProperties;
 import nanofl.ide.library.IdeLibrary;
 import nanofl.ide.plugins.Importer;
@@ -42,7 +41,7 @@ class DocumentTools extends InjectContainer
         
         if (Path.extension(path) != "nfl") return import_(path);
         
-        console.log("Loading " + path);
+        log("Loading " + path);
         
         view.waiter.show();
         return loadLibraryAndProperties(path, null).then((e:{ library:IdeLibrary, properties:DocumentProperties, lastModified:Date }) ->
@@ -65,9 +64,10 @@ class DocumentTools extends InjectContainer
         if (fileSystem.exists(path) && !fileSystem.isDirectory(path))
         {
             final realLastModified = fileSystem.getDocumentLastModified(path);
-            
             if (lastModified == null || lastModified.getTime() < realLastModified.getTime())
             {
+                log("loadLibraryAndProperties " + path);
+                
                 final properties = DocumentProperties.load(path, fileSystem);
                 final library = new IdeLibrary(Path.join([ Path.directory(path), "library" ]));
                 return library.loadItems().then(_ ->
@@ -83,6 +83,8 @@ class DocumentTools extends InjectContainer
 
     public function import_(path:String, ?importer:Importer) : Promise<Document>
     {
+        log("Importing " + path);
+
         final document = createTemporary();
         return document.import_(path, importer).then(success -> success ? document : null);
     }
@@ -92,4 +94,9 @@ class DocumentTools extends InjectContainer
         final name = Uuid.newUuid();
         return folders.unsavedDocuments + "/" + name + "/" + name + ".nfl";
     }
+	
+	static function log(v:Dynamic)
+	{
+		nanofl.engine.Log.console.trace("DocumentTools", Reflect.isFunction(v) ? v() : v);
+	}
 }

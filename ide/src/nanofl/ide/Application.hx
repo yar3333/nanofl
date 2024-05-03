@@ -82,7 +82,7 @@ class Application extends js.injecting.InjectContainer
 		this.popups = injector.getService(Popups);
 		this.openedFiles = injector.getService(OpenedFiles);
 	
-		Log.init(fileSystem, folders, view.alerter);
+		Log.init(this, fileSystem, folders);
 		
 		new JQuery(Browser.window).resize();
 		new JQuery(Browser.document.body).focus();
@@ -294,6 +294,6 @@ class Application extends js.injecting.InjectContainer
 	
 	static function log(v:Dynamic)
 	{
-		//nanofl.engine.Log.console.log(Reflect.isFunction(v) ? v() : v);
+		nanofl.engine.Log.console.trace("Application", Reflect.isFunction(v) ? v() : v);
 	}
 }
