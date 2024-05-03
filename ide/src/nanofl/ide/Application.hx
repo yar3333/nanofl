@@ -1,5 +1,6 @@
 package nanofl.ide;
 
+import stdlib.Timer;
 import haxe.io.Path;
 import js.lib.Promise;
 import js.Browser;
@@ -180,12 +181,13 @@ class Application extends js.injecting.InjectContainer
 	
 	public function quit(force=false) : Promise<Bool>
 	{
+        log("quit");
         return openedFiles.closeAll(force).then(success -> 
         {
             if (!success) return false;
             readyToQuit = true;
-            Browser.window.close();
-            log("quit: CLOSE");
+            log("readyToQuit");
+            Timer.delayAsync(1).then(_ -> Browser.window.close());
             return true;
         });
 	}
