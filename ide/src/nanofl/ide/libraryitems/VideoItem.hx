@@ -72,6 +72,6 @@ class VideoItem extends nanofl.engine.libraryitems.VideoItem
 
 	static function log(v:Dynamic)
 	{
-		//nanofl.engine.Log.console.trace("", Reflect.isFunction(v) ? v() : v);
+		//nanofl.engine.Log.console.namedLog("VideoItem", v);
 	}
 }

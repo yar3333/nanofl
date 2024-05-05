@@ -35,6 +35,8 @@ class Library
 
 	public function addItem<TLibraryItem:ILibraryItem>(item:TLibraryItem) : Void
     {
+        log("addItem: " + item.namePath);
+
         item.setLibrary(cast this);
         items.set(item.namePath, item);
         ensureFolderOfItemExists(item.namePath);
@@ -48,7 +50,7 @@ class Library
 
 	function removeItemInner(namePath:String)
     {
-        var itemToRemove = getItem(namePath);
+        final itemToRemove = getItem(namePath);
         
         items.remove(namePath);
         
@@ -75,7 +77,7 @@ class Library
     {
         Debug.assert(namePath != null);
         Debug.assert(namePath != "");
-        var r = items.get(namePath);
+        final r = items.get(namePath);
         if (r != null) return r;
         console.warn("Symbol '" + namePath + "' is not found.");
         return createItemOnItemNotFound(namePath);
@@ -139,10 +141,10 @@ class Library
 
 	function ensureFolderOfItemExists(namePath:String)
     {
-        var parts = namePath.split("/");
+        final parts = namePath.split("/");
         for (i in 1...parts.length)
         {
-            var folder = parts.slice(0, i).join("/");
+            final folder = parts.slice(0, i).join("/");
             if (!hasItem(folder)) addItem(new FolderItem(folder));
         }
     }    
@@ -198,8 +200,8 @@ class Library
 	
 	public function getFonts() : Array<Font>
 	{
-		var fontItems = getItems().filterByType(FontItem);
-		var fonts = fontItems.map(item -> item.toFont());
+		final fontItems = getItems().filterByType(FontItem);
+		final fonts = fontItems.map(item -> item.toFont());
 		fonts.sort((a, b) -> Reflect.compare(a.family, b.family));
 		return fonts;
 	}
@@ -209,47 +211,16 @@ class Library
         return MapTools.equ(items, library.items);
     }
     
-    #if (!ide || display)
-    // public static function load(urlToLibraryJson:String) : Promise<Library>
-    // {
-    //     var n = urlToLibraryJson.lastIndexOf("/");
-    //     var baseLibraryUrl = (n > 0 ? urlToLibraryJson.substring(0, n + 1) : "") + "library";
-        
-    //     var library = new Library(urlToLibraryJson);
-
-    //     var p : Promise<Void>;
-    //     p = Loader.file(urlToLibraryJson).then(jsonStr ->
-    //     {
-    //         var jsonObj = jsonmod.Json.parse(jsonStr);
-    //         var namePaths = Reflect.fields(jsonObj);
-
-    //         for (namePath in namePaths)
-    //         {
-    //             p = p.then(_ ->
-    //             {
-    //                 var itemType = Reflect.field(jsonObj, namePath);
-    //                 return switch (itemType)
-    //                 {
-    //                     case "movieclip": MovieClipItem.loadFromJson(namePath, baseLibraryUrl);
-    //                     case _: null;
-    //                 }
-    //             })
-    //             .then((item:ILibraryItem) ->
-    //             {
-    //                 if (item != null) library.addItem(item);
-    //             });
-    //         }
-    //     });
-
-    //     return p.then(_ -> library);
-    // }
-    #end
-
     #if !ide
     public static function loadFromJson(libraryDir:String, obj:Dynamic) : Library
     {
-        var items = Reflect.fields(obj).map(namePath -> LibraryItem.loadFromJson(namePath, Reflect.field(obj, namePath)));
+        final items = Reflect.fields(obj).map(namePath -> LibraryItem.loadFromJson(namePath, Reflect.field(obj, namePath)));
         return new Library(libraryDir, items);
     }
     #end
+
+    static function log(v:Dynamic)
+    {
+        nanofl.engine.Log.console.namedLog("Library", v);
+    }
 }	

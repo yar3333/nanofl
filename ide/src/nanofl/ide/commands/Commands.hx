@@ -80,6 +80,6 @@ class Commands
 
 	static function log(v:Dynamic)
 	{
-		nanofl.engine.Log.console.trace("Commands", Reflect.isFunction(v) ? v() : v);
+		nanofl.engine.Log.console.namedLog("Commands", v);
 	}
 }

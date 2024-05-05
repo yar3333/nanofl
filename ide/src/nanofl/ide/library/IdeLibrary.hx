@@ -185,6 +185,8 @@ class IdeLibrary extends nanofl.engine.Library
 	public function renameItem(oldNamePath:String, newNamePath:String)
 	{
 		Debug.assert(canRenameItem(oldNamePath, newNamePath), "oldNamePath = '" + oldNamePath + "', newNamePath = '" + newNamePath + "'");
+
+        log("renameItem: " + oldNamePath + " => " + newNamePath);
 		
 		for (item in getItemsInFolder(oldNamePath))
 		{
@@ -200,6 +202,8 @@ class IdeLibrary extends nanofl.engine.Library
 	{
 		var item = items.get(oldNamePath);
 		Debug.assert(item != null, "IdeLibrary.renameItem " + oldNamePath + " => " + newNamePath);
+
+        log("\trenameItemInner: " + oldNamePath + " => " + newNamePath);
 		
 		items.remove(oldNamePath);
 		items.set(newNamePath, item);
@@ -284,5 +288,10 @@ class IdeLibrary extends nanofl.engine.Library
     public function getNextGroupNamePath() : String
     {
         return GROUPS_NAME_PATH + "/" + Uuid.newUuid();
+    }
+
+	static function log(v:Dynamic)
+    {
+        nanofl.engine.Log.console.namedLog("IdeLibrary", v);
     }
 }

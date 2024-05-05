@@ -50,7 +50,7 @@ class Application extends js.injecting.InjectContainer
     
     public function setActiveView(v:ActiveView, e:JqEvent)
     {
-        log("activeView: " + _activeView + " -> " + v);
+        //log("activeView: " + _activeView + " -> " + v);
         if (e != null) clipboard.restoreFocus(e.originalEvent);
         return _activeView = v;
     }
@@ -194,11 +194,11 @@ class Application extends js.injecting.InjectContainer
 	
 	function checkForUpdates() : Promise<{}>
 	{
-		var period = preferences.application.checkNewVersionPeriod;
+		final period = preferences.application.checkNewVersionPeriod;
 		if (period == "no") return null;
 		
-		var lastDate = preferences.application.checkNewVersionLastDate != null ? preferences.application.checkNewVersionLastDate : 0.0;
-		var dt = Date.now().getTime() - lastDate;
+		final lastDate = preferences.application.checkNewVersionLastDate != null ? preferences.application.checkNewVersionLastDate : 0.0;
+		final dt = Date.now().getTime() - lastDate;
 		
 		switch (period)
 		{
@@ -296,6 +296,6 @@ class Application extends js.injecting.InjectContainer
 	
 	static function log(v:Dynamic)
 	{
-		nanofl.engine.Log.console.trace("Application", Reflect.isFunction(v) ? v() : v);
+		nanofl.engine.Log.console.namedLog("Application", v);
 	}
 }

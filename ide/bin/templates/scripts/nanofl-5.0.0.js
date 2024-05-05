@@ -3784,13 +3784,14 @@ class nanofl_engine_Library {
 		}
 	}
 	addItem(item) {
+		nanofl_engine_Library.log("addItem: " + item.namePath);
 		item.setLibrary(this);
 		this.items.h[item.namePath] = item;
 		this.ensureFolderOfItemExists(item.namePath);
 	}
 	getItem(namePath) {
-		stdlib_Debug.assert(namePath != null,null,{ fileName : "engine/nanofl/engine/Library.hx", lineNumber : 76, className : "nanofl.engine.Library", methodName : "getItem"});
-		stdlib_Debug.assert(namePath != "",null,{ fileName : "engine/nanofl/engine/Library.hx", lineNumber : 77, className : "nanofl.engine.Library", methodName : "getItem"});
+		stdlib_Debug.assert(namePath != null,null,{ fileName : "engine/nanofl/engine/Library.hx", lineNumber : 78, className : "nanofl.engine.Library", methodName : "getItem"});
+		stdlib_Debug.assert(namePath != "",null,{ fileName : "engine/nanofl/engine/Library.hx", lineNumber : 79, className : "nanofl.engine.Library", methodName : "getItem"});
 		let r = this.items.h[namePath];
 		if(r != null) {
 			return r;
@@ -3855,6 +3856,9 @@ class nanofl_engine_Library {
 		}
 		let items = result;
 		return new nanofl_engine_Library(libraryDir,items);
+	}
+	static log(v) {
+		nanofl_engine_Log.console.namedLog("Library",v);
 	}
 }
 nanofl_engine_Library.__name__ = "nanofl.engine.Library";
@@ -3952,6 +3956,14 @@ class nanofl_engine__$Log_Console {
 	}
 	error(...args) {
 		$global.console.error(...args);
+	}
+	namedLog(type,data) {
+		if(Reflect.isFunction(data)) {
+			data = data();
+		}
+		$global.console.groupCollapsed("[" + type + "]",data);
+		$global.console.trace();
+		$global.console.groupEnd();
 	}
 }
 nanofl_engine__$Log_Console.__name__ = "nanofl.engine._Log.Console";

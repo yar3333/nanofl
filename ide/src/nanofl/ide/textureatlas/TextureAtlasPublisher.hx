@@ -108,6 +108,6 @@ class TextureAtlasPublisher
 
 	static function log(v:Dynamic)
 	{
-		//nanofl.engine.Log.console.trace("", Reflect.isFunction(v) ? v() : v);
+		nanofl.engine.Log.console.namedLog("TextureAtlasPublisher", v);
 	}
 }

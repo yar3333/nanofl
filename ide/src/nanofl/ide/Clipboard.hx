@@ -223,12 +223,12 @@ class Clipboard extends InjectContainer
 	{
 		if (e != null && js.Browser.document.activeElement != e.target && isInputActive())
 		{
-            log("restoreFocus hit");
+            //log("restoreFocus hit");
 			js.Browser.document.activeElement.blur();
 		}
         else
         {
-            log("restoreFocus miss");
+            //log("restoreFocus miss");
         }
 	}
 	
@@ -325,7 +325,7 @@ class Clipboard extends InjectContainer
 	
 	public function saveFilesIntoClipboard(baseDir:String, relativePaths:Array<String>) : Void
 	{
-		var clipboardDir = folders.temp + "/clipboard";
+		final clipboardDir = folders.temp + "/clipboard";
 		
 		fileSystem.deleteAny(clipboardDir + "/*");
 		
@@ -337,6 +337,6 @@ class Clipboard extends InjectContainer
 	
 	static function log(v:Dynamic)
 	{
-		nanofl.engine.Log.console.trace("Clipboard", Reflect.isFunction(v) ? v() : v);
+		nanofl.engine.Log.console.namedLog("Clipboard", v);
 	}
 }

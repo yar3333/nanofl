@@ -278,6 +278,6 @@ class CodeGenerator extends InjectContainer
 	
 	static function log(v:Dynamic)
 	{
-		nanofl.engine.Log.console.trace("CodeGenerator", Reflect.isFunction(v) ? v() : v);
+		nanofl.engine.Log.console.namedLog("CodeGenerator", v);
 	}
 }

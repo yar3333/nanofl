@@ -9,9 +9,9 @@ class FileActions
 {
 	public static function process(fileSystem:FileSystem, path:String, actions:Array<FileAction>) 
 	{
-		log("FileActions.process");
+		log("process");
 		
-		var libraryDir = Path.directory(path) + "/library";
+		final libraryDir = Path.directory(path) + "/library";
 		
 		for (action in actions)
 		{
@@ -33,16 +33,16 @@ class FileActions
 	
 	public static function fromUndoOperations(operations:Array<Operation>) : Array<FileAction>
 	{
-		log("FileActions.fromUndoOperations " + operations.length);
+		log("fromUndoOperations " + operations.length);
 		
-		var actions = [];
+		final actions = [];
 		
 		for (op in operations)
 		{
 			switch (op)
 			{
 				case Operation.LIBRARY_REMOVE_ITEMS(oldLibraryState, newLibraryState):
-					var removedItemNamePaths = oldLibraryState.map(item -> item.namePath);
+					final removedItemNamePaths = oldLibraryState.map(item -> item.namePath);
 					for (item in newLibraryState) removedItemNamePaths.remove(item.namePath);
 					actions.push(FileAction.REMOVE_LIBRARY_ITEMS(removedItemNamePaths));
 					
@@ -69,6 +69,6 @@ class FileActions
 	
 	static function log(v:Dynamic)
 	{
-		//nanofl.engine.Log.console.trace("", Reflect.isFunction(v) ? v() : v);
+		nanofl.engine.Log.console.namedLog("FileActions", v);
 	}
 }

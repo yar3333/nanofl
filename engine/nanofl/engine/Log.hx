@@ -101,7 +101,7 @@ class Log
 	}
 
     @:allow(nanofl.engine.Console)
-    static function writeToFile(type:String, data:Array<Dynamic>) : Void
+    static function writeToFile(type:String, data:Dynamic) : Void
     {
         final dir = folders.temp + "/logs/";
         if (!fileSystem.exists(dir)) fileSystem.createDirectory(dir);
@@ -167,30 +167,32 @@ private class Console
         Browser.console.trace();
         Browser.console.groupEnd();
 
-        #if ide Log.writeToFile("log", args); #end
+        #if ide Log.writeToFile("log", args.toArray()); #end
     }
 
     public function warn(...args:Dynamic) : Void
     {
         Browser.console.warn(...args);
         
-        #if ide Log.writeToFile("warn", args); #end
+        #if ide Log.writeToFile("warn", args.toArray()); #end
     }
 
     public function error(...args:Dynamic) : Void
     {
         Browser.console.error(...args);
         
-        #if ide Log.writeToFile("error", args); #end
+        #if ide Log.writeToFile("error", args.toArray()); #end
     }
 
-    public function trace(type:String, data:String)
+    public function namedLog(type:String, data:Dynamic)
     {
-        Browser.console.groupCollapsed("trace:" + type, data);
+        data = Reflect.isFunction(data) ? data() : data;
+
+        Browser.console.groupCollapsed("[" + type + "]", data);
         Browser.console.trace();
         Browser.console.groupEnd();
 
-        #if ide Log.writeToFile("trace:" + type, [ data ]); #end
+        #if ide Log.writeToFile("[" + type + "]", data); #end
     }
 }
 

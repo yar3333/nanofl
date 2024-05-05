@@ -77,7 +77,7 @@ class LibraryDragAndDropTools
         if (params.width == null) return null;
 		
         if (document.editor.activeLayer.type == LayerType.folder) return null;
-        var k = document.editor.zoomLevel / 100;
+        final k = document.editor.zoomLevel / 100;
 		
 		return DragImageType.RECTANGLE
 		(
@@ -125,7 +125,7 @@ class LibraryDragAndDropTools
 	{
 		Debug.assert(folder != null);
 		
-		log("LibraryItems.drop");
+		log("dropItemsIntoFolderInner: " + folder);
 		
 		if (document.id == params.documentId)
 		{
@@ -218,7 +218,7 @@ class LibraryDragAndDropTools
 
 	public static function addLibraryItemIntoEditor(document:Document, view:View, item:IIdeLibraryItem, e:JqEvent)
 	{
-		log("addLibraryItemIntoEditor");
+		log("addLibraryItemIntoEditor: " + item.namePath);
 		
 		if (document.navigator.pathItem.frame == null) { view.alerter.error("There is no frame to drop into."); return; }
 		
@@ -264,6 +264,6 @@ class LibraryDragAndDropTools
 	
 	static function log(v:Dynamic)
 	{
-		//nanofl.engine.Log.console.trace("", Reflect.isFunction(v) ? v() : v);
+		nanofl.engine.Log.console.namedLog("LibraryDragAndDropTools", v);
 	}
 }

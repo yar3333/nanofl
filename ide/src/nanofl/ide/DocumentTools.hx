@@ -97,6 +97,6 @@ class DocumentTools extends InjectContainer
 	
 	static function log(v:Dynamic)
 	{
-		nanofl.engine.Log.console.trace("DocumentTools", Reflect.isFunction(v) ? v() : v);
+		nanofl.engine.Log.console.namedLog("DocumentTools", v);
 	}
 }

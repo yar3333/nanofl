@@ -61,6 +61,8 @@ class EditorLibrary extends InjectContainer
 	
 	public function addItems(items:Array<IIdeLibraryItem>, addUndoTransaction=true)
 	{
+        log("addItems: " + items.map(x -> x.namePath));
+
 		if (addUndoTransaction) document.undoQueue.beginTransaction({ libraryAddItems:true });
 		for (item in items) library.addItem(item);
 		if (addUndoTransaction) document.undoQueue.commitTransaction();
@@ -245,6 +247,8 @@ class EditorLibrary extends InjectContainer
     
     function importFilesInner(paths:Array<String>, folderPath="") : Void
     {
+        log("importFilesInner: " + paths);
+
         for (path in paths)
         {
             final file = Path.withoutDirectory(path);
@@ -283,7 +287,7 @@ class EditorLibrary extends InjectContainer
 	
 	public function addFilesFromClipboard() : Bool
 	{
-        log("EditorLibrary.addFilesFromClipboard");
+        log("addFilesFromClipboard");
         if (!document.saveNative()) return false;
         clipboard.loadFilesFromClipboard(libraryDir);
         return true;
@@ -291,7 +295,7 @@ class EditorLibrary extends InjectContainer
 	
 	public function copyFilesIntoLibrary(srcDir:String, relativePaths:Array<String>) : Void
 	{
-        log("EditorLibrary.copyFilesIntoLibrary");
+        log("copyFilesIntoLibrary");
         document.saveNative();
         fileSystem.copyLibraryFiles(srcDir, relativePaths, libraryDir);
 	}
@@ -409,6 +413,8 @@ class EditorLibrary extends InjectContainer
     {
  		final selectedItems = getSelectedItems().filter(x -> !x.type.match(LibraryItemType.folder));
         if (selectedItems.length == 0) return;
+
+        log("duplicate: " + selectedItems.map(x -> x.namePath));
 
         externalChangesDetector.runPreventingAutoReloadAsync(() ->
         {
@@ -531,6 +537,6 @@ class EditorLibrary extends InjectContainer
 
 	static function log(v:Dynamic)
 	{
-		//nanofl.engine.Log.console.trace("", Reflect.isFunction(v) ? v() : v);
+		nanofl.engine.Log.console.namedLog("EditorLibrary", v);
 	}
 }
