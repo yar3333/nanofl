@@ -106,7 +106,7 @@ class Log
         final dir = folders.temp + "/logs/";
         if (!fileSystem.exists(dir)) fileSystem.createDirectory(dir);
 
-        final fileName = dir + "/" + (app.document?.id ?? "_general") + ".json";
+        final fileName = dir + "/" + (app.document?.id ?? "_general") + ".log";
 
         var stack = haxe.CallStack.callStack();
         if (isTopStackItemMatch(stack, null, "writeToFile"))
