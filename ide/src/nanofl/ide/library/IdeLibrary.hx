@@ -3,12 +3,12 @@ package nanofl.ide.library;
 import stdlib.Uuid;
 import haxe.Json;
 import datatools.ArrayRO;
-import nanofl.engine.elements.TextElement;
 import datatools.ArrayTools;
 import haxe.io.Path;
 import js.lib.Promise;
 import nanofl.engine.FontVariant;
 import nanofl.engine.MovieClipItemTools;
+import nanofl.engine.elements.TextElement;
 import nanofl.engine.elements.Element;
 import nanofl.engine.elements.Instance;
 import nanofl.engine.elements.ShapeElement;
@@ -82,7 +82,8 @@ class IdeLibrary extends nanofl.engine.Library
 	
 	public function save(fileSystem:nanofl.ide.sys.FileSystem)
 	{
-		Debug.assert(libraryDir != null);
+        log("save: " + libraryDir);
+        Debug.assert(libraryDir != null);
 		
 		for (item in getItemsAsIde(true))
 		{
@@ -115,7 +116,7 @@ class IdeLibrary extends nanofl.engine.Library
 	
 	public function loadItems() : Promise<{}>
 	{
-		//trace("IdeLibrary.load " + libraryDir);
+		log("loadItems: " + libraryDir);
 		
 		final files = [];
 		final dirs = [];
@@ -203,7 +204,7 @@ class IdeLibrary extends nanofl.engine.Library
 		var item = items.get(oldNamePath);
 		Debug.assert(item != null, "IdeLibrary.renameItem " + oldNamePath + " => " + newNamePath);
 
-        log("\trenameItemInner: " + oldNamePath + " => " + newNamePath);
+        log("*   renameItemInner: " + oldNamePath + " => " + newNamePath);
 		
 		items.remove(oldNamePath);
 		items.set(newNamePath, item);

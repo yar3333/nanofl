@@ -42,7 +42,9 @@ class DocumentProperties extends InjectContainer
 	
 	public static function load(filePath:String, fileSystem:FileSystem) : DocumentProperties
 	{
-		var content = fileSystem.getContent(filePath);
+        log("load: " + filePath);
+		
+        var content = fileSystem.getContent(filePath);
         
         //if (content.startsWith("<")) // expected project in XML format - version <= 2.x.x
         //{
@@ -122,6 +124,8 @@ class DocumentProperties extends InjectContainer
 	
 	public function save(filePath:String)
 	{
+        log("save: " + filePath);
+
 		var out = new htmlparser.XmlBuilder();
 		
 		out.begin("nanofl").attr("version", Version.document);
@@ -178,6 +182,6 @@ class DocumentProperties extends InjectContainer
 	
 	static function log(v:Dynamic)
 	{
-		//nanofl.engine.Log.console.namedLog("DocumentProperties", v);
+		nanofl.engine.Log.console.namedLog("DocumentProperties", v);
 	}
 }

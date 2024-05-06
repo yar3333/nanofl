@@ -579,10 +579,7 @@ class Document extends InjectContainer
 		
         FileActions.process(fileSystem, path, FileActions.fromUndoOperations(undoQueue.getOperationsFromLastSaveToNow()));
 		
-		log("Save document properties");
 		properties.save(path);
-		
-		log("Save library");
 		library.getRawLibrary().save(fileSystem);
 
         CodeGenerator.generate
