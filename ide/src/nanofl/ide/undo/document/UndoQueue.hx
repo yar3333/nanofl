@@ -1,12 +1,13 @@
 package nanofl.ide.undo.document;
 
+import haxe.Json;
+import stdlib.Debug;
 import datatools.ArrayTools;
 import nanofl.engine.elements.Element;
 import nanofl.ide.Document;
 import nanofl.ide.library.IdeLibraryTools;
 import nanofl.ide.ui.View;
 import nanofl.ide.undo.states.*;
-import stdlib.Debug;
 using stdlib.StringTools;
 using stdlib.Lambda;
 
@@ -41,6 +42,30 @@ class UndoQueue extends undoqueue.UndoQueue<Changes, Operation>
 		
 		this.document = document;
 	}
+
+    override function beginTransaction(changes:Changes)
+    {
+        log("beginTransaction\n" + Json.stringify(changes, "\t"));
+        super.beginTransaction(changes);
+    }
+
+    override function commitTransaction()
+    {
+        log("commitTransaction");
+        super.commitTransaction();
+    }
+
+    override function addOperation(operation:Operation)
+    {
+        log("addOperation: " + operation.getName());
+        super.addOperation(operation);
+    }
+
+    override function documentSaved()
+    {
+        log("documentSaved");
+        super.documentSaved();
+    }
 	
 	function rememberStates(changes:Changes)
 	{
@@ -263,7 +288,7 @@ class UndoQueue extends undoqueue.UndoQueue<Changes, Operation>
 			final navigatorState = document.navigator.getState();
 			final newElementsState = document.editor.getElementsState();
             
-            log(() -> "navigatorStage = " + haxe.Json.stringify(navigatorState, "  "));
+            log(() -> "navigatorStage = " + Json.stringify(navigatorState, "  "));
             log(() -> "oldElementsState =\n" + oldElementsState);
             log(() -> "newElementsState =\n" + newElementsState);
             
