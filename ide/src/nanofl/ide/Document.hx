@@ -137,7 +137,7 @@ class Document extends InjectContainer
 	{
 		if (undoQueue.isDocumentModified())
 		{
-			log("MODIFIED because undoQueue");
+			//log("MODIFIED because undoQueue");
 			return true;
 		}
 		
@@ -147,7 +147,7 @@ class Document extends InjectContainer
 			{
 				if (!properties.equ(savedProperties))
 				{
-					log("MODIFIED because document properties");
+					//log("MODIFIED because document properties");
 					return  true;
 				}
 
@@ -155,7 +155,7 @@ class Document extends InjectContainer
                 tempEmptyLibrary.addSceneWithFrame();
 				if (!library.getRawLibrary().equ(tempEmptyLibrary))
 				{
-					log("MODIFIED because library not empty");
+					//log("MODIFIED because library not empty");
 					return  true;
 				}
 			}
@@ -163,12 +163,12 @@ class Document extends InjectContainer
 			{
 				if (lastModified == null || originalLastModified == null)
 				{
-					log("MODIFIED because lastModified or originalLastModified is null");
+					//log("MODIFIED because lastModified or originalLastModified is null");
 					return true;
 				}
 				if (lastModified.getTime() > originalLastModified.getTime())
 				{
-					log("MODIFIED because lastModified > originalLastModified");
+					//log("MODIFIED because lastModified > originalLastModified");
 					return true;
 				}
 			}

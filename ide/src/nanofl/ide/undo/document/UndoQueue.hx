@@ -57,7 +57,7 @@ class UndoQueue extends undoqueue.UndoQueue<Changes, Operation>
 
     override function addOperation(operation:Operation)
     {
-        log("addOperation: " + operation.getName());
+        log("*   addOperation: " + operation.getName());
         super.addOperation(operation);
     }
 
@@ -71,25 +71,25 @@ class UndoQueue extends undoqueue.UndoQueue<Changes, Operation>
 	{
 		if (oldDocumentState == null && changes.document)
 		{
-			log("\tsave DOCUMENT");
+			log("*   save DOCUMENT");
 			oldDocumentState = document.properties.clone();
 		}
 		
 		if (oldLibraryState_changeItems == null && changes.libraryChangeItems != null && changes.libraryChangeItems.length > 0)
 		{
-			log("\tsave LIBRARY(changeItems)");
+			log("*   save LIBRARY(changeItems)");
 			oldLibraryState_changeItems = document.library.getState(changes.libraryChangeItems);
 		}
 		
 		if (oldLibraryState_addItems == null && changes.libraryAddItems)
 		{
-			log("\tsave LIBRARY(addItem)");
+			log("*   save LIBRARY(addItem)");
 			oldLibraryState_addItems = document.library.getState([]);
 		}
 		
 		if (oldLibraryState_removeItems == null && changes.libraryRemoveItems != null && changes.libraryRemoveItems.length > 0)
 		{
-			log("\tsave LIBRARY(removeItems)");
+			log("*   save LIBRARY(removeItems)");
 			var items = document.library.getWithExandedFolders(changes.libraryRemoveItems.map(document.library.getItem));
 			oldLibraryState_removeItems = document.library.getState
 			(
@@ -100,7 +100,7 @@ class UndoQueue extends undoqueue.UndoQueue<Changes, Operation>
 		
 		if (oldLibraryState_renameItems == null && changes.libraryRenameItems != null && changes.libraryRenameItems.length > 0)
 		{
-			log("\tsave LIBRARY(renameItem)");
+			log("*   save LIBRARY(renameItem)");
 			oldLibraryState_renameItems =
 			{
 				state: document.library.getState([]),
@@ -112,7 +112,7 @@ class UndoQueue extends undoqueue.UndoQueue<Changes, Operation>
 		{
             if (oldFigureState == null)
             {
-                log("\tsave FIGURE");
+                log("*   save FIGURE");
                 oldFigureState = document.editor.figure.getState();
             }
 		}
@@ -121,7 +121,7 @@ class UndoQueue extends undoqueue.UndoQueue<Changes, Operation>
 		{
             if (oldTransformationStates == null)
             {
-                log("\tsave TRANSFORMATIONS");
+                log("*   save TRANSFORMATIONS");
                 oldTransformationStates = document.editor.getTransformationStates();
             }
 		}
@@ -130,7 +130,7 @@ class UndoQueue extends undoqueue.UndoQueue<Changes, Operation>
 		{
             if (oldElementsState == null)
             {
-                log("\tsave ELEMENTS");
+                log("*   save ELEMENTS");
                 
                 oldElementsState = document.editor.getElementsState();
                 
@@ -141,13 +141,13 @@ class UndoQueue extends undoqueue.UndoQueue<Changes, Operation>
 		if (changes.timeline)
 		{
             Debug.assert(oldTimelineState == null, "Transaction with timeline already started.");
-            log("\tsave TIMELINE");
+            log("*   save TIMELINE");
             oldTimelineState = document.navigator.pathItem.mcItem.getTimelineState();
 		}
 		
 		if (changes.element != null && !oldElementStates.exists(e -> e.element == changes.element))
 		{
-			log("\tsave ELEMENT " + changes.element.toString());
+			log("*   save ELEMENT " + changes.element.toString());
 			oldElementStates.push({ element:changes.element, state:changes.element.getState() });
 		}
 	}
