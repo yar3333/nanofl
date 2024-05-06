@@ -571,52 +571,34 @@ class Document extends InjectContainer
 		}
 	}
 	
-	public function saveNative(force = false) : Bool
+	public function saveNative(force=false) : Bool
 	{
 		if (!force && lastModified != null && !undoQueue.isDocumentModified()) return true;
 		
         undoQueue.commitTransaction();
-        
-        var e = saveNativeInner
-        (
-            path,
-            properties,
-            library.getRawLibrary(),
-            FileActions.fromUndoOperations(undoQueue.getOperationsFromLastSaveToNow())
-        );
-        
-        lastModified = e.lastModified;
-        undoQueue.documentSaved();
-        openedFiles.titleChanged(this);
-        trace("Saved " + path);
-        if (e.errorMessage != null) view.alerter.error("Generator error: " + e.errorMessage);
-        
-        return true;
-	}
-	
-	function saveNativeInner(path:String, properties:DocumentProperties, library:IdeLibrary, fileActions:Array<FileAction>) : { lastModified:Date, errorMessage:String }
-	{
-		Debug.assert(path != null);
-		Debug.assert(properties != null);
-		Debug.assert(library != null);
-		Debug.assert(fileActions != null);
 		
-		FileActions.process(fileSystem, path, fileActions);
+        FileActions.process(fileSystem, path, FileActions.fromUndoOperations(undoQueue.getOperationsFromLastSaveToNow()));
 		
 		log("Save document properties");
 		properties.save(path);
 		
 		log("Save library");
-		library.save(fileSystem);
+		library.getRawLibrary().save(fileSystem);
 
         CodeGenerator.generate
         (
             Path.withoutDirectory(Path.withoutExtension(path)),
-            library,
+            library.getRawLibrary(),
             Path.directory(path)
         );
 		
-		return { lastModified:Date.fromTime(Date.now().getTime() + 1), errorMessage:null };
+		lastModified = Date.fromTime(Date.now().getTime() + 1);
+
+        undoQueue.documentSaved();
+        openedFiles.titleChanged(this);
+        log("saveNative: saved " + path);
+        
+        return true;
 	}
     
 	public function getShortTitle() : String

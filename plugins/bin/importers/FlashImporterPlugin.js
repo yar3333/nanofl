@@ -3983,7 +3983,7 @@ stdlib_Debug.traceStack = function(v,pos) {
 	}
 	lines = result;
 	stack = lines.slice(1).join("\n");
-	haxe_Log.trace("TRACE " + (typeof(v) == "string" ? v : stdlib_StringTools.trim(stdlib_Debug.getDump(v))) + "\nStack trace:\n" + stack,{ fileName : "stdlib/Debug.hx", lineNumber : 186, className : "stdlib.Debug", methodName : "traceStack", customParams : [pos]});
+	haxe_Log.trace("TRACE " + (typeof(v) == "string" ? v : stdlib_StringTools.trim(stdlib_Debug.getDump(v))) + "\nStack trace:\n" + stack,{ fileName : "stdlib/Debug.hx", lineNumber : 189, className : "stdlib.Debug", methodName : "traceStack", customParams : [pos]});
 };
 stdlib_Debug.methodNotSupported = function(_this,pos) {
 	var c = js_Boot.getClass(_this);
