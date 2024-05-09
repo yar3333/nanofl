@@ -1,21 +1,21 @@
 package nanofl.ide.library;
 
+import haxe.io.Path;
+import js.JQuery;
 import js.html.DragEvent;
+import js.lib.Promise;
+import stdlib.Debug;
 import easeljs.geom.Rectangle;
-import js.JQuery.JqEvent;
+import htmlparser.HtmlNodeElement;
+import htmlparser.XmlBuilder;
+import htmlparser.XmlDocument;
 import nanofl.engine.LayerType;
+import nanofl.engine.libraryitems.InstancableItem;
+import nanofl.ide.ui.View;
+import nanofl.ide.draganddrop.DropEffect;
 import nanofl.ide.draganddrop.DragDataType;
 import nanofl.ide.draganddrop.DragImageType;
-import htmlparser.XmlDocument;
-import nanofl.ide.ui.View;
-import stdlib.Debug;
-import htmlparser.HtmlNodeElement;
-import nanofl.ide.draganddrop.DropEffect;
-import htmlparser.XmlBuilder;
-import nanofl.engine.libraryitems.InstancableItem;
 import nanofl.ide.draganddrop.DragInfoParams;
-import haxe.io.Path;
-import js.lib.Promise;
 import nanofl.ide.libraryitems.IIdeLibraryItem;
 import nanofl.ide.libraryitems.FolderItem;
 
