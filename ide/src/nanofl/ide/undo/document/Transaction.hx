@@ -19,7 +19,7 @@ class Transaction extends undoqueue.Transaction<Operation>
 	
 	function applyOperation(operation:Operation)
 	{
-		log("\t" + operation.getName());
+		log("*   " + operation.getName());
 		
 		switch (operation)
 		{

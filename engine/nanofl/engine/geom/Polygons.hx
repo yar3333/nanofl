@@ -51,7 +51,7 @@ class Polygons
 					{
 						var outerEdges = Edges.exclude(Edges.concatUnique(polygons[i].contours[0].edges, polygons[j].contours[0].edges), commonEdges);
 						
-						log("\tMERGE!");
+						log("*   MERGE!");
 						if (outerEdges.length > 0)
 						{
 							//log(() -> ">>>outerEdges = " + outerEdges);
@@ -78,13 +78,13 @@ class Polygons
 						}
 						//log(() -> "(1) RESULT\n" + polygons[i].toString());
 						
-						log("\tRemove polygon " + j);
+						log("*   Remove polygon " + j);
 						polygons.splice(j, 1);
 						
 						if (outerEdges.length > 0) j = i;	// if p[i] changed => need recheck p[i] with all p[j] where j>i
 						else                       j--;		// p[j] is equ p[i] because all edges are common
 						
-						log("\tj = " + j);
+						log("*   j = " + j);
 					}
 				}
 				j++;

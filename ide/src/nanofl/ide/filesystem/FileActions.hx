@@ -18,14 +18,14 @@ class FileActions
 			switch (action)
 			{
 				case FileAction.REMOVE_LIBRARY_ITEMS(namePaths):
-					log("\tREMOVE_LIBRARY_ITEMS " + namePaths);
+					log("*   REMOVE_LIBRARY_ITEMS " + namePaths);
 					for (namePath in namePaths)
 					{
 						fileSystem.deleteAnyByPattern(libraryDir + "/" + namePath + ".*");
 					}
 					
 				case FileAction.RENAME_LIBRARY_ITEM(oldNamePath, newNamePath):
-					log("\tRENAME_LIBRARY_ITEM " + oldNamePath + " => " + newNamePath);
+					log("*   RENAME_LIBRARY_ITEM " + oldNamePath + " => " + newNamePath);
 					fileSystem.renameByPattern(libraryDir + "/" + oldNamePath + ".*", libraryDir + "/" + newNamePath + ".*");
 			}
 		}

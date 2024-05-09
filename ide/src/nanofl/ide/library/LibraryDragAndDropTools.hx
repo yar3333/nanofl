@@ -129,7 +129,7 @@ class LibraryDragAndDropTools
 		
 		if (document.id == params.documentId)
 		{
-			log("\tjust rename");
+			log("*   just rename");
 			
 			if (folder != "") (cast document.library.getItem(folder) : FolderItem).opened = true;
 			
@@ -161,7 +161,7 @@ class LibraryDragAndDropTools
 		else
 		{
 			final items = LibraryItems.loadFromXml(data);
-			log("\titems: " + items.map(x -> x.namePath));
+			log("*   items: " + items.map(x -> x.namePath));
 			
 			document.undoQueue.beginTransaction({ libraryAddItems:true });
 			
@@ -173,18 +173,18 @@ class LibraryDragAndDropTools
 				final libraryDir = libraryFilesNodes[0].getAttribute("libraryDir");
 				final files = libraryFilesNodes[0].find(">file").map(x -> x.getAttribute("path"));
 				document.library.copyFilesIntoLibrary(libraryDir, files);
-                log("\tfiles copied into library");
+                log("*   files copied into library");
                 
                 return document.reloadWoTransactionForced().then((e:{ added:Array<IIdeLibraryItem>, removed:Array<IIdeLibraryItem> }) ->
                 {
-                    log("\tdocument reloaded\n\t" + e.added.map(x -> x.namePath).join("\n\t"));
+                    log("*   document reloaded\n\t" + e.added.map(x -> x.namePath).join("\n\t"));
                     document.undoQueue.commitTransaction();
                     return items.concat(e.added);
                 });
 			}
 			else
 			{
-				log("\tno files");
+				log("*   no files");
 				document.undoQueue.commitTransaction();
 				return Promise.resolve(items);
 			}

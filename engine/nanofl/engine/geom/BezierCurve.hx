@@ -350,8 +350,8 @@ class BezierCurve
 		if (!getBounds().isIntersect(line.getBounds())) return null;
 		
 		//log("getIntersection_straightSection_getT:");
-		//log("\tline = " + line);
-		//log("\tcurve = " + this);
+		//log("*   line = " + line);
+		//log("*   curve = " + this);
 		
 		var dx = line.x2 - line.x1; //log("getIntersection_straightSection_getT dx = " + dx);
 		var dy = line.y2 - line.y1; //log("getIntersection_straightSection_getT dy = " + dy);
@@ -360,8 +360,8 @@ class BezierCurve
 		var da = Math.atan2(dy, dx); //log("getIntersection_straightSection_getT da = " + da);
 		
 		var rotatedCurve = clone().translate(-line.x1, -line.y1).rotate(-da);
-		//log("\trotatedCurve = " + rotatedCurve);
-		//log("\tlen = " + len);
+		//log("*   rotatedCurve = " + rotatedCurve);
+		//log("*   len = " + len);
 		
 		var I = rotatedCurve.getIntersections_horizontalStraightSection(0, 0, len);
 		for (i in I)
