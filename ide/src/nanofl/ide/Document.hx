@@ -571,9 +571,9 @@ class Document extends InjectContainer
 		}
 	}
 	
-	public function saveNative(force=false) : Bool
+	public function saveNative(force=false)
 	{
-		if (!force && lastModified != null && !undoQueue.isDocumentModified()) return true;
+		if (!force && lastModified != null && !undoQueue.isDocumentModified()) return;
 		
         undoQueue.commitTransaction();
 		
@@ -594,8 +594,6 @@ class Document extends InjectContainer
         undoQueue.documentSaved();
         openedFiles.titleChanged(this);
         log("saveNative: saved " + path);
-        
-        return true;
 	}
     
 	public function getShortTitle() : String

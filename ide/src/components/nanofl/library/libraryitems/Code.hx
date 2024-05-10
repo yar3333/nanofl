@@ -97,7 +97,13 @@ class Code extends wquery.Component
                     effect: AllowedDropEffect.copyMove,
                     type: DragDataType.LIBRARYITEMS,
                     params: LibraryDragAndDropTools.getDragParams(app.document, item, app.document.library.getSelectedItemsWithDependencies()),
-                    data: LibraryDragAndDropTools.getDragData(app.document, item, app.document.library.getSelectedItemsWithDependencies()),
+                    data: LibraryDragAndDropTools.getDragData
+                          (
+                            app.document,
+                            item,
+                            app.document.library.getSelectedItemsWithDependencies(),
+                            app.document.library.getSelectedItems().map(x -> x.namePath),
+                          ),
                 };
 			});
 			

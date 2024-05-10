@@ -44,13 +44,17 @@ class LibraryDragAndDropTools
         return r;
 	}
 		
-    public static function getDragData(document:Document, item:IIdeLibraryItem, items:Array<IIdeLibraryItem>) : String
+    public static function getDragData(document:Document, item:IIdeLibraryItem, draggedWithDependencies:Array<IIdeLibraryItem>, selectedNamePaths:Array<String>) : String
     {
         final out = new XmlBuilder();
 
-        LibraryItems.saveToXml(items, out);
+        out.begin("selected");
+        for (namePath in selectedNamePaths) out.begin("libraryitem").attr("namePath", namePath).end();
+        out.end();
+
+        LibraryItems.saveToXml(draggedWithDependencies, out);
 		
-		final files = LibraryItems.getFiles(items);
+		final files = LibraryItems.getFiles(draggedWithDependencies);
 		if (files.length > 0)
 		{
 			out.begin("libraryfiles").attr("libraryDir", document.library.libraryDir);
@@ -132,8 +136,8 @@ class LibraryDragAndDropTools
 			log("*   just rename");
 			
 			if (folder != "") (cast document.library.getItem(folder) : FolderItem).opened = true;
-			
-			final namePaths = data.find(">libraryitems>item")
+
+            final selectedNamePaths = data.find(">selected>libraryitem")
 				.map(x -> x.getAttribute("namePath"))
 				.filter(namePath ->
 				{
@@ -146,7 +150,7 @@ class LibraryDragAndDropTools
 				});
 			
 			final renames = [];
-			for (namePath in getWithoutSubItems(namePaths))
+			for (namePath in selectedNamePaths)
 			{
 				final newNamePath = Path.join([ folder, Path.withoutDirectory(namePath) ]);
 				if (namePath != newNamePath && document.library.canRenameItem(namePath, newNamePath))
