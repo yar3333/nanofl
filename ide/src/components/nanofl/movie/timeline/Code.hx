@@ -178,7 +178,7 @@ class Code extends wquery.Component
             );
 		});
 		
-		final padLeft = template().buttons.width();
+		final padLeft = template().layerBottomPanel.width();
 		final padRight = SCROLLBAR_SIZE;
 		new AutoScrollHorizontally(template().headers, template().hScrollbar, padLeft, padRight, onAutoScrollHorizontally);
 		new AutoScrollHorizontally(template().borders, template().hScrollbar, padLeft, padRight, onAutoScrollHorizontally);
