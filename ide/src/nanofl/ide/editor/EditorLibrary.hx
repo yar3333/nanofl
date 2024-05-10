@@ -285,12 +285,11 @@ class EditorLibrary extends InjectContainer
             });
 	}
 	
-	public function addFilesFromClipboard() : Bool
+	public function addFilesFromClipboard()
 	{
         log("addFilesFromClipboard");
-        if (!document.saveNative()) return false;
+        document.saveNative();
         clipboard.loadFilesFromClipboard(libraryDir);
-        return true;
 	}
 	
 	public function copyFilesIntoLibrary(srcDir:String, relativePaths:Array<String>) : Void

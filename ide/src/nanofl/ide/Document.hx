@@ -232,22 +232,16 @@ class Document extends InjectContainer
 			
 			if (Path.extension(newPath) == "nfl")
 			{
-                if (!saveNative(force)) return Promise.resolve(false);
+                saveNative(force);
 
-                final success = saveNativeAs(newPath);
-                if (success)
-                {
-                    originalPath = null;
-                    originalLastModified = null;
-                    openedFiles.titleChanged(this);
-                    view.alerter.info("Document \"" + newPath + "\" saved.");
-                }
-                else
-                {
-                    view.alerter.error("Could't save document \"" + newPath + "\".");
-                }
+                saveNativeAs(newPath);
 
-                return Promise.resolve(success);
+                originalPath = null;
+                originalLastModified = null;
+                openedFiles.titleChanged(this);
+                view.alerter.info("Document \"" + newPath + "\" saved.");
+                
+                return Promise.resolve(true);
 			}
 			else
 			{
@@ -270,28 +264,24 @@ class Document extends InjectContainer
 		}
 	}
 	
-	function saveNativeAs(newPath:String) : Bool
+	function saveNativeAs(newPath:String)
 	{
 		if (newPath == originalPath || newPath == path)
 		{
-			return saveNative();
+			saveNative();
 		}
 		else
 		{
-			final oldPath = path;
-			
-            fileSystem.copyAny(Path.directory(oldPath), Path.directory(newPath));
-            fileSystem.rename(Path.join([ Path.directory(newPath), Path.withoutDirectory(oldPath) ]), newPath);
+            fileSystem.copyAny(Path.directory(path), Path.directory(newPath));
+            fileSystem.rename(Path.join([ Path.directory(newPath), Path.withoutDirectory(path) ]), newPath);
 			library.changeDir(Path.directory(newPath) + "/library");
 			
             lastModified = null;
             path = newPath;
-			final success = saveNative();
 			
-            if (success) originalPath = null;
-			else         path = oldPath;
-			
-            return success;
+            saveNative();
+            
+            originalPath = null;
 		}
 	}
 		
@@ -332,7 +322,7 @@ class Document extends InjectContainer
 			
 			if (exporter != null)
 			{
-				if (!saveNative()) return Promise.resolve(false);
+				saveNative();
                 return exporter.run(this, destPath, popups);
 			}
 			else
@@ -471,7 +461,7 @@ class Document extends InjectContainer
 	
 	public function publish() : Promise<Bool>
 	{
-        if (!saveNative()) throw new DocumentError("Can't save file " + getPath() + ".");
+        saveNative();
 
         try
         {

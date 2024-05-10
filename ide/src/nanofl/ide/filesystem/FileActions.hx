@@ -1,5 +1,6 @@
 package nanofl.ide.filesystem;
 
+import nanofl.engine.LibraryItemType;
 import haxe.io.Path;
 import nanofl.ide.sys.FileSystem;
 import nanofl.ide.filesystem.FileAction;
@@ -27,6 +28,10 @@ class FileActions
 				case FileAction.RENAME_LIBRARY_ITEM(oldNamePath, newNamePath):
 					log("*   RENAME_LIBRARY_ITEM " + oldNamePath + " => " + newNamePath);
 					fileSystem.renameByPattern(libraryDir + "/" + oldNamePath + ".*", libraryDir + "/" + newNamePath + ".*");
+
+				case FileAction.CREATE_LIBRARY_FOLDER(namePath):
+					log("*   CREATE_LIBRARY_FOLDER " + namePath);
+					fileSystem.createDirectory(libraryDir + "/" + namePath);
 			}
 		}
 	}
@@ -51,6 +56,15 @@ class FileActions
 					{
 						actions.push(FileAction.RENAME_LIBRARY_ITEM(t.oldNamePath, t.newNamePath));
 					}
+                    
+                case Operation.LIBRARY_ADD_ITEMS(_, newLibraryState):
+                    for (item in newLibraryState)
+                    {
+                        if (item.type.match(LibraryItemType.folder))
+                        {
+                            actions.push(FileAction.CREATE_LIBRARY_FOLDER(item.namePath)); 
+                        }
+                    }
 					
 				case Operation.DOCUMENT(_, _),
 					 Operation.TIMELINE(_, _, _),
@@ -58,7 +72,6 @@ class FileActions
 					 Operation.ELEMENT(_, _, _, _),
 					 Operation.FIGURE(_, _, _),
 					 Operation.TRANSFORMATIONS(_, _, _),
-					 Operation.LIBRARY_ADD_ITEMS(_, _),
 					 Operation.LIBRARY_CHANGE_ITEMS(_, _):
 					// nothing to do
 			}

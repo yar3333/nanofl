@@ -162,19 +162,12 @@ class Clipboard extends InjectContainer
 						libraryAddItems: true
 					});
 					
-					final success = app.document.library.addFilesFromClipboard();
-                    log("loadFilesFromClipboard " + success);
-                    if (success)
-                    {
-                        app.document.reloadWoTransactionForced().then(_ ->
-                        {
-                            pasteStringInner(xml);
-                        });
-                    }
-                    else
+					app.document.library.addFilesFromClipboard();
+
+                    app.document.reloadWoTransactionForced().then(_ ->
                     {
                         pasteStringInner(xml);
-                    }
+                    });
 			}
 			
 			return true;
