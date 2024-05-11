@@ -149,6 +149,7 @@ class FileSystemTools
             {
                 fileSystem.deleteAny(dirPath + "/" + file);
             }
+            fileSystem.deleteEmptyDirectory(dirPath);
         }
 	}
 	

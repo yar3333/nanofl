@@ -2910,6 +2910,7 @@ nanofl_ide_sys_tools_FileSystemTools.deleteDirectoryRecursively = function(fileS
 			++_g;
 			fileSystem.deleteAny(dirPath + "/" + file);
 		}
+		fileSystem.deleteEmptyDirectory(dirPath);
 	}
 };
 nanofl_ide_sys_tools_FileSystemTools.deleteAny = function(fileSystem,path) {
@@ -2929,13 +2930,13 @@ nanofl_ide_sys_tools_FileSystemTools.deleteAnyByPattern = function(fileSystem,pa
 nanofl_ide_sys_tools_FileSystemTools.renameByPattern = function(fileSystem,srcPath,destPath) {
 	nanofl_ide_sys_tools_FileSystemTools.processFilePatternPair(fileSystem,srcPath,destPath,function(srcPath,destPath) {
 		if(fileSystem.exists(srcPath)) {
-			nanofl_ide_sys_tools_FileSystemTools.log("rename " + srcPath + " => " + destPath,{ fileName : "src/nanofl/ide/sys/tools/FileSystemTools.hx", lineNumber : 184, className : "nanofl.ide.sys.tools.FileSystemTools", methodName : "renameByPattern"});
+			nanofl_ide_sys_tools_FileSystemTools.log("rename " + srcPath + " => " + destPath,{ fileName : "src/nanofl/ide/sys/tools/FileSystemTools.hx", lineNumber : 185, className : "nanofl.ide.sys.tools.FileSystemTools", methodName : "renameByPattern"});
 			fileSystem.rename(srcPath,destPath);
 		}
 	});
 };
 nanofl_ide_sys_tools_FileSystemTools.copyAny = function(fileSystem,srcPath,destPath) {
-	nanofl_ide_sys_tools_FileSystemTools.log("copyAny " + srcPath + " => " + destPath,{ fileName : "src/nanofl/ide/sys/tools/FileSystemTools.hx", lineNumber : 192, className : "nanofl.ide.sys.tools.FileSystemTools", methodName : "copyAny"});
+	nanofl_ide_sys_tools_FileSystemTools.log("copyAny " + srcPath + " => " + destPath,{ fileName : "src/nanofl/ide/sys/tools/FileSystemTools.hx", lineNumber : 193, className : "nanofl.ide.sys.tools.FileSystemTools", methodName : "copyAny"});
 	if(fileSystem.isDirectory(srcPath)) {
 		var files = fileSystem.readDirectory(srcPath);
 		var _g = 0;
@@ -2954,7 +2955,7 @@ nanofl_ide_sys_tools_FileSystemTools.copyByPattern = function(fileSystem,srcPath
 	});
 };
 nanofl_ide_sys_tools_FileSystemTools.syncDirectory = function(fileSystem,src,dest) {
-	nanofl_ide_sys_tools_FileSystemTools.log("syncDirectory " + src + " => " + dest,{ fileName : "src/nanofl/ide/sys/tools/FileSystemTools.hx", lineNumber : 218, className : "nanofl.ide.sys.tools.FileSystemTools", methodName : "syncDirectory"});
+	nanofl_ide_sys_tools_FileSystemTools.log("syncDirectory " + src + " => " + dest,{ fileName : "src/nanofl/ide/sys/tools/FileSystemTools.hx", lineNumber : 219, className : "nanofl.ide.sys.tools.FileSystemTools", methodName : "syncDirectory"});
 	nanofl_ide_sys_tools_FileSystemTools.deleteAny(fileSystem,dest);
 	nanofl_ide_sys_tools_FileSystemTools.copyAny(fileSystem,src,dest);
 };
