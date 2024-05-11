@@ -49,7 +49,7 @@ extern class Document extends nanofl.ide.InjectContainer {
 	function resize(width:Int, height:Int):Void;
 	function canBeSaved():Bool;
 	function dispose():Void;
-	function saveNative(?force:Bool):Bool;
+	function saveNative(?force:Bool):Void;
 	function getShortTitle():String;
 	function getPath():String;
 	function getLongTitle():String;

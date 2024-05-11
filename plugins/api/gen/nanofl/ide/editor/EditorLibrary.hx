@@ -35,7 +35,7 @@ extern class EditorLibrary extends nanofl.ide.InjectContainer {
 	function importFiles(?folderPath:String):js.lib.Promise<{ }>;
 	function importFont():Void;
 	function addUploadedFiles(files:Array<js.html.File>, ?folderPath:String):js.lib.Promise<Array<nanofl.ide.libraryitems.IIdeLibraryItem>>;
-	function addFilesFromClipboard():Bool;
+	function addFilesFromClipboard():Void;
 	function copyFilesIntoLibrary(srcDir:String, relativePaths:Array<String>):Void;
 	function selectUnusedItems():Void;
 	function removeUnusedItems():Void;
