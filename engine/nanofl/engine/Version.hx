@@ -4,9 +4,9 @@ using stdlib.Lambda;
 
 class Version
 {
-	public static var ide(default, null) = "5.0.0";
-	public static var player(default, null) = "5.0.0";
-	public static var document(default, null) = "2.3.0";
+	public static var ide(default, null) = "5.1.0";
+	public static var player(default, null) = "5.1.0";
+	public static var document(default, null) = "2.4.0";
 	
 	public static function compare(v1:String, v2:String) : Int
 	{
