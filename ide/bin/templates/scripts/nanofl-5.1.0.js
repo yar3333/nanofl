@@ -3982,7 +3982,8 @@ class nanofl_engine_MaskTools {
 			let layerIndex = _g++;
 			let layer = mc.symbol.get_layers()[layerIndex];
 			let tmp = layer.get_parentLayer();
-			if((tmp != null ? tmp.type : null) == nanofl_engine_LayerType.mask) {
+			let _g1 = tmp != null ? tmp.type : null;
+			if(_g1 == null ? false : _g1._hx_index == 1) {
 				let _g = 0;
 				let _g1 = mc.getChildrenByLayerIndex(layerIndex);
 				while(_g < _g1.length) {
@@ -3994,6 +3995,14 @@ class nanofl_engine_MaskTools {
 						masks_h[layer.parentIndex] = mask;
 					}
 					nanofl_engine_MaskTools.applyMaskToDisplayObject(mask.bitmapCache,mask.cacheCanvas,child);
+				}
+			} else if(layer.type._hx_index == 1) {
+				let _g = 0;
+				let _g1 = mc.getChildrenByLayerIndex(layerIndex);
+				while(_g < _g1.length) {
+					let child = _g1[_g];
+					++_g;
+					child.visible = false;
 				}
 			}
 		}

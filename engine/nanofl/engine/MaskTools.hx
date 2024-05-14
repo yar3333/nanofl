@@ -1,11 +1,11 @@
 package nanofl.engine;
 
-import easeljs.geom.Matrix2D;
 import js.Browser;
 import js.html.CanvasElement;
-import easeljs.filters.BitmapCache;
-import easeljs.geom.Rectangle;
 import easeljs.display.DisplayObject;
+import easeljs.filters.BitmapCache;
+import easeljs.geom.Matrix2D;
+import easeljs.geom.Rectangle;
 
 class MaskTools
 {
@@ -18,7 +18,7 @@ class MaskTools
         for (layerIndex in 0...mc.symbol.layers.length)
         {
             final layer = mc.symbol.layers[layerIndex];
-            if (layer.parentLayer?.type == LayerType.mask)
+            if (layer.parentLayer?.type.match(LayerType.mask))
             {
                 for (child in mc.getChildrenByLayerIndex(layerIndex))
                 {
@@ -30,6 +30,10 @@ class MaskTools
                     }
                     MaskTools.applyMaskToDisplayObject(mask.bitmapCache, mask.cacheCanvas, child);
                 }
+            }
+            else if (layer.type.match(LayerType.mask))
+            {
+                for (child in mc.getChildrenByLayerIndex(layerIndex)) child.visible = false;
             }
         }
     }
