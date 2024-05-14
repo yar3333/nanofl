@@ -2,7 +2,7 @@ libraryData =
 {
   "bottle": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
@@ -14,9 +14,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -452,7 +449,7 @@ libraryData =
   },
   "scene": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
@@ -464,13 +461,8 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
             "duration": 101,
-            "motionTween": null,
             "elements": [
-              {
-                "type": "shape"
-              },
               {
                 "type": "instance",
                 "libraryItem": "bottle",
@@ -501,9 +493,7 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
             "duration": 101,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -547,7 +537,6 @@ libraryData =
         "parentIndex": 1,
         "keyFrames": [
           {
-            "label": "",
             "duration": 100,
             "motionTween": {
               "tweenType": "motion",
@@ -560,9 +549,6 @@ libraryData =
               "motionTweenDirectionalLightRotateCountY": 0
             },
             "elements": [
-              {
-                "type": "shape"
-              },
               {
                 "type": "instance",
                 "libraryItem": "water",
@@ -581,8 +567,6 @@ libraryData =
             ]
           },
           {
-            "label": "",
-            "duration": 1,
             "motionTween": {
               "tweenType": "motion",
               "motionTweenEasing": 0,
@@ -617,7 +601,7 @@ libraryData =
   },
   "water": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
@@ -629,9 +613,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",

@@ -1,4 +1,4 @@
-<movieclip version="2.3.0">
+<movieclip version="2.4.0" loop="true">
 	<layer name="Barrels">
 		<frame>
 			<instance libraryItem="_bitmaps/barrels" x="-283.05" y="19.9" matrix="0.491775512695313,0,0,0.491775512695313" regX="152.4" regY="137.6" />

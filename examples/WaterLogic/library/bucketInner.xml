@@ -1,4 +1,4 @@
-<movieclip version="2.3.0">
+<movieclip version="2.4.0" loop="true">
 	<layer name="Layer 1">
 		<frame>
 			<instance libraryItem="_bitmaps/bucket" x="-28.75" y="-37.4" matrix="0.575485229492188,0,0,0.575485229492188" regX="49.95" regY="64.9" />

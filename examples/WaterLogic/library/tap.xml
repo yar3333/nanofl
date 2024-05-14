@@ -1,4 +1,4 @@
-<movieclip version="2.3.0" autoPlay="false" loop="false">
+<movieclip version="2.4.0" autoPlay="false" loop="false">
 	<layer name="Layer 1">
 		<frame>
 			<instance libraryItem="barrel" name="mcKran" x="275" y="-134" matrix="-0.999969482421875,0,0,0.949966430664063" regY="0.05" />

@@ -1,4 +1,4 @@
-<movieclip version="2.3.0" likeButton="true">
+<movieclip version="2.4.0" loop="true" likeButton="true">
 	<layer name="Layer 1">
 		<frame duration="3">
 			<instance libraryItem="_buttons/Rules" x="1.9" y="0.45" regX="0.5" regY="0.25">

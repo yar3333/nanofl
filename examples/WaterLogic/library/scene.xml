@@ -1,4 +1,4 @@
-<movieclip version="2.3.0" linkedClass="Scene" autoPlay="false" loop="false">
+<movieclip version="2.4.0" linkedClass="Scene" autoPlay="false" loop="false">
 	<layer name="Label">
 		<frame label="Origin" />
 		<frame label="Rules" />

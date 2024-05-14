@@ -1,4 +1,4 @@
-<movieclip version="2.3.0">
+<movieclip version="2.4.0" loop="true">
 	<layer name="Layer 1" type="mask" locked="true">
 		<frame>
 			<text x="-32.25" y="-18.8" width="64.4" height="39">

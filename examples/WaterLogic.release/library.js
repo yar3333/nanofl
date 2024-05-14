@@ -2,63 +2,59 @@ libraryData =
 {
   "_bitmaps/barrel": {
     "type": "bitmap",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "ext": "png",
     "textureAtlas": null
   },
   "_bitmaps/barrel3D": {
     "type": "bitmap",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "ext": "png",
     "textureAtlas": null
   },
   "_bitmaps/barrels": {
     "type": "bitmap",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "ext": "png",
     "textureAtlas": null
   },
   "_bitmaps/bucket": {
     "type": "bitmap",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "ext": "png",
     "textureAtlas": null
   },
   "_bitmaps/floor": {
     "type": "bitmap",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "ext": "jpg",
     "textureAtlas": null
   },
   "_bitmaps/trash": {
     "type": "bitmap",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "ext": "png",
     "textureAtlas": null
   },
   "_bitmaps/wall": {
     "type": "bitmap",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "ext": "jpg",
     "textureAtlas": null
   },
   "_buttons/Back": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
-    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -67,9 +63,6 @@ libraryData =
         "locked": true,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "text",
@@ -123,9 +116,6 @@ libraryData =
         "parentIndex": 0,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -170,14 +160,11 @@ libraryData =
   },
   "_buttons/btnBack": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
     "likeButton": true,
-    "exportAsSprite": false,
-    "textureAtlas": null,
-    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -186,9 +173,7 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
             "duration": 3,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -198,20 +183,18 @@ libraryData =
                 "y": -0.25,
                 "regX": 28.4,
                 "regY": 9.95,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "filters": [
                   {
                     "name": "GlowFilter",
                     "params": {
-                      "alpha": 100,
+                      "alpha": "100",
                       "blurX": 2,
                       "blurY": 2,
                       "color": "#000000",
                       "inner": false,
                       "knockout": false,
-                      "quality": 2,
-                      "strength": 200
+                      "quality": "2",
+                      "strength": "200"
                     }
                   }
                 ]
@@ -219,9 +202,6 @@ libraryData =
             ]
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -255,14 +235,11 @@ libraryData =
   },
   "_buttons/btnNext": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
     "likeButton": true,
-    "exportAsSprite": false,
-    "textureAtlas": null,
-    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -271,9 +248,7 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
             "duration": 3,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -289,20 +264,18 @@ libraryData =
                 ],
                 "regX": 35.75,
                 "regY": 9.9,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "filters": [
                   {
                     "name": "GlowFilter",
                     "params": {
-                      "alpha": 100,
+                      "alpha": "100",
                       "blurX": 2,
                       "blurY": 2,
                       "color": "#000000",
                       "inner": false,
                       "knockout": false,
-                      "quality": 2,
-                      "strength": 200
+                      "quality": "2",
+                      "strength": "200"
                     }
                   }
                 ]
@@ -310,9 +283,6 @@ libraryData =
             ]
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -346,14 +316,11 @@ libraryData =
   },
   "_buttons/btnRules": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
     "likeButton": true,
-    "exportAsSprite": false,
-    "textureAtlas": null,
-    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -362,9 +329,7 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
             "duration": 3,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -374,20 +339,18 @@ libraryData =
                 "y": 0.45,
                 "regX": 0.5,
                 "regY": 0.25,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "filters": [
                   {
                     "name": "GlowFilter",
                     "params": {
-                      "alpha": 100,
+                      "alpha": "100",
                       "blurX": 2,
                       "blurY": 2,
                       "color": "#000000",
                       "inner": false,
                       "knockout": false,
-                      "quality": 2,
-                      "strength": 200
+                      "quality": "2",
+                      "strength": "200"
                     }
                   }
                 ]
@@ -395,9 +358,6 @@ libraryData =
             ]
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -431,14 +391,11 @@ libraryData =
   },
   "_buttons/btnStart": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
     "likeButton": true,
-    "exportAsSprite": false,
-    "textureAtlas": null,
-    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -447,9 +404,7 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
             "duration": 3,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -459,20 +414,18 @@ libraryData =
                 "y": 1.45,
                 "regX": 0.5,
                 "regY": 0.25,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "filters": [
                   {
                     "name": "GlowFilter",
                     "params": {
-                      "alpha": 100,
+                      "alpha": "100",
                       "blurX": 2,
                       "blurY": 2,
                       "color": "#000000",
                       "inner": false,
                       "knockout": false,
-                      "quality": 2,
-                      "strength": 200
+                      "quality": "2",
+                      "strength": "200"
                     }
                   }
                 ]
@@ -480,9 +433,6 @@ libraryData =
             ]
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -516,14 +466,10 @@ libraryData =
   },
   "_buttons/Next": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
-    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -532,9 +478,6 @@ libraryData =
         "locked": true,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "text",
@@ -588,9 +531,6 @@ libraryData =
         "parentIndex": 0,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -635,14 +575,10 @@ libraryData =
   },
   "_buttons/Rules": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
-    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -651,9 +587,6 @@ libraryData =
         "locked": true,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "text",
@@ -707,9 +640,6 @@ libraryData =
         "parentIndex": 0,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -754,14 +684,10 @@ libraryData =
   },
   "_buttons/Start": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
-    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -770,9 +696,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "text",
@@ -826,9 +749,6 @@ libraryData =
         "parentIndex": 0,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -873,49 +793,45 @@ libraryData =
   },
   "_sounds/sndBucket": {
     "type": "sound",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "loop": false,
     "linkage": "bucket",
     "ext": "ogg"
   },
   "_sounds/sndMusic": {
     "type": "sound",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "loop": false,
     "linkage": "music",
     "ext": "ogg"
   },
   "_sounds/sndTap": {
     "type": "sound",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "loop": false,
     "linkage": "tap",
     "ext": "ogg"
   },
   "_sounds/sndTrash": {
     "type": "sound",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "loop": false,
     "linkage": "trash",
     "ext": "ogg"
   },
   "_sounds/sndWater": {
     "type": "sound",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "loop": false,
     "linkage": "water",
     "ext": "ogg"
   },
   "_splash/splash": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
-    "relatedSound": "",
     "layers": [
       {
         "name": "Barrels",
@@ -924,9 +840,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -941,9 +854,7 @@ libraryData =
                   0.491775512695313
                 ],
                 "regX": 152.4,
-                "regY": 137.6,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 137.6
               },
               {
                 "type": "instance",
@@ -958,9 +869,7 @@ libraryData =
                   0.608108520507813
                 ],
                 "regX": 152.35,
-                "regY": 137.45,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 137.45
               }
             ]
           }
@@ -973,9 +882,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -990,9 +896,7 @@ libraryData =
                   0.608688354492188
                 ],
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               }
             ]
           }
@@ -1005,9 +909,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -1022,9 +923,7 @@ libraryData =
                   0.565582275390625
                 ],
                 "regX": 260,
-                "regY": 41.55,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 41.55
               }
             ]
           }
@@ -1037,9 +936,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -1048,9 +944,7 @@ libraryData =
                 "x": -260,
                 "y": -195,
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               }
             ]
           }
@@ -1060,14 +954,10 @@ libraryData =
   },
   "_splash/title": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
-    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 5",
@@ -1076,9 +966,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -1094,20 +981,18 @@ libraryData =
                 ],
                 "regX": 78.25,
                 "regY": 19.45,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "filters": [
                   {
                     "name": "GlowFilter",
                     "params": {
-                      "alpha": 100,
+                      "alpha": "100",
                       "blurX": 3,
                       "blurY": 3,
                       "color": "#000000",
                       "inner": false,
                       "knockout": false,
-                      "quality": 2,
-                      "strength": 300
+                      "quality": "2",
+                      "strength": "300"
                     }
                   }
                 ]
@@ -1120,14 +1005,10 @@ libraryData =
   },
   "_splash/titleInner": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
-    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 3",
@@ -1136,9 +1017,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "text",
@@ -1192,9 +1070,6 @@ libraryData =
         "parentIndex": 0,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -1239,14 +1114,10 @@ libraryData =
   },
   "background": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
-    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -1255,18 +1126,13 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
                 "libraryItem": "wall",
                 "name": "",
                 "regX": 260,
-                "regY": 195,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 195
               },
               {
                 "type": "instance",
@@ -1281,9 +1147,7 @@ libraryData =
                   0.368423461914063
                 ],
                 "regX": 152.55,
-                "regY": 137.6,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 137.6
               },
               {
                 "type": "instance",
@@ -1298,9 +1162,7 @@ libraryData =
                   0.565582275390625
                 ],
                 "regX": 260,
-                "regY": 41.55,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 41.55
               },
               {
                 "type": "instance",
@@ -1315,9 +1177,7 @@ libraryData =
                   0.368423461914063
                 ],
                 "regX": 152.5,
-                "regY": 137.65,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 137.65
               }
             ]
           }
@@ -1327,14 +1187,10 @@ libraryData =
   },
   "barrel": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
-    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -1343,9 +1199,7 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
             "duration": 2,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -1354,9 +1208,7 @@ libraryData =
                 "x": 1.95,
                 "y": -5,
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               }
             ]
           }
@@ -1366,14 +1218,10 @@ libraryData =
   },
   "bucket": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "Bucket",
     "autoPlay": false,
     "loop": false,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
-    "relatedSound": "",
     "layers": [
       {
         "name": "neck",
@@ -1382,9 +1230,7 @@ libraryData =
         "locked": true,
         "keyFrames": [
           {
-            "label": "",
             "duration": 101,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -1393,9 +1239,7 @@ libraryData =
                 "x": 0,
                 "y": -65,
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               }
             ]
           }
@@ -1408,9 +1252,7 @@ libraryData =
         "locked": true,
         "keyFrames": [
           {
-            "label": "",
             "duration": 101,
-            "motionTween": null,
             "elements": [
               {
                 "type": "text",
@@ -1463,7 +1305,6 @@ libraryData =
         "locked": true,
         "keyFrames": [
           {
-            "label": "",
             "duration": 100,
             "motionTween": {
               "tweenType": "motion",
@@ -1483,15 +1324,11 @@ libraryData =
                 "x": -18,
                 "y": -1.35,
                 "regX": 18.5,
-                "regY": 15.9,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 15.9
               }
             ]
           },
           {
-            "label": "",
-            "duration": 1,
             "motionTween": {
               "tweenType": "motion",
               "motionTweenEasing": 0,
@@ -1510,9 +1347,7 @@ libraryData =
                 "x": -18,
                 "y": -57.3,
                 "regX": 18.5,
-                "regY": 15.9,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 15.9
               }
             ]
           }
@@ -1526,9 +1361,7 @@ libraryData =
         "parentIndex": 2,
         "keyFrames": [
           {
-            "label": "",
             "duration": 101,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -1538,8 +1371,6 @@ libraryData =
                 "y": -36.75,
                 "regX": 18,
                 "regY": 15,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "colorEffect": {
                   "type": "advanced",
                   "alphaMultiplier": 0.859375,
@@ -1563,9 +1394,7 @@ libraryData =
         "locked": true,
         "keyFrames": [
           {
-            "label": "",
             "duration": 101,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -1575,8 +1404,6 @@ libraryData =
                 "y": -65,
                 "regX": 21,
                 "regY": 32.5,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "colorEffect": {
                   "type": "alpha",
                   "value": 0
@@ -1593,9 +1420,7 @@ libraryData =
         "locked": true,
         "keyFrames": [
           {
-            "label": "",
             "duration": 101,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -1605,8 +1430,6 @@ libraryData =
                 "y": -36.75,
                 "regX": 18,
                 "regY": 15,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "colorEffect": {
                   "type": "tint",
                   "color": "#FF0000",
@@ -1624,9 +1447,7 @@ libraryData =
         "locked": true,
         "keyFrames": [
           {
-            "label": "",
             "duration": 101,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -1635,9 +1456,7 @@ libraryData =
                 "x": 1.3,
                 "y": -36.65,
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               }
             ]
           }
@@ -1647,14 +1466,10 @@ libraryData =
   },
   "bucketBox": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
-    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -1663,9 +1478,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -1699,14 +1511,10 @@ libraryData =
   },
   "bucketInner": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
-    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -1715,9 +1523,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -1732,9 +1537,7 @@ libraryData =
                   0.575485229492188
                 ],
                 "regX": 49.95,
-                "regY": 64.9,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 64.9
               }
             ]
           }
@@ -1744,14 +1547,10 @@ libraryData =
   },
   "bucketWaterMask": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
-    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -1760,9 +1559,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -1796,14 +1592,10 @@ libraryData =
   },
   "game": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "Game",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
-    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -1812,9 +1604,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": []
           }
         ]
@@ -1823,14 +1612,10 @@ libraryData =
   },
   "musicButton": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "MusicButton",
     "autoPlay": false,
     "loop": false,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
-    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 2",
@@ -1839,15 +1624,9 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": []
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -1885,9 +1664,7 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
             "duration": 2,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -1924,9 +1701,7 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
             "duration": 2,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -1991,14 +1766,10 @@ libraryData =
   },
   "neck": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
-    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -2007,9 +1778,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": []
           }
         ]
@@ -2018,14 +1786,10 @@ libraryData =
   },
   "scene": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "Scene",
     "autoPlay": false,
     "loop": false,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
-    "relatedSound": "",
     "layers": [
       {
         "name": "Label",
@@ -2035,36 +1799,21 @@ libraryData =
         "keyFrames": [
           {
             "label": "Origin",
-            "duration": 1,
-            "motionTween": null,
-            "elements": [
-              {
-                "type": "shape"
-              }
-            ]
+            "elements": []
           },
           {
             "label": "Rules",
-            "duration": 1,
-            "motionTween": null,
             "elements": []
           },
           {
             "label": "Game",
-            "duration": 1,
-            "motionTween": null,
             "elements": []
           },
           {
             "label": "Win",
-            "duration": 1,
-            "motionTween": null,
             "elements": []
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": []
           }
         ]
@@ -2076,37 +1825,18 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
-            "elements": [
-              {
-                "type": "shape"
-              }
-            ]
-          },
-          {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": []
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": []
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": []
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
+            "elements": []
+          },
+          {
             "elements": []
           }
         ]
@@ -2118,13 +1848,7 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
-              {
-                "type": "shape"
-              },
               {
                 "type": "instance",
                 "libraryItem": "_buttons/btnStart",
@@ -2138,9 +1862,7 @@ libraryData =
                   0.854268770962861
                 ],
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               },
               {
                 "type": "instance",
@@ -2155,16 +1877,11 @@ libraryData =
                   0.993637084960938
                 ],
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               }
             ]
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -2173,9 +1890,7 @@ libraryData =
                 "x": 120.65,
                 "y": 345.65,
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               },
               {
                 "type": "text",
@@ -2295,9 +2010,7 @@ libraryData =
                   0.750000000000001
                 ],
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               },
               {
                 "type": "text",
@@ -2348,9 +2061,6 @@ libraryData =
             ]
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -2359,9 +2069,7 @@ libraryData =
                 "x": 481,
                 "y": 11,
                 "regX": 15,
-                "regY": 16,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 16
               },
               {
                 "type": "text",
@@ -2446,9 +2154,6 @@ libraryData =
             ]
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -2463,9 +2168,7 @@ libraryData =
                   1.0517578125
                 ],
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               },
               {
                 "type": "text",
@@ -2529,9 +2232,6 @@ libraryData =
             ]
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -2540,9 +2240,7 @@ libraryData =
                 "x": 260.1,
                 "y": 302.3,
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               },
               {
                 "type": "text",
@@ -2621,13 +2319,7 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
-              {
-                "type": "shape"
-              },
               {
                 "type": "instance",
                 "libraryItem": "_splash/title",
@@ -2635,22 +2327,14 @@ libraryData =
                 "x": 148.283540372671,
                 "y": -10.2478260869565,
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               }
             ]
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": []
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -2659,18 +2343,14 @@ libraryData =
                 "x": 97,
                 "y": 228.4,
                 "regX": 75,
-                "regY": 15,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 15
               },
               {
                 "type": "instance",
                 "libraryItem": "game",
                 "name": "game",
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               },
               {
                 "type": "text",
@@ -2715,15 +2395,9 @@ libraryData =
             ]
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": []
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": []
           }
         ]
@@ -2735,13 +2409,7 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
-              {
-                "type": "shape"
-              },
               {
                 "type": "instance",
                 "libraryItem": "_splash/splash",
@@ -2749,16 +2417,11 @@ libraryData =
                 "x": 260,
                 "y": 195.2,
                 "regX": 16.2,
-                "regY": 15.1,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 15.1
               }
             ]
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -2768,8 +2431,6 @@ libraryData =
                 "y": 195,
                 "regX": 16.2,
                 "regY": 15.1,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "colorEffect": {
                   "type": "brightness",
                   "value": -0.31
@@ -2778,9 +2439,6 @@ libraryData =
             ]
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -2788,8 +2446,6 @@ libraryData =
                 "name": "",
                 "regX": 217.75,
                 "regY": 193.95,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "colorEffect": {
                   "type": "brightness",
                   "value": -0.1
@@ -2802,16 +2458,11 @@ libraryData =
                 "x": 451.4,
                 "y": 214.35,
                 "regX": -1.05,
-                "regY": -0.5,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": -0.5
               }
             ]
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -2819,8 +2470,6 @@ libraryData =
                 "name": "",
                 "regX": 260,
                 "regY": 195,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "colorEffect": {
                   "type": "tint",
                   "color": "#333333",
@@ -2832,7 +2481,7 @@ libraryData =
                     "params": {
                       "blurX": 10,
                       "blurY": 10,
-                      "quality": 3
+                      "quality": "3"
                     }
                   }
                 ]
@@ -2840,9 +2489,6 @@ libraryData =
             ]
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -2850,8 +2496,6 @@ libraryData =
                 "name": "",
                 "regX": 260,
                 "regY": 195,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "colorEffect": {
                   "type": "tint",
                   "color": "#333333",
@@ -2863,7 +2507,7 @@ libraryData =
                     "params": {
                       "blurX": 10,
                       "blurY": 10,
-                      "quality": 3
+                      "quality": "3"
                     }
                   }
                 ]
@@ -2876,14 +2520,10 @@ libraryData =
   },
   "tap": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": false,
     "loop": false,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
-    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -2892,9 +2532,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -2909,16 +2546,11 @@ libraryData =
                   0.949966430664063
                 ],
                 "regX": 0,
-                "regY": 0.05,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0.05
               }
             ]
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -2934,8 +2566,6 @@ libraryData =
                 ],
                 "regX": 93,
                 "regY": 59.5,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "colorEffect": {
                   "type": "tint",
                   "color": "#FF0000",
@@ -2945,9 +2575,6 @@ libraryData =
             ]
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -2962,9 +2589,7 @@ libraryData =
                   0.949996948242188
                 ],
                 "regX": 93,
-                "regY": 59.5,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 59.5
               },
               {
                 "type": "instance",
@@ -2974,8 +2599,6 @@ libraryData =
                 "y": -17.55,
                 "regX": -178.55,
                 "regY": 30.55,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "colorEffect": {
                   "type": "advanced",
                   "alphaMultiplier": 1,
@@ -2996,14 +2619,10 @@ libraryData =
   },
   "trash": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "Trash",
     "autoPlay": false,
     "loop": false,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
-    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -3012,9 +2631,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -3023,16 +2639,11 @@ libraryData =
                 "x": -80,
                 "y": 78,
                 "regX": 89,
-                "regY": 36.45,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 36.45
               }
             ]
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -3042,8 +2653,6 @@ libraryData =
                 "y": 78,
                 "regX": 89,
                 "regY": 36.45,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "colorEffect": {
                   "type": "tint",
                   "color": "#FF0000",
@@ -3058,14 +2667,10 @@ libraryData =
   },
   "trashInner": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
-    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -3074,9 +2679,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -3085,9 +2687,7 @@ libraryData =
                 "x": 5.4,
                 "y": -9.75,
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               }
             ]
           }
@@ -3097,14 +2697,10 @@ libraryData =
   },
   "wall": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
-    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 2",
@@ -3113,18 +2709,13 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
                 "libraryItem": "_bitmaps/wall",
                 "name": "",
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               }
             ]
           }
@@ -3137,9 +2728,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": []
           }
         ]
@@ -3148,14 +2736,10 @@ libraryData =
   },
   "waterFromTap": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
-    "relatedSound": "",
     "layers": [
       {
         "name": "Layer 1",
@@ -3164,9 +2748,7 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
             "duration": 4,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -3207,9 +2789,7 @@ libraryData =
             ]
           },
           {
-            "label": "",
             "duration": 5,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -3250,9 +2830,7 @@ libraryData =
             ]
           },
           {
-            "label": "",
             "duration": 5,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -3293,9 +2871,7 @@ libraryData =
             ]
           },
           {
-            "label": "",
             "duration": 5,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -3336,9 +2912,7 @@ libraryData =
             ]
           },
           {
-            "label": "",
             "duration": 5,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -3379,9 +2953,7 @@ libraryData =
             ]
           },
           {
-            "label": "",
             "duration": 5,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -3422,9 +2994,6 @@ libraryData =
             ]
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
