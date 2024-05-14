@@ -21,9 +21,10 @@ declare namespace nanofl
 
     class DisplayObjectTools
     {
+        static recache(obj:createjs.DisplayObject, force?:boolean) : boolean;
         static cache(obj:createjs.DisplayObject) : void;
-        static uncache(obj:createjs.DisplayObject) : void;
-        static getBounds(obj:createjs.DisplayObject, ignoreSelf?:boolean) : createjs.Rectangle;
+        static getOuterBounds(obj:createjs.DisplayObject, ignoreSelf?:boolean) : createjs.Rectangle;
+        static getInnerBounds(obj:createjs.DisplayObject) : createjs.Rectangle;
     }
 
     class Bitmap extends createjs.Bitmap
@@ -68,8 +69,16 @@ declare namespace nanofl
         static readonly stage : createjs.Stage;
         static readonly scene : nanofl.MovieClip;
         static readonly spriteSheets : Record<string, createjs.SpriteSheet>;
+        static readonly lifetime : Number;
         
-        static init(canvas:HTMLCanvasElement, library:Library, framerate?:number, scaleMode?:string, textureAtlasesData?:Record<string, { images:string[], frames:number[] }>) : void;
+        static init(args:{
+            container:HTMLDivElement, 
+            libraryData:any, 
+            framerate?:number, 
+            scaleMode?:string, 
+            textureAtlasesData?:Record<string, { images:string[], frames:number[] }>,
+            clickToStart?:Boolean,
+        }) : Promise<void>;
     }
     
     class TextField extends createjs.Container
@@ -128,50 +137,22 @@ declare namespace nanofl
          */
         update() : void;
     }
-    
-    interface PlayPropsConfig
-    {
-        /**
-         * How to interrupt any currently playing instances of audio with the same source, if the maximum number of instances of the sound are already playing.
-         * Values are defined as INTERRUPT_TYPE constants on the Sound class, with the default defined by defaultInterruptBehavior.
-         * 
-         * createjs.Sound.INTERRUPT_***
-         */
-        interrupt?: any;
-        
-        /**
-         * The amount of time to delay the start of audio playback, in milliseconds.
-         */
-        delay?: number;
 
-        /**
-         * The offset from the start of the audio to begin playback, in milliseconds.
-         */
-        offset?: number;
+    class SolidContainer extends createjs.Container
+    {
+    }
+
+    class Video extends nanofl.SolidContainer
+    {
+        readonly symbol : any;
+        readonly video : HTMLVideoElement;
+        readonly duration : Number;
         
-        /**
-         * How many times the audio loops when it reaches the end of playback. The default is 0 (no loops), and -1 can be used for infinite playback.
-         */
-        loop?: number;
+        constructor(videoLibraryItem:any);
         
-        /**
-         * The volume of the sound, between 0 and 1. Note that the master volume is applied against the individual volume.
-         */
-        volume?: number;
-        
-        /**
-         * The left-right pan of the sound (if supported), between -1 (left) and 1 (right).
-         */
-        pan?: number;
-        
-        /**
-         * To create an audio sprite (with duration), the initial offset to start playback and loop from, in milliseconds.
-         */
-        startTime?: number;
-        
-        /**
-         * To create an audio sprite (with startTime), the amount of time to play the clip for, in milliseconds.
-         */
-        duration?: number;
-    }   
+        onEnterFrame() : void;
+        onMouseDown(e:nanofl.MouseEvent) : void;
+        onMouseMove(e:nanofl.MouseEvent) : void;
+        onMouseUp(e:nanofl.MouseEvent) : void;
+    }    
 }
