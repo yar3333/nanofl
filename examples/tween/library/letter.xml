@@ -1,4 +1,4 @@
-<movieclip version="2.3.0">
+<movieclip version="2.4.0" loop="true">
 	<layer name="Layer 1">
 		<frame duration="6" tweenType="motion">
 			<instance libraryItem="inner" x="0.024999999999991473" y="0" />

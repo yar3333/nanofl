@@ -1,4 +1,4 @@
-<movieclip version="2.3.0">
+<movieclip version="2.4.0" loop="true">
 	<layer name="bottle">
 		<frame duration="101">
 			<instance libraryItem="bottle" x="207.96895053545487" y="93.8603199286265" matrix="1.0541309553408709,0,0,0.8338006641679843" regX="55.6" regY="117.45">

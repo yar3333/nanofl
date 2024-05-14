@@ -1,4 +1,4 @@
-<movieclip version="2.3.0">
+<movieclip version="2.4.0" loop="true">
 	<layer name="Layer 1">
 		<frame>
 			<instance libraryItem="mc" x="223" y="177.3" matrix="0.25,0,0,1" />

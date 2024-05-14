@@ -2,13 +2,10 @@ libraryData =
 {
   "mc": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
     "layers": [
       {
         "name": "auto",
@@ -17,9 +14,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -53,13 +47,10 @@ libraryData =
   },
   "scene": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
     "layers": [
       {
         "name": "auto",
@@ -68,13 +59,7 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
-              {
-                "type": "shape"
-              },
               {
                 "type": "instance",
                 "libraryItem": "mc",
@@ -83,8 +68,6 @@ libraryData =
                 "y": 25.97402597402595,
                 "regX": 0,
                 "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "filters": [
                   {
                     "name": "GaussianBlurFilterPlugin",
@@ -101,9 +84,7 @@ libraryData =
                 "x": 32,
                 "y": 220,
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               }
             ]
           }
@@ -116,9 +97,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",

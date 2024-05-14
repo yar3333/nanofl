@@ -1,4 +1,4 @@
-<movieclip version="2.3.0">
+<movieclip version="2.4.0" loop="true">
 	<layer name="Label">
 		<frame>
 			<instance libraryItem="$groups/00000002-018EF669-000024D7-E433-51F2" x="298.5" y="223.5" />

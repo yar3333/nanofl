@@ -2,7 +2,7 @@ libraryData =
 {
   "scene": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
@@ -14,13 +14,7 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
-              {
-                "type": "shape"
-              },
               {
                 "type": "instance",
                 "libraryItem": "tweenBottle",
@@ -53,7 +47,7 @@ libraryData =
   },
   "tweenBottle": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
@@ -66,7 +60,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
             "duration": 57,
             "motionTween": {
               "tweenType": "motion",
@@ -79,9 +72,6 @@ libraryData =
               "motionTweenDirectionalLightRotateCountY": 0
             },
             "elements": [
-              {
-                "type": "shape"
-              },
               {
                 "type": "instance",
                 "libraryItem": "bottle",
@@ -100,13 +90,7 @@ libraryData =
             ]
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
-              {
-                "type": "shape"
-              },
               {
                 "type": "instance",
                 "libraryItem": "bottle",
@@ -130,7 +114,7 @@ libraryData =
   },
   "tweenLetter": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
@@ -143,7 +127,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
             "duration": 63,
             "motionTween": {
               "tweenType": "motion",
@@ -157,9 +140,6 @@ libraryData =
             },
             "elements": [
               {
-                "type": "shape"
-              },
-              {
                 "type": "instance",
                 "libraryItem": "letter",
                 "name": "",
@@ -171,9 +151,6 @@ libraryData =
             ]
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",

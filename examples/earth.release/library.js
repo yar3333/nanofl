@@ -2,14 +2,14 @@ libraryData =
 {
   "earth": {
     "type": "mesh",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "textureAtlas": null,
     "loadLights": false
   },
   "scene": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "MySceneClass",
     "autoPlay": true,
     "loop": true,

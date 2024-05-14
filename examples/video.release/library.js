@@ -2,7 +2,7 @@ libraryData =
 {
   "scene": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
@@ -14,9 +14,7 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
             "duration": 4,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -31,9 +29,7 @@ libraryData =
             ]
           },
           {
-            "label": "",
             "duration": 8,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -47,7 +43,6 @@ libraryData =
             ]
           },
           {
-            "label": "",
             "duration": 53,
             "motionTween": {
               "tweenType": "motion",
@@ -73,9 +68,6 @@ libraryData =
             ]
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -95,10 +87,10 @@ libraryData =
   },
   "test_with_sound": {
     "type": "video",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "ext": "mp4",
     "autoPlay": true,
-    "loop": true
+    "loop": false
   }
 }

@@ -2,13 +2,10 @@ libraryData =
 {
   "mc": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
     "layers": [
       {
         "name": "Layer 1",
@@ -17,9 +14,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -34,9 +28,7 @@ libraryData =
                   0.296295166015625
                 ],
                 "regX": 135,
-                "regY": 141.55,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 141.55
               }
             ]
           }
@@ -46,20 +38,17 @@ libraryData =
   },
   "pic": {
     "type": "bitmap",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "ext": "png",
     "textureAtlas": null
   },
   "scene": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
     "layers": [
       {
         "name": "Layer 1",
@@ -68,13 +57,7 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
-              {
-                "type": "shape"
-              },
               {
                 "type": "instance",
                 "libraryItem": "mc",
@@ -88,9 +71,7 @@ libraryData =
                   1
                 ],
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               },
               {
                 "type": "instance",
@@ -105,9 +86,7 @@ libraryData =
                   1
                 ],
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               },
               {
                 "type": "instance",
@@ -116,9 +95,7 @@ libraryData =
                 "x": 63.5,
                 "y": 178.95,
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               },
               {
                 "type": "instance",
@@ -133,9 +110,7 @@ libraryData =
                   1
                 ],
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               },
               {
                 "type": "instance",
@@ -150,9 +125,7 @@ libraryData =
                   1
                 ],
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               },
               {
                 "type": "instance",
@@ -167,9 +140,7 @@ libraryData =
                   1
                 ],
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               },
               {
                 "type": "instance",
@@ -184,9 +155,7 @@ libraryData =
                   1
                 ],
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               },
               {
                 "type": "instance",
@@ -201,9 +170,7 @@ libraryData =
                   1
                 ],
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               },
               {
                 "type": "instance",
@@ -218,9 +185,7 @@ libraryData =
                   1
                 ],
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               }
             ]
           }

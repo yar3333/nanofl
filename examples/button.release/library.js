@@ -2,13 +2,11 @@ libraryData =
 {
   "MainButton": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "MyButton",
     "autoPlay": true,
     "loop": true,
     "likeButton": true,
-    "exportAsSprite": false,
-    "textureAtlas": null,
     "layers": [
       {
         "name": "Layer 1",
@@ -17,9 +15,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "text",
@@ -64,9 +59,6 @@ libraryData =
             ]
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "text",
@@ -111,9 +103,6 @@ libraryData =
             ]
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "text",
@@ -158,9 +147,6 @@ libraryData =
             ]
           },
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "text",
@@ -213,9 +199,7 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
             "duration": 4,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -317,13 +301,10 @@ libraryData =
   },
   "scene": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": false,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
     "layers": [
       {
         "name": "Layer 0",
@@ -332,13 +313,7 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
-              {
-                "type": "shape"
-              },
               {
                 "type": "instance",
                 "libraryItem": "MainButton",
@@ -346,9 +321,7 @@ libraryData =
                 "x": 324.71500000000003,
                 "y": 226.76,
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               }
             ]
           }

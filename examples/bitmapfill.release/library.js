@@ -2,14 +2,14 @@ libraryData =
 {
   "Bitmap 10": {
     "type": "bitmap",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "ext": "png",
     "textureAtlas": null
   },
   "scene": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
@@ -88,7 +88,7 @@ libraryData =
   },
   "Symbol 1": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,

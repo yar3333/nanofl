@@ -1,4 +1,4 @@
-<movieclip version="2.3.0">
+<movieclip version="2.4.0" loop="true">
 	<layer name="Layer 3">
 		<frame>
 			<instance libraryItem="bmp" matrix="0.701766967773438,0,0,0.701766967773438" regX="152.45" regY="137.6" />

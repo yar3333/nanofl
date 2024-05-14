@@ -2,13 +2,10 @@ libraryData =
 {
   "letter": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
     "layers": [
       {
         "name": "Layer 1",
@@ -17,9 +14,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -95,13 +89,10 @@ libraryData =
   },
   "scene": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
     "layers": [
       {
         "name": "Layer 1",
@@ -110,13 +101,7 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
-              {
-                "type": "shape"
-              },
               {
                 "type": "instance",
                 "libraryItem": "letter",
@@ -125,8 +110,6 @@ libraryData =
                 "y": 38.5,
                 "regX": 0.5,
                 "regY": 0.5,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "colorEffect": {
                   "type": "tint",
                   "color": "#BF6E3A",
@@ -141,8 +124,6 @@ libraryData =
                 "y": 38.5,
                 "regX": 0.5,
                 "regY": 0.5,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "colorEffect": {
                   "type": "advanced",
                   "alphaMultiplier": 0.828125,
@@ -163,8 +144,6 @@ libraryData =
                 "y": 38.5,
                 "regX": 0.5,
                 "regY": 0.5,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "colorEffect": {
                   "type": "alpha",
                   "value": 0.26953125
@@ -177,9 +156,7 @@ libraryData =
                 "x": 47,
                 "y": 38.5,
                 "regX": 0.5,
-                "regY": 0.4,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0.4
               },
               {
                 "type": "instance",
@@ -189,8 +166,6 @@ libraryData =
                 "y": 38.4,
                 "regX": 0.65,
                 "regY": 0.6,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "colorEffect": {
                   "type": "brightness",
                   "value": 0.5
@@ -204,8 +179,6 @@ libraryData =
                 "y": 38.4,
                 "regX": 0.65,
                 "regY": 0.6,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "colorEffect": {
                   "type": "brightness",
                   "value": -0.5

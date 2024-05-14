@@ -2,13 +2,10 @@ libraryData =
 {
   "scene": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
     "layers": [
       {
         "name": "Layer 1",
@@ -17,9 +14,7 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
             "duration": 158,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -71,7 +66,6 @@ libraryData =
         "parentIndex": 0,
         "keyFrames": [
           {
-            "label": "",
             "duration": 155,
             "motionTween": {
               "tweenType": "motion",
@@ -85,24 +79,17 @@ libraryData =
             },
             "elements": [
               {
-                "type": "shape"
-              },
-              {
                 "type": "instance",
                 "libraryItem": "Symbol 1",
                 "name": "",
                 "x": 27.4,
                 "y": 236.65,
                 "regX": 11.5,
-                "regY": 15.5,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 15.5
               }
             ]
           },
           {
-            "label": "",
-            "duration": 1,
             "motionTween": {
               "tweenType": "motion",
               "motionTweenEasing": 0,
@@ -127,9 +114,7 @@ libraryData =
                   2.54838562011719
                 ],
                 "regX": 11.5,
-                "regY": 15.5,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 15.5
               }
             ]
           }
@@ -142,9 +127,7 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
             "duration": 158,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -192,13 +175,10 @@ libraryData =
   },
   "Symbol 1": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
     "layers": [
       {
         "name": "Layer 1",
@@ -207,9 +187,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",

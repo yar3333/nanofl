@@ -2,20 +2,17 @@ libraryData =
 {
   "bmp": {
     "type": "bitmap",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "ext": "png",
     "textureAtlas": null
   },
   "mc": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
     "layers": [
       {
         "name": "Layer 3",
@@ -24,9 +21,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -39,9 +33,7 @@ libraryData =
                   0.701766967773438
                 ],
                 "regX": 152.45,
-                "regY": 137.6,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 137.6
               }
             ]
           }
@@ -51,13 +43,10 @@ libraryData =
   },
   "scene": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
     "layers": [
       {
         "name": "Layer 1",
@@ -66,13 +55,7 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
-              {
-                "type": "shape"
-              },
               {
                 "type": "instance",
                 "libraryItem": "mc",
@@ -85,13 +68,11 @@ libraryData =
                 ],
                 "regX": 0,
                 "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "filters": [
                   {
                     "name": "DropShadowFilter",
                     "params": {
-                      "alpha": 100,
+                      "alpha": "100",
                       "angle": 77.5000028459121,
                       "blurX": 16,
                       "blurY": 16,
@@ -100,8 +81,8 @@ libraryData =
                       "hideObject": true,
                       "inner": true,
                       "knockout": true,
-                      "quality": 2,
-                      "strength": 83
+                      "quality": "2",
+                      "strength": "83"
                     }
                   }
                 ]
@@ -120,15 +101,13 @@ libraryData =
                 ],
                 "regX": 0,
                 "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "filters": [
                   {
                     "name": "BoxBlurFilter",
                     "params": {
                       "blurX": 30,
                       "blurY": 30,
-                      "quality": 3
+                      "quality": "3"
                     }
                   }
                 ]
@@ -147,20 +126,18 @@ libraryData =
                 ],
                 "regX": 0,
                 "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "filters": [
                   {
                     "name": "GlowFilter",
                     "params": {
-                      "alpha": 100,
+                      "alpha": "100",
                       "blurX": 8,
                       "blurY": 8,
                       "color": "#0000FF",
                       "inner": true,
                       "knockout": true,
-                      "quality": 2,
-                      "strength": 79
+                      "quality": "2",
+                      "strength": "79"
                     }
                   }
                 ]
@@ -179,8 +156,6 @@ libraryData =
                 ],
                 "regX": 0,
                 "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "filters": [
                   {
                     "name": "BevelFilter",
@@ -206,8 +181,6 @@ libraryData =
                 ],
                 "regX": 0,
                 "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "filters": [
                   {
                     "name": "GradientGlowFilter",
@@ -231,8 +204,6 @@ libraryData =
                 ],
                 "regX": 0,
                 "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "filters": [
                   {
                     "name": "GradientBevelFilter",
@@ -254,16 +225,14 @@ libraryData =
                 ],
                 "regX": 0,
                 "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "filters": [
                   {
                     "name": "AdjustColorFilter",
                     "params": {
-                      "brightness": 19,
-                      "contrast": 11,
-                      "hue": 160,
-                      "saturation": -44
+                      "brightness": "19",
+                      "contrast": "11",
+                      "hue": "160",
+                      "saturation": "-44"
                     }
                   }
                 ]

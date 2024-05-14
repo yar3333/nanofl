@@ -2,13 +2,10 @@ libraryData =
 {
   "LibraryItem 1": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
     "layers": [
       {
         "name": "Layer 0",
@@ -17,9 +14,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -53,13 +47,10 @@ libraryData =
   },
   "LibraryItem 2": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
     "layers": [
       {
         "name": "Layer 1",
@@ -68,9 +59,6 @@ libraryData =
         "locked": true,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -108,9 +96,6 @@ libraryData =
         "parentIndex": 0,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -118,15 +103,13 @@ libraryData =
                 "name": "",
                 "regX": 0,
                 "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "filters": [
                   {
                     "name": "BoxBlurFilter",
                     "params": {
                       "blurX": 20,
                       "blurY": 10,
-                      "quality": 1
+                      "quality": "1"
                     }
                   }
                 ]
@@ -139,13 +122,10 @@ libraryData =
   },
   "LibraryItem 3": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
     "layers": [
       {
         "name": "Layer 0",
@@ -154,9 +134,6 @@ libraryData =
         "locked": false,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "instance",
@@ -166,15 +143,13 @@ libraryData =
                 "y": 14,
                 "regX": 0,
                 "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "filters": [
                   {
                     "name": "BoxBlurFilter",
                     "params": {
                       "blurX": 20,
                       "blurY": 10,
-                      "quality": 1
+                      "quality": "1"
                     }
                   }
                 ]
@@ -187,13 +162,10 @@ libraryData =
   },
   "scene": {
     "type": "movieclip",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "linkedClass": "",
     "autoPlay": true,
     "loop": true,
-    "likeButton": false,
-    "exportAsSprite": false,
-    "textureAtlas": null,
     "layers": [
       {
         "name": "Layer 1",
@@ -202,9 +174,6 @@ libraryData =
         "locked": true,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
               {
                 "type": "shape",
@@ -242,13 +211,7 @@ libraryData =
         "parentIndex": 0,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
-              {
-                "type": "shape"
-              },
               {
                 "type": "instance",
                 "libraryItem": "LibraryItem 1",
@@ -257,15 +220,13 @@ libraryData =
                 "y": 69,
                 "regX": 0,
                 "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0,
                 "filters": [
                   {
                     "name": "BoxBlurFilter",
                     "params": {
                       "blurX": 20,
                       "blurY": 10,
-                      "quality": 1
+                      "quality": "1"
                     }
                   }
                 ]
@@ -282,13 +243,7 @@ libraryData =
         "parentIndex": 0,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
-              {
-                "type": "shape"
-              },
               {
                 "type": "instance",
                 "libraryItem": "LibraryItem 3",
@@ -296,9 +251,7 @@ libraryData =
                 "x": 131.5,
                 "y": 142,
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               }
             ]
           }
@@ -311,13 +264,7 @@ libraryData =
         "locked": true,
         "keyFrames": [
           {
-            "label": "",
-            "duration": 1,
-            "motionTween": null,
             "elements": [
-              {
-                "type": "shape"
-              },
               {
                 "type": "instance",
                 "libraryItem": "LibraryItem 2",
@@ -325,9 +272,7 @@ libraryData =
                 "x": 126,
                 "y": 252,
                 "regX": 0,
-                "regY": 0,
-                "blendMode": "normal",
-                "meshParams": 0
+                "regY": 0
               }
             ]
           }
