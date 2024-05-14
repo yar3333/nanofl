@@ -1,6 +1,5 @@
 package nanofl;
 
-import nanofl.engine.movieclip.TweenedElement;
 import js.html.Image;
 import js.Browser;
 import js.html.CanvasElement;
@@ -12,6 +11,7 @@ import easeljs.display.SpriteSheet;
 import nanofl.engine.Library;
 import nanofl.engine.TextureAtlasTools;
 import nanofl.engine.ScaleMode;
+import nanofl.engine.movieclip.TweenedElement;
 
 @:expose
 class Player
@@ -25,11 +25,6 @@ class Player
 	public static var spriteSheets : Dynamic<easeljs.display.SpriteSheet> = {};
 
     public static var lifetime = 0;
-	
-	static function __init__()
-	{
-		//js.Syntax.code("$hx_exports.$extend = $extend");
-	}
 	
 	public static function init(args:PlayerArgs) : Promise<{}>
 	{

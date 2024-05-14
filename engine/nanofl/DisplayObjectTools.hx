@@ -134,7 +134,7 @@ class DisplayObjectTools
 		
         if (parent.parent != null)
         {
-            var method = Reflect.field(parent, name);
+            final method = Reflect.field(parent, name);
             if (Reflect.isFunction(method))
             {
                 e._target = parent;
@@ -156,7 +156,7 @@ class DisplayObjectTools
 			
 			x = Math.round((x - obj.bitmapCache.offX - obj.bitmapCache._filterOffX) * obj.bitmapCache.scale);
 			y = Math.round((y - obj.bitmapCache.offY - obj.bitmapCache._filterOffY) * obj.bitmapCache.scale);
-			var alpha = obj.cacheCanvas.getContext2d().getImageData(x, y, 1, 1).data[3];
+			final alpha = obj.cacheCanvas.getContext2d().getImageData(x, y, 1, 1).data[3];
 			return alpha >= minAlpha;
 		}
 	}
