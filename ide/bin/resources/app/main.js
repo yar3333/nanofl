@@ -1,18 +1,21 @@
-const { app, BrowserWindow, ipcMain, dialog, clipboard, screen, shell, utilityProcess } = require('electron/main');
+const { app, BrowserWindow, shell } = require('electron/main');
 const path = require('path');
-const fs = require('node:fs');
+const { loadOptions, saveOptions } = require('./main-options');
+const { ipcInit } = require('./main-ipc');
 
 app.disableHardwareAcceleration();
 const isShowDevTools = process.argv.includes("-devTools");
+ipcInit();
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
-var options;
+
+let options;
 
 function createWindow()
 {
-    loadOptions();
+    options = loadOptions();
   
     win = new BrowserWindow({
         x: options.windowBounds.x,
@@ -43,75 +46,9 @@ function createWindow()
 
     if (isShowDevTools) win.webContents.openDevTools()
 
-    win.on('close', () => saveOptions());
+    win.on('close', () => saveOptions(options, win));
     win.on('closed', () => win = null)
 }
-
-let ipcObjects =
-{
-    process: process,
-    dialog: dialog,
-    clipboard: clipboard,
-};
-
-ipcMain.handle('electronApi:callMethodAsync', (event, objName, methodName, ...args) =>
-{
-    console.log("electronApi:callMethodAsync", objName, methodName, ...args);
-    const obj = ipcObjects[objName];
-    const met = obj[methodName];
-    return met(...args);
-});
-
-ipcMain.on('electronApi:callMethod', (event, objName, methodName, ...args) =>
-{
-    console.log("electronApi:callMethod", objName, methodName, ...args);
-    const obj = ipcObjects[objName];
-    const met = obj[methodName];
-    event.returnValue = met(...args);
-});
-
-ipcMain.on('electronApi:getVar', (event, objName, varName) =>
-{
-    event.returnValue = ipcObjects[objName][varName];
-});
-
-ipcMain.on('electronApi:setVar', (event, objName, varName, value) =>
-{
-    ipcObjects[objName][varName] = value;
-    event.returnValue = null;
-});
-
-ipcMain.on('electronApi:getEnvVar', (event, varName) =>
-{
-    event.returnValue = process.env[varName];
-});
-
-ipcMain.on('electronApi:setEnvVar', (event, varName, value) =>
-{
-    process.env[varName] = value;
-    event.returnValue = null;
-});
-
-const webServers = {};
-ipcMain.on('electronApi:webServerStart', (event, uid, directoryToServe) =>
-{
-    const child = utilityProcess.fork(path.join(__dirname, 'server.js'), [ directoryToServe ], { stdio:['ignore', 'pipe', 'ignore'] });
-    child.on('exit', () => { delete webServers[uid] });
-    child.stdout.on('data', data => { webServers[uid].address = (data + "").trim() });
-    webServers[uid] = { child:child, address:null };
-    event.returnValue = null;
-});
-ipcMain.on('electronApi:webServerGetAddress', (event, uid) =>
-{
-    event.returnValue = webServers[uid].address;
-});
-ipcMain.on('electronApi:webServerKill', (event, uid) =>
-{
-    if (!webServers[uid]) return;
-    try { webServers[uid].child.kill() } catch {}
-    delete webServers[uid];
-    event.returnValue = null;
-});
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -136,34 +73,3 @@ app.on('activate', () =>
         createWindow()
     }
 })
-
-function loadOptions()
-{
-    try {
-        options = JSON.parse(fs.readFileSync(path.join(app.getPath("userData"), "config.json"), { encoding: 'utf8' }));
-    } catch (err) {
-        options = {};
-    }
-
-    if (!options.windowBounds) options.windowBounds = { x:0, y:0 };
-    if (!options.windowBounds.x) options.windowBounds.x = 0;
-    if (!options.windowBounds.y) options.windowBounds.y = 0;
-
-    const display = screen.getDisplayNearestPoint({ x:options.windowBounds.x, y:options.windowBounds.y });
-    if (!(options.windowBounds.x > display.bounds.x && options.windowBounds.x < display.size.width) 
-     || !(options.windowBounds.y > display.bounds.y && options.windowBounds.y < display.size.height))
-    {
-        options.windowBounds.x = display.bounds.x
-        options.windowBounds.y = display.bounds.y
-    }
-}
-
-function saveOptions()
-{
-    const newOptions =
-    {
-        windowIsMaximized: win.isMaximized(),
-        windowBounds: win.isMaximized() ? options.windowBounds : win.getBounds()
-    }
-    fs.writeFileSync(path.join(app.getPath("userData"), "config.json"), JSON.stringify(newOptions, null, "\t"), { encoding: 'utf8' });
-}
